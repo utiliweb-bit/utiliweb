@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UtiliWeb - Ferramentas Online Gratuitas</title>
+<title>UtiliWeb - Ferramentas Online</title>
 
 <link rel="stylesheet" href="assets/style.css">
 </head>
@@ -12,71 +12,51 @@
 
 <header>
     <h1>UtiliWeb</h1>
-    <p>Ferramentas Online Gratuitas para o Dia a Dia</p>
+    <p>Ferramentas rápidas, simples e gratuitas</p>
 </header>
-
-<!-- NAV -->
-<div class="container" style="text-align:center; margin-top:10px;">
-    <a href="/">🏠 Início</a> |
-    <a href="#tools">🧠 Ferramentas</a>
-</div>
-
-<!-- SEARCH -->
-<div class="search-box">
-    <input type="text" id="search" placeholder="Buscar ferramenta (ex: senha, porcentagem, texto...)">
-</div>
 
 <div class="container">
 
-    <h2 id="tools">🧠 Ferramentas</h2>
+    <input
+        id="search"
+        type="text"
+        placeholder="Buscar ferramentas (ex: senha, texto, porcentagem...)"
+    />
 
-    <div class="grid">
+    <h2 style="margin-top:30px;">🧠 Ferramentas</h2>
 
-        <a class="card" href="tools/contador-caracteres.html" data-name="texto caracteres palavras contador">
+    <div class="grid" id="tools">
+
+        <a class="card" href="tools/contador-caracteres.html" data-key="texto caracteres palavras contador">
             📝 Contador de Caracteres
             <div class="badge">Texto</div>
         </a>
 
-        <a class="card" href="tools/calculadora-porcentagem.html" data-name="porcentagem calculadora matemática">
+        <a class="card" href="tools/calculadora-porcentagem.html" data-key="porcentagem calculadora matemática">
             🧮 Calculadora de Porcentagem
             <div class="badge">Matemática</div>
         </a>
 
-        <div class="card" data-name="senha gerador segurança password">
-            🔐 Gerador de Senhas (em breve)
-            <div class="badge">Segurança</div>
+        <div class="card" data-key="senha gerador password segurança">
+            🔐 Gerador de Senhas
+            <div class="badge">Em breve</div>
         </div>
 
-        <div class="card" data-name="conversor temperatura celsius fahrenheit">
-            🌡️ Conversor de Temperatura (em breve)
-            <div class="badge">Conversor</div>
+        <div class="card" data-key="conversor temperatura celsius fahrenheit">
+            🌡️ Conversor de Temperatura
+            <div class="badge">Em breve</div>
         </div>
 
-        <div class="card" data-name="ip internet meu ip">
-            🌐 Descobrir meu IP (em breve)
-            <div class="badge">Internet</div>
+        <div class="card" data-key="ip internet meu ip">
+            🌐 Descobrir meu IP
+            <div class="badge">Em breve</div>
         </div>
 
     </div>
 
 </div>
 
-<script>
-// UX SEARCH (produto real)
-const search = document.getElementById("search");
-const cards = document.querySelectorAll(".card");
-
-search.addEventListener("input", (e) => {
-    const value = e.target.value.toLowerCase().trim();
-
-    cards.forEach(card => {
-        const text = card.innerText.toLowerCase();
-        const match = text.includes(value);
-
-        card.style.display = match ? "block" : "none";
-    });
-});
-</script>
+<script src="assets/app.js"></script>
 
 </body>
 </html>
