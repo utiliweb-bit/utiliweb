@@ -7,61 +7,131 @@
 
 <style>
 body {
+    margin: 0;
     font-family: Arial, sans-serif;
-    max-width: 900px;
-    margin: 40px auto;
-    padding: 20px;
-    background: #f7f7f7;
+    background: #0b1220;
+    color: #e5e7eb;
 }
 
-h1 {
+/* HEADER */
+header {
     text-align: center;
+    padding: 50px 20px 30px;
+    background: radial-gradient(circle at top, #3b82f6, #1d4ed8);
 }
 
+header h1 {
+    margin: 0;
+    font-size: 44px;
+}
+
+header p {
+    opacity: 0.9;
+    margin-top: 10px;
+}
+
+/* SEARCH */
+.search-box {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 14px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+}
+
+/* CONTAINER */
+.container {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* GRID */
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 15px;
-    margin-top: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 20px;
 }
 
+/* CARD */
 .card {
-    background: white;
+    background: #111827;
     padding: 20px;
-    border-radius: 10px;
+    border-radius: 14px;
     text-decoration: none;
-    color: black;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    color: #e5e7eb;
+    border: 1px solid #1f2937;
     transition: 0.2s;
 }
 
 .card:hover {
-    transform: scale(1.03);
+    transform: translateY(-6px);
+    border-color: #3b82f6;
+    background: #0f172a;
+}
+
+.badge {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 12px;
+    opacity: 0.7;
+}
+
+/* CATEGORY */
+.section-title {
+    margin: 40px 0 20px;
+    font-size: 20px;
+    color: #93c5fd;
 }
 </style>
 </head>
 
 <body>
 
-<h1>UtiliWeb</h1>
-<p style="text-align:center;">Ferramentas Online Gratuitas</p>
+<header>
+    <h1>UtiliWeb</h1>
+    <p>Ferramentas Online Gratuitas para o Dia a Dia</p>
+</header>
 
-<div class="grid">
+<!-- SEARCH -->
+<div class="search-box">
+    <input type="text" placeholder="Buscar ferramenta (ex: porcentagem, senha, texto...)">
+</div>
 
-    <a class="card" href="contador-caracteres.html">
-        📝 Contador de Caracteres
-    </a>
+<div class="container">
 
-    <div class="card">
-        🧮 Calculadora de Porcentagem <br>(em breve)
+    <div class="section-title">📝 Ferramentas de Texto</div>
+
+    <div class="grid">
+        <a class="card" href="contador-caracteres.html">
+            Contador de Caracteres
+            <div class="badge">Texto</div>
+        </a>
     </div>
 
-    <div class="card">
-        🌡️ Conversor Celsius ↔ Fahrenheit <br>(em breve)
+    <div class="section-title">🧮 Matemática</div>
+
+    <div class="grid">
+        <a class="card" href="calculadora-porcentagem.html">
+            Calculadora de Porcentagem
+            <div class="badge">Cálculo rápido</div>
+        </a>
     </div>
 
-    <div class="card">
-        🔐 Gerador de Senhas <br>(em breve)
+    <div class="section-title">🚧 Em breve</div>
+
+    <div class="grid">
+        <div class="card">🌡️ Conversor Celsius ↔ Fahrenheit</div>
+        <div class="card">🔐 Gerador de Senhas</div>
+        <div class="card">🌐 Descobrir meu IP</div>
+        <div class="card">📦 Conversores</div>
     </div>
 
 </div>
