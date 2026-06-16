@@ -4,28 +4,67 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>UtiliWeb - Ferramentas Online Gratuitas</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #f7f7f7;
+}
+
+h1 {
+    text-align: center;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: black;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: 0.2s;
+}
+
+.card:hover {
+    transform: scale(1.03);
+}
+</style>
 </head>
+
 <body>
 
 <h1>UtiliWeb</h1>
+<p style="text-align:center;">Ferramentas Online Gratuitas</p>
 
-<p>Ferramentas Online Gratuitas</p>
+<div class="grid">
 
-<h2>Ferramentas disponíveis</h2>
+    <a class="card" href="contador-caracteres.html">
+        📝 Contador de Caracteres
+    </a>
 
-<ul>
-    <li>
-        <a href="contador-caracteres.html">
-            Contador de Caracteres
-        </a>
-    </li>
+    <div class="card">
+        🧮 Calculadora de Porcentagem <br>(em breve)
+    </div>
 
-    <li>Calculadora de Porcentagem (em breve)</li>
+    <div class="card">
+        🌡️ Conversor Celsius ↔ Fahrenheit <br>(em breve)
+    </div>
 
-    <li>Conversor Celsius ↔ Fahrenheit (em breve)</li>
+    <div class="card">
+        🔐 Gerador de Senhas <br>(em breve)
+    </div>
 
-    <li>Gerador de Senhas (em breve)</li>
-</ul>
+</div>
 
 </body>
 </html>
