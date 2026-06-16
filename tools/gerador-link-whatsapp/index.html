@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Gerador de Link WhatsApp Online | UtiliWeb</title>
+
+<meta name="description" content="Crie links de WhatsApp com mensagem automática. Ferramenta grátis e rápida do UtiliWeb.">
+<meta name="robots" content="index, follow">
+
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+
+<body>
+
+<header>
+    <h1>Gerador de Link WhatsApp</h1>
+    <p>Crie links clicáveis para WhatsApp com mensagem</p>
+</header>
+
+<div class="container">
+
+    <a href="../../index.html">← Voltar</a>
+
+    <div style="margin-top:20px;">
+
+        <label>Seu número (com DDD e país):</label>
+        <input id="number" type="text" placeholder="Ex: 5511999999999">
+
+        <label style="display:block; margin-top:10px;">Mensagem:</label>
+        <input id="message" type="text" placeholder="Ex: Olá, gostaria de mais informações">
+
+        <button style="margin-top:15px;" onclick="gerar()">Gerar Link</button>
+
+        <div style="margin-top:20px;">
+            <p><strong>Seu link:</strong></p>
+            <a id="link" href="#" target="_blank">---</a>
+        </div>
+
+    </div>
+
+    <section style="margin-top:40px;">
+        <h2>Como usar</h2>
+        <p>Digite seu número e a mensagem. A ferramenta cria um link direto para abrir conversa no WhatsApp.</p>
+    </section>
+
+</div>
+
+<script>
+function gerar() {
+    const number = document.getElementById("number").value.trim();
+    const message = document.getElementById("message").value.trim();
+
+    if (!number) return;
+
+    const url = `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
+
+    const link = document.getElementById("link");
+    link.href = url;
+    link.textContent = url;
+}
+</script>
+
+</body>
+</html>
