@@ -3,7 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UtiliWeb - Ferramentas Online</title>
+
+<title>UtiliWeb - Ferramentas Online Gratuitas</title>
+
+<meta name="description" content="UtiliWeb é uma plataforma de ferramentas online gratuitas como contador de caracteres, calculadora de porcentagem, gerador de senhas e muito mais.">
+<meta name="keywords" content="ferramentas online, utiliweb, contador de caracteres, calculadora de porcentagem, gerador de senhas, ferramentas grátis">
+<meta name="robots" content="index, follow">
 
 <link rel="stylesheet" href="assets/style.css">
 </head>
@@ -12,27 +17,23 @@
 
 <header>
     <h1>UtiliWeb</h1>
-    <p>Ferramentas rápidas, simples e gratuitas</p>
+    <p>Ferramentas rápidas, gratuitas e online</p>
 </header>
 
 <div class="container">
 
-    <input
-        id="search"
-        type="text"
-        placeholder="Buscar ferramentas (ex: senha, texto, porcentagem...)"
-    />
+    <input id="search" type="text" placeholder="Buscar ferramentas (ex: senha, texto, porcentagem...)">
 
     <h2 style="margin-top:30px;">🧠 Ferramentas</h2>
 
-    <div class="grid" id="tools">
+    <div class="grid">
 
         <a class="card" href="tools/contador-caracteres.html" data-key="texto caracteres palavras contador">
             📝 Contador de Caracteres
             <div class="badge">Texto</div>
         </a>
 
-        <a class="card" href="tools/calculadora-porcentagem.html" data-key="porcentagem calculadora matemática">
+        <a class="card" href="tools/calculadora-porcentagem.html" data-key="porcentagem calculadora matematica">
             🧮 Calculadora de Porcentagem
             <div class="badge">Matemática</div>
         </a>
@@ -42,7 +43,7 @@
             <div class="badge">Em breve</div>
         </div>
 
-        <div class="card" data-key="conversor temperatura celsius fahrenheit">
+        <div class="card" data-key="temperatura celsius fahrenheit conversor">
             🌡️ Conversor de Temperatura
             <div class="badge">Em breve</div>
         </div>
@@ -54,9 +55,31 @@
 
     </div>
 
+    <div style="margin-top:40px; font-size:14px; color:#94a3b8;">
+        <p>
+            Ferramentas gratuitas do <strong>UtiliWeb</strong> para uso rápido no navegador.
+            Sem instalação e sem cadastro.
+        </p>
+    </div>
+
 </div>
 
-<script src="assets/app.js"></script>
+<script>
+const search = document.getElementById("search");
+const cards = document.querySelectorAll(".card");
+
+search.addEventListener("input", (e) => {
+    const value = e.target.value.toLowerCase().trim();
+
+    cards.forEach(card => {
+        const key = card.getAttribute("data-key") || "";
+        const text = card.innerText.toLowerCase();
+
+        const match = key.includes(value) || text.includes(value);
+        card.style.display = match ? "block" : "none";
+    });
+});
+</script>
 
 </body>
 </html>
