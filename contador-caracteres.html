@@ -5,65 +5,47 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Contador de Caracteres | UtiliWeb</title>
 
-<style>
-body{
-    font-family: Arial, sans-serif;
-    max-width: 800px;
-    margin: 40px auto;
-    padding: 20px;
-}
-
-textarea{
-    width: 100%;
-    height: 200px;
-    padding: 10px;
-    font-size: 16px;
-}
-
-.resultado{
-    margin-top: 20px;
-    font-size: 18px;
-}
-</style>
+<link rel="stylesheet" href="../assets/style.css">
 </head>
+
 <body>
 
-<h1>Contador de Caracteres</h1>
+<header>
+    <h1>Contador de Caracteres</h1>
+</header>
 
-<p>Digite ou cole um texto abaixo:</p>
+<div class="container">
 
-<textarea id="texto"></textarea>
+    <a href="../index.html">← Voltar para o início</a>
 
-<div class="resultado">
-    <p><strong>Caracteres:</strong> <span id="caracteres">0</span></p>
-    <p><strong>Palavras:</strong> <span id="palavras">0</span></p>
-    <p><strong>Linhas:</strong> <span id="linhas">0</span></p>
+    <p>Digite ou cole seu texto abaixo:</p>
+
+    <textarea id="text" placeholder="Comece a digitar..."></textarea>
+
+    <div class="result">
+        <p>Caracteres: <span id="chars">0</span></p>
+        <p>Palavras: <span id="words">0</span></p>
+        <p>Linhas: <span id="lines">0</span></p>
+    </div>
+
 </div>
 
 <script>
-const texto = document.getElementById("texto");
+const text = document.getElementById("text");
 
-texto.addEventListener("input", function() {
+text.addEventListener("input", () => {
+    let value = text.value;
 
-    const conteudo = texto.value;
+    // Caracteres
+    document.getElementById("chars").textContent = value.length;
 
-    document.getElementById("caracteres").textContent =
-        conteudo.length;
+    // Palavras
+    document.getElementById("words").textContent =
+        value.trim() === "" ? 0 : value.trim().split(/\s+/).length;
 
-    const palavras = conteudo.trim() === ""
-        ? 0
-        : conteudo.trim().split(/\s+/).length;
-
-    document.getElementById("palavras").textContent =
-        palavras;
-
-    const linhas = conteudo === ""
-        ? 0
-        : conteudo.split("\n").length;
-
-    document.getElementById("linhas").textContent =
-        linhas;
-
+    // Linhas
+    document.getElementById("lines").textContent =
+        value === "" ? 0 : value.split("\n").length;
 });
 </script>
 
