@@ -4,59 +4,64 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Calculadora de Porcentagem Online Grátis | UtiliWeb</title>
-
-<meta name="description" content="Calcule porcentagens de forma rápida e gratuita. Ferramenta simples online do UtiliWeb para cálculos precisos.">
-<meta name="keywords" content="calculadora de porcentagem, porcentagem online, cálculo rápido, utiliweb, matemática online">
+<title>Calculadora de Porcentagem Online | UtiliWeb</title>
+<meta name="description" content="Calcule porcentagens online de forma rápida e gratuita. Ferramenta simples e precisa do UtiliWeb.">
 <meta name="robots" content="index, follow">
 
-<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="../../assets/style.css">
 </head>
 
 <body>
 
 <header>
     <h1>Calculadora de Porcentagem</h1>
-    <p>Calcule valores de forma rápida e gratuita</p>
+    <p>Calcule porcentagens de forma rápida e fácil</p>
 </header>
 
 <div class="container">
 
-    <a href="../index.html">← Voltar para o início</a>
+    <a href="../../index.html">← Voltar</a>
 
-    <p style="margin-top:20px;">
-        Digite o valor e a porcentagem para calcular o resultado automaticamente.
-    </p>
+    <div style="margin-top:20px;">
+        <label>Valor total:</label>
+        <input id="total" type="number" placeholder="Ex: 200">
 
-    <label>Valor:</label>
-    <input type="number" id="valor" placeholder="Ex: 200">
+        <label style="display:block; margin-top:10px;">Porcentagem (%):</label>
+        <input id="percent" type="number" placeholder="Ex: 10">
 
-    <label>Porcentagem (%):</label>
-    <input type="number" id="porcentagem" placeholder="Ex: 10">
+        <button style="margin-top:15px;" onclick="calcular()">Calcular</button>
 
-    <button onclick="calcular()">Calcular</button>
-
-    <div class="result">
-        <p><strong>Resultado:</strong> <span id="resultado">0</span></p>
+        <div style="margin-top:20px;">
+            <p><strong>Resultado:</strong></p>
+            <p id="resultado">---</p>
+        </div>
     </div>
 
-    <div style="margin-top:40px; font-size:14px; color:#94a3b8;">
-        <p>
-            Ferramenta gratuita do <strong>UtiliWeb</strong> para cálculos rápidos de porcentagem.
-            Sem cadastro e sem instalação.
-        </p>
-    </div>
+    <section style="margin-top:40px;">
+        <h2>Como usar</h2>
+        <p>Digite o valor total e a porcentagem desejada. A ferramenta calcula automaticamente o resultado para você.</p>
+    </section>
+
+    <section style="margin-top:20px;">
+        <h2>Exemplo</h2>
+        <p>10% de 200 = 20</p>
+    </section>
 
 </div>
 
 <script>
 function calcular() {
-    const valor = parseFloat(document.getElementById("valor").value) || 0;
-    const porcentagem = parseFloat(document.getElementById("porcentagem").value) || 0;
+    const total = parseFloat(document.getElementById("total").value);
+    const percent = parseFloat(document.getElementById("percent").value);
 
-    const resultado = (valor * porcentagem) / 100;
+    if (isNaN(total) || isNaN(percent)) {
+        document.getElementById("resultado").textContent = "Digite valores válidos";
+        return;
+    }
 
-    document.getElementById("resultado").textContent = resultado;
+    const result = (total * percent) / 100;
+
+    document.getElementById("resultado").textContent = result;
 }
 </script>
 
