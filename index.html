@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -16,18 +17,17 @@ body {
 /* HEADER */
 header {
     text-align: center;
-    padding: 50px 20px 30px;
-    background: radial-gradient(circle at top, #3b82f6, #1d4ed8);
+    padding: 50px 20px 20px;
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
 }
 
 header h1 {
     margin: 0;
-    font-size: 44px;
+    font-size: 42px;
 }
 
 header p {
     opacity: 0.9;
-    margin-top: 10px;
 }
 
 /* SEARCH */
@@ -49,7 +49,7 @@ header p {
 /* CONTAINER */
 .container {
     max-width: 1100px;
-    margin: 40px auto;
+    margin: 30px auto;
     padding: 0 20px;
 }
 
@@ -57,38 +57,42 @@ header p {
 .grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-    gap: 20px;
+    gap: 15px;
 }
 
 /* CARD */
 .card {
     background: #111827;
-    padding: 20px;
-    border-radius: 14px;
+    padding: 18px;
+    border-radius: 12px;
     text-decoration: none;
     color: #e5e7eb;
     border: 1px solid #1f2937;
     transition: 0.2s;
+    cursor: pointer;
 }
 
 .card:hover {
-    transform: translateY(-6px);
+    transform: translateY(-5px);
     border-color: #3b82f6;
-    background: #0f172a;
 }
 
 .badge {
-    display: inline-block;
-    margin-top: 8px;
     font-size: 12px;
-    opacity: 0.7;
+    opacity: 0.6;
+    margin-top: 6px;
 }
 
 /* CATEGORY */
 .section-title {
-    margin: 40px 0 20px;
-    font-size: 20px;
+    margin: 35px 0 15px;
     color: #93c5fd;
+    font-size: 18px;
+}
+
+/* HIDE */
+.hidden {
+    display: none;
 }
 </style>
 </head>
@@ -102,39 +106,63 @@ header p {
 
 <!-- SEARCH -->
 <div class="search-box">
-    <input type="text" placeholder="Buscar ferramenta (ex: porcentagem, senha, texto...)">
+    <input type="text" id="search" placeholder="Buscar ferramenta (ex: senha, porcentagem, texto...)">
 </div>
 
 <div class="container">
 
-    <div class="section-title">📝 Ferramentas de Texto</div>
+    <div class="section-title">🧠 Ferramentas</div>
 
-    <div class="grid">
-        <a class="card" href="contador-caracteres.html">
-            Contador de Caracteres
+    <div class="grid" id="tools">
+
+        <a class="card" href="contador-caracteres.html" data-name="texto caracteres palavras contador">
+            📝 Contador de Caracteres
             <div class="badge">Texto</div>
         </a>
-    </div>
 
-    <div class="section-title">🧮 Matemática</div>
-
-    <div class="grid">
-        <a class="card" href="calculadora-porcentagem.html">
-            Calculadora de Porcentagem
-            <div class="badge">Cálculo rápido</div>
+        <a class="card" href="calculadora-porcentagem.html" data-name="porcentagem calculadora matemática">
+            🧮 Calculadora de Porcentagem
+            <div class="badge">Matemática</div>
         </a>
-    </div>
 
-    <div class="section-title">🚧 Em breve</div>
+        <div class="card" data-name="senha gerador segurança password">
+            🔐 Gerador de Senhas (em breve)
+            <div class="badge">Segurança</div>
+        </div>
 
-    <div class="grid">
-        <div class="card">🌡️ Conversor Celsius ↔ Fahrenheit</div>
-        <div class="card">🔐 Gerador de Senhas</div>
-        <div class="card">🌐 Descobrir meu IP</div>
-        <div class="card">📦 Conversores</div>
+        <div class="card" data-name="conversor temperatura celsius fahrenheit">
+            🌡️ Conversor de Temperatura (em breve)
+            <div class="badge">Conversor</div>
+        </div>
+
+        <div class="card" data-name="ip internet meu ip">
+            🌐 Descobrir meu IP (em breve)
+            <div class="badge">Internet</div>
+        </div>
+
     </div>
 
 </div>
+
+<script>
+// BUSCA INTELIGENTE
+const search = document.getElementById("search");
+const tools = document.querySelectorAll("#tools .card");
+
+search.addEventListener("input", function () {
+    let value = this.value.toLowerCase();
+
+    tools.forEach(tool => {
+        let name = tool.getAttribute("data-name");
+
+        if (name.includes(value)) {
+            tool.classList.remove("hidden");
+        } else {
+            tool.classList.add("hidden");
+        }
+    });
+});
+</script>
 
 </body>
 </html>
