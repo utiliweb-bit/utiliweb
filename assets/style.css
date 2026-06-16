@@ -7,20 +7,15 @@
     --primary: #3b82f6;
 }
 
-* {
-    box-sizing: border-box;
-}
-
 body {
     margin: 0;
-    font-family: system-ui, Arial, sans-serif;
+    font-family: system-ui, Arial;
     background: var(--bg);
     color: var(--text);
 }
 
-/* HEADER */
 header {
-    padding: 28px;
+    padding: 30px;
     text-align: center;
     background: linear-gradient(135deg, #1d4ed8, #2563eb);
     color: white;
@@ -28,7 +23,6 @@ header {
     top: 0;
 }
 
-/* CONTAINER */
 .container {
     max-width: 1000px;
     margin: 30px auto;
@@ -76,13 +70,4 @@ input {
     font-size: 12px;
     color: var(--muted);
     margin-top: 6px;
-}
-
-/* RESULT */
-.result {
-    margin-top: 20px;
-    background: var(--panel);
-    padding: 16px;
-    border-radius: 14px;
-    border: 1px solid var(--border);
 }
