@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Conversor de Temperatura Online | UtiliWeb</title>
+<meta name="description" content="Converta Celsius para Fahrenheit e Fahrenheit para Celsius online grátis. Ferramenta rápida do UtiliWeb.">
+<meta name="robots" content="index, follow">
+
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+
+<body>
+
+<header>
+    <h1>Conversor de Temperatura</h1>
+    <p>Celsius ↔ Fahrenheit em segundos</p>
+</header>
+
+<div class="container">
+
+    <a href="../../index.html">← Voltar</a>
+
+    <div style="margin-top:20px;">
+        <label>Temperatura (°C ou °F):</label>
+        <input id="temp" type="number" placeholder="Ex: 25">
+
+        <div style="margin-top:10px;">
+            <button onclick="toF()">C → F</button>
+            <button onclick="toC()">F → C</button>
+        </div>
+
+        <div style="margin-top:20px;">
+            <p><strong>Resultado:</strong></p>
+            <p id="result">---</p>
+        </div>
+    </div>
+
+    <section style="margin-top:40px;">
+        <h2>Como usar</h2>
+        <p>Digite a temperatura e escolha a conversão desejada entre Celsius e Fahrenheit.</p>
+    </section>
+
+</div>
+
+<script>
+function toF() {
+    const c = parseFloat(document.getElementById("temp").value);
+
+    if (isNaN(c)) {
+        document.getElementById("result").textContent = "Digite um valor válido";
+        return;
+    }
+
+    const f = (c * 9/5) + 32;
+    document.getElementById("result").textContent = f.toFixed(2) + " °F";
+}
+
+function toC() {
+    const f = parseFloat(document.getElementById("temp").value);
+
+    if (isNaN(f)) {
+        document.getElementById("result").textContent = "Digite um valor válido";
+        return;
+    }
+
+    const c = (f - 32) * 5/9;
+    document.getElementById("result").textContent = c.toFixed(2) + " °C";
+}
+</script>
+
+</body>
+</html>
