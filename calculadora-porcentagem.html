@@ -3,64 +3,102 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Calculadora de Porcentagem | UtiliWeb</title>
+<title>UtiliWeb - Ferramentas Online Gratuitas</title>
 
 <style>
 body {
+    margin: 0;
     font-family: Arial, sans-serif;
-    max-width: 600px;
+    background: #0f172a;
+    color: #e2e8f0;
+}
+
+header {
+    text-align: center;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 40px;
+}
+
+header p {
+    margin-top: 10px;
+    opacity: 0.9;
+}
+
+.container {
+    max-width: 1000px;
     margin: 40px auto;
+    padding: 0 20px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: #1e293b;
     padding: 20px;
+    border-radius: 15px;
+    text-decoration: none;
+    color: #e2e8f0;
+    transition: 0.3s;
+    border: 1px solid transparent;
 }
 
-input {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    font-size: 16px;
+.card:hover {
+    transform: translateY(-5px);
+    border: 1px solid #3b82f6;
+    background: #111827;
 }
 
-button {
-    padding: 10px 15px;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-.resultado {
-    margin-top: 20px;
-    font-size: 18px;
-    font-weight: bold;
+.badge {
+    font-size: 12px;
+    opacity: 0.7;
+    margin-top: 5px;
 }
 </style>
 </head>
 
 <body>
 
-<h1>Calculadora de Porcentagem</h1>
+<header>
+    <h1>UtiliWeb</h1>
+    <p>Ferramentas Online Gratuitas para o Dia a Dia</p>
+</header>
 
-<p>Digite os valores abaixo:</p>
+<div class="container">
 
-<label>Valor:</label>
-<input type="number" id="valor" placeholder="Ex: 200">
+    <div class="grid">
 
-<label>Porcentagem (%):</label>
-<input type="number" id="porcentagem" placeholder="Ex: 10">
+        <a class="card" href="contador-caracteres.html">
+            📝 Contador de Caracteres
+            <div class="badge">Texto</div>
+        </a>
 
-<button onclick="calcular()">Calcular</button>
+        <a class="card" href="calculadora-porcentagem.html">
+            🧮 Calculadora de Porcentagem
+            <div class="badge">Matemática</div>
+        </a>
 
-<div class="resultado" id="resultado"></div>
+        <div class="card">
+            🌡️ Conversor Celsius ↔ Fahrenheit
+            <div class="badge">Em breve</div>
+        </div>
 
-<script>
-function calcular() {
-    let valor = document.getElementById("valor").value;
-    let porcentagem = document.getElementById("porcentagem").value;
+        <div class="card">
+            🔐 Gerador de Senhas
+            <div class="badge">Em breve</div>
+        </div>
 
-    let resultado = (valor * porcentagem) / 100;
+    </div>
 
-    document.getElementById("resultado").innerHTML =
-        porcentagem + "% de " + valor + " = " + resultado;
-}
-</script>
+</div>
 
 </body>
 </html>
