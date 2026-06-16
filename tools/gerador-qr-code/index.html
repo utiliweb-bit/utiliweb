@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Gerador de QR Code Online | UtiliWeb</title>
+<meta name="description" content="Gere QR Codes online grátis. Converta links, textos e informações em QR Code instantaneamente.">
+<meta name="robots" content="index, follow">
+
+<link rel="stylesheet" href="../../assets/style.css">
+
+<!-- biblioteca QR -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+
+<body>
+
+<header>
+    <h1>Gerador de QR Code</h1>
+    <p>Crie QR Codes para links e textos</p>
+</header>
+
+<div class="container">
+
+    <a href="../../index.html">← Voltar</a>
+
+    <div style="margin-top:20px;">
+        <input id="text" type="text" placeholder="Digite um link ou texto">
+
+        <button onclick="gerar()">Gerar QR Code</button>
+
+        <div id="qrcode" style="margin-top:20px;"></div>
+    </div>
+
+    <section style="margin-top:40px;">
+        <h2>Como usar</h2>
+        <p>Digite um link ou texto e clique em gerar. O QR Code aparecerá automaticamente abaixo.</p>
+    </section>
+
+</div>
+
+<script>
+function gerar() {
+    const text = document.getElementById("text").value;
+
+    if (!text) return;
+
+    document.getElementById("qrcode").innerHTML = "";
+
+    new QRCode(document.getElementById("qrcode"), {
+        text: text,
+        width: 180,
+        height: 180
+    });
+}
+</script>
+
+</body>
+</html>
