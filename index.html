@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -6,95 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>UtiliWeb - Ferramentas Online Gratuitas</title>
 
-<style>
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #0b1220;
-    color: #e5e7eb;
-}
-
-/* HEADER */
-header {
-    text-align: center;
-    padding: 50px 20px 20px;
-    background: linear-gradient(135deg, #2563eb, #1d4ed8);
-}
-
-header h1 {
-    margin: 0;
-    font-size: 42px;
-}
-
-header p {
-    opacity: 0.9;
-}
-
-/* SEARCH */
-.search-box {
-    max-width: 600px;
-    margin: 20px auto;
-    padding: 0 20px;
-}
-
-.search-box input {
-    width: 100%;
-    padding: 14px;
-    border-radius: 10px;
-    border: none;
-    outline: none;
-    font-size: 16px;
-}
-
-/* CONTAINER */
-.container {
-    max-width: 1100px;
-    margin: 30px auto;
-    padding: 0 20px;
-}
-
-/* GRID */
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-    gap: 15px;
-}
-
-/* CARD */
-.card {
-    background: #111827;
-    padding: 18px;
-    border-radius: 12px;
-    text-decoration: none;
-    color: #e5e7eb;
-    border: 1px solid #1f2937;
-    transition: 0.2s;
-    cursor: pointer;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-    border-color: #3b82f6;
-}
-
-.badge {
-    font-size: 12px;
-    opacity: 0.6;
-    margin-top: 6px;
-}
-
-/* CATEGORY */
-.section-title {
-    margin: 35px 0 15px;
-    color: #93c5fd;
-    font-size: 18px;
-}
-
-/* HIDE */
-.hidden {
-    display: none;
-}
-</style>
+<link rel="stylesheet" href="assets/style.css">
 </head>
 
 <body>
@@ -104,6 +15,12 @@ header p {
     <p>Ferramentas Online Gratuitas para o Dia a Dia</p>
 </header>
 
+<!-- NAV -->
+<div class="container" style="text-align:center; margin-top:10px;">
+    <a href="/">🏠 Início</a> |
+    <a href="#tools">🧠 Ferramentas</a>
+</div>
+
 <!-- SEARCH -->
 <div class="search-box">
     <input type="text" id="search" placeholder="Buscar ferramenta (ex: senha, porcentagem, texto...)">
@@ -111,16 +28,16 @@ header p {
 
 <div class="container">
 
-    <div class="section-title">🧠 Ferramentas</div>
+    <h2 id="tools">🧠 Ferramentas</h2>
 
-    <div class="grid" id="tools">
+    <div class="grid">
 
-        <a class="card" href="contador-caracteres.html" data-name="texto caracteres palavras contador">
+        <a class="card" href="tools/contador-caracteres.html" data-name="texto caracteres palavras contador">
             📝 Contador de Caracteres
             <div class="badge">Texto</div>
         </a>
 
-        <a class="card" href="calculadora-porcentagem.html" data-name="porcentagem calculadora matemática">
+        <a class="card" href="tools/calculadora-porcentagem.html" data-name="porcentagem calculadora matemática">
             🧮 Calculadora de Porcentagem
             <div class="badge">Matemática</div>
         </a>
@@ -145,21 +62,18 @@ header p {
 </div>
 
 <script>
-// BUSCA INTELIGENTE
+// UX SEARCH (produto real)
 const search = document.getElementById("search");
-const tools = document.querySelectorAll("#tools .card");
+const cards = document.querySelectorAll(".card");
 
-search.addEventListener("input", function () {
-    let value = this.value.toLowerCase();
+search.addEventListener("input", (e) => {
+    const value = e.target.value.toLowerCase().trim();
 
-    tools.forEach(tool => {
-        let name = tool.getAttribute("data-name");
+    cards.forEach(card => {
+        const text = card.innerText.toLowerCase();
+        const match = text.includes(value);
 
-        if (name.includes(value)) {
-            tool.classList.remove("hidden");
-        } else {
-            tool.classList.add("hidden");
-        }
+        card.style.display = match ? "block" : "none";
     });
 });
 </script>
