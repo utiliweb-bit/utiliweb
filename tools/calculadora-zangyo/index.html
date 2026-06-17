@@ -11,7 +11,7 @@
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
 }
 
 body{
@@ -23,47 +23,41 @@ body{
     padding:12px;
 }
 
-/* WRAPPER PRINCIPAL */
 .wrapper{
     width:100%;
-    max-width:1000px;
+    max-width:1100px;
     background:#fff;
     border-radius:16px;
     display:grid;
     grid-template-columns:1fr 1fr;
-    overflow:hidden; /* 🔥 evita vazamento visual */
-    box-shadow:0 20px 60px rgba(0,0,0,0.3);
+    overflow:hidden;
+    box-shadow:0 20px 60px rgba(0,0,0,.30);
 }
 
-/* PAINÉIS */
 .left-panel,
 .right-panel{
     padding:24px;
-    min-width:0; /* 🔥 evita overflow em grid */
+    min-width:0;
 }
 
-/* LEFT */
 h2{
-    font-size:22px;
+    font-size:24px;
     margin-bottom:6px;
 }
 
 .subtitle{
-    font-size:12px;
+    font-size:13px;
     color:#777;
-    margin-bottom:14px;
+    margin-bottom:16px;
 }
 
-/* INPUTS */
 input{
     width:100%;
-    max-width:100%;
     padding:12px;
     margin:6px 0;
     border:2px solid #ddd;
     border-radius:10px;
     font-size:16px;
-    display:block;
 }
 
 input:focus{
@@ -71,54 +65,82 @@ input:focus{
     outline:none;
 }
 
-/* BOTÃO */
 button{
     width:100%;
-    padding:12px;
-    margin-top:10px;
+    padding:14px;
+    margin-top:12px;
     border:none;
     border-radius:10px;
     background:#27ae60;
     color:#fff;
+    font-size:16px;
     font-weight:bold;
-    font-size:14px;
+    cursor:pointer;
 }
 
-/* RIGHT */
+button:hover{
+    opacity:.95;
+}
+
 .right-panel{
-    background: linear-gradient(135deg,#e8f8f5,#d5f4e6);
+    background:linear-gradient(135deg,#e8f8f5,#d5f4e6);
 }
 
 .result-title{
-    font-size:12px;
+    font-size:13px;
     font-weight:700;
     color:#27ae60;
-    margin-bottom:10px;
+    margin-bottom:12px;
     border-bottom:2px solid #27ae60;
-    padding-bottom:6px;
+    padding-bottom:8px;
 }
 
 .result{
-    font-size:13px;
-    line-height:1.6;
+    font-size:14px;
+    line-height:1.7;
     color:#222;
+    word-break:break-word;
 }
 
 .big{
-    font-size:18px;
+    font-size:24px;
     font-weight:bold;
     color:#27ae60;
-    margin-top:10px;
+    margin-top:18px;
 }
 
-/* RESPONSIVO */
+hr{
+    border:none;
+    border-top:1px solid #c7e9d6;
+    margin:12px 0;
+}
+
 @media(max-width:768px){
+
+    body{
+        align-items:flex-start;
+        padding:10px;
+    }
+
     .wrapper{
         grid-template-columns:1fr;
     }
 
     .left-panel{
         border-bottom:1px solid #ddd;
+    }
+
+    .left-panel,
+    .right-panel{
+        padding:18px;
+    }
+
+    h2{
+        font-size:22px;
+    }
+
+    .big{
+        font-size:22px;
     }
 }
 </style>
@@ -128,31 +150,46 @@ button{
 
 <div class="wrapper">
 
-    <!-- INPUT -->
     <div class="left-panel">
 
         <h2>💼 Zangyō PRO</h2>
-        <div class="subtitle">Simulador de Salário no Japão</div>
+        <div class="subtitle">
+            Simulador Realista de Salário no Japão
+        </div>
 
-        <input id="jikyu" type="number" placeholder="Valor da hora ¥">
-        <input id="horasNormal" type="number" placeholder="Horas normais">
-        <input id="horasExtra" type="number" placeholder="Horas extras (+25%)">
-        <input id="horasNoturnas" type="number" placeholder="Horas noturnas (+25%)">
+        <input id="jikyu" type="number" placeholder="Valor da hora (時給) ¥">
 
-        <button onclick="calcular()">Calcular</button>
+        <input id="horasNormal" type="number" placeholder="Horas normais diurnas">
+
+        <input id="horasNoturnas" type="number" placeholder="Horas normais noturnas (+25%)">
+
+        <input id="horasExtra" type="number" placeholder="Horas extras diurnas (+25%)">
+
+        <input id="horasExtraNoturna" type="number" placeholder="Horas extras noturnas (+50%)">
+
+        <input id="horasFeriado" type="number" placeholder="Horas em feriado (+35%)">
+
+        <input id="horasFeriadoNoturno" type="number" placeholder="Feriado noturno (+60%)">
+
+        <input id="diasMes" type="number" value="22" placeholder="Dias trabalhados no mês">
+
+        <button onclick="calcular()">
+            Calcular Salário
+        </button>
 
     </div>
 
-    <!-- RESULTADO -->
     <div class="right-panel">
 
-        <div class="result-title">Resultado</div>
-
-        <div class="result" id="out">
-            Preencha os dados e calcule
+        <div class="result-title">
+            Resultado da Simulação
         </div>
 
-        <div class="big" id="total"></div>
+        <div id="out" class="result">
+            Preencha os dados e clique em calcular.
+        </div>
+
+        <div id="total" class="big"></div>
 
     </div>
 
@@ -163,162 +200,180 @@ button{
 function calcular(){
 
     const jikyu =
-        parseFloat(document.getElementById("jikyu").value) || 0;
+    parseFloat(document.getElementById("jikyu").value) || 0;
 
     const normal =
-        parseFloat(document.getElementById("horasNormal").value) || 0;
-
-    const extra =
-        parseFloat(document.getElementById("horasExtra").value) || 0;
+    parseFloat(document.getElementById("horasNormal").value) || 0;
 
     const noturno =
-        parseFloat(document.getElementById("horasNoturnas").value) || 0;
+    parseFloat(document.getElementById("horasNoturnas").value) || 0;
+
+    const extra =
+    parseFloat(document.getElementById("horasExtra").value) || 0;
+
+    const extraNoturna =
+    parseFloat(document.getElementById("horasExtraNoturna").value) || 0;
+
+    const feriado =
+    parseFloat(document.getElementById("horasFeriado").value) || 0;
+
+    const feriadoNoturno =
+    parseFloat(document.getElementById("horasFeriadoNoturno").value) || 0;
+
+    const diasMes =
+    parseFloat(document.getElementById("diasMes").value) || 22;
 
     if(jikyu <= 0){
+
         document.getElementById("out").innerHTML =
-        "❌ Informe o valor da hora.";
+        "❌ Informe um valor válido para o salário por hora.";
+
         document.getElementById("total").innerHTML = "";
+
         return;
     }
 
-    // ==========================
-    // BRUTO
-    // ==========================
+    // =====================
+    // GANHOS
+    // =====================
 
     const valorNormal =
-        jikyu * normal;
-
-    const valorExtra =
-        jikyu * extra * 1.25;
+    jikyu * normal;
 
     const valorNoturno =
-        jikyu * noturno * 1.25;
+    jikyu * noturno * 1.25;
+
+    const valorExtra =
+    jikyu * extra * 1.25;
+
+    const valorExtraNoturna =
+    jikyu * extraNoturna * 1.50;
+
+    const valorFeriado =
+    jikyu * feriado * 1.35;
+
+    const valorFeriadoNoturno =
+    jikyu * feriadoNoturno * 1.60;
 
     const brutoDia =
-        valorNormal +
-        valorExtra +
-        valorNoturno;
-
-    // Média padrão fábrica Japão
-    const diasMes = 22;
+    valorNormal +
+    valorNoturno +
+    valorExtra +
+    valorExtraNoturna +
+    valorFeriado +
+    valorFeriadoNoturno;
 
     const brutoMes =
-        brutoDia * diasMes;
+    brutoDia * diasMes;
 
-    // ==========================
-    // DESCONTOS REAIS ESTIMADOS
-    // ==========================
+    // =====================
+    // DESCONTOS ESTIMADOS
+    // =====================
 
-    let percentualDesconto;
+    let descontoPct;
 
     if(brutoMes < 150000){
-        percentualDesconto = 0.11;
+        descontoPct = 0.11;
     }
     else if(brutoMes < 200000){
-        percentualDesconto = 0.13;
+        descontoPct = 0.13;
     }
     else if(brutoMes < 250000){
-        percentualDesconto = 0.16;
+        descontoPct = 0.16;
     }
     else if(brutoMes < 300000){
-        percentualDesconto = 0.18;
+        descontoPct = 0.18;
     }
     else if(brutoMes < 350000){
-        percentualDesconto = 0.20;
+        descontoPct = 0.20;
     }
     else if(brutoMes < 450000){
-        percentualDesconto = 0.22;
+        descontoPct = 0.22;
     }
     else{
-        percentualDesconto = 0.25;
+        descontoPct = 0.25;
     }
 
     const descontoTotal =
-        brutoMes * percentualDesconto;
+    brutoMes * descontoPct;
 
     const liquidoMes =
-        brutoMes - descontoTotal;
+    brutoMes - descontoTotal;
 
-    // ==========================
-    // DETALHAMENTO
-    // ==========================
-
-    const adicionalExtra =
-        valorExtra - (jikyu * extra);
-
-    const adicionalNoturno =
-        valorNoturno - (jikyu * noturno);
+    // =====================
+    // RESULTADO
+    // =====================
 
     document.getElementById("out").innerHTML = `
 
-🕒 Salário Base:
-¥${valorNormal.toLocaleString('ja-JP')}
+🕒 Horas Normais<br>
+<b>¥${valorNormal.toLocaleString('ja-JP')}</b>
 
-<br><br>
+<hr>
 
-⚡ Hora Extra (+25%):
-¥${valorExtra.toLocaleString('ja-JP')}
+🌙 Horas Noturnas (+25%)<br>
+<b>¥${valorNoturno.toLocaleString('ja-JP')}</b>
 
-<br>
+<hr>
 
-📈 Acréscimo recebido:
-¥${adicionalExtra.toLocaleString('ja-JP')}
+⚡ Horas Extras (+25%)<br>
+<b>¥${valorExtra.toLocaleString('ja-JP')}</b>
 
-<br><br>
+<hr>
 
-🌙 Horário Noturno (+25%):
-¥${valorNoturno.toLocaleString('ja-JP')}
+🌃 Horas Extras Noturnas (+50%)<br>
+<b>¥${valorExtraNoturna.toLocaleString('ja-JP')}</b>
 
-<br>
+<hr>
 
-🌃 Acréscimo noturno:
-¥${adicionalNoturno.toLocaleString('ja-JP')}
+🎌 Trabalho em Feriado (+35%)<br>
+<b>¥${valorFeriado.toLocaleString('ja-JP')}</b>
 
-<br><br>
+<hr>
 
-━━━━━━━━━━━━━━
+🎌🌙 Feriado Noturno (+60%)<br>
+<b>¥${valorFeriadoNoturno.toLocaleString('ja-JP')}</b>
 
-<br>
+<hr>
 
-📆 Bruto Diário:
+📆 Bruto Diário<br>
 <b>¥${brutoDia.toLocaleString('ja-JP')}</b>
 
-<br>
+<hr>
 
-📅 Bruto Mensal (22 dias):
+📅 Bruto Mensal (${diasMes} dias)<br>
 <b>¥${brutoMes.toLocaleString('ja-JP')}</b>
 
-<br><br>
+<hr>
 
-🏥 Saúde + Pensão + Seguro:
-≈ ${(percentualDesconto*100).toFixed(0)}%
-
-<br>
-
-💸 Descontos estimados:
-- ¥${descontoTotal.toLocaleString('ja-JP')}
+🏥 Saúde + Pensão + Seguro + Imposto<br>
+≈ ${(descontoPct*100).toFixed(0)}%
 
 <br><br>
 
-━━━━━━━━━━━━━━
+💸 Descontos Estimados<br>
+<b>- ¥${descontoTotal.toLocaleString('ja-JP')}</b>
 
-<br>
+<hr>
 
-💰 Líquido estimado:
-<b>¥${liquidoMes.toLocaleString('ja-JP')}</b>
+💰 Salário Líquido Estimado<br>
+<b style="font-size:20px;color:#27ae60;">
+¥${liquidoMes.toLocaleString('ja-JP')}
+</b>
 
 <br><br>
 
-<small style="color:#666">
-Estimativa baseada em descontos médios praticados no Japão.
-Valores reais podem variar conforme prefeitura, idade, contrato, dependentes e renda anual.
+<small style="color:#666;">
+Estimativa baseada em descontos médios praticados no Japão
+(健康保険, 厚生年金, 雇用保険 e imposto de renda).
+Os valores reais podem variar conforme província,
+idade, dependentes, empresa e faixa salarial.
 </small>
 
 `;
 
     document.getElementById("total").innerHTML =
     "💴 ¥" + liquidoMes.toLocaleString('ja-JP');
-
 }
 
 </script>
