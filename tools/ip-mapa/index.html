@@ -12,12 +12,35 @@
 <link rel="stylesheet" href="../../assets/style.css">
 
 <style>
-#map{
-    width:100%;
-    height:350px;
-    margin-top:20px;
-    border-radius:10px;
-    overflow:hidden;
+.container {
+    max-width: 900px;
+}
+
+.box {
+    display: grid;
+    gap: 15px;
+}
+
+.result {
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 12px;
+    border-radius: 10px;
+    background: rgba(0,0,0,0.03);
+}
+
+#map {
+    width: 100%;
+    height: 360px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border, #ddd);
+}
+
+iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
 }
 </style>
 
@@ -27,7 +50,7 @@
 
 <header>
     <h1>🗺️ IP no Mapa</h1>
-    <p>Veja a localização aproximada do seu IP</p>
+    <p>Localização aproximada do seu IP em tempo real</p>
 </header>
 
 <div class="container">
@@ -37,7 +60,7 @@
     <div class="box">
 
         <div id="info" class="result">
-            Carregando informações...
+            Carregando dados do IP...
         </div>
 
         <div id="map"></div>
@@ -47,51 +70,39 @@
 </div>
 
 <script>
-
 async function load() {
 
     const info = document.getElementById("info");
 
     try {
-
         const response = await fetch("https://ipapi.co/json/");
         const data = await response.json();
 
         if (!data.latitude || !data.longitude) {
-
             info.textContent = "Não foi possível localizar o IP.";
             return;
-
         }
 
         info.innerHTML = `
-            <strong>IP:</strong> ${data.ip}<br><br>
+            <strong>IP:</strong> ${data.ip}<br>
             <strong>Cidade:</strong> ${data.city}<br>
             <strong>País:</strong> ${data.country_name}
         `;
 
         document.getElementById("map").innerHTML = `
             <iframe
-                width="100%"
-                height="350"
-                style="border:0"
                 loading="lazy"
                 src="https://maps.google.com/maps?q=${data.latitude},${data.longitude}&z=10&output=embed">
             </iframe>
         `;
 
-    } catch {
-
-        info.textContent = "Erro ao carregar os dados.";
-
+    } catch (e) {
+        info.textContent = "Erro ao carregar informações do IP.";
     }
-
 }
 
 load();
-
 </script>
 
 </body>
 </html>
-```
