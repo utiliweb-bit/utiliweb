@@ -2,14 +2,12 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
 <title>Gerador de QR Code | UtiliWeb</title>
 
 <meta name="description" content="Gere QR Codes online grátis para links, textos e PIX.">
 <meta name="keywords" content="qr code, gerador qr code, utiliweb">
-
-<link rel="stylesheet" href="../../assets/style.css">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
@@ -18,6 +16,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
 }
 
 html, body {
@@ -28,45 +27,69 @@ html, body {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    padding: 16px;
 }
 
 /* WRAPPER */
 .wrapper {
     width: 100%;
-    max-width: 1000px;
-    min-height: 650px;
+    max-width: 1100px;
     background: #fff;
-    border-radius: 20px;
+    border-radius: 16px;
     box-shadow: 0 20px 60px rgba(0,0,0,0.3);
     display: grid;
     grid-template-columns: 1fr 1fr;
     overflow: hidden;
+    max-height: 90vh;
 }
 
 /* LEFT */
 .left-panel {
-    padding: 30px;
-    border-right: 1px solid #eee;
+    padding: 28px;
+    overflow-y: auto;
+    border-right: 1px solid #e0e0e0;
 }
 
-header h1 {
+/* RIGHT */
+.right-panel {
+    padding: 28px;
+    background: #eafaf1;
+    overflow-y: auto;
+}
+
+/* HEADER */
+header {
+    text-align: center;
+    margin-bottom: 18px;
+}
+
+h1 {
     font-size: 26px;
+    color: #333;
 }
 
 .subtitle {
-    font-size: 14px;
+    font-size: 13px;
     color: #777;
+}
+
+/* VOLTAR */
+a {
+    display: inline-block;
+    margin-bottom: 14px;
+    color: #27ae60;
+    font-weight: 600;
+    text-decoration: none;
 }
 
 /* INPUTS */
 input, select {
     width: 100%;
     padding: 12px;
-    margin-top: 10px;
-    border-radius: 8px;
+    border-radius: 10px;
     border: 2px solid #ddd;
     font-size: 14px;
+    margin-top: 10px;
 }
 
 input:focus, select:focus {
@@ -74,56 +97,76 @@ input:focus, select:focus {
     outline: none;
 }
 
-/* BOTÕES */
+/* BUTTONS */
 .buttons {
-    display: flex;
-    gap: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
     margin-top: 15px;
 }
 
 button {
-    flex: 1;
     padding: 12px;
-    border-radius: 8px;
+    border-radius: 10px;
     border: none;
     cursor: pointer;
-    font-weight: bold;
+    font-weight: 700;
+    font-size: 12px;
     background: #27ae60;
     color: white;
+    text-transform: uppercase;
+    transition: 0.2s;
 }
 
-button:hover {
-    opacity: 0.9;
+button:active {
+    transform: scale(0.97);
 }
 
-/* QR AREA */
+/* QR */
 .qr-box {
     margin-top: 20px;
-    text-align: center;
-    padding: 20px;
-    border-radius: 10px;
     background: #f7f7f7;
-}
-
-/* RIGHT */
-.right-panel {
-    padding: 30px;
-    background: #eafaf1;
+    padding: 20px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 260px;
 }
 
 /* RESPONSIVO */
 @media (max-width: 900px) {
     .wrapper {
         grid-template-columns: 1fr;
+        max-height: none;
+        border-radius: 12px;
     }
 
     .left-panel {
         border-right: none;
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid #e0e0e0;
     }
 
     .buttons {
-        flex-direction: column;
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    html, body {
+        padding: 10px;
+    }
+
+    .wrapper {
+        border-radius: 10px;
+    }
+
+    .left-panel, .right-panel {
+        padding: 16px;
+    }
+
+    h1 {
+        font-size: 20px;
     }
 }
 </style>
@@ -138,17 +181,14 @@ button:hover {
     <div class="left-panel">
 
         <header>
-            <h1>📱 Gerador de QR Code</h1>
-            <p class="subtitle">Links, textos e PIX</p>
+            <h1>📱 QR Code</h1>
+            <p class="subtitle">Gerador rápido e responsivo</p>
         </header>
-
-        <br>
 
         <a href="../../index.html">← Voltar</a>
 
         <input id="text" type="text" placeholder="Digite link ou texto">
 
-        <label>Tamanho</label>
         <select id="size">
             <option value="120">Pequeno</option>
             <option value="200" selected>Médio</option>
@@ -172,8 +212,8 @@ button:hover {
 
         <h2>Como funciona</h2>
         <p>
-            Digite um texto ou link e gere um QR Code instantaneamente.
-            Ideal para sites, cartões e pagamentos.
+            Gere QR Codes instantaneamente para links, textos e pagamentos.
+            Interface otimizada para celular e desktop.
         </p>
 
     </div>
@@ -184,7 +224,6 @@ button:hover {
 let currentText = "";
 
 function generate() {
-
     const text = document.getElementById("text").value.trim();
     const size = parseInt(document.getElementById("size").value);
 
