@@ -2,59 +2,129 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
-<title>Teste de Velocidade da Internet | UtiliWeb</title>
+<title>Teste de Velocidade | UtiliWeb</title>
 
-<meta name="description" content="Teste gratuitamente a qualidade da sua conexão de internet. Veja o ping e a classificação da rede.">
+<meta name="description" content="Teste ping e qualidade da sua conexão em segundos.">
 <meta name="robots" content="index, follow">
 
-<link rel="stylesheet" href="../../assets/style.css">
-
 <style>
-.container {
-    max-width: 900px;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
 }
 
-.box {
-    display: grid;
-    gap: 15px;
-    text-align: center;
-}
-
-.speed-number {
-    font-size: 48px;
-    font-weight: 800;
-    margin: 10px 0;
-}
-
-.status {
-    font-size: 20px;
-    font-weight: 600;
-}
-
-.progress {
+html, body {
     width: 100%;
-    height: 14px;
-    background: #e5e7eb;
-    border-radius: 20px;
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+}
+
+/* CONTAINER */
+.wrapper {
+    width: 100%;
+    max-width: 1000px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     overflow: hidden;
 }
 
-.progress-bar {
+/* PAINÉIS */
+.left, .right {
+    padding: 28px;
+}
+
+/* TÍTULOS */
+h1 {
+    font-size: 22px;
+    margin-bottom: 6px;
+}
+
+p {
+    font-size: 12px;
+    color: #777;
+}
+
+/* BOTÃO */
+button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 16px;
+    border: none;
+    border-radius: 10px;
+    background: #27ae60;
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* RESULTADO PRINCIPAL */
+.ping {
+    font-size: 52px;
+    font-weight: 800;
+    text-align: center;
+    margin: 20px 0;
+}
+
+/* STATUS */
+.status {
+    text-align: center;
+    font-size: 18px;
+    font-weight: 700;
+    color: #333;
+}
+
+/* PROGRESS BAR */
+.progress {
+    width: 100%;
+    height: 12px;
+    background: #eee;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-top: 16px;
+}
+
+.bar {
     width: 0%;
     height: 100%;
     background: linear-gradient(90deg, #3b82f6, #22c55e);
     transition: 0.4s;
 }
 
+/* INFO */
 .info {
-    text-align: left;
-    font-size: 14px;
-    line-height: 1.6;
-    background: rgba(0,0,0,0.03);
-    padding: 12px;
+    margin-top: 16px;
+    background: #f4f4f4;
+    padding: 14px;
     border-radius: 10px;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* RESPONSIVO */
+@media (max-width: 768px) {
+    .wrapper {
+        grid-template-columns: 1fr;
+    }
+
+    html, body {
+        padding: 12px;
+    }
+
+    .left, .right {
+        padding: 18px;
+    }
 }
 </style>
 
@@ -62,30 +132,32 @@
 
 <body>
 
-<header>
-    <h1>⚡ Teste de Velocidade</h1>
-    <p>Ping e qualidade da sua conexão em segundos</p>
-</header>
+<div class="wrapper">
 
-<div class="container">
+    <!-- INPUT -->
+    <div class="left">
 
-    <a href="../../index.html">← Voltar</a>
-
-    <div class="box">
+        <h1>⚡ Teste de Velocidade</h1>
+        <p>Ping e qualidade da sua conexão em segundos</p>
 
         <button onclick="testSpeed()">Iniciar teste</button>
 
-        <div class="speed-number" id="ping">--</div>
+        <div class="ping" id="ping">--</div>
 
-        <div class="status" id="quality">
-            Clique para iniciar
-        </div>
+        <div class="status" id="status">Clique para iniciar</div>
 
         <div class="progress">
-            <div class="progress-bar" id="bar"></div>
+            <div class="bar" id="bar"></div>
         </div>
 
-        <div class="info" id="details"></div>
+    </div>
+
+    <!-- RESULTADO -->
+    <div class="right">
+
+        <h2>Detalhes</h2>
+
+        <div class="info" id="info">Nenhum teste realizado</div>
 
     </div>
 
@@ -95,22 +167,20 @@
 async function testSpeed() {
 
     const ping = document.getElementById("ping");
-    const quality = document.getElementById("quality");
-    const details = document.getElementById("details");
+    const status = document.getElementById("status");
+    const info = document.getElementById("info");
     const bar = document.getElementById("bar");
 
     ping.textContent = "...";
-    quality.textContent = "Testando conexão...";
-    details.innerHTML = "";
+    status.textContent = "Testando conexão...";
     bar.style.width = "10%";
+    info.innerHTML = "";
 
     try {
 
         const start = performance.now();
 
-        await fetch("https://api.ipify.org?format=json", {
-            cache: "no-store"
-        });
+        await fetch("https://api.ipify.org?format=json", { cache: "no-store" });
 
         const end = performance.now();
         const latency = Math.round(end - start);
@@ -118,36 +188,36 @@ async function testSpeed() {
         bar.style.width = "100%";
         ping.textContent = `${latency} ms`;
 
-        let status = "";
+        let quality = "";
         let use = "";
 
         if (latency < 100) {
-            status = "🟢 Excelente";
-            use = "Navegação, streaming, chamadas e jogos online";
+            quality = "🟢 Excelente";
+            use = "Streaming, jogos online, chamadas";
         } 
         else if (latency < 300) {
-            status = "🟡 Boa";
-            use = "Navegação e streaming (jogos podem ter atraso)";
+            quality = "🟡 Boa";
+            use = "Navegação e vídeos (jogos podem atrasar)";
         } 
         else {
-            status = "🔴 Lenta";
-            use = "Navegação básica, streaming pode travar";
+            quality = "🔴 Lenta";
+            use = "Uso básico, pode haver travamentos";
         }
 
-        quality.textContent = status;
+        status.textContent = quality;
 
-        details.innerHTML = `
+        info.innerHTML = `
             <strong>Ping:</strong> ${latency} ms<br>
+            <strong>Qualidade:</strong> ${quality}<br>
             <strong>Uso recomendado:</strong> ${use}<br>
-            <strong>Data:</strong> ${new Date().toLocaleString("pt-BR")}
+            <strong>Horário:</strong> ${new Date().toLocaleString("pt-BR")}
         `;
 
     } catch (e) {
 
         ping.textContent = "--";
-        quality.textContent = "Erro ao testar conexão.";
+        status.textContent = "Erro no teste";
         bar.style.width = "0%";
-
     }
 }
 </script>
