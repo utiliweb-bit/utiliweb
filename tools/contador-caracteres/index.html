@@ -2,71 +2,70 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
-<title>Contador de Caracteres | UtiliWeb</title>
+<title>Contador de Texto | UtiliWeb</title>
 
-<meta name="description" content="Conte caracteres e palavras em tempo real de forma simples e rápida.">
-<meta name="keywords" content="contador de texto, caracteres, palavras, utiliweb">
-
-<link rel="stylesheet" href="../../assets/style.css">
+<meta name="description" content="Conte caracteres e palavras em tempo real de forma rápida e precisa.">
+<meta name="robots" content="index, follow">
 
 <style>
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
 }
 
 html, body {
     width: 100%;
     min-height: 100vh;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial;
-    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    padding: 16px;
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
 }
 
+/* WRAPPER */
 .wrapper {
     width: 100%;
     max-width: 1100px;
-    min-height: 600px;
     background: #fff;
-    border-radius: 20px;
+    border-radius: 16px;
     box-shadow: 0 20px 60px rgba(0,0,0,0.3);
     display: grid;
     grid-template-columns: 1fr 1fr;
     overflow: hidden;
 }
 
-/* ESQUERDA */
-.left-panel {
-    padding: 30px;
-    border-right: 1px solid #eee;
-    overflow-y: auto;
+/* PAINÉIS */
+.left, .right {
+    padding: 28px;
 }
 
-header h1 {
-    font-size: 26px;
+/* HEADER */
+h1 {
+    font-size: 22px;
+    margin-bottom: 6px;
 }
 
-.subtitle {
-    font-size: 14px;
+p {
+    font-size: 12px;
     color: #777;
 }
 
-/* INPUT */
+/* TEXTAREA */
 textarea {
     width: 100%;
-    height: 200px;
+    min-height: 220px;
+    margin-top: 12px;
     padding: 12px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    resize: none;
+    border-radius: 10px;
+    border: 1px solid #ddd;
     font-size: 14px;
-    margin-top: 10px;
+    resize: none;
 }
 
 textarea:focus {
@@ -74,51 +73,34 @@ textarea:focus {
     border-color: #27ae60;
 }
 
-/* GRID RESULTADO */
+/* GRID */
 .grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
-    margin-top: 15px;
+    margin-top: 14px;
 }
 
 .card {
-    background: #f9f9f9;
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    font-weight: bold;
-}
-
-/* DIREITA */
-.right-panel {
-    padding: 30px;
-    background: #eafaf1;
+    background: #f4f4f4;
+    padding: 14px;
+    border-radius: 10px;
+    font-weight: 800;
+    font-size: 14px;
 }
 
 /* RESPONSIVO */
-@media (max-width: 900px) {
+@media (max-width: 768px) {
     .wrapper {
         grid-template-columns: 1fr;
     }
 
-    .left-panel {
-        border-right: none;
-        border-bottom: 1px solid #eee;
-    }
-}
-
-@media (max-width: 600px) {
-    body {
-        padding: 10px;
+    html, body {
+        padding: 12px;
     }
 
-    .wrapper {
-        border-radius: 12px;
-    }
-
-    .grid {
-        grid-template-columns: 1fr;
+    .left, .right {
+        padding: 18px;
     }
 }
 </style>
@@ -129,20 +111,13 @@ textarea:focus {
 
 <div class="wrapper">
 
-    <!-- ESQUERDA -->
-    <div class="left-panel">
+    <!-- INPUT -->
+    <div class="left">
 
-        <header>
-            <h1>✍️ Contador de Texto</h1>
-            <p class="subtitle">Contagem em tempo real</p>
-        </header>
+        <h1>✍️ Contador de Texto</h1>
+        <p>Contagem em tempo real</p>
 
-        <br>
-
-        <a href="../../index.html">← Voltar</a>
-
-        <label>Digite seu texto</label>
-        <textarea id="text" placeholder="Digite aqui..."></textarea>
+        <textarea id="text" placeholder="Digite seu texto aqui..."></textarea>
 
         <div class="grid">
             <div class="card">Caracteres: <span id="chars">0</span></div>
@@ -151,10 +126,12 @@ textarea:focus {
 
     </div>
 
-    <!-- DIREITA -->
-    <div class="right-panel">
+    <!-- RESULTADO -->
+    <div class="right">
+
         <h2>Resultado ao vivo</h2>
-        <p>Os dados são atualizados automaticamente conforme você digita.</p>
+        <p>Atualização automática conforme digitação.</p>
+
     </div>
 
 </div>
@@ -165,6 +142,7 @@ const chars = document.getElementById("chars");
 const words = document.getElementById("words");
 
 text.addEventListener("input", () => {
+
     const value = text.value;
     const trimmed = value.trim();
 
