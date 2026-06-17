@@ -1,252 +1,1076 @@
-<script>
-/* =========================
-   UTILIWEB CORE - PRAZOS PRO
-========================= */
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Contador de Dias e Prazos - Calcule vistos, contratos e prazos com facilidade">
+    <meta name="keywords" content="contador dias, prazos, visto japão, contrato, renovação, brasileiros no japão">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Contador de Prazos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-let lembretes = JSON.parse(localStorage.getItem('lembretes-prazos-desktop')) || [];
-let abaAtiva = 'diferenca';
+        html, body {
+            width: 100%;
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+            margin: 0;
+        }
 
-/* =========================
-   ABA SWITCH
-========================= */
-function mudarAba(aba, event) {
-    abaAtiva = aba;
+        .wrapper {
+            width: 100%;
+            max-width: 1200px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            overflow: hidden;
+            max-height: 90vh;
+        }
 
-    document.querySelectorAll('.aba-btn').forEach(btn => btn.classList.remove('ativo'));
-    if (event?.currentTarget) event.currentTarget.classList.add('ativo');
+        .left-panel {
+            padding: 32px;
+            overflow-y: auto;
+            border-right: 1px solid #e0e0e0;
+            -webkit-overflow-scrolling: touch;
+        }
 
-    document.querySelectorAll('.aba-conteudo').forEach(el => el.classList.remove('ativo'));
-    const alvo = document.getElementById(`aba-${aba}`);
-    if (alvo) alvo.classList.add('ativo');
+        .right-panel {
+            padding: 32px;
+            background: linear-gradient(135deg, #e8f8f5 0%, #d5f4e6 100%);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
 
-    limparResultado();
-}
+        header {
+            margin-bottom: 24px;
+            text-align: center;
+        }
 
-/* =========================
-   INIT
-========================= */
-window.addEventListener('load', () => {
-    const hoje = new Date().toISOString().split('T')[0];
-    const dataFinal = document.getElementById('dataFinal');
+        h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 6px;
+            font-weight: 700;
+        }
 
-    if (dataFinal) dataFinal.value = hoje;
+        .subtitle {
+            color: #999;
+            font-size: 13px;
+            font-weight: 500;
+        }
 
-    atualizarLembretes?.();
-});
+        .info-box {
+            background: linear-gradient(135deg, #e8f8f5 0%, #d5f4e6 100%);
+            border-left: 4px solid #27ae60;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            color: #27ae60;
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
 
-/* =========================
-   MAIN CALC
-========================= */
-function calcular() {
-    abaAtiva === 'diferenca'
-        ? calcularDiferenca()
-        : calcularDataFutura();
-}
+        .info-box strong {
+            color: #27ae60;
+            font-weight: 700;
+        }
 
-/* =========================
-   DIFERENÇA ENTRE DATAS
-========================= */
-function calcularDiferenca() {
-    let inicio = document.getElementById('dataInicial')?.value;
-    const fim = document.getElementById('dataFinal')?.value;
+        .abas {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
 
-    if (!fim) return mostrarStatus("Preencha a data final");
+        .aba-btn {
+            padding: 12px;
+            background: #e0e0e0;
+            color: #666;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            -webkit-appearance: none;
+            appearance: none;
+        }
 
-    if (!inicio) {
-        inicio = new Date().toISOString().split('T')[0];
-    }
+        .aba-btn.ativo {
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            color: white;
+        }
 
-    const d1 = new Date(inicio + "T00:00:00");
-    const d2 = new Date(fim + "T00:00:00");
+        .aba-btn:active {
+            transform: scale(0.98);
+        }
 
-    const diffMs = d2 - d1;
-    const totalDias = Math.round(diffMs / 86400000);
+        .aba-conteudo {
+            display: none;
+        }
 
-    const tempo = calcularTempoComposto(d1, d2);
+        .aba-conteudo.ativo {
+            display: block;
+        }
 
-    exibirResultadoDiferenca(tempo, totalDias);
+        .input-section {
+            margin-bottom: 24px;
+        }
 
-    adicionarLembrete?.(fim, `Prazo até ${fim}`);
-}
+        .section-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #333;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #27ae60;
+        }
 
-/* =========================
-   TEMPO COMPOSTO
-========================= */
-function calcularTempoComposto(d1, d2) {
-    if (d1 > d2) [d1, d2] = [d2, d1];
+        .input-group {
+            margin-bottom: 12px;
+        }
 
-    let anos = 0, meses = 0, dias = 0;
-    let temp = new Date(d1);
+        .input-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 6px;
+            display: block;
+        }
 
-    while (new Date(temp.getFullYear() + 1, temp.getMonth(), temp.getDate()) <= d2) {
-        anos++;
-        temp.setFullYear(temp.getFullYear() + 1);
-    }
+        .input-hint {
+            font-size: 10px;
+            color: #999;
+            margin-top: 3px;
+        }
 
-    while (new Date(temp.getFullYear(), temp.getMonth() + 1, temp.getDate()) <= d2) {
-        meses++;
-        temp.setMonth(temp.getMonth() + 1);
-    }
+        input[type="date"] {
+            width: 100%;
+            padding: 11px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            background: white;
+            color: #333;
+            transition: all 0.2s ease;
+            -webkit-appearance: none;
+            appearance: none;
+        }
 
-    while (temp < d2) {
-        dias++;
-        temp.setDate(temp.getDate() + 1);
-    }
+        input[type="date"]:focus {
+            outline: none;
+            border-color: #27ae60;
+            background: #f0f9f7;
+        }
 
-    return { anos, meses, dias };
-}
+        input[type="date"]::placeholder {
+            color: #ccc;
+        }
 
-/* =========================
-   DATA FUTURA
-========================= */
-function calcularDataFutura() {
-    const input = document.getElementById('dataFutura')?.value;
+        .btn-calcular {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
+            margin-top: 16px;
+            -webkit-appearance: none;
+            appearance: none;
+        }
 
-    if (!input) return mostrarStatus("Preencha a data futura");
+        .btn-calcular:active {
+            transform: scale(0.98);
+        }
 
-    const hoje = new Date();
-    const data = new Date(input + "T00:00:00");
+        .resultado-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
 
-    const dias = Math.round((data - hoje) / 86400000);
+        .resultado-header {
+            font-size: 12px;
+            font-weight: 700;
+            color: #27ae60;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #27ae60;
+        }
 
-    exibirResultadoFutura(
-        data.toLocaleDateString('pt-BR'),
-        dias
-    );
+        .resultado-items {
+            flex: 0 1 auto;
+            overflow-y: auto;
+            margin-bottom: 12px;
+            -webkit-overflow-scrolling: touch;
+        }
 
-    adicionarLembrete?.(input, `Prazo: ${input}`);
-}
+        .resultado-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(39, 174, 96, 0.2);
+            font-size: 12px;
+        }
 
-/* =========================
-   RESULTADOS
-========================= */
-function exibirResultadoDiferenca(t, totalDias) {
-    mostrarResultados(true);
+        .resultado-item:last-child {
+            border-bottom: none;
+        }
 
-    setText('resultado1Label', 'Anos');
-    setText('resultado1Valor', t.anos);
+        .resultado-label {
+            font-weight: 600;
+            color: #27ae60;
+            flex: 1;
+        }
 
-    setText('resultado2Label', 'Meses');
-    setText('resultado2Valor', t.meses);
+        .resultado-valor {
+            font-size: 13px;
+            font-weight: 700;
+            color: #27ae60;
+            font-family: 'Courier New', monospace;
+            text-align: right;
+        }
 
-    setText('resultado3Label', 'Dias');
-    setText('resultado3Valor', t.dias);
+        .resultado-total {
+            display: flex;
+            flex-direction: column;
+            padding: 14px;
+            background: white;
+            border-radius: 10px;
+            border: 2px solid #27ae60;
+            margin-bottom: 12px;
+        }
 
-    const partes = [];
-    if (t.anos) partes.push(`${t.anos}a`);
-    if (t.meses) partes.push(`${t.meses}m`);
-    if (t.dias) partes.push(`${t.dias}d`);
+        .resultado-total-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #27ae60;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
 
-    setText('totalLabel', partes.length ? `Faltam ${partes.join(" ")}` : "Hoje é o dia!");
-    setText('total', totalDias);
-    setText('diasAuxiliar', `${totalDias} dias`);
+        .resultado-total-valor {
+            font-size: 22px;
+            font-weight: 700;
+            color: #27ae60;
+            font-family: 'Courier New', monospace;
+        }
 
-    setBadge(totalDias);
-}
+        .resultado-dias {
+            font-size: 11px;
+            color: #666;
+            font-style: italic;
+            margin-top: 6px;
+        }
 
-function exibirResultadoFutura(data, dias) {
-    mostrarResultados(true);
+        .status-badge {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-top: 8px;
+        }
 
-    setText('resultado1Label', 'Data');
-    setText('resultado1Valor', data);
+        .status-badge.urgente {
+            background: #ffebee;
+            color: #c62828;
+        }
 
-    hide('resultado2');
-    hide('resultado3');
+        .status-badge.proximo {
+            background: #fff3e0;
+            color: #e65100;
+        }
 
-    setText('totalLabel', 'Dias restantes');
-    setText('total', dias);
-    setText('diasAuxiliar', '');
+        .status-badge.tranquilo {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
 
-    setBadge(dias);
-}
+        .botoes {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
 
-/* =========================
-   BADGE STATUS
-========================= */
-function setBadge(dias) {
-    const badge = document.getElementById('statusBadge');
-    if (!badge) return;
+        button {
+            padding: 11px;
+            border: none;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            -webkit-appearance: none;
+            appearance: none;
+        }
 
-    let text = '✓ OK';
+        .btn-copiar {
+            background: white;
+            color: #27ae60;
+            border: 2px solid #27ae60;
+        }
 
-    if (dias < 0) text = '❌ Vencido';
-    else if (dias <= 30) text = '⚠️ Urgente';
-    else if (dias <= 90) text = '⏰ Próximo';
+        .btn-copiar:active {
+            background: #27ae60;
+            color: white;
+            transform: scale(0.98);
+        }
 
-    badge.innerHTML = `<div class="status-badge">${text}</div>`;
-}
+        .btn-limpar {
+            background: rgba(255, 255, 255, 0.5);
+            color: #27ae60;
+            border: 2px solid rgba(39, 174, 96, 0.3);
+        }
 
-/* =========================
-   COPIAR
-========================= */
-function copiarResultado() {
-    const texto =
-        `${getText('totalLabel')} - ${getText('total')}`;
+        .btn-limpar:active {
+            background: rgba(255, 255, 255, 0.8);
+            transform: scale(0.98);
+        }
 
-    navigator.clipboard.writeText(texto);
+        .lembretes {
+            margin-top: 12px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
 
-    const btn = event?.target;
-    if (!btn) return;
+        .lembretes-titulo {
+            font-size: 11px;
+            font-weight: 700;
+            color: #27ae60;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 8px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid rgba(39, 174, 96, 0.3);
+        }
 
-    const old = btn.textContent;
-    btn.textContent = "✓ Copiado!";
-    setTimeout(() => btn.textContent = old, 1200);
-}
+        .lembretes-lista {
+            list-style: none;
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
 
-/* =========================
-   LIMPAR
-========================= */
-function limpar() {
-    ['dataInicial','dataFinal','dataFutura'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.value = '';
-    });
+        .lembrete-item {
+            padding: 8px;
+            border-bottom: 1px solid rgba(39, 174, 96, 0.2);
+            font-size: 10px;
+            color: #27ae60;
+            display: flex;
+            justify-content: space-between;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            background: rgba(255, 255, 255, 0.3);
+            margin-bottom: 3px;
+        }
 
-    limparResultado();
-}
+        .lembrete-item:active {
+            background: rgba(255, 255, 255, 0.7);
+        }
 
-function limparResultado() {
-    mostrarResultados(false);
+        .lembrete-item:last-child {
+            border-bottom: none;
+        }
 
-    const badge = document.getElementById('statusBadge');
-    if (badge) badge.innerHTML = '';
-}
+        .lembrete-vazio {
+            text-align: center;
+            color: rgba(39, 174, 96, 0.5);
+            font-size: 10px;
+            padding: 8px 0;
+        }
 
-/* =========================
-   HELPERS UI
-========================= */
-function mostrarResultados(show) {
-    const items = document.getElementById('resultadoItems');
-    const total = document.getElementById('resultadoTotal');
+        .status {
+            text-align: center;
+            font-size: 11px;
+            color: #27ae60;
+            margin-top: 8px;
+            min-height: 16px;
+            font-weight: 700;
+        }
 
-    if (items) items.style.display = show ? 'block' : 'none';
-    if (total) total.style.display = show ? 'block' : 'none';
-}
+        /* RESPONSIVO */
+        @media (max-width: 1024px) {
+            .wrapper {
+                grid-template-columns: 1fr;
+                max-height: none;
+                border-radius: 12px;
+            }
 
-function setText(id, value) {
-    const el = document.getElementById(id);
-    if (el) el.textContent = value;
-}
+            .left-panel {
+                border-right: none;
+                border-bottom: 1px solid #e0e0e0;
+                padding: 24px;
+                max-height: 50vh;
+            }
 
-function getText(id) {
-    const el = document.getElementById(id);
-    return el ? el.textContent : '';
-}
+            .right-panel {
+                padding: 24px;
+                max-height: 50vh;
+            }
 
-function hide(id) {
-    const el = document.getElementById(id);
-    if (el) el.style.display = 'none';
-}
+            h1 {
+                font-size: 24px;
+            }
+        }
 
-/* =========================
-   STATUS
-========================= */
-function mostrarStatus(msg) {
-    setBadge(0);
+        @media (max-width: 768px) {
+            html, body {
+                padding: 12px;
+            }
 
-    const badge = document.getElementById('statusBadge');
-    if (badge) {
-        badge.innerHTML = `<div class="status-badge urgente">${msg}</div>`;
-    }
-}
-</script>
+            .wrapper {
+                grid-template-columns: 1fr;
+                max-height: none;
+                border-radius: 12px;
+            }
+
+            .left-panel {
+                border-right: none;
+                border-bottom: 1px solid #e0e0e0;
+                padding: 16px;
+                max-height: none;
+            }
+
+            .right-panel {
+                padding: 16px;
+                max-height: none;
+            }
+
+            header {
+                margin-bottom: 16px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+
+            .subtitle {
+                font-size: 12px;
+            }
+
+            .info-box {
+                font-size: 10px;
+                padding: 10px;
+                margin-bottom: 16px;
+            }
+
+            .abas {
+                gap: 8px;
+                margin-bottom: 16px;
+            }
+
+            .aba-btn {
+                padding: 10px;
+                font-size: 11px;
+            }
+
+            .input-section {
+                margin-bottom: 16px;
+            }
+
+            .section-title {
+                font-size: 11px;
+                margin-bottom: 10px;
+                padding-bottom: 6px;
+            }
+
+            .input-label {
+                font-size: 10px;
+            }
+
+            .input-hint {
+                font-size: 9px;
+            }
+
+            input[type="date"] {
+                padding: 10px;
+                font-size: 13px;
+            }
+
+            .btn-calcular {
+                padding: 12px;
+                font-size: 12px;
+                margin-top: 12px;
+            }
+
+            .resultado-header {
+                font-size: 11px;
+                margin-bottom: 10px;
+                padding-bottom: 6px;
+            }
+
+            .resultado-item {
+                padding: 8px 0;
+                font-size: 11px;
+            }
+
+            .resultado-valor {
+                font-size: 12px;
+            }
+
+            .resultado-total {
+                padding: 12px;
+                margin-bottom: 10px;
+            }
+
+            .resultado-total-label {
+                font-size: 12px;
+                margin-bottom: 6px;
+            }
+
+            .resultado-total-valor {
+                font-size: 20px;
+            }
+
+            .resultado-dias {
+                font-size: 10px;
+                margin-top: 4px;
+            }
+
+            .botoes {
+                gap: 6px;
+                margin-bottom: 10px;
+            }
+
+            button {
+                padding: 10px;
+                font-size: 10px;
+            }
+
+            .lembretes {
+                margin-top: 10px;
+            }
+
+            .lembretes-titulo {
+                font-size: 10px;
+                margin-bottom: 6px;
+                padding-bottom: 4px;
+            }
+
+            .lembrete-item {
+                padding: 7px;
+                font-size: 9px;
+                margin-bottom: 2px;
+            }
+
+            .status {
+                font-size: 10px;
+                margin-top: 6px;
+                min-height: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            html, body {
+                padding: 8px;
+            }
+
+            .wrapper {
+                border-radius: 10px;
+            }
+
+            .left-panel,
+            .right-panel {
+                padding: 12px;
+            }
+
+            header {
+                margin-bottom: 12px;
+            }
+
+            h1 {
+                font-size: 20px;
+                margin-bottom: 4px;
+            }
+
+            .subtitle {
+                font-size: 11px;
+            }
+
+            .info-box {
+                font-size: 9px;
+                padding: 8px;
+                margin-bottom: 12px;
+            }
+
+            .abas {
+                gap: 6px;
+                margin-bottom: 12px;
+            }
+
+            .aba-btn {
+                padding: 9px;
+                font-size: 10px;
+            }
+
+            .input-section {
+                margin-bottom: 12px;
+            }
+
+            .section-title {
+                font-size: 10px;
+                margin-bottom: 8px;
+                padding-bottom: 4px;
+            }
+
+            .input-label {
+                font-size: 9px;
+                margin-bottom: 4px;
+            }
+
+            .input-hint {
+                font-size: 8px;
+                margin-top: 2px;
+            }
+
+            input[type="date"] {
+                padding: 9px;
+                font-size: 12px;
+            }
+
+            .btn-calcular {
+                padding: 11px;
+                font-size: 11px;
+                margin-top: 10px;
+            }
+
+            .resultado-total {
+                padding: 10px;
+                margin-bottom: 8px;
+            }
+
+            .resultado-total-valor {
+                font-size: 18px;
+            }
+
+            .botoes {
+                gap: 5px;
+                margin-bottom: 8px;
+            }
+
+            button {
+                padding: 9px;
+                font-size: 9px;
+            }
+
+            .lembretes {
+                margin-top: 8px;
+            }
+
+            .lembretes-titulo {
+                font-size: 9px;
+                margin-bottom: 4px;
+                padding-bottom: 3px;
+            }
+
+            .lembrete-item {
+                padding: 6px;
+                font-size: 8px;
+                margin-bottom: 2px;
+            }
+
+            .status {
+                font-size: 9px;
+                margin-top: 4px;
+                min-height: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="left-panel">
+            <header>
+                <h1>📅 Contador de Prazos</h1>
+                <p class="subtitle">Calcule dias e prazos com facilidade</p>
+            </header>
+
+            <div class="info-box">
+                <strong>Dica:</strong> Use para controlar vistos, contratos, aluguel e outros prazos importantes.
+            </div>
+
+            <div class="abas">
+                <button class="aba-btn ativo" onclick="mudarAba('diferenca')">📊 Diferença</button>
+                <button class="aba-btn" onclick="mudarAba('futura')">🔮 Data Futura</button>
+            </div>
+
+            <div class="input-section">
+                <!-- ABA 1: Diferença entre datas -->
+                <div id="aba-diferenca" class="aba-conteudo ativo">
+                    <div class="section-title">Calcular Diferença</div>
+                    
+                    <div class="input-group">
+                        <label class="input-label">Data Inicial (Opcional)</label>
+                        <input type="date" id="dataInicial">
+                        <div class="input-hint">Se vazio, usa hoje</div>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">Data Final</label>
+                        <input type="date" id="dataFinal">
+                        <div class="input-hint">Quando termina?</div>
+                    </div>
+                </div>
+
+                <!-- ABA 2: Calcular data futura -->
+                <div id="aba-futura" class="aba-conteudo">
+                    <div class="section-title">Calcular Data Futura</div>
+                    
+                    <div class="input-group">
+                        <label class="input-label">Data Futura</label>
+                        <input type="date" id="dataFutura">
+                        <div class="input-hint">Selecione a data exata</div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn-calcular" onclick="calcular()">Calcular</button>
+        </div>
+
+        <div class="right-panel">
+            <div class="resultado-section">
+                <div class="resultado-header">Resultado</div>
+
+                <div class="resultado-items" id="resultadoItems" style="display: none;">
+                    <div class="resultado-item" id="resultado1" style="display: none;">
+                        <span class="resultado-label" id="resultado1Label">-</span>
+                        <span class="resultado-valor" id="resultado1Valor">-</span>
+                    </div>
+                    <div class="resultado-item" id="resultado2" style="display: none;">
+                        <span class="resultado-label" id="resultado2Label">-</span>
+                        <span class="resultado-valor" id="resultado2Valor">-</span>
+                    </div>
+                    <div class="resultado-item" id="resultado3" style="display: none;">
+                        <span class="resultado-label" id="resultado3Label">-</span>
+                        <span class="resultado-valor" id="resultado3Valor">-</span>
+                    </div>
+                </div>
+
+                <div class="resultado-total" id="resultadoTotal" style="display: none;">
+                    <span class="resultado-total-label" id="totalLabel">-</span>
+                    <span class="resultado-total-valor" id="total">-</span>
+                    <span class="resultado-dias" id="diasAuxiliar">-</span>
+                    <div id="statusBadge"></div>
+                </div>
+
+                <div class="botoes">
+                    <button class="btn-copiar" onclick="copiarResultado()">📋 Copiar</button>
+                    <button class="btn-limpar" onclick="limpar()">🗑️ Limpar</button>
+                </div>
+
+                <div class="lembretes">
+                    <div class="lembretes-titulo">📌 Lembretes Recentes</div>
+                    <ul class="lembretes-lista" id="lembretes">
+                        <li class="lembrete-vazio">Nenhum lembrete</li>
+                    </ul>
+                </div>
+
+                <div class="status" id="status"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let lembretes = JSON.parse(localStorage.getItem('lembretes-prazos-responsivo')) || [];
+        let abaAtiva = 'diferenca';
+
+        function mudarAba(aba) {
+            abaAtiva = aba;
+            
+            // Atualizar botões
+            document.querySelectorAll('.aba-btn').forEach(btn => btn.classList.remove('ativo'));
+            event.target.classList.add('ativo');
+
+            // Atualizar conteúdo
+            document.querySelectorAll('.aba-conteudo').forEach(el => el.classList.remove('ativo'));
+            document.getElementById(`aba-${aba}`).classList.add('ativo');
+
+            limparResultado();
+        }
+
+        window.addEventListener('load', () => {
+            // Pré-preencher com data de hoje
+            const hoje = new Date().toISOString().split('T')[0];
+            document.getElementById('dataFinal').value = hoje;
+            atualizarLembretes();
+        });
+
+        function calcular() {
+            if (abaAtiva === 'diferenca') {
+                calcularDiferenca();
+            } else {
+                calcularDataFutura();
+            }
+        }
+
+        function calcularDiferenca() {
+            let dataInicial = document.getElementById('dataInicial').value;
+            const dataFinal = document.getElementById('dataFinal').value;
+
+            if (!dataFinal) {
+                alert('Por favor, preencha a data final');
+                return;
+            }
+
+            // Se data inicial não for preenchida, usar data atual
+            if (!dataInicial) {
+                dataInicial = new Date().toISOString().split('T')[0];
+            }
+
+            const data1 = new Date(dataInicial);
+            const data2 = new Date(dataFinal);
+
+            // Calcular tempo composto (anos, meses, dias)
+            const tempoComposto = calcularTempoComposto(data1, data2);
+            const totalDias = Math.floor(Math.abs(data2 - data1) / (1000 * 60 * 60 * 24));
+
+            exibirResultadoDiferenca(tempoComposto, totalDias);
+            adicionarLembrete(dataFinal, `Prazo: ${dataFinal}`);
+
+            const status = document.getElementById('status');
+            status.textContent = '✓ Calculado com sucesso';
+            setTimeout(() => { status.textContent = ''; }, 2000);
+        }
+
+        function calcularTempoComposto(data1, data2) {
+            let anos = 0, meses = 0, dias = 0;
+            
+            // Garantir que data1 seja menor que data2
+            if (data1 > data2) {
+                [data1, data2] = [data2, data1];
+            }
+
+            // Calcular anos
+            let dataTemp = new Date(data1);
+            while (new Date(dataTemp.getFullYear() + 1, dataTemp.getMonth(), dataTemp.getDate()) <= data2) {
+                anos++;
+                dataTemp.setFullYear(dataTemp.getFullYear() + 1);
+            }
+
+            // Calcular meses
+            while (new Date(dataTemp.getFullYear(), dataTemp.getMonth() + 1, dataTemp.getDate()) <= data2) {
+                meses++;
+                dataTemp.setMonth(dataTemp.getMonth() + 1);
+            }
+
+            // Calcular dias
+            while (dataTemp < data2) {
+                dias++;
+                dataTemp.setDate(dataTemp.getDate() + 1);
+            }
+
+            return { anos, meses, dias };
+        }
+
+        function calcularDataFutura() {
+            const dataFutura = document.getElementById('dataFutura').value;
+
+            if (!dataFutura) {
+                alert('Por favor, preencha a data futura');
+                return;
+            }
+
+            const data = new Date(dataFutura);
+            const hoje = new Date();
+            const diferenca = Math.abs(data - hoje);
+            const diasAte = Math.floor(diferenca / (1000 * 60 * 60 * 24));
+
+            const dataFormatada = data.toLocaleDateString('pt-BR');
+            exibirResultadoFutura(dataFormatada, diasAte);
+            adicionarLembrete(dataFutura, `Prazo: ${dataFormatada}`);
+
+            const status = document.getElementById('status');
+            status.textContent = '✓ Data calculada com sucesso';
+            setTimeout(() => { status.textContent = ''; }, 2000);
+        }
+
+        function exibirResultadoDiferenca(tempoComposto, totalDias) {
+            const { anos, meses, dias } = tempoComposto;
+
+            document.getElementById('resultado1').style.display = 'flex';
+            document.getElementById('resultado1Label').textContent = 'Anos';
+            document.getElementById('resultado1Valor').textContent = anos;
+
+            document.getElementById('resultado2').style.display = 'flex';
+            document.getElementById('resultado2Label').textContent = 'Meses';
+            document.getElementById('resultado2Valor').textContent = meses;
+
+            document.getElementById('resultado3').style.display = 'flex';
+            document.getElementById('resultado3Label').textContent = 'Dias';
+            document.getElementById('resultado3Valor').textContent = dias;
+
+            // Montar texto composto
+            let textoComposto = '';
+            const partes = [];
+            if (anos > 0) partes.push(`${anos} ano${anos > 1 ? 's' : ''}`);
+            if (meses > 0) partes.push(`${meses} mês${meses > 1 ? 'es' : ''}`);
+            if (dias > 0) partes.push(`${dias} dia${dias > 1 ? 's' : ''}`);
+            
+            if (partes.length === 0) {
+                textoComposto = 'Hoje é o dia!';
+            } else if (partes.length === 1) {
+                textoComposto = 'Faltam ' + partes[0];
+            } else if (partes.length === 2) {
+                textoComposto = 'Faltam ' + partes.join(' e ');
+            } else {
+                textoComposto = 'Faltam ' + partes[0] + ', ' + partes[1] + ' e ' + partes[2];
+            }
+
+            document.getElementById('totalLabel').textContent = textoComposto;
+            document.getElementById('total').textContent = '';
+            document.getElementById('diasAuxiliar').textContent = `${totalDias} dias no total`;
+            document.getElementById('resultadoItems').style.display = 'block';
+            document.getElementById('resultadoTotal').style.display = 'block';
+
+            // Status badge
+            const badge = document.getElementById('statusBadge');
+            if (totalDias <= 30) {
+                badge.innerHTML = '<div class="status-badge urgente">⚠️ Urgente!</div>';
+            } else if (totalDias <= 90) {
+                badge.innerHTML = '<div class="status-badge proximo">⏰ Próximo</div>';
+            } else {
+                badge.innerHTML = '<div class="status-badge tranquilo">✓ Tranquilo</div>';
+            }
+        }
+
+        function exibirResultadoFutura(dataFormatada, diasAte) {
+            document.getElementById('resultado1').style.display = 'flex';
+            document.getElementById('resultado1Label').textContent = 'Data';
+            document.getElementById('resultado1Valor').textContent = dataFormatada;
+
+            document.getElementById('resultado2').style.display = 'none';
+            document.getElementById('resultado3').style.display = 'none';
+
+            document.getElementById('totalLabel').textContent = 'Dias até lá';
+            document.getElementById('total').textContent = diasAte;
+            document.getElementById('diasAuxiliar').textContent = '';
+            document.getElementById('resultadoItems').style.display = 'block';
+            document.getElementById('resultadoTotal').style.display = 'block';
+
+            // Status badge
+            const badge = document.getElementById('statusBadge');
+            if (diasAte <= 30) {
+                badge.innerHTML = '<div class="status-badge urgente">⚠️ Urgente!</div>';
+            } else if (diasAte <= 90) {
+                badge.innerHTML = '<div class="status-badge proximo">⏰ Próximo</div>';
+            } else {
+                badge.innerHTML = '<div class="status-badge tranquilo">✓ Tranquilo</div>';
+            }
+        }
+
+        function copiarResultado() {
+            const total = document.getElementById('total').textContent || document.getElementById('totalLabel').textContent;
+            navigator.clipboard.writeText(total).then(() => {
+                const btn = event.target;
+                const textoOriginal = btn.textContent;
+                btn.textContent = '✓ Copiado!';
+                setTimeout(() => {
+                    btn.textContent = textoOriginal;
+                }, 1500);
+            });
+        }
+
+        function limpar() {
+            document.getElementById('dataInicial').value = '';
+            document.getElementById('dataFinal').value = '';
+            document.getElementById('dataFutura').value = '';
+            limparResultado();
+        }
+
+        function limparResultado() {
+            document.getElementById('resultadoItems').style.display = 'none';
+            document.getElementById('resultadoTotal').style.display = 'none';
+        }
+
+        function adicionarLembrete(data, descricao) {
+            const entrada = {
+                data: data,
+                descricao: descricao,
+                timestamp: new Date().getTime()
+            };
+
+            lembretes = lembretes.filter(l => l.data !== data);
+            lembretes.unshift(entrada);
+            if (lembretes.length > 20) {
+                lembretes.pop();
+            }
+
+            localStorage.setItem('lembretes-prazos-responsivo', JSON.stringify(lembretes));
+            atualizarLembretes();
+        }
+
+        function atualizarLembretes() {
+            const lista = document.getElementById('lembretes');
+
+            if (lembretes.length === 0) {
+                lista.innerHTML = '<li class="lembrete-vazio">Nenhum lembrete</li>';
+                return;
+            }
+
+            lista.innerHTML = lembretes.map((lembrete, index) => {
+                const data = new Date(lembrete.data);
+                const hoje = new Date();
+                const diferenca = Math.abs(data - hoje);
+                const dias = Math.floor(diferenca / (1000 * 60 * 60 * 24));
+
+                return `
+                    <li class="lembrete-item" onclick="restaurarLembrete(${index})">
+                        <span>${lembrete.data}</span>
+                        <span>${dias} dias</span>
+                    </li>
+                `;
+            }).join('');
+        }
+
+        function restaurarLembrete(index) {
+            const lembrete = lembretes[index];
+            document.getElementById('dataFinal').value = lembrete.data;
+            document.getElementById('dataInicial').value = '';
+            mudarAba('diferenca');
+            calcularDiferenca();
+        }
+    </script>
+</body>
+</html>
