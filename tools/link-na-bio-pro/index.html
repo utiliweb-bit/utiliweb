@@ -12,12 +12,35 @@
 <link rel="stylesheet" href="../../assets/style.css">
 
 <style>
+.container {
+    max-width: 900px;
+}
+
 .box {
-    margin-top: 20px;
-    padding: 20px;
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    display: grid;
+    gap: 15px;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid var(--border, #ddd);
+    font-size: 14px;
+}
+
+textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.result {
+    font-size: 14px;
+    line-height: 1.6;
+    word-break: break-word;
+    background: rgba(0,0,0,0.03);
+    padding: 12px;
+    border-radius: 10px;
 }
 
 .btn {
@@ -33,15 +56,7 @@
 }
 
 .btn:hover {
-    background: #333;
-}
-
-textarea, input {
-    width: 100%;
-    margin-top: 8px;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
+    opacity: 0.85;
 }
 </style>
 
@@ -50,40 +65,39 @@ textarea, input {
 <body>
 
 <header>
-    <h1>Link na Bio PRO</h1>
-    <p>Página estilo Linktree com URL individual</p>
+    <h1>🔗 Link na Bio PRO</h1>
+    <p>Crie sua página estilo Linktree</p>
 </header>
 
 <div class="container">
 
-<a href="../../index.html">← Voltar</a>
+    <a href="../../index.html">← Voltar</a>
 
-<div id="creator">
+    <!-- CRIADOR -->
+    <div id="creator" class="box">
 
-    <h3>Criar sua página</h3>
+        <label>Seu nome</label>
+        <input id="name" placeholder="Ex: Meu perfil">
 
-    <input id="name" placeholder="Seu nome ou perfil">
-
-    <textarea id="links" placeholder="Cole seus links (1 por linha)
-https://youtube.com
+        <label>Links (um por linha)</label>
+        <textarea id="links" placeholder="https://youtube.com
 https://instagram.com
 https://tiktok.com"></textarea>
 
-    <button onclick="generate()" style="margin-top:15px;">Gerar Link</button>
+        <button onclick="generate()">Gerar Link</button>
 
-    <div id="result" style="margin-top:20px;"></div>
+        <div id="result" class="result"></div>
 
-</div>
+    </div>
 
-<div id="page" style="display:none;"></div>
+    <!-- PÁGINA PÚBLICA -->
+    <div id="page" class="box" style="display:none;"></div>
 
 </div>
 
 <script>
-/* =========================
-   GERADOR DE LINK
-========================= */
 function generate() {
+
     const name = document.getElementById("name").value;
 
     const links = document
@@ -91,7 +105,7 @@ function generate() {
         .value
         .split("\n")
         .map(l => l.trim())
-        .filter(l => l.length > 0)
+        .filter(Boolean)
         .map(l => l.startsWith("http") ? l : "https://" + l);
 
     const encodedLinks = encodeURIComponent(JSON.stringify(links));
@@ -101,33 +115,22 @@ function generate() {
     const url = `${base}?name=${encodeURIComponent(name)}&data=${encodedLinks}`;
 
     document.getElementById("result").innerHTML = `
-        <p><strong>Seu link:</strong></p>
-        <a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>
+        <strong>Seu link:</strong><br>
+        <a href="${url}" target="_blank">${url}</a>
     `;
 }
 
-/* =========================
-   FUNÇÃO SEGURA DE URL
-========================= */
+/* normalize URL */
 function normalize(url) {
     if (!url) return null;
-
-    url = url.trim();
-
-    if (!url.startsWith("http")) {
-        url = "https://" + url;
-    }
-
     try {
-        return new URL(url).href;
+        return new URL(url.startsWith("http") ? url : "https://" + url).href;
     } catch {
         return null;
     }
 }
 
-/* =========================
-   MODO PÁGINA PÚBLICA
-========================= */
+/* modo público */
 const params = new URLSearchParams(window.location.search);
 const name = params.get("name");
 const data = params.get("data");
@@ -140,31 +143,26 @@ if (name && data) {
 
     try {
         links = JSON.parse(decodeURIComponent(data));
-    } catch (e) {
+    } catch {
         links = [];
     }
 
-    let html = `<div class="box"><h2>${name}</h2>`;
+    let html = `<h2>${name}</h2>`;
 
     links.forEach(link => {
+
         const safe = normalize(link);
         if (!safe) return;
 
         html += `
-            <a class="btn"
-               href="${safe}"
-               target="_blank"
-               rel="noopener noreferrer">
-               🔗 Abrir link
+            <a class="btn" href="${safe}" target="_blank">
+                🔗 Abrir link
             </a>
         `;
     });
 
-    html += `</div>`;
-
-    const page = document.getElementById("page");
-    page.innerHTML = html;
-    page.style.display = "block";
+    document.getElementById("page").innerHTML = html;
+    document.getElementById("page").style.display = "grid";
 }
 </script>
 
