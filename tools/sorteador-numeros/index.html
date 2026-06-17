@@ -6,93 +6,192 @@
 
 <title>Sorteador de Números Online | UtiliWeb</title>
 
-<meta name="description" content="Sorteie números aleatórios online gratuitamente. Defina o valor mínimo e máximo e gere resultados instantaneamente com o UtiliWeb.">
+<meta name="description" content="Sorteie números aleatórios online gratuitamente. Defina mínimo e máximo e gere instantaneamente.">
+<meta name="keywords" content="utiliweb, sorteador, números aleatórios, random, gerador">
 
 <link rel="stylesheet" href="../../assets/style.css">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.wrapper {
+    width: 100%;
+    max-width: 1100px;
+    background: #fff;
+    border-radius: 18px;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+}
+
+.left, .right {
+    padding: 25px;
+}
+
+.left {
+    border-right: 1px solid #eee;
+}
+
+h1 {
+    font-size: 26px;
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-top: 12px;
+    font-size: 14px;
+    color: #333;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 6px;
+    border-radius: 10px;
+    border: 2px solid #ddd;
+}
+
+input:focus {
+    outline: none;
+    border-color: #27ae60;
+}
+
+button {
+    margin-top: 15px;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.primary {
+    background: #27ae60;
+    color: #fff;
+}
+
+.secondary {
+    background: #fff;
+    border: 2px solid #27ae60;
+    color: #27ae60;
+}
+
+.result-box {
+    font-size: 60px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 40px;
+    color: #27ae60;
+}
+
+a {
+    display: inline-block;
+    margin-bottom: 10px;
+    text-decoration: none;
+    color: #27ae60;
+    font-weight: bold;
+}
+
+/* RESPONSIVO */
+@media(max-width: 900px) {
+    .wrapper {
+        grid-template-columns: 1fr;
+    }
+
+    .left {
+        border-right: none;
+        border-bottom: 1px solid #eee;
+    }
+
+    .result-box {
+        font-size: 42px;
+    }
+}
+</style>
+
 </head>
 
 <body>
 
-<header>
-    <h1>Sorteador de Números</h1>
-    <p>Gere números aleatórios de forma rápida e gratuita</p>
-</header>
+<div class="wrapper">
 
-<div class="container">
+    <!-- ESQUERDA -->
+    <div class="left">
 
-    <a href="../../index.html">← Voltar</a>
+        <h1>🎲 Sorteador de Números</h1>
+        <p class="subtitle">Gere números aleatórios instantaneamente</p>
 
-    <div style="margin-top:20px;">
+        <a href="../../index.html">← Voltar</a>
 
-        <label for="minimo">Número mínimo</label>
-        <input
-            type="number"
-            id="minimo"
-            value="1"
-            style="width:100%; margin-top:10px;">
+        <label>Número mínimo</label>
+        <input type="number" id="minimo" value="1">
 
-    </div>
+        <label>Número máximo</label>
+        <input type="number" id="maximo" value="100">
 
-    <div style="margin-top:20px;">
-
-        <label for="maximo">Número máximo</label>
-        <input
-            type="number"
-            id="maximo"
-            value="100"
-            style="width:100%; margin-top:10px;">
+        <button class="primary" onclick="sortear()">Sortear</button>
+        <button class="secondary" onclick="limpar()">Limpar</button>
 
     </div>
 
-    <div style="margin-top:20px;">
+    <!-- DIREITA -->
+    <div class="right">
 
-        <button onclick="sortearNumero()">
-            Sortear
-        </button>
+        <h2>Resultado</h2>
 
-    </div>
-
-    <div style="margin-top:30px;">
-
-        <p><strong>Resultado:</strong></p>
-
-        <div class="result" id="resultado">
-            -
-        </div>
+        <div class="result-box" id="resultado">-</div>
 
     </div>
-
-    <section style="margin-top:40px;">
-        <h2>Como usar</h2>
-
-        <p>
-            Informe os valores mínimo e máximo e clique em "Sortear".
-            Um número aleatório será gerado instantaneamente.
-        </p>
-    </section>
 
 </div>
 
 <script>
-function sortearNumero() {
+function sortear() {
 
-    const minimo = parseInt(document.getElementById("minimo").value);
-    const maximo = parseInt(document.getElementById("maximo").value);
-    const resultado = document.getElementById("resultado");
+    const min = parseInt(document.getElementById("minimo").value);
+    const max = parseInt(document.getElementById("maximo").value);
+    const res = document.getElementById("resultado");
 
-    if (isNaN(minimo) || isNaN(maximo)) {
-        resultado.textContent = "Informe valores válidos.";
+    if (isNaN(min) || isNaN(max)) {
+        res.textContent = "Inválido";
         return;
     }
 
-    if (minimo > maximo) {
-        resultado.textContent = "O mínimo deve ser menor que o máximo.";
+    if (min > max) {
+        res.textContent = "Erro";
         return;
     }
 
-    const numero = Math.floor(Math.random() * (maximo - minimo + 1)) + minimo;
+    const numero = Math.floor(Math.random() * (max - min + 1)) + min;
+    res.textContent = numero;
+}
 
-    resultado.textContent = numero;
+function limpar() {
+    document.getElementById("minimo").value = 1;
+    document.getElementById("maximo").value = 100;
+    document.getElementById("resultado").textContent = "-";
 }
 </script>
 
