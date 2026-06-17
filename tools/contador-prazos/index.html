@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Contador de Prazos Online | UtiliWeb</title>
+
+<meta name="description" content="Calcule quantos dias faltam para uma data. Contador de prazos online grátis e rápido.">
+<meta name="robots" content="index, follow">
+
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+
+<body>
+
+<header>
+    <h1>📅 Contador de Prazos</h1>
+    <p>Descubra quantos dias faltam para uma data</p>
+</header>
+
+<div class="container">
+
+    <a href="../../index.html">← Voltar</a>
+
+    <div style="margin-top:20px;">
+
+        <label>Escolha a data final:</label>
+        <input id="date" type="date" style="width:100%; margin-top:10px;">
+
+        <button style="margin-top:15px;" onclick="calcular()">
+            Calcular prazo
+        </button>
+
+    </div>
+
+    <div class="result" id="result" style="margin-top:20px;">
+        -
+    </div>
+
+    <section style="margin-top:40px;">
+        <h2>Como usar</h2>
+        <p>Selecione uma data e veja automaticamente quantos dias faltam até o prazo escolhido.</p>
+    </section>
+
+</div>
+
+<script>
+function calcular() {
+
+    const input = document.getElementById("date").value;
+    const result = document.getElementById("result");
+
+    if (!input) {
+        result.textContent = "Selecione uma data.";
+        return;
+    }
+
+    const hoje = new Date();
+    const alvo = new Date(input);
+
+    hoje.setHours(0,0,0,0);
+    alvo.setHours(0,0,0,0);
+
+    const diff = alvo - hoje;
+
+    const dias = Math.ceil(diff / (1000 * 60 * 60 * 24));
+
+    if (dias > 0) {
+        result.innerHTML = `Faltam <strong>${dias}</strong> dias para o prazo.`;
+    } else if (dias === 0) {
+        result.innerHTML = `<strong>O prazo é hoje!</strong>`;
+    } else {
+        result.innerHTML = `O prazo já passou há <strong>${Math.abs(dias)}</strong> dias.`;
+    }
+}
+</script>
+
+</body>
+</html>
