@@ -4,73 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Calculadora Zangyo (Horas Extras Japão) | UtiliWeb</title>
+<title>Calculadora Zangyo | UtiliWeb</title>
 
-<meta name="description" content="Calcule salário com horas extras no Japão (Zangyo). Ferramenta grátis para brasileiros no Japão.">
-<meta name="robots" content="index, follow">
-
+<meta name="description" content="Calcule salário com horas extras no Japão de forma rápida e precisa.">
 <link rel="stylesheet" href="../../assets/style.css">
-
-<style>
-/* ajuste leve para integrar com tema escuro UtiliWeb */
-body {
-    background: #0f0f0f;
-    color: #eee;
-}
-
-.wrapper {
-    max-width: 900px;
-    margin: 40px auto;
-    padding: 20px;
-}
-
-.card-box {
-    background: #1a1a1a;
-    padding: 20px;
-    border-radius: 12px;
-    margin-top: 15px;
-    border: 1px solid #2a2a2a;
-}
-
-input {
-    width: 100%;
-    padding: 12px;
-    margin-top: 8px;
-    margin-bottom: 15px;
-    border-radius: 8px;
-    border: 1px solid #333;
-    background: #111;
-    color: #fff;
-}
-
-button {
-    padding: 12px 16px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    background: #2ecc71;
-    color: #000;
-    font-weight: bold;
-    margin-right: 10px;
-    margin-top: 10px;
-}
-
-button:hover {
-    opacity: 0.9;
-}
-
-.result {
-    margin-top: 20px;
-    background: #111;
-    padding: 15px;
-    border-radius: 10px;
-    border: 1px solid #2a2a2a;
-}
-
-h1 {
-    font-size: 26px;
-}
-</style>
 </head>
 
 <body>
@@ -80,11 +17,11 @@ h1 {
     <p>Horas extras no Japão de forma simples</p>
 </header>
 
-<div class="wrapper">
+<div class="container">
 
-    <a href="../../index.html" style="color:#2ecc71;">← Voltar</a>
+    <a href="../../index.html">← Voltar</a>
 
-    <div class="card-box">
+    <div class="box">
 
         <label>Valor da hora (¥)</label>
         <input id="jikyu" type="number" placeholder="Ex: 1200">
@@ -101,11 +38,21 @@ h1 {
         <label>Horas extra noturnas (+50%)</label>
         <input id="extraNight" type="number" value="0">
 
-        <button onclick="calcular()">Calcular</button>
-        <button onclick="limpar()">Limpar</button>
+        <div style="margin-top:15px; display:flex; gap:10px; flex-wrap:wrap;">
+            <button onclick="calcular()">Calcular</button>
+            <button class="btn-secondary" onclick="limpar()">Limpar</button>
+        </div>
 
-        <div class="result" id="result">Preencha os dados e calcule</div>
+        <div id="result" class="result hidden"></div>
 
+    </div>
+
+    <div class="box">
+        <h2>Como funciona</h2>
+        <p>
+            Esta calculadora aplica os adicionais padrão no Japão:
+            noturno (+25%), hora extra (+25%) e extra noturna (+50%).
+        </p>
     </div>
 
 </div>
@@ -119,8 +66,11 @@ function calcular() {
     const extraDay = parseFloat(document.getElementById("extraDay").value) || 0;
     const extraNight = parseFloat(document.getElementById("extraNight").value) || 0;
 
+    const result = document.getElementById("result");
+
     if (jikyu <= 0) {
-        document.getElementById("result").innerHTML = "Insira o valor da hora.";
+        result.classList.remove("hidden");
+        result.textContent = "Insira o valor da hora.";
         return;
     }
 
@@ -130,19 +80,25 @@ function calcular() {
         (jikyu * extraDay * 1.25) +
         (jikyu * extraNight * 1.5);
 
-    document.getElementById("result").innerHTML = `
-        <strong>Total a receber:</strong><br>
-        ¥ ${total.toLocaleString("ja-JP", {minimumFractionDigits: 2})}
+    result.classList.remove("hidden");
+    result.innerHTML = `
+        <strong>Total a receber:</strong>
+        <br><br>
+        ¥ ${total.toLocaleString("ja-JP", { minimumFractionDigits: 2 })}
     `;
 }
 
 function limpar() {
+
     document.getElementById("jikyu").value = "";
     document.getElementById("day").value = 0;
     document.getElementById("night").value = 0;
     document.getElementById("extraDay").value = 0;
     document.getElementById("extraNight").value = 0;
-    document.getElementById("result").innerHTML = "Preencha os dados e calcule";
+
+    const result = document.getElementById("result");
+    result.classList.add("hidden");
+    result.textContent = "";
 }
 </script>
 
