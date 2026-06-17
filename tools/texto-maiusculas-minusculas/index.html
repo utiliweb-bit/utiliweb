@@ -6,87 +6,195 @@
 
 <title>Texto em Maiúsculas e Minúsculas Online | UtiliWeb</title>
 
-<meta name="description" content="Converta texto para maiúsculas, minúsculas ou capitalize frases online gratuitamente com o UtiliWeb.">
+<meta name="description" content="Converta texto para maiúsculas, minúsculas ou capitalize frases online gratuitamente.">
+<meta name="keywords" content="utiliweb, maiúsculas, minúsculas, texto, converter texto">
 
 <link rel="stylesheet" href="../../assets/style.css">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.wrapper {
+    width: 100%;
+    max-width: 1100px;
+    background: #fff;
+    border-radius: 18px;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+}
+
+.left, .right {
+    padding: 25px;
+}
+
+.left {
+    border-right: 1px solid #eee;
+}
+
+h1 {
+    font-size: 26px;
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+textarea {
+    width: 100%;
+    height: 200px;
+    padding: 12px;
+    border-radius: 10px;
+    border: 2px solid #ddd;
+    resize: none;
+    margin-top: 10px;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: #27ae60;
+}
+
+button {
+    margin-top: 10px;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.primary {
+    background: #27ae60;
+    color: #fff;
+}
+
+.secondary {
+    background: #fff;
+    border: 2px solid #27ae60;
+    color: #27ae60;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+a {
+    display: inline-block;
+    margin-bottom: 10px;
+    text-decoration: none;
+    color: #27ae60;
+    font-weight: bold;
+}
+
+.result-box {
+    white-space: pre-wrap;
+    font-size: 16px;
+    line-height: 1.5;
+    background: #f6fff8;
+    border: 1px solid #d7f5e3;
+    padding: 15px;
+    border-radius: 10px;
+    min-height: 200px;
+}
+
+/* RESPONSIVO */
+@media(max-width: 900px) {
+    .wrapper {
+        grid-template-columns: 1fr;
+    }
+
+    .left {
+        border-right: none;
+        border-bottom: 1px solid #eee;
+    }
+
+    .buttons {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
 </head>
 
 <body>
 
-<header>
-    <h1>Texto em Maiúsculas e Minúsculas</h1>
-    <p>Converta letras rapidamente e copie o resultado</p>
-</header>
+<div class="wrapper">
 
-<div class="container">
+    <!-- ESQUERDA -->
+    <div class="left">
 
-    <a href="../../index.html">← Voltar</a>
+        <h1>🔤 Conversor de Texto</h1>
+        <p class="subtitle">Maiúsculas, minúsculas e capitalização</p>
 
-    <textarea
-        id="text"
-        placeholder="Digite ou cole seu texto aqui..."
-        style="width:100%; height:150px; margin-top:20px;"></textarea>
+        <a href="../../index.html">← Voltar</a>
 
-    <div style="margin-top:20px; display:flex; gap:10px; flex-wrap:wrap;">
+        <textarea id="text" placeholder="Digite ou cole seu texto aqui..."></textarea>
 
-        <button onclick="converterMaiusculas()">
-            MAIÚSCULAS
-        </button>
+        <div class="buttons">
 
-        <button onclick="converterMinusculas()">
-            minúsculas
-        </button>
+            <button class="primary" onclick="maiusculas()">MAIÚSCULAS</button>
+            <button class="secondary" onclick="minusculas()">minúsculas</button>
+            <button class="secondary" onclick="capitalizar()">Capitalizar</button>
+            <button class="secondary" onclick="copiar()">Copiar</button>
 
-        <button onclick="capitalizarTexto()">
-            Primeira Letra Maiúscula
-        </button>
-
-        <button onclick="copiarResultado()">
-            Copiar
-        </button>
+        </div>
 
     </div>
 
-    <textarea
-        id="resultado"
-        readonly
-        placeholder="O resultado aparecerá aqui..."
-        style="width:100%; height:150px; margin-top:20px;"></textarea>
+    <!-- DIREITA -->
+    <div class="right">
 
-    <section style="margin-top:40px;">
-        <h2>Como usar</h2>
+        <h2>Resultado</h2>
 
-        <p>
-            Digite ou cole seu texto na caixa acima e escolha uma das opções:
-            converter para MAIÚSCULAS, minúsculas ou capitalizar cada palavra.
-        </p>
-    </section>
+        <div class="result-box" id="resultado">O resultado aparecerá aqui...</div>
+
+    </div>
 
 </div>
 
 <script>
-const text = document.getElementById("text");
-const resultado = document.getElementById("resultado");
+const input = document.getElementById("text");
+const output = document.getElementById("resultado");
 
-function converterMaiusculas() {
-    resultado.value = text.value.toUpperCase();
+function maiusculas() {
+    output.textContent = input.value.toUpperCase();
 }
 
-function converterMinusculas() {
-    resultado.value = text.value.toLowerCase();
+function minusculas() {
+    output.textContent = input.value.toLowerCase();
 }
 
-function capitalizarTexto() {
-    resultado.value = text.value
+function capitalizar() {
+    output.textContent = input.value
         .toLowerCase()
-        .replace(/\b\w/g, letra => letra.toUpperCase());
+        .replace(/\b\w/g, c => c.toUpperCase());
 }
 
-function copiarResultado() {
-    if (!resultado.value) return;
-
-    navigator.clipboard.writeText(resultado.value);
-    alert("Texto copiado!");
+function copiar() {
+    const text = output.textContent;
+    if (!text || text.includes("aparecerá")) return;
+    navigator.clipboard.writeText(text);
 }
 </script>
 
