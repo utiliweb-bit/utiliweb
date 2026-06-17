@@ -6,63 +6,87 @@
 
 <title>Texto em Maiúsculas e Minúsculas Online | UtiliWeb</title>
 
-<meta name="description" content="Converta texto para maiúsculas, minúsculas ou formato capitalizado de forma rápida e gratuita. Ferramenta online do UtiliWeb.">
+<meta name="description" content="Converta texto para maiúsculas, minúsculas ou capitalize frases online gratuitamente com o UtiliWeb.">
 
-<meta name="keywords" content="texto maiúsculo, texto minúsculo, converter letras, letras maiúsculas, letras minúsculas, capitalizar texto">
-
-<link rel="canonical" href="https://seusite.com/tools/texto-maiusculas-minusculas/">
-
+<link rel="stylesheet" href="../../assets/style.css">
 </head>
+
 <body>
 
-<div class="box">
+<header>
     <h1>Texto em Maiúsculas e Minúsculas</h1>
+    <p>Converta letras rapidamente e copie o resultado</p>
+</header>
 
-    <textarea id="texto" rows="10" placeholder="Digite ou cole seu texto aqui..."></textarea>
+<div class="container">
 
-    <br><br>
+    <a href="../../index.html">← Voltar</a>
 
-    <button onclick="maiusculas()">MAIÚSCULAS</button>
+    <textarea
+        id="text"
+        placeholder="Digite ou cole seu texto aqui..."
+        style="width:100%; height:150px; margin-top:20px;"></textarea>
 
-    <button onclick="minusculas()">minúsculas</button>
+    <div style="margin-top:20px; display:flex; gap:10px; flex-wrap:wrap;">
 
-    <button onclick="capitalizar()">Primeira Letra Maiúscula</button>
+        <button onclick="converterMaiusculas()">
+            MAIÚSCULAS
+        </button>
 
-    <button onclick="copiarTexto()">Copiar</button>
+        <button onclick="converterMinusculas()">
+            minúsculas
+        </button>
 
-    <div class="result" id="resultado"></div>
+        <button onclick="capitalizarTexto()">
+            Primeira Letra Maiúscula
+        </button>
+
+        <button onclick="copiarResultado()">
+            Copiar
+        </button>
+
+    </div>
+
+    <textarea
+        id="resultado"
+        readonly
+        placeholder="O resultado aparecerá aqui..."
+        style="width:100%; height:150px; margin-top:20px;"></textarea>
+
+    <section style="margin-top:40px;">
+        <h2>Como usar</h2>
+
+        <p>
+            Digite ou cole seu texto na caixa acima e escolha uma das opções:
+            converter para MAIÚSCULAS, minúsculas ou capitalizar cada palavra.
+        </p>
+    </section>
+
 </div>
 
 <script>
-const texto = document.getElementById("texto");
+const text = document.getElementById("text");
 const resultado = document.getElementById("resultado");
 
-function maiusculas() {
-    resultado.textContent = texto.value.toUpperCase();
+function converterMaiusculas() {
+    resultado.value = text.value.toUpperCase();
 }
 
-function minusculas() {
-    resultado.textContent = texto.value.toLowerCase();
+function converterMinusculas() {
+    resultado.value = text.value.toLowerCase();
 }
 
-function capitalizar() {
-    let convertido = texto.value
+function capitalizarTexto() {
+    resultado.value = text.value
         .toLowerCase()
         .replace(/\b\w/g, letra => letra.toUpperCase());
-
-    resultado.textContent = convertido;
 }
 
-function copiarTexto() {
-    navigator.clipboard.writeText(resultado.textContent);
+function copiarResultado() {
+    if (!resultado.value) return;
 
-    const antigo = resultado.innerHTML;
-
-    resultado.innerHTML += "<br><br>✅ Texto copiado!";
-    
-    setTimeout(() => {
-        resultado.innerHTML = antigo;
-    }, 2000);
+    navigator.clipboard.writeText(resultado.value);
+    alert("Texto copiado!");
 }
 </script>
 
