@@ -6,7 +6,8 @@
 
 <title>UtiliWeb - Ferramentas Online Gratuitas</title>
 
-<meta name="description" content="UtiliWeb é uma plataforma de ferramentas online gratuitas para produtividade, texto, SEO, redes sociais e muito mais.">
+<meta name="description" content="UtiliWeb é uma plataforma de ferramentas online gratuitas como contador de caracteres, calculadora de porcentagem, gerador de senhas e muito mais.">
+<meta name="keywords" content="ferramentas online, utiliweb, contador de caracteres, calculadora de porcentagem, gerador de senhas, ferramentas grátis">
 <meta name="robots" content="index, follow">
 
 <link rel="stylesheet" href="assets/style.css">
@@ -28,6 +29,7 @@
 }
 
 .card {
+    display: block;
     padding: 15px;
     border-radius: 12px;
     background: #fff;
@@ -54,35 +56,36 @@
 
 <header>
     <h1>🚀 UtiliWeb</h1>
-    <p>Ferramentas online gratuitas para produtividade e criação</p>
+    <p>Ferramentas rápidas, gratuitas e online</p>
 </header>
 
 <div class="container">
 
-<input class="search" id="search" placeholder="Buscar ferramentas (ex: bio, senha, texto, SEO...)">
+<input class="search" id="search" placeholder="Buscar ferramentas (ex: senha, texto, porcentagem...)">
 
 <h2 style="margin-top:25px;">🧠 Ferramentas</h2>
 
-<div class="grid" id="grid">
+<div class="grid">
 
-    <a class="card" href="tools/gerador-bio-viral/index.html" data-key="bio instagram tiktok youtube">
-        🔥 Gerador de Bio Viral
-        <div class="badge">Social Media</div>
+    <a class="card" href="tools/contador-caracteres/index.html" data-key="texto caracteres palavras contador">
+        📝 Contador de Caracteres
+        <div class="badge">Texto</div>
     </a>
 
-    <a class="card" href="tools/gerador-senhas/index.html" data-key="senha segurança password">
-        🔐 Gerador de Senhas
-        <div class="badge">Segurança</div>
-    </a>
-
-    <a class="card" href="tools/calculadora-porcentagem/index.html" data-key="porcentagem matematica calculadora">
+    <a class="card" href="tools/calculadora-porcentagem/index.html" data-key="porcentagem calculadora matematica">
         🧮 Calculadora de Porcentagem
         <div class="badge">Matemática</div>
     </a>
 
-    <a class="card" href="tools/contador-caracteres/index.html" data-key="texto palavras caracteres">
-        📝 Contador de Caracteres
-        <div class="badge">Texto</div>
+    <a class="card" href="tools/gerador-senhas/index.html" data-key="senha password segurança gerador">
+        🔐 Gerador de Senhas
+        <div class="badge">Segurança</div>
+    </a>
+
+    <!-- NOVA TOOL (sem apagar o resto) -->
+    <a class="card" href="tools/gerador-bio-viral/index.html" data-key="bio instagram tiktok youtube">
+        🔥 Gerador de Bio Viral
+        <div class="badge">Social</div>
     </a>
 
 </div>
@@ -94,10 +97,10 @@ const search = document.getElementById("search");
 const cards = document.querySelectorAll(".card");
 
 search.addEventListener("input", (e) => {
-    const value = e.target.value.toLowerCase();
+    const value = e.target.value.toLowerCase().trim();
 
     cards.forEach(card => {
-        const key = card.getAttribute("data-key");
+        const key = card.getAttribute("data-key") || "";
         const text = card.innerText.toLowerCase();
 
         if (key.includes(value) || text.includes(value)) {
