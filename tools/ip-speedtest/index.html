@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -6,64 +7,56 @@
 
 <title>Teste de Internet | UtiliWeb</title>
 
+<meta name="description" content="Teste a latência da sua conexão de internet online e gratuitamente.">
+<meta name="robots" content="index, follow">
+
 <link rel="stylesheet" href="../../assets/style.css">
-
-<style>
-.box {
-    margin-top: 20px;
-    padding: 20px;
-    background: #fff;
-    border-radius: 12px;
-    text-align:center;
-}
-
-.result {
-    font-size: 22px;
-    margin-top: 15px;
-}
-button {
-    padding:10px 15px;
-    margin-top:10px;
-    border:none;
-    background:#111;
-    color:#fff;
-    border-radius:8px;
-}
-</style>
 
 </head>
 
 <body>
 
 <header>
-<h1>⚡ Teste de Internet</h1>
+    <h1>⚡ Teste de Internet</h1>
+    <p>Verifique a resposta da sua conexão</p>
 </header>
 
 <div class="container">
 
-<a href="../../index.html">← Voltar</a>
+    <a href="../../index.html">← Voltar</a>
 
-<div class="box">
+    <div class="box">
 
-<button onclick="test()">Testar conexão</button>
+        <button onclick="test()">
+            Testar conexão
+        </button>
 
-<div class="result" id="r">Clique para testar</div>
+        <br><br>
 
-</div>
+        <div class="result" id="r">
+            Clique no botão para iniciar
+        </div>
+
+    </div>
 
 </div>
 
 <script>
 
 async function test() {
+
     const el = document.getElementById("r");
 
-    el.innerText = "Testando...";
+    el.textContent = "Testando...";
 
     const start = performance.now();
 
     try {
-        await fetch("https://api.ipify.org?format=json", { cache: "no-store" });
+
+        await fetch(
+            "https://api.ipify.org?format=json",
+            { cache: "no-store" }
+        );
 
         const end = performance.now();
 
@@ -71,21 +64,30 @@ async function test() {
 
         let quality = "";
 
-        if (latency < 100) quality = "🟢 Excelente";
-        else if (latency < 300) quality = "🟡 Boa";
-        else quality = "🔴 Lenta";
+        if (latency < 100) {
+            quality = "🟢 Excelente";
+        } else if (latency < 300) {
+            quality = "🟡 Boa";
+        } else {
+            quality = "🔴 Lenta";
+        }
 
         el.innerHTML = `
-            Latência: <b>${latency}ms</b><br>
-            Qualidade: ${quality}
+            <strong>Latência:</strong> ${latency} ms
+            <br><br>
+            <strong>Qualidade:</strong> ${quality}
         `;
 
-    } catch (e) {
-        el.innerText = "Erro ao testar conexão";
+    } catch {
+
+        el.textContent = "Erro ao testar conexão.";
+
     }
+
 }
 
 </script>
 
 </body>
 </html>
+```
