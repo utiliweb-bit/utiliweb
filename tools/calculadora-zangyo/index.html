@@ -2,24 +2,19 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Zangyo PRO Responsivo</title>
+<title>Zangyō PRO Real</title>
 
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family: Arial, sans-serif;
-}
-
 body{
-    background: linear-gradient(135deg,#1f7a4d,#27ae60);
-    min-height:100vh;
+    margin:0;
+    font-family: Arial;
+    background:#1f7a4d;
     display:flex;
     justify-content:center;
     align-items:center;
+    min-height:100vh;
     padding:12px;
 }
 
@@ -29,53 +24,43 @@ body{
     background:#fff;
     border-radius:14px;
     padding:16px;
-    color:#000;
 }
 
-/* HEADER */
 h2{
     text-align:center;
-    margin-bottom:12px;
-    font-size:22px;
 }
 
-/* INPUTS */
 input{
     width:100%;
     padding:12px;
     margin:6px 0;
-    border:1px solid #ccc;
+    font-size:16px;
     border-radius:10px;
-    font-size:16px; /* evita zoom no mobile */
+    border:1px solid #ccc;
 }
 
-/* BOTÃO */
 button{
     width:100%;
     padding:12px;
     margin-top:10px;
-    border:none;
-    border-radius:10px;
     background:#27ae60;
     color:#fff;
-    font-weight:bold;
+    border:none;
+    border-radius:10px;
     font-size:16px;
-    cursor:pointer;
+    font-weight:bold;
 }
 
-/* RESULTADO */
 .result{
     margin-top:14px;
     padding:12px;
-    background:#f4f4f4;
+    background:#f3f3f3;
     border-radius:10px;
-    font-size:14px;
-    line-height:1.5;
+    line-height:1.6;
 }
 
-/* BARRA */
 .bar{
-    height:18px;
+    height:16px;
     background:#ddd;
     border-radius:10px;
     overflow:hidden;
@@ -86,32 +71,6 @@ button{
     height:100%;
     width:0%;
     background:#27ae60;
-    transition:0.4s;
-}
-
-/* MOBILE AJUSTE FINO */
-@media (max-width:480px){
-
-    .wrapper{
-        padding:12px;
-    }
-
-    h2{
-        font-size:18px;
-    }
-
-    input, button{
-        font-size:15px;
-        padding:11px;
-    }
-
-    .result{
-        font-size:13px;
-    }
-
-    .bar{
-        height:14px;
-    }
 }
 </style>
 </head>
@@ -120,14 +79,19 @@ button{
 
 <div class="wrapper">
 
-<h2>💼 Zangyō PRO</h2>
+<h2>💼 Zangyō PRO REAL</h2>
 
 <input id="jikyu" type="number" placeholder="Valor da hora ¥">
-<input id="horas" type="number" placeholder="Horas totais">
+
+<input id="horasNormal" type="number" placeholder="Horas normais">
+
+<input id="horasExtra" type="number" placeholder="Horas extras">
+
+<input id="horasNoturnas" type="number" placeholder="Horas noturnas (22h-05h)">
 
 <button onclick="calcular()">Calcular</button>
 
-<div class="result" id="out">Preencha os dados e calcule</div>
+<div class="result" id="out">Preencha os dados</div>
 
 <div class="bar">
     <div class="bar-fill" id="bar"></div>
@@ -139,46 +103,38 @@ button{
 function calcular(){
 
     const jikyu = parseFloat(document.getElementById("jikyu").value)||0;
-    const horas = parseFloat(document.getElementById("horas").value)||0;
+    const normal = parseFloat(document.getElementById("horasNormal").value)||0;
+    const extra = parseFloat(document.getElementById("horasExtra").value)||0;
+    const noturno = parseFloat(document.getElementById("horasNoturnas").value)||0;
 
-    if(jikyu<=0 || horas<=0){
-        document.getElementById("out").innerText="❌ Dados inválidos";
+    if(jikyu<=0){
+        document.getElementById("out").innerText="❌ Insira valor da hora";
         return;
     }
 
-    // bruto diário
-    const diario = jikyu * horas;
+    // ===== REGRAS JAPÃO =====
+    const valorNormal = jikyu * normal;
+    const valorExtra = jikyu * extra * 1.25;
+    const valorNoturno = jikyu * noturno * 1.25;
+    const bonusExtraNoturno = jikyu * extra * 0.25; // simplificação leve
 
-    // mensal (22 dias)
-    const mensal = diario * 22;
+    const total = valorNormal + valorExtra + valorNoturno + bonusExtraNoturno;
 
-    // imposto progressivo simplificado
-    let impostoRate = 0.10;
-    if(mensal>1000000) impostoRate=0.15;
-    if(mensal>2000000) impostoRate=0.20;
-
-    const imposto = mensal * impostoRate;
-
-    // seguro social Japão (~14%)
-    const seguro = mensal * 0.14;
-
-    const liquido = mensal - imposto - seguro;
-
-    const descontos = imposto + seguro;
-    const pct = (descontos / mensal) * 100;
+    // estimativa mensal (22 dias)
+    const mensal = total * 22;
 
     document.getElementById("out").innerHTML = `
-        💰 Bruto mensal: ¥${mensal.toFixed(0)}<br>
-        📆 Diário: ¥${diario.toFixed(0)}<br><br>
+💰 Diário: ¥${total.toFixed(0)}<br>
+📆 Mensal estimado: ¥${mensal.toFixed(0)}<br><br>
 
-        🧾 Imposto: ¥${imposto.toFixed(0)}<br>
-        🏥 Seguro social: ¥${seguro.toFixed(0)}<br><br>
+🕒 Normais: ¥${valorNormal.toFixed(0)}<br>
+⚡ Extras: ¥${valorExtra.toFixed(0)}<br>
+🌙 Noturnas: ¥${valorNoturno.toFixed(0)}<br><br>
 
-        💵 Líquido final: ¥${liquido.toFixed(0)}<br>
-        📉 Descontos: ${pct.toFixed(1)}%
-    `;
+💵 Total dia: ¥${total.toFixed(0)}
+`;
 
-    document.getElementById("bar").style.width = pct + "%";
+    document.getElementById("bar").style.width = "80%";
 }
 </script>
 
