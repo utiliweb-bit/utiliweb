@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Sorteador de Números Online | UtiliWeb</title>
+
+<meta name="description" content="Sorteie números aleatórios online gratuitamente. Defina o valor mínimo e máximo e gere resultados instantaneamente com o UtiliWeb.">
+
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+
+<body>
+
+<header>
+    <h1>Sorteador de Números</h1>
+    <p>Gere números aleatórios de forma rápida e gratuita</p>
+</header>
+
+<div class="container">
+
+    <a href="../../index.html">← Voltar</a>
+
+    <div style="margin-top:20px;">
+
+        <label for="minimo">Número mínimo</label>
+        <input
+            type="number"
+            id="minimo"
+            value="1"
+            style="width:100%; margin-top:10px;">
+
+    </div>
+
+    <div style="margin-top:20px;">
+
+        <label for="maximo">Número máximo</label>
+        <input
+            type="number"
+            id="maximo"
+            value="100"
+            style="width:100%; margin-top:10px;">
+
+    </div>
+
+    <div style="margin-top:20px;">
+
+        <button onclick="sortearNumero()">
+            Sortear
+        </button>
+
+    </div>
+
+    <div style="margin-top:30px;">
+
+        <p><strong>Resultado:</strong></p>
+
+        <div class="result" id="resultado">
+            -
+        </div>
+
+    </div>
+
+    <section style="margin-top:40px;">
+        <h2>Como usar</h2>
+
+        <p>
+            Informe os valores mínimo e máximo e clique em "Sortear".
+            Um número aleatório será gerado instantaneamente.
+        </p>
+    </section>
+
+</div>
+
+<script>
+function sortearNumero() {
+
+    const minimo = parseInt(document.getElementById("minimo").value);
+    const maximo = parseInt(document.getElementById("maximo").value);
+    const resultado = document.getElementById("resultado");
+
+    if (isNaN(minimo) || isNaN(maximo)) {
+        resultado.textContent = "Informe valores válidos.";
+        return;
+    }
+
+    if (minimo > maximo) {
+        resultado.textContent = "O mínimo deve ser menor que o máximo.";
+        return;
+    }
+
+    const numero = Math.floor(Math.random() * (maximo - minimo + 1)) + minimo;
+
+    resultado.textContent = numero;
+}
+</script>
+
+</body>
+</html>
