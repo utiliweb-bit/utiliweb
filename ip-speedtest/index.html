@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Teste de Internet | UtiliWeb</title>
+
+<link rel="stylesheet" href="../../assets/style.css">
+
+<style>
+.box {
+    margin-top: 20px;
+    padding: 20px;
+    background: #fff;
+    border-radius: 12px;
+    text-align:center;
+}
+.result {
+    font-size: 24px;
+    margin-top: 10px;
+}
+button {
+    padding:10px 15px;
+    margin-top:10px;
+}
+</style>
+
+</head>
+
+<body>
+
+<header>
+<h1>⚡ Teste de Internet</h1>
+</header>
+
+<div class="container">
+
+<a href="../../index.html">← Voltar</a>
+
+<div class="box">
+
+<button onclick="test()">Testar velocidade</button>
+
+<div class="result" id="r">-</div>
+
+</div>
+
+</div>
+
+<script>
+
+function test() {
+    const start = performance.now();
+
+    fetch("https://api.ipify.org?format=json")
+    .then(() => {
+        const end = performance.now();
+        const speed = (1000 / (end - start)).toFixed(2);
+        document.getElementById("r").innerText = speed + " req/s (estimado)";
+    });
+}
+
+</script>
+
+</body>
+</html>
