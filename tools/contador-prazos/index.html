@@ -1,80 +1,198 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Contador de Prazos Online | UtiliWeb</title>
-
-<meta name="description" content="Calcule quantos dias faltam para uma data. Contador de prazos online grátis e rápido.">
-<meta name="robots" content="index, follow">
-
-<link rel="stylesheet" href="../../assets/style.css">
-</head>
-
-<body>
-
-<header>
-    <h1>📅 Contador de Prazos</h1>
-    <p>Descubra quantos dias faltam para uma data</p>
-</header>
-
-<div class="container">
-
-    <a href="../../index.html">← Voltar</a>
-
-    <div style="margin-top:20px;">
-
-        <label>Escolha a data final:</label>
-        <input id="date" type="date" style="width:100%; margin-top:10px;">
-
-        <button style="margin-top:15px;" onclick="calcular()">
-            Calcular prazo
-        </button>
-
-    </div>
-
-    <div class="result" id="result" style="margin-top:20px;">
-        -
-    </div>
-
-    <section style="margin-top:40px;">
-        <h2>Como usar</h2>
-        <p>Selecione uma data e veja automaticamente quantos dias faltam até o prazo escolhido.</p>
-    </section>
-
-</div>
-
 <script>
+let lembretes = JSON.parse(localStorage.getItem('lembretes-prazos-desktop')) || [];
+let abaAtiva = 'diferenca';
+
+function mudarAba(aba, event) {
+    abaAtiva = aba;
+
+    document.querySelectorAll('.aba-btn').forEach(btn => btn.classList.remove('ativo'));
+    event.currentTarget.classList.add('ativo');
+
+    document.querySelectorAll('.aba-conteudo').forEach(el => el.classList.remove('ativo'));
+    document.getElementById(`aba-${aba}`).classList.add('ativo');
+
+    limparResultado();
+}
+
+window.addEventListener('load', () => {
+    const hoje = new Date().toISOString().split('T')[0];
+    document.getElementById('dataFinal').value = hoje;
+    atualizarLembretes();
+});
+
 function calcular() {
+    if (abaAtiva === 'diferenca') {
+        calcularDiferenca();
+    } else {
+        calcularDataFutura();
+    }
+}
 
-    const input = document.getElementById("date").value;
-    const result = document.getElementById("result");
+function calcularDiferenca() {
+    let dataInicial = document.getElementById('dataInicial').value;
+    const dataFinal = document.getElementById('dataFinal').value;
 
-    if (!input) {
-        result.textContent = "Selecione uma data.";
+    if (!dataFinal) {
+        mostrarStatus("Preencha a data final", "urgente");
+        return;
+    }
+
+    if (!dataInicial) {
+        dataInicial = new Date().toISOString().split('T')[0];
+    }
+
+    const data1 = new Date(dataInicial + "T00:00:00");
+    const data2 = new Date(dataFinal + "T00:00:00");
+
+    const diffMs = data2 - data1;
+    const totalDias = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+
+    const tempo = calcularTempoComposto(data1, data2);
+
+    exibirResultadoDiferenca(tempo, totalDias);
+
+    adicionarLembrete(dataFinal, `Prazo até ${dataFinal}`);
+}
+
+function calcularTempoComposto(data1, data2) {
+    if (data1 > data2) [data1, data2] = [data2, data1];
+
+    let anos = 0, meses = 0, dias = 0;
+    let temp = new Date(data1);
+
+    while (new Date(temp.getFullYear() + 1, temp.getMonth(), temp.getDate()) <= data2) {
+        anos++;
+        temp.setFullYear(temp.getFullYear() + 1);
+    }
+
+    while (new Date(temp.getFullYear(), temp.getMonth() + 1, temp.getDate()) <= data2) {
+        meses++;
+        temp.setMonth(temp.getMonth() + 1);
+    }
+
+    while (temp < data2) {
+        dias++;
+        temp.setDate(temp.getDate() + 1);
+    }
+
+    return { anos, meses, dias };
+}
+
+function calcularDataFutura() {
+    const dataFutura = document.getElementById('dataFutura').value;
+
+    if (!dataFutura) {
+        mostrarStatus("Preencha a data futura", "urgente");
         return;
     }
 
     const hoje = new Date();
-    const alvo = new Date(input);
+    const data = new Date(dataFutura + "T00:00:00");
 
-    hoje.setHours(0,0,0,0);
-    alvo.setHours(0,0,0,0);
+    const dias = Math.ceil((data - hoje) / (1000 * 60 * 60 * 24));
 
-    const diff = alvo - hoje;
+    exibirResultadoFutura(
+        data.toLocaleDateString('pt-BR'),
+        dias
+    );
 
-    const dias = Math.ceil(diff / (1000 * 60 * 60 * 24));
+    adicionarLembrete(dataFutura, `Prazo: ${dataFutura}`);
+}
 
-    if (dias > 0) {
-        result.innerHTML = `Faltam <strong>${dias}</strong> dias para o prazo.`;
-    } else if (dias === 0) {
-        result.innerHTML = `<strong>O prazo é hoje!</strong>`;
+function exibirResultadoDiferenca(tempo, totalDias) {
+    const { anos, meses, dias } = tempo;
+
+    document.getElementById('resultadoItems').style.display = 'block';
+    document.getElementById('resultadoTotal').style.display = 'block';
+
+    document.getElementById('resultado1').style.display = 'flex';
+    document.getElementById('resultado2').style.display = 'flex';
+    document.getElementById('resultado3').style.display = 'flex';
+
+    document.getElementById('resultado1Label').textContent = 'Anos';
+    document.getElementById('resultado1Valor').textContent = anos;
+
+    document.getElementById('resultado2Label').textContent = 'Meses';
+    document.getElementById('resultado2Valor').textContent = meses;
+
+    document.getElementById('resultado3Label').textContent = 'Dias';
+    document.getElementById('resultado3Valor').textContent = dias;
+
+    const partes = [];
+    if (anos) partes.push(`${anos}a`);
+    if (meses) partes.push(`${meses}m`);
+    if (dias) partes.push(`${dias}d`);
+
+    const texto = partes.length ? `Faltam ${partes.join(" ")}` : "Hoje é o dia!";
+
+    document.getElementById('totalLabel').textContent = texto;
+    document.getElementById('total').textContent = totalDias;
+    document.getElementById('diasAuxiliar').textContent = `${totalDias} dias`;
+
+    setBadge(totalDias);
+}
+
+function exibirResultadoFutura(data, dias) {
+    document.getElementById('resultadoItems').style.display = 'block';
+    document.getElementById('resultadoTotal').style.display = 'block';
+
+    document.getElementById('resultado1').style.display = 'flex';
+    document.getElementById('resultado1Label').textContent = 'Data';
+    document.getElementById('resultado1Valor').textContent = data;
+
+    document.getElementById('resultado2').style.display = 'none';
+    document.getElementById('resultado3').style.display = 'none';
+
+    document.getElementById('totalLabel').textContent = 'Dias restantes';
+    document.getElementById('total').textContent = dias;
+    document.getElementById('diasAuxiliar').textContent = '';
+
+    setBadge(dias);
+}
+
+function setBadge(dias) {
+    const badge = document.getElementById('statusBadge');
+
+    if (dias < 0) {
+        badge.innerHTML = '<div class="status-badge urgente">❌ Vencido</div>';
+    } else if (dias <= 30) {
+        badge.innerHTML = '<div class="status-badge urgente">⚠️ Urgente</div>';
+    } else if (dias <= 90) {
+        badge.innerHTML = '<div class="status-badge proximo">⏰ Próximo</div>';
     } else {
-        result.innerHTML = `O prazo já passou há <strong>${Math.abs(dias)}</strong> dias.`;
+        badge.innerHTML = '<div class="status-badge tranquilo">✓ OK</div>';
     }
 }
-</script>
 
-</body>
-</html>
+function copiarResultado() {
+    const texto =
+        document.getElementById('totalLabel').textContent +
+        " - " +
+        document.getElementById('total').textContent;
+
+    navigator.clipboard.writeText(texto);
+
+    const btn = event.target;
+    const old = btn.textContent;
+    btn.textContent = "✓ Copiado!";
+    setTimeout(() => btn.textContent = old, 1200);
+}
+
+function limpar() {
+    document.getElementById('dataInicial').value = '';
+    document.getElementById('dataFinal').value = '';
+    document.getElementById('dataFutura').value = '';
+    limparResultado();
+}
+
+function limparResultado() {
+    document.getElementById('resultadoItems').style.display = 'none';
+    document.getElementById('resultadoTotal').style.display = 'none';
+    document.getElementById('statusBadge').innerHTML = '';
+}
+
+function mostrarStatus(msg, tipo) {
+    const badge = document.getElementById('statusBadge');
+    badge.innerHTML = `<div class="status-badge ${tipo}">${msg}</div>`;
+}
+</script>
