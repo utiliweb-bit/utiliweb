@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Gerador de Bio Viral | UtiliWeb</title>
+
+<link rel="stylesheet" href="../../assets/style.css">
+
+<style>
+textarea, input, select {
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.btn {
+    display:block;
+    margin-top:10px;
+    padding:12px;
+    background:#111;
+    color:#fff;
+    text-align:center;
+    border-radius:8px;
+    text-decoration:none;
+    cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🔥 Gerador de Bio Viral</h1>
+    <p>Crie bios prontas para Instagram, TikTok e YouTube</p>
+</header>
+
+<div class="container">
+
+<a href="../../index.html">← Voltar</a>
+
+<input id="name" placeholder="Seu nome ou marca">
+
+<select id="niche">
+    <option value="creator">Criador de conteúdo</option>
+    <option value="fitness">Fitness</option>
+    <option value="business">Negócios</option>
+    <option value="music">Música</option>
+    <option value="gaming">Games</option>
+</select>
+
+<select id="style">
+    <option value="viral">🔥 Viral</option>
+    <option value="pro">💼 Profissional</option>
+    <option value="fun">😂 Engraçado</option>
+</select>
+
+<button class="btn" onclick="generate()">Gerar Bio</button>
+
+<div id="output" style="margin-top:20px;"></div>
+
+</div>
+
+<script>
+function generate() {
+    const name = document.getElementById("name").value;
+    const niche = document.getElementById("niche").value;
+    const style = document.getElementById("style").value;
+
+    let bio = "";
+
+    if (style === "viral") {
+        bio = `🔥 ${name || "Criador de conteúdo"}\n💥 Conteúdo de ${niche}\n📈 Crescendo todos os dias\n👇 Veja meus conteúdos`;
+    }
+
+    if (style === "pro") {
+        bio = `👤 ${name || "Profissional"}\n🎯 Especialista em ${niche}\n📊 Resultados reais\n📩 Contato na bio`;
+    }
+
+    if (style === "fun") {
+        bio = `😂 ${name || "Criador engraçado"}\n🎮 ${niche} na área\n🚀 Só conteúdo leve\n👇 Cola aqui`;
+    }
+
+    document.getElementById("output").innerHTML = `
+        <textarea rows="6">${bio}</textarea>
+        <button class="btn" onclick="navigator.clipboard.writeText(\`${bio}\`)">Copiar Bio</button>
+    `;
+}
+</script>
+
+</body>
+</html>
