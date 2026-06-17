@@ -4,53 +4,101 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Teste de Internet | UtiliWeb</title>
+<title>Teste de Velocidade da Internet | UtiliWeb</title>
 
-<meta name="description" content="Teste a latência da sua conexão de internet online e gratuitamente.">
+<meta name="description" content="Teste gratuitamente a qualidade da sua conexão de internet. Veja o ping e a classificação da rede.">
 <meta name="robots" content="index, follow">
 
 <link rel="stylesheet" href="../../assets/style.css">
+
+<style>
+.speed-number{
+    font-size:48px;
+    font-weight:bold;
+    margin:20px 0;
+}
+
+.status{
+    font-size:22px;
+    margin-top:20px;
+}
+
+.progress{
+    width:100%;
+    height:18px;
+    background:#1f2937;
+    border-radius:20px;
+    overflow:hidden;
+    margin-top:25px;
+}
+
+.progress-bar{
+    width:0%;
+    height:100%;
+    background:#3b82f6;
+    transition:0.4s;
+}
+
+.info{
+    margin-top:25px;
+    line-height:1.8;
+}
+</style>
 
 </head>
 
 <body>
 
 <header>
-    <h1>⚡ Teste de Internet</h1>
-    <p>Verifique a resposta da sua conexão</p>
+    <h1>⚡ Teste de Velocidade da Internet</h1>
+    <p>Verifique a qualidade da sua conexão</p>
 </header>
 
 <div class="container">
 
-    <a href="../../index.html">← Voltar</a>
+<a href="../../index.html">← Voltar</a>
 
-    <div class="box">
+<div class="box">
 
-        <button onclick="test()">
-            Testar conexão
-        </button>
+<button onclick="testSpeed()">
+    Iniciar teste
+</button>
 
-        <br><br>
+<div class="speed-number" id="ping">
+    --
+</div>
 
-        <div class="result" id="r">
-            Clique no botão para iniciar
-        </div>
+<div class="status" id="quality">
+    Clique em "Iniciar teste"
+</div>
 
-    </div>
+<div class="progress">
+    <div class="progress-bar" id="bar"></div>
+</div>
+
+<div class="info" id="details"></div>
+
+</div>
 
 </div>
 
 <script>
 
-async function test() {
+async function testSpeed() {
 
-    const el = document.getElementById("r");
+    const ping = document.getElementById("ping");
+    const quality = document.getElementById("quality");
+    const details = document.getElementById("details");
+    const bar = document.getElementById("bar");
 
-    el.textContent = "Testando...";
-
-    const start = performance.now();
+    ping.textContent = "...";
+    quality.textContent = "Testando...";
+    details.innerHTML = "";
+    bar.style.width = "0%";
 
     try {
+
+        const start = performance.now();
 
         await fetch(
             "https://api.ipify.org?format=json",
@@ -59,27 +107,59 @@ async function test() {
 
         const end = performance.now();
 
-        const latency = (end - start).toFixed(0);
+        const latency = Math.round(end - start);
 
-        let quality = "";
+        bar.style.width = "100%";
+
+        ping.textContent = latency + " ms";
+
+        let status = "";
+        let use = "";
 
         if (latency < 100) {
-            quality = "🟢 Excelente";
-        } else if (latency < 300) {
-            quality = "🟡 Boa";
-        } else {
-            quality = "🔴 Lenta";
+            status = "🟢 Excelente";
+            use = `
+            ✅ Navegação<br>
+            ✅ YouTube e Netflix<br>
+            ✅ Chamadas de vídeo<br>
+            ✅ Jogos online
+            `;
+        }
+        else if (latency < 300) {
+            status = "🟡 Boa";
+            use = `
+            ✅ Navegação<br>
+            ✅ Streaming<br>
+            ⚠️ Jogos online podem sofrer atraso
+            `;
+        }
+        else {
+            status = "🔴 Lenta";
+            use = `
+            ⚠️ Navegação mais lenta<br>
+            ⚠️ Streaming pode travar
+            `;
         }
 
-        el.innerHTML = `
-            <strong>Latência:</strong> ${latency} ms
+        quality.textContent = status;
+
+        details.innerHTML = `
+            <strong>Ping:</strong> ${latency} ms<br><br>
+
+            <strong>Último teste:</strong><br>
+            ${new Date().toLocaleString("pt-BR")}
             <br><br>
-            <strong>Qualidade:</strong> ${quality}
+
+            <strong>Indicada para:</strong><br>
+            ${use}
         `;
 
-    } catch {
+    }
 
-        el.textContent = "Erro ao testar conexão.";
+    catch {
+
+        ping.textContent = "--";
+        quality.textContent = "Erro ao testar conexão.";
 
     }
 
