@@ -2,138 +2,162 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
 <title>Gerador de Lorem Ipsum | UtiliWeb</title>
 
 <meta name="description" content="Gere textos Lorem Ipsum para layouts e projetos de forma rápida e gratuita.">
 <meta name="keywords" content="lorem ipsum, gerador de texto, utiliweb, placeholder text">
 
-<link rel="stylesheet" href="../../assets/style.css">
-
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+:root{
+    --pad: clamp(10px, 2vw, 20px);
+    --radius: 18px;
 }
 
-html, body {
-    width: 100%;
-    min-height: 100vh;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial;
-    background: linear-gradient(135deg, #2ecc71, #27ae60);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html, body{
+    width:100%;
+    min-height:100dvh;
+    font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial;
+    background:linear-gradient(135deg,#2ecc71,#27ae60);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:var(--pad);
 }
 
 /* WRAPPER */
-.wrapper {
-    width: 100%;
-    max-width: 1000px;
-    min-height: 650px;
-    background: #fff;
-    border-radius: 20px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    overflow: hidden;
+.wrapper{
+    width:100%;
+    max-width:1000px;
+    background:#fff;
+    border-radius:var(--radius);
+    box-shadow:0 20px 60px rgba(0,0,0,.3);
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    overflow:hidden;
+}
+
+/* PAINÉIS */
+.left-panel,
+.right-panel{
+    padding:clamp(16px, 3vw, 30px);
 }
 
 /* ESQUERDA */
-.left-panel {
-    padding: 30px;
-    border-right: 1px solid #eee;
+.left-panel{
+    border-right:1px solid #eee;
 }
 
-header h1 {
-    font-size: 26px;
+/* TIPOGRAFIA */
+header h1{
+    font-size:clamp(20px, 2.2vw, 26px);
 }
 
-.subtitle {
-    font-size: 14px;
-    color: #777;
+.subtitle{
+    font-size:clamp(12px, 1.4vw, 14px);
+    color:#777;
 }
 
-/* INPUTS */
-input {
-    width: 100%;
-    padding: 12px;
-    margin-top: 10px;
-    border-radius: 8px;
-    border: 2px solid #ddd;
-    font-size: 14px;
+/* INPUT */
+input{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border-radius:10px;
+    border:2px solid #ddd;
+    font-size:14px;
+    outline:none;
 }
 
-input:focus {
-    border-color: #27ae60;
-    outline: none;
+input:focus{
+    border-color:#27ae60;
 }
 
 /* BOTÕES */
-.buttons {
-    display: flex;
-    gap: 10px;
-    margin-top: 15px;
+.buttons{
+    display:flex;
+    gap:10px;
+    margin-top:15px;
 }
 
-button {
-    flex: 1;
-    padding: 12px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    font-weight: bold;
-    background: #27ae60;
-    color: white;
+button{
+    flex:1;
+    padding:12px;
+    border-radius:10px;
+    border:none;
+    cursor:pointer;
+    font-weight:700;
+    background:#27ae60;
+    color:#fff;
+    min-height:44px;
+    touch-action:manipulation;
 }
 
-button:hover {
-    opacity: 0.9;
+button:hover{
+    opacity:0.9;
 }
 
 /* TEXTAREA */
-textarea {
-    width: 100%;
-    height: 260px;
-    margin-top: 20px;
-    padding: 12px;
-    border-radius: 8px;
-    border: 2px solid #ddd;
-    resize: none;
-    font-size: 13px;
+textarea{
+    width:100%;
+    height:260px;
+    margin-top:20px;
+    padding:12px;
+    border-radius:10px;
+    border:2px solid #ddd;
+    resize:none;
+    font-size:13px;
+    outline:none;
 }
 
-textarea:focus {
-    border-color: #27ae60;
-    outline: none;
+textarea:focus{
+    border-color:#27ae60;
 }
 
 /* DIREITA */
-.right-panel {
-    padding: 30px;
-    background: #eafaf1;
+.right-panel{
+    background:#eafaf1;
 }
 
 /* RESPONSIVO */
-@media (max-width: 900px) {
-    .wrapper {
-        grid-template-columns: 1fr;
+@media (max-width: 900px){
+    .wrapper{
+        grid-template-columns:1fr;
     }
 
-    .left-panel {
-        border-right: none;
-        border-bottom: 1px solid #eee;
+    .left-panel{
+        border-right:none;
+        border-bottom:1px solid #eee;
     }
 
-    .buttons {
-        flex-direction: column;
+    .buttons{
+        flex-direction:column;
+    }
+}
+
+@media (max-width: 480px){
+    html, body{
+        padding:10px;
+    }
+
+    textarea{
+        height:220px;
+        font-size:12px;
+    }
+
+    input, button{
+        font-size:13px;
+        padding:11px;
     }
 }
 </style>
-
 </head>
 
 <body>
@@ -151,6 +175,8 @@ textarea:focus {
         <br>
 
         <a href="../../index.html">← Voltar</a>
+
+        <br><br>
 
         <label>Quantidade de parágrafos</label>
         <input type="number" id="quantidade" min="1" max="20" value="3">
