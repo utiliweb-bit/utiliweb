@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Gerador de Link na Bio | UtiliWeb</title>
+
+<meta name="description" content="Crie link na bio para Instagram, TikTok e redes sociais. Gere páginas simples com seus links grátis.">
+<meta name="robots" content="index, follow">
+
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+
+<body>
+
+<header>
+    <h1>Link na Bio</h1>
+    <p>Crie uma página simples com seus links</p>
+</header>
+
+<div class="container">
+
+    <a href="../../index.html">← Voltar</a>
+
+    <div style="margin-top:20px;">
+
+        <label>Seu nome ou título:</label>
+        <input id="title" type="text" placeholder="Ex: Meu Perfil">
+
+        <label style="display:block; margin-top:10px;">Link principal:</label>
+        <input id="link" type="text" placeholder="https://...">
+
+        <button style="margin-top:15px;" onclick="gerar()">Gerar Página</button>
+
+        <div style="margin-top:20px;">
+            <p><strong>Prévia:</strong></p>
+            <div id="preview" style="padding:15px; border:1px solid #ccc;">
+                ---
+            </div>
+        </div>
+
+    </div>
+
+    <section style="margin-top:40px;">
+        <h2>Como funciona</h2>
+        <p>Você cria uma página simples com seu link principal para usar na bio do Instagram ou TikTok.</p>
+    </section>
+
+</div>
+
+<script>
+function gerar() {
+    const title = document.getElementById("title").value;
+    const link = document.getElementById("link").value;
+
+    document.getElementById("preview").innerHTML = `
+        <h3>${title}</h3>
+        <a href="${link}" target="_blank">${link}</a>
+    `;
+}
+</script>
+
+</body>
+</html>
