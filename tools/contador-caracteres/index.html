@@ -4,34 +4,42 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Contador de Caracteres Online | UtiliWeb</title>
-<meta name="description" content="Conte caracteres, palavras e espaços online grátis. Ferramenta rápida e simples do UtiliWeb.">
+<title>Contador de Caracteres | UtiliWeb</title>
 
+<meta name="description" content="Conte caracteres, palavras e espaços em tempo real.">
 <link rel="stylesheet" href="../../assets/style.css">
 </head>
 
 <body>
 
 <header>
-    <h1>Contador de Caracteres</h1>
-    <p>Conte letras, palavras e espaços em tempo real</p>
+    <h1>📝 Contador de Caracteres</h1>
+    <p>Conte letras e palavras em tempo real</p>
 </header>
 
 <div class="container">
 
     <a href="../../index.html">← Voltar</a>
 
-    <textarea id="text" placeholder="Digite ou cole seu texto aqui..." style="width:100%; height:150px; margin-top:20px;"></textarea>
+    <div class="box">
 
-    <div style="margin-top:20px;">
-        <p><strong>Caracteres:</strong> <span id="chars">0</span></p>
-        <p><strong>Palavras:</strong> <span id="words">0</span></p>
+        <textarea id="text" placeholder="Digite ou cole seu texto aqui..."></textarea>
+
+        <div class="result" style="margin-top:15px;">
+            <strong>Caracteres:</strong> <span id="chars">0</span>
+            <br>
+            <strong>Palavras:</strong> <span id="words">0</span>
+        </div>
+
     </div>
 
-    <section style="margin-top:40px;">
-        <h2>Como usar</h2>
-        <p>Digite ou cole seu texto e veja a contagem automaticamente em tempo real.</p>
-    </section>
+    <div class="box">
+        <h2>Como funciona</h2>
+        <p>
+            O contador atualiza automaticamente enquanto você digita,
+            mostrando caracteres e palavras em tempo real.
+        </p>
+    </div>
 
 </div>
 
@@ -39,10 +47,12 @@
 const text = document.getElementById("text");
 
 text.addEventListener("input", () => {
+
     const value = text.value;
 
     document.getElementById("chars").textContent = value.length;
-    document.getElementById("words").textContent = value.trim() ? value.trim().split(/\s+/).length : 0;
+    document.getElementById("words").textContent =
+        value.trim() ? value.trim().split(/\s+/).length : 0;
 });
 </script>
 
