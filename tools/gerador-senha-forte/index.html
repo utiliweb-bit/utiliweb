@@ -2,20 +2,19 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
 <title>Gerador de Senha Forte | UtiliWeb</title>
 
 <meta name="description" content="Gere senhas fortes e seguras com letras, números e símbolos.">
 <meta name="keywords" content="senha forte, gerador de senha, segurança, utiliweb">
 
-<link rel="stylesheet" href="../../assets/style.css">
-
 <style>
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
 }
 
 html, body {
@@ -26,45 +25,69 @@ html, body {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    padding: 16px;
 }
 
 /* WRAPPER */
 .wrapper {
     width: 100%;
-    max-width: 1000px;
-    min-height: 650px;
+    max-width: 1050px;
     background: #fff;
-    border-radius: 20px;
+    border-radius: 16px;
     box-shadow: 0 20px 60px rgba(0,0,0,0.3);
     display: grid;
     grid-template-columns: 1fr 1fr;
     overflow: hidden;
+    max-height: 90vh;
 }
 
 /* LEFT */
 .left-panel {
-    padding: 30px;
-    border-right: 1px solid #eee;
+    padding: 28px;
+    overflow-y: auto;
+    border-right: 1px solid #e0e0e0;
 }
 
-header h1 {
-    font-size: 26px;
+/* RIGHT */
+.right-panel {
+    padding: 28px;
+    background: #eafaf1;
+    overflow-y: auto;
+}
+
+/* HEADER */
+header {
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+h1 {
+    font-size: 24px;
+    color: #333;
 }
 
 .subtitle {
-    font-size: 14px;
+    font-size: 13px;
     color: #777;
 }
 
-/* INPUTS */
+/* LINK VOLTAR */
+a {
+    display: inline-block;
+    margin-bottom: 14px;
+    color: #27ae60;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+/* INPUT */
 input[type="number"] {
     width: 100%;
     padding: 12px;
-    margin-top: 10px;
-    border-radius: 8px;
+    border-radius: 10px;
     border: 2px solid #ddd;
     font-size: 14px;
+    margin-top: 10px;
 }
 
 input:focus {
@@ -76,62 +99,78 @@ input:focus {
 .checks {
     margin-top: 12px;
     display: flex;
-    gap: 15px;
+    gap: 14px;
     flex-wrap: wrap;
-    font-size: 14px;
+    font-size: 13px;
+    color: #333;
 }
 
-/* BOTÕES */
+/* BUTTONS */
 .buttons {
-    display: flex;
-    gap: 10px;
-    margin-top: 15px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 16px;
 }
 
 button {
-    flex: 1;
     padding: 12px;
-    border-radius: 8px;
+    border-radius: 10px;
     border: none;
     cursor: pointer;
-    font-weight: bold;
+    font-weight: 700;
+    font-size: 12px;
     background: #27ae60;
     color: white;
+    text-transform: uppercase;
+    transition: 0.2s;
 }
 
-button:hover {
-    opacity: 0.9;
+button:active {
+    transform: scale(0.97);
 }
 
 /* RESULT */
 .result-box {
-    margin-top: 20px;
-    padding: 15px;
+    margin-top: 18px;
+    padding: 14px;
     background: #f7f7f7;
     border-radius: 10px;
     word-break: break-all;
-    font-weight: bold;
-}
-
-/* RIGHT */
-.right-panel {
-    padding: 30px;
-    background: #eafaf1;
+    font-weight: 700;
+    font-size: 14px;
+    min-height: 48px;
 }
 
 /* RESPONSIVO */
 @media (max-width: 900px) {
     .wrapper {
         grid-template-columns: 1fr;
+        max-height: none;
+        border-radius: 12px;
     }
 
     .left-panel {
         border-right: none;
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid #e0e0e0;
     }
 
     .buttons {
-        flex-direction: column;
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    html, body {
+        padding: 10px;
+    }
+
+    .left-panel, .right-panel {
+        padding: 16px;
+    }
+
+    h1 {
+        font-size: 20px;
     }
 }
 </style>
@@ -146,11 +185,9 @@ button:hover {
     <div class="left-panel">
 
         <header>
-            <h1>🔐 Gerador de Senha Forte</h1>
-            <p class="subtitle">Senhas seguras e aleatórias</p>
+            <h1>🔐 Senha Forte</h1>
+            <p class="subtitle">Gerador seguro e rápido</p>
         </header>
-
-        <br>
 
         <a href="../../index.html">← Voltar</a>
 
@@ -176,8 +213,8 @@ button:hover {
 
         <h2>Como funciona</h2>
         <p>
-            Gere senhas seguras usando criptografia do navegador.
-            Ideal para redes sociais, bancos e sistemas.
+            Senhas são geradas localmente no navegador usando aleatoriedade criptográfica.
+            Ideal para segurança em redes sociais, bancos e sistemas.
         </p>
 
     </div>
