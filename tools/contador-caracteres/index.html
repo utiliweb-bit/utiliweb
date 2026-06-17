@@ -4,151 +4,587 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
-<title>Contador de Texto | UtiliWeb</title>
+<title>Contador de Texto PRO | UtiliWeb</title>
 
-<meta name="description" content="Conte caracteres e palavras em tempo real de forma rápida e precisa.">
-<meta name="robots" content="index, follow">
+<meta name="description" content="Conte palavras, caracteres, frases, parágrafos, tempo de leitura e muito mais em tempo real.">
 
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
 }
 
-html, body {
-    width: 100%;
-    min-height: 100vh;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 16px;
-    background: linear-gradient(135deg, #2ecc71, #27ae60);
+body{
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
+    background:linear-gradient(135deg,#2ecc71,#27ae60);
+    min-height:100dvh;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding:16px;
 }
 
-/* WRAPPER */
-.wrapper {
-    width: 100%;
-    max-width: 1100px;
-    background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    overflow: hidden;
+.wrapper{
+    width:100%;
+    max-width:1200px;
+    background:#fff;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 20px 60px rgba(0,0,0,.25);
+    display:grid;
+    grid-template-columns:1fr 1fr;
 }
 
-/* PAINÉIS */
-.left, .right {
-    padding: 28px;
+.left,
+.right{
+    padding:24px;
+    min-width:0;
 }
 
-/* HEADER */
-h1 {
-    font-size: 22px;
-    margin-bottom: 6px;
+.left{
+    border-right:1px solid #eee;
 }
 
-p {
-    font-size: 12px;
-    color: #777;
+h1{
+    font-size:28px;
+    margin-bottom:6px;
 }
 
-/* TEXTAREA */
-textarea {
-    width: 100%;
-    min-height: 220px;
-    margin-top: 12px;
-    padding: 12px;
-    border-radius: 10px;
-    border: 1px solid #ddd;
-    font-size: 14px;
-    resize: none;
+h2{
+    font-size:22px;
+    margin-bottom:10px;
 }
 
-textarea:focus {
-    outline: none;
-    border-color: #27ae60;
+.subtitle{
+    color:#777;
+    font-size:14px;
+    margin-bottom:15px;
 }
 
-/* GRID */
-.grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-top: 14px;
+textarea{
+    width:100%;
+    min-height:320px;
+    resize:vertical;
+    padding:14px;
+    border-radius:12px;
+    border:2px solid #ddd;
+    font-size:15px;
+    line-height:1.6;
 }
 
-.card {
-    background: #f4f4f4;
-    padding: 14px;
-    border-radius: 10px;
-    font-weight: 800;
-    font-size: 14px;
+textarea:focus{
+    outline:none;
+    border-color:#27ae60;
 }
 
-/* RESPONSIVO */
-@media (max-width: 768px) {
-    .wrapper {
-        grid-template-columns: 1fr;
+.actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:12px;
+}
+
+button{
+    padding:13px;
+    border:none;
+    border-radius:12px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+.primary{
+    background:#27ae60;
+    color:#fff;
+}
+
+.secondary{
+    background:#fff;
+    border:2px solid #27ae60;
+    color:#27ae60;
+}
+
+.goal-box{
+    margin-top:15px;
+}
+
+.goal-box label{
+    display:block;
+    margin-bottom:6px;
+    font-size:13px;
+    font-weight:700;
+}
+
+.goal-box input{
+    width:100%;
+    padding:12px;
+    border:2px solid #ddd;
+    border-radius:10px;
+}
+
+.progress{
+    height:14px;
+    background:#ececec;
+    border-radius:999px;
+    overflow:hidden;
+    margin-top:10px;
+}
+
+.bar{
+    height:100%;
+    width:0%;
+    background:#27ae60;
+    transition:.3s;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+}
+
+.card{
+    background:#f8fff9;
+    border:1px solid #d7f5e3;
+    border-radius:12px;
+    padding:14px;
+}
+
+.card-title{
+    font-size:12px;
+    color:#666;
+}
+
+.card-value{
+    font-size:22px;
+    font-weight:800;
+    color:#27ae60;
+    margin-top:4px;
+}
+
+.section{
+    margin-top:18px;
+}
+
+.list{
+    background:#f8fff9;
+    border:1px solid #d7f5e3;
+    border-radius:12px;
+    padding:14px;
+    line-height:1.8;
+}
+
+.social{
+    display:grid;
+    gap:10px;
+}
+
+.social-item{
+    background:#f8fff9;
+    border:1px solid #d7f5e3;
+    border-radius:10px;
+    padding:10px;
+    font-size:14px;
+}
+
+.warning{
+    color:#d35400;
+    font-weight:700;
+}
+
+.success{
+    color:#27ae60;
+    font-weight:700;
+}
+
+@media(max-width:900px){
+
+    .wrapper{
+        grid-template-columns:1fr;
     }
 
-    html, body {
-        padding: 12px;
+    .left{
+        border-right:none;
+        border-bottom:1px solid #eee;
     }
 
-    .left, .right {
-        padding: 18px;
+    .left,
+    .right{
+        padding:18px;
     }
+
+    textarea{
+        min-height:260px;
+    }
+
 }
+
+@media(max-width:500px){
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .actions{
+        grid-template-columns:1fr;
+    }
+
+    h1{
+        font-size:24px;
+    }
+
+}
+
 </style>
-
 </head>
-
 <body>
 
 <div class="wrapper">
 
-    <!-- INPUT -->
-    <div class="left">
+<div class="left">
 
-        <h1>✍️ Contador de Texto</h1>
-        <p>Contagem em tempo real</p>
+<h1>✍️ Contador de Texto PRO</h1>
+<div class="subtitle">
+Análise completa em tempo real
+</div>
 
-        <textarea id="text" placeholder="Digite seu texto aqui..."></textarea>
+<textarea
+id="text"
+placeholder="Digite ou cole seu texto aqui..."></textarea>
 
-        <div class="grid">
-            <div class="card">Caracteres: <span id="chars">0</span></div>
-            <div class="card">Palavras: <span id="words">0</span></div>
-        </div>
+<div class="actions">
 
-    </div>
+<button class="primary" onclick="copyText()">
+📋 Copiar Texto
+</button>
 
-    <!-- RESULTADO -->
-    <div class="right">
+<button class="secondary" onclick="clearText()">
+🗑 Limpar
+</button>
 
-        <h2>Resultado ao vivo</h2>
-        <p>Atualização automática conforme digitação.</p>
+</div>
 
-    </div>
+<div class="goal-box">
+
+<label>🎯 Meta de palavras</label>
+
+<input
+id="goal"
+type="number"
+placeholder="Ex: 1000"
+value="1000">
+
+<div class="progress">
+<div class="bar" id="bar"></div>
+</div>
+
+<div style="margin-top:8px;font-size:13px;">
+Meta: <span id="goalText">0%</span>
+</div>
+
+</div>
+
+</div>
+
+<div class="right">
+
+<h2>📊 Estatísticas</h2>
+
+<div class="stats">
+
+<div class="card">
+<div class="card-title">Caracteres</div>
+<div class="card-value" id="chars">0</div>
+</div>
+
+<div class="card">
+<div class="card-title">Sem Espaços</div>
+<div class="card-value" id="charsNoSpace">0</div>
+</div>
+
+<div class="card">
+<div class="card-title">Palavras</div>
+<div class="card-value" id="words">0</div>
+</div>
+
+<div class="card">
+<div class="card-title">Frases</div>
+<div class="card-value" id="sentences">0</div>
+</div>
+
+<div class="card">
+<div class="card-title">Parágrafos</div>
+<div class="card-value" id="paragraphs">0</div>
+</div>
+
+<div class="card">
+<div class="card-title">Linhas</div>
+<div class="card-value" id="lines">0</div>
+</div>
+
+</div>
+
+<div class="section">
+
+<div class="list">
+
+⏱ <strong>Tempo de leitura:</strong>
+<span id="reading">0 min</span>
+
+<br>
+
+🎤 <strong>Tempo de fala:</strong>
+<span id="speech">0 min</span>
+
+<br>
+
+📚 <strong>Tamanho:</strong>
+<span id="quality">Muito curto</span>
+
+<br>
+
+📄 <strong>Páginas A4:</strong>
+<span id="pages">0</span>
+
+</div>
+
+</div>
+
+<div class="section">
+
+<h2>🔥 Palavras Mais Usadas</h2>
+
+<div class="list" id="topWords">
+Nenhum texto analisado.
+</div>
+
+</div>
+
+<div class="section">
+
+<h2>📱 Redes Sociais</h2>
+
+<div class="social">
+
+<div class="social-item" id="twitter"></div>
+<div class="social-item" id="instagram"></div>
+<div class="social-item" id="youtube"></div>
+
+</div>
+
+</div>
+
+</div>
 
 </div>
 
 <script>
-const text = document.getElementById("text");
-const chars = document.getElementById("chars");
-const words = document.getElementById("words");
 
-text.addEventListener("input", () => {
+const text =
+document.getElementById("text");
 
-    const value = text.value;
-    const trimmed = value.trim();
+const goal =
+document.getElementById("goal");
 
-    chars.textContent = value.length;
-    words.textContent = trimmed ? trimmed.split(/\s+/).length : 0;
+text.value =
+localStorage.getItem("utiliweb_text") || "";
+
+function update(){
+
+const value = text.value;
+
+localStorage.setItem(
+"utiliweb_text",
+value
+);
+
+const chars =
+value.length;
+
+const charsNoSpace =
+value.replace(/\s/g,'').length;
+
+const wordsArray =
+value.trim()
+? value.trim().split(/\s+/)
+: [];
+
+const words =
+wordsArray.length;
+
+const sentences =
+value.trim()
+? value.split(/[.!?]+/)
+.filter(v=>v.trim())
+.length
+: 0;
+
+const paragraphs =
+value.trim()
+? value.split(/\n\s*\n/)
+.filter(v=>v.trim())
+.length
+: 0;
+
+const lines =
+value
+? value.split('\n').length
+: 0;
+
+document.getElementById("chars").textContent =
+chars.toLocaleString("pt-BR");
+
+document.getElementById("charsNoSpace").textContent =
+charsNoSpace.toLocaleString("pt-BR");
+
+document.getElementById("words").textContent =
+words.toLocaleString("pt-BR");
+
+document.getElementById("sentences").textContent =
+sentences.toLocaleString("pt-BR");
+
+document.getElementById("paragraphs").textContent =
+paragraphs.toLocaleString("pt-BR");
+
+document.getElementById("lines").textContent =
+lines.toLocaleString("pt-BR");
+
+const reading =
+Math.max(1, Math.ceil(words/200));
+
+const speech =
+Math.max(1, Math.ceil(words/130));
+
+document.getElementById("reading").textContent =
+reading + " min";
+
+document.getElementById("speech").textContent =
+speech + " min";
+
+let quality = "Muito curto";
+
+if(words >= 100) quality = "Curto";
+if(words >= 300) quality = "Médio";
+if(words >= 800) quality = "Longo";
+if(words >= 1500) quality = "Muito longo";
+
+document.getElementById("quality").textContent =
+quality;
+
+document.getElementById("pages").textContent =
+(words / 500).toFixed(1);
+
+const target =
+parseInt(goal.value) || 0;
+
+let percent = 0;
+
+if(target > 0){
+percent = Math.min(
+100,
+(words / target) * 100
+);
+}
+
+document.getElementById("bar").style.width =
+percent + "%";
+
+document.getElementById("goalText").textContent =
+percent.toFixed(1) + "%";
+
+const frequency = {};
+
+wordsArray.forEach(word=>{
+
+const clean =
+word
+.toLowerCase()
+.replace(/[^\p{L}\p{N}]/gu,'');
+
+if(clean.length < 3) return;
+
+frequency[clean] =
+(frequency[clean] || 0) + 1;
+
 });
+
+const top =
+Object.entries(frequency)
+.sort((a,b)=>b[1]-a[1])
+.slice(0,5);
+
+document.getElementById("topWords").innerHTML =
+top.length
+? top.map(
+item =>
+`<strong>${item[0]}</strong> — ${item[1]}x`
+).join("<br>")
+: "Nenhuma palavra relevante encontrada.";
+
+updateSocial(chars);
+}
+
+function updateSocial(chars){
+
+const twitter =
+chars <= 280
+? `<span class="success">✓ X/Twitter (${chars}/280)</span>`
+: `<span class="warning">✗ X/Twitter (${chars}/280)</span>`;
+
+const instagram =
+chars <= 150
+? `<span class="success">✓ Bio Instagram (${chars}/150)</span>`
+: `<span class="warning">✗ Bio Instagram (${chars}/150)</span>`;
+
+const youtube =
+chars <= 100
+? `<span class="success">✓ Título YouTube (${chars}/100)</span>`
+: `<span class="warning">✗ Título YouTube (${chars}/100)</span>`;
+
+document.getElementById("twitter").innerHTML =
+twitter;
+
+document.getElementById("instagram").innerHTML =
+instagram;
+
+document.getElementById("youtube").innerHTML =
+youtube;
+}
+
+function copyText(){
+
+if(!text.value.trim()){
+alert("Nenhum texto para copiar.");
+return;
+}
+
+navigator.clipboard.writeText(text.value);
+
+alert("Texto copiado!");
+}
+
+function clearText(){
+
+if(!confirm("Limpar todo o texto?")){
+return;
+}
+
+text.value = "";
+
+localStorage.removeItem(
+"utiliweb_text"
+);
+
+update();
+}
+
+text.addEventListener("input", update);
+goal.addEventListener("input", update);
+
+update();
+
 </script>
 
 </body>
