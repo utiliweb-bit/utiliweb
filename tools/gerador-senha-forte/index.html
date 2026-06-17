@@ -15,7 +15,7 @@
 <body>
 
 <header>
-    <h1>Gerador de Senha Forte</h1>
+    <h1>🔐 Gerador de Senha Forte</h1>
     <p>Crie senhas seguras com nível profissional</p>
 </header>
 
@@ -26,20 +26,17 @@
     <div style="margin-top:20px;">
 
         <label for="length">Tamanho da senha:</label>
-        <input id="length" type="number" value="12" min="6" max="64">
+        <input id="length" type="number" value="12" min="6" max="64" style="width:100%; margin-top:10px;">
 
         <div style="margin-top:10px;">
             <label><input type="checkbox" id="numbers" checked> Números</label>
             <label><input type="checkbox" id="symbols" checked> Símbolos</label>
         </div>
 
-        <button style="margin-top:15px;" onclick="generate()">
-            Gerar Senha
-        </button>
-
-        <button style="margin-top:15px;" onclick="copyPassword()">
-            Copiar Senha
-        </button>
+        <div style="margin-top:15px; display:flex; gap:10px; flex-wrap:wrap;">
+            <button onclick="generate()">Gerar Senha</button>
+            <button onclick="copyPassword()">Copiar Senha</button>
+        </div>
 
     </div>
 
@@ -50,7 +47,7 @@
 
     <section style="margin-top:40px;">
         <h2>Como funciona</h2>
-        <p>Escolha o tamanho e opções. A senha é gerada com segurança criptográfica usando o sistema do navegador.</p>
+        <p>Escolha o tamanho e opções. A senha é gerada automaticamente com segurança.</p>
     </section>
 
 </div>
@@ -60,7 +57,7 @@ let currentPassword = "";
 
 function generate() {
 
-    const length = parseInt(document.getElementById("length").value);
+    const length = parseInt(document.getElementById("length").value) || 12;
     const useNumbers = document.getElementById("numbers").checked;
     const useSymbols = document.getElementById("symbols").checked;
 
@@ -69,13 +66,24 @@ function generate() {
     if (useNumbers) chars += "0123456789";
     if (useSymbols) chars += "!@#$%^&*()-_=+[]{}<>?/";
 
-    const array = new Uint32Array(length);
-    crypto.getRandomValues(array);
-
     let password = "";
 
-    for (let i = 0; i < length; i++) {
-        password += chars[array[i] % chars.length];
+    // tenta usar criptografia segura do navegador
+    if (window.crypto && crypto.getRandomValues) {
+
+        const array = new Uint32Array(length);
+        crypto.getRandomValues(array);
+
+        for (let i = 0; i < length; i++) {
+            password += chars[array[i] % chars.length];
+        }
+
+    } else {
+
+        // fallback simples
+        for (let i = 0; i < length; i++) {
+            password += chars[Math.floor(Math.random() * chars.length)];
+        }
     }
 
     currentPassword = password;
