@@ -6,54 +6,38 @@
 
 <title>Contador de Caracteres | UtiliWeb</title>
 
-<meta name="description" content="Conte caracteres, palavras e espaços em tempo real.">
 <link rel="stylesheet" href="../../assets/style.css">
 </head>
 
 <body>
 
 <header>
-    <h1>📝 Contador de Caracteres</h1>
-    <p>Conte letras e palavras em tempo real</p>
+    <h1>✍️ Contador de Texto</h1>
 </header>
 
 <div class="container">
 
-    <a href="../../index.html">← Voltar</a>
+<a href="../../index.html">← Voltar</a>
 
-    <div class="box">
+<div class="box">
 
-        <textarea id="text" placeholder="Digite ou cole seu texto aqui..."></textarea>
+<textarea id="text" placeholder="Digite aqui..."></textarea>
 
-        <div class="result" style="margin-top:15px;">
-            <strong>Caracteres:</strong> <span id="chars">0</span>
-            <br>
-            <strong>Palavras:</strong> <span id="words">0</span>
-        </div>
+<div class="grid">
+    <div class="card">Caracteres: <span id="chars">0</span></div>
+    <div class="card">Palavras: <span id="words">0</span></div>
+</div>
 
-    </div>
-
-    <div class="box">
-        <h2>Como funciona</h2>
-        <p>
-            O contador atualiza automaticamente enquanto você digita,
-            mostrando caracteres e palavras em tempo real.
-        </p>
-    </div>
+</div>
 
 </div>
 
 <script>
-const text = document.getElementById("text");
-
-text.addEventListener("input", () => {
-
-    const value = text.value;
-
-    document.getElementById("chars").textContent = value.length;
-    document.getElementById("words").textContent =
-        value.trim() ? value.trim().split(/\s+/).length : 0;
-});
+text.oninput = () => {
+    const v = text.value.trim();
+    chars.textContent = text.value.length;
+    words.textContent = v ? v.split(/\s+/).length : 0;
+};
 </script>
 
 </body>
