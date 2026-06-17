@@ -6,7 +6,7 @@
 
 <title>Link na Bio PRO | UtiliWeb</title>
 
-<meta name="description" content="Crie sua página estilo Linktree com URL individual.">
+<meta name="description" content="Crie sua página estilo Linktree com múltiplos links.">
 <meta name="robots" content="index, follow">
 
 <link rel="stylesheet" href="../../assets/style.css">
@@ -80,6 +80,33 @@ https://tiktok.com"></textarea>
 </div>
 
 <script>
+// 🔥 LIMPA LINKS (resolve TikTok redirect / ttam)
+function cleanLink(url) {
+    try {
+        if (!url) return "";
+
+        // remove espaços
+        url = url.trim();
+
+        // corrige falta de https
+        if (!url.startsWith("http")) {
+            url = "https://" + url;
+        }
+
+        // tenta resolver redirect TikTok
+        if (url.includes("ttam-partners") && url.includes("tiktok.com")) {
+            const match = url.match(/u=([^&]+)/);
+            if (match) {
+                return decodeURIComponent(match[1]);
+            }
+        }
+
+        return url;
+    } catch {
+        return url;
+    }
+}
+
 function generate() {
     const name = document.getElementById("name").value;
 
@@ -87,9 +114,8 @@ function generate() {
         .getElementById("links")
         .value
         .split("\n")
-        .map(l => l.trim())
-        .filter(l => l.length > 0)
-        .map(l => l.startsWith("http") ? l : "https://" + l);
+        .map(cleanLink)
+        .filter(l => l.length > 0);
 
     const encodedLinks = encodeURIComponent(JSON.stringify(links));
 
@@ -103,14 +129,15 @@ function generate() {
     `;
 }
 
-// BLOQUEIO DE MODO CRIADOR (EVITA "VOLTA PRO INÍCIO")
+// 🌐 MODO PÁGINA PÚBLICA
 const params = new URLSearchParams(window.location.search);
 const name = params.get("name");
 const data = params.get("data");
 
 if (name && data) {
 
-    document.getElementById("creator").style.display = "none";
+    const creator = document.getElementById("creator");
+    if (creator) creator.style.display = "none";
 
     let links = [];
 
@@ -124,12 +151,13 @@ if (name && data) {
 
     links.forEach(link => {
 
-        // proteção extra contra links vazios
-        if (!link) return;
+        const safeLink = cleanLink(link);
+
+        if (!safeLink) return;
 
         html += `
             <a class="btn"
-               href="${link}"
+               href="${safeLink}"
                target="_blank"
                rel="noopener noreferrer">
                 🔗 Abrir link
@@ -140,8 +168,10 @@ if (name && data) {
     html += `</div>`;
 
     const page = document.getElementById("page");
-    page.style.display = "block";
-    page.innerHTML = html;
+    if (page) {
+        page.style.display = "block";
+        page.innerHTML = html;
+    }
 }
 </script>
 
