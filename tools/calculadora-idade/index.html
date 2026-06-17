@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Calculadora de Idade Online | UtiliWeb</title>
+
+<meta name="description" content="Calcule sua idade em anos, meses e dias gratuitamente com a Calculadora de Idade do UtiliWeb.">
+
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+
+<body>
+
+<header>
+    <h1>Calculadora de Idade</h1>
+    <p>Descubra sua idade exata em segundos</p>
+</header>
+
+<div class="container">
+
+    <a href="../../index.html">← Voltar</a>
+
+    <div style="margin-top:20px;">
+
+        <label for="nascimento">Data de nascimento</label>
+
+        <input
+            type="date"
+            id="nascimento"
+            style="width:100%; margin-top:10px;">
+
+    </div>
+
+    <div style="margin-top:20px;">
+
+        <button onclick="calcularIdade()">
+            Calcular Idade
+        </button>
+
+    </div>
+
+    <div class="result" id="resultado" style="margin-top:20px;">
+        -
+    </div>
+
+    <section style="margin-top:40px;">
+        <h2>Como usar</h2>
+
+        <p>
+            Selecione sua data de nascimento e clique em "Calcular Idade".
+            A ferramenta mostrará sua idade exata em anos, meses e dias.
+        </p>
+    </section>
+
+</div>
+
+<script>
+function calcularIdade() {
+
+    const nascimento = document.getElementById("nascimento").value;
+    const resultado = document.getElementById("resultado");
+
+    if (!nascimento) {
+        resultado.textContent = "Selecione uma data válida.";
+        return;
+    }
+
+    const dataNascimento = new Date(nascimento);
+    const hoje = new Date();
+
+    let anos = hoje.getFullYear() - dataNascimento.getFullYear();
+    let meses = hoje.getMonth() - dataNascimento.getMonth();
+    let dias = hoje.getDate() - dataNascimento.getDate();
+
+    if (dias < 0) {
+        meses--;
+        const ultimoMes = new Date(
+            hoje.getFullYear(),
+            hoje.getMonth(),
+            0
+        ).getDate();
+
+        dias += ultimoMes;
+    }
+
+    if (meses < 0) {
+        anos--;
+        meses += 12;
+    }
+
+    const diferencaMs = hoje - dataNascimento;
+    const totalDias = Math.floor(diferencaMs / (1000 * 60 * 60 * 24));
+
+    resultado.innerHTML = `
+        <strong>${anos} anos, ${meses} meses e ${dias} dias</strong>
+        <br><br>
+        Total aproximado de dias vividos:
+        <strong>${totalDias.toLocaleString("pt-BR")}</strong>
+    `;
+}
+</script>
+
+</body>
+</html>
