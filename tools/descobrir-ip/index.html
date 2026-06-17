@@ -4,48 +4,146 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Descobrir Meu IP Online | UtiliWeb</title>
+<title>Descobrir Meu IP | UtiliWeb</title>
 
-<meta name="description" content="Descubra seu endereço IP público online de forma rápida e gratuita.">
-<meta name="robots" content="index, follow">
+<meta name="description" content="Descubra seu endereço IP público de forma rápida e gratuita.">
+<meta name="keywords" content="meu ip, ip público, utiliweb, ip online">
 
 <link rel="stylesheet" href="../../assets/style.css">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial;
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* WRAPPER */
+.wrapper {
+    width: 100%;
+    max-width: 900px;
+    min-height: 500px;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+}
+
+/* ESQUERDA */
+.left-panel {
+    padding: 30px;
+    border-right: 1px solid #eee;
+}
+
+header h1 {
+    font-size: 26px;
+}
+
+.subtitle {
+    font-size: 14px;
+    color: #777;
+}
+
+/* RESULTADO */
+.result {
+    margin-top: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #27ae60;
+    word-break: break-all;
+}
+
+/* BOTÃO */
+button {
+    margin-top: 20px;
+    padding: 12px;
+    width: 100%;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    background: #27ae60;
+    color: white;
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* DIREITA */
+.right-panel {
+    padding: 30px;
+    background: #eafaf1;
+}
+
+/* RESPONSIVO */
+@media (max-width: 900px) {
+    .wrapper {
+        grid-template-columns: 1fr;
+    }
+
+    .left-panel {
+        border-right: none;
+        border-bottom: 1px solid #eee;
+    }
+}
+</style>
 
 </head>
 
 <body>
 
-<header>
-    <h1>🌍 Descobrir Meu IP</h1>
-    <p>Veja seu IP público em tempo real</p>
-</header>
+<div class="wrapper">
 
-<div class="container">
+    <!-- ESQUERDA -->
+    <div class="left-panel">
 
-    <a href="../../index.html">← Voltar</a>
-
-    <div class="box">
-
-        <p>Seu IP público é:</p>
-
-        <div class="result" id="ip">
-            Clique no botão abaixo
-        </div>
+        <header>
+            <h1>🌍 Descobrir Meu IP</h1>
+            <p class="subtitle">IP público em tempo real</p>
+        </header>
 
         <br>
 
-        <button id="btn" onclick="buscarIP()">
-            Mostrar meu IP
-        </button>
+        <a href="../../index.html">← Voltar</a>
+
+        <p>Seu IP público é:</p>
+
+        <div class="result" id="ip">Clique no botão abaixo</div>
+
+        <button id="btn" onclick="buscarIP()">Mostrar meu IP</button>
+
+    </div>
+
+    <!-- DIREITA -->
+    <div class="right-panel">
+
+        <h2>Como funciona</h2>
+        <p>
+            Esta ferramenta consulta um serviço externo seguro e retorna seu IP público atual.
+            Não armazena dados.
+        </p>
 
     </div>
 
 </div>
 
 <script>
-
 async function buscarIP() {
-
     const ipEl = document.getElementById("ip");
     const btn = document.getElementById("btn");
 
@@ -53,29 +151,20 @@ async function buscarIP() {
     ipEl.textContent = "Carregando...";
 
     try {
-
         const res = await fetch("https://api.ipify.org?format=json", {
             cache: "no-store"
         });
 
         const data = await res.json();
-
         ipEl.textContent = data.ip;
 
-    } catch {
-
+    } catch (e) {
         ipEl.textContent = "Erro ao obter IP";
-
     } finally {
-
         btn.disabled = false;
-
     }
-
 }
-
 </script>
 
 </body>
 </html>
-```
