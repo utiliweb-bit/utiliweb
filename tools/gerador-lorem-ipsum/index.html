@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Gerador de Lorem Ipsum Online | UtiliWeb</title>
+
+<meta name="description" content="Gere textos Lorem Ipsum para sites, layouts e projetos gráficos gratuitamente com o UtiliWeb.">
+
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+
+<body>
+
+<header>
+    <h1>Gerador de Lorem Ipsum</h1>
+    <p>Crie textos fictícios para layouts e projetos</p>
+</header>
+
+<div class="container">
+
+    <a href="../../index.html">← Voltar</a>
+
+    <div style="margin-top:20px;">
+
+        <label for="quantidade">
+            Quantidade de parágrafos:
+        </label>
+
+        <input
+            type="number"
+            id="quantidade"
+            min="1"
+            max="20"
+            value="3"
+            style="width:100%; margin-top:10px;">
+
+    </div>
+
+    <div style="margin-top:20px; display:flex; gap:10px; flex-wrap:wrap;">
+
+        <button onclick="gerarLorem()">
+            Gerar Texto
+        </button>
+
+        <button onclick="copiarResultado()">
+            Copiar
+        </button>
+
+    </div>
+
+    <textarea
+        id="resultado"
+        readonly
+        placeholder="O texto será exibido aqui..."
+        style="width:100%; height:250px; margin-top:20px;"></textarea>
+
+    <section style="margin-top:40px;">
+        <h2>Como usar</h2>
+
+        <p>
+            Escolha a quantidade de parágrafos desejada e clique em
+            "Gerar Texto". O Lorem Ipsum é ideal para testes de layouts,
+            blogs, aplicativos e projetos gráficos.
+        </p>
+    </section>
+
+</div>
+
+<script>
+const resultado = document.getElementById("resultado");
+
+const lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
+
+function gerarLorem() {
+
+    let quantidade = parseInt(document.getElementById("quantidade").value);
+
+    if (quantidade < 1) quantidade = 1;
+    if (quantidade > 20) quantidade = 20;
+
+    let texto = [];
+
+    for (let i = 0; i < quantidade; i++) {
+        texto.push(lorem);
+    }
+
+    resultado.value = texto.join("\n\n");
+}
+
+function copiarResultado() {
+
+    if (!resultado.value) return;
+
+    navigator.clipboard.writeText(resultado.value);
+    alert("Texto copiado!");
+
+}
+</script>
+
+</body>
+</html>
