@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+<title>Custo de Vida Japão vs Brasil | UtiliWeb</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+}
+
+body{
+    background: linear-gradient(135deg,#1f7a4d,#27ae60);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:12px;
+}
+
+/* ===== WRAPPER ESTILO ZANGYO ===== */
+.wrapper{
+    width:100%;
+    max-width:1100px;
+    background:#fff;
+    border-radius:16px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    overflow:hidden;
+    box-shadow:0 20px 60px rgba(0,0,0,0.3);
+}
+
+/* LEFT */
+.left-panel{
+    padding:28px;
+    border-right:1px solid #e0e0e0;
+}
+
+h2{
+    font-size:22px;
+    margin-bottom:6px;
+}
+
+.subtitle{
+    font-size:12px;
+    color:#777;
+    margin-bottom:16px;
+}
+
+label{
+    font-size:11px;
+    font-weight:700;
+    color:#666;
+    margin-top:10px;
+    display:block;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    margin-top:5px;
+    border:2px solid #ddd;
+    border-radius:10px;
+    font-size:16px;
+}
+
+input:focus{
+    border-color:#27ae60;
+    outline:none;
+}
+
+button{
+    width:100%;
+    margin-top:14px;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    background:#27ae60;
+    color:#fff;
+    font-weight:bold;
+    font-size:14px;
+}
+
+/* RIGHT */
+.right-panel{
+    padding:28px;
+    background: linear-gradient(135deg,#e8f8f5,#d5f4e6);
+}
+
+.result-title{
+    font-size:12px;
+    font-weight:700;
+    color:#27ae60;
+    margin-bottom:10px;
+    border-bottom:2px solid #27ae60;
+    padding-bottom:6px;
+}
+
+.result{
+    font-size:13px;
+    line-height:1.6;
+    color:#222;
+}
+
+.big{
+    font-size:18px;
+    font-weight:bold;
+    color:#27ae60;
+    margin-top:10px;
+}
+
+/* RESPONSIVO */
+@media(max-width:768px){
+    .wrapper{
+        grid-template-columns:1fr;
+    }
+
+    .left-panel{
+        border-right:none;
+        border-bottom:1px solid #e0e0e0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+    <!-- INPUT -->
+    <div class="left-panel">
+
+        <h2>🌍 Japão vs Brasil</h2>
+        <div class="subtitle">Comparador de custo de vida estilo Zangyō</div>
+
+        <label>Salário mensal</label>
+        <input id="salario" type="number" placeholder="Ex: 300000 (¥ ou R$ convertido)">
+
+        <label>País (JP ou BR)</label>
+        <input id="pais" type="text" placeholder="JP ou BR">
+
+        <label>Custo aluguel (opcional)</label>
+        <input id="aluguel" type="number" placeholder="Ex: 80000">
+
+        <label>Custo alimentação</label>
+        <input id="comida" type="number" placeholder="Ex: 40000">
+
+        <label>Custo transporte</label>
+        <input id="transporte" type="number" placeholder="Ex: 15000">
+
+        <button onclick="calcular()">Comparar</button>
+
+    </div>
+
+    <!-- RESULTADO -->
+    <div class="right-panel">
+
+        <div class="result-title">Resultado</div>
+
+        <div class="result" id="out">Preencha os dados e compare</div>
+
+        <div class="big" id="score"></div>
+
+    </div>
+
+</div>
+
+<script>
+function calcular(){
+
+    const salario = parseFloat(document.getElementById("salario").value)||0;
+    const pais = document.getElementById("pais").value.toUpperCase();
+
+    const aluguel = parseFloat(document.getElementById("aluguel").value)||0;
+    const comida = parseFloat(document.getElementById("comida").value)||0;
+    const transporte = parseFloat(document.getElementById("transporte").value)||0;
+
+    if(salario<=0 || !pais){
+        document.getElementById("out").innerText="Dados inválidos";
+        return;
+    }
+
+    const custoTotal = aluguel + comida + transporte;
+
+    const sobra = salario - custoTotal;
+
+    const score = Math.max(0, (sobra / salario) * 100);
+
+    let paisNome = pais === "JP" ? "🇯🇵 Japão" : "🇧🇷 Brasil";
+
+    document.getElementById("out").innerHTML = `
+        ${paisNome}<br><br>
+
+        💰 Salário: ${salario.toFixed(0)}<br>
+        🏠 Aluguel: ${aluguel.toFixed(0)}<br>
+        🍜 Comida: ${comida.toFixed(0)}<br>
+        🚆 Transporte: ${transporte.toFixed(0)}<br><br>
+
+        📉 Custo total: ${custoTotal.toFixed(0)}<br>
+        💵 Sobra mensal: ${sobra.toFixed(0)}
+    `;
+
+    document.getElementById("score").innerText =
+        "📊 Qualidade financeira: " + score.toFixed(1) + "%";
+}
+</script>
+
+</body>
+</html>
