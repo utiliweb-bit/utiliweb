@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Separador de Texto por Vírgulas Online | UtiliWeb</title>
+
+<meta name="description" content="Converta listas em texto separado por vírgulas de forma rápida e gratuita com o UtiliWeb.">
+
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+
+<body>
+
+<header>
+    <h1>Separador de Texto por Vírgulas</h1>
+    <p>Transforme várias linhas em uma lista separada por vírgulas</p>
+</header>
+
+<div class="container">
+
+    <a href="../../index.html">← Voltar</a>
+
+    <textarea
+        id="text"
+        placeholder="Digite ou cole uma lista com uma linha por item..."
+        style="width:100%; height:150px; margin-top:20px;"></textarea>
+
+    <div style="margin-top:20px; display:flex; gap:10px; flex-wrap:wrap;">
+
+        <button onclick="separarPorVirgulas()">
+            Converter
+        </button>
+
+        <button onclick="copiarResultado()">
+            Copiar
+        </button>
+
+    </div>
+
+    <textarea
+        id="resultado"
+        readonly
+        placeholder="O resultado aparecerá aqui..."
+        style="width:100%; height:150px; margin-top:20px;"></textarea>
+
+    <section style="margin-top:40px;">
+        <h2>Como usar</h2>
+
+        <p>
+            Cole uma lista contendo uma linha por item e clique em
+            "Converter". O resultado será exibido em uma única linha,
+            separado por vírgulas.
+        </p>
+    </section>
+
+</div>
+
+<script>
+const text = document.getElementById("text");
+const resultado = document.getElementById("resultado");
+
+function separarPorVirgulas() {
+
+    const itens = text.value
+        .split("\n")
+        .map(item => item.trim())
+        .filter(item => item !== "");
+
+    resultado.value = itens.join(", ");
+}
+
+function copiarResultado() {
+
+    if (!resultado.value) return;
+
+    navigator.clipboard.writeText(resultado.value);
+    alert("Texto copiado!");
+
+}
+</script>
+
+</body>
+</html>
