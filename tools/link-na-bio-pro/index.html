@@ -6,7 +6,7 @@
 
 <title>Link na Bio PRO | UtiliWeb</title>
 
-<meta name="description" content="Crie sua página estilo Linktree com URL individual. Ferramenta gratuita para Instagram, TikTok e YouTube.">
+<meta name="description" content="Crie sua página estilo Linktree com URL individual.">
 <meta name="robots" content="index, follow">
 
 <link rel="stylesheet" href="../../assets/style.css">
@@ -99,20 +99,18 @@ function generate() {
 
     document.getElementById("result").innerHTML = `
         <p><strong>Seu link:</strong></p>
-        <a href="${url}" target="_blank">${url}</a>
+        <a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>
     `;
 }
 
-// BLOQUEIO TOTAL DO MODO CRIADOR
+// BLOQUEIO DE MODO CRIADOR (EVITA "VOLTA PRO INÍCIO")
 const params = new URLSearchParams(window.location.search);
 const name = params.get("name");
 const data = params.get("data");
 
 if (name && data) {
 
-    // ESCONDE CRIADOR IMEDIATAMENTE (ANTES DE QUALQUER RENDER)
-    const creator = document.getElementById("creator");
-    if (creator) creator.style.display = "none";
+    document.getElementById("creator").style.display = "none";
 
     let links = [];
 
@@ -125,9 +123,16 @@ if (name && data) {
     let html = `<div class="box"><h2>${name}</h2>`;
 
     links.forEach(link => {
+
+        // proteção extra contra links vazios
+        if (!link) return;
+
         html += `
-            <a class="btn" href="${link}" target="_blank" rel="noopener noreferrer">
-                Abrir link
+            <a class="btn"
+               href="${link}"
+               target="_blank"
+               rel="noopener noreferrer">
+                🔗 Abrir link
             </a>
         `;
     });
@@ -135,9 +140,10 @@ if (name && data) {
     html += `</div>`;
 
     const page = document.getElementById("page");
-    if (page) {
-        page.innerHTML = html;
-        page.style.display = "block";
-    }
+    page.style.display = "block";
+    page.innerHTML = html;
 }
 </script>
+
+</body>
+</html>
