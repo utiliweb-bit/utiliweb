@@ -6,7 +6,7 @@ function mudarAba(aba, event) {
     abaAtiva = aba;
 
     document.querySelectorAll('.aba-btn').forEach(btn => btn.classList.remove('ativo'));
-    event.currentTarget.classList.add('ativo');
+    if (event) event.currentTarget.classList.add('ativo');
 
     document.querySelectorAll('.aba-conteudo').forEach(el => el.classList.remove('ativo'));
     document.getElementById(`aba-${aba}`).classList.add('ativo');
@@ -16,10 +16,13 @@ function mudarAba(aba, event) {
 
 window.addEventListener('load', () => {
     const hoje = new Date().toISOString().split('T')[0];
-    document.getElementById('dataFinal').value = hoje;
+    const el = document.getElementById('dataFinal');
+    if (el) el.value = hoje;
+
     atualizarLembretes();
 });
 
+// 🔥 cálculo principal
 function calcular() {
     if (abaAtiva === 'diferenca') {
         calcularDiferenca();
@@ -28,32 +31,31 @@ function calcular() {
     }
 }
 
+// 📅 diferença entre datas
 function calcularDiferenca() {
     let dataInicial = document.getElementById('dataInicial').value;
     const dataFinal = document.getElementById('dataFinal').value;
 
-    if (!dataFinal) {
-        mostrarStatus("Preencha a data final", "urgente");
-        return;
-    }
+    if (!dataFinal) return mostrarStatus("Preencha a data final", "urgente");
 
     if (!dataInicial) {
         dataInicial = new Date().toISOString().split('T')[0];
     }
 
-    const data1 = new Date(dataInicial + "T00:00:00");
-    const data2 = new Date(dataFinal + "T00:00:00");
+    const d1 = new Date(dataInicial + "T00:00:00");
+    const d2 = new Date(dataFinal + "T00:00:00");
 
-    const diffMs = data2 - data1;
-    const totalDias = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+    const diffMs = d2.getTime() - d1.getTime();
+    const totalDias = Math.round(diffMs / 86400000);
 
-    const tempo = calcularTempoComposto(data1, data2);
+    const tempo = calcularTempoComposto(d1, d2);
 
     exibirResultadoDiferenca(tempo, totalDias);
 
     adicionarLembrete(dataFinal, `Prazo até ${dataFinal}`);
 }
 
+// 📊 tempo composto
 function calcularTempoComposto(data1, data2) {
     if (data1 > data2) [data1, data2] = [data2, data1];
 
@@ -78,121 +80,132 @@ function calcularTempoComposto(data1, data2) {
     return { anos, meses, dias };
 }
 
+// 🔮 data futura
 function calcularDataFutura() {
     const dataFutura = document.getElementById('dataFutura').value;
 
-    if (!dataFutura) {
-        mostrarStatus("Preencha a data futura", "urgente");
-        return;
-    }
+    if (!dataFutura) return mostrarStatus("Preencha a data futura", "urgente");
 
     const hoje = new Date();
     const data = new Date(dataFutura + "T00:00:00");
 
-    const dias = Math.ceil((data - hoje) / (1000 * 60 * 60 * 24));
+    const dias = Math.round((data - hoje) / 86400000);
 
-    exibirResultadoFutura(
-        data.toLocaleDateString('pt-BR'),
-        dias
-    );
+    exibirResultadoFutura(data.toLocaleDateString('pt-BR'), dias);
 
     adicionarLembrete(dataFutura, `Prazo: ${dataFutura}`);
 }
 
+// 📊 resultado diferença
 function exibirResultadoDiferenca(tempo, totalDias) {
     const { anos, meses, dias } = tempo;
 
-    document.getElementById('resultadoItems').style.display = 'block';
-    document.getElementById('resultadoTotal').style.display = 'block';
+    mostrarResultados(true);
 
-    document.getElementById('resultado1').style.display = 'flex';
-    document.getElementById('resultado2').style.display = 'flex';
-    document.getElementById('resultado3').style.display = 'flex';
+    setText('resultado1Label', 'Anos');
+    setText('resultado1Valor', anos);
 
-    document.getElementById('resultado1Label').textContent = 'Anos';
-    document.getElementById('resultado1Valor').textContent = anos;
+    setText('resultado2Label', 'Meses');
+    setText('resultado2Valor', meses);
 
-    document.getElementById('resultado2Label').textContent = 'Meses';
-    document.getElementById('resultado2Valor').textContent = meses;
-
-    document.getElementById('resultado3Label').textContent = 'Dias';
-    document.getElementById('resultado3Valor').textContent = dias;
+    setText('resultado3Label', 'Dias');
+    setText('resultado3Valor', dias);
 
     const partes = [];
     if (anos) partes.push(`${anos}a`);
     if (meses) partes.push(`${meses}m`);
     if (dias) partes.push(`${dias}d`);
 
-    const texto = partes.length ? `Faltam ${partes.join(" ")}` : "Hoje é o dia!";
-
-    document.getElementById('totalLabel').textContent = texto;
-    document.getElementById('total').textContent = totalDias;
-    document.getElementById('diasAuxiliar').textContent = `${totalDias} dias`;
+    setText('totalLabel', partes.length ? `Faltam ${partes.join(" ")}` : "Hoje é o dia!");
+    setText('total', totalDias);
+    setText('diasAuxiliar', `${totalDias} dias`);
 
     setBadge(totalDias);
 }
 
+// 📊 resultado futura
 function exibirResultadoFutura(data, dias) {
-    document.getElementById('resultadoItems').style.display = 'block';
-    document.getElementById('resultadoTotal').style.display = 'block';
+    mostrarResultados(true);
 
-    document.getElementById('resultado1').style.display = 'flex';
-    document.getElementById('resultado1Label').textContent = 'Data';
-    document.getElementById('resultado1Valor').textContent = data;
+    setText('resultado1Label', 'Data');
+    setText('resultado1Valor', data);
 
     document.getElementById('resultado2').style.display = 'none';
     document.getElementById('resultado3').style.display = 'none';
 
-    document.getElementById('totalLabel').textContent = 'Dias restantes';
-    document.getElementById('total').textContent = dias;
-    document.getElementById('diasAuxiliar').textContent = '';
+    setText('totalLabel', 'Dias restantes');
+    setText('total', dias);
+    setText('diasAuxiliar', '');
 
     setBadge(dias);
 }
 
+// 🟢 badge status
 function setBadge(dias) {
     const badge = document.getElementById('statusBadge');
+    if (!badge) return;
+
+    let html = '';
 
     if (dias < 0) {
-        badge.innerHTML = '<div class="status-badge urgente">❌ Vencido</div>';
+        html = '❌ Vencido';
     } else if (dias <= 30) {
-        badge.innerHTML = '<div class="status-badge urgente">⚠️ Urgente</div>';
+        html = '⚠️ Urgente';
     } else if (dias <= 90) {
-        badge.innerHTML = '<div class="status-badge proximo">⏰ Próximo</div>';
+        html = '⏰ Próximo';
     } else {
-        badge.innerHTML = '<div class="status-badge tranquilo">✓ OK</div>';
+        html = '✓ OK';
     }
+
+    badge.innerHTML = `<div class="status-badge">${html}</div>`;
 }
 
+// 📋 copiar
 function copiarResultado() {
-    const texto =
-        document.getElementById('totalLabel').textContent +
-        " - " +
-        document.getElementById('total').textContent;
-
+    const texto = `${document.getElementById('totalLabel').textContent} - ${document.getElementById('total').textContent}`;
     navigator.clipboard.writeText(texto);
 
-    const btn = event.target;
+    const btn = event?.target;
+    if (!btn) return;
+
     const old = btn.textContent;
     btn.textContent = "✓ Copiado!";
     setTimeout(() => btn.textContent = old, 1200);
 }
 
+// 🧹 limpar
 function limpar() {
-    document.getElementById('dataInicial').value = '';
-    document.getElementById('dataFinal').value = '';
-    document.getElementById('dataFutura').value = '';
+    ['dataInicial','dataFinal','dataFutura'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+    });
+
     limparResultado();
 }
 
+// 🧼 reset UI
 function limparResultado() {
-    document.getElementById('resultadoItems').style.display = 'none';
-    document.getElementById('resultadoTotal').style.display = 'none';
-    document.getElementById('statusBadge').innerHTML = '';
+    mostrarResultados(false);
+
+    const badge = document.getElementById('statusBadge');
+    if (badge) badge.innerHTML = '';
 }
 
-function mostrarStatus(msg, tipo) {
-    const badge = document.getElementById('statusBadge');
-    badge.innerHTML = `<div class="status-badge ${tipo}">${msg}</div>`;
+// 👁 helpers UI
+function mostrarResultados(show) {
+    document.getElementById('resultadoItems').style.display = show ? 'block' : 'none';
+    document.getElementById('resultadoTotal').style.display = show ? 'block' : 'none';
+}
+
+function setText(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value;
+}
+
+// ⚠ status simples
+function mostrarStatus(msg) {
+    setBadge(0);
+    document.getElementById('statusBadge').innerHTML =
+        `<div class="status-badge urgente">${msg}</div>`;
 }
 </script>
