@@ -1,233 +1,693 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Calculadora de Salário e Horas Extras (Zangyo) para brasileiros no Japão - Versão Desktop">
+    <meta name="keywords" content="zangyo, horas extras japão, calculadora salário, jikyū, brasileiros no japão">
+    <title>Calculadora Zangyo - Desktop</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<title>Título da Ferramenta | UtiliWeb</title>
+        html, body {
+            width: 100%;
+            height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow: hidden;
+        }
 
-<meta name="description" content="Descrição curta da ferramenta.">
-<meta name="keywords" content="utiliweb, ferramentas, japão, calculadora">
+        .wrapper {
+            width: 100%;
+            max-width: 1200px;
+            height: 100%;
+            max-height: 800px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            overflow: hidden;
+        }
 
-<link rel="stylesheet" href="../../assets/style.css">
+        .left-panel {
+            padding: 40px;
+            overflow-y: auto;
+            border-right: 1px solid #e0e0e0;
+        }
 
-<style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+        .right-panel {
+            padding: 40px;
+            background: linear-gradient(135deg, #e8f8f5 0%, #d5f4e6 100%);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
 
-html, body {
-    width: 100%;
-    min-height: 100vh;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-    background: linear-gradient(135deg, #2ecc71, #27ae60);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-}
+        header {
+            margin-bottom: 30px;
+            text-align: center;
+        }
 
-/* CONTAINER PRINCIPAL */
-.wrapper {
-    width: 100%;
-    max-width: 1200px;
-    min-height: 700px;
-    background: #fff;
-    border-radius: 20px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    overflow: hidden;
-}
+        h1 {
+            color: #333;
+            font-size: 32px;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
 
-/* PAINÉIS */
-.left-panel, .right-panel {
-    padding: 30px;
-    overflow-y: auto;
-}
+        .subtitle {
+            color: #999;
+            font-size: 14px;
+            font-weight: 500;
+        }
 
-.left-panel {
-    border-right: 1px solid #eee;
-}
+        .info-box {
+            background: linear-gradient(135deg, #e8f8f5 0%, #d5f4e6 100%);
+            border-left: 4px solid #27ae60;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 12px;
+            color: #27ae60;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
 
-.right-panel {
-    background: #eafaf1;
-}
+        .info-box strong {
+            color: #27ae60;
+            font-weight: 700;
+        }
 
-/* TÍTULO */
-header h1 {
-    font-size: 28px;
-    margin-bottom: 5px;
-}
+        .input-section {
+            margin-bottom: 30px;
+        }
 
-.subtitle {
-    font-size: 14px;
-    color: #777;
-}
+        .section-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #333;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #27ae60;
+        }
 
-/* INPUTS */
-input, textarea {
-    width: 100%;
-    padding: 12px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    margin-top: 6px;
-    font-size: 14px;
-}
+        .input-group {
+            margin-bottom: 15px;
+        }
 
-input:focus, textarea:focus {
-    outline: none;
-    border-color: #27ae60;
-}
+        .input-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+            display: block;
+        }
 
-/* BOTÕES */
-button {
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-}
+        .input-hint {
+            font-size: 11px;
+            color: #999;
+            margin-top: 4px;
+        }
 
-.btn-primary {
-    background: #27ae60;
-    color: white;
-}
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
 
-.btn-secondary {
-    background: white;
-    border: 2px solid #27ae60;
-    color: #27ae60;
-}
+        .input-row .input-group {
+            margin-bottom: 0;
+        }
 
-/* GRID */
-.grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-}
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            background: white;
+            color: #333;
+            transition: all 0.2s ease;
+        }
 
-/* CARD */
-.card {
-    background: white;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-}
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #27ae60;
+            background: #f0f9f7;
+        }
 
-/* RESPONSIVO */
-@media (max-width: 1024px) {
-    .wrapper {
-        grid-template-columns: 1fr;
-        min-height: auto;
-    }
+        input[type="number"]::placeholder {
+            color: #ccc;
+        }
 
-    .left-panel {
-        border-right: none;
-        border-bottom: 1px solid #eee;
-    }
-}
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
 
-@media (max-width: 600px) {
-    body {
-        padding: 10px;
-    }
+        input[type="number"][type="number"] {
+            -moz-appearance: textfield;
+        }
 
-    .wrapper {
-        border-radius: 12px;
-    }
+        .opcoes-rapidas {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
 
-    .left-panel, .right-panel {
-        padding: 15px;
-    }
+        .btn-rapido {
+            padding: 10px;
+            background: #e8f8f5;
+            color: #27ae60;
+            border: 2px solid #27ae60;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
 
-    header h1 {
-        font-size: 22px;
-    }
+        .btn-rapido:hover {
+            background: #27ae60;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+        }
 
-    .grid {
-        grid-template-columns: 1fr;
-    }
-}
-</style>
+        .btn-rapido:active {
+            transform: translateY(0);
+        }
 
+        .btn-calcular {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
+            margin-top: 20px;
+        }
+
+        .btn-calcular:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(46, 204, 113, 0.4);
+        }
+
+        .btn-calcular:active {
+            transform: translateY(0);
+        }
+
+        .resultado-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .resultado-header {
+            font-size: 14px;
+            font-weight: 700;
+            color: #27ae60;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #27ae60;
+        }
+
+        .resultado-items {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+
+        .resultado-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(39, 174, 96, 0.2);
+            font-size: 13px;
+        }
+
+        .resultado-item:last-child {
+            border-bottom: none;
+        }
+
+        .resultado-label {
+            font-weight: 600;
+            color: #27ae60;
+        }
+
+        .resultado-valor {
+            font-size: 14px;
+            font-weight: 700;
+            color: #27ae60;
+            font-family: 'Courier New', monospace;
+        }
+
+        .resultado-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            background: white;
+            border-radius: 10px;
+            border: 2px solid #27ae60;
+            margin-bottom: 15px;
+        }
+
+        .resultado-total-label {
+            font-size: 14px;
+            font-weight: 700;
+            color: #27ae60;
+            text-transform: uppercase;
+        }
+
+        .resultado-total-valor {
+            font-size: 28px;
+            font-weight: 700;
+            color: #27ae60;
+            font-family: 'Courier New', monospace;
+        }
+
+        .botoes {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        button {
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-copiar {
+            background: white;
+            color: #27ae60;
+            border: 2px solid #27ae60;
+        }
+
+        .btn-copiar:hover {
+            background: #27ae60;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-limpar {
+            background: rgba(255, 255, 255, 0.5);
+            color: #27ae60;
+            border: 2px solid rgba(39, 174, 96, 0.3);
+        }
+
+        .btn-limpar:hover {
+            background: rgba(255, 255, 255, 0.8);
+            transform: translateY(-2px);
+        }
+
+        .historico {
+            margin-top: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .historico-titulo {
+            font-size: 12px;
+            font-weight: 700;
+            color: #27ae60;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid rgba(39, 174, 96, 0.3);
+        }
+
+        .historico-lista {
+            list-style: none;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .historico-item {
+            padding: 10px;
+            border-bottom: 1px solid rgba(39, 174, 96, 0.2);
+            font-size: 11px;
+            color: #27ae60;
+            display: flex;
+            justify-content: space-between;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            background: rgba(255, 255, 255, 0.3);
+            margin-bottom: 4px;
+        }
+
+        .historico-item:hover {
+            background: rgba(255, 255, 255, 0.7);
+            transform: translateX(4px);
+        }
+
+        .historico-item:last-child {
+            border-bottom: none;
+        }
+
+        .historico-vazio {
+            text-align: center;
+            color: rgba(39, 174, 96, 0.5);
+            font-size: 11px;
+            padding: 10px 0;
+        }
+
+        .status {
+            text-align: center;
+            font-size: 12px;
+            color: #27ae60;
+            margin-top: 10px;
+            min-height: 18px;
+        }
+
+        .status.sucesso {
+            color: #27ae60;
+            font-weight: 700;
+        }
+
+        @media (max-width: 1024px) {
+            .wrapper {
+                grid-template-columns: 1fr;
+                max-height: 100%;
+            }
+
+            .left-panel {
+                border-right: none;
+                border-bottom: 1px solid #e0e0e0;
+                max-height: 50%;
+            }
+
+            .right-panel {
+                max-height: 50%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .wrapper {
+                border-radius: 10px;
+                max-width: 100%;
+            }
+
+            .left-panel,
+            .right-panel {
+                padding: 20px;
+            }
+
+            header {
+                margin-bottom: 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .opcoes-rapidas {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
 </head>
-
 <body>
+    <div class="wrapper">
+        <div class="left-panel">
+            <header>
+                <h1>💼 Zangyo</h1>
+                <p class="subtitle">Calculadora de Salário</p>
+            </header>
 
-<div class="wrapper">
-
-    <!-- ESQUERDA -->
-    <div class="left-panel">
-
-        <header>
-            <h1>📌 Nome da Ferramenta</h1>
-            <p class="subtitle">Descrição curta aqui</p>
-        </header>
-
-        <br>
-
-        <a href="../../index.html">← Voltar</a>
-
-        <div class="box">
-
-            <label>Campo 1</label>
-            <input id="input1" type="number">
-
-            <label>Campo 2</label>
-            <input id="input2" type="number">
-
-            <div style="margin-top:15px; display:flex; gap:10px;">
-                <button class="btn-primary" onclick="calcular()">Calcular</button>
-                <button class="btn-secondary" onclick="limpar()">Limpar</button>
+            <div class="info-box">
+                <strong>Adicionais:</strong> Noturno +25% (22h-05h) | Extra +25% | Extra Noturno +50%
             </div>
 
+            <div class="input-section">
+                <div class="section-title">Dados Básicos</div>
+                
+                <div class="input-group">
+                    <label class="input-label">Valor da Hora (¥/hora)</label>
+                    <input type="number" id="jikyu" placeholder="0.00" min="0" step="0.01" inputmode="decimal">
+                    <div class="input-hint">Jikyū (時給)</div>
+                </div>
+            </div>
+
+            <div class="input-section">
+                <div class="section-title">Horas Trabalhadas</div>
+
+                <div class="input-row">
+                    <div class="input-group">
+                        <label class="input-label">Horas Diurnas</label>
+                        <input type="number" id="horasDiurnas" placeholder="0.00" min="0" step="0.5" inputmode="decimal">
+                        <div class="input-hint">Sem adicional</div>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">Horas Noturnas</label>
+                        <input type="number" id="horasNoturnas" placeholder="0.00" min="0" step="0.5" inputmode="decimal">
+                        <div class="input-hint">+25%</div>
+                    </div>
+                </div>
+
+                <div class="input-row">
+                    <div class="input-group">
+                        <label class="input-label">Horas Extra Diurnas</label>
+                        <input type="number" id="horasExtraDiurnas" placeholder="0.00" min="0" step="0.5" inputmode="decimal">
+                        <div class="input-hint">+25%</div>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">Horas Extra Noturnas</label>
+                        <input type="number" id="horasExtraNoturnas" placeholder="0.00" min="0" step="0.5" inputmode="decimal">
+                        <div class="input-hint">+50%</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-section">
+                <div class="section-title">Atalhos Rápidos</div>
+                <div class="opcoes-rapidas">
+                    <button class="btn-rapido" onclick="preencherJikyu(1000)">¥1.000</button>
+                    <button class="btn-rapido" onclick="preencherJikyu(1500)">¥1.500</button>
+                    <button class="btn-rapido" onclick="preencherJikyu(2000)">¥2.000</button>
+                    <button class="btn-rapido" onclick="preencherJikyu(2500)">¥2.500</button>
+                </div>
+            </div>
+
+            <button class="btn-calcular" onclick="calcular()">Calcular Salário</button>
         </div>
 
+        <div class="right-panel">
+            <div class="resultado-section">
+                <div class="resultado-header">Resultado</div>
+
+                <div class="resultado-items" id="resultadoItems" style="display: none;">
+                    <div class="resultado-item">
+                        <span class="resultado-label">Horas Diurnas</span>
+                        <span class="resultado-valor" id="resultDiurnas">¥0.00</span>
+                    </div>
+                    <div class="resultado-item">
+                        <span class="resultado-label">Horas Noturnas (+25%)</span>
+                        <span class="resultado-valor" id="resultNoturnas">¥0.00</span>
+                    </div>
+                    <div class="resultado-item">
+                        <span class="resultado-label">Horas Extra Diurnas (+25%)</span>
+                        <span class="resultado-valor" id="resultExtraDiurnas">¥0.00</span>
+                    </div>
+                    <div class="resultado-item">
+                        <span class="resultado-label">Horas Extra Noturnas (+50%)</span>
+                        <span class="resultado-valor" id="resultExtraNoturnas">¥0.00</span>
+                    </div>
+                </div>
+
+                <div class="resultado-total" id="resultadoTotal" style="display: none;">
+                    <span class="resultado-total-label">Total</span>
+                    <span class="resultado-total-valor" id="total">¥0.00</span>
+                </div>
+
+                <div class="botoes">
+                    <button class="btn-copiar" onclick="copiarResultado()">📋 Copiar</button>
+                    <button class="btn-limpar" onclick="limpar()">🗑️ Limpar</button>
+                </div>
+
+                <div class="historico">
+                    <div class="historico-titulo">📋 Histórico</div>
+                    <ul class="historico-lista" id="historico">
+                        <li class="historico-vazio">Nenhum cálculo</li>
+                    </ul>
+                </div>
+
+                <div class="status" id="status"></div>
+            </div>
+        </div>
     </div>
 
-    <!-- DIREITA -->
-    <div class="right-panel">
+    <script>
+        let historico = JSON.parse(localStorage.getItem('historico-zangyo-desktop')) || [];
 
-        <h2>Resultado</h2>
+        window.addEventListener('load', () => {
+            atualizarHistorico();
+        });
 
-        <div class="grid">
-            <div class="card">Valor 1: <span id="r1">0</span></div>
-            <div class="card">Valor 2: <span id="r2">0</span></div>
-        </div>
+        function preencherJikyu(valor) {
+            document.getElementById('jikyu').value = valor.toFixed(2);
+            document.getElementById('jikyu').focus();
+        }
 
-        <br>
+        function calcular() {
+            const jikyu = parseFloat(document.getElementById('jikyu').value) || 0;
+            const horasDiurnas = parseFloat(document.getElementById('horasDiurnas').value) || 0;
+            const horasNoturnas = parseFloat(document.getElementById('horasNoturnas').value) || 0;
+            const horasExtraDiurnas = parseFloat(document.getElementById('horasExtraDiurnas').value) || 0;
+            const horasExtraNoturnas = parseFloat(document.getElementById('horasExtraNoturnas').value) || 0;
 
-        <div class="card">
-            <strong>Total:</strong>
-            <div id="total">0</div>
-        </div>
+            const totalHoras = horasDiurnas + horasNoturnas + horasExtraDiurnas + horasExtraNoturnas;
 
-    </div>
+            if (jikyu === 0 || totalHoras === 0) {
+                alert('Por favor, preencha o valor da hora e pelo menos um tipo de hora trabalhada');
+                return;
+            }
 
-</div>
+            // Cálculos com adicionais
+            const resultDiurnas = jikyu * horasDiurnas;
+            const resultNoturnas = jikyu * horasNoturnas * 1.25;
+            const resultExtraDiurnas = jikyu * horasExtraDiurnas * 1.25;
+            const resultExtraNoturnas = jikyu * horasExtraNoturnas * 1.50;
 
-<script>
-function calcular() {
-    const i1 = parseFloat(document.getElementById("input1").value) || 0;
-    const i2 = parseFloat(document.getElementById("input2").value) || 0;
+            const total = resultDiurnas + resultNoturnas + resultExtraDiurnas + resultExtraNoturnas;
 
-    document.getElementById("r1").textContent = i1;
-    document.getElementById("r2").textContent = i2;
-    document.getElementById("total").textContent = i1 + i2;
-}
+            document.getElementById('resultDiurnas').textContent = `¥${resultDiurnas.toFixed(2)}`;
+            document.getElementById('resultNoturnas').textContent = `¥${resultNoturnas.toFixed(2)}`;
+            document.getElementById('resultExtraDiurnas').textContent = `¥${resultExtraDiurnas.toFixed(2)}`;
+            document.getElementById('resultExtraNoturnas').textContent = `¥${resultExtraNoturnas.toFixed(2)}`;
+            document.getElementById('total').textContent = `¥${total.toFixed(2)}`;
+            
+            document.getElementById('resultadoItems').style.display = 'block';
+            document.getElementById('resultadoTotal').style.display = 'flex';
 
-function limpar() {
-    document.getElementById("input1").value = "";
-    document.getElementById("input2").value = "";
+            adicionarAoHistorico(jikyu, horasDiurnas, horasNoturnas, horasExtraDiurnas, horasExtraNoturnas, total);
 
-    document.getElementById("r1").textContent = "0";
-    document.getElementById("r2").textContent = "0";
-    document.getElementById("total").textContent = "0";
-}
-</script>
+            const status = document.getElementById('status');
+            status.textContent = '✓ Calculado com sucesso';
+            status.className = 'status sucesso';
+            setTimeout(() => { status.textContent = ''; }, 2000);
+        }
 
+        function copiarResultado() {
+            const total = document.getElementById('total').textContent;
+            navigator.clipboard.writeText(total).then(() => {
+                const btn = event.target;
+                const textoOriginal = btn.textContent;
+                btn.textContent = '✓ Copiado!';
+                setTimeout(() => {
+                    btn.textContent = textoOriginal;
+                }, 1500);
+            });
+        }
+
+        function limpar() {
+            document.getElementById('jikyu').value = '';
+            document.getElementById('horasDiurnas').value = '';
+            document.getElementById('horasNoturnas').value = '';
+            document.getElementById('horasExtraDiurnas').value = '';
+            document.getElementById('horasExtraNoturnas').value = '';
+            document.getElementById('resultadoItems').style.display = 'none';
+            document.getElementById('resultadoTotal').style.display = 'none';
+        }
+
+        function adicionarAoHistorico(jikyu, horasDiurnas, horasNoturnas, horasExtraDiurnas, horasExtraNoturnas, total) {
+            const agora = new Date();
+            const hora = agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+            const entrada = {
+                jikyu: jikyu.toFixed(2),
+                horasDiurnas: horasDiurnas.toFixed(1),
+                horasNoturnas: horasNoturnas.toFixed(1),
+                horasExtraDiurnas: horasExtraDiurnas.toFixed(1),
+                horasExtraNoturnas: horasExtraNoturnas.toFixed(1),
+                total: total.toFixed(2),
+                hora: hora,
+                timestamp: agora.getTime()
+            };
+
+            historico.unshift(entrada);
+            if (historico.length > 50) {
+                historico.pop();
+            }
+
+            localStorage.setItem('historico-zangyo-desktop', JSON.stringify(historico));
+            atualizarHistorico();
+        }
+
+        function atualizarHistorico() {
+            const lista = document.getElementById('historico');
+
+            if (historico.length === 0) {
+                lista.innerHTML = '<li class="historico-vazio">Nenhum cálculo</li>';
+                return;
+            }
+
+            lista.innerHTML = historico.map((entrada, index) => {
+                const totalHoras = (
+                    parseFloat(entrada.horasDiurnas) +
+                    parseFloat(entrada.horasNoturnas) +
+                    parseFloat(entrada.horasExtraDiurnas) +
+                    parseFloat(entrada.horasExtraNoturnas)
+                ).toFixed(1);
+
+                return `
+                    <li class="historico-item" onclick="restaurarCalculo(${index})">
+                        <span>¥${entrada.jikyu} (${totalHoras}h)</span>
+                        <span>¥${entrada.total}</span>
+                    </li>
+                `;
+            }).join('');
+        }
+
+        function restaurarCalculo(index) {
+            const entrada = historico[index];
+            document.getElementById('jikyu').value = entrada.jikyu;
+            document.getElementById('horasDiurnas').value = entrada.horasDiurnas;
+            document.getElementById('horasNoturnas').value = entrada.horasNoturnas;
+            document.getElementById('horasExtraDiurnas').value = entrada.horasExtraDiurnas;
+            document.getElementById('horasExtraNoturnas').value = entrada.horasExtraNoturnas;
+            calcular();
+        }
+    </script>
 </body>
 </html>
