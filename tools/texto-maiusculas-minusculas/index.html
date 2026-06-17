@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
 <title>Texto em Maiúsculas e Minúsculas Online | UtiliWeb</title>
 
@@ -12,129 +12,225 @@
 <link rel="stylesheet" href="../../assets/style.css">
 
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
-body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-    background: linear-gradient(135deg, #2ecc71, #27ae60);
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
+html{
+    -webkit-text-size-adjust:100%;
 }
 
-.wrapper {
-    width: 100%;
-    max-width: 1100px;
-    background: #fff;
-    border-radius: 18px;
-    overflow: hidden;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+body{
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
+    background:linear-gradient(135deg,#2ecc71,#27ae60);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:
+        max(16px,env(safe-area-inset-top))
+        max(16px,env(safe-area-inset-right))
+        max(16px,env(safe-area-inset-bottom))
+        max(16px,env(safe-area-inset-left));
 }
 
-.left, .right {
-    padding: 25px;
+.wrapper{
+    width:100%;
+    max-width:1100px;
+    background:#fff;
+    border-radius:18px;
+    overflow:hidden;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    box-shadow:0 20px 60px rgba(0,0,0,.25);
 }
 
-.left {
-    border-right: 1px solid #eee;
+.left,
+.right{
+    padding:24px;
+    min-width:0;
 }
 
-h1 {
-    font-size: 26px;
-    margin-bottom: 5px;
+.left{
+    border-right:1px solid #eee;
 }
 
-.subtitle {
-    color: #666;
-    font-size: 14px;
-    margin-bottom: 15px;
+h1{
+    font-size:clamp(22px,3vw,30px);
+    line-height:1.2;
+    margin-bottom:6px;
 }
 
-textarea {
-    width: 100%;
-    height: 200px;
-    padding: 12px;
-    border-radius: 10px;
-    border: 2px solid #ddd;
-    resize: none;
-    margin-top: 10px;
+h2{
+    font-size:clamp(20px,2.5vw,26px);
+    margin-bottom:12px;
 }
 
-textarea:focus {
-    outline: none;
-    border-color: #27ae60;
+.subtitle{
+    color:#666;
+    font-size:14px;
+    margin-bottom:16px;
 }
 
-button {
-    margin-top: 10px;
-    padding: 12px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: bold;
+a{
+    display:inline-block;
+    margin-bottom:12px;
+    text-decoration:none;
+    color:#27ae60;
+    font-weight:600;
 }
 
-.primary {
-    background: #27ae60;
-    color: #fff;
+textarea{
+    width:100%;
+    min-height:220px;
+    padding:14px;
+    border-radius:12px;
+    border:2px solid #ddd;
+    resize:vertical;
+    margin-top:10px;
+    font-size:16px;
+    line-height:1.5;
+    transition:.2s;
 }
 
-.secondary {
-    background: #fff;
-    border: 2px solid #27ae60;
-    color: #27ae60;
+textarea:focus{
+    outline:none;
+    border-color:#27ae60;
 }
 
-.buttons {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
+.buttons{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+    margin-top:12px;
 }
 
-a {
-    display: inline-block;
-    margin-bottom: 10px;
-    text-decoration: none;
-    color: #27ae60;
-    font-weight: bold;
+button{
+    width:100%;
+    min-height:48px;
+    padding:12px;
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+    font-weight:700;
+    font-size:15px;
+    transition:.2s;
+    -webkit-tap-highlight-color:transparent;
 }
 
-.result-box {
-    white-space: pre-wrap;
-    font-size: 16px;
-    line-height: 1.5;
-    background: #f6fff8;
-    border: 1px solid #d7f5e3;
-    padding: 15px;
-    border-radius: 10px;
-    min-height: 200px;
+button:hover{
+    transform:translateY(-1px);
 }
 
-/* RESPONSIVO */
-@media(max-width: 900px) {
-    .wrapper {
-        grid-template-columns: 1fr;
+button:active{
+    transform:scale(.98);
+}
+
+.primary{
+    background:#27ae60;
+    color:#fff;
+}
+
+.secondary{
+    background:#fff;
+    border:2px solid #27ae60;
+    color:#27ae60;
+}
+
+.result-box{
+    white-space:pre-wrap;
+    word-break:break-word;
+    overflow-wrap:anywhere;
+    font-size:16px;
+    line-height:1.6;
+    background:#f6fff8;
+    border:1px solid #d7f5e3;
+    padding:16px;
+    border-radius:12px;
+    min-height:220px;
+}
+
+.copy-msg{
+    margin-top:10px;
+    color:#27ae60;
+    font-size:14px;
+    font-weight:600;
+    display:none;
+}
+
+/* TABLETS */
+@media (max-width:900px){
+
+    .wrapper{
+        grid-template-columns:1fr;
+        max-width:700px;
     }
 
-    .left {
-        border-right: none;
-        border-bottom: 1px solid #eee;
+    .left{
+        border-right:none;
+        border-bottom:1px solid #eee;
+    }
+}
+
+/* CELULARES */
+@media (max-width:600px){
+
+    body{
+        padding:10px;
+        align-items:flex-start;
     }
 
-    .buttons {
-        grid-template-columns: 1fr;
+    .wrapper{
+        border-radius:14px;
+    }
+
+    .left,
+    .right{
+        padding:18px;
+    }
+
+    textarea{
+        min-height:180px;
+        font-size:16px;
+    }
+
+    .buttons{
+        grid-template-columns:1fr;
+    }
+
+    button{
+        min-height:52px;
+        font-size:16px;
+    }
+
+    .result-box{
+        min-height:180px;
+    }
+}
+
+/* CELULARES PEQUENOS */
+@media (max-width:380px){
+
+    .left,
+    .right{
+        padding:14px;
+    }
+
+    h1{
+        font-size:22px;
+    }
+
+    h2{
+        font-size:20px;
+    }
+
+    textarea{
+        min-height:160px;
     }
 }
 </style>
-
 </head>
 
 <body>
@@ -149,14 +245,31 @@ a {
 
         <a href="../../index.html">← Voltar</a>
 
-        <textarea id="text" placeholder="Digite ou cole seu texto aqui..."></textarea>
+        <textarea
+            id="text"
+            placeholder="Digite ou cole seu texto aqui..."
+            autocomplete="off"
+            autocorrect="off"
+            autocapitalize="off"
+            spellcheck="false"></textarea>
 
         <div class="buttons">
 
-            <button class="primary" onclick="maiusculas()">MAIÚSCULAS</button>
-            <button class="secondary" onclick="minusculas()">minúsculas</button>
-            <button class="secondary" onclick="capitalizar()">Capitalizar</button>
-            <button class="secondary" onclick="copiar()">Copiar</button>
+            <button class="primary" onclick="maiusculas()">
+                MAIÚSCULAS
+            </button>
+
+            <button class="secondary" onclick="minusculas()">
+                minúsculas
+            </button>
+
+            <button class="secondary" onclick="capitalizar()">
+                Capitalizar
+            </button>
+
+            <button class="secondary" onclick="copiar()">
+                Copiar
+            </button>
 
         </div>
 
@@ -167,35 +280,63 @@ a {
 
         <h2>Resultado</h2>
 
-        <div class="result-box" id="resultado">O resultado aparecerá aqui...</div>
+        <div class="result-box" id="resultado">
+O resultado aparecerá aqui...
+        </div>
+
+        <div class="copy-msg" id="copyMsg">
+            ✓ Texto copiado com sucesso
+        </div>
 
     </div>
 
 </div>
 
 <script>
+
 const input = document.getElementById("text");
 const output = document.getElementById("resultado");
+const copyMsg = document.getElementById("copyMsg");
 
 function maiusculas() {
-    output.textContent = input.value.toUpperCase();
+
+    output.textContent =
+        input.value.toUpperCase();
 }
 
 function minusculas() {
-    output.textContent = input.value.toLowerCase();
+
+    output.textContent =
+        input.value.toLowerCase();
 }
 
 function capitalizar() {
+
     output.textContent = input.value
         .toLowerCase()
-        .replace(/\b\w/g, c => c.toUpperCase());
+        .replace(/\b\w/g, letra => letra.toUpperCase());
 }
 
 function copiar() {
-    const text = output.textContent;
-    if (!text || text.includes("aparecerá")) return;
-    navigator.clipboard.writeText(text);
+
+    const texto = output.textContent.trim();
+
+    if(
+        !texto ||
+        texto === "O resultado aparecerá aqui..."
+    ){
+        return;
+    }
+
+    navigator.clipboard.writeText(texto);
+
+    copyMsg.style.display = "block";
+
+    setTimeout(() => {
+        copyMsg.style.display = "none";
+    }, 2000);
 }
+
 </script>
 
 </body>
