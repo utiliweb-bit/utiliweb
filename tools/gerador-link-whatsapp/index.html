@@ -4,126 +4,206 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Gerador de Link WhatsApp Online | UtiliWeb</title>
+<title>Gerador de Link WhatsApp | UtiliWeb</title>
 
-<meta name="description" content="Crie links de WhatsApp com mensagem automática gratuitamente. Gere links clicáveis para clientes e redes sociais com o UtiliWeb.">
-
-<meta name="robots" content="index, follow">
+<meta name="description" content="Crie links de WhatsApp com mensagem automática de forma rápida e gratuita.">
+<meta name="keywords" content="whatsapp link, wa.me, gerador whatsapp, utiliweb">
 
 <link rel="stylesheet" href="../../assets/style.css">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial;
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* WRAPPER */
+.wrapper {
+    width: 100%;
+    max-width: 1000px;
+    min-height: 650px;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+}
+
+/* ESQUERDA */
+.left-panel {
+    padding: 30px;
+    border-right: 1px solid #eee;
+}
+
+header h1 {
+    font-size: 26px;
+}
+
+.subtitle {
+    font-size: 14px;
+    color: #777;
+}
+
+/* INPUTS */
+input, textarea {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 8px;
+    border: 2px solid #ddd;
+    font-size: 14px;
+}
+
+textarea {
+    height: 120px;
+    resize: none;
+}
+
+input:focus, textarea:focus {
+    border-color: #27ae60;
+    outline: none;
+}
+
+/* BOTÕES */
+.buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+button {
+    flex: 1;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    background: #27ae60;
+    color: white;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+/* RESULTADO */
+.result-box {
+    margin-top: 20px;
+}
+
+.result-box input {
+    background: #f7f7f7;
+    font-size: 13px;
+}
+
+/* DIREITA */
+.right-panel {
+    padding: 30px;
+    background: #eafaf1;
+}
+
+/* RESPONSIVO */
+@media (max-width: 900px) {
+    .wrapper {
+        grid-template-columns: 1fr;
+    }
+
+    .left-panel {
+        border-right: none;
+        border-bottom: 1px solid #eee;
+    }
+
+    .buttons {
+        flex-direction: column;
+    }
+}
+</style>
+
 </head>
 
 <body>
 
-<header>
-    <h1>Gerador de Link WhatsApp</h1>
-    <p>Crie links clicáveis com mensagem automática</p>
-</header>
+<div class="wrapper">
 
-<div class="container">
+    <!-- ESQUERDA -->
+    <div class="left-panel">
 
-    <a href="../../index.html">← Voltar</a>
+        <header>
+            <h1>💬 Gerador de Link WhatsApp</h1>
+            <p class="subtitle">Links com mensagem automática</p>
+        </header>
 
-    <div style="margin-top:20px;">
+        <br>
 
-        <label for="number">
-            Número do WhatsApp (com código do país):
-        </label>
+        <a href="../../index.html">← Voltar</a>
 
-        <input
-            id="number"
-            type="text"
-            inputmode="numeric"
-            placeholder="Ex: 5511999999999"
-            style="width:100%; margin-top:10px;">
+        <label>Número do WhatsApp</label>
+        <input id="number" type="text" placeholder="Ex: 5511999999999" inputmode="numeric">
 
-        <label
-            for="message"
-            style="display:block; margin-top:20px;">
+        <label>Mensagem</label>
+        <textarea id="message" placeholder="Olá, gostaria de mais informações."></textarea>
 
-            Mensagem automática:
+        <div class="buttons">
+            <button onclick="gerarLink()">Gerar</button>
+            <button onclick="copiarLink()">Copiar</button>
+        </div>
 
-        </label>
-
-        <textarea
-            id="message"
-            placeholder="Olá, gostaria de mais informações."
-            style="width:100%; height:120px; margin-top:10px;"></textarea>
-
-        <div style="margin-top:20px; display:flex; gap:10px; flex-wrap:wrap;">
-
-            <button onclick="gerarLink()">
-                Gerar Link
-            </button>
-
-            <button onclick="copiarLink()">
-                Copiar Link
-            </button>
-
+        <div class="result-box">
+            <label>Seu link</label>
+            <input id="resultado" readonly placeholder="Gerar link para aparecer aqui">
         </div>
 
     </div>
 
-    <div class="result" style="margin-top:20px;">
+    <!-- DIREITA -->
+    <div class="right-panel">
 
-        <p><strong>Seu link:</strong></p>
-
-        <input
-            id="resultado"
-            type="text"
-            readonly
-            value=""
-            style="width:100%;">
-
-    </div>
-
-    <section style="margin-top:40px;">
-        <h2>Como usar</h2>
-
+        <h2>Como funciona</h2>
         <p>
-            Digite o número do WhatsApp com o código do país, escreva uma mensagem e clique em "Gerar Link". O link poderá ser usado em sites, Instagram, Facebook e outras redes sociais.
+            Gere links do WhatsApp com mensagem automática para usar em Instagram,
+            sites, anúncios e atendimento rápido.
         </p>
 
-    </section>
+    </div>
 
 </div>
 
 <script>
 function gerarLink() {
-
-    const number = document
-        .getElementById("number")
-        .value
-        .replace(/\D/g, "");
-
-    const message = document
-        .getElementById("message")
-        .value
-        .trim();
+    const number = document.getElementById("number").value.replace(/\D/g, "");
+    const message = document.getElementById("message").value.trim();
 
     if (!number) {
-        alert("Digite um número válido.");
+        alert("Digite um número válido");
         return;
     }
 
-    const url =
-        `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
-
+    const url = `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
     document.getElementById("resultado").value = url;
 }
 
 function copiarLink() {
-
     const campo = document.getElementById("resultado");
 
     if (!campo.value) {
-        alert("Gere um link primeiro.");
+        alert("Gere um link primeiro");
         return;
     }
 
     navigator.clipboard.writeText(campo.value);
-
-    alert("Link copiado!");
 }
 </script>
 
