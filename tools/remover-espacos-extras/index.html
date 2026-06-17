@@ -2,76 +2,70 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
-<title>Remover Espaços Extras Online | UtiliWeb</title>
+<title>Remover Espaços Extras | UtiliWeb</title>
 
-<meta name="description" content="Remova espaços extras, linhas em branco e organize textos online gratuitamente com o UtiliWeb.">
+<meta name="description" content="Limpe textos removendo espaços extras e organize automaticamente.">
 <meta name="robots" content="index, follow">
-
-<link rel="stylesheet" href="../../assets/style.css">
 
 <style>
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
 }
 
 html, body {
     width: 100%;
     min-height: 100vh;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    padding: 16px;
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
 }
 
+/* CONTAINER */
 .wrapper {
     width: 100%;
-    max-width: 1200px;
-    min-height: 700px;
+    max-width: 1100px;
     background: #fff;
-    border-radius: 20px;
+    border-radius: 16px;
     box-shadow: 0 20px 60px rgba(0,0,0,0.3);
     display: grid;
     grid-template-columns: 1fr 1fr;
     overflow: hidden;
 }
 
-.left-panel, .right-panel {
-    padding: 30px;
-    overflow-y: auto;
+/* PAINÉIS */
+.left, .right {
+    padding: 28px;
 }
 
-.left-panel {
-    border-right: 1px solid #eee;
+/* TÍTULOS */
+h1 {
+    font-size: 22px;
+    margin-bottom: 6px;
 }
 
-.right-panel {
-    background: #eafaf1;
-}
-
-header h1 {
-    font-size: 26px;
-    margin-bottom: 5px;
-}
-
-.subtitle {
-    font-size: 14px;
+p {
+    font-size: 12px;
     color: #777;
 }
 
+/* TEXTAREA */
 textarea {
     width: 100%;
     min-height: 180px;
     padding: 12px;
-    border: 2px solid #ddd;
     border-radius: 10px;
-    margin-top: 10px;
+    border: 1px solid #ddd;
+    margin-top: 12px;
     font-size: 14px;
+    resize: vertical;
 }
 
 textarea:focus {
@@ -79,37 +73,56 @@ textarea:focus {
     border-color: #27ae60;
 }
 
-button {
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.btn-primary {
-    background: #27ae60;
-    color: white;
-}
-
-.btn-secondary {
-    background: white;
-    border: 2px solid #27ae60;
-    color: #27ae60;
-}
-
-.grid {
-    display: grid;
-    grid-template-columns: 1fr;
+/* BOTÕES */
+.btns {
+    display: flex;
     gap: 10px;
+    margin-top: 14px;
+    flex-wrap: wrap;
 }
 
-.card {
-    background: white;
+button {
+    flex: 1;
     padding: 12px;
     border-radius: 10px;
-    border: 1px solid #ddd;
-    font-size: 14px;
+    border: none;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.primary {
+    background: #27ae60;
+    color: #fff;
+}
+
+.secondary {
+    background: #f4f4f4;
+    color: #333;
+}
+
+/* RESULTADO */
+.result {
+    background: #f4f4f4;
+    padding: 14px;
+    border-radius: 10px;
+    font-size: 13px;
+    word-break: break-word;
+    min-height: 120px;
+}
+
+/* RESPONSIVO */
+@media (max-width: 768px) {
+    .wrapper {
+        grid-template-columns: 1fr;
+    }
+
+    html, body {
+        padding: 12px;
+    }
+
+    .left, .right {
+        padding: 18px;
+    }
 }
 </style>
 
@@ -119,50 +132,28 @@ button {
 
 <div class="wrapper">
 
-    <!-- ESQUERDA -->
-    <div class="left-panel">
+    <!-- INPUT -->
+    <div class="left">
 
-        <header>
-            <h1>🧹 Remover Espaços Extras</h1>
-            <p class="subtitle">Limpe textos rapidamente e organize automaticamente</p>
-        </header>
+        <h1>🧹 Remover Espaços Extras</h1>
+        <p>Limpe textos e organize automaticamente</p>
 
-        <br>
+        <textarea id="text" placeholder="Digite ou cole seu texto aqui..."></textarea>
 
-        <a href="../../index.html">← Voltar</a>
-
-        <div class="box">
-
-            <label>Texto original</label>
-            <textarea id="text" placeholder="Digite ou cole seu texto aqui..."></textarea>
-
-            <div style="margin-top:15px; display:flex; gap:10px; flex-wrap:wrap;">
-                <button class="btn-primary" onclick="cleanText()">Limpar texto</button>
-                <button class="btn-secondary" onclick="copyResult()">Copiar</button>
-                <button class="btn-secondary" onclick="resetAll()">Limpar tudo</button>
-            </div>
-
+        <div class="btns">
+            <button class="primary" onclick="cleanText()">Limpar</button>
+            <button class="secondary" onclick="copyText()">Copiar</button>
+            <button class="secondary" onclick="resetAll()">Reset</button>
         </div>
 
     </div>
 
-    <!-- DIREITA -->
-    <div class="right-panel">
+    <!-- RESULTADO -->
+    <div class="right">
 
         <h2>Resultado</h2>
 
-        <div class="grid">
-            <div class="card">
-                Texto limpo será exibido aqui automaticamente
-            </div>
-        </div>
-
-        <br>
-
-        <div class="card">
-            <strong>Resultado:</strong>
-            <div id="result" style="margin-top:10px; word-break: break-word;">---</div>
-        </div>
+        <div id="result" class="result">---</div>
 
     </div>
 
@@ -180,9 +171,8 @@ function cleanText() {
     result.textContent = cleaned || "Nada para limpar";
 }
 
-function copyResult() {
+function copyText() {
     if (!result.textContent || result.textContent === "---") return;
-
     navigator.clipboard.writeText(result.textContent);
 }
 
@@ -191,7 +181,7 @@ function resetAll() {
     result.textContent = "---";
 }
 
-// auto preview (UX PRO)
+// UX automático (tempo real)
 input.addEventListener("input", cleanText);
 </script>
 
