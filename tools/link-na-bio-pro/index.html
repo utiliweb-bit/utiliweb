@@ -6,7 +6,7 @@
 
 <title>Link na Bio PRO | UtiliWeb</title>
 
-<meta name="description" content="Crie sua página estilo Linktree com URL individual.">
+<meta name="description" content="Crie sua página estilo Linktree com URL individual. Ferramenta gratuita para Instagram, TikTok e YouTube.">
 <meta name="robots" content="index, follow">
 
 <link rel="stylesheet" href="../../assets/style.css">
@@ -21,14 +21,27 @@
 }
 
 .btn {
-    display:block;
-    margin-top:10px;
-    padding:12px;
-    background:#111;
-    color:#fff;
-    text-decoration:none;
-    border-radius:8px;
-    text-align:center;
+    display: block;
+    margin-top: 10px;
+    padding: 12px;
+    background: #111;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 8px;
+    text-align: center;
+    transition: 0.2s;
+}
+
+.btn:hover {
+    background: #333;
+}
+
+textarea, input {
+    width: 100%;
+    margin-top: 8px;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
 }
 </style>
 
@@ -49,14 +62,14 @@
 
     <h3>Criar sua página</h3>
 
-    <input id="name" placeholder="Seu nome">
+    <input id="name" placeholder="Seu nome ou perfil">
 
-    <textarea id="links" placeholder="Digite links (1 por linha):
+    <textarea id="links" placeholder="Cole seus links (1 por linha)
 https://youtube.com
 https://instagram.com
 https://tiktok.com"></textarea>
 
-    <button onclick="generate()">Gerar Link</button>
+    <button onclick="generate()" style="margin-top:15px;">Gerar Link</button>
 
     <div id="result" style="margin-top:20px;"></div>
 
@@ -69,11 +82,20 @@ https://tiktok.com"></textarea>
 <script>
 function generate() {
     const name = document.getElementById("name").value;
-    const links = document.getElementById("links").value.split("\n");
 
-    const encodedLinks = encodeURIComponent(links.join(","));
+    const links = document
+        .getElementById("links")
+        .value
+        .split("\n")
+        .map(l => l.trim())
+        .filter(l => l.length > 0)
+        .map(l => l.startsWith("http") ? l : "https://" + l);
 
-    const url = `${window.location.origin}${window.location.pathname}?name=${encodeURIComponent(name)}&links=${encodedLinks}`;
+    const encodedLinks = encodeURIComponent(JSON.stringify(links));
+
+    const base = window.location.href.split('?')[0];
+
+    const url = `${base}?name=${encodeURIComponent(name)}&data=${encodedLinks}`;
 
     document.getElementById("result").innerHTML = `
         <p><strong>Seu link:</strong></p>
@@ -84,21 +106,29 @@ function generate() {
 // modo página pública
 const params = new URLSearchParams(window.location.search);
 const name = params.get("name");
-const links = params.get("links");
+const data = params.get("data");
 
-if (name && links) {
+if (name && data) {
     document.getElementById("creator").style.display = "none";
 
-    const list = decodeURIComponent(links).split(",");
+    let links = [];
+
+    try {
+        links = JSON.parse(decodeURIComponent(data));
+    } catch (e) {
+        links = [];
+    }
 
     let html = `<div class="box">
         <h2>${name}</h2>
     `;
 
-    list.forEach(link => {
-        if (link.trim()) {
-            html += `<a class="btn" href="${link}" target="_blank">Abrir link</a>`;
-        }
+    links.forEach(link => {
+        html += `
+            <a class="btn" href="${link}" target="_blank" rel="noopener noreferrer">
+                Abrir link
+            </a>
+        `;
     });
 
     html += `</div>`;
