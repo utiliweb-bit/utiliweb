@@ -2,24 +2,68 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
 <title>Calculadora de Porcentagem | UtiliWeb</title>
 
 <meta name="description" content="Calcule porcentagens de forma rápida e precisa.">
 <meta name="keywords" content="porcentagem, calculadora, utiliweb">
 
-<link rel="stylesheet" href="../../assets/style.css">
-
 <style>
-.tool-box {
-    margin-top: 20px;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
 }
 
+html, body {
+    width: 100%;
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+}
+
+/* CONTAINER */
+.wrapper {
+    width: 100%;
+    max-width: 900px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+}
+
+/* PAINÉIS */
+.left, .right {
+    padding: 28px;
+}
+
+/* LEFT */
+h1 {
+    font-size: 22px;
+    margin-bottom: 6px;
+}
+
+p {
+    font-size: 12px;
+    color: #777;
+    margin-bottom: 20px;
+}
+
+/* INPUTS */
 label {
     display: block;
-    margin-top: 12px;
-    font-weight: 500;
+    margin-top: 14px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #333;
 }
 
 input {
@@ -27,36 +71,59 @@ input {
     padding: 12px;
     margin-top: 6px;
     border-radius: 8px;
-    border: 1px solid #ccc;
+    border: 1px solid #ddd;
     font-size: 14px;
 }
 
+/* BOTÕES */
 .btn-group {
     display: flex;
     gap: 10px;
-    margin-top: 15px;
-    flex-wrap: wrap;
+    margin-top: 16px;
 }
 
 button {
-    padding: 12px 16px;
+    flex: 1;
+    padding: 12px;
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    background: #111;
-    color: #fff;
+    font-weight: 700;
+    font-size: 12px;
 }
 
-button:hover {
-    opacity: 0.9;
+.btn-calc {
+    background: #27ae60;
+    color: white;
 }
 
+.btn-clear {
+    background: #eee;
+    color: #333;
+}
+
+/* RESULTADO */
 .result {
-    margin-top: 20px;
-    padding: 12px;
-    background: #f5f5f5;
-    border-radius: 8px;
-    min-height: 40px;
+    background: #f4f4f4;
+    border-radius: 10px;
+    padding: 16px;
+    font-size: 14px;
+    min-height: 80px;
+}
+
+/* RESPONSIVO */
+@media (max-width: 768px) {
+    .wrapper {
+        grid-template-columns: 1fr;
+    }
+
+    html, body {
+        padding: 12px;
+    }
+
+    .left, .right {
+        padding: 18px;
+    }
 }
 </style>
 
@@ -64,16 +131,13 @@ button:hover {
 
 <body>
 
-<header>
-    <h1>📊 Calculadora de Porcentagem</h1>
-    <p>Calcule valores percentuais rapidamente</p>
-</header>
+<div class="wrapper">
 
-<div class="container">
+    <!-- INPUT -->
+    <div class="left">
 
-    <a href="../../index.html">← Voltar</a>
-
-    <div class="tool-box">
+        <h1>📊 Calculadora de Porcentagem</h1>
+        <p>Calcule valores percentuais rapidamente</p>
 
         <label>Valor total</label>
         <input id="total" type="number" placeholder="Ex: 200">
@@ -82,9 +146,16 @@ button:hover {
         <input id="percent" type="number" placeholder="Ex: 10">
 
         <div class="btn-group">
-            <button onclick="calcular()">Calcular</button>
-            <button onclick="limpar()">Limpar</button>
+            <button class="btn-calc" onclick="calcular()">Calcular</button>
+            <button class="btn-clear" onclick="limpar()">Limpar</button>
         </div>
+
+    </div>
+
+    <!-- RESULTADO -->
+    <div class="right">
+
+        <h2>Resultado</h2>
 
         <div id="resultado" class="result">---</div>
 
@@ -100,7 +171,7 @@ function calcular() {
     const resultado = document.getElementById("resultado");
 
     if (isNaN(total) || isNaN(percent)) {
-        resultado.textContent = "Digite valores válidos.";
+        resultado.innerHTML = "Digite valores válidos.";
         return;
     }
 
@@ -115,7 +186,7 @@ function calcular() {
 function limpar() {
     document.getElementById("total").value = "";
     document.getElementById("percent").value = "";
-    document.getElementById("resultado").textContent = "---";
+    document.getElementById("resultado").innerHTML = "---";
 }
 </script>
 
