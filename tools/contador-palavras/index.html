@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Contador de Palavras Online | UtiliWeb</title>
+<title>Contador de Palavras | UtiliWeb</title>
 
-<meta name="description" content="Conte palavras online de forma rápida e gratuita. Ferramenta simples para textos, redações e SEO.">
+<meta name="description" content="Conte palavras e caracteres em tempo real online.">
 <meta name="robots" content="index, follow">
 
 <link rel="stylesheet" href="../../assets/style.css">
@@ -15,30 +15,36 @@
 <body>
 
 <header>
-    <h1>Contador de Palavras</h1>
-    <p>Conte palavras e caracteres em tempo real</p>
+    <h1>📝 Contador de Palavras</h1>
+    <p>Texto em tempo real</p>
 </header>
 
 <div class="container">
 
     <a href="../../index.html">← Voltar</a>
 
-    <textarea id="text" placeholder="Digite ou cole seu texto aqui..." style="width:100%; height:160px; margin-top:20px;"></textarea>
+    <div class="box">
 
-    <div style="margin-top:20px;">
-        <p><strong>Palavras:</strong> <span id="words">0</span></p>
-        <p><strong>Caracteres:</strong> <span id="chars">0</span></p>
+        <textarea id="text" placeholder="Digite ou cole seu texto aqui..."></textarea>
+
+        <div class="grid">
+            <div class="card">
+                <strong>Palavras</strong>
+                <div id="words" class="result">0</div>
+            </div>
+
+            <div class="card">
+                <strong>Caracteres</strong>
+                <div id="chars" class="result">0</div>
+            </div>
+        </div>
+
     </div>
 
-    <section style="margin-top:40px;">
+    <div class="box">
         <h2>Como usar</h2>
-        <p>Digite seu texto e veja automaticamente a contagem de palavras e caracteres em tempo real.</p>
-    </section>
-
-    <section style="margin-top:20px;">
-        <h2>Por que usar?</h2>
-        <p>Ideal para redações, posts, SEO e textos que precisam de limite de palavras.</p>
-    </section>
+        <p>Digite ou cole seu texto e a contagem será atualizada automaticamente.</p>
+    </div>
 
 </div>
 
@@ -48,11 +54,8 @@ const text = document.getElementById("text");
 text.addEventListener("input", () => {
     const value = text.value.trim();
 
-    const words = value ? value.split(/\s+/).length : 0;
-    const chars = value.length;
-
-    document.getElementById("words").textContent = words;
-    document.getElementById("chars").textContent = chars;
+    document.getElementById("chars").textContent = text.value.length;
+    document.getElementById("words").textContent = value ? value.split(/\s+/).length : 0;
 });
 </script>
 
