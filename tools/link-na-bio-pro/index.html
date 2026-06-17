@@ -6,221 +6,520 @@
 
 <title>Link na Bio PRO | UtiliWeb</title>
 
-<meta name="description" content="Crie sua página estilo Linktree com múltiplos links.">
-<meta name="robots" content="index, follow">
+<meta name="description" content="Crie sua página estilo Linktree com avatar, bio, QR Code e links personalizados.">
+<meta name="theme-color" content="#27ae60">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
 }
 
-html, body {
-    width: 100%;
-    min-height: 100vh;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 16px;
-    background: linear-gradient(135deg, #2ecc71, #27ae60);
+body{
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
+    background:linear-gradient(135deg,#2ecc71,#27ae60);
+    min-height:100dvh;
+    padding:12px;
 }
 
-/* CONTAINER */
-.wrapper {
-    width: 100%;
-    max-width: 1000px;
-    background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    overflow: hidden;
+.wrapper{
+    width:100%;
+    max-width:1200px;
+    margin:auto;
+    background:#fff;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 20px 60px rgba(0,0,0,.25);
+    display:grid;
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
 }
 
-/* PAINÉIS */
-.left, .right {
-    padding: 28px;
+.left,
+.right{
+    padding:24px;
+    min-width:0;
 }
 
-/* INPUTS */
-label {
-    display: block;
-    margin-top: 14px;
-    font-size: 12px;
-    font-weight: 700;
-    color: #333;
+.left{
+    border-right:1px solid #e8e8e8;
 }
 
-input, textarea {
-    width: 100%;
-    padding: 12px;
-    margin-top: 6px;
-    border-radius: 10px;
-    border: 1px solid #ddd;
-    font-size: 14px;
+h1{
+    font-size:28px;
+    margin-bottom:5px;
 }
 
-textarea {
-    min-height: 140px;
-    resize: vertical;
+.subtitle{
+    color:#777;
+    font-size:13px;
+    margin-bottom:18px;
 }
 
-/* BOTÕES */
-button {
-    width: 100%;
-    margin-top: 14px;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    background: #27ae60;
-    color: #fff;
-    font-weight: 700;
-    cursor: pointer;
+label{
+    display:block;
+    margin-top:12px;
+    margin-bottom:5px;
+    font-size:12px;
+    font-weight:700;
+    color:#444;
 }
 
-button:hover {
-    opacity: 0.9;
+input,
+textarea,
+select{
+    width:100%;
+    padding:13px;
+    border:2px solid #ddd;
+    border-radius:12px;
+    font-size:15px;
 }
 
-/* RESULTADO */
-.result {
-    background: #f4f4f4;
-    padding: 14px;
-    border-radius: 10px;
-    font-size: 13px;
-    word-break: break-word;
+input:focus,
+textarea:focus,
+select:focus{
+    outline:none;
+    border-color:#27ae60;
 }
 
-/* LINKS PÚBLICOS */
-.link-btn {
-    display: block;
-    text-align: center;
-    padding: 12px;
-    margin-top: 10px;
-    border-radius: 10px;
-    background: #111;
-    color: #fff;
-    text-decoration: none;
-    font-weight: 700;
+textarea{
+    min-height:160px;
+    resize:vertical;
 }
 
-/* RESPONSIVO */
-@media (max-width: 768px) {
-    .wrapper {
-        grid-template-columns: 1fr;
+button{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    margin-top:12px;
+    background:#27ae60;
+    color:#fff;
+    font-weight:700;
+    font-size:15px;
+    cursor:pointer;
+}
+
+button:hover{
+    opacity:.95;
+}
+
+.secondary{
+    background:#fff;
+    color:#27ae60;
+    border:2px solid #27ae60;
+}
+
+.result{
+    margin-top:15px;
+    background:#f7f7f7;
+    padding:14px;
+    border-radius:12px;
+    word-break:break-word;
+    font-size:13px;
+}
+
+.preview-phone{
+    width:100%;
+    max-width:420px;
+    margin:auto;
+    background:#fff;
+    border-radius:24px;
+    padding:20px;
+}
+
+.avatar{
+    width:96px;
+    height:96px;
+    border-radius:50%;
+    object-fit:cover;
+    display:block;
+    margin:0 auto 15px;
+    border:4px solid #eaf8ef;
+}
+
+.profile-name{
+    text-align:center;
+    font-size:24px;
+    font-weight:700;
+}
+
+.profile-bio{
+    text-align:center;
+    color:#666;
+    margin-top:8px;
+    margin-bottom:18px;
+    font-size:14px;
+}
+
+.link-btn{
+    display:block;
+    width:100%;
+    text-align:center;
+    text-decoration:none;
+    padding:15px;
+    border-radius:14px;
+    color:#fff;
+    font-weight:700;
+    margin-top:10px;
+    transition:.25s;
+}
+
+.link-btn:hover{
+    transform:translateY(-2px);
+}
+
+.link-btn:active{
+    transform:scale(.98);
+}
+
+.counter{
+    margin-top:15px;
+    text-align:center;
+    color:#666;
+    font-size:13px;
+}
+
+#qrcode{
+    margin-top:18px;
+    display:flex;
+    justify-content:center;
+}
+
+@media(max-width:900px){
+
+    .wrapper{
+        grid-template-columns:1fr;
     }
 
-    html, body {
-        padding: 12px;
+    .left{
+        border-right:none;
+        border-bottom:1px solid #eee;
     }
 
-    .left, .right {
-        padding: 18px;
+    .left,
+    .right{
+        padding:18px;
+    }
+
+    h1{
+        font-size:24px;
     }
 }
+
 </style>
-
 </head>
-
 <body>
 
 <div class="wrapper">
 
-    <!-- CRIADOR -->
-    <div class="left">
+<div class="left">
 
-        <h1>🔗 Link na Bio PRO</h1>
-        <p style="font-size:12px;color:#777;margin-top:6px;">
-            Crie sua página estilo Linktree
-        </p>
+<h1>🔗 Link na Bio PRO</h1>
 
-        <label>Seu nome</label>
-        <input id="name" placeholder="Ex: Meu perfil">
+<div class="subtitle">
+Crie sua página estilo Linktree
+</div>
 
-        <label>Links (um por linha)</label>
-        <textarea id="links" placeholder="https://youtube.com
-https://instagram.com
-https://tiktok.com"></textarea>
+<label>Foto de Perfil (URL)</label>
+<input id="avatar"
+placeholder="https://site.com/foto.jpg">
 
-        <button onclick="generate()">Gerar link</button>
+<label>Nome</label>
+<input id="name"
+placeholder="Seu nome">
 
-        <div id="result" class="result" style="margin-top:14px;">---</div>
+<label>Bio</label>
+<input id="bio"
+placeholder="Criador de conteúdo, músico, empresa...">
 
-    </div>
+<label>Tema</label>
+<select id="theme">
+<option value="green">Verde</option>
+<option value="blue">Azul</option>
+<option value="purple">Roxo</option>
+<option value="dark">Escuro</option>
+</select>
 
-    <!-- PREVIEW / PÁGINA PÚBLICA -->
-    <div class="right" id="pageBox">
+<label>Links (Nome|URL)</label>
 
-        <h2>Preview</h2>
-        <div id="page" style="margin-top:12px;">---</div>
+<textarea id="links"
+placeholder="YouTube|https://youtube.com/@canal
 
-    </div>
+Instagram|https://instagram.com/perfil
+
+TikTok|https://tiktok.com/@perfil"></textarea>
+
+<button onclick="generate()">
+Gerar Página
+</button>
+
+<button class="secondary" onclick="copyLink()">
+📋 Copiar Link
+</button>
+
+<button class="secondary" onclick="sharePage()">
+📤 Compartilhar
+</button>
+
+<div class="result" id="result">
+Aguardando...
+</div>
+
+</div>
+
+<div class="right">
+
+<div class="preview-phone">
+
+<div id="page">
+Preview aparecerá aqui
+</div>
+
+<div id="qrcode"></div>
+
+</div>
+
+</div>
 
 </div>
 
 <script>
-function generate() {
 
-    const name = document.getElementById("name").value || "Meu perfil";
+let generatedUrl = "";
 
-    const links = document
-        .getElementById("links")
-        .value
-        .split("\n")
-        .map(l => l.trim())
-        .filter(Boolean)
-        .map(l => l.startsWith("http") ? l : "https://" + l);
+const themes = {
+green:"#27ae60",
+blue:"#3498db",
+purple:"#8e44ad",
+dark:"#222"
+};
 
-    const encoded = encodeURIComponent(JSON.stringify(links));
+function generate(){
 
-    const base = window.location.href.split('?')[0];
+const avatar =
+document.getElementById("avatar").value.trim();
 
-    const url = `${base}?name=${encodeURIComponent(name)}&data=${encoded}`;
+const name =
+document.getElementById("name").value.trim() || "Meu Perfil";
 
-    document.getElementById("result").innerHTML = `
-        <strong>Seu link:</strong><br>
-        ${url}
-    `;
+const bio =
+document.getElementById("bio").value.trim();
 
-    renderPreview(name, links);
+const theme =
+document.getElementById("theme").value;
+
+const rawLinks =
+document.getElementById("links").value
+.split("\n")
+.map(x=>x.trim())
+.filter(Boolean);
+
+const links = [];
+
+rawLinks.forEach(item=>{
+
+const parts = item.split("|");
+
+if(parts.length >= 2){
+
+links.push({
+title:parts[0].trim(),
+url:parts.slice(1).join("|").trim()
+});
+
 }
 
-function renderPreview(name, links) {
+});
 
-    let html = `<h2>${name}</h2>`;
+const data = {
+avatar,
+name,
+bio,
+theme,
+links
+};
 
-    links.forEach(link => {
-        html += `<a class="link-btn" href="${link}" target="_blank">🔗 Abrir link</a>`;
-    });
+generatedUrl =
+location.pathname +
+"?data=" +
+encodeURIComponent(
+btoa(unescape(
+encodeURIComponent(
+JSON.stringify(data)
+)
+))
+);
 
-    document.getElementById("page").innerHTML = html;
+const fullUrl =
+location.origin +
+generatedUrl;
+
+document.getElementById("result").innerHTML = `
+<strong>Link Gerado:</strong><br><br>
+${fullUrl}
+`;
+
+renderPage(data);
+
+generateQR(fullUrl);
 }
 
-/* modo público */
-const params = new URLSearchParams(window.location.search);
-const name = params.get("name");
-const data = params.get("data");
+function renderPage(data){
 
-if (name && data) {
+let html = "";
 
-    let links = [];
+if(data.avatar){
 
-    try {
-        links = JSON.parse(decodeURIComponent(data));
-    } catch {
-        links = [];
-    }
+html += `
+<img
+src="${data.avatar}"
+class="avatar"
+onerror="this.style.display='none'">
+`;
 
-    document.querySelector(".left").style.display = "none";
-
-    document.getElementById("pageBox").innerHTML = `
-        <h2>${name}</h2>
-        ${links.map(l => `<a class="link-btn" href="${l}" target="_blank">🔗 Abrir link</a>`).join("")}
-    `;
 }
+
+html += `
+<div class="profile-name">
+${escapeHtml(data.name)}
+</div>
+
+<div class="profile-bio">
+${escapeHtml(data.bio)}
+</div>
+`;
+
+data.links.forEach(link=>{
+
+html += `
+<a
+class="link-btn"
+href="${link.url}"
+target="_blank"
+style="background:${themes[data.theme]}"
+>
+${escapeHtml(link.title)}
+</a>
+`;
+
+});
+
+html += `
+<div class="counter">
+${data.links.length} link(s)
+</div>
+`;
+
+document.getElementById("page").innerHTML = html;
+}
+
+function copyLink(){
+
+if(!generatedUrl){
+alert("Gere um link primeiro.");
+return;
+}
+
+navigator.clipboard.writeText(
+location.origin + generatedUrl
+);
+
+alert("Link copiado!");
+}
+
+async function sharePage(){
+
+if(!generatedUrl){
+alert("Gere um link primeiro.");
+return;
+}
+
+const url =
+location.origin + generatedUrl;
+
+if(navigator.share){
+
+try{
+
+await navigator.share({
+title:"Meu Link na Bio",
+url:url
+});
+
+}catch(e){}
+
+}else{
+
+navigator.clipboard.writeText(url);
+alert("Link copiado!");
+}
+}
+
+function generateQR(url){
+
+const qr =
+document.getElementById("qrcode");
+
+qr.innerHTML = "";
+
+new QRCode(qr,{
+text:url,
+width:140,
+height:140
+});
+}
+
+function escapeHtml(text){
+
+return text
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;");
+}
+
+const params =
+new URLSearchParams(location.search);
+
+if(params.has("data")){
+
+let data;
+
+try{
+
+data = JSON.parse(
+decodeURIComponent(
+escape(
+atob(params.get("data"))
+)
+)
+);
+
+}catch{
+
+data = null;
+}
+
+if(data){
+
+document.querySelector(".left").style.display = "none";
+
+document.querySelector(".wrapper").style.gridTemplateColumns =
+"1fr";
+
+renderPage(data);
+
+generateQR(location.href);
+
+}
+
+}
+
 </script>
 
 </body>
