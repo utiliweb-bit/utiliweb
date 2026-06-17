@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Calculadora de Horas Extras (Zangyo) Online | UtiliWeb</title>
+
+<meta name="description" content="Calcule horas extras (zangyo) e salário extra de forma simples. Ferramenta gratuita online do UtiliWeb.">
+<meta name="robots" content="index, follow">
+
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+
+<body>
+
+<header>
+    <h1>⏱️ Calculadora de Zangyo</h1>
+    <p>Calcule suas horas extras e valor adicional</p>
+</header>
+
+<div class="container">
+
+    <a href="../../index.html">← Voltar</a>
+
+    <div style="margin-top:20px;">
+
+        <label>Salário mensal (R$)</label>
+        <input id="salary" type="number" placeholder="Ex: 3000" style="width:100%; margin-top:10px;">
+
+        <label style="display:block; margin-top:15px;">
+            Horas normais por mês
+        </label>
+        <input id="hoursMonth" type="number" placeholder="Ex: 220" style="width:100%; margin-top:10px;">
+
+        <label style="display:block; margin-top:15px;">
+            Horas extras trabalhadas
+        </label>
+        <input id="extraHours" type="number" placeholder="Ex: 10" style="width:100%; margin-top:10px;">
+
+        <label style="display:block; margin-top:15px;">
+            Multiplicador da hora extra (ex: 1.5)
+        </label>
+        <input id="rate" type="number" step="0.1" value="1.5" style="width:100%; margin-top:10px;">
+
+        <button style="margin-top:20px;" onclick="calcular()">
+            Calcular
+        </button>
+
+    </div>
+
+    <div class="result" id="result" style="margin-top:20px;">
+        -
+    </div>
+
+    <section style="margin-top:40px;">
+        <h2>Como funciona</h2>
+        <p>Calcula o valor da hora normal e aplica o adicional de horas extras (zangyo).</p>
+    </section>
+
+</div>
+
+<script>
+function calcular() {
+
+    const salary = parseFloat(document.getElementById("salary").value) || 0;
+    const hoursMonth = parseFloat(document.getElementById("hoursMonth").value) || 0;
+    const extraHours = parseFloat(document.getElementById("extraHours").value) || 0;
+    const rate = parseFloat(document.getElementById("rate").value) || 1.5;
+
+    const result = document.getElementById("result");
+
+    if (salary <= 0 || hoursMonth <= 0 || extraHours < 0) {
+        result.textContent = "Preencha os campos corretamente.";
+        return;
+    }
+
+    const hourlyRate = salary / hoursMonth;
+    const extraValue = hourlyRate * extraHours * rate;
+    const total = extraValue;
+
+    result.innerHTML = `
+        <strong>Valor da hora:</strong> R$ ${hourlyRate.toFixed(2)}<br><br>
+        <strong>Horas extras:</strong> ${extraHours}<br><br>
+        <strong>Valor extra:</strong> R$ ${extraValue.toFixed(2)}<br><br>
+        <strong>Total a receber:</strong> R$ ${total.toFixed(2)}
+    `;
+}
+</script>
+
+</body>
+</html>
