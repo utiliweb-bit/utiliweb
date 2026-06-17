@@ -6,8 +6,7 @@
 
 <title>UtiliWeb - Ferramentas Online Gratuitas</title>
 
-<meta name="description" content="UtiliWeb é uma plataforma de ferramentas online gratuitas como contador de caracteres, calculadora de porcentagem, gerador de senhas e muito mais.">
-<meta name="keywords" content="ferramentas online, utiliweb, contador de caracteres, calculadora de porcentagem, gerador de senhas, ferramentas grátis">
+<meta name="description" content="UtiliWeb é uma plataforma de ferramentas online gratuitas para produtividade, texto, SEO e utilitários.">
 <meta name="robots" content="index, follow">
 
 <link rel="stylesheet" href="assets/style.css">
@@ -61,13 +60,13 @@
 
 <div class="container">
 
-<input class="search" id="search" placeholder="Buscar ferramentas (ex: senha, texto, porcentagem...)">
+<input class="search" id="search" placeholder="Buscar ferramentas...">
 
 <h2 style="margin-top:25px;">🧠 Ferramentas</h2>
 
 <div class="grid">
 
-    <!-- EXISTENTES -->
+    <!-- EXISTENTES (REAIS) -->
     <a class="card" href="tools/contador-caracteres/index.html" data-key="texto caracteres palavras contador">
         📝 Contador de Caracteres
         <div class="badge">Texto</div>
@@ -83,26 +82,24 @@
         <div class="badge">Segurança</div>
     </a>
 
-    <!-- NOVA VIRAL -->
-    <a class="card" href="tools/gerador-bio-viral/index.html" data-key="bio instagram tiktok youtube">
+    <a class="card" href="tools/gerador-bio-viral/index.html" data-key="bio instagram tiktok youtube social">
         🔥 Gerador de Bio Viral
+        <div class="badge">Social Media</div>
+    </a>
+
+    <a class="card" href="tools/link-na-bio-pro/index.html" data-key="link bio linktree pagina">
+        🌐 Link na Bio PRO
         <div class="badge">Social</div>
     </a>
 
-    <!-- REINTEGRAÇÃO DAS FUTURAS / EM BREVE -->
-    <a class="card" href="#" data-key="temperatura celsius fahrenheit conversor">
+    <a class="card" href="tools/conversor-temperatura/index.html" data-key="temperatura celsius fahrenheit conversor">
         🌡️ Conversor de Temperatura
-        <div class="badge">Em breve</div>
+        <div class="badge">Utilitário</div>
     </a>
 
-    <a class="card" href="#" data-key="ip internet meu ip localização">
-        🌐 Descobrir meu IP
-        <div class="badge">Em breve</div>
-    </a>
-
-    <a class="card" href="#" data-key="gerador nick nome usuario">
-        🎮 Gerador de Nicknames
-        <div class="badge">Em breve</div>
+    <a class="card" href="tools/descobrir-ip/index.html" data-key="ip internet meu ip localização">
+        🌍 Descobrir meu IP
+        <div class="badge">Utilitário</div>
     </a>
 
 </div>
@@ -120,11 +117,9 @@ search.addEventListener("input", (e) => {
         const key = card.getAttribute("data-key") || "";
         const text = card.innerText.toLowerCase();
 
-        if (key.includes(value) || text.includes(value)) {
-            card.style.display = "block";
-        } else {
-            card.style.display = "none";
-        }
+        card.style.display = (key.includes(value) || text.includes(value))
+            ? "block"
+            : "none";
     });
 });
 </script>
