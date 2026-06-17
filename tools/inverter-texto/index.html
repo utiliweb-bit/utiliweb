@@ -2,85 +2,160 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
-<title>Inverter Texto Online | UtiliWeb</title>
+<title>Inverter Texto | UtiliWeb</title>
 
-<meta name="description" content="Inverta palavras e frases online gratuitamente. Ferramenta simples e rápida do UtiliWeb.">
-
-<link rel="stylesheet" href="../../assets/style.css">
+<meta name="description" content="Inverta textos, palavras e frases online gratuitamente.">
+<meta name="robots" content="index, follow">
 
 <style>
-.container {
-    max-width: 800px;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
 }
 
-.box {
+html, body {
+    width: 100%;
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+}
+
+/* CONTAINER */
+.wrapper {
+    width: 100%;
+    max-width: 1000px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
     display: grid;
-    gap: 15px;
+    grid-template-columns: 1fr 1fr;
+    overflow: hidden;
 }
 
+/* PAINÉIS */
+.left, .right {
+    padding: 28px;
+}
+
+/* TÍTULO */
+h1 {
+    font-size: 22px;
+    margin-bottom: 6px;
+}
+
+p {
+    font-size: 12px;
+    color: #777;
+}
+
+/* TEXTAREA */
 textarea {
     width: 100%;
     min-height: 140px;
     padding: 12px;
     border-radius: 10px;
-    border: 1px solid var(--border, #ccc);
+    border: 1px solid #ddd;
     font-size: 14px;
+    margin-top: 10px;
     resize: vertical;
 }
 
-.actions {
+textarea:focus {
+    outline: none;
+    border-color: #27ae60;
+}
+
+/* BOTÕES */
+.btns {
     display: flex;
     gap: 10px;
+    margin-top: 14px;
     flex-wrap: wrap;
 }
 
 button {
-    padding: 12px 14px;
+    flex: 1;
+    padding: 12px;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
-    font-weight: 600;
-    background: #111;
+    font-weight: 700;
+    font-size: 12px;
+}
+
+.primary {
+    background: #27ae60;
     color: #fff;
-    transition: 0.2s;
 }
 
-button:hover {
-    opacity: 0.85;
+.secondary {
+    background: #f4f4f4;
+    color: #333;
 }
 
-.result {
-    font-weight: 600;
+/* RESULTADO */
+.result-box {
+    background: #f4f4f4;
+    padding: 14px;
+    border-radius: 10px;
+    min-height: 140px;
+    font-size: 14px;
+    word-break: break-word;
+    white-space: pre-wrap;
+}
+
+/* RESPONSIVO */
+@media (max-width: 768px) {
+    .wrapper {
+        grid-template-columns: 1fr;
+    }
+
+    html, body {
+        padding: 12px;
+    }
+
+    .left, .right {
+        padding: 18px;
+    }
 }
 </style>
+
 </head>
 
 <body>
 
-<header>
-    <h1>🔁 Inverter Texto</h1>
-    <p>Texto ao contrário em tempo real</p>
-</header>
+<div class="wrapper">
 
-<div class="container">
+    <!-- INPUT -->
+    <div class="left">
 
-    <a href="../../index.html">← Voltar</a>
+        <h1>🔁 Inverter Texto</h1>
+        <p>Inverta letras, palavras ou frases em tempo real</p>
 
-    <div class="box">
+        <textarea id="text" placeholder="Digite seu texto aqui..."></textarea>
 
-        <label>Digite seu texto</label>
-        <textarea id="text" placeholder="Digite ou cole seu texto aqui..."></textarea>
-
-        <div class="actions">
-            <button onclick="inverterTexto()">Inverter</button>
-            <button onclick="copiarResultado()">Copiar</button>
-            <button onclick="limpar()">Limpar</button>
+        <div class="btns">
+            <button class="primary" onclick="inverter()">Inverter</button>
+            <button class="secondary" onclick="copiar()">Copiar</button>
+            <button class="secondary" onclick="limpar()">Limpar</button>
         </div>
 
-        <label>Resultado</label>
-        <textarea id="resultado" readonly placeholder="Resultado aparecerá aqui..."></textarea>
+    </div>
+
+    <!-- RESULTADO -->
+    <div class="right">
+
+        <h2>Resultado</h2>
+
+        <div id="resultado" class="result-box">---</div>
 
     </div>
 
@@ -90,19 +165,23 @@ button:hover {
 const text = document.getElementById("text");
 const resultado = document.getElementById("resultado");
 
-function inverterTexto() {
-    resultado.value = text.value.split("").reverse().join("");
+function inverter() {
+    const value = text.value || "";
+    resultado.textContent = value.split("").reverse().join("") || "---";
 }
 
-function copiarResultado() {
-    if (!resultado.value) return;
-    navigator.clipboard.writeText(resultado.value);
+function copiar() {
+    if (!resultado.textContent || resultado.textContent === "---") return;
+    navigator.clipboard.writeText(resultado.textContent);
 }
 
 function limpar() {
     text.value = "";
-    resultado.value = "";
+    resultado.textContent = "---";
 }
+
+/* UX extra: auto preview */
+text.addEventListener("input", inverter);
 </script>
 
 </body>
