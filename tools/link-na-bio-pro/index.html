@@ -103,13 +103,16 @@ function generate() {
     `;
 }
 
-// modo página pública
+// BLOQUEIO TOTAL DO MODO CRIADOR
 const params = new URLSearchParams(window.location.search);
 const name = params.get("name");
 const data = params.get("data");
 
 if (name && data) {
-    document.getElementById("creator").style.display = "none";
+
+    // ESCONDE CRIADOR IMEDIATAMENTE (ANTES DE QUALQUER RENDER)
+    const creator = document.getElementById("creator");
+    if (creator) creator.style.display = "none";
 
     let links = [];
 
@@ -119,9 +122,7 @@ if (name && data) {
         links = [];
     }
 
-    let html = `<div class="box">
-        <h2>${name}</h2>
-    `;
+    let html = `<div class="box"><h2>${name}</h2>`;
 
     links.forEach(link => {
         html += `
@@ -133,10 +134,10 @@ if (name && data) {
 
     html += `</div>`;
 
-    document.getElementById("page").style.display = "block";
-    document.getElementById("page").innerHTML = html;
+    const page = document.getElementById("page");
+    if (page) {
+        page.innerHTML = html;
+        page.style.display = "block";
+    }
 }
 </script>
-
-</body>
-</html>
