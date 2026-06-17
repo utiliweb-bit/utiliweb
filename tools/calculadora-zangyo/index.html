@@ -132,7 +132,7 @@ button{
     <div class="left-panel">
 
         <h2>💼 Zangyō PRO</h2>
-        <div class="subtitle">Calculadora de horas Japão</div>
+        <div class="subtitle">Simulador de Salário no Japão</div>
 
         <input id="jikyu" type="number" placeholder="Valor da hora ¥">
         <input id="horasNormal" type="number" placeholder="Horas normais">
@@ -159,38 +159,168 @@ button{
 </div>
 
 <script>
+
 function calcular(){
 
-    const jikyu = parseFloat(document.getElementById("jikyu").value)||0;
-    const normal = parseFloat(document.getElementById("horasNormal").value)||0;
-    const extra = parseFloat(document.getElementById("horasExtra").value)||0;
-    const noturno = parseFloat(document.getElementById("horasNoturnas").value)||0;
+    const jikyu =
+        parseFloat(document.getElementById("jikyu").value) || 0;
 
-    if(jikyu<=0){
-        document.getElementById("out").innerText="❌ Insira valor da hora";
+    const normal =
+        parseFloat(document.getElementById("horasNormal").value) || 0;
+
+    const extra =
+        parseFloat(document.getElementById("horasExtra").value) || 0;
+
+    const noturno =
+        parseFloat(document.getElementById("horasNoturnas").value) || 0;
+
+    if(jikyu <= 0){
+        document.getElementById("out").innerHTML =
+        "❌ Informe o valor da hora.";
+        document.getElementById("total").innerHTML = "";
         return;
     }
 
-    // ===== CÁLCULO =====
-    const vNormal = jikyu * normal;
-    const vExtra = jikyu * extra * 1.25;
-    const vNoturno = jikyu * noturno * 1.25;
+    // ==========================
+    // BRUTO
+    // ==========================
 
-    const totalDia = vNormal + vExtra + vNoturno;
-    const mensal = totalDia * 22;
+    const valorNormal =
+        jikyu * normal;
+
+    const valorExtra =
+        jikyu * extra * 1.25;
+
+    const valorNoturno =
+        jikyu * noturno * 1.25;
+
+    const brutoDia =
+        valorNormal +
+        valorExtra +
+        valorNoturno;
+
+    // Média padrão fábrica Japão
+    const diasMes = 22;
+
+    const brutoMes =
+        brutoDia * diasMes;
+
+    // ==========================
+    // DESCONTOS REAIS ESTIMADOS
+    // ==========================
+
+    let percentualDesconto;
+
+    if(brutoMes < 150000){
+        percentualDesconto = 0.11;
+    }
+    else if(brutoMes < 200000){
+        percentualDesconto = 0.13;
+    }
+    else if(brutoMes < 250000){
+        percentualDesconto = 0.16;
+    }
+    else if(brutoMes < 300000){
+        percentualDesconto = 0.18;
+    }
+    else if(brutoMes < 350000){
+        percentualDesconto = 0.20;
+    }
+    else if(brutoMes < 450000){
+        percentualDesconto = 0.22;
+    }
+    else{
+        percentualDesconto = 0.25;
+    }
+
+    const descontoTotal =
+        brutoMes * percentualDesconto;
+
+    const liquidoMes =
+        brutoMes - descontoTotal;
+
+    // ==========================
+    // DETALHAMENTO
+    // ==========================
+
+    const adicionalExtra =
+        valorExtra - (jikyu * extra);
+
+    const adicionalNoturno =
+        valorNoturno - (jikyu * noturno);
 
     document.getElementById("out").innerHTML = `
-🕒 Normal: ¥${vNormal.toFixed(0)}<br>
-⚡ Extra (+25%): ¥${vExtra.toFixed(0)}<br>
-🌙 Noturno (+25%): ¥${vNoturno.toFixed(0)}<br><br>
 
-📆 Diário: ¥${totalDia.toFixed(0)}<br>
-💰 Mensal (22 dias): ¥${mensal.toFixed(0)}
+🕒 Salário Base:
+¥${valorNormal.toLocaleString('ja-JP')}
+
+<br><br>
+
+⚡ Hora Extra (+25%):
+¥${valorExtra.toLocaleString('ja-JP')}
+
+<br>
+
+📈 Acréscimo recebido:
+¥${adicionalExtra.toLocaleString('ja-JP')}
+
+<br><br>
+
+🌙 Horário Noturno (+25%):
+¥${valorNoturno.toLocaleString('ja-JP')}
+
+<br>
+
+🌃 Acréscimo noturno:
+¥${adicionalNoturno.toLocaleString('ja-JP')}
+
+<br><br>
+
+━━━━━━━━━━━━━━
+
+<br>
+
+📆 Bruto Diário:
+<b>¥${brutoDia.toLocaleString('ja-JP')}</b>
+
+<br>
+
+📅 Bruto Mensal (22 dias):
+<b>¥${brutoMes.toLocaleString('ja-JP')}</b>
+
+<br><br>
+
+🏥 Saúde + Pensão + Seguro:
+≈ ${(percentualDesconto*100).toFixed(0)}%
+
+<br>
+
+💸 Descontos estimados:
+- ¥${descontoTotal.toLocaleString('ja-JP')}
+
+<br><br>
+
+━━━━━━━━━━━━━━
+
+<br>
+
+💰 Líquido estimado:
+<b>¥${liquidoMes.toLocaleString('ja-JP')}</b>
+
+<br><br>
+
+<small style="color:#666">
+Estimativa baseada em descontos médios praticados no Japão.
+Valores reais podem variar conforme prefeitura, idade, contrato, dependentes e renda anual.
+</small>
+
 `;
 
-    document.getElementById("total").innerText =
-        "💵 Total: ¥" + totalDia.toFixed(0);
+    document.getElementById("total").innerHTML =
+    "💴 ¥" + liquidoMes.toLocaleString('ja-JP');
+
 }
+
 </script>
 
 </body>
