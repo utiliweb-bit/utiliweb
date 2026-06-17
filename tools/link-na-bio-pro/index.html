@@ -2,61 +2,124 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
 <title>Link na Bio PRO | UtiliWeb</title>
 
 <meta name="description" content="Crie sua página estilo Linktree com múltiplos links.">
 <meta name="robots" content="index, follow">
 
-<link rel="stylesheet" href="../../assets/style.css">
-
 <style>
-.container {
-    max-width: 900px;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
 }
 
-.box {
+html, body {
+    width: 100%;
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+}
+
+/* CONTAINER */
+.wrapper {
+    width: 100%;
+    max-width: 1000px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
     display: grid;
-    gap: 15px;
+    grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+}
+
+/* PAINÉIS */
+.left, .right {
+    padding: 28px;
+}
+
+/* INPUTS */
+label {
+    display: block;
+    margin-top: 14px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #333;
 }
 
 input, textarea {
     width: 100%;
     padding: 12px;
+    margin-top: 6px;
     border-radius: 10px;
-    border: 1px solid var(--border, #ddd);
+    border: 1px solid #ddd;
     font-size: 14px;
 }
 
 textarea {
-    min-height: 120px;
+    min-height: 140px;
     resize: vertical;
 }
 
-.result {
-    font-size: 14px;
-    line-height: 1.6;
-    word-break: break-word;
-    background: rgba(0,0,0,0.03);
+/* BOTÕES */
+button {
+    width: 100%;
+    margin-top: 14px;
     padding: 12px;
-    border-radius: 10px;
+    border: none;
+    border-radius: 8px;
+    background: #27ae60;
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
 }
 
-.btn {
+button:hover {
+    opacity: 0.9;
+}
+
+/* RESULTADO */
+.result {
+    background: #f4f4f4;
+    padding: 14px;
+    border-radius: 10px;
+    font-size: 13px;
+    word-break: break-word;
+}
+
+/* LINKS PÚBLICOS */
+.link-btn {
     display: block;
-    margin-top: 10px;
+    text-align: center;
     padding: 12px;
+    margin-top: 10px;
+    border-radius: 10px;
     background: #111;
     color: #fff;
     text-decoration: none;
-    border-radius: 8px;
-    text-align: center;
-    transition: 0.2s;
+    font-weight: 700;
 }
 
-.btn:hover {
-    opacity: 0.85;
+/* RESPONSIVO */
+@media (max-width: 768px) {
+    .wrapper {
+        grid-template-columns: 1fr;
+    }
+
+    html, body {
+        padding: 12px;
+    }
+
+    .left, .right {
+        padding: 18px;
+    }
 }
 </style>
 
@@ -64,17 +127,15 @@ textarea {
 
 <body>
 
-<header>
-    <h1>🔗 Link na Bio PRO</h1>
-    <p>Crie sua página estilo Linktree</p>
-</header>
-
-<div class="container">
-
-    <a href="../../index.html">← Voltar</a>
+<div class="wrapper">
 
     <!-- CRIADOR -->
-    <div id="creator" class="box">
+    <div class="left">
+
+        <h1>🔗 Link na Bio PRO</h1>
+        <p style="font-size:12px;color:#777;margin-top:6px;">
+            Crie sua página estilo Linktree
+        </p>
 
         <label>Seu nome</label>
         <input id="name" placeholder="Ex: Meu perfil">
@@ -84,21 +145,26 @@ textarea {
 https://instagram.com
 https://tiktok.com"></textarea>
 
-        <button onclick="generate()">Gerar Link</button>
+        <button onclick="generate()">Gerar link</button>
 
-        <div id="result" class="result"></div>
+        <div id="result" class="result" style="margin-top:14px;">---</div>
 
     </div>
 
-    <!-- PÁGINA PÚBLICA -->
-    <div id="page" class="box" style="display:none;"></div>
+    <!-- PREVIEW / PÁGINA PÚBLICA -->
+    <div class="right" id="pageBox">
+
+        <h2>Preview</h2>
+        <div id="page" style="margin-top:12px;">---</div>
+
+    </div>
 
 </div>
 
 <script>
 function generate() {
 
-    const name = document.getElementById("name").value;
+    const name = document.getElementById("name").value || "Meu perfil";
 
     const links = document
         .getElementById("links")
@@ -108,26 +174,29 @@ function generate() {
         .filter(Boolean)
         .map(l => l.startsWith("http") ? l : "https://" + l);
 
-    const encodedLinks = encodeURIComponent(JSON.stringify(links));
+    const encoded = encodeURIComponent(JSON.stringify(links));
 
     const base = window.location.href.split('?')[0];
 
-    const url = `${base}?name=${encodeURIComponent(name)}&data=${encodedLinks}`;
+    const url = `${base}?name=${encodeURIComponent(name)}&data=${encoded}`;
 
     document.getElementById("result").innerHTML = `
         <strong>Seu link:</strong><br>
-        <a href="${url}" target="_blank">${url}</a>
+        ${url}
     `;
+
+    renderPreview(name, links);
 }
 
-/* normalize URL */
-function normalize(url) {
-    if (!url) return null;
-    try {
-        return new URL(url.startsWith("http") ? url : "https://" + url).href;
-    } catch {
-        return null;
-    }
+function renderPreview(name, links) {
+
+    let html = `<h2>${name}</h2>`;
+
+    links.forEach(link => {
+        html += `<a class="link-btn" href="${link}" target="_blank">🔗 Abrir link</a>`;
+    });
+
+    document.getElementById("page").innerHTML = html;
 }
 
 /* modo público */
@@ -137,8 +206,6 @@ const data = params.get("data");
 
 if (name && data) {
 
-    document.getElementById("creator").style.display = "none";
-
     let links = [];
 
     try {
@@ -147,22 +214,12 @@ if (name && data) {
         links = [];
     }
 
-    let html = `<h2>${name}</h2>`;
+    document.querySelector(".left").style.display = "none";
 
-    links.forEach(link => {
-
-        const safe = normalize(link);
-        if (!safe) return;
-
-        html += `
-            <a class="btn" href="${safe}" target="_blank">
-                🔗 Abrir link
-            </a>
-        `;
-    });
-
-    document.getElementById("page").innerHTML = html;
-    document.getElementById("page").style.display = "grid";
+    document.getElementById("pageBox").innerHTML = `
+        <h2>${name}</h2>
+        ${links.map(l => `<a class="link-btn" href="${l}" target="_blank">🔗 Abrir link</a>`).join("")}
+    `;
 }
 </script>
 
