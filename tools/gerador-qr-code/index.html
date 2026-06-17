@@ -5,12 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Gerador de QR Code Online | UtiliWeb</title>
-<meta name="description" content="Gere QR Codes online grátis. Converta links, textos e informações em QR Code instantaneamente.">
+
+<meta name="description" content="Gere QR Codes online gratuitamente. Converta links, textos e informações em QR Code instantaneamente com o UtiliWeb.">
+
 <meta name="robots" content="index, follow">
 
 <link rel="stylesheet" href="../../assets/style.css">
 
-<!-- biblioteca QR -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 
@@ -18,7 +19,7 @@
 
 <header>
     <h1>Gerador de QR Code</h1>
-    <p>Crie QR Codes para links e textos</p>
+    <p>Crie QR Codes para links, textos e mensagens</p>
 </header>
 
 <div class="container">
@@ -26,33 +27,79 @@
     <a href="../../index.html">← Voltar</a>
 
     <div style="margin-top:20px;">
-        <input id="text" type="text" placeholder="Digite um link ou texto">
 
-        <button onclick="gerar()">Gerar QR Code</button>
+        <input
+            id="text"
+            type="text"
+            placeholder="Digite um link ou texto"
+            style="width:100%;">
 
-        <div id="qrcode" style="margin-top:20px;"></div>
+        <div style="margin-top:20px; display:flex; gap:10px; flex-wrap:wrap;">
+
+            <button onclick="gerarQRCode()">
+                Gerar QR Code
+            </button>
+
+            <button onclick="baixarQRCode()">
+                Baixar PNG
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="result" style="margin-top:20px; text-align:center;">
+
+        <div id="qrcode"></div>
+
     </div>
 
     <section style="margin-top:40px;">
         <h2>Como usar</h2>
-        <p>Digite um link ou texto e clique em gerar. O QR Code aparecerá automaticamente abaixo.</p>
+
+        <p>
+            Digite um link ou texto e clique em "Gerar QR Code".
+            O código será criado instantaneamente e poderá ser baixado em PNG.
+        </p>
+
     </section>
 
 </div>
 
 <script>
-function gerar() {
-    const text = document.getElementById("text").value;
+function gerarQRCode() {
 
-    if (!text) return;
+    const texto = document.getElementById("text").value.trim();
+
+    if (!texto) {
+        alert("Digite um texto ou link.");
+        return;
+    }
 
     document.getElementById("qrcode").innerHTML = "";
 
     new QRCode(document.getElementById("qrcode"), {
-        text: text,
-        width: 180,
-        height: 180
+        text: texto,
+        width: 200,
+        height: 200
     });
+}
+
+function baixarQRCode() {
+
+    const img = document.querySelector("#qrcode img");
+
+    if (!img) {
+        alert("Gere um QR Code primeiro.");
+        return;
+    }
+
+    const link = document.createElement("a");
+
+    link.href = img.src;
+    link.download = "qrcode.png";
+
+    link.click();
 }
 </script>
 
