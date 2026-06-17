@@ -6,8 +6,7 @@
 
 <title>Gerador de QR Code Online | UtiliWeb</title>
 
-<meta name="description" content="Gere QR Codes online gratuitamente. Converta links, textos e informações em QR Code instantaneamente com o UtiliWeb.">
-
+<meta name="description" content="Gere QR Codes online grátis. Converta links e textos em QR Code instantaneamente com download em PNG.">
 <meta name="robots" content="index, follow">
 
 <link rel="stylesheet" href="../../assets/style.css">
@@ -18,8 +17,8 @@
 <body>
 
 <header>
-    <h1>Gerador de QR Code</h1>
-    <p>Crie QR Codes para links, textos e mensagens</p>
+    <h1>📱 Gerador de QR Code</h1>
+    <p>Crie QR Codes para links, PIX e textos</p>
 </header>
 
 <div class="container">
@@ -28,79 +27,80 @@
 
     <div style="margin-top:20px;">
 
-        <input
-            id="text"
-            type="text"
-            placeholder="Digite um link ou texto"
-            style="width:100%;">
+        <input id="text" type="text" placeholder="Digite link ou texto" style="width:100%;">
 
-        <div style="margin-top:20px; display:flex; gap:10px; flex-wrap:wrap;">
+        <div style="margin-top:15px;">
+            <label>Tamanho:</label>
+            <select id="size">
+                <option value="120">Pequeno</option>
+                <option value="200" selected>Médio</option>
+                <option value="300">Grande</option>
+            </select>
+        </div>
 
-            <button onclick="gerarQRCode()">
-                Gerar QR Code
-            </button>
-
-            <button onclick="baixarQRCode()">
-                Baixar PNG
-            </button>
-
+        <div style="margin-top:15px; display:flex; gap:10px; flex-wrap:wrap;">
+            <button onclick="generate()">Gerar</button>
+            <button onclick="downloadQR()">Baixar PNG</button>
+            <button onclick="copyText()">Copiar texto</button>
         </div>
 
     </div>
 
     <div class="result" style="margin-top:20px; text-align:center;">
-
         <div id="qrcode"></div>
-
     </div>
 
     <section style="margin-top:40px;">
         <h2>Como usar</h2>
-
-        <p>
-            Digite um link ou texto e clique em "Gerar QR Code".
-            O código será criado instantaneamente e poderá ser baixado em PNG.
-        </p>
-
+        <p>Digite um texto ou link, clique em gerar e baixe o QR Code instantaneamente.</p>
     </section>
 
 </div>
 
 <script>
-function gerarQRCode() {
+let currentText = "";
 
-    const texto = document.getElementById("text").value.trim();
+function generate() {
 
-    if (!texto) {
-        alert("Digite um texto ou link.");
-        return;
-    }
+    const text = document.getElementById("text").value.trim();
+    const size = parseInt(document.getElementById("size").value);
 
-    document.getElementById("qrcode").innerHTML = "";
+    if (!text) return;
 
-    new QRCode(document.getElementById("qrcode"), {
-        text: texto,
-        width: 200,
-        height: 200
+    currentText = text;
+
+    const container = document.getElementById("qrcode");
+    container.innerHTML = "";
+
+    new QRCode(container, {
+        text: text,
+        width: size,
+        height: size
     });
 }
 
-function baixarQRCode() {
+function downloadQR() {
 
     const img = document.querySelector("#qrcode img");
 
-    if (!img) {
-        alert("Gere um QR Code primeiro.");
-        return;
-    }
+    if (!img) return;
 
     const link = document.createElement("a");
-
     link.href = img.src;
     link.download = "qrcode.png";
-
     link.click();
 }
+
+function copyText() {
+
+    if (!currentText) return;
+
+    navigator.clipboard.writeText(currentText);
+    alert("Texto copiado!");
+}
+
+// auto gerar
+document.getElementById("text").addEventListener("input", generate);
 </script>
 
 </body>
