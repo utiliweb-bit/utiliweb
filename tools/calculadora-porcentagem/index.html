@@ -4,190 +4,746 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
-<title>Calculadora de Porcentagem | UtiliWeb</title>
+<title>Calculadora de Porcentagem PRO | UtiliWeb</title>
 
-<meta name="description" content="Calcule porcentagens de forma rápida e precisa.">
-<meta name="keywords" content="porcentagem, calculadora, utiliweb">
+<meta name="description" content="Calculadora de porcentagem completa com desconto, aumento, imposto, cashback, comissão e reajuste salarial.">
 
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
 }
 
-html, body {
-    width: 100%;
-    min-height: 100vh;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 16px;
-    background: linear-gradient(135deg, #2ecc71, #27ae60);
+body{
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
+    background:linear-gradient(135deg,#2ecc71,#27ae60);
+    min-height:100dvh;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding:16px;
 }
 
-/* CONTAINER */
-.wrapper {
-    width: 100%;
-    max-width: 900px;
-    background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    overflow: hidden;
+.wrapper{
+    width:100%;
+    max-width:1200px;
+    background:#fff;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 20px 60px rgba(0,0,0,.25);
+    display:grid;
+    grid-template-columns:1fr 1fr;
 }
 
-/* PAINÉIS */
-.left, .right {
-    padding: 28px;
+.left,
+.right{
+    padding:24px;
+    min-width:0;
 }
 
-/* LEFT */
-h1 {
-    font-size: 22px;
-    margin-bottom: 6px;
+.left{
+    border-right:1px solid #eee;
 }
 
-p {
-    font-size: 12px;
-    color: #777;
-    margin-bottom: 20px;
+h1{
+    font-size:28px;
+    margin-bottom:6px;
 }
 
-/* INPUTS */
-label {
-    display: block;
-    margin-top: 14px;
-    font-size: 12px;
-    font-weight: 700;
-    color: #333;
+h2{
+    font-size:22px;
+    margin-bottom:12px;
 }
 
-input {
-    width: 100%;
-    padding: 12px;
-    margin-top: 6px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    font-size: 14px;
+.subtitle{
+    color:#777;
+    font-size:14px;
+    margin-bottom:18px;
 }
 
-/* BOTÕES */
-.btn-group {
-    display: flex;
-    gap: 10px;
-    margin-top: 16px;
+label{
+    display:block;
+    margin-top:14px;
+    margin-bottom:6px;
+    font-size:13px;
+    font-weight:700;
+    color:#444;
 }
 
-button {
-    flex: 1;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 700;
-    font-size: 12px;
+input,
+select{
+    width:100%;
+    padding:13px;
+    border-radius:12px;
+    border:2px solid #ddd;
+    font-size:15px;
 }
 
-.btn-calc {
-    background: #27ae60;
-    color: white;
+input:focus,
+select:focus{
+    outline:none;
+    border-color:#27ae60;
 }
 
-.btn-clear {
-    background: #eee;
-    color: #333;
+.result{
+    background:#f8fff9;
+    border:1px solid #d7f5e3;
+    border-radius:14px;
+    padding:18px;
+    min-height:220px;
+    line-height:1.8;
 }
 
-/* RESULTADO */
-.result {
-    background: #f4f4f4;
-    border-radius: 10px;
-    padding: 16px;
-    font-size: 14px;
-    min-height: 80px;
+.big{
+    font-size:34px;
+    font-weight:800;
+    color:#27ae60;
+    margin-bottom:10px;
 }
 
-/* RESPONSIVO */
-@media (max-width: 768px) {
-    .wrapper {
-        grid-template-columns: 1fr;
+.progress{
+    height:16px;
+    background:#eee;
+    border-radius:999px;
+    overflow:hidden;
+    margin-top:12px;
+}
+
+.bar{
+    height:100%;
+    width:0%;
+    background:#27ae60;
+    transition:.3s;
+}
+
+.actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:16px;
+}
+
+button{
+    padding:13px;
+    border:none;
+    border-radius:12px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+.primary{
+    background:#27ae60;
+    color:#fff;
+}
+
+.secondary{
+    background:#fff;
+    color:#27ae60;
+    border:2px solid #27ae60;
+}
+
+.history{
+    margin-top:20px;
+}
+
+.history-box{
+    background:#f8fff9;
+    border:1px solid #d7f5e3;
+    border-radius:12px;
+    padding:12px;
+    max-height:240px;
+    overflow:auto;
+    font-size:14px;
+    line-height:1.8;
+}
+
+.muted{
+    color:#777;
+    font-size:13px;
+}
+
+.card{
+    margin-top:12px;
+    background:#fff;
+    border:1px solid #d7f5e3;
+    border-radius:10px;
+    padding:12px;
+}
+
+@media(max-width:900px){
+
+    .wrapper{
+        grid-template-columns:1fr;
     }
 
-    html, body {
-        padding: 12px;
+    .left{
+        border-right:none;
+        border-bottom:1px solid #eee;
     }
 
-    .left, .right {
-        padding: 18px;
+    .left,
+    .right{
+        padding:18px;
     }
+
 }
+
+@media(max-width:500px){
+
+    .actions{
+        grid-template-columns:1fr;
+    }
+
+    h1{
+        font-size:24px;
+    }
+
+    .big{
+        font-size:28px;
+    }
+
+}
+
 </style>
-
 </head>
-
 <body>
 
 <div class="wrapper">
 
-    <!-- INPUT -->
-    <div class="left">
+<div class="left">
 
-        <h1>📊 Calculadora de Porcentagem</h1>
-        <p>Calcule valores percentuais rapidamente</p>
+<h1>📊 Calculadora de Porcentagem PRO</h1>
 
-        <label>Valor total</label>
-        <input id="total" type="number" placeholder="Ex: 200">
+<div class="subtitle">
+Desconto, aumento, imposto, cashback, comissão e muito mais.
+</div>
 
-        <label>Porcentagem (%)</label>
-        <input id="percent" type="number" placeholder="Ex: 10">
+<label>Modo de cálculo</label>
 
-        <div class="btn-group">
-            <button class="btn-calc" onclick="calcular()">Calcular</button>
-            <button class="btn-clear" onclick="limpar()">Limpar</button>
-        </div>
+<select id="tipo">
 
-    </div>
+<option value="percentOf">
+Quanto é X% de Y
+</option>
 
-    <!-- RESULTADO -->
-    <div class="right">
+<option value="whatPercent">
+X é quantos % de Y
+</option>
 
-        <h2>Resultado</h2>
+<option value="increase">
+Aumentar valor
+</option>
 
-        <div id="resultado" class="result">---</div>
+<option value="discount">
+Aplicar desconto
+</option>
 
-    </div>
+<option value="tax">
+Adicionar imposto
+</option>
+
+<option value="cashback">
+Cashback
+</option>
+
+<option value="salary">
+Reajuste salarial
+</option>
+
+<option value="commission">
+Comissão
+</option>
+
+</select>
+
+<label id="label1">
+Valor
+</label>
+
+<input
+type="number"
+id="valor1"
+placeholder="Digite um valor">
+
+<label id="label2">
+Porcentagem
+</label>
+
+<input
+type="number"
+id="valor2"
+placeholder="Digite uma porcentagem">
+
+<div class="actions">
+
+<button class="primary" onclick="calcular()">
+Calcular
+</button>
+
+<button class="secondary" onclick="limpar()">
+Limpar
+</button>
+
+</div>
+
+</div>
+
+<div class="right">
+
+<h2>Resultado</h2>
+
+<div class="result" id="resultado">
+
+<div class="muted">
+Preencha os campos para calcular.
+</div>
+
+</div>
+
+<div class="history">
+
+<h2>📜 Histórico</h2>
+
+<div class="history-box" id="historico">
+Nenhum cálculo realizado.
+</div>
+
+</div>
+
+</div>
 
 </div>
 
 <script>
-function calcular() {
 
-    const total = parseFloat(document.getElementById("total").value);
-    const percent = parseFloat(document.getElementById("percent").value);
-    const resultado = document.getElementById("resultado");
+const tipo =
+document.getElementById("tipo");
 
-    if (isNaN(total) || isNaN(percent)) {
-        resultado.innerHTML = "Digite valores válidos.";
-        return;
-    }
+const valor1 =
+document.getElementById("valor1");
 
-    const result = (total * percent) / 100;
+const valor2 =
+document.getElementById("valor2");
 
-    resultado.innerHTML = `
-        <strong>${percent}% de ${total}</strong><br><br>
-        Resultado: <strong>${result.toLocaleString("pt-BR")}</strong>
-    `;
+const resultado =
+document.getElementById("resultado");
+
+const historicoBox =
+document.getElementById("historico");
+
+function moeda(v){
+
+return Number(v)
+.toLocaleString(
+'pt-BR',
+{
+minimumFractionDigits:2,
+maximumFractionDigits:2
+}
+);
+
 }
 
-function limpar() {
-    document.getElementById("total").value = "";
-    document.getElementById("percent").value = "";
-    document.getElementById("resultado").innerHTML = "---";
+function atualizarLabels(){
+
+switch(tipo.value){
+
+case "percentOf":
+document.getElementById("label1").innerText =
+"Valor Total";
+document.getElementById("label2").innerText =
+"Porcentagem (%)";
+break;
+
+case "whatPercent":
+document.getElementById("label1").innerText =
+"Parte";
+document.getElementById("label2").innerText =
+"Total";
+break;
+
+default:
+document.getElementById("label1").innerText =
+"Valor";
+document.getElementById("label2").innerText =
+"Porcentagem (%)";
 }
+
+}
+
+tipo.addEventListener(
+"change",
+()=>{
+atualizarLabels();
+calcular();
+}
+);
+
+valor1.addEventListener("input",calcular);
+valor2.addEventListener("input",calcular);
+
+function salvarHistorico(texto){
+
+let hist =
+JSON.parse(
+localStorage.getItem("utiliweb_percent_history")
+|| "[]"
+);
+
+hist.unshift(texto);
+
+hist = hist.slice(0,15);
+
+localStorage.setItem(
+"utiliweb_percent_history",
+JSON.stringify(hist)
+);
+
+mostrarHistorico();
+}
+
+function mostrarHistorico(){
+
+let hist =
+JSON.parse(
+localStorage.getItem("utiliweb_percent_history")
+|| "[]"
+);
+
+if(hist.length===0){
+
+historicoBox.innerHTML =
+"Nenhum cálculo realizado.";
+
+return;
+}
+
+historicoBox.innerHTML =
+hist.map(item =>
+`• ${item}`
+).join("<br>");
+
+}
+
+function calcular(){
+
+const a =
+parseFloat(valor1.value);
+
+const b =
+parseFloat(valor2.value);
+
+if(
+isNaN(a) ||
+isNaN(b)
+){
+return;
+}
+
+let html = "";
+let textoHist = "";
+let resultadoFinal = 0;
+let percentualBarra = 0;
+
+switch(tipo.value){
+
+case "percentOf":
+
+resultadoFinal =
+(a*b)/100;
+
+percentualBarra = b;
+
+html = `
+<div class="big">
+${moeda(resultadoFinal)}
+</div>
+
+📊 ${b}% de ${moeda(a)}
+
+<div class="card">
+Fórmula:<br>
+(${a} × ${b}) ÷ 100
+</div>
+`;
+
+textoHist =
+`${b}% de ${a} = ${resultadoFinal.toFixed(2)}`;
+
+break;
+
+case "whatPercent":
+
+resultadoFinal =
+(a/b)*100;
+
+percentualBarra =
+resultadoFinal;
+
+html = `
+<div class="big">
+${resultadoFinal.toFixed(2)}%
+</div>
+
+📊 ${a} representa
+${resultadoFinal.toFixed(2)}%
+de ${b}
+`;
+
+textoHist =
+`${a} é ${resultadoFinal.toFixed(2)}% de ${b}`;
+
+break;
+
+case "increase":
+
+const aumento =
+(a*b)/100;
+
+resultadoFinal =
+a + aumento;
+
+percentualBarra = b;
+
+html = `
+<div class="big">
+${moeda(resultadoFinal)}
+</div>
+
+📈 Valor original:
+${moeda(a)}
+
+<br>
+
+➕ Acréscimo:
+${moeda(aumento)}
+
+<br>
+
+📊 Aumento:
+${b}%
+`;
+
+textoHist =
+`${a} + ${b}% = ${resultadoFinal.toFixed(2)}`;
+
+break;
+
+case "discount":
+
+const desconto =
+(a*b)/100;
+
+resultadoFinal =
+a - desconto;
+
+percentualBarra = b;
+
+html = `
+<div class="big">
+${moeda(resultadoFinal)}
+</div>
+
+🏷️ Valor original:
+${moeda(a)}
+
+<br>
+
+💰 Economia:
+${moeda(desconto)}
+
+<br>
+
+📉 Desconto:
+${b}%
+`;
+
+textoHist =
+`${a} - ${b}% = ${resultadoFinal.toFixed(2)}`;
+
+break;
+
+case "tax":
+
+const imposto =
+(a*b)/100;
+
+resultadoFinal =
+a + imposto;
+
+percentualBarra = b;
+
+html = `
+<div class="big">
+${moeda(resultadoFinal)}
+</div>
+
+🧾 Imposto:
+${moeda(imposto)}
+
+<br>
+
+📊 Alíquota:
+${b}%
+`;
+
+textoHist =
+`Imposto ${b}% sobre ${a}`;
+
+break;
+
+case "cashback":
+
+resultadoFinal =
+(a*b)/100;
+
+percentualBarra = b;
+
+html = `
+<div class="big">
+${moeda(resultadoFinal)}
+</div>
+
+💸 Cashback recebido
+
+<br>
+
+Compra:
+${moeda(a)}
+
+<br>
+
+Taxa:
+${b}%
+`;
+
+textoHist =
+`Cashback ${b}% de ${a}`;
+
+break;
+
+case "salary":
+
+const ganho =
+(a*b)/100;
+
+resultadoFinal =
+a + ganho;
+
+percentualBarra = b;
+
+html = `
+<div class="big">
+${moeda(resultadoFinal)}
+</div>
+
+💼 Novo salário
+
+<br>
+
+📈 Aumento mensal:
+${moeda(ganho)}
+
+<br>
+
+📅 Ganho anual:
+${moeda(ganho*12)}
+`;
+
+textoHist =
+`Salário ${a} reajuste ${b}%`;
+
+break;
+
+case "commission":
+
+resultadoFinal =
+(a*b)/100;
+
+percentualBarra = b;
+
+html = `
+<div class="big">
+${moeda(resultadoFinal)}
+</div>
+
+💰 Comissão
+
+<br>
+
+Vendas:
+${moeda(a)}
+
+<br>
+
+Taxa:
+${b}%
+`;
+
+textoHist =
+`Comissão ${b}% de ${a}`;
+
+break;
+}
+
+html += `
+
+<div class="progress">
+<div
+class="bar"
+style="width:${Math.min(percentualBarra,100)}%">
+</div>
+</div>
+
+`;
+
+html += `
+<div style="margin-top:12px;">
+<button
+class="secondary"
+onclick="copiarResultado()">
+📋 Copiar Resultado
+</button>
+</div>
+`;
+
+resultado.innerHTML = html;
+
+clearTimeout(window.histTimer);
+
+window.histTimer =
+setTimeout(
+()=>salvarHistorico(textoHist),
+800
+);
+
+}
+
+function copiarResultado(){
+
+navigator.clipboard.writeText(
+resultado.innerText
+);
+
+alert("Resultado copiado!");
+}
+
+function limpar(){
+
+valor1.value = "";
+valor2.value = "";
+
+resultado.innerHTML =
+'<div class="muted">Preencha os campos para calcular.</div>';
+
+}
+
+atualizarLabels();
+mostrarHistorico();
+
 </script>
 
 </body>
