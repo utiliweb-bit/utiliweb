@@ -26,16 +26,23 @@
 
     <div style="margin-top:20px;">
 
-        <label>Número do WhatsApp (com código do país):</label>
+        <label for="number">
+            Número do WhatsApp (com código do país):
+        </label>
 
         <input
             id="number"
             type="text"
+            inputmode="numeric"
             placeholder="Ex: 5511999999999"
             style="width:100%; margin-top:10px;">
 
-        <label style="display:block; margin-top:20px;">
+        <label
+            for="message"
+            style="display:block; margin-top:20px;">
+
             Mensagem automática:
+
         </label>
 
         <textarea
@@ -43,21 +50,17 @@
             placeholder="Olá, gostaria de mais informações."
             style="width:100%; height:120px; margin-top:10px;"></textarea>
 
-        <button
-            style="margin-top:20px;"
-            onclick="gerarLink()">
+        <div style="margin-top:20px; display:flex; gap:10px; flex-wrap:wrap;">
 
-            Gerar Link
+            <button onclick="gerarLink()">
+                Gerar Link
+            </button>
 
-        </button>
+            <button onclick="copiarLink()">
+                Copiar Link
+            </button>
 
-        <button
-            style="margin-top:20px;"
-            onclick="copiarLink()">
-
-            Copiar Link
-
-        </button>
+        </div>
 
     </div>
 
@@ -67,6 +70,7 @@
 
         <input
             id="resultado"
+            type="text"
             readonly
             value=""
             style="width:100%;">
@@ -112,7 +116,10 @@ function copiarLink() {
 
     const campo = document.getElementById("resultado");
 
-    if (!campo.value) return;
+    if (!campo.value) {
+        alert("Gere um link primeiro.");
+        return;
+    }
 
     navigator.clipboard.writeText(campo.value);
 
