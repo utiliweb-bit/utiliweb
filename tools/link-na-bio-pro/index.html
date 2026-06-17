@@ -80,33 +80,9 @@ https://tiktok.com"></textarea>
 </div>
 
 <script>
-// 🔥 LIMPA LINKS (resolve TikTok redirect / ttam)
-function cleanLink(url) {
-    try {
-        if (!url) return "";
-
-        // remove espaços
-        url = url.trim();
-
-        // corrige falta de https
-        if (!url.startsWith("http")) {
-            url = "https://" + url;
-        }
-
-        // tenta resolver redirect TikTok
-        if (url.includes("ttam-partners") && url.includes("tiktok.com")) {
-            const match = url.match(/u=([^&]+)/);
-            if (match) {
-                return decodeURIComponent(match[1]);
-            }
-        }
-
-        return url;
-    } catch {
-        return url;
-    }
-}
-
+/* =========================
+   GERADOR DE LINK
+========================= */
 function generate() {
     const name = document.getElementById("name").value;
 
@@ -114,8 +90,9 @@ function generate() {
         .getElementById("links")
         .value
         .split("\n")
-        .map(cleanLink)
-        .filter(l => l.length > 0);
+        .map(l => l.trim())
+        .filter(l => l.length > 0)
+        .map(l => l.startsWith("http") ? l : "https://" + l);
 
     const encodedLinks = encodeURIComponent(JSON.stringify(links));
 
@@ -129,15 +106,35 @@ function generate() {
     `;
 }
 
-// 🌐 MODO PÁGINA PÚBLICA
+/* =========================
+   FUNÇÃO SEGURA DE URL
+========================= */
+function normalize(url) {
+    if (!url) return null;
+
+    url = url.trim();
+
+    if (!url.startsWith("http")) {
+        url = "https://" + url;
+    }
+
+    try {
+        return new URL(url).href;
+    } catch {
+        return null;
+    }
+}
+
+/* =========================
+   MODO PÁGINA PÚBLICA
+========================= */
 const params = new URLSearchParams(window.location.search);
 const name = params.get("name");
 const data = params.get("data");
 
 if (name && data) {
 
-    const creator = document.getElementById("creator");
-    if (creator) creator.style.display = "none";
+    document.getElementById("creator").style.display = "none";
 
     let links = [];
 
@@ -150,17 +147,15 @@ if (name && data) {
     let html = `<div class="box"><h2>${name}</h2>`;
 
     links.forEach(link => {
-
-        const safeLink = cleanLink(link);
-
-        if (!safeLink) return;
+        const safe = normalize(link);
+        if (!safe) return;
 
         html += `
             <a class="btn"
-               href="${safeLink}"
+               href="${safe}"
                target="_blank"
                rel="noopener noreferrer">
-                🔗 Abrir link
+               🔗 Abrir link
             </a>
         `;
     });
@@ -168,10 +163,8 @@ if (name && data) {
     html += `</div>`;
 
     const page = document.getElementById("page");
-    if (page) {
-        page.style.display = "block";
-        page.innerHTML = html;
-    }
+    page.innerHTML = html;
+    page.style.display = "block";
 }
 </script>
 
