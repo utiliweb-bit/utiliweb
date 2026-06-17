@@ -6,34 +6,29 @@
 
 <title>Link na Bio PRO | UtiliWeb</title>
 
-<meta name="description" content="Crie uma página estilo Linktree com múltiplos links para Instagram, TikTok e YouTube. Grátis e rápido.">
+<meta name="description" content="Crie sua página estilo Linktree com URL individual.">
 <meta name="robots" content="index, follow">
 
 <link rel="stylesheet" href="../../assets/style.css">
 
 <style>
-.card-box {
+.box {
     margin-top: 20px;
     padding: 20px;
-    border-radius: 12px;
     background: #fff;
+    border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
-.link-btn {
-    display: block;
-    padding: 12px;
-    margin-top: 10px;
-    background: #111;
-    color: #fff;
-    text-align: center;
-    border-radius: 8px;
-    text-decoration: none;
-    transition: 0.2s;
-}
-
-.link-btn:hover {
-    background: #333;
+.btn {
+    display:block;
+    margin-top:10px;
+    padding:12px;
+    background:#111;
+    color:#fff;
+    text-decoration:none;
+    border-radius:8px;
+    text-align:center;
 }
 </style>
 
@@ -43,26 +38,31 @@
 
 <header>
     <h1>Link na Bio PRO</h1>
-    <p>Crie sua página estilo Linktree</p>
+    <p>Página estilo Linktree com URL individual</p>
 </header>
 
 <div class="container">
 
-    <a href="../../index.html">← Voltar</a>
+<a href="../../index.html">← Voltar</a>
 
-    <div style="margin-top:20px;">
+<div id="creator">
 
-        <label>Nome do perfil:</label>
-        <input id="name" type="text" placeholder="Ex: Meu Perfil">
+    <h3>Criar sua página</h3>
 
-        <label style="display:block; margin-top:10px;">Adicionar links (um por linha):</label>
-        <textarea id="links" placeholder="https://youtube.com/...\nhttps://instagram.com/...\nhttps://tiktok.com/..." style="width:100%; height:120px;"></textarea>
+    <input id="name" placeholder="Seu nome">
 
-        <button style="margin-top:15px;" onclick="generate()">Gerar Página</button>
+    <textarea id="links" placeholder="Digite links (1 por linha):
+https://youtube.com
+https://instagram.com
+https://tiktok.com"></textarea>
 
-    </div>
+    <button onclick="generate()">Gerar Link</button>
 
-    <div id="output"></div>
+    <div id="result" style="margin-top:20px;"></div>
+
+</div>
+
+<div id="page" style="display:none;"></div>
 
 </div>
 
@@ -71,20 +71,40 @@ function generate() {
     const name = document.getElementById("name").value;
     const links = document.getElementById("links").value.split("\n");
 
-    let html = `
-        <div class="card-box">
-            <h2>${name}</h2>
+    const encodedLinks = encodeURIComponent(links.join(","));
+
+    const url = `${window.location.origin}${window.location.pathname}?name=${encodeURIComponent(name)}&links=${encodedLinks}`;
+
+    document.getElementById("result").innerHTML = `
+        <p><strong>Seu link:</strong></p>
+        <a href="${url}" target="_blank">${url}</a>
+    `;
+}
+
+// modo página pública
+const params = new URLSearchParams(window.location.search);
+const name = params.get("name");
+const links = params.get("links");
+
+if (name && links) {
+    document.getElementById("creator").style.display = "none";
+
+    const list = decodeURIComponent(links).split(",");
+
+    let html = `<div class="box">
+        <h2>${name}</h2>
     `;
 
-    links.forEach(link => {
+    list.forEach(link => {
         if (link.trim()) {
-            html += `<a class="link-btn" href="${link}" target="_blank">Abrir link</a>`;
+            html += `<a class="btn" href="${link}" target="_blank">Abrir link</a>`;
         }
     });
 
     html += `</div>`;
 
-    document.getElementById("output").innerHTML = html;
+    document.getElementById("page").style.display = "block";
+    document.getElementById("page").innerHTML = html;
 }
 </script>
 
