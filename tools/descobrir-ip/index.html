@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Descobrir Meu IP Online | UtiliWeb</title>
+
+<meta name="description" content="Descubra seu endereço IP público online de forma rápida e gratuita.">
+<meta name="robots" content="index, follow">
+
+<link rel="stylesheet" href="../../assets/style.css">
+
+<style>
+.box {
+    margin-top: 20px;
+    padding: 20px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    text-align: center;
+}
+
+.ip {
+    font-size: 28px;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #111;
+}
+
+button {
+    margin-top: 15px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    background: #111;
+    color: #fff;
+    cursor: pointer;
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+</style>
+
+</head>
+
+<body>
+
+<header>
+    <h1>🌍 Descobrir Meu IP</h1>
+    <p>Veja seu IP público em tempo real</p>
+</header>
+
+<div class="container">
+
+<a href="../../index.html">← Voltar</a>
+
+<div class="box">
+
+    <p>Seu IP público é:</p>
+
+    <div class="ip" id="ip">Clique no botão abaixo</div>
+
+    <button id="btn" onclick="buscarIP()">Mostrar meu IP</button>
+
+</div>
+
+</div>
+
+<script>
+async function buscarIP() {
+    const ipEl = document.getElementById("ip");
+    const btn = document.getElementById("btn");
+
+    btn.disabled = true;
+    ipEl.textContent = "Carregando...";
+
+    try {
+        const res = await fetch("https://api.ipify.org?format=json", {
+            cache: "no-store"
+        });
+
+        const data = await res.json();
+
+        ipEl.textContent = data.ip;
+    } catch (e) {
+        ipEl.textContent = "Erro ao obter IP (tente novamente)";
+    } finally {
+        btn.disabled = false;
+    }
+}
+</script>
+
+</body>
+</html>
