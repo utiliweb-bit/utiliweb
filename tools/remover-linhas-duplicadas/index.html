@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Remover Linhas Duplicadas Online | UtiliWeb</title>
+
+<meta name="description" content="Remova linhas repetidas de textos e listas online gratuitamente com o UtiliWeb.">
+
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+
+<body>
+
+<header>
+    <h1>Remover Linhas Duplicadas</h1>
+    <p>Elimine linhas repetidas de listas e textos rapidamente</p>
+</header>
+
+<div class="container">
+
+    <a href="../../index.html">← Voltar</a>
+
+    <textarea
+        id="text"
+        placeholder="Digite ou cole uma lista com várias linhas..."
+        style="width:100%; height:150px; margin-top:20px;"></textarea>
+
+    <div style="margin-top:20px; display:flex; gap:10px; flex-wrap:wrap;">
+
+        <button onclick="removerDuplicadas()">
+            Remover Duplicadas
+        </button>
+
+        <button onclick="copiarResultado()">
+            Copiar
+        </button>
+
+    </div>
+
+    <textarea
+        id="resultado"
+        readonly
+        placeholder="O resultado aparecerá aqui..."
+        style="width:100%; height:150px; margin-top:20px;"></textarea>
+
+    <section style="margin-top:40px;">
+        <h2>Como usar</h2>
+
+        <p>
+            Cole uma lista contendo várias linhas. A ferramenta removerá automaticamente as linhas repetidas, mantendo apenas uma ocorrência de cada item.
+        </p>
+    </section>
+
+</div>
+
+<script>
+const text = document.getElementById("text");
+const resultado = document.getElementById("resultado");
+
+function removerDuplicadas() {
+
+    const linhas = text.value
+        .split("\n")
+        .map(linha => linha.trim())
+        .filter(linha => linha !== "");
+
+    const unicas = [...new Set(linhas)];
+
+    resultado.value = unicas.join("\n");
+}
+
+function copiarResultado() {
+
+    if (!resultado.value) return;
+
+    navigator.clipboard.writeText(resultado.value);
+    alert("Texto copiado!");
+
+}
+</script>
+
+</body>
+</html>
