@@ -3,51 +3,113 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Conversor de Moedas | UtiliWeb</title>
 
-<meta name="description" content="Converta moedas online de forma rápida e gratuita.">
-<meta name="keywords" content="utiliweb, conversor de moedas, iene, real, dólar">
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-<link rel="stylesheet" href="../../assets/style.css">
+html, body {
+    width: 100%;
+    height: 100vh;
+    font-family: system-ui, Arial;
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wrapper {
+    width: 100%;
+    max-width: 1200px;
+    height: 100%;
+    max-height: 800px;
+    background: white;
+    border-radius: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+}
+
+.left-panel {
+    padding: 40px;
+    border-right: 1px solid #ddd;
+    overflow-y: auto;
+}
+
+.right-panel {
+    padding: 40px;
+    background: #e8f8f5;
+}
+
+h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    margin-top: 8px;
+    margin-bottom: 16px;
+}
+
+button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.result {
+    font-size: 22px;
+    font-weight: bold;
+}
+</style>
 </head>
 
 <body>
 
-<header>
-    <h1>💱 Conversor de Moedas</h1>
-    <p>Converta valores em tempo real</p>
-</header>
+<div class="wrapper">
 
-<div class="container">
+    <!-- ESQUERDA -->
+    <div class="left-panel">
 
-    <a href="../../index.html">← Voltar</a>
-
-    <div class="box">
+        <h1>💱 Conversor de Moedas</h1>
 
         <label>Valor</label>
-        <input id="valor" type="number" placeholder="Ex: 100">
+        <input id="valor" type="number">
 
-        <label style="margin-top:12px;">Moeda de origem</label>
+        <label>De</label>
         <select id="de">
-            <option value="BRL">Real (BRL)</option>
-            <option value="USD">Dólar (USD)</option>
-            <option value="JPY">Iene (JPY)</option>
+            <option value="BRL">BRL</option>
+            <option value="USD">USD</option>
+            <option value="JPY">JPY</option>
         </select>
 
-        <label style="margin-top:12px;">Moeda de destino</label>
+        <label>Para</label>
         <select id="para">
-            <option value="JPY">Iene (JPY)</option>
-            <option value="USD">Dólar (USD)</option>
-            <option value="BRL">Real (BRL)</option>
+            <option value="JPY">JPY</option>
+            <option value="USD">USD</option>
+            <option value="BRL">BRL</option>
         </select>
 
-        <div style="margin-top:15px;">
-            <button onclick="converter()">Converter</button>
-            <button class="btn-secondary" onclick="limpar()">Limpar</button>
-        </div>
+        <button onclick="calcular()">Converter</button>
 
-        <div id="resultado" class="result hidden"></div>
+    </div>
+
+    <!-- DIREITA -->
+    <div class="right-panel">
+
+        <h2>Resultado</h2>
+        <div class="result" id="resultado">-</div>
 
     </div>
 
@@ -56,48 +118,24 @@
 <script>
 const taxas = {
     BRL: { USD: 0.20, JPY: 30 },
-    USD: { BRL: 5.0, JPY: 150 },
+    USD: { BRL: 5, JPY: 150 },
     JPY: { BRL: 0.033, USD: 0.0067 }
 };
 
-function converter() {
-    const valor = parseFloat(document.getElementById("valor").value);
-    const de = document.getElementById("de").value;
-    const para = document.getElementById("para").value;
-    const resultado = document.getElementById("resultado");
+function $(id){ return document.getElementById(id); }
 
-    if (isNaN(valor)) {
-        resultado.classList.remove("hidden");
-        resultado.textContent = "Digite um valor válido.";
-        return;
-    }
+function calcular() {
+    const v = parseFloat($("valor").value);
+    const de = $("de").value;
+    const para = $("para").value;
 
-    if (de === para) {
-        resultado.classList.remove("hidden");
-        resultado.textContent = `Resultado: ${valor.toFixed(2)} ${para}`;
-        return;
-    }
+    if (!v) return $("resultado").innerText = "Valor inválido";
 
-    const taxa = taxas[de][para];
+    if (de === para) return $("resultado").innerText = v + " " + para;
 
-    if (!taxa) {
-        resultado.classList.remove("hidden");
-        resultado.textContent = "Conversão não disponível.";
-        return;
-    }
+    const r = v * taxas[de][para];
 
-    const convertido = valor * taxa;
-
-    resultado.classList.remove("hidden");
-    resultado.innerHTML = `
-        <strong>${valor} ${de}</strong> =
-        <strong>${convertido.toFixed(2)} ${para}</strong>
-    `;
-}
-
-function limpar() {
-    document.getElementById("valor").value = "";
-    document.getElementById("resultado").classList.add("hidden");
+    $("resultado").innerText = r.toFixed(2) + " " + para;
 }
 </script>
 
