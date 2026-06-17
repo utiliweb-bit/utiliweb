@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Texto em Maiúsculas e Minúsculas Online | UtiliWeb</title>
+
+<meta name="description" content="Converta texto para maiúsculas, minúsculas ou formato capitalizado de forma rápida e gratuita. Ferramenta online do UtiliWeb.">
+
+<meta name="keywords" content="texto maiúsculo, texto minúsculo, converter letras, letras maiúsculas, letras minúsculas, capitalizar texto">
+
+<link rel="canonical" href="https://seusite.com/tools/texto-maiusculas-minusculas/">
+
+</head>
+<body>
+
+<div class="box">
+    <h1>Texto em Maiúsculas e Minúsculas</h1>
+
+    <textarea id="texto" rows="10" placeholder="Digite ou cole seu texto aqui..."></textarea>
+
+    <br><br>
+
+    <button onclick="maiusculas()">MAIÚSCULAS</button>
+
+    <button onclick="minusculas()">minúsculas</button>
+
+    <button onclick="capitalizar()">Primeira Letra Maiúscula</button>
+
+    <button onclick="copiarTexto()">Copiar</button>
+
+    <div class="result" id="resultado"></div>
+</div>
+
+<script>
+const texto = document.getElementById("texto");
+const resultado = document.getElementById("resultado");
+
+function maiusculas() {
+    resultado.textContent = texto.value.toUpperCase();
+}
+
+function minusculas() {
+    resultado.textContent = texto.value.toLowerCase();
+}
+
+function capitalizar() {
+    let convertido = texto.value
+        .toLowerCase()
+        .replace(/\b\w/g, letra => letra.toUpperCase());
+
+    resultado.textContent = convertido;
+}
+
+function copiarTexto() {
+    navigator.clipboard.writeText(resultado.textContent);
+
+    const antigo = resultado.innerHTML;
+
+    resultado.innerHTML += "<br><br>✅ Texto copiado!";
+    
+    setTimeout(() => {
+        resultado.innerHTML = antigo;
+    }, 2000);
+}
+</script>
+
+</body>
+</html>
