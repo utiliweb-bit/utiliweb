@@ -6,97 +6,86 @@
 
 <title>UtiliWeb - Ferramentas Online Gratuitas</title>
 
-<meta name="description" content="UtiliWeb é uma plataforma de ferramentas online gratuitas como contador de caracteres, calculadora de porcentagem, gerador de senhas e muito mais.">
-<meta name="keywords" content="ferramentas online, utiliweb, contador de caracteres, calculadora de porcentagem, gerador de senhas, ferramentas grátis">
+<meta name="description" content="UtiliWeb é uma plataforma de ferramentas online gratuitas para produtividade, texto, SEO, redes sociais e muito mais.">
 <meta name="robots" content="index, follow">
 
 <link rel="stylesheet" href="assets/style.css">
+
+<style>
+.search {
+    width: 100%;
+    padding: 12px;
+    margin-top: 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.card {
+    padding: 15px;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    text-decoration: none;
+    color: #111;
+    transition: 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+}
+
+.badge {
+    font-size: 12px;
+    color: #666;
+    margin-top: 8px;
+}
+</style>
+
 </head>
 
 <body>
 
 <header>
-    <h1>UtiliWeb</h1>
-    <p>Ferramentas rápidas, gratuitas e online</p>
+    <h1>🚀 UtiliWeb</h1>
+    <p>Ferramentas online gratuitas para produtividade e criação</p>
 </header>
 
 <div class="container">
 
-    <input id="search" type="text" placeholder="Buscar ferramentas (ex: senha, texto, porcentagem...)">
+<input class="search" id="search" placeholder="Buscar ferramentas (ex: bio, senha, texto, SEO...)">
 
-    <h2 style="margin-top:30px;">🧠 Ferramentas</h2>
+<h2 style="margin-top:25px;">🧠 Ferramentas</h2>
 
-    <div class="grid">
+<div class="grid" id="grid">
 
-        <a class="card" href="tools/contador-caracteres/" data-key="texto caracteres palavras contador">
-            📝 Contador de Caracteres
-            <div class="badge">Texto</div>
-        </a>
+    <a class="card" href="tools/gerador-bio-viral/index.html" data-key="bio instagram tiktok youtube">
+        🔥 Gerador de Bio Viral
+        <div class="badge">Social Media</div>
+    </a>
 
-        <a class="card" href="tools/calculadora-porcentagem/" data-key="porcentagem calculadora matematica">
-            🧮 Calculadora de Porcentagem
-            <div class="badge">Matemática</div>
-        </a>
+    <a class="card" href="tools/gerador-senhas/index.html" data-key="senha segurança password">
+        🔐 Gerador de Senhas
+        <div class="badge">Segurança</div>
+    </a>
 
-        <a class="card" href="tools/gerador-senhas/" data-key="senha gerador password segurança">
-            🔐 Gerador de Senhas
-            <div class="badge">Segurança</div>
-        </a>
-        
-        <a class="card" href="tools/conversor-temperatura/" data-key="temperatura celsius fahrenheit conversor">
-            🌡️ Conversor de Temperatura
-            <div class="badge">Utilidade</div>
-        </a>
+    <a class="card" href="tools/calculadora-porcentagem/index.html" data-key="porcentagem matematica calculadora">
+        🧮 Calculadora de Porcentagem
+        <div class="badge">Matemática</div>
+    </a>
 
-        <a class="card" href="tools/gerador-qr-code/" data-key="qr code gerador link codigo qr">
-            🔳 Gerador de QR Code
-            <div class="badge">Utilidade</div>
-        </a>
+    <a class="card" href="tools/contador-caracteres/index.html" data-key="texto palavras caracteres">
+        📝 Contador de Caracteres
+        <div class="badge">Texto</div>
+    </a>
 
-        <a class="card" href="tools/meu-ip/" data-key="ip meu ip descobrir internet endereco">
-            🌐 Descobrir Meu IP
-            <div class="badge">Utilidade</div>
-        </a>
-
-        <a class="card" href="tools/gerador-link-whatsapp/" data-key="whatsapp link gerador mensagem contato wa.me">
-           💬 Link WhatsApp
-           <div class="badge">Marketing</div>
-        </a>
-
-        <a class="card" href="tools/contador-palavras/" data-key="contador palavras texto word count seo">
-           📊 Contador de Palavras
-           <div class="badge">Texto</div>
-        </a>
-
-        <a class="card" href="tools/gerador-senha-forte/" data-key="senha forte gerador password segura seguranca">
-           🔐 Senha Forte PRO
-           <div class="badge">Segurança</div>
-        </a>
-
-        <a class="card" href="tools/link-na-bio-pro/" data-key="link bio instagram tiktok linktree pagina links perfil">
-           🔗 Link na Bio PRO
-           <div class="badge">Social</div>
-        </a>
-        
-        
-
-    </div>
-
-    <!-- SEO CONTENT (IMPORTANTE PARA GOOGLE) -->
-    <section style="margin-top:40px;">
-        <h2>Ferramentas Online Gratuitas</h2>
-        <p>
-            O UtiliWeb oferece ferramentas rápidas e gratuitas para facilitar tarefas do dia a dia como contagem de caracteres, cálculos matemáticos e geração de senhas seguras.
-            Tudo funciona direto no navegador, sem instalação e sem cadastro.
-        </p>
-    </section>
-
-    <div style="margin-top:20px; font-size:14px; color:#94a3b8;">
-        <p>
-            Ferramentas gratuitas do <strong>UtiliWeb</strong> para uso rápido no navegador.
-            Sem instalação e sem cadastro.
-        </p>
-    </div>
+</div>
 
 </div>
 
@@ -105,14 +94,17 @@ const search = document.getElementById("search");
 const cards = document.querySelectorAll(".card");
 
 search.addEventListener("input", (e) => {
-    const value = e.target.value.toLowerCase().trim();
+    const value = e.target.value.toLowerCase();
 
     cards.forEach(card => {
-        const key = card.getAttribute("data-key") || "";
+        const key = card.getAttribute("data-key");
         const text = card.innerText.toLowerCase();
 
-        const match = key.includes(value) || text.includes(value);
-        card.style.display = match ? "block" : "none";
+        if (key.includes(value) || text.includes(value)) {
+            card.style.display = "block";
+        } else {
+            card.style.display = "none";
+        }
     });
 });
 </script>
