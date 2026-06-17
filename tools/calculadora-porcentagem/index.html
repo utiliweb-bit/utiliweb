@@ -7,7 +7,59 @@
 <title>Calculadora de Porcentagem | UtiliWeb</title>
 
 <meta name="description" content="Calcule porcentagens de forma rápida e precisa.">
+<meta name="keywords" content="porcentagem, calculadora, utiliweb">
+
 <link rel="stylesheet" href="../../assets/style.css">
+
+<style>
+.tool-box {
+    margin-top: 20px;
+}
+
+label {
+    display: block;
+    margin-top: 12px;
+    font-weight: 500;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 6px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+.btn-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+}
+
+button {
+    padding: 12px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background: #111;
+    color: #fff;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+.result {
+    margin-top: 20px;
+    padding: 12px;
+    background: #f5f5f5;
+    border-radius: 8px;
+    min-height: 40px;
+}
+</style>
+
 </head>
 
 <body>
@@ -21,31 +73,21 @@
 
     <a href="../../index.html">← Voltar</a>
 
-    <div class="box">
+    <div class="tool-box">
 
         <label>Valor total</label>
         <input id="total" type="number" placeholder="Ex: 200">
 
-        <label style="margin-top:12px;">Porcentagem (%)</label>
+        <label>Porcentagem (%)</label>
         <input id="percent" type="number" placeholder="Ex: 10">
 
-        <div style="margin-top:15px;">
+        <div class="btn-group">
             <button onclick="calcular()">Calcular</button>
+            <button onclick="limpar()">Limpar</button>
         </div>
 
-        <div id="resultado" class="result hidden"></div>
+        <div id="resultado" class="result">---</div>
 
-    </div>
-
-    <div class="box">
-        <h2>Como funciona</h2>
-        <p>
-            Informe o valor total e a porcentagem desejada.
-            O sistema calcula automaticamente o valor correspondente.
-        </p>
-
-        <h2 style="margin-top:15px;">Exemplo</h2>
-        <p>10% de 200 = 20</p>
     </div>
 
 </div>
@@ -58,19 +100,22 @@ function calcular() {
     const resultado = document.getElementById("resultado");
 
     if (isNaN(total) || isNaN(percent)) {
-        resultado.classList.remove("hidden");
         resultado.textContent = "Digite valores válidos.";
         return;
     }
 
     const result = (total * percent) / 100;
 
-    resultado.classList.remove("hidden");
     resultado.innerHTML = `
-        <strong>${percent}% de ${total}</strong>
-        <br><br>
+        <strong>${percent}% de ${total}</strong><br><br>
         Resultado: <strong>${result.toLocaleString("pt-BR")}</strong>
     `;
+}
+
+function limpar() {
+    document.getElementById("total").value = "";
+    document.getElementById("percent").value = "";
+    document.getElementById("resultado").textContent = "---";
 }
 </script>
 
