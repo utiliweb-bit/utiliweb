@@ -2,195 +2,445 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
-<title>Calculadora de Idade | UtiliWeb</title>
+<title>Calculadora de Idade PRO | UtiliWeb</title>
 
-<meta name="description" content="Calcule sua idade exata em anos, meses e dias com precisão.">
-<meta name="keywords" content="utiliweb, idade, calculadora de idade, idade exata">
-
-<link rel="stylesheet" href="../../assets/style.css">
+<meta name="description" content="Descubra sua idade exata, signo, dia da semana em que nasceu, próximo aniversário e diversas estatísticas.">
 
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
-body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-    background: linear-gradient(135deg, #2ecc71, #27ae60);
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
+html{
+    -webkit-text-size-adjust:100%;
 }
 
-.wrapper {
-    width: 100%;
-    max-width: 1100px;
-    background: #fff;
-    border-radius: 18px;
-    overflow: hidden;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+body{
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
+    background:linear-gradient(135deg,#2ecc71,#27ae60);
+    min-height:100dvh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:12px;
 }
 
-.left, .right {
-    padding: 25px;
+.wrapper{
+    width:100%;
+    max-width:1100px;
+    background:#fff;
+    border-radius:18px;
+    overflow:hidden;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    box-shadow:0 20px 60px rgba(0,0,0,.25);
 }
 
-.left {
-    border-right: 1px solid #eee;
+.left,
+.right{
+    padding:24px;
+    min-width:0;
 }
 
-h1 {
-    font-size: 26px;
-    margin-bottom: 5px;
+.left{
+    border-right:1px solid #eee;
 }
 
-.subtitle {
-    color: #666;
-    font-size: 14px;
-    margin-bottom: 15px;
+h1{
+    font-size:28px;
+    margin-bottom:6px;
 }
 
-label {
-    display: block;
-    margin-top: 12px;
-    font-size: 14px;
+h2{
+    font-size:24px;
+    margin-bottom:12px;
 }
 
-input {
-    width: 100%;
-    padding: 12px;
-    margin-top: 6px;
-    border-radius: 10px;
-    border: 2px solid #ddd;
+.subtitle{
+    color:#666;
+    font-size:14px;
+    margin-bottom:18px;
 }
 
-input:focus {
-    outline: none;
-    border-color: #27ae60;
+a{
+    display:inline-block;
+    margin-bottom:14px;
+    text-decoration:none;
+    color:#27ae60;
+    font-weight:700;
 }
 
-button {
-    margin-top: 15px;
-    padding: 12px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: bold;
-    background: #27ae60;
-    color: #fff;
+label{
+    display:block;
+    margin-bottom:8px;
+    font-size:14px;
+    font-weight:700;
+    color:#444;
 }
 
-.result-box {
-    font-size: 18px;
-    line-height: 1.6;
-    background: #f6fff8;
-    border: 1px solid #d7f5e3;
-    padding: 18px;
-    border-radius: 10px;
-    min-height: 120px;
+.date-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:10px;
 }
 
-a {
-    display: inline-block;
-    margin-bottom: 10px;
-    text-decoration: none;
-    color: #27ae60;
-    font-weight: bold;
+select{
+    width:100%;
+    padding:13px;
+    border-radius:12px;
+    border:2px solid #ddd;
+    font-size:16px;
+    background:#fff;
 }
 
-/* RESPONSIVO */
-@media(max-width: 900px) {
-    .wrapper {
-        grid-template-columns: 1fr;
+select:focus{
+    outline:none;
+    border-color:#27ae60;
+}
+
+button{
+    width:100%;
+    margin-top:18px;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    background:#27ae60;
+    color:#fff;
+    font-size:16px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+button:hover{
+    opacity:.95;
+}
+
+.result-box{
+    background:#f6fff8;
+    border:1px solid #d7f5e3;
+    border-radius:14px;
+    padding:18px;
+    line-height:1.8;
+    min-height:260px;
+    font-size:15px;
+}
+
+.highlight{
+    font-size:32px;
+    font-weight:800;
+    color:#27ae60;
+    margin-bottom:10px;
+}
+
+.stat{
+    margin-top:10px;
+    padding:12px;
+    background:#fff;
+    border-radius:10px;
+    border:1px solid #e7f7ec;
+}
+
+@media(max-width:900px){
+
+    body{
+        align-items:flex-start;
+        padding:10px;
     }
 
-    .left {
-        border-right: none;
-        border-bottom: 1px solid #eee;
+    .wrapper{
+        grid-template-columns:1fr;
+    }
+
+    .left{
+        border-right:none;
+        border-bottom:1px solid #eee;
+    }
+
+    .left,
+    .right{
+        padding:18px;
+    }
+
+    h1{
+        font-size:24px;
+    }
+
+    h2{
+        font-size:22px;
+    }
+
+    .highlight{
+        font-size:28px;
     }
 }
+
+@media(max-width:480px){
+
+    .date-grid{
+        grid-template-columns:1fr;
+    }
+}
+
 </style>
-
 </head>
-
 <body>
 
 <div class="wrapper">
 
-    <!-- ESQUERDA -->
-    <div class="left">
+<div class="left">
 
-        <h1>🎂 Calculadora de Idade</h1>
-        <p class="subtitle">Idade exata em anos, meses e dias</p>
+<h1>🎂 Calculadora de Idade PRO</h1>
 
-        <a href="../../index.html">← Voltar</a>
+<p class="subtitle">
+Idade exata, signo, aniversário e estatísticas
+</p>
 
-        <label>Data de nascimento</label>
-        <input type="date" id="nascimento">
+<a href="../../index.html">← Voltar</a>
 
-        <button onclick="calcular()">Calcular idade</button>
+<label>Data de nascimento</label>
 
-    </div>
+<div class="date-grid">
 
-    <!-- DIREITA -->
-    <div class="right">
+<select id="dia"></select>
 
-        <h2>Resultado</h2>
+<select id="mes">
+<option value="0">Janeiro</option>
+<option value="1">Fevereiro</option>
+<option value="2">Março</option>
+<option value="3">Abril</option>
+<option value="4">Maio</option>
+<option value="5">Junho</option>
+<option value="6">Julho</option>
+<option value="7">Agosto</option>
+<option value="8">Setembro</option>
+<option value="9">Outubro</option>
+<option value="10">Novembro</option>
+<option value="11">Dezembro</option>
+</select>
 
-        <div class="result-box" id="resultado">
-            Selecione sua data de nascimento
-        </div>
+<select id="ano"></select>
 
-    </div>
+</div>
+
+<button onclick="calcular()">
+Calcular Idade
+</button>
+
+</div>
+
+<div class="right">
+
+<h2>Resultado</h2>
+
+<div class="result-box" id="resultado">
+Selecione sua data de nascimento.
+</div>
+
+</div>
 
 </div>
 
 <script>
-function calcular() {
 
-    const nascimento = document.getElementById("nascimento").value;
-    const res = document.getElementById("resultado");
+const diaSelect = document.getElementById("dia");
+const anoSelect = document.getElementById("ano");
 
-    if (!nascimento) {
-        res.textContent = "Selecione uma data válida.";
-        return;
-    }
-
-    const nasc = new Date(nascimento);
-    const hoje = new Date();
-
-    let anos = hoje.getFullYear() - nasc.getFullYear();
-    let meses = hoje.getMonth() - nasc.getMonth();
-    let dias = hoje.getDate() - nasc.getDate();
-
-    if (dias < 0) {
-        meses--;
-        const ultimoMes = new Date(hoje.getFullYear(), hoje.getMonth(), 0).getDate();
-        dias += ultimoMes;
-    }
-
-    if (meses < 0) {
-        anos--;
-        meses += 12;
-    }
-
-    const totalDias = Math.floor((hoje - nasc) / (1000 * 60 * 60 * 24));
-
-    res.innerHTML = `
-        <strong>${anos}</strong> anos<br>
-        <strong>${meses}</strong> meses<br>
-        <strong>${dias}</strong> dias<br><br>
-        📊 Total de dias: <strong>${totalDias.toLocaleString("pt-BR")}</strong>
-    `;
+for(let d=1; d<=31; d++){
+    diaSelect.innerHTML += `<option value="${d}">${d}</option>`;
 }
+
+const anoAtual = new Date().getFullYear();
+
+for(let a=anoAtual; a>=1900; a--){
+    anoSelect.innerHTML += `<option value="${a}">${a}</option>`;
+}
+
+function getSigno(dia,mes){
+
+mes += 1;
+
+if((mes==1 && dia>=20)||(mes==2 && dia<=18)) return "♒ Aquário";
+if((mes==2 && dia>=19)||(mes==3 && dia<=20)) return "♓ Peixes";
+if((mes==3 && dia>=21)||(mes==4 && dia<=19)) return "♈ Áries";
+if((mes==4 && dia>=20)||(mes==5 && dia<=20)) return "♉ Touro";
+if((mes==5 && dia>=21)||(mes==6 && dia<=20)) return "♊ Gêmeos";
+if((mes==6 && dia>=21)||(mes==7 && dia<=22)) return "♋ Câncer";
+if((mes==7 && dia>=23)||(mes==8 && dia<=22)) return "♌ Leão";
+if((mes==8 && dia>=23)||(mes==9 && dia<=22)) return "♍ Virgem";
+if((mes==9 && dia>=23)||(mes==10 && dia<=22)) return "♎ Libra";
+if((mes==10 && dia>=23)||(mes==11 && dia<=21)) return "♏ Escorpião";
+if((mes==11 && dia>=22)||(mes==12 && dia<=21)) return "♐ Sagitário";
+
+return "♑ Capricórnio";
+}
+
+function calcular(){
+
+const dia =
+parseInt(document.getElementById("dia").value);
+
+const mes =
+parseInt(document.getElementById("mes").value);
+
+const ano =
+parseInt(document.getElementById("ano").value);
+
+const nascimento =
+new Date(ano,mes,dia);
+
+const hoje =
+new Date();
+
+if(nascimento > hoje){
+
+resultado.innerHTML =
+"❌ Data inválida.";
+return;
+}
+
+let anos =
+hoje.getFullYear() - nascimento.getFullYear();
+
+let meses =
+hoje.getMonth() - nascimento.getMonth();
+
+let dias =
+hoje.getDate() - nascimento.getDate();
+
+if(dias < 0){
+
+meses--;
+
+const ultimoMes =
+new Date(
+hoje.getFullYear(),
+hoje.getMonth(),
+0
+).getDate();
+
+dias += ultimoMes;
+}
+
+if(meses < 0){
+
+anos--;
+meses += 12;
+}
+
+const totalDias =
+Math.floor(
+(hoje - nascimento) /
+(1000*60*60*24)
+);
+
+const totalHoras =
+Math.floor(totalDias*24);
+
+const totalSemanas =
+Math.floor(totalDias/7);
+
+const totalMeses =
+anos*12 + meses;
+
+const diasSemana = [
+"Domingo",
+"Segunda-feira",
+"Terça-feira",
+"Quarta-feira",
+"Quinta-feira",
+"Sexta-feira",
+"Sábado"
+];
+
+const diaSemana =
+diasSemana[nascimento.getDay()];
+
+const signo =
+getSigno(dia,mes);
+
+let proxAniversario =
+new Date(
+hoje.getFullYear(),
+mes,
+dia
+);
+
+if(proxAniversario < hoje){
+
+proxAniversario =
+new Date(
+hoje.getFullYear()+1,
+mes,
+dia
+);
+}
+
+const faltam =
+Math.ceil(
+(proxAniversario - hoje) /
+(1000*60*60*24)
+);
+
+resultado.innerHTML = `
+
+<div class="highlight">
+${anos} anos
+</div>
+
+📅 <strong>Idade exata</strong><br>
+
+${anos} anos,
+${meses} meses e
+${dias} dias
+
+<div class="stat">
+
+🎉 <strong>Próximo aniversário</strong><br>
+
+Faltam
+<strong>${faltam}</strong>
+dias
+
+</div>
+
+<div class="stat">
+
+⭐ <strong>Signo</strong><br>
+
+${signo}
+
+</div>
+
+<div class="stat">
+
+🗓️ <strong>Dia da semana em que nasceu</strong><br>
+
+${diaSemana}
+
+</div>
+
+<div class="stat">
+
+📊 <strong>Estatísticas</strong><br>
+
+${totalDias.toLocaleString('pt-BR')} dias vividos<br>
+
+${totalSemanas.toLocaleString('pt-BR')} semanas<br>
+
+${totalMeses.toLocaleString('pt-BR')} meses<br>
+
+${totalHoras.toLocaleString('pt-BR')} horas
+
+</div>
+
+`;
+}
+
 </script>
 
 </body>
