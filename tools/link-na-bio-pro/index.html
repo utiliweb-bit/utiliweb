@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Link na Bio PRO | UtiliWeb</title>
+
+<meta name="description" content="Crie uma página estilo Linktree com múltiplos links para Instagram, TikTok e YouTube. Grátis e rápido.">
+<meta name="robots" content="index, follow">
+
+<link rel="stylesheet" href="../../assets/style.css">
+
+<style>
+.card-box {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.link-btn {
+    display: block;
+    padding: 12px;
+    margin-top: 10px;
+    background: #111;
+    color: #fff;
+    text-align: center;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.link-btn:hover {
+    background: #333;
+}
+</style>
+
+</head>
+
+<body>
+
+<header>
+    <h1>Link na Bio PRO</h1>
+    <p>Crie sua página estilo Linktree</p>
+</header>
+
+<div class="container">
+
+    <a href="../../index.html">← Voltar</a>
+
+    <div style="margin-top:20px;">
+
+        <label>Nome do perfil:</label>
+        <input id="name" type="text" placeholder="Ex: Meu Perfil">
+
+        <label style="display:block; margin-top:10px;">Adicionar links (um por linha):</label>
+        <textarea id="links" placeholder="https://youtube.com/...\nhttps://instagram.com/...\nhttps://tiktok.com/..." style="width:100%; height:120px;"></textarea>
+
+        <button style="margin-top:15px;" onclick="generate()">Gerar Página</button>
+
+    </div>
+
+    <div id="output"></div>
+
+</div>
+
+<script>
+function generate() {
+    const name = document.getElementById("name").value;
+    const links = document.getElementById("links").value.split("\n");
+
+    let html = `
+        <div class="card-box">
+            <h2>${name}</h2>
+    `;
+
+    links.forEach(link => {
+        if (link.trim()) {
+            html += `<a class="link-btn" href="${link}" target="_blank">Abrir link</a>`;
+        }
+    });
+
+    html += `</div>`;
+
+    document.getElementById("output").innerHTML = html;
+}
+</script>
+
+</body>
+</html>
