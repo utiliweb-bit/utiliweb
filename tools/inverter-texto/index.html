@@ -9,50 +9,80 @@
 <meta name="description" content="Inverta palavras e frases online gratuitamente. Ferramenta simples e rápida do UtiliWeb.">
 
 <link rel="stylesheet" href="../../assets/style.css">
+
+<style>
+.container {
+    max-width: 800px;
+}
+
+.box {
+    display: grid;
+    gap: 15px;
+}
+
+textarea {
+    width: 100%;
+    min-height: 140px;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid var(--border, #ccc);
+    font-size: 14px;
+    resize: vertical;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+button {
+    padding: 12px 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    background: #111;
+    color: #fff;
+    transition: 0.2s;
+}
+
+button:hover {
+    opacity: 0.85;
+}
+
+.result {
+    font-weight: 600;
+}
+</style>
 </head>
 
 <body>
 
 <header>
-    <h1>Inverter Texto</h1>
-    <p>Escreva palavras e frases ao contrário instantaneamente</p>
+    <h1>🔁 Inverter Texto</h1>
+    <p>Texto ao contrário em tempo real</p>
 </header>
 
 <div class="container">
 
     <a href="../../index.html">← Voltar</a>
 
-    <textarea
-        id="text"
-        placeholder="Digite ou cole seu texto aqui..."
-        style="width:100%; height:150px; margin-top:20px;"></textarea>
+    <div class="box">
 
-    <div style="margin-top:20px; display:flex; gap:10px; flex-wrap:wrap;">
+        <label>Digite seu texto</label>
+        <textarea id="text" placeholder="Digite ou cole seu texto aqui..."></textarea>
 
-        <button onclick="inverterTexto()">
-            Inverter Texto
-        </button>
+        <div class="actions">
+            <button onclick="inverterTexto()">Inverter</button>
+            <button onclick="copiarResultado()">Copiar</button>
+            <button onclick="limpar()">Limpar</button>
+        </div>
 
-        <button onclick="copiarResultado()">
-            Copiar
-        </button>
+        <label>Resultado</label>
+        <textarea id="resultado" readonly placeholder="Resultado aparecerá aqui..."></textarea>
 
     </div>
-
-    <textarea
-        id="resultado"
-        readonly
-        placeholder="O resultado aparecerá aqui..."
-        style="width:100%; height:150px; margin-top:20px;"></textarea>
-
-    <section style="margin-top:40px;">
-        <h2>Como usar</h2>
-
-        <p>
-            Digite ou cole o texto na caixa acima e clique em
-            "Inverter Texto". O conteúdo será exibido na ordem inversa.
-        </p>
-    </section>
 
 </div>
 
@@ -66,9 +96,12 @@ function inverterTexto() {
 
 function copiarResultado() {
     if (!resultado.value) return;
-
     navigator.clipboard.writeText(resultado.value);
-    alert("Texto copiado!");
+}
+
+function limpar() {
+    text.value = "";
+    resultado.value = "";
 }
 </script>
 
