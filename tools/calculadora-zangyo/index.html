@@ -1,118 +1,184 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Calculadora de Salário e Horas Extras (Zangyo) para brasileiros no Japão - Responsiva">
-    <meta name="keywords" content="zangyo, horas extras japão, calculadora salário, jikyū, brasileiros no japão">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Calculadora Zangyo</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+<title>Zangyo PRO Responsivo</title>
 
 <style>
-/* ===== SEU CSS ORIGINAL (MANTIDO INTACTO) ===== */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: Arial, sans-serif;
 }
 
-html, body {
-    width: 100%;
-    min-height: 100vh;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 16px;
-    margin: 0;
+body{
+    background: linear-gradient(135deg,#1f7a4d,#27ae60);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:12px;
 }
 
-.wrapper {
-    width: 100%;
-    max-width: 1200px;
-    background: white;
-    border-radius: 16px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    overflow: hidden;
+.wrapper{
+    width:100%;
+    max-width:900px;
+    background:#fff;
+    border-radius:14px;
+    padding:16px;
+    color:#000;
 }
 
-.left-panel {
-    padding: 32px;
-    border-right: 1px solid #e0e0e0;
+/* HEADER */
+h2{
+    text-align:center;
+    margin-bottom:12px;
+    font-size:22px;
 }
 
-.right-panel {
-    padding: 32px;
-    background: linear-gradient(135deg, #e8f8f5 0%, #d5f4e6 100%);
+/* INPUTS */
+input{
+    width:100%;
+    padding:12px;
+    margin:6px 0;
+    border:1px solid #ccc;
+    border-radius:10px;
+    font-size:16px; /* evita zoom no mobile */
 }
 
-/* resto do CSS permanece igual */
+/* BOTÃO */
+button{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border:none;
+    border-radius:10px;
+    background:#27ae60;
+    color:#fff;
+    font-weight:bold;
+    font-size:16px;
+    cursor:pointer;
+}
+
+/* RESULTADO */
+.result{
+    margin-top:14px;
+    padding:12px;
+    background:#f4f4f4;
+    border-radius:10px;
+    font-size:14px;
+    line-height:1.5;
+}
+
+/* BARRA */
+.bar{
+    height:18px;
+    background:#ddd;
+    border-radius:10px;
+    overflow:hidden;
+    margin-top:10px;
+}
+
+.bar-fill{
+    height:100%;
+    width:0%;
+    background:#27ae60;
+    transition:0.4s;
+}
+
+/* MOBILE AJUSTE FINO */
+@media (max-width:480px){
+
+    .wrapper{
+        padding:12px;
+    }
+
+    h2{
+        font-size:18px;
+    }
+
+    input, button{
+        font-size:15px;
+        padding:11px;
+    }
+
+    .result{
+        font-size:13px;
+    }
+
+    .bar{
+        height:14px;
+    }
+}
 </style>
 </head>
 
 <body>
+
 <div class="wrapper">
 
-    <div class="left-panel">
-        <h1>💼 Zangyo</h1>
+<h2>💼 Zangyō PRO</h2>
 
-        <input id="jikyu" type="number" placeholder="Valor hora ¥">
+<input id="jikyu" type="number" placeholder="Valor da hora ¥">
+<input id="horas" type="number" placeholder="Horas totais">
 
-        <input id="horas" type="number" placeholder="Total horas">
+<button onclick="calcular()">Calcular</button>
 
-        <button onclick="calcular()">Calcular</button>
-    </div>
+<div class="result" id="out">Preencha os dados e calcule</div>
 
-    <div class="right-panel">
-
-        <h2>Resultado</h2>
-
-        <div id="resultado">-</div>
-
-        <!-- 🔥 NOVOS CAMPOS -->
-        <div id="mensal"></div>
-        <div id="imposto"></div>
-        <div id="liquido"></div>
-
-    </div>
+<div class="bar">
+    <div class="bar-fill" id="bar"></div>
+</div>
 
 </div>
 
 <script>
-function calcular() {
+function calcular(){
 
-    const jikyu = parseFloat(document.getElementById("jikyu").value) || 0;
-    const horas = parseFloat(document.getElementById("horas").value) || 0;
+    const jikyu = parseFloat(document.getElementById("jikyu").value)||0;
+    const horas = parseFloat(document.getElementById("horas").value)||0;
 
-    if (jikyu <= 0 || horas <= 0) {
-        document.getElementById("resultado").innerText = "Dados inválidos";
+    if(jikyu<=0 || horas<=0){
+        document.getElementById("out").innerText="❌ Dados inválidos";
         return;
     }
 
-    const total = jikyu * horas;
+    // bruto diário
+    const diario = jikyu * horas;
 
-    // 💰 mensal (22 dias)
-    const mensal = total * 22;
+    // mensal (22 dias)
+    const mensal = diario * 22;
 
-    // 💸 imposto simples Japão
-    let taxa = 0;
-    if (mensal <= 1000000) taxa = 0.10;
-    else if (mensal <= 2000000) taxa = 0.15;
-    else taxa = 0.20;
+    // imposto progressivo simplificado
+    let impostoRate = 0.10;
+    if(mensal>1000000) impostoRate=0.15;
+    if(mensal>2000000) impostoRate=0.20;
 
-    const imposto = mensal * taxa;
-    const liquido = mensal - imposto;
+    const imposto = mensal * impostoRate;
 
-    // OUTPUT
-    document.getElementById("resultado").innerText = "¥ " + total.toFixed(0);
-    document.getElementById("mensal").innerText = "Mensal: ¥ " + mensal.toFixed(0);
-    document.getElementById("imposto").innerText = "Imposto: ¥ " + imposto.toFixed(0);
-    document.getElementById("liquido").innerText = "Líquido: ¥ " + liquido.toFixed(0);
+    // seguro social Japão (~14%)
+    const seguro = mensal * 0.14;
+
+    const liquido = mensal - imposto - seguro;
+
+    const descontos = imposto + seguro;
+    const pct = (descontos / mensal) * 100;
+
+    document.getElementById("out").innerHTML = `
+        💰 Bruto mensal: ¥${mensal.toFixed(0)}<br>
+        📆 Diário: ¥${diario.toFixed(0)}<br><br>
+
+        🧾 Imposto: ¥${imposto.toFixed(0)}<br>
+        🏥 Seguro social: ¥${seguro.toFixed(0)}<br><br>
+
+        💵 Líquido final: ¥${liquido.toFixed(0)}<br>
+        📉 Descontos: ${pct.toFixed(1)}%
+    `;
+
+    document.getElementById("bar").style.width = pct + "%";
 }
 </script>
 
