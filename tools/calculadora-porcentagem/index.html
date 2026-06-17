@@ -4,64 +4,73 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Calculadora de Porcentagem Online | UtiliWeb</title>
-<meta name="description" content="Calcule porcentagens online de forma rápida e gratuita. Ferramenta simples e precisa do UtiliWeb.">
-<meta name="robots" content="index, follow">
+<title>Calculadora de Porcentagem | UtiliWeb</title>
 
+<meta name="description" content="Calcule porcentagens de forma rápida e precisa.">
 <link rel="stylesheet" href="../../assets/style.css">
 </head>
 
 <body>
 
 <header>
-    <h1>Calculadora de Porcentagem</h1>
-    <p>Calcule porcentagens de forma rápida e fácil</p>
+    <h1>📊 Calculadora de Porcentagem</h1>
+    <p>Calcule valores percentuais rapidamente</p>
 </header>
 
 <div class="container">
 
     <a href="../../index.html">← Voltar</a>
 
-    <div style="margin-top:20px;">
-        <label>Valor total:</label>
+    <div class="box">
+
+        <label>Valor total</label>
         <input id="total" type="number" placeholder="Ex: 200">
 
-        <label style="display:block; margin-top:10px;">Porcentagem (%):</label>
+        <label style="margin-top:12px;">Porcentagem (%)</label>
         <input id="percent" type="number" placeholder="Ex: 10">
 
-        <button style="margin-top:15px;" onclick="calcular()">Calcular</button>
-
-        <div style="margin-top:20px;">
-            <p><strong>Resultado:</strong></p>
-            <p id="resultado">---</p>
+        <div style="margin-top:15px;">
+            <button onclick="calcular()">Calcular</button>
         </div>
+
+        <div id="resultado" class="result hidden"></div>
+
     </div>
 
-    <section style="margin-top:40px;">
-        <h2>Como usar</h2>
-        <p>Digite o valor total e a porcentagem desejada. A ferramenta calcula automaticamente o resultado para você.</p>
-    </section>
+    <div class="box">
+        <h2>Como funciona</h2>
+        <p>
+            Informe o valor total e a porcentagem desejada.
+            O sistema calcula automaticamente o valor correspondente.
+        </p>
 
-    <section style="margin-top:20px;">
-        <h2>Exemplo</h2>
+        <h2 style="margin-top:15px;">Exemplo</h2>
         <p>10% de 200 = 20</p>
-    </section>
+    </div>
 
 </div>
 
 <script>
 function calcular() {
+
     const total = parseFloat(document.getElementById("total").value);
     const percent = parseFloat(document.getElementById("percent").value);
+    const resultado = document.getElementById("resultado");
 
     if (isNaN(total) || isNaN(percent)) {
-        document.getElementById("resultado").textContent = "Digite valores válidos";
+        resultado.classList.remove("hidden");
+        resultado.textContent = "Digite valores válidos.";
         return;
     }
 
     const result = (total * percent) / 100;
 
-    document.getElementById("resultado").textContent = result;
+    resultado.classList.remove("hidden");
+    resultado.innerHTML = `
+        <strong>${percent}% de ${total}</strong>
+        <br><br>
+        Resultado: <strong>${result.toLocaleString("pt-BR")}</strong>
+    `;
 }
 </script>
 
