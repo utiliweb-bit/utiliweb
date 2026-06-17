@@ -13,13 +13,6 @@
 <link rel="stylesheet" href="../../assets/style.css">
 
 <style>
-.box{
-    margin-top:20px;
-    padding:20px;
-    background:#fff;
-    border-radius:12px;
-}
-
 #map{
     width:100%;
     height:350px;
@@ -28,6 +21,7 @@
     overflow:hidden;
 }
 </style>
+
 </head>
 
 <body>
@@ -39,15 +33,17 @@
 
 <div class="container">
 
-<a href="../../index.html">← Voltar</a>
+    <a href="../../index.html">← Voltar</a>
 
-<div class="box">
+    <div class="box">
 
-<p id="info">Carregando informações...</p>
+        <div id="info" class="result">
+            Carregando informações...
+        </div>
 
-<div id="map"></div>
+        <div id="map"></div>
 
-</div>
+    </div>
 
 </div>
 
@@ -63,12 +59,14 @@ async function load() {
         const data = await response.json();
 
         if (!data.latitude || !data.longitude) {
-            info.innerText = "Não foi possível localizar o IP.";
+
+            info.textContent = "Não foi possível localizar o IP.";
             return;
+
         }
 
         info.innerHTML = `
-            <strong>IP:</strong> ${data.ip}<br>
+            <strong>IP:</strong> ${data.ip}<br><br>
             <strong>Cidade:</strong> ${data.city}<br>
             <strong>País:</strong> ${data.country_name}
         `;
@@ -83,8 +81,10 @@ async function load() {
             </iframe>
         `;
 
-    } catch (error) {
-        info.innerText = "Erro ao carregar os dados.";
+    } catch {
+
+        info.textContent = "Erro ao carregar os dados.";
+
     }
 
 }
