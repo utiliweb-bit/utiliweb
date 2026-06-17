@@ -7,76 +7,194 @@
 <title>Removedor de Quebras de Linha Online | UtiliWeb</title>
 
 <meta name="description" content="Remova quebras de linha e transforme textos em uma única linha online gratuitamente com o UtiliWeb.">
+<meta name="robots" content="index, follow">
 
 <link rel="stylesheet" href="../../assets/style.css">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.wrapper {
+    width: 100%;
+    max-width: 1200px;
+    min-height: 700px;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+}
+
+.left-panel, .right-panel {
+    padding: 30px;
+    overflow-y: auto;
+}
+
+.left-panel {
+    border-right: 1px solid #eee;
+}
+
+.right-panel {
+    background: #eafaf1;
+}
+
+header h1 {
+    font-size: 26px;
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    font-size: 14px;
+    color: #777;
+}
+
+textarea {
+    width: 100%;
+    min-height: 180px;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    margin-top: 10px;
+    font-size: 14px;
+    resize: vertical;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: #27ae60;
+}
+
+button {
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-primary {
+    background: #27ae60;
+    color: white;
+}
+
+.btn-secondary {
+    background: white;
+    border: 2px solid #27ae60;
+    color: #27ae60;
+}
+
+.card {
+    background: white;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+</style>
+
 </head>
 
 <body>
 
-<header>
-    <h1>Removedor de Quebras de Linha</h1>
-    <p>Transforme textos com várias linhas em uma única linha</p>
-</header>
+<div class="wrapper">
 
-<div class="container">
+    <!-- ESQUERDA -->
+    <div class="left-panel">
 
-    <a href="../../index.html">← Voltar</a>
+        <header>
+            <h1>📄 Remover Quebras de Linha</h1>
+            <p class="subtitle">Transforme textos multiline em uma única linha</p>
+        </header>
 
-    <textarea
-        id="text"
-        placeholder="Digite ou cole seu texto aqui..."
-        style="width:100%; height:150px; margin-top:20px;"></textarea>
+        <br>
 
-    <div style="margin-top:20px; display:flex; gap:10px; flex-wrap:wrap;">
+        <a href="../../index.html">← Voltar</a>
 
-        <button onclick="removerQuebras()">
-            Remover Quebras de Linha
-        </button>
+        <div class="box">
 
-        <button onclick="copiarResultado()">
-            Copiar
-        </button>
+            <label>Texto original</label>
+            <textarea id="text" placeholder="Digite ou cole seu texto aqui..."></textarea>
+
+            <div style="margin-top:15px; display:flex; gap:10px; flex-wrap:wrap;">
+                <button class="btn-primary" onclick="removeLineBreaks()">Remover quebras</button>
+                <button class="btn-secondary" onclick="copyResult()">Copiar</button>
+                <button class="btn-secondary" onclick="resetAll()">Limpar</button>
+            </div>
+
+        </div>
 
     </div>
 
-    <textarea
-        id="resultado"
-        readonly
-        placeholder="O resultado aparecerá aqui..."
-        style="width:100%; height:150px; margin-top:20px;"></textarea>
+    <!-- DIREITA -->
+    <div class="right-panel">
 
-    <section style="margin-top:40px;">
-        <h2>Como usar</h2>
+        <h2>Resultado</h2>
 
-        <p>
-            Cole o texto na caixa acima e clique em "Remover Quebras de Linha".
-            Todas as linhas serão unidas em um único texto contínuo.
-        </p>
-    </section>
+        <div class="grid">
+            <div class="card">
+                O texto sem quebras de linha aparecerá aqui automaticamente
+            </div>
+        </div>
+
+        <br>
+
+        <div class="card">
+            <strong>Resultado:</strong>
+            <div id="result" style="margin-top:10px; word-break: break-word;">---</div>
+        </div>
+
+    </div>
 
 </div>
 
 <script>
-const text = document.getElementById("text");
-const resultado = document.getElementById("resultado");
+const input = document.getElementById("text");
+const result = document.getElementById("result");
 
-function removerQuebras() {
+function removeLineBreaks() {
 
-    resultado.value = text.value
+    const cleaned = (input.value || "")
         .replace(/\r?\n/g, " ")
         .replace(/\s+/g, " ")
         .trim();
 
+    result.textContent = cleaned || "Nada para processar";
 }
 
-function copiarResultado() {
-
-    if (!resultado.value) return;
-
-    navigator.clipboard.writeText(resultado.value);
-    alert("Texto copiado!");
-
+function copyResult() {
+    if (!result.textContent || result.textContent === "---") return;
+    navigator.clipboard.writeText(result.textContent);
 }
+
+function resetAll() {
+    input.value = "";
+    result.textContent = "---";
+}
+
+// UX PRO: atualização automática
+input.addEventListener("input", removeLineBreaks);
 </script>
 
 </body>
