@@ -2,132 +2,152 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
 <title>Gerador de Bio Viral | UtiliWeb</title>
 
 <meta name="description" content="Crie bios prontas para Instagram, TikTok e YouTube em segundos.">
 <meta name="keywords" content="bio instagram, bio tiktok, gerador de bio, utiliweb">
 
-<link rel="stylesheet" href="../../assets/style.css">
-
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+:root{
+    --pad: clamp(10px, 2vw, 20px);
+    --radius: 18px;
 }
 
-html, body {
-    width: 100%;
-    min-height: 100vh;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial;
-    background: linear-gradient(135deg, #2ecc71, #27ae60);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html, body{
+    width:100%;
+    min-height:100dvh;
+    font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial;
+    background:linear-gradient(135deg,#2ecc71,#27ae60);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:var(--pad);
 }
 
 /* WRAPPER */
-.wrapper {
-    width: 100%;
-    max-width: 1000px;
-    min-height: 600px;
-    background: #fff;
-    border-radius: 20px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    overflow: hidden;
+.wrapper{
+    width:100%;
+    max-width:1000px;
+    background:#fff;
+    border-radius:var(--radius);
+    box-shadow:0 20px 60px rgba(0,0,0,0.3);
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    overflow:hidden;
+}
+
+/* LEFT / RIGHT */
+.left-panel,
+.right-panel{
+    padding:clamp(16px, 3vw, 30px);
 }
 
 /* ESQUERDA */
-.left-panel {
-    padding: 30px;
-    border-right: 1px solid #eee;
+.left-panel{
+    border-right:1px solid #eee;
 }
 
-header h1 {
-    font-size: 26px;
+/* HEADER */
+header h1{
+    font-size:clamp(20px, 2.2vw, 26px);
 }
 
-.subtitle {
-    font-size: 14px;
-    color: #777;
+.subtitle{
+    font-size:clamp(12px, 1.4vw, 14px);
+    color:#777;
 }
 
 /* INPUTS */
-input, select {
-    width: 100%;
-    padding: 12px;
-    margin-top: 10px;
-    border-radius: 8px;
-    border: 2px solid #ddd;
-    font-size: 14px;
+input, select, textarea{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border-radius:10px;
+    border:2px solid #ddd;
+    font-size:14px;
+    outline:none;
 }
 
-input:focus, select:focus {
-    border-color: #27ae60;
-    outline: none;
+input:focus,
+select:focus,
+textarea:focus{
+    border-color:#27ae60;
 }
 
-/* BOTÃO */
-button {
-    width: 100%;
-    margin-top: 15px;
-    padding: 12px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    font-weight: bold;
-    background: #27ae60;
-    color: white;
+/* BOTÕES */
+button{
+    width:100%;
+    margin-top:12px;
+    padding:12px;
+    border-radius:10px;
+    border:none;
+    cursor:pointer;
+    font-weight:700;
+    background:#27ae60;
+    color:#fff;
+    min-height:44px;
+    touch-action:manipulation;
 }
 
-button:hover {
-    opacity: 0.9;
+button:hover{
+    opacity:0.9;
 }
 
 /* OUTPUT */
-.output {
-    margin-top: 20px;
+.output{
+    margin-top:18px;
 }
 
-textarea {
-    width: 100%;
-    height: 140px;
-    padding: 12px;
-    border-radius: 8px;
-    border: 2px solid #ddd;
-    resize: none;
-    font-size: 14px;
-}
-
-textarea:focus {
-    border-color: #27ae60;
-    outline: none;
+textarea{
+    height:140px;
+    resize:none;
 }
 
 /* DIREITA */
-.right-panel {
-    padding: 30px;
-    background: #eafaf1;
+.right-panel{
+    background:#eafaf1;
 }
 
 /* RESPONSIVO */
-@media (max-width: 900px) {
-    .wrapper {
-        grid-template-columns: 1fr;
+@media (max-width: 900px){
+    .wrapper{
+        grid-template-columns:1fr;
     }
 
-    .left-panel {
-        border-right: none;
-        border-bottom: 1px solid #eee;
+    .left-panel{
+        border-right:none;
+        border-bottom:1px solid #eee;
+    }
+}
+
+@media (max-width: 480px){
+    html, body{
+        padding:10px;
+    }
+
+    .wrapper{
+        border-radius:14px;
+    }
+
+    input, select, textarea{
+        font-size:13px;
+        padding:10px;
+    }
+
+    button{
+        font-size:13px;
+        padding:11px;
     }
 }
 </style>
-
 </head>
 
 <body>
@@ -203,7 +223,9 @@ function generate() {
 
     document.getElementById("output").innerHTML = `
         <textarea readonly>${bio}</textarea>
-        <button onclick="copyBio(\`${bio}\`)">📋 Copiar Bio</button>
+        <button onclick="copyBio(this.getAttribute('data-bio'))" data-bio="${bio.replace(/"/g,'&quot;')}">
+            📋 Copiar Bio
+        </button>
     `;
 }
 
