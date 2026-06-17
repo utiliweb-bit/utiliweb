@@ -6,6 +6,7 @@
 
 <title>Contador de Caracteres | UtiliWeb</title>
 
+<meta name="description" content="Conte caracteres e palavras em tempo real de forma simples e rápida.">
 <link rel="stylesheet" href="../../assets/style.css">
 </head>
 
@@ -13,31 +14,39 @@
 
 <header>
     <h1>✍️ Contador de Texto</h1>
+    <p>Conte caracteres e palavras em tempo real</p>
 </header>
 
 <div class="container">
 
-<a href="../../index.html">← Voltar</a>
+    <a href="../../index.html">← Voltar</a>
 
-<div class="box">
+    <div class="box">
 
-<textarea id="text" placeholder="Digite aqui..."></textarea>
+        <label>Digite seu texto</label>
+        <textarea id="text" placeholder="Digite aqui..."></textarea>
 
-<div class="grid">
-    <div class="card">Caracteres: <span id="chars">0</span></div>
-    <div class="card">Palavras: <span id="words">0</span></div>
-</div>
+        <div class="grid" style="margin-top:15px;">
+            <div class="card">Caracteres: <span id="chars">0</span></div>
+            <div class="card">Palavras: <span id="words">0</span></div>
+        </div>
 
-</div>
+    </div>
 
 </div>
 
 <script>
-text.oninput = () => {
-    const v = text.value.trim();
-    chars.textContent = text.value.length;
-    words.textContent = v ? v.split(/\s+/).length : 0;
-};
+const text = document.getElementById("text");
+const chars = document.getElementById("chars");
+const words = document.getElementById("words");
+
+text.addEventListener("input", () => {
+    const value = text.value;
+    const trimmed = value.trim();
+
+    chars.textContent = value.length;
+    words.textContent = trimmed ? trimmed.split(/\s+/).length : 0;
+});
 </script>
 
 </body>
