@@ -1,78 +1,94 @@
 <script>
+/* =========================
+   UTILIWEB CORE - PRAZOS PRO
+========================= */
+
 let lembretes = JSON.parse(localStorage.getItem('lembretes-prazos-desktop')) || [];
 let abaAtiva = 'diferenca';
 
+/* =========================
+   ABA SWITCH
+========================= */
 function mudarAba(aba, event) {
     abaAtiva = aba;
 
     document.querySelectorAll('.aba-btn').forEach(btn => btn.classList.remove('ativo'));
-    if (event) event.currentTarget.classList.add('ativo');
+    if (event?.currentTarget) event.currentTarget.classList.add('ativo');
 
     document.querySelectorAll('.aba-conteudo').forEach(el => el.classList.remove('ativo'));
-    document.getElementById(`aba-${aba}`).classList.add('ativo');
+    const alvo = document.getElementById(`aba-${aba}`);
+    if (alvo) alvo.classList.add('ativo');
 
     limparResultado();
 }
 
+/* =========================
+   INIT
+========================= */
 window.addEventListener('load', () => {
     const hoje = new Date().toISOString().split('T')[0];
-    const el = document.getElementById('dataFinal');
-    if (el) el.value = hoje;
+    const dataFinal = document.getElementById('dataFinal');
 
-    atualizarLembretes();
+    if (dataFinal) dataFinal.value = hoje;
+
+    atualizarLembretes?.();
 });
 
-// 🔥 cálculo principal
+/* =========================
+   MAIN CALC
+========================= */
 function calcular() {
-    if (abaAtiva === 'diferenca') {
-        calcularDiferenca();
-    } else {
-        calcularDataFutura();
-    }
+    abaAtiva === 'diferenca'
+        ? calcularDiferenca()
+        : calcularDataFutura();
 }
 
-// 📅 diferença entre datas
+/* =========================
+   DIFERENÇA ENTRE DATAS
+========================= */
 function calcularDiferenca() {
-    let dataInicial = document.getElementById('dataInicial').value;
-    const dataFinal = document.getElementById('dataFinal').value;
+    let inicio = document.getElementById('dataInicial')?.value;
+    const fim = document.getElementById('dataFinal')?.value;
 
-    if (!dataFinal) return mostrarStatus("Preencha a data final", "urgente");
+    if (!fim) return mostrarStatus("Preencha a data final");
 
-    if (!dataInicial) {
-        dataInicial = new Date().toISOString().split('T')[0];
+    if (!inicio) {
+        inicio = new Date().toISOString().split('T')[0];
     }
 
-    const d1 = new Date(dataInicial + "T00:00:00");
-    const d2 = new Date(dataFinal + "T00:00:00");
+    const d1 = new Date(inicio + "T00:00:00");
+    const d2 = new Date(fim + "T00:00:00");
 
-    const diffMs = d2.getTime() - d1.getTime();
+    const diffMs = d2 - d1;
     const totalDias = Math.round(diffMs / 86400000);
 
     const tempo = calcularTempoComposto(d1, d2);
 
     exibirResultadoDiferenca(tempo, totalDias);
 
-    adicionarLembrete(dataFinal, `Prazo até ${dataFinal}`);
+    adicionarLembrete?.(fim, `Prazo até ${fim}`);
 }
 
-// 📊 tempo composto
-function calcularTempoComposto(data1, data2) {
-    if (data1 > data2) [data1, data2] = [data2, data1];
+/* =========================
+   TEMPO COMPOSTO
+========================= */
+function calcularTempoComposto(d1, d2) {
+    if (d1 > d2) [d1, d2] = [d2, d1];
 
     let anos = 0, meses = 0, dias = 0;
-    let temp = new Date(data1);
+    let temp = new Date(d1);
 
-    while (new Date(temp.getFullYear() + 1, temp.getMonth(), temp.getDate()) <= data2) {
+    while (new Date(temp.getFullYear() + 1, temp.getMonth(), temp.getDate()) <= d2) {
         anos++;
         temp.setFullYear(temp.getFullYear() + 1);
     }
 
-    while (new Date(temp.getFullYear(), temp.getMonth() + 1, temp.getDate()) <= data2) {
+    while (new Date(temp.getFullYear(), temp.getMonth() + 1, temp.getDate()) <= d2) {
         meses++;
         temp.setMonth(temp.getMonth() + 1);
     }
 
-    while (temp < data2) {
+    while (temp < d2) {
         dias++;
         temp.setDate(temp.getDate() + 1);
     }
@@ -80,41 +96,46 @@ function calcularTempoComposto(data1, data2) {
     return { anos, meses, dias };
 }
 
-// 🔮 data futura
+/* =========================
+   DATA FUTURA
+========================= */
 function calcularDataFutura() {
-    const dataFutura = document.getElementById('dataFutura').value;
+    const input = document.getElementById('dataFutura')?.value;
 
-    if (!dataFutura) return mostrarStatus("Preencha a data futura", "urgente");
+    if (!input) return mostrarStatus("Preencha a data futura");
 
     const hoje = new Date();
-    const data = new Date(dataFutura + "T00:00:00");
+    const data = new Date(input + "T00:00:00");
 
     const dias = Math.round((data - hoje) / 86400000);
 
-    exibirResultadoFutura(data.toLocaleDateString('pt-BR'), dias);
+    exibirResultadoFutura(
+        data.toLocaleDateString('pt-BR'),
+        dias
+    );
 
-    adicionarLembrete(dataFutura, `Prazo: ${dataFutura}`);
+    adicionarLembrete?.(input, `Prazo: ${input}`);
 }
 
-// 📊 resultado diferença
-function exibirResultadoDiferenca(tempo, totalDias) {
-    const { anos, meses, dias } = tempo;
-
+/* =========================
+   RESULTADOS
+========================= */
+function exibirResultadoDiferenca(t, totalDias) {
     mostrarResultados(true);
 
     setText('resultado1Label', 'Anos');
-    setText('resultado1Valor', anos);
+    setText('resultado1Valor', t.anos);
 
     setText('resultado2Label', 'Meses');
-    setText('resultado2Valor', meses);
+    setText('resultado2Valor', t.meses);
 
     setText('resultado3Label', 'Dias');
-    setText('resultado3Valor', dias);
+    setText('resultado3Valor', t.dias);
 
     const partes = [];
-    if (anos) partes.push(`${anos}a`);
-    if (meses) partes.push(`${meses}m`);
-    if (dias) partes.push(`${dias}d`);
+    if (t.anos) partes.push(`${t.anos}a`);
+    if (t.meses) partes.push(`${t.meses}m`);
+    if (t.dias) partes.push(`${t.dias}d`);
 
     setText('totalLabel', partes.length ? `Faltam ${partes.join(" ")}` : "Hoje é o dia!");
     setText('total', totalDias);
@@ -123,15 +144,14 @@ function exibirResultadoDiferenca(tempo, totalDias) {
     setBadge(totalDias);
 }
 
-// 📊 resultado futura
 function exibirResultadoFutura(data, dias) {
     mostrarResultados(true);
 
     setText('resultado1Label', 'Data');
     setText('resultado1Valor', data);
 
-    document.getElementById('resultado2').style.display = 'none';
-    document.getElementById('resultado3').style.display = 'none';
+    hide('resultado2');
+    hide('resultado3');
 
     setText('totalLabel', 'Dias restantes');
     setText('total', dias);
@@ -140,29 +160,29 @@ function exibirResultadoFutura(data, dias) {
     setBadge(dias);
 }
 
-// 🟢 badge status
+/* =========================
+   BADGE STATUS
+========================= */
 function setBadge(dias) {
     const badge = document.getElementById('statusBadge');
     if (!badge) return;
 
-    let html = '';
+    let text = '✓ OK';
 
-    if (dias < 0) {
-        html = '❌ Vencido';
-    } else if (dias <= 30) {
-        html = '⚠️ Urgente';
-    } else if (dias <= 90) {
-        html = '⏰ Próximo';
-    } else {
-        html = '✓ OK';
-    }
+    if (dias < 0) text = '❌ Vencido';
+    else if (dias <= 30) text = '⚠️ Urgente';
+    else if (dias <= 90) text = '⏰ Próximo';
 
-    badge.innerHTML = `<div class="status-badge">${html}</div>`;
+    badge.innerHTML = `<div class="status-badge">${text}</div>`;
 }
 
-// 📋 copiar
+/* =========================
+   COPIAR
+========================= */
 function copiarResultado() {
-    const texto = `${document.getElementById('totalLabel').textContent} - ${document.getElementById('total').textContent}`;
+    const texto =
+        `${getText('totalLabel')} - ${getText('total')}`;
+
     navigator.clipboard.writeText(texto);
 
     const btn = event?.target;
@@ -173,7 +193,9 @@ function copiarResultado() {
     setTimeout(() => btn.textContent = old, 1200);
 }
 
-// 🧹 limpar
+/* =========================
+   LIMPAR
+========================= */
 function limpar() {
     ['dataInicial','dataFinal','dataFutura'].forEach(id => {
         const el = document.getElementById(id);
@@ -183,7 +205,6 @@ function limpar() {
     limparResultado();
 }
 
-// 🧼 reset UI
 function limparResultado() {
     mostrarResultados(false);
 
@@ -191,10 +212,15 @@ function limparResultado() {
     if (badge) badge.innerHTML = '';
 }
 
-// 👁 helpers UI
+/* =========================
+   HELPERS UI
+========================= */
 function mostrarResultados(show) {
-    document.getElementById('resultadoItems').style.display = show ? 'block' : 'none';
-    document.getElementById('resultadoTotal').style.display = show ? 'block' : 'none';
+    const items = document.getElementById('resultadoItems');
+    const total = document.getElementById('resultadoTotal');
+
+    if (items) items.style.display = show ? 'block' : 'none';
+    if (total) total.style.display = show ? 'block' : 'none';
 }
 
 function setText(id, value) {
@@ -202,10 +228,25 @@ function setText(id, value) {
     if (el) el.textContent = value;
 }
 
-// ⚠ status simples
+function getText(id) {
+    const el = document.getElementById(id);
+    return el ? el.textContent : '';
+}
+
+function hide(id) {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+}
+
+/* =========================
+   STATUS
+========================= */
 function mostrarStatus(msg) {
     setBadge(0);
-    document.getElementById('statusBadge').innerHTML =
-        `<div class="status-badge urgente">${msg}</div>`;
+
+    const badge = document.getElementById('statusBadge');
+    if (badge) {
+        badge.innerHTML = `<div class="status-badge urgente">${msg}</div>`;
+    }
 }
 </script>
