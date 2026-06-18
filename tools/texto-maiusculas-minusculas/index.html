@@ -280,7 +280,7 @@ button:active{
 
         <h2>Resultado</h2>
 
-        <div class="result-box" id="resultado">
+        <div class="result-box" id="resultado" aria-live="polite">
 O resultado aparecerá aqui...
         </div>
 
@@ -298,43 +298,69 @@ const input = document.getElementById("text");
 const output = document.getElementById("resultado");
 const copyMsg = document.getElementById("copyMsg");
 
-function maiusculas() {
+const PLACEHOLDER_INICIAL = "O resultado aparecerá aqui...";
+const PLACEHOLDER_VAZIO = "Digite algo para converter.";
 
-    output.textContent =
-        input.value.toUpperCase();
+// Aplica a transformação só quando há texto real; caso contrário mostra um aviso
+function converter(transformar) {
+
+    const valor = input.value;
+
+    if (!valor.trim()) {
+        output.textContent = PLACEHOLDER_VAZIO;
+        return;
+    }
+
+    output.textContent = transformar(valor);
+}
+
+function maiusculas() {
+    converter(valor => valor.toUpperCase());
 }
 
 function minusculas() {
-
-    output.textContent =
-        input.value.toLowerCase();
+    converter(valor => valor.toLowerCase());
 }
 
 function capitalizar() {
 
-    output.textContent = input.value
+    converter(valor => valor
         .toLowerCase()
-        .replace(/\b\w/g, letra => letra.toUpperCase());
+        // Unicode-aware: \w nativo do JS não reconhece letras acentuadas (á, é, ã, ç...),
+        // então usamos \p{L} (qualquer letra) e \p{N} (qualquer número) com a flag /u
+        .replace(
+            /(^|[^\p{L}\p{N}_])([\p{L}\p{N}_])/gu,
+            (match, antes, letra) => antes + letra.toUpperCase()
+        )
+    );
 }
 
-function copiar() {
+async function copiar() {
 
     const texto = output.textContent.trim();
 
-    if(
+    if (
         !texto ||
-        texto === "O resultado aparecerá aqui..."
-    ){
+        texto === PLACEHOLDER_INICIAL ||
+        texto === PLACEHOLDER_VAZIO
+    ) {
         return;
     }
 
-    navigator.clipboard.writeText(texto);
+    try {
 
-    copyMsg.style.display = "block";
+        await navigator.clipboard.writeText(texto);
 
-    setTimeout(() => {
-        copyMsg.style.display = "none";
-    }, 2000);
+        copyMsg.style.display = "block";
+
+        setTimeout(() => {
+            copyMsg.style.display = "none";
+        }, 2000);
+
+    } catch (error) {
+
+        alert("Não foi possível copiar o texto.");
+    }
 }
 
 </script>
