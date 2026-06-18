@@ -6,8 +6,9 @@
 
 <title>Conversor de Temperatura | UtiliWeb</title>
 
-<meta name="description" content="Converta Celsius e Fahrenheit de forma rápida e precisa online.">
+<meta name="description" content="Converta Celsius e Fahrenheit de forma rápida e precisa online. Ferramenta gratuita para estudos, viagens, culinária e uso diário.">
 <meta name="keywords" content="temperatura, celsius, fahrenheit, conversor, utiliweb">
+<meta name="robots" content="index,follow">
 
 <style>
 :root{
@@ -24,7 +25,7 @@
 html, body{
     width:100%;
     min-height:100dvh;
-    font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial;
+    font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
     background:linear-gradient(135deg,#2ecc71,#27ae60);
     display:flex;
     justify-content:center;
@@ -32,7 +33,6 @@ html, body{
     padding:var(--pad);
 }
 
-/* WRAPPER */
 .wrapper{
     width:100%;
     max-width:1000px;
@@ -44,18 +44,15 @@ html, body{
     overflow:hidden;
 }
 
-/* PAINÉIS */
 .left-panel,
 .right-panel{
     padding:clamp(16px, 3vw, 30px);
 }
 
-/* ESQUERDA */
 .left-panel{
     border-right:1px solid #eee;
 }
 
-/* TIPOGRAFIA */
 header h1{
     font-size:clamp(20px, 2.2vw, 26px);
 }
@@ -63,9 +60,27 @@ header h1{
 .subtitle{
     font-size:clamp(12px, 1.4vw, 14px);
     color:#777;
+    margin-top:5px;
 }
 
-/* INPUT */
+.back-link{
+    display:inline-block;
+    margin-top:20px;
+    color:#27ae60;
+    text-decoration:none;
+    font-weight:600;
+}
+
+.back-link:hover{
+    text-decoration:underline;
+}
+
+label{
+    display:block;
+    margin-top:25px;
+    font-weight:600;
+}
+
 input{
     width:100%;
     padding:12px;
@@ -80,7 +95,6 @@ input:focus{
     border-color:#27ae60;
 }
 
-/* BOTÕES */
 .buttons{
     display:flex;
     gap:10px;
@@ -96,36 +110,71 @@ button{
     font-weight:700;
     min-height:44px;
     touch-action:manipulation;
+    transition:.2s;
 }
 
-/* PRIMARY */
+button:hover{
+    opacity:.95;
+}
+
+button:active{
+    transform:scale(.98);
+}
+
 .btn-primary{
     background:#27ae60;
     color:#fff;
 }
 
-/* SECONDARY */
 .btn-secondary{
     background:#fff;
     border:2px solid #27ae60;
     color:#27ae60;
 }
 
-/* RESULTADO */
 .result{
     margin-top:20px;
+    padding:16px;
+    border-radius:12px;
+    background:#f8fff9;
+    border:1px solid #d7f5df;
     font-size:clamp(18px, 2vw, 22px);
     font-weight:700;
     color:#27ae60;
+    text-align:center;
+    transition:.15s ease;
+    word-break:break-word;
 }
 
-/* DIREITA */
 .right-panel{
     background:#eafaf1;
 }
 
-/* RESPONSIVO */
-@media (max-width: 900px){
+.right-panel h2{
+    margin-bottom:10px;
+}
+
+.right-panel h3{
+    margin-top:20px;
+    margin-bottom:10px;
+}
+
+.info-box{
+    line-height:1.9;
+}
+
+.formula-box{
+    line-height:1.8;
+}
+
+.footer-note{
+    margin-top:25px;
+    font-size:13px;
+    color:#666;
+}
+
+@media (max-width:900px){
+
     .wrapper{
         grid-template-columns:1fr;
     }
@@ -140,7 +189,8 @@ button{
     }
 }
 
-@media (max-width: 480px){
+@media (max-width:480px){
+
     html, body{
         padding:10px;
     }
@@ -170,21 +220,33 @@ button{
             <p class="subtitle">Celsius ↔ Fahrenheit</p>
         </header>
 
-        <br>
+        <a href="../../index.html" class="back-link">
+            ← Voltar
+        </a>
 
-        <a href="../../index.html">← Voltar</a>
+        <label for="temp">
+            Temperatura
+        </label>
 
-        <br><br>
-
-        <label>Temperatura</label>
-        <input id="temp" type="number" placeholder="Digite o valor">
+        <input
+            id="temp"
+            type="number"
+            step="any"
+            placeholder="Digite o valor">
 
         <div class="buttons">
-            <button class="btn-primary" onclick="toF()">C → F</button>
-            <button class="btn-secondary" onclick="toC()">F → C</button>
+            <button class="btn-primary" onclick="toF()">
+                C → F
+            </button>
+
+            <button class="btn-secondary" onclick="toC()">
+                F → C
+            </button>
         </div>
 
-        <div class="result" id="result">Resultado aparecerá aqui</div>
+        <div class="result" id="result">
+            Resultado aparecerá aqui
+        </div>
 
     </div>
 
@@ -192,38 +254,117 @@ button{
     <div class="right-panel">
 
         <h2>Como funciona</h2>
+
         <p>
             Converta temperaturas entre Celsius e Fahrenheit de forma rápida e precisa.
-            Ideal para estudos, viagens e uso diário.
+            Ideal para estudos, viagens, culinária e uso diário.
         </p>
+
+        <h3>Referências rápidas</h3>
+
+        <div class="info-box">
+            ❄️ 0°C = 32°F (Congelamento da água)<br>
+            🌤️ 25°C = 77°F (Temperatura ambiente)<br>
+            🌡️ 37°C = 98.6°F (Temperatura corporal média)<br>
+            🔥 100°C = 212°F (Ebulição da água)
+        </div>
+
+        <h3>Fórmulas utilizadas</h3>
+
+        <div class="formula-box">
+            Celsius → Fahrenheit<br>
+            <strong>(°C × 9 ÷ 5) + 32</strong>
+
+            <br><br>
+
+            Fahrenheit → Celsius<br>
+            <strong>(°F − 32) × 5 ÷ 9</strong>
+        </div>
+
+        <div class="footer-note">
+            Dica: pressione Enter após digitar um valor para converter rapidamente.
+        </div>
 
     </div>
 
 </div>
 
 <script>
+const tempInput = document.getElementById("temp");
+const result = document.getElementById("result");
+
+function animateResult() {
+
+    result.style.transform = "scale(1.03)";
+
+    setTimeout(() => {
+        result.style.transform = "scale(1)";
+    }, 150);
+}
+
+function showError() {
+    result.textContent = "Digite uma temperatura válida";
+}
+
 function toF() {
-    const c = parseFloat(document.getElementById("temp").value);
+
+    const c = parseFloat(tempInput.value);
 
     if (isNaN(c)) {
-        document.getElementById("result").textContent = "Valor inválido";
+        showError();
         return;
     }
 
-    const f = (c * 9/5) + 32;
-    document.getElementById("result").textContent = f.toFixed(2) + " °F";
+    const f = (c * 9 / 5) + 32;
+
+    result.textContent =
+        `${c}°C = ${f.toFixed(2)}°F`;
+
+    animateResult();
 }
 
 function toC() {
-    const f = parseFloat(document.getElementById("temp").value);
+
+    const f = parseFloat(tempInput.value);
 
     if (isNaN(f)) {
-        document.getElementById("result").textContent = "Valor inválido";
+        showError();
         return;
     }
 
-    const c = (f - 32) * 5/9;
-    document.getElementById("result").textContent = c.toFixed(2) + " °C";
+    const c = (f - 32) * 5 / 9;
+
+    result.textContent =
+        `${f}°F = ${c.toFixed(2)}°C`;
+
+    animateResult();
+}
+
+tempInput.addEventListener("keydown", function(e){
+
+    if(e.key === "Enter"){
+        toF();
+    }
+
+});
+
+tempInput.addEventListener("input", function(){
+
+    if(this.value === ""){
+        result.textContent = "Resultado aparecerá aqui";
+    }
+
+});
+</script>
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"WebApplication",
+  "name":"Conversor de Temperatura",
+  "applicationCategory":"UtilityApplication",
+  "operatingSystem":"Any",
+  "description":"Conversor online de Celsius para Fahrenheit e Fahrenheit para Celsius."
 }
 </script>
 
