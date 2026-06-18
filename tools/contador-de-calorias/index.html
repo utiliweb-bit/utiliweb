@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Contador de Calorias | UtiliWeb</title>
+<meta name="description" content="Consulte calorias, proteínas, carboidratos e gorduras de centenas de alimentos e monte seu diário alimentar.">
+<style>
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    min-height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 12px;
+}
+
+.wrapper {
+    width: 100%;
+    max-width: 1100px;
+    background: #fff;
+    border-radius: 18px;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    box-shadow: 0 20px 60px rgba(0,0,0,.25);
+    margin: auto;
+}
+
+.left, .right {
+    padding: 24px;
+    min-width: 0;
+}
+
+.left { border-right: 1px solid #eee; }
+.right { background: #f6fff8; }
+
+h1 { font-size: 28px; margin-bottom: 6px; }
+h2 { font-size: 24px; margin-bottom: 16px; }
+
+.subtitle { color: #666; font-size: 14px; margin-bottom: 18px; }
+
+a.back {
+    display: inline-block;
+    margin-bottom: 14px;
+    text-decoration: none;
+    color: #27ae60;
+    font-weight: 700;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #444;
+}
+
+input[type="text"], input[type="number"], select {
+    width: 100%;
+    padding: 13px;
+    border-radius: 12px;
+    border: 2px solid #ddd;
+    font-size: 16px;
+    background: #fff;
+    color: #333;
+    font-family: inherit;
+}
+
+input[type="text"]:focus, input[type="number"]:focus, select:focus {
+    outline: none;
+    border-color: #27ae60;
+}
+
+.search-wrap {
+    position: relative;
+    margin-bottom: 8px;
+}
+
+.suggestions {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0; right: 0;
+    background: #fff;
+    border: 2px solid #27ae60;
+    border-radius: 12px;
+    max-height: 220px;
+    overflow-y: auto;
+    z-index: 100;
+    display: none;
+}
+
+.suggestion-item {
+    padding: 10px 14px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+    border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.suggestion-item:last-child { border-bottom: none; }
+.suggestion-item:hover { background: #f6fff8; }
+
+.suggestion-kcal {
+    font-size: 12px;
+    color: #27ae60;
+    font-weight: 700;
+}
+
+.input-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.input-group { margin-bottom: 16px; }
+
+.btn-add {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    background: #27ae60;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 4px;
+}
+
+.btn-add:hover { opacity: .95; }
+
+.btn-limpar {
+    width: 100%;
+    padding: 11px;
+    border: 2px solid #27ae60;
+    border-radius: 12px;
+    background: #fff;
+    color: #27ae60;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.btn-limpar:hover { background: #f6fff8; }
+
+/* Painel nutricional do alimento selecionado */
+.nutri-preview {
+    background: #f6fff8;
+    border: 1px solid #d7f5e3;
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 16px;
+    display: none;
+}
+
+.nutri-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.nutri-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+}
+
+.nutri-item {
+    background: #fff;
+    border-radius: 8px;
+    padding: 8px 6px;
+    text-align: center;
+    border: 1px solid #e7f7ec;
+}
+
+.nutri-val {
+    font-size: 16px;
+    font-weight: 800;
+    color: #27ae60;
+    display: block;
+}
+
+.nutri-lbl {
+    font-size: 10px;
+    color: #888;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    margin-top: 2px;
+    display: block;
+}
+
+/* Diário */
+.section-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #aaa;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+}
+
+.total-card {
+    background: #fff;
+    border: 2px solid #27ae60;
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 14px;
+}
+
+.total-kcal {
+    font-size: 38px;
+    font-weight: 800;
+    color: #27ae60;
+    line-height: 1;
+    margin-bottom: 4px;
+}
+
+.total-sub {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 12px;
+}
+
+.macro-bar-wrap {
+    margin-bottom: 6px;
+}
+
+.macro-bar-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.macro-bar-track {
+    height: 8px;
+    background: #eee;
+    border-radius: 99px;
+    overflow: hidden;
+}
+
+.macro-bar-fill {
+    height: 100%;
+    border-radius: 99px;
+    transition: width 0.3s;
+}
+
+.macros-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.macro-pill {
+    background: #f6fff8;
+    border: 1px solid #e7f7ec;
+    border-radius: 8px;
+    padding: 8px 6px;
+    text-align: center;
+}
+
+.macro-pill-val {
+    font-size: 15px;
+    font-weight: 800;
+    display: block;
+}
+
+.macro-pill-lbl {
+    font-size: 10px;
+    color: #888;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-top: 1px;
+    display: block;
+}
+
+/* Lista de itens */
+.diary-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 320px;
+    overflow-y: auto;
+}
+
+.diary-item {
+    background: #fff;
+    border: 1px solid #e7f7ec;
+    border-radius: 10px;
+    padding: 10px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+.diary-item-info { flex: 1; min-width: 0; }
+
+.diary-item-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.diary-item-meta {
+    font-size: 12px;
+    color: #888;
+    margin-top: 2px;
+}
+
+.diary-item-kcal {
+    font-size: 16px;
+    font-weight: 800;
+    color: #27ae60;
+    white-space: nowrap;
+}
+
+.diary-item-del {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #ccc;
+    font-size: 18px;
+    line-height: 1;
+    padding: 0 0 0 6px;
+    margin-top: 0;
+    width: auto;
+    font-weight: 400;
+}
+
+.diary-item-del:hover { color: #e74c3c; }
+
+.empty-msg { color: #999; font-size: 15px; }
+
+@media (max-width: 900px) {
+    body { align-items: flex-start; }
+    .wrapper { grid-template-columns: 1fr; }
+    .left { border-right: none; border-bottom: 1px solid #eee; }
+    h1 { font-size: 22px; }
+    h2 { font-size: 20px; }
+}
+
+@media (max-width: 480px) {
+    .input-row { grid-template-columns: 1fr; }
+    .nutri-grid { grid-template-columns: repeat(2, 1fr); }
+    .total-kcal { font-size: 30px; }
+}
+
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+    <div class="left">
+        <h1>🥗 Contador de Calorias</h1>
+        <p class="subtitle">Consulte a tabela nutricional e monte seu diário alimentar</p>
+        <a class="back" href="../../index.html">← Voltar</a>
+
+        <label>Buscar alimento</label>
+        <div class="search-wrap">
+            <input type="text" id="busca" placeholder="Ex: arroz, frango, banana…" autocomplete="off" oninput="buscar()">
+            <div class="suggestions" id="sugestoes"></div>
+        </div>
+        <p style="font-size:12px;color:#aaa;margin-bottom:16px">Tabela com mais de 250 alimentos da dieta brasileira</p>
+
+        <div class="nutri-preview" id="nutri-preview">
+            <div class="nutri-name" id="nutri-nome">—</div>
+            <div class="nutri-grid">
+                <div class="nutri-item"><span class="nutri-val" id="prev-kcal">0</span><span class="nutri-lbl">kcal</span></div>
+                <div class="nutri-item"><span class="nutri-val" id="prev-prot" style="color:#3498db">0g</span><span class="nutri-lbl">proteína</span></div>
+                <div class="nutri-item"><span class="nutri-val" id="prev-carb" style="color:#e67e22">0g</span><span class="nutri-lbl">carboidrato</span></div>
+                <div class="nutri-item"><span class="nutri-val" id="prev-gord" style="color:#e74c3c">0g</span><span class="nutri-lbl">gordura</span></div>
+            </div>
+            <p style="font-size:11px;color:#aaa;margin-top:8px">Valores por 100g</p>
+        </div>
+
+        <div class="input-row">
+            <div>
+                <label>Quantidade (g)</label>
+                <input type="number" id="quantidade" value="100" min="1" step="1">
+            </div>
+            <div>
+                <label>Refeição</label>
+                <select id="refeicao">
+                    <option value="Café da manhã">☀️ Café da manhã</option>
+                    <option value="Lanche da manhã">🍎 Lanche da manhã</option>
+                    <option value="Almoço" selected>🍽️ Almoço</option>
+                    <option value="Lanche da tarde">🥪 Lanche da tarde</option>
+                    <option value="Jantar">🌙 Jantar</option>
+                    <option value="Ceia">🌛 Ceia</option>
+                </select>
+            </div>
+        </div>
+
+        <button class="btn-add" onclick="adicionar()">+ Adicionar ao diário</button>
+        <button class="btn-limpar" onclick="limparDiario()">🗑️ Limpar diário</button>
+    </div>
+
+    <div class="right">
+        <h2>Diário alimentar</h2>
+        <div id="painel"><p class="empty-msg">Adicione alimentos para ver o total.</p></div>
+    </div>
+</div>
+
+<script>
+
+// Tabela nutricional por 100g: [kcal, prot(g), carb(g), gord(g)]
+const ALIMENTOS = [
+    // Cereais e farináceos
+    ["Arroz branco cozido",          128, 2.5, 28.1, 0.2],
+    ["Arroz integral cozido",        124, 2.6, 25.8, 1.0],
+    ["Arroz parboilizado cozido",    123, 2.6, 26.2, 0.4],
+    ["Macarrão cozido",              131, 4.5, 26.4, 0.9],
+    ["Macarrão integral cozido",     124, 5.3, 23.5, 1.2],
+    ["Macarrão ao molho de tomate",  140, 4.2, 23.0, 3.5],
+    ["Pão francês",                  300, 8.0, 58.6, 3.1],
+    ["Pão de forma branco",          280, 8.0, 50.0, 4.0],
+    ["Pão de forma integral",        253, 8.2, 44.0, 4.5],
+    ["Pão sírio",                    275, 9.1, 55.5, 1.5],
+    ["Pão de hambúrguer",            280, 9.0, 49.0, 5.0],
+    ["Torrada tradicional",          411, 10.5,76.0, 5.5],
+    ["Tapioca",                      346, 0.6, 85.0, 0.0],
+    ["Aveia em flocos",              394, 13.9,64.9, 8.5],
+    ["Granola",                      388, 8.0, 64.0, 12.0],
+    ["Quinoa cozida",                120, 4.4, 21.3, 1.9],
+    ["Farinha de trigo",             361, 9.8, 75.1, 1.4],
+    ["Farinha de mandioca",          361, 1.6, 87.0, 0.3],
+    ["Farofa pronta",                415, 2.0, 65.0, 15.0],
+    ["Polenta cozida",               80,  1.6, 17.0, 0.5],
+    ["Cuscuz de milho cozido",       107, 2.5, 22.0, 0.6],
+    ["Milho cozido",                 86,  3.2, 18.7, 1.0],
+    ["Pipoca simples",               387, 12.9,74.8, 4.3],
+    ["Batata inglesa cozida",        82,  1.9, 18.6, 0.1],
+    ["Batata doce cozida",           93,  1.4, 21.7, 0.1],
+    ["Batata frita (porção)",        312, 3.8, 41.0, 15.0],
+    ["Purê de batata",               95,  1.9, 14.5, 3.5],
+    ["Inhame cozido",                95,  1.5, 22.0, 0.1],
+    ["Mandioca cozida",              125, 1.0, 30.0, 0.2],
+    ["Mandioquinha (batata baroa) cozida", 80, 1.0, 19.0, 0.2],
+    ["Cará cozido",                  97,  1.8, 23.2, 0.1],
+
+    // Carnes e aves
+    ["Frango grelhado (peito)",      159, 32.0, 0.0, 2.7],
+    ["Frango assado (coxa)",         197, 26.0, 0.0, 10.0],
+    ["Frango desfiado (cozido)",     163, 28.0, 0.0, 5.0],
+    ["Frango empanado frito",        290, 16.0, 14.0, 19.0],
+    ["Frango a passarinho frito",    275, 22.0, 5.0, 18.0],
+    ["Carne moída refogada",         212, 26.0, 0.5, 11.5],
+    ["Carne bovina patinho cozido",  219, 32.5, 0.0, 9.6],
+    ["Carne bovina acém cozido",     225, 30.0, 0.0, 11.3],
+    ["Carne bovina contrafilé grelhado", 247, 29.5, 0.0, 13.9],
+    ["Picanha grelhada",             289, 25.0, 0.0, 21.0],
+    ["Alcatra grelhada",             185, 30.0, 0.0, 6.5],
+    ["Costela bovina assada",        352, 22.0, 0.0, 29.0],
+    ["Fígado bovino grelhado",       175, 26.0, 4.5, 5.0],
+    ["Carne seca/charque cozida",    280, 35.0, 0.0, 15.0],
+    ["Carne suína lombo grelhado",   197, 30.5, 0.0, 7.9],
+    ["Costelinha suína assada",      320, 24.0, 0.0, 24.0],
+    ["Pernil suíno assado",          230, 28.0, 0.0, 12.5],
+    ["Linguiça de frango grelhada",  214, 18.5, 2.0, 14.5],
+    ["Linguiça calabresa cozida",    291, 16.0, 2.5, 24.5],
+    ["Bacon frito",                  541, 37.0, 1.4, 42.0],
+    ["Salsicha cozida",              245, 12.5, 2.5, 21.0],
+    ["Presunto",                     140, 18.0, 2.0, 6.5],
+    ["Peito de peru defumado",       109, 18.5, 1.5, 3.2],
+    ["Carne de panela (ensopada)",   195, 25.0, 2.0, 9.5],
+
+    // Peixes e frutos do mar
+    ["Atum em lata (em água)",       128, 29.0, 0.0, 1.0],
+    ["Salmão grelhado",              182, 25.0, 0.0, 9.0],
+    ["Tilápia grelhada",             128, 26.2, 0.0, 2.7],
+    ["Sardinha em lata (em óleo)",   208, 24.6, 0.0, 11.5],
+    ["Camarão cozido",               99,  20.9, 0.9, 1.0],
+    ["Bacalhau cozido",              118, 26.0, 0.0, 0.9],
+    ["Merluza grelhada",             84,  17.8, 0.0, 1.2],
+    ["Peixe frito (filé empanado)",  235, 16.0, 12.0, 14.0],
+    ["Lula refogada",                92,  15.6, 3.1, 1.4],
+    ["Polvo cozido",                 92,  17.9, 2.2, 1.0],
+
+    // Ovos e laticínios
+    ["Ovo inteiro cozido",           155, 12.6, 1.1, 10.6],
+    ["Ovo frito",                    196, 13.6, 0.8, 15.3],
+    ["Clara de ovo cozida",          52,  11.1, 0.7, 0.2],
+    ["Omelete simples",              154, 10.6, 1.6, 11.7],
+    ["Leite integral",               61,  3.2,  4.7, 3.3],
+    ["Leite desnatado",              35,  3.5,  5.0, 0.1],
+    ["Leite condensado",             321, 7.9, 54.4, 6.6],
+    ["Creme de leite",               297, 2.4,  3.4, 30.0],
+    ["Iogurte natural integral",     61,  3.5,  4.7, 3.3],
+    ["Iogurte grego",                97,  9.0,  3.8, 5.0],
+    ["Iogurte de frutas",            85,  3.0, 14.0, 1.8],
+    ["Whey protein (1 dose 30g)",    120, 24.0, 3.0, 1.5],
+    ["Queijo mussarela",             280, 22.0, 2.2, 20.0],
+    ["Queijo prato",                 358, 22.0, 2.0, 28.7],
+    ["Queijo minas frescal",         264, 17.4, 3.2, 20.2],
+    ["Queijo parmesão",              431, 38.5, 3.5, 29.0],
+    ["Queijo cottage",               103, 12.5, 3.4, 4.5],
+    ["Ricota",                       140, 11.0, 3.8, 8.0],
+    ["Requeijão cremoso",            238, 7.0,  4.6, 21.5],
+    ["Cream cheese",                 342, 6.2,  4.1, 34.0],
+    ["Manteiga",                     726, 0.9,  0.1, 80.5],
+    ["Margarina",                    540, 0.5,  0.9, 60.0],
+
+    // Leguminosas
+    ["Feijão carioca cozido",        77,  4.8, 13.6, 0.5],
+    ["Feijão preto cozido",          77,  4.5, 14.0, 0.5],
+    ["Feijão branco cozido",         87,  6.0, 16.0, 0.4],
+    ["Feijão fradinho cozido",       90,  6.0, 16.0, 0.5],
+    ["Lentilha cozida",              93,  6.3, 16.3, 0.4],
+    ["Grão-de-bico cozido",          164, 8.9, 27.4, 2.6],
+    ["Ervilha cozida",               84,  5.4, 15.6, 0.4],
+    ["Soja cozida",                  141, 12.9,11.5, 6.4],
+    ["Tofu",                         76,  8.1,  1.9, 4.8],
+
+    // Vegetais e verduras
+    ["Alface",                       13,  1.3,  2.3, 0.2],
+    ["Rúcula",                       25,  2.6,  3.7, 0.4],
+    ["Agrião",                       11,  3.0,  1.5, 0.2],
+    ["Almeirão cru",                 18,  2.0,  3.0, 0.3],
+    ["Escarola crua",                17,  1.7,  3.2, 0.2],
+    ["Acelga crua",                  19,  1.8,  3.7, 0.2],
+    ["Acelga refogada",              28,  2.0,  4.0, 1.2],
+    ["Couve manteiga crua",          27,  2.9,  4.3, 0.7],
+    ["Couve manteiga refogada",      40,  2.7,  4.0, 2.0],
+    ["Couve-de-bruxelas cozida",     36,  2.6,  7.1, 0.3],
+    ["Repolho cru",                  17,  1.2,  3.9, 0.1],
+    ["Repolho roxo cru",             24,  1.4,  5.3, 0.2],
+    ["Repolho refogado",             27,  1.3,  4.5, 1.0],
+    ["Mostarda (folha) crua",        15,  1.5,  2.5, 0.2],
+    ["Chicória crua",                14,  1.3,  2.6, 0.2],
+    ["Taioba refogada",              25,  2.4,  3.7, 0.5],
+    ["Espinafre cru",                23,  2.9,  3.6, 0.4],
+    ["Espinafre refogado",           30,  3.0,  3.0, 1.5],
+    ["Brócolis cozido",              35,  2.4,  7.2, 0.4],
+    ["Couve-flor cozida",            25,  1.9,  5.0, 0.2],
+    ["Cenoura crua",                 41,  0.9,  9.6, 0.2],
+    ["Cenoura cozida",               34,  0.8,  7.7, 0.2],
+    ["Beterraba cozida",             44,  1.7,  9.9, 0.1],
+    ["Tomate",                       18,  0.9,  3.9, 0.2],
+    ["Pepino",                       15,  0.7,  3.1, 0.1],
+    ["Chuchu cozido",                22,  1.0,  5.0, 0.1],
+    ["Abobrinha cozida",             20,  1.3,  3.7, 0.3],
+    ["Berinjela cozida",             24,  0.8,  5.5, 0.2],
+    ["Pimentão",                     20,  0.9,  4.6, 0.1],
+    ["Cebola",                       40,  1.0,  9.3, 0.1],
+    ["Alho",                         149, 6.4, 32.0, 0.5],
+    ["Milho verde",                  86,  3.2, 18.7, 1.0],
+    ["Abóbora cozida",               25,  1.0,  5.9, 0.1],
+    ["Quiabo cozido",                33,  2.0,  7.0, 0.1],
+    ["Vagem cozida",                 21,  1.5,  4.4, 0.1],
+    ["Aspargo cozido",               20,  2.2,  3.7, 0.2],
+    ["Nabo cozido",                  20,  0.8,  4.6, 0.1],
+    ["Salsão (aipo) cru",            14,  0.7,  3.0, 0.1],
+    ["Rabanete cru",                 12,  0.7,  2.1, 0.1],
+    ["Jiló cozido",                  29,  1.5,  6.3, 0.2],
+    ["Maxixe cru",                   17,  1.2,  3.4, 0.2],
+    ["Broto de feijão cru",          30,  3.0,  5.9, 0.2],
+    ["Palmito em conserva",          26,  2.0,  4.0, 0.5],
+    ["Pepino japonês",               13,  0.6,  2.8, 0.1],
+
+    // Frutas
+    ["Banana prata",                 92,  1.3, 23.8, 0.1],
+    ["Banana nanica",                87,  1.3, 22.4, 0.1],
+    ["Maçã",                         56,  0.3, 15.1, 0.2],
+    ["Laranja",                      47,  0.9, 11.5, 0.1],
+    ["Tangerina/mexerica",           38,  0.9,  9.7, 0.2],
+    ["Mamão papaia",                 45,  0.5, 11.8, 0.1],
+    ["Melancia",                     30,  0.9,  7.4, 0.2],
+    ["Melão",                        29,  0.9,  6.6, 0.2],
+    ["Uva",                          69,  0.7, 17.7, 0.4],
+    ["Uva passa",                    299, 2.5, 79.0, 0.5],
+    ["Manga",                        64,  0.4, 17.0, 0.3],
+    ["Abacaxi",                      48,  0.9, 12.3, 0.1],
+    ["Morango",                      30,  0.7,  7.1, 0.3],
+    ["Abacate",                      160, 2.1,  1.8, 15.3],
+    ["Coco fresco",                  354, 3.4,  7.3, 35.0],
+    ["Goiaba",                       54,  2.4, 12.5, 0.6],
+    ["Maracujá (polpa)",             68,  2.4, 13.0, 0.7],
+    ["Limão",                        29,  1.1,  7.3, 0.2],
+    ["Kiwi",                         61,  1.1, 14.7, 0.5],
+    ["Pera",                         57,  0.5, 15.2, 0.1],
+    ["Caqui",                        70,  0.6, 18.6, 0.2],
+    ["Ameixa fresca",                46,  0.6, 11.0, 0.3],
+    ["Ameixa seca",                  240, 2.2, 63.0, 0.4],
+    ["Pêssego",                      40,  0.9,  9.5, 0.3],
+    ["Figo",                         41,  0.8, 10.0, 0.3],
+    ["Romã",                         83,  1.7, 18.7, 1.2],
+    ["Cereja",                       63,  1.1, 16.0, 0.2],
+    ["Framboesa",                    52,  1.2, 11.9, 0.7],
+    ["Mirtilo (blueberry)",          57,  0.7, 14.5, 0.3],
+    ["Amora",                        43,  1.4,  9.6, 0.5],
+    ["Jaca",                         95,  1.7, 23.2, 0.3],
+    ["Carambola",                    31,  1.0,  6.7, 0.3],
+    ["Acerola",                      33,  0.9,  8.0, 0.2],
+    ["Lichia",                       66,  0.8, 16.5, 0.4],
+    ["Damasco seco",                 241, 3.4, 62.6, 0.5],
+    ["Tâmara",                       282, 2.5, 75.0, 0.4],
+
+    // Oleaginosas e sementes
+    ["Amendoim torrado",             581, 26.0,19.0, 49.0],
+    ["Castanha-do-pará",             656, 14.3, 7.1, 63.5],
+    ["Castanha de caju torrada",     570, 18.5,28.7, 46.0],
+    ["Nozes",                        620, 14.3, 7.0, 62.5],
+    ["Amêndoas",                     579, 21.2,21.7, 49.9],
+    ["Pistache",                     560, 20.6,27.2, 45.3],
+    ["Macadâmia",                    718, 7.9,  13.8,75.8],
+    ["Chia",                         490, 16.5,42.1, 30.7],
+    ["Linhaça",                      495, 18.3,28.9, 34.0],
+    ["Gergelim",                     573, 17.7,26.0, 49.7],
+    ["Semente de abóbora",           559, 30.2,10.7, 49.0],
+    ["Semente de girassol",          584, 20.8,20.0, 51.5],
+
+    // Óleos e gorduras
+    ["Azeite de oliva",              884, 0.0,  0.0, 100.0],
+    ["Óleo de soja",                 884, 0.0,  0.0, 100.0],
+    ["Óleo de canola",               884, 0.0,  0.0, 100.0],
+    ["Óleo de girassol",             884, 0.0,  0.0, 100.0],
+    ["Óleo de coco",                 862, 0.0,  0.0, 100.0],
+    ["Banha de porco",               902, 0.0,  0.0, 100.0],
+
+    // Bebidas
+    ["Suco de laranja natural",      44,  0.7, 10.4, 0.1],
+    ["Suco de uva integral",         60,  0.3, 14.9, 0.1],
+    ["Suco de maçã",                 46,  0.1, 11.3, 0.1],
+    ["Água de coco",                 19,  0.2,  4.5, 0.1],
+    ["Leite de coco",                197, 1.9,  3.4, 20.0],
+    ["Leite de amêndoas",            17,  0.6,  0.6, 1.1],
+    ["Leite de aveia",               46,  1.0,  7.0, 1.5],
+    ["Achocolatado pronto",          70,  1.6, 13.0, 1.4],
+    ["Refrigerante cola",            41,  0.0, 10.3, 0.0],
+    ["Refrigerante guaraná",         40,  0.0, 10.5, 0.0],
+    ["Refrigerante zero/diet",       1,   0.0,  0.2, 0.0],
+    ["Energético",                   45,  0.0, 11.0, 0.0],
+    ["Cerveja",                      43,  0.5,  3.5, 0.0],
+    ["Vinho tinto",                  74,  0.1,  2.0, 0.0],
+    ["Vinho branco",                 82,  0.1,  2.6, 0.0],
+    ["Café preto sem açúcar",        2,   0.3,  0.0, 0.0],
+    ["Café com leite",               38,  1.9,  4.3, 1.5],
+    ["Chá mate",                     2,   0.0,  0.4, 0.0],
+    ["Chá verde",                    1,   0.0,  0.0, 0.0],
+    ["Vitamina de banana (com leite)", 95, 3.0, 16.0, 2.5],
+
+    // Doces e industrializados
+    ["Chocolate ao leite",           546, 7.5, 57.9, 31.3],
+    ["Chocolate meio amargo 70%",    566, 8.0, 45.0, 40.0],
+    ["Biscoito maisena",             451, 7.4, 73.6, 14.2],
+    ["Biscoito recheado",            484, 5.7, 69.5, 20.3],
+    ["Bolo simples",                 355, 5.9, 56.2, 13.0],
+    ["Bolo de chocolate",            371, 5.0, 53.0, 16.0],
+    ["Sorvete de creme",             207, 3.7, 23.6, 11.0],
+    ["Picolé de fruta",              92,  0.5, 22.0, 0.2],
+    ["Pudim de leite",               152, 3.9, 26.0, 3.8],
+    ["Brigadeiro",                   411, 4.5, 60.0, 17.0],
+    ["Beijinho",                     400, 3.8, 58.0, 16.0],
+    ["Paçoca",                       469, 17.5,46.0, 25.0],
+    ["Rapadura",                     352, 0.4, 91.0, 0.1],
+    ["Goiabada",                     290, 0.4, 73.0, 0.1],
+    ["Doce de leite",                315, 6.5, 55.0, 6.5],
+    ["Gelatina",                     60,  1.5, 13.0, 0.0],
+    ["Mel",                          304, 0.4, 82.5, 0.0],
+    ["Açúcar refinado",              387, 0.0, 99.5, 0.0],
+    ["Adoçante stevia (por dose)",   0,   0.0,  0.0, 0.0],
+
+    // Fast food e refeições prontas
+    ["Hambúrguer bovino grelhado",   245, 20.5, 0.0, 17.8],
+    ["Cheeseburger (lanche)",        303, 15.0, 28.0, 14.5],
+    ["X-salada (lanche)",            330, 16.0, 30.0, 16.5],
+    ["Cachorro-quente completo",     290, 11.0, 28.0, 15.0],
+    ["Batata frita (fast food)",     333, 3.4, 41.0, 17.0],
+    ["Nuggets de frango",            296, 14.0, 17.0, 19.0],
+    ["Pizza de mussarela (fatia)",   256, 11.2,31.5, 9.5],
+    ["Coxinha de frango (unid 80g)", 244, 10.0,23.5, 12.0],
+    ["Pastel frito (carne)",         320, 8.5, 30.0, 19.0],
+    ["Esfirra de carne aberta",      280, 11.0,28.0, 13.0],
+    ["Quibe frito",                  290, 12.0,18.0, 19.0],
+    ["Empada de frango",             310, 7.5, 28.0, 19.0],
+    ["Pão de queijo",                326, 7.8, 47.5, 12.5],
+    ["Misto quente",                 290, 13.0,28.0, 13.5],
+    ["Macarrão instantâneo (miojo)", 436, 9.0, 60.0, 17.0],
+    ["Lasanha (porção pronta)",      155, 8.0, 14.0, 7.5],
+    ["Strogonoff de frango",         170, 12.0, 6.0, 11.0],
+    ["Feijoada (porção)",            180, 12.0, 14.0, 8.5],
+    ["Sushi (peça niguiri/sashimi)", 145, 6.5, 23.0, 2.5],
+    ["Temaki (média, salmão)",       180, 6.0, 26.0, 5.0],
+    ["Açaí na tigela (com xarope)",  180, 1.5, 28.0, 7.0],
+    ["Caldo de cana",                56,  0.3, 13.1, 0.0],
+];
+
+let selecionado = null;
+let diario = [];
+
+function normalizar(s) {
+    return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+
+function buscar() {
+    const q = normalizar(document.getElementById('busca').value);
+    const box = document.getElementById('sugestoes');
+    if (q.length < 2) { box.style.display = 'none'; return; }
+    const res = ALIMENTOS.filter(a => normalizar(a[0]).includes(q)).slice(0, 12);
+    if (!res.length) { box.style.display = 'none'; return; }
+    box.innerHTML = res.map((a, i) =>
+        `<div class="suggestion-item" onclick="selecionar(${ALIMENTOS.indexOf(a)})">
+            <span>${a[0]}</span>
+            <span class="suggestion-kcal">${a[1]} kcal</span>
+        </div>`
+    ).join('');
+    box.style.display = 'block';
+}
+
+function selecionar(idx) {
+    selecionado = ALIMENTOS[idx];
+    document.getElementById('busca').value = selecionado[0];
+    document.getElementById('sugestoes').style.display = 'none';
+    const prev = document.getElementById('nutri-preview');
+    prev.style.display = 'block';
+    document.getElementById('nutri-nome').textContent = selecionado[0] + ' — por 100g';
+    document.getElementById('prev-kcal').textContent = selecionado[1];
+    document.getElementById('prev-prot').textContent = selecionado[2] + 'g';
+    document.getElementById('prev-carb').textContent = selecionado[3] + 'g';
+    document.getElementById('prev-gord').textContent = selecionado[4] + 'g';
+}
+
+document.addEventListener('click', e => {
+    if (!e.target.closest('.search-wrap')) {
+        document.getElementById('sugestoes').style.display = 'none';
+    }
+});
+
+function adicionar() {
+    if (!selecionado) { alert('Selecione um alimento primeiro.'); return; }
+    const qtd = parseFloat(document.getElementById('quantidade').value) || 100;
+    const ref = document.getElementById('refeicao').value;
+    const fator = qtd / 100;
+    diario.push({
+        nome: selecionado[0],
+        qtd,
+        ref,
+        kcal: Math.round(selecionado[1] * fator),
+        prot: +(selecionado[2] * fator).toFixed(1),
+        carb: +(selecionado[3] * fator).toFixed(1),
+        gord: +(selecionado[4] * fator).toFixed(1),
+    });
+    renderDiario();
+}
+
+function remover(i) {
+    diario.splice(i, 1);
+    renderDiario();
+}
+
+function limparDiario() {
+    diario = [];
+    renderDiario();
+}
+
+function renderDiario() {
+    const el = document.getElementById('painel');
+    if (!diario.length) {
+        el.innerHTML = '<p class="empty-msg">Adicione alimentos para ver o total.</p>';
+        return;
+    }
+
+    const totKcal = diario.reduce((s, i) => s + i.kcal, 0);
+    const totProt = +diario.reduce((s, i) => s + i.prot, 0).toFixed(1);
+    const totCarb = +diario.reduce((s, i) => s + i.carb, 0).toFixed(1);
+    const totGord = +diario.reduce((s, i) => s + i.gord, 0).toFixed(1);
+
+    const totalMacro = totProt + totCarb + totGord || 1;
+    const pProt = Math.round(totProt / totalMacro * 100);
+    const pCarb = Math.round(totCarb / totalMacro * 100);
+    const pGord = Math.round(totGord / totalMacro * 100);
+
+    const refeicoes = {};
+    diario.forEach((item, idx) => {
+        if (!refeicoes[item.ref]) refeicoes[item.ref] = [];
+        refeicoes[item.ref].push({ ...item, idx });
+    });
+
+    const listaHTML = Object.entries(refeicoes).map(([ref, itens]) => {
+        const refKcal = itens.reduce((s, i) => s + i.kcal, 0);
+        const items = itens.map(it => `
+            <div class="diary-item">
+                <div class="diary-item-info">
+                    <div class="diary-item-name">${it.nome}</div>
+                    <div class="diary-item-meta">${it.qtd}g · P: ${it.prot}g · C: ${it.carb}g · G: ${it.gord}g</div>
+                </div>
+                <div class="diary-item-kcal">${it.kcal} kcal</div>
+                <button class="diary-item-del" onclick="remover(${it.idx})">×</button>
+            </div>
+        `).join('');
+        return `
+            <div style="margin-bottom:10px">
+                <div style="font-size:12px;font-weight:700;color:#27ae60;margin-bottom:5px;display:flex;justify-content:space-between">
+                    <span>${ref}</span><span>${refKcal} kcal</span>
+                </div>
+                ${items}
+            </div>
+        `;
+    }).join('');
+
+    el.innerHTML = `
+        <div class="total-card">
+            <div class="total-kcal">${totKcal.toLocaleString('pt-BR')} kcal</div>
+            <div class="total-sub">total consumido hoje</div>
+
+            <div class="macro-bar-wrap">
+                <div class="macro-bar-label">
+                    <span style="color:#3498db">Proteína ${pProt}%</span>
+                    <span style="color:#e67e22">Carboidrato ${pCarb}%</span>
+                    <span style="color:#e74c3c">Gordura ${pGord}%</span>
+                </div>
+                <div class="macro-bar-track">
+                    <div style="display:flex;height:100%">
+                        <div class="macro-bar-fill" style="width:${pProt}%;background:#3498db"></div>
+                        <div class="macro-bar-fill" style="width:${pCarb}%;background:#e67e22"></div>
+                        <div class="macro-bar-fill" style="width:${pGord}%;background:#e74c3c"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="macros-row">
+                <div class="macro-pill">
+                    <span class="macro-pill-val" style="color:#3498db">${totProt}g</span>
+                    <span class="macro-pill-lbl">Proteína</span>
+                </div>
+                <div class="macro-pill">
+                    <span class="macro-pill-val" style="color:#e67e22">${totCarb}g</span>
+                    <span class="macro-pill-lbl">Carboidrato</span>
+                </div>
+                <div class="macro-pill">
+                    <span class="macro-pill-val" style="color:#e74c3c">${totGord}g</span>
+                    <span class="macro-pill-lbl">Gordura</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-label">📋 Refeições do dia</div>
+        <div class="diary-list">${listaHTML}</div>
+
+        <p style="font-size:12px;color:#bbb;margin-top:12px;font-style:italic">Valores nutricionais aproximados baseados na Tabela TACO e IBGE. Para acompanhamento clínico, consulte um nutricionista.</p>
+    `;
+}
+
+</script>
+
+</body>
+</html>
