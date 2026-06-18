@@ -12,20 +12,11 @@
 <style>
 
 :root{
-    --red:#a3162b;
-    --red-deep:#7a0f1f;
-    --red-soft:#c43a4f;
-    --gold:#c9a227;
-    --gold-light:#e8cf86;
-    --ink:#231711;
-    --ink-soft:#5a4a40;
-    --paper:#f3e9d8;
-    --paper-soft:#fbf6ec;
-    --wood:#3c6e47;
-    --fire:#a3162b;
-    --earth:#9c6b2f;
-    --metal:#6f7c8a;
-    --water:#274b6d;
+    --red:#27ae60;
+    --red-deep:#1e8449;
+    --red-soft:#2ecc71;
+    --gold:#27ae60;
+    --gold-light:#d5f5e3;
 }
 
 *{
@@ -36,7 +27,7 @@
 
 body{
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-    background:linear-gradient(135deg,#a3162b,#7a0f1f);
+    background:linear-gradient(135deg,#2ecc71,#27ae60);
     min-height:100vh;
     padding:20px;
 }
@@ -57,8 +48,7 @@ body{
 }
 
 .right-panel{
-    padding:32px;
-    background:#fdf4f4;
+    background:#e8f8f5;
 }
 
 .eyebrow{
@@ -91,24 +81,13 @@ h1{
 }
 
 .info-box{
-    background:rgba(163,22,43,.06);
-    border-left:3px solid var(--red);
-    padding:14px 16px;
-    border-radius:8px;
-    margin-bottom:28px;
-    color:var(--red-deep);
-    font-size:12.5px;
-    line-height:1.6;
+    background:#f0fff7;
+    border-left:4px solid #27ae60;
+    color:#27ae60;
 }
 
 .section-title{
-    position:relative;
-    font:600 11px/1 'Inter',sans-serif;
-    letter-spacing:.18em;
-    text-transform:uppercase;
-    color:var(--red-deep);
-    padding-bottom:11px;
-    margin-bottom:20px;
+    border-bottom:2px solid #27ae60;
 }
 
 .section-title::after{
@@ -173,36 +152,18 @@ select:focus{
 }
 
 .btn-primary{
-    width:100%;
-    padding:15px;
-    border:none;
-    border-radius:10px;
-    background:var(--red);
-    color:var(--paper-soft);
-    font-weight:600;
-    font-size:14px;
-    letter-spacing:.03em;
-    cursor:pointer;
-    transition:background .15s ease, transform .1s ease;
+    background:#27ae60;
 }
 
-.btn-primary:hover{ background:var(--red-deep); }
+.btn-primary:hover{
+    background:#1e8449;
+}
 .btn-primary:active{ transform:scale(.98); }
 .btn-primary:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
 
 .btn-secondary{
-    width:100%;
-    padding:11px;
-    border:1.5px solid var(--gold);
-    border-radius:8px;
-    background:transparent;
-    color:var(--red-deep);
-    font-weight:600;
-    font-size:12.5px;
-    cursor:pointer;
-    margin-top:18px;
-    margin-bottom:26px;
-    transition:background .15s ease;
+    border:1.5px solid #27ae60;
+    color:#27ae60;
 }
 
 .btn-secondary:hover{ background:rgba(201,162,39,.15); }
@@ -325,12 +286,7 @@ select:focus{
 }
 
 .historico-titulo{
-    color:var(--red-deep);
-    font-size:11px;
-    font-weight:600;
-    letter-spacing:.1em;
-    text-transform:uppercase;
-    margin-bottom:10px;
+    color:#27ae60;
 }
 
 .historico{
@@ -339,13 +295,7 @@ select:focus{
 }
 
 .historico li{
-    background:#fff;
-    border-left:3px solid var(--gold);
-    padding:9px 12px;
-    border-radius:6px;
-    margin-bottom:7px;
-    font-size:11.5px;
-    color:var(--ink-soft);
+    border-left:3px solid #27ae60;
 }
 
 .cycle-grid{
@@ -563,11 +513,11 @@ const ANIMALS = [
 const ELEMENTOS = ["Madeira","Fogo","Terra","Metal","Água"];
 
 const ELEMENT_COLORS = {
-"Madeira":"#3c6e47",
-"Fogo":"#a3162b",
-"Terra":"#9c6b2f",
-"Metal":"#6f7c8a",
-"Água":"#274b6d"
+"Madeira":"#27ae60",
+"Fogo":"#27ae60",
+"Terra":"#27ae60",
+"Metal":"#27ae60",
+"Água":"#27ae60"
 };
 
 // =========================
