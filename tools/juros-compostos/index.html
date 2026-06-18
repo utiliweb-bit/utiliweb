@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-
 <title>Juros Compostos | UtiliWeb</title>
-
 <meta name="description" content="Simule juros compostos com aportes mensais e veja o crescimento do seu investimento.">
 <meta name="robots" content="index, follow">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.0/chart.umd.min.js"></script>
 
 <style>
 * {
@@ -16,7 +16,6 @@
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
 }
-
 html, body {
     width: 100%;
     min-height: 100vh;
@@ -27,7 +26,6 @@ html, body {
     padding: 16px;
     background: linear-gradient(135deg, #2ecc71, #27ae60);
 }
-
 /* CONTAINER */
 .wrapper {
     width: 100%;
@@ -38,24 +36,31 @@ html, body {
     display: grid;
     grid-template-columns: 1fr 1fr;
     overflow: hidden;
+    max-height: 92vh;
 }
-
 /* PAINÉIS */
 .left, .right {
     padding: 28px;
+    overflow-y: auto;
 }
-
+.right {
+    background: #f7faf8;
+    border-left: 1px solid #eee;
+}
 /* TITULOS */
 h1 {
     font-size: 22px;
     margin-bottom: 6px;
 }
-
+h2 {
+    font-size: 16px;
+    color: #444;
+    margin-bottom: 4px;
+}
 p {
     font-size: 12px;
     color: #777;
 }
-
 /* INPUTS */
 label {
     display: block;
@@ -63,21 +68,35 @@ label {
     font-weight: 700;
     margin-top: 12px;
 }
-
-input {
+input, select {
     width: 100%;
     padding: 12px;
     margin-top: 6px;
     border-radius: 10px;
     border: 1px solid #ddd;
     font-size: 14px;
+    font-family: inherit;
+    color: #1a1a1a;
 }
-
-input:focus {
+input:focus, select:focus {
     outline: none;
     border-color: #27ae60;
 }
-
+input.invalido {
+    border-color: #e74c3c;
+}
+/* LINHA TAXA + TIPO */
+.linha-taxa {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 8px;
+}
+.erro-texto {
+    font-size: 12px;
+    color: #e74c3c;
+    margin-top: 4px;
+    min-height: 14px;
+}
 /* BOTÃO */
 button {
     width: 100%;
@@ -89,107 +108,420 @@ button {
     cursor: pointer;
     background: #27ae60;
     color: #fff;
-}
-
-/* RESULTADO */
-.result {
-    margin-top: 10px;
-    padding: 14px;
-    border-radius: 10px;
-    background: #f4f4f4;
+    font-family: inherit;
     font-size: 14px;
-    line-height: 1.6;
+    transition: background 0.15s ease;
 }
-
+button:hover {
+    background: #219150;
+}
+/* RESULTADO */
+.resumo {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+}
+.resumo-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 12px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.resumo-card .valor {
+    font-size: 16px;
+    font-weight: 800;
+    color: #1a1a1a;
+    margin-top: 4px;
+    word-break: break-word;
+}
+.resumo-card.destaque .valor {
+    color: #27ae60;
+}
+.resumo-card .label {
+    font-size: 11px;
+    color: #888;
+}
+.grafico-container {
+    background: #fff;
+    border-radius: 10px;
+    padding: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    margin-bottom: 16px;
+    height: 240px;
+    position: relative;
+}
+.placeholder {
+    color: #999;
+    font-size: 13px;
+    text-align: center;
+    padding: 40px 10px;
+}
+/* TABELA */
+.tabela-container {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    overflow: hidden;
+}
+.tabela-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    border-bottom: 1px solid #eee;
+}
+.tabela-header span {
+    font-size: 13px;
+    font-weight: 700;
+    color: #444;
+}
+.tabela-header button {
+    width: auto;
+    margin: 0;
+    padding: 6px 12px;
+    font-size: 11px;
+    background: #fff;
+    color: #27ae60;
+    border: 1px solid #27ae60;
+}
+.tabela-scroll {
+    max-height: 220px;
+    overflow-y: auto;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+th, td {
+    padding: 8px 14px;
+    text-align: right;
+    white-space: nowrap;
+}
+th:first-child, td:first-child {
+    text-align: left;
+}
+thead th {
+    background: #f7faf8;
+    color: #666;
+    font-weight: 700;
+    position: sticky;
+    top: 0;
+}
+tbody tr:nth-child(even) {
+    background: #fafafa;
+}
 /* RESPONSIVO */
 @media (max-width: 768px) {
     .wrapper {
         grid-template-columns: 1fr;
+        max-height: none;
     }
-
     html, body {
         padding: 12px;
     }
-
     .left, .right {
         padding: 18px;
     }
+    .right {
+        border-left: none;
+        border-top: 1px solid #eee;
+    }
+    .resumo {
+        grid-template-columns: 1fr;
+    }
 }
 </style>
-
 </head>
-
 <body>
-
 <div class="wrapper">
-
     <!-- INPUT -->
     <div class="left">
-
         <h1>📈 Juros Compostos</h1>
         <p>Simule o crescimento do seu investimento</p>
 
-        <label>Capital inicial (R$)</label>
-        <input id="capital" type="number" min="0">
+        <label for="capital">Capital inicial (R$)</label>
+        <input id="capital" type="number" min="0" step="0.01" placeholder="Ex: 1000">
 
-        <label>Aporte mensal (R$)</label>
-        <input id="aporte" type="number" min="0" value="0">
+        <label for="aporte">Aporte mensal (R$)</label>
+        <input id="aporte" type="number" min="0" step="0.01" value="0">
 
-        <label>Taxa de juros mensal (%)</label>
-        <input id="taxa" type="number" min="0" step="0.01">
+        <label for="taxa">Taxa de juros</label>
+        <div class="linha-taxa">
+            <input id="taxa" type="number" min="0" step="0.01" placeholder="Ex: 1">
+            <select id="periodoTaxa">
+                <option value="mensal">% ao mês</option>
+                <option value="anual">% ao ano</option>
+            </select>
+        </div>
 
-        <label>Período (meses)</label>
-        <input id="meses" type="number" min="1">
+        <label for="meses">Período</label>
+        <div class="linha-taxa">
+            <input id="meses" type="number" min="1" step="1" placeholder="Ex: 12">
+            <select id="unidadePeriodo">
+                <option value="meses">meses</option>
+                <option value="anos">anos</option>
+            </select>
+        </div>
 
-        <button onclick="calcular()">Calcular</button>
+        <div class="erro-texto" id="erroTexto"></div>
 
+        <button type="button" id="btnCalcular">Calcular</button>
     </div>
 
     <!-- RESULTADO -->
     <div class="right">
-
         <h2>Resultado</h2>
 
-        <div id="resultado" class="result">
-            Preencha os dados e clique em calcular
+        <div class="resumo">
+            <div class="resumo-card">
+                <div class="label">Total investido</div>
+                <div class="valor" id="valInvestido">—</div>
+            </div>
+            <div class="resumo-card">
+                <div class="label">Juros ganhos</div>
+                <div class="valor" id="valJuros">—</div>
+            </div>
+            <div class="resumo-card destaque">
+                <div class="label">Valor final</div>
+                <div class="valor" id="valFinal">—</div>
+            </div>
         </div>
 
-    </div>
+        <div class="grafico-container">
+            <canvas id="grafico" style="display:none;"></canvas>
+            <div class="placeholder" id="graficoPlaceholder">Preencha os dados e clique em calcular para ver a evolução do seu investimento</div>
+        </div>
 
+        <div class="tabela-container" id="tabelaContainer" style="display:none;">
+            <div class="tabela-header">
+                <span>Evolução mês a mês</span>
+                <button type="button" id="btnExportar">Exportar CSV</button>
+            </div>
+            <div class="tabela-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mês</th>
+                            <th>Investido</th>
+                            <th>Juros</th>
+                            <th>Saldo</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelaBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
+const elCapital = document.getElementById("capital");
+const elAporte = document.getElementById("aporte");
+const elTaxa = document.getElementById("taxa");
+const elPeriodoTaxa = document.getElementById("periodoTaxa");
+const elMeses = document.getElementById("meses");
+const elUnidadePeriodo = document.getElementById("unidadePeriodo");
+const elErroTexto = document.getElementById("erroTexto");
+const elBtnCalcular = document.getElementById("btnCalcular");
+const elBtnExportar = document.getElementById("btnExportar");
+
+const elValInvestido = document.getElementById("valInvestido");
+const elValJuros = document.getElementById("valJuros");
+const elValFinal = document.getElementById("valFinal");
+
+const elGrafico = document.getElementById("grafico");
+const elGraficoPlaceholder = document.getElementById("graficoPlaceholder");
+const elTabelaContainer = document.getElementById("tabelaContainer");
+const elTabelaBody = document.getElementById("tabelaBody");
+
+let chartInstance = null;
+let serieAtual = null;
+
+function formatarReal(valor) {
+    return valor.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
+}
+
+function taxaAnualParaMensal(taxaAnualDecimal) {
+    return Math.pow(1 + taxaAnualDecimal, 1 / 12) - 1;
+}
+
+function limparErro(el) {
+    elErroTexto.textContent = "";
+    [elCapital, elTaxa, elMeses].forEach(e => e.classList.remove("invalido"));
+}
+
+function calcularSerie(capital, aporte, taxaMensal, meses) {
+    const serie = [{ mes: 0, saldo: capital, investido: capital, juros: 0 }];
+    let saldo = capital;
+    let investido = capital;
+    for (let i = 1; i <= meses; i++) {
+        saldo = saldo * (1 + taxaMensal) + aporte;
+        investido += aporte;
+        serie.push({ mes: i, saldo, investido, juros: saldo - investido });
+    }
+    return serie;
+}
+
+function desenharGrafico(serie) {
+    elGrafico.style.display = "block";
+    elGraficoPlaceholder.style.display = "none";
+
+    const labels = serie.map(p => `Mês ${p.mes}`);
+    const investidoData = serie.map(p => Math.round(p.investido * 100) / 100);
+    const saldoData = serie.map(p => Math.round(p.saldo * 100) / 100);
+
+    if (chartInstance) chartInstance.destroy();
+
+    chartInstance = new Chart(elGrafico, {
+        type: "line",
+        data: {
+            labels,
+            datasets: [
+                {
+                    label: "Total investido",
+                    data: investidoData,
+                    borderColor: "#aaa",
+                    backgroundColor: "rgba(170,170,170,0.1)",
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    tension: 0
+                },
+                {
+                    label: "Valor com juros",
+                    data: saldoData,
+                    borderColor: "#27ae60",
+                    backgroundColor: "rgba(39,174,96,0.12)",
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    fill: true,
+                    tension: 0.15
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: "index", intersect: false },
+            plugins: {
+                legend: { position: "bottom", labels: { font: { size: 11 } } },
+                tooltip: {
+                    callbacks: {
+                        label: (ctx) => `${ctx.dataset.label}: ${formatarReal(ctx.parsed.y)}`
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: { maxTicksLimit: 8, font: { size: 10 } },
+                    grid: { display: false }
+                },
+                y: {
+                    ticks: {
+                        font: { size: 10 },
+                        callback: (v) => "R$ " + v.toLocaleString("pt-BR")
+                    }
+                }
+            }
+        }
+    });
+}
+
+function preencherTabela(serie) {
+    elTabelaContainer.style.display = "block";
+    elTabelaBody.innerHTML = serie.map(p => `
+        <tr>
+            <td>${p.mes}</td>
+            <td>${formatarReal(p.investido)}</td>
+            <td>${formatarReal(p.juros)}</td>
+            <td>${formatarReal(p.saldo)}</td>
+        </tr>
+    `).join("");
+}
+
+function exportarCSV() {
+    if (!serieAtual) return;
+    const linhas = ["Mes,Investido,Juros,Saldo"];
+    serieAtual.forEach(p => {
+        linhas.push(`${p.mes},${p.investido.toFixed(2)},${p.juros.toFixed(2)},${p.saldo.toFixed(2)}`);
+    });
+    const blob = new Blob([linhas.join("\n")], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "juros-compostos.csv";
+    link.click();
+    URL.revokeObjectURL(url);
+}
+
 function calcular() {
+    limparErro();
 
-    const capital = parseFloat(document.getElementById("capital").value) || 0;
-    const aporte = parseFloat(document.getElementById("aporte").value) || 0;
-    const taxa = (parseFloat(document.getElementById("taxa").value) || 0) / 100;
-    const meses = parseInt(document.getElementById("meses").value);
+    const capital = parseFloat(elCapital.value);
+    const aporte = parseFloat(elAporte.value) || 0;
+    const taxaInformada = parseFloat(elTaxa.value);
+    const periodoTaxa = elPeriodoTaxa.value;
+    const periodoInformado = parseFloat(elMeses.value);
+    const unidadePeriodo = elUnidadePeriodo.value;
 
-    const out = document.getElementById("resultado");
+    let temErro = false;
 
-    if (!meses || meses <= 0) {
-        out.textContent = "Informe um período válido.";
+    if (isNaN(capital) || capital < 0) {
+        elCapital.classList.add("invalido");
+        temErro = true;
+    }
+    if (isNaN(taxaInformada) || taxaInformada < 0) {
+        elTaxa.classList.add("invalido");
+        temErro = true;
+    }
+    if (isNaN(periodoInformado) || periodoInformado <= 0) {
+        elMeses.classList.add("invalido");
+        temErro = true;
+    }
+
+    if (temErro) {
+        elErroTexto.textContent = "Preencha os campos destacados com valores válidos.";
         return;
     }
 
-    let saldo = capital;
+    const taxaDecimal = taxaInformada / 100;
+    const taxaMensal = periodoTaxa === "anual" ? taxaAnualParaMensal(taxaDecimal) : taxaDecimal;
+    const meses = unidadePeriodo === "anos" ? Math.round(periodoInformado * 12) : Math.round(periodoInformado);
 
-    for (let i = 0; i < meses; i++) {
-        saldo = saldo * (1 + taxa);
-        saldo += aporte;
+    if (meses > 1200) {
+        elErroTexto.textContent = "Período muito longo. Use no máximo 100 anos (1200 meses).";
+        return;
     }
 
-    const investido = capital + (aporte * meses);
-    const juros = saldo - investido;
+    const serie = calcularSerie(capital, aporte, taxaMensal, meses);
+    serieAtual = serie;
 
-    out.innerHTML = `
-        <strong>Total investido:</strong> R$ ${investido.toLocaleString("pt-BR",{minimumFractionDigits:2})}<br>
-        <strong>Juros ganhos:</strong> R$ ${juros.toLocaleString("pt-BR",{minimumFractionDigits:2})}<br>
-        <strong>Valor final:</strong> R$ ${saldo.toLocaleString("pt-BR",{minimumFractionDigits:2})}
-    `;
+    const ultimo = serie[serie.length - 1];
+
+    elValInvestido.textContent = formatarReal(ultimo.investido);
+    elValJuros.textContent = formatarReal(ultimo.juros);
+    elValFinal.textContent = formatarReal(ultimo.saldo);
+
+    desenharGrafico(serie);
+    preencherTabela(serie);
 }
-</script>
 
+elBtnCalcular.addEventListener("click", calcular);
+elBtnExportar.addEventListener("click", exportarCSV);
+
+[elCapital, elAporte, elTaxa, elMeses].forEach(el => {
+    el.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") calcular();
+    });
+    el.addEventListener("input", () => el.classList.remove("invalido"));
+});
+</script>
 </body>
 </html>
