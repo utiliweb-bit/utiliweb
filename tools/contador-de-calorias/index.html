@@ -384,7 +384,7 @@ input[type="text"]:focus, input[type="number"]:focus, select:focus {
             <input type="text" id="busca" placeholder="Ex: arroz, frango, banana…" autocomplete="off" oninput="buscar()">
             <div class="suggestions" id="sugestoes"></div>
         </div>
-        <p style="font-size:12px;color:#aaa;margin-bottom:16px">Tabela com mais de 250 alimentos da dieta brasileira</p>
+        <p style="font-size:12px;color:#aaa;margin-bottom:16px">Tabela com mais de 280 alimentos, incluindo pratos da culinária japonesa</p>
 
         <div class="nutri-preview" id="nutri-preview">
             <div class="nutri-name" id="nutri-nome">—</div>
@@ -395,12 +395,14 @@ input[type="text"]:focus, input[type="number"]:focus, select:focus {
                 <div class="nutri-item"><span class="nutri-val" id="prev-gord" style="color:#e74c3c">0g</span><span class="nutri-lbl">gordura</span></div>
             </div>
             <p style="font-size:11px;color:#aaa;margin-top:8px">Valores por 100g</p>
+            <p id="colher-info" style="display:none;font-size:12px;color:#27ae60;font-weight:700;margin-top:6px;background:#fff;border-radius:8px;padding:6px 8px;border:1px solid #d7f5e3"></p>
         </div>
 
         <div class="input-row">
             <div>
                 <label>Quantidade (g)</label>
-                <input type="number" id="quantidade" value="100" min="1" step="1">
+                <input type="number" id="quantidade" value="100" min="1" step="1" oninput="atualizarColherQtd()">
+                <p id="qtd-colher" style="display:none;font-size:12px;color:#27ae60;font-weight:700;margin-top:6px">🥄 —</p>
             </div>
             <div>
                 <label>Refeição</label>
@@ -430,11 +432,11 @@ input[type="text"]:focus, input[type="number"]:focus, select:focus {
 // Tabela nutricional por 100g: [kcal, prot(g), carb(g), gord(g)]
 const ALIMENTOS = [
     // Cereais e farináceos
-    ["Arroz branco cozido",          128, 2.5, 28.1, 0.2],
-    ["Arroz integral cozido",        124, 2.6, 25.8, 1.0],
-    ["Arroz parboilizado cozido",    123, 2.6, 26.2, 0.4],
-    ["Macarrão cozido",              131, 4.5, 26.4, 0.9],
-    ["Macarrão integral cozido",     124, 5.3, 23.5, 1.2],
+    ["Arroz branco cozido",          128, 2.5, 28.1, 0.2, 25],
+    ["Arroz integral cozido",        124, 2.6, 25.8, 1.0, 25],
+    ["Arroz parboilizado cozido",    123, 2.6, 26.2, 0.4, 25],
+    ["Macarrão cozido",              131, 4.5, 26.4, 0.9, 25],
+    ["Macarrão integral cozido",     124, 5.3, 23.5, 1.2, 25],
     ["Macarrão ao molho de tomate",  140, 4.2, 23.0, 3.5],
     ["Pão francês",                  300, 8.0, 58.6, 3.1],
     ["Pão de forma branco",          280, 8.0, 50.0, 4.0],
@@ -443,20 +445,24 @@ const ALIMENTOS = [
     ["Pão de hambúrguer",            280, 9.0, 49.0, 5.0],
     ["Torrada tradicional",          411, 10.5,76.0, 5.5],
     ["Tapioca",                      346, 0.6, 85.0, 0.0],
-    ["Aveia em flocos",              394, 13.9,64.9, 8.5],
-    ["Granola",                      388, 8.0, 64.0, 12.0],
-    ["Quinoa cozida",                120, 4.4, 21.3, 1.9],
-    ["Farinha de trigo",             361, 9.8, 75.1, 1.4],
-    ["Farinha de mandioca",          361, 1.6, 87.0, 0.3],
-    ["Farofa pronta",                415, 2.0, 65.0, 15.0],
-    ["Polenta cozida",               80,  1.6, 17.0, 0.5],
-    ["Cuscuz de milho cozido",       107, 2.5, 22.0, 0.6],
+    ["Aveia em flocos",              394, 13.9,64.9, 8.5, 9],
+    ["Granola",                      388, 8.0, 64.0, 12.0, 12],
+    ["Cereal matinal (sucrilhos)",   357, 7.0, 84.0, 0.4, 7],
+    ["Cereal matinal integral",      370, 8.0, 80.0, 3.0, 8],
+    ["Cereal matinal de chocolate",  380, 6.0, 82.0, 3.0, 8],
+    ["Muesli",                       360, 10.0,66.0, 6.0, 10],
+    ["Quinoa cozida",                120, 4.4, 21.3, 1.9, 20],
+    ["Farinha de trigo",             361, 9.8, 75.1, 1.4, 10],
+    ["Farinha de mandioca",          361, 1.6, 87.0, 0.3, 9],
+    ["Farofa pronta",                415, 2.0, 65.0, 15.0, 12],
+    ["Polenta cozida",               80,  1.6, 17.0, 0.5, 20],
+    ["Cuscuz de milho cozido",       107, 2.5, 22.0, 0.6, 20],
     ["Milho cozido",                 86,  3.2, 18.7, 1.0],
     ["Pipoca simples",               387, 12.9,74.8, 4.3],
     ["Batata inglesa cozida",        82,  1.9, 18.6, 0.1],
     ["Batata doce cozida",           93,  1.4, 21.7, 0.1],
     ["Batata frita (porção)",        312, 3.8, 41.0, 15.0],
-    ["Purê de batata",               95,  1.9, 14.5, 3.5],
+    ["Purê de batata",               95,  1.9, 14.5, 3.5, 20],
     ["Inhame cozido",                95,  1.5, 22.0, 0.1],
     ["Mandioca cozida",              125, 1.0, 30.0, 0.2],
     ["Mandioquinha (batata baroa) cozida", 80, 1.0, 19.0, 0.2],
@@ -507,8 +513,9 @@ const ALIMENTOS = [
     ["Omelete simples",              154, 10.6, 1.6, 11.7],
     ["Leite integral",               61,  3.2,  4.7, 3.3],
     ["Leite desnatado",              35,  3.5,  5.0, 0.1],
-    ["Leite condensado",             321, 7.9, 54.4, 6.6],
-    ["Creme de leite",               297, 2.4,  3.4, 30.0],
+    ["Leite condensado",             321, 7.9, 54.4, 6.6, 20],
+    ["Leite em pó integral",         496, 25.7,39.0, 26.7, 8],
+    ["Creme de leite",               297, 2.4,  3.4, 30.0, 18],
     ["Iogurte natural integral",     61,  3.5,  4.7, 3.3],
     ["Iogurte grego",                97,  9.0,  3.8, 5.0],
     ["Iogurte de frutas",            85,  3.0, 14.0, 1.8],
@@ -519,20 +526,20 @@ const ALIMENTOS = [
     ["Queijo parmesão",              431, 38.5, 3.5, 29.0],
     ["Queijo cottage",               103, 12.5, 3.4, 4.5],
     ["Ricota",                       140, 11.0, 3.8, 8.0],
-    ["Requeijão cremoso",            238, 7.0,  4.6, 21.5],
-    ["Cream cheese",                 342, 6.2,  4.1, 34.0],
-    ["Manteiga",                     726, 0.9,  0.1, 80.5],
-    ["Margarina",                    540, 0.5,  0.9, 60.0],
+    ["Requeijão cremoso",            238, 7.0,  4.6, 21.5, 18],
+    ["Cream cheese",                 342, 6.2,  4.1, 34.0, 15],
+    ["Manteiga",                     726, 0.9,  0.1, 80.5, 14],
+    ["Margarina",                    540, 0.5,  0.9, 60.0, 14],
 
     // Leguminosas
-    ["Feijão carioca cozido",        77,  4.8, 13.6, 0.5],
-    ["Feijão preto cozido",          77,  4.5, 14.0, 0.5],
-    ["Feijão branco cozido",         87,  6.0, 16.0, 0.4],
-    ["Feijão fradinho cozido",       90,  6.0, 16.0, 0.5],
-    ["Lentilha cozida",              93,  6.3, 16.3, 0.4],
-    ["Grão-de-bico cozido",          164, 8.9, 27.4, 2.6],
-    ["Ervilha cozida",               84,  5.4, 15.6, 0.4],
-    ["Soja cozida",                  141, 12.9,11.5, 6.4],
+    ["Feijão carioca cozido",        77,  4.8, 13.6, 0.5, 18],
+    ["Feijão preto cozido",          77,  4.5, 14.0, 0.5, 18],
+    ["Feijão branco cozido",         87,  6.0, 16.0, 0.4, 18],
+    ["Feijão fradinho cozido",       90,  6.0, 16.0, 0.5, 18],
+    ["Lentilha cozida",              93,  6.3, 16.3, 0.4, 18],
+    ["Grão-de-bico cozido",          164, 8.9, 27.4, 2.6, 18],
+    ["Ervilha cozida",               84,  5.4, 15.6, 0.4, 15],
+    ["Soja cozida",                  141, 12.9,11.5, 6.4, 18],
     ["Tofu",                         76,  8.1,  1.9, 4.8],
 
     // Vegetais e verduras
@@ -620,26 +627,27 @@ const ALIMENTOS = [
     ["Tâmara",                       282, 2.5, 75.0, 0.4],
 
     // Oleaginosas e sementes
-    ["Amendoim torrado",             581, 26.0,19.0, 49.0],
+    ["Amendoim torrado",             581, 26.0,19.0, 49.0, 9],
     ["Castanha-do-pará",             656, 14.3, 7.1, 63.5],
     ["Castanha de caju torrada",     570, 18.5,28.7, 46.0],
     ["Nozes",                        620, 14.3, 7.0, 62.5],
     ["Amêndoas",                     579, 21.2,21.7, 49.9],
     ["Pistache",                     560, 20.6,27.2, 45.3],
     ["Macadâmia",                    718, 7.9,  13.8,75.8],
-    ["Chia",                         490, 16.5,42.1, 30.7],
-    ["Linhaça",                      495, 18.3,28.9, 34.0],
-    ["Gergelim",                     573, 17.7,26.0, 49.7],
-    ["Semente de abóbora",           559, 30.2,10.7, 49.0],
-    ["Semente de girassol",          584, 20.8,20.0, 51.5],
+    ["Chia",                         490, 16.5,42.1, 30.7, 12],
+    ["Linhaça",                      495, 18.3,28.9, 34.0, 10],
+    ["Gergelim",                     573, 17.7,26.0, 49.7, 9],
+    ["Semente de abóbora",           559, 30.2,10.7, 49.0, 8],
+    ["Semente de girassol",          584, 20.8,20.0, 51.5, 8],
+    ["Pasta de amendoim",            588, 25.0,20.0, 50.0, 16],
 
     // Óleos e gorduras
-    ["Azeite de oliva",              884, 0.0,  0.0, 100.0],
-    ["Óleo de soja",                 884, 0.0,  0.0, 100.0],
-    ["Óleo de canola",               884, 0.0,  0.0, 100.0],
-    ["Óleo de girassol",             884, 0.0,  0.0, 100.0],
-    ["Óleo de coco",                 862, 0.0,  0.0, 100.0],
-    ["Banha de porco",               902, 0.0,  0.0, 100.0],
+    ["Azeite de oliva",              884, 0.0,  0.0, 100.0, 13],
+    ["Óleo de soja",                 884, 0.0,  0.0, 100.0, 13],
+    ["Óleo de canola",               884, 0.0,  0.0, 100.0, 13],
+    ["Óleo de girassol",             884, 0.0,  0.0, 100.0, 13],
+    ["Óleo de coco",                 862, 0.0,  0.0, 100.0, 13],
+    ["Banha de porco",               902, 0.0,  0.0, 100.0, 13],
 
     // Bebidas
     ["Suco de laranja natural",      44,  0.7, 10.4, 0.1],
@@ -678,10 +686,12 @@ const ALIMENTOS = [
     ["Paçoca",                       469, 17.5,46.0, 25.0],
     ["Rapadura",                     352, 0.4, 91.0, 0.1],
     ["Goiabada",                     290, 0.4, 73.0, 0.1],
-    ["Doce de leite",                315, 6.5, 55.0, 6.5],
+    ["Doce de leite",                315, 6.5, 55.0, 6.5, 20],
     ["Gelatina",                     60,  1.5, 13.0, 0.0],
-    ["Mel",                          304, 0.4, 82.5, 0.0],
-    ["Açúcar refinado",              387, 0.0, 99.5, 0.0],
+    ["Mel",                          304, 0.4, 82.5, 0.0, 20],
+    ["Geleia de frutas",             250, 0.4, 65.0, 0.0, 18],
+    ["Achocolatado em pó",           376, 5.0, 80.0, 4.0, 10],
+    ["Açúcar refinado",              387, 0.0, 99.5, 0.0, 12],
     ["Adoçante stevia (por dose)",   0,   0.0,  0.0, 0.0],
 
     // Fast food e refeições prontas
@@ -703,10 +713,37 @@ const ALIMENTOS = [
     ["Lasanha (porção pronta)",      155, 8.0, 14.0, 7.5],
     ["Strogonoff de frango",         170, 12.0, 6.0, 11.0],
     ["Feijoada (porção)",            180, 12.0, 14.0, 8.5],
-    ["Sushi (peça niguiri/sashimi)", 145, 6.5, 23.0, 2.5],
-    ["Temaki (média, salmão)",       180, 6.0, 26.0, 5.0],
     ["Açaí na tigela (com xarope)",  180, 1.5, 28.0, 7.0],
     ["Caldo de cana",                56,  0.3, 13.1, 0.0],
+
+    // Culinária japonesa
+    ["Gohan (arroz japonês cozido)", 130, 2.5, 28.6, 0.3],
+    ["Missô (pasta de soja)",        199, 11.7,25.4, 6.0, 16],
+    ["Miso shiru (sopa de missô)",   40,  3.0,  4.0, 1.5],
+    ["Sushi (peça niguiri/sashimi)", 145, 6.5, 23.0, 2.5],
+    ["Temaki (média, salmão)",       180, 6.0, 26.0, 5.0],
+    ["Hot roll (sushi empanado)",    255, 8.0, 25.0, 13.5],
+    ["Sashimi de salmão",            188, 20.0, 0.0, 11.5],
+    ["Yakimeshi (arroz frito japonês)", 170, 4.0, 25.0, 6.0],
+    ["Onigiri simples",              180, 3.0, 39.0, 0.5],
+    ["Yakisoba",                     150, 5.0, 20.0, 5.0],
+    ["Udon cozido",                  99,  2.6, 21.0, 0.4],
+    ["Soba cozido",                  99,  5.0, 21.0, 0.4],
+    ["Ramen tradicional (com caldo)",120, 5.0, 16.0, 4.0],
+    ["Tempura de camarão",           270, 10.0,20.0, 17.0],
+    ["Tonkatsu (costeleta empanada)",280, 20.0,15.0, 16.0],
+    ["Yakitori (espetinho de frango)",200, 22.0, 8.0, 9.0],
+    ["Gyoza (5 unidades)",           210, 8.0, 22.0, 10.0],
+    ["Tamagoyaki",                   180, 11.0, 6.0, 12.0],
+    ["Natto (soja fermentada)",      212, 17.7,12.4, 11.0],
+    ["Edamame cozido",               122, 11.0,10.0, 5.0],
+    ["Takoyaki (porção)",            220, 8.0, 25.0, 10.0],
+    ["Curry japonês com arroz",      150, 4.0, 20.0, 6.0],
+    ["Okonomiyaki",                  180, 7.0, 18.0, 9.0],
+    ["Oden (variado, com caldo)",    70,  6.0,  8.0, 2.0],
+    ["Mochi",                        210, 2.0, 48.0, 0.3],
+    ["Dorayaki",                     280, 6.0, 55.0, 4.0],
+    ["Chá matcha (sem açúcar)",      3,   0.2,  0.3, 0.0],
 ];
 
 let selecionado = null;
@@ -731,6 +768,25 @@ function buscar() {
     box.style.display = 'block';
 }
 
+function formatColher(n, curto) {
+    const r = Math.round(n * 2) / 2; // arredonda para o ½ mais próximo
+    if (r <= 0) return curto ? '< ½ colher' : 'menos de ½ colher de sopa';
+    const numTxt = (r % 1 === 0) ? String(r) : r.toFixed(1).replace('.', ',');
+    if (curto) return numTxt + ' c.sopa';
+    const plural = r !== 1;
+    return numTxt + (plural ? ' colheres de sopa' : ' colher de sopa');
+}
+
+function atualizarColherQtd() {
+    const el = document.getElementById('qtd-colher');
+    if (!selecionado || !selecionado[5]) { el.style.display = 'none'; return; }
+    const qtd = parseFloat(document.getElementById('quantidade').value) || 0;
+    if (qtd <= 0) { el.style.display = 'none'; return; }
+    const colheres = qtd / selecionado[5];
+    el.textContent = `🥄 ${qtd}g ≈ ${formatColher(colheres)}`;
+    el.style.display = 'block';
+}
+
 function selecionar(idx) {
     selecionado = ALIMENTOS[idx];
     document.getElementById('busca').value = selecionado[0];
@@ -742,6 +798,16 @@ function selecionar(idx) {
     document.getElementById('prev-prot').textContent = selecionado[2] + 'g';
     document.getElementById('prev-carb').textContent = selecionado[3] + 'g';
     document.getElementById('prev-gord').textContent = selecionado[4] + 'g';
+
+    const colherEl = document.getElementById('colher-info');
+    if (selecionado[5]) {
+        const colheres100g = 100 / selecionado[5];
+        colherEl.textContent = `🥄 100g ≈ ${formatColher(colheres100g)} (${selecionado[5]}g por colher)`;
+        colherEl.style.display = 'block';
+    } else {
+        colherEl.style.display = 'none';
+    }
+    atualizarColherQtd();
 }
 
 document.addEventListener('click', e => {
@@ -763,6 +829,7 @@ function adicionar() {
         prot: +(selecionado[2] * fator).toFixed(1),
         carb: +(selecionado[3] * fator).toFixed(1),
         gord: +(selecionado[4] * fator).toFixed(1),
+        colher: selecionado[5] ? qtd / selecionado[5] : null,
     });
     renderDiario();
 }
@@ -806,7 +873,7 @@ function renderDiario() {
             <div class="diary-item">
                 <div class="diary-item-info">
                     <div class="diary-item-name">${it.nome}</div>
-                    <div class="diary-item-meta">${it.qtd}g · P: ${it.prot}g · C: ${it.carb}g · G: ${it.gord}g</div>
+                    <div class="diary-item-meta">${it.qtd}g${it.colher ? ' (' + formatColher(it.colher, true) + ')' : ''} · P: ${it.prot}g · C: ${it.carb}g · G: ${it.gord}g</div>
                 </div>
                 <div class="diary-item-kcal">${it.kcal} kcal</div>
                 <button class="diary-item-del" onclick="remover(${it.idx})">×</button>
@@ -861,7 +928,7 @@ function renderDiario() {
         <div class="section-label">📋 Refeições do dia</div>
         <div class="diary-list">${listaHTML}</div>
 
-        <p style="font-size:12px;color:#bbb;margin-top:12px;font-style:italic">Valores nutricionais aproximados baseados na Tabela TACO e IBGE. Para acompanhamento clínico, consulte um nutricionista.</p>
+        <p style="font-size:12px;color:#bbb;margin-top:12px;font-style:italic">Valores nutricionais aproximados baseados na Tabela TACO e IBGE. Conversões em colheres de sopa são estimativas (variam por densidade do alimento). Para acompanhamento clínico, consulte um nutricionista.</p>
     `;
 }
 
