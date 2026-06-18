@@ -3,12 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-
 <title>Remover Linhas Duplicadas | UtiliWeb</title>
-
 <meta name="description" content="Remova linhas repetidas de textos e listas automaticamente.">
 <meta name="robots" content="index, follow">
-
 <style>
 * {
     margin: 0;
@@ -16,7 +13,6 @@
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
 }
-
 html, body {
     width: 100%;
     min-height: 100vh;
@@ -27,7 +23,6 @@ html, body {
     padding: 16px;
     background: linear-gradient(135deg, #2ecc71, #27ae60);
 }
-
 /* WRAPPER */
 .wrapper {
     width: 100%;
@@ -39,23 +34,19 @@ html, body {
     grid-template-columns: 1fr 1fr;
     overflow: hidden;
 }
-
 /* PAINÉIS */
 .left, .right {
     padding: 28px;
 }
-
 /* TITULOS */
 h1 {
     font-size: 22px;
     margin-bottom: 6px;
 }
-
 p {
     font-size: 12px;
     color: #777;
 }
-
 /* INPUT */
 textarea {
     width: 100%;
@@ -67,12 +58,10 @@ textarea {
     font-size: 14px;
     resize: vertical;
 }
-
 textarea:focus {
     outline: none;
     border-color: #27ae60;
 }
-
 /* BOTÕES */
 .btns {
     display: flex;
@@ -80,7 +69,6 @@ textarea:focus {
     margin-top: 14px;
     flex-wrap: wrap;
 }
-
 button {
     flex: 1;
     padding: 12px;
@@ -89,17 +77,21 @@ button {
     font-weight: 700;
     cursor: pointer;
 }
-
 .primary {
     background: #27ae60;
     color: #fff;
 }
-
 .secondary {
     background: #f4f4f4;
     color: #333;
 }
-
+.copy-msg {
+    margin-top: 10px;
+    color: #27ae60;
+    font-size: 14px;
+    font-weight: 600;
+    display: none;
+}
 /* RESULTADO */
 .result {
     background: #f4f4f4;
@@ -109,85 +101,109 @@ button {
     white-space: pre-wrap;
     min-height: 120px;
 }
-
 /* RESPONSIVO */
 @media (max-width: 768px) {
     .wrapper {
         grid-template-columns: 1fr;
     }
-
     html, body {
         padding: 12px;
     }
-
     .left, .right {
         padding: 18px;
     }
 }
 </style>
-
 </head>
-
 <body>
-
 <div class="wrapper">
-
     <!-- INPUT -->
     <div class="left">
-
         <h1>🧾 Remover Linhas Duplicadas</h1>
         <p>Limpe listas removendo itens repetidos automaticamente</p>
-
         <textarea id="text" placeholder="Digite ou cole sua lista aqui..."></textarea>
-
         <div class="btns">
             <button class="primary" onclick="removeDup()">Remover</button>
             <button class="secondary" onclick="copyText()">Copiar</button>
             <button class="secondary" onclick="resetAll()">Limpar</button>
         </div>
-
+        <div class="copy-msg" id="copyMsg">✓ Texto copiado com sucesso</div>
     </div>
-
     <!-- RESULTADO -->
     <div class="right">
-
         <h2>Resultado</h2>
-
-        <div id="result" class="result">---</div>
-
+        <div id="result" class="result" aria-live="polite">---</div>
     </div>
-
 </div>
-
 <script>
+
 const input = document.getElementById("text");
 const result = document.getElementById("result");
+const copyMsg = document.getElementById("copyMsg");
+
+const PLACEHOLDER_INICIAL = "---";
+const MENSAGEM_VAZIA = "Nada para processar";
 
 function removeDup() {
 
-    const lines = (input.value || "")
+    const vistos = new Set();
+    const unicas = [];
+
+    (input.value || "")
         .split("\n")
-        .map(l => l.trim())
-        .filter(Boolean);
+        .forEach(linha => {
 
-    const unique = [...new Set(lines)];
+            // normaliza forma Unicode (evita que acentos representados de
+            // jeitos diferentes escapem da deduplicação) e colapsa espaços internos
+            const limpa = linha
+                .normalize("NFC")
+                .replace(/\s+/g, " ")
+                .trim();
 
-    result.textContent = unique.length ? unique.join("\n") : "Nada para processar";
+            if (!limpa || vistos.has(limpa)) return;
+
+            vistos.add(limpa);
+            unicas.push(limpa);
+        });
+
+    result.textContent = unicas.length ? unicas.join("\n") : MENSAGEM_VAZIA;
 }
 
-function copyText() {
-    if (!result.textContent || result.textContent === "---") return;
-    navigator.clipboard.writeText(result.textContent);
+async function copyText() {
+
+    const texto = result.textContent.trim();
+
+    if (
+        !texto ||
+        texto === PLACEHOLDER_INICIAL ||
+        texto === MENSAGEM_VAZIA
+    ) {
+        return;
+    }
+
+    try {
+
+        await navigator.clipboard.writeText(texto);
+
+        copyMsg.style.display = "block";
+
+        setTimeout(() => {
+            copyMsg.style.display = "none";
+        }, 2000);
+
+    } catch (error) {
+
+        alert("Não foi possível copiar o texto.");
+    }
 }
 
 function resetAll() {
     input.value = "";
-    result.textContent = "---";
+    result.textContent = PLACEHOLDER_INICIAL;
 }
 
 /* UX automático */
 input.addEventListener("input", removeDup);
 </script>
-
 </body>
 </html>
