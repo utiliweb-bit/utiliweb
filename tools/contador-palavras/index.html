@@ -3,24 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-
 <title>Contador de Palavras | UtiliWeb</title>
-
 <meta name="description" content="Conte palavras e caracteres em tempo real online.">
 <meta name="keywords" content="contador de palavras, contador de texto, utiliweb">
-
 <style>
 :root{
     --pad: clamp(10px, 2vw, 20px);
     --radius: 18px;
 }
-
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
 }
-
 html, body{
     width:100%;
     min-height:100dvh;
@@ -31,7 +26,6 @@ html, body{
     align-items:center;
     padding:var(--pad);
 }
-
 /* WRAPPER */
 .wrapper{
     width:100%;
@@ -43,28 +37,23 @@ html, body{
     grid-template-columns:1fr 1fr;
     overflow:hidden;
 }
-
 /* PAINÉIS */
 .left-panel,
 .right-panel{
     padding:clamp(16px, 3vw, 30px);
 }
-
 /* ESQUERDA */
 .left-panel{
     border-right:1px solid #eee;
 }
-
 /* HEADER */
 header h1{
     font-size:clamp(20px, 2.2vw, 26px);
 }
-
 .subtitle{
     font-size:clamp(12px, 1.4vw, 14px);
     color:#777;
 }
-
 /* TEXTAREA */
 textarea{
     width:100%;
@@ -77,11 +66,9 @@ textarea{
     font-size:14px;
     outline:none;
 }
-
 textarea:focus{
     border-color:#27ae60;
 }
-
 /* GRID RESULTADOS */
 .grid{
     display:grid;
@@ -89,7 +76,6 @@ textarea:focus{
     gap:10px;
     margin-top:15px;
 }
-
 .card{
     background:#f9f9f9;
     padding:12px;
@@ -97,40 +83,33 @@ textarea:focus{
     border:1px solid #ddd;
     text-align:center;
 }
-
 .result{
     font-size:clamp(16px, 2vw, 20px);
     font-weight:700;
     margin-top:5px;
     color:#27ae60;
 }
-
 /* DIREITA */
 .right-panel{
     background:#eafaf1;
 }
-
 /* RESPONSIVO */
 @media (max-width: 900px){
     .wrapper{
         grid-template-columns:1fr;
     }
-
     .left-panel{
         border-right:none;
         border-bottom:1px solid #eee;
     }
 }
-
 @media (max-width: 480px){
     html, body{
         padding:10px;
     }
-
     .grid{
         grid-template-columns:1fr;
     }
-
     textarea{
         height:180px;
         font-size:13px;
@@ -138,64 +117,66 @@ textarea:focus{
 }
 </style>
 </head>
-
 <body>
-
 <div class="wrapper">
-
     <!-- ESQUERDA -->
     <div class="left-panel">
-
         <header>
             <h1>📝 Contador de Palavras</h1>
             <p class="subtitle">Texto em tempo real</p>
         </header>
-
         <br>
-
         <a href="../../index.html">← Voltar</a>
-
         <textarea id="text" placeholder="Digite ou cole seu texto aqui..."></textarea>
-
         <div class="grid">
             <div class="card">
                 <strong>Palavras</strong>
-                <div id="words" class="result">0</div>
+                <div id="words" class="result" aria-live="polite">0</div>
             </div>
-
             <div class="card">
                 <strong>Caracteres</strong>
-                <div id="chars" class="result">0</div>
+                <div id="chars" class="result" aria-live="polite">0</div>
             </div>
         </div>
-
     </div>
-
     <!-- DIREITA -->
     <div class="right-panel">
-
         <h2>Resultado em tempo real</h2>
         <p>
             A contagem é atualizada automaticamente conforme você digita ou cola texto.
         </p>
-
     </div>
-
 </div>
-
 <script>
+
 const text = document.getElementById("text");
 const chars = document.getElementById("chars");
 const words = document.getElementById("words");
 
+// Contagem de caracteres Unicode-aware: .length puro conta unidades UTF-16,
+// então emojis (e outros caracteres fora do plano básico) contam errado (ex: 😀 = 2)
+const segmentador = (typeof Intl !== "undefined" && Intl.Segmenter)
+    ? new Intl.Segmenter("pt-BR", { granularity: "grapheme" })
+    : null;
+
+function contarCaracteres(str) {
+
+    if (segmentador) {
+        return Array.from(segmentador.segment(str)).length;
+    }
+
+    // fallback: ao menos respeita pares substitutos (emojis), via spread
+    return Array.from(str).length;
+}
+
 text.addEventListener("input", () => {
+
     const value = text.value;
     const trimmed = value.trim();
 
-    chars.textContent = value.length;
+    chars.textContent = contarCaracteres(value);
     words.textContent = trimmed ? trimmed.split(/\s+/).length : 0;
 });
 </script>
-
 </body>
 </html>
