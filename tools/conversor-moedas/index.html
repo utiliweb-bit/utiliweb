@@ -6,7 +6,7 @@
 
 <title>Conversor de Moedas | UtiliWeb</title>
 
-<meta name="description" content="Converta BRL, USD, EUR, GBP, JPY rapidamente online.">
+<meta name="description" content="Converta BRL, USD, EUR, GBP, JPY e outras moedas com cotações atualizadas em tempo real.">
 <meta name="robots" content="index, follow">
 
 <style>
@@ -45,10 +45,24 @@ html, body {
     padding: 28px;
 }
 
+.right {
+    background: #f7faf8;
+    border-left: 1px solid #eee;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
 /* TITULOS */
 h1 {
     font-size: 22px;
     margin-bottom: 6px;
+}
+
+h2 {
+    font-size: 16px;
+    color: #444;
+    margin-bottom: 4px;
 }
 
 p {
@@ -71,11 +85,51 @@ input, select {
     border-radius: 10px;
     border: 1px solid #ddd;
     font-size: 14px;
+    font-family: inherit;
+    background: #fff;
+    color: #1a1a1a;
 }
 
 input:focus, select:focus {
     outline: none;
     border-color: #27ae60;
+}
+
+input:disabled, select:disabled, button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* LINHA DE/PARA COM BOTÃO DE INVERTER */
+.swap-row {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: end;
+    gap: 8px;
+}
+
+.swap-btn {
+    width: 40px;
+    height: 40px;
+    margin-top: 6px;
+    border-radius: 50%;
+    border: 1px solid #ddd;
+    background: #fff;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.15s ease, background 0.15s ease;
+    color: #27ae60;
+}
+
+.swap-btn:hover {
+    background: #eafaf1;
+}
+
+.swap-btn:active {
+    transform: rotate(180deg);
 }
 
 /* BOTÃO */
@@ -89,14 +143,81 @@ button {
     cursor: pointer;
     background: #27ae60;
     color: #fff;
+    font-family: inherit;
+    font-size: 14px;
+    transition: background 0.15s ease;
+}
+
+button:hover:not(:disabled) {
+    background: #219150;
 }
 
 /* RESULTADO */
 .result {
-    font-size: 26px;
+    font-size: 30px;
     font-weight: 800;
     color: #27ae60;
     margin-top: 10px;
+    word-break: break-word;
+    min-height: 38px;
+}
+
+.result.erro {
+    color: #c0392b;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.taxa-info {
+    font-size: 13px;
+    color: #666;
+    margin-top: 14px;
+    line-height: 1.5;
+}
+
+.taxa-info strong {
+    color: #27ae60;
+}
+
+.status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #888;
+    margin-top: 18px;
+}
+
+.status .ponto {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #27ae60;
+}
+
+.status .ponto.carregando {
+    background: #f39c12;
+    animation: pulsar 1s infinite ease-in-out;
+}
+
+.status .ponto.falha {
+    background: #c0392b;
+}
+
+@keyframes pulsar {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+.fonte-attr {
+    font-size: 11px;
+    color: #aaa;
+    margin-top: 6px;
+}
+
+.fonte-attr a {
+    color: #aaa;
+    text-decoration: underline;
 }
 
 /* RESPONSIVO */
@@ -112,6 +233,15 @@ button {
     .left, .right {
         padding: 18px;
     }
+
+    .right {
+        border-left: none;
+        border-top: 1px solid #eee;
+    }
+
+    .result {
+        font-size: 24px;
+    }
 }
 </style>
 
@@ -125,34 +255,49 @@ button {
     <div class="left">
 
         <h1>💱 Conversor de Moedas</h1>
-        <p>BRL, USD, EUR, GBP, JPY, CAD, AUD</p>
+        <p>BRL, USD, EUR, GBP, JPY, CAD, AUD e outras — cotações atualizadas</p>
 
-        <label>Valor</label>
-        <input id="valor" type="number" placeholder="Ex: 1000">
+        <label for="valor">Valor</label>
+        <input id="valor" type="number" inputmode="decimal" min="0" step="any" placeholder="Ex: 1000">
 
-        <label>De</label>
-        <select id="de">
-            <option value="BRL">BRL</option>
-            <option value="USD">USD</option>
-            <option value="EUR">EUR</option>
-            <option value="GBP">GBP</option>
-            <option value="JPY">JPY</option>
-            <option value="CAD">CAD</option>
-            <option value="AUD">AUD</option>
-        </select>
+        <div class="swap-row">
+            <div>
+                <label for="de">De</label>
+                <select id="de">
+                    <option value="BRL">BRL — Real brasileiro</option>
+                    <option value="USD">USD — Dólar americano</option>
+                    <option value="EUR">EUR — Euro</option>
+                    <option value="GBP">GBP — Libra esterlina</option>
+                    <option value="JPY">JPY — Iene japonês</option>
+                    <option value="CAD">CAD — Dólar canadense</option>
+                    <option value="AUD">AUD — Dólar australiano</option>
+                </select>
+            </div>
 
-        <label>Para</label>
-        <select id="para">
-            <option value="USD">USD</option>
-            <option value="BRL">BRL</option>
-            <option value="EUR">EUR</option>
-            <option value="GBP">GBP</option>
-            <option value="JPY">JPY</option>
-            <option value="CAD">CAD</option>
-            <option value="AUD">AUD</option>
-        </select>
+            <button type="button" class="swap-btn" id="inverter" title="Inverter moedas" aria-label="Inverter moedas">⇄</button>
 
-        <button onclick="converter()">Converter</button>
+            <div>
+                <label for="para">Para</label>
+                <select id="para">
+                    <option value="USD">USD — Dólar americano</option>
+                    <option value="BRL">BRL — Real brasileiro</option>
+                    <option value="EUR">EUR — Euro</option>
+                    <option value="GBP">GBP — Libra esterlina</option>
+                    <option value="JPY">JPY — Iene japonês</option>
+                    <option value="CAD">CAD — Dólar canadense</option>
+                    <option value="AUD">AUD — Dólar australiano</option>
+                </select>
+            </div>
+        </div>
+
+        <button type="button" id="btnConverter">Converter</button>
+
+        <div class="status" id="status">
+            <span class="ponto carregando" id="statusPonto"></span>
+            <span id="statusTexto">Buscando cotações atualizadas...</span>
+        </div>
+
+        <div class="fonte-attr">Cotações por <a href="https://www.exchangerate-api.com" target="_blank" rel="noopener">ExchangeRate-API</a></div>
 
     </div>
 
@@ -161,44 +306,179 @@ button {
 
         <h2>Resultado</h2>
 
-        <div class="result" id="resultado">-</div>
+        <div class="result" id="resultado">—</div>
+
+        <div class="taxa-info" id="taxaInfo"></div>
 
     </div>
 
 </div>
 
 <script>
-const taxas = {
-    BRL: { USD: 0.20, EUR: 0.18, GBP: 0.15, JPY: 30, CAD: 0.27, AUD: 0.30 },
-    USD: { BRL: 5, EUR: 0.90, GBP: 0.78, JPY: 150, CAD: 1.35, AUD: 1.50 },
-    EUR: { BRL: 5.5, USD: 1.11, GBP: 0.86, JPY: 165, CAD: 1.48, AUD: 1.65 },
-    GBP: { BRL: 6.5, USD: 1.28, EUR: 1.16, JPY: 190, CAD: 1.72, AUD: 1.92 },
-    JPY: { BRL: 0.033, USD: 0.0067, EUR: 0.0060, GBP: 0.0052, CAD: 0.0090, AUD: 0.010 },
-    CAD: { BRL: 3.7, USD: 0.74, EUR: 0.68, GBP: 0.58, JPY: 111, AUD: 1.10 },
-    AUD: { BRL: 3.3, USD: 0.67, EUR: 0.61, GBP: 0.52, JPY: 100, CAD: 0.91 }
+const NOMES = {
+    BRL: "Real brasileiro", USD: "Dólar americano", EUR: "Euro",
+    GBP: "Libra esterlina", JPY: "Iene japonês", CAD: "Dólar canadense",
+    AUD: "Dólar australiano"
 };
 
+// Moedas sem casas decimais na exibição (ex: Iene)
+const SEM_DECIMAIS = new Set(["JPY"]);
+
+const elValor = document.getElementById("valor");
+const elDe = document.getElementById("de");
+const elPara = document.getElementById("para");
+const elResultado = document.getElementById("resultado");
+const elTaxaInfo = document.getElementById("taxaInfo");
+const elBtnConverter = document.getElementById("btnConverter");
+const elInverter = document.getElementById("inverter");
+const elStatusPonto = document.getElementById("statusPonto");
+const elStatusTexto = document.getElementById("statusTexto");
+
+let taxas = null;          // tabela de taxas com base fixa (BRL)
+let taxasAtualizadasEm = null;
+let carregando = false;
+
+// Tabela de fallback (aproximada) usada apenas se as duas APIs falharem,
+// para o conversor nunca ficar totalmente inutilizável offline.
+const TAXAS_FALLBACK_BASE_USD = {
+    USD: 1, BRL: 5, EUR: 0.90, GBP: 0.78, JPY: 150, CAD: 1.35, AUD: 1.50
+};
+
+function formatarMoeda(valor, codigo) {
+    const casas = SEM_DECIMAIS.has(codigo) ? 0 : 2;
+    try {
+        return new Intl.NumberFormat("pt-BR", {
+            style: "currency",
+            currency: codigo,
+            minimumFractionDigits: casas,
+            maximumFractionDigits: casas
+        }).format(valor);
+    } catch (e) {
+        // Caso o navegador não reconheça o código ISO (raro)
+        return `${valor.toFixed(casas)} ${codigo}`;
+    }
+}
+
+function definirStatus(tipo, texto) {
+    elStatusPonto.classList.remove("carregando", "falha");
+    if (tipo === "carregando") elStatusPonto.classList.add("carregando");
+    if (tipo === "falha") elStatusPonto.classList.add("falha");
+    elStatusTexto.textContent = texto;
+}
+
+async function buscarTaxas() {
+    carregando = true;
+    elBtnConverter.disabled = true;
+    definirStatus("carregando", "Buscando cotações atualizadas...");
+
+    // Tenta a Frankfurter primeiro (dados de bancos centrais, sem chave)
+    try {
+        const resp = await fetch("https://api.frankfurter.dev/v1/latest?base=USD");
+        if (!resp.ok) throw new Error("Frankfurter indisponível");
+        const dados = await resp.json();
+        taxas = { USD: 1, ...dados.rates };
+        taxasAtualizadasEm = dados.date ? new Date(dados.date) : new Date();
+        definirStatus("ok", `Cotações atualizadas em ${taxasAtualizadasEm.toLocaleDateString("pt-BR")}`);
+        carregando = false;
+        elBtnConverter.disabled = false;
+        return;
+    } catch (e) {
+        // segue para o próximo provedor
+    }
+
+    // Fallback: open.er-api.com (também sem chave)
+    try {
+        const resp = await fetch("https://open.er-api.com/v6/latest/USD");
+        if (!resp.ok) throw new Error("open.er-api indisponível");
+        const dados = await resp.json();
+        if (dados.result !== "success") throw new Error("Resposta inesperada");
+        taxas = dados.rates;
+        taxasAtualizadasEm = new Date();
+        definirStatus("ok", "Cotações atualizadas (fonte alternativa)");
+        carregando = false;
+        elBtnConverter.disabled = false;
+        return;
+    } catch (e) {
+        // segue para o fallback estático
+    }
+
+    // Último recurso: tabela fixa aproximada (avisando o usuário)
+    taxas = TAXAS_FALLBACK_BASE_USD;
+    taxasAtualizadasEm = null;
+    definirStatus("falha", "Sem conexão — usando valores aproximados");
+    carregando = false;
+    elBtnConverter.disabled = false;
+}
+
 function converter() {
+    const valor = parseFloat(elValor.value);
+    const de = elDe.value;
+    const para = elPara.value;
 
-    const valor = parseFloat(document.getElementById("valor").value);
-    const de = document.getElementById("de").value;
-    const para = document.getElementById("para").value;
-    const out = document.getElementById("resultado");
+    elResultado.classList.remove("erro");
 
-    if (!valor || valor <= 0) {
-        out.textContent = "Valor inválido";
+    if (carregando) {
+        elResultado.textContent = "Carregando cotações...";
+        return;
+    }
+
+    if (!taxas) {
+        elResultado.classList.add("erro");
+        elResultado.textContent = "Não foi possível obter as cotações. Tente novamente.";
+        return;
+    }
+
+    if (isNaN(valor) || valor <= 0) {
+        elResultado.classList.add("erro");
+        elResultado.textContent = "Digite um valor válido maior que zero";
+        elTaxaInfo.textContent = "";
+        return;
+    }
+
+    if (!(de in taxas) || !(para in taxas)) {
+        elResultado.classList.add("erro");
+        elResultado.textContent = "Moeda não suportada pela fonte de dados atual";
         return;
     }
 
     if (de === para) {
-        out.textContent = `${valor} ${para}`;
+        elResultado.textContent = formatarMoeda(valor, para);
+        elTaxaInfo.textContent = "Mesma moeda selecionada nos dois campos.";
         return;
     }
 
-    const result = valor * (taxas[de]?.[para] || 0);
+    // Conversão via taxa cruzada com base comum (USD)
+    const taxaCruzada = taxas[para] / taxas[de];
+    const resultado = valor * taxaCruzada;
 
-    out.textContent = `${result.toFixed(2)} ${para}`;
+    elResultado.textContent = formatarMoeda(resultado, para);
+
+    const dataTexto = taxasAtualizadasEm
+        ? taxasAtualizadasEm.toLocaleDateString("pt-BR")
+        : "indisponível";
+
+    elTaxaInfo.innerHTML =
+        `1 ${de} = <strong>${taxaCruzada.toFixed(6).replace(/0+$/, "").replace(/\.$/, "")} ${para}</strong><br>` +
+        `${NOMES[de] || de} → ${NOMES[para] || para} · atualizado em ${dataTexto}`;
 }
+
+function inverterMoedas() {
+    const de = elDe.value;
+    const para = elPara.value;
+    elDe.value = para;
+    elPara.value = de;
+    converter();
+}
+
+elBtnConverter.addEventListener("click", converter);
+elInverter.addEventListener("click", inverterMoedas);
+elValor.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") converter();
+});
+elDe.addEventListener("change", converter);
+elPara.addEventListener("change", converter);
+
+buscarTaxas();
 </script>
 
 </body>
