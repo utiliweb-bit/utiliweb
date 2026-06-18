@@ -3,12 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-
 <title>Inverter Texto | UtiliWeb</title>
-
 <meta name="description" content="Inverta textos, palavras e frases online gratuitamente.">
 <meta name="robots" content="index, follow">
-
 <style>
 * {
     margin: 0;
@@ -16,7 +13,6 @@
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
 }
-
 html, body {
     width: 100%;
     min-height: 100vh;
@@ -27,7 +23,6 @@ html, body {
     padding: 16px;
     background: linear-gradient(135deg, #2ecc71, #27ae60);
 }
-
 /* CONTAINER */
 .wrapper {
     width: 100%;
@@ -39,23 +34,19 @@ html, body {
     grid-template-columns: 1fr 1fr;
     overflow: hidden;
 }
-
 /* PAINÉIS */
 .left, .right {
     padding: 28px;
 }
-
 /* TÍTULO */
 h1 {
     font-size: 22px;
     margin-bottom: 6px;
 }
-
 p {
     font-size: 12px;
     color: #777;
 }
-
 /* TEXTAREA */
 textarea {
     width: 100%;
@@ -67,12 +58,10 @@ textarea {
     margin-top: 10px;
     resize: vertical;
 }
-
 textarea:focus {
     outline: none;
     border-color: #27ae60;
 }
-
 /* BOTÕES */
 .btns {
     display: flex;
@@ -80,7 +69,6 @@ textarea:focus {
     margin-top: 14px;
     flex-wrap: wrap;
 }
-
 button {
     flex: 1;
     padding: 12px;
@@ -90,17 +78,21 @@ button {
     font-weight: 700;
     font-size: 12px;
 }
-
 .primary {
     background: #27ae60;
     color: #fff;
 }
-
 .secondary {
     background: #f4f4f4;
     color: #333;
 }
-
+.copy-msg {
+    margin-top: 10px;
+    color: #27ae60;
+    font-size: 14px;
+    font-weight: 600;
+    display: none;
+}
 /* RESULTADO */
 .result-box {
     background: #f4f4f4;
@@ -111,68 +103,89 @@ button {
     word-break: break-word;
     white-space: pre-wrap;
 }
-
 /* RESPONSIVO */
 @media (max-width: 768px) {
     .wrapper {
         grid-template-columns: 1fr;
     }
-
     html, body {
         padding: 12px;
     }
-
     .left, .right {
         padding: 18px;
     }
 }
 </style>
-
 </head>
-
 <body>
-
 <div class="wrapper">
-
     <!-- INPUT -->
     <div class="left">
-
         <h1>🔁 Inverter Texto</h1>
         <p>Inverta letras, palavras ou frases em tempo real</p>
-
         <textarea id="text" placeholder="Digite seu texto aqui..."></textarea>
-
         <div class="btns">
             <button class="primary" onclick="inverter()">Inverter</button>
             <button class="secondary" onclick="copiar()">Copiar</button>
             <button class="secondary" onclick="limpar()">Limpar</button>
         </div>
-
+        <div class="copy-msg" id="copyMsg">✓ Texto copiado com sucesso</div>
     </div>
-
     <!-- RESULTADO -->
     <div class="right">
-
         <h2>Resultado</h2>
-
-        <div id="resultado" class="result-box">---</div>
-
+        <div id="resultado" class="result-box" aria-live="polite">---</div>
     </div>
-
 </div>
-
 <script>
+
 const text = document.getElementById("text");
 const resultado = document.getElementById("resultado");
+const copyMsg = document.getElementById("copyMsg");
+
+// Reversor com suporte a grapheme clusters (Unicode), pra não quebrar
+// emojis e outros caracteres formados por mais de uma unidade UTF-16
+const segmentador = (typeof Intl !== "undefined" && Intl.Segmenter)
+    ? new Intl.Segmenter("pt-BR", { granularity: "grapheme" })
+    : null;
+
+function reverseTexto(str) {
+
+    if (segmentador) {
+        return Array.from(segmentador.segment(str), s => s.segment)
+            .reverse()
+            .join("");
+    }
+
+    // fallback: pelo menos respeita pares substitutos (emojis), via spread
+    return Array.from(str).reverse().join("");
+}
 
 function inverter() {
     const value = text.value || "";
-    resultado.textContent = value.split("").reverse().join("") || "---";
+    resultado.textContent = reverseTexto(value) || "---";
 }
 
-function copiar() {
-    if (!resultado.textContent || resultado.textContent === "---") return;
-    navigator.clipboard.writeText(resultado.textContent);
+async function copiar() {
+
+    const texto = resultado.textContent.trim();
+
+    if (!texto || texto === "---") return;
+
+    try {
+
+        await navigator.clipboard.writeText(texto);
+
+        copyMsg.style.display = "block";
+
+        setTimeout(() => {
+            copyMsg.style.display = "none";
+        }, 2000);
+
+    } catch (error) {
+
+        alert("Não foi possível copiar o texto.");
+    }
 }
 
 function limpar() {
@@ -183,6 +196,5 @@ function limpar() {
 /* UX extra: auto preview */
 text.addEventListener("input", inverter);
 </script>
-
 </body>
 </html>
