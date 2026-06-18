@@ -6,7 +6,7 @@
 
 <title>Conversor de Moedas | UtiliWeb</title>
 
-<meta name="description" content="Converta BRL, USD, EUR, GBP, JPY e outras moedas com cotações atualizadas em tempo real.">
+<meta name="description" content="Converta mais de 160 moedas — BRL, USD, EUR, GBP, JPY e moedas de todo o mundo — com cotações atualizadas em tempo real.">
 <meta name="robots" content="index, follow">
 
 <style>
@@ -17,13 +17,15 @@
     -webkit-tap-highlight-color: transparent;
 }
 
-html, body {
+html { -webkit-text-size-adjust: 100%; }
+
+body {
     width: 100%;
-    min-height: 100vh;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    min-height: 100dvh;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     padding: 16px;
     background: linear-gradient(135deg, #2ecc71, #27ae60);
 }
@@ -33,74 +35,197 @@ html, body {
     width: 100%;
     max-width: 1100px;
     background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    border-radius: 18px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.25);
     display: grid;
     grid-template-columns: 1fr 1fr;
     overflow: hidden;
+    margin: auto;
 }
 
 /* PAINÉIS */
 .left, .right {
     padding: 28px;
+    min-width: 0;
 }
 
+.left { border-right: 1px solid #eee; }
+
 .right {
-    background: #f7faf8;
-    border-left: 1px solid #eee;
+    background: #f6fff8;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+}
+
+a.back {
+    display: inline-block;
+    margin-bottom: 14px;
+    text-decoration: none;
+    color: #27ae60;
+    font-weight: 700;
+    font-size: 14px;
 }
 
 /* TITULOS */
-h1 {
-    font-size: 22px;
-    margin-bottom: 6px;
-}
+h1 { font-size: 26px; margin-bottom: 6px; }
+h2 { font-size: 20px; margin-bottom: 16px; color: #1a1a1a; }
 
-h2 {
-    font-size: 16px;
-    color: #444;
-    margin-bottom: 4px;
-}
-
-p {
-    font-size: 12px;
-    color: #777;
-}
+.subtitle { color: #666; font-size: 14px; margin-bottom: 20px; }
 
 /* INPUTS */
 label {
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 700;
+    color: #444;
     display: block;
-    margin-top: 12px;
+    margin-bottom: 8px;
 }
 
-input, select {
+label.label-sep { margin-top: 16px; }
+
+input {
     width: 100%;
-    padding: 12px;
-    margin-top: 6px;
-    border-radius: 10px;
-    border: 1px solid #ddd;
-    font-size: 14px;
+    padding: 13px;
+    border-radius: 12px;
+    border: 2px solid #ddd;
+    font-size: 17px;
     font-family: inherit;
     background: #fff;
     color: #1a1a1a;
 }
 
-input:focus, select:focus {
-    outline: none;
-    border-color: #27ae60;
+input:focus { outline: none; border-color: #27ae60; }
+
+input:disabled, button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* SELETOR DE MOEDA CUSTOMIZADO */
+.currency-field { position: relative; }
+
+.currency-trigger {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 13px;
+    border-radius: 12px;
+    border: 2px solid #ddd;
+    background: #fff;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 15px;
+    color: #1a1a1a;
+    text-align: left;
 }
 
-input:disabled, select:disabled, button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
+.currency-trigger:hover { border-color: #b9e8cc; }
+
+.currency-trigger.aberto { border-color: #27ae60; }
+
+.currency-trigger .bandeira {
+    font-size: 22px;
+    line-height: 1;
+    flex-shrink: 0;
 }
 
-/* LINHA DE/PARA COM BOTÃO DE INVERTER */
+.currency-trigger .info {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.currency-trigger .codigo {
+    font-weight: 800;
+    display: block;
+}
+
+.currency-trigger .nome {
+    font-size: 11px;
+    color: #888;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.currency-trigger .seta {
+    color: #aaa;
+    font-size: 12px;
+    flex-shrink: 0;
+    transition: transform 0.15s ease;
+}
+
+.currency-trigger.aberto .seta { transform: rotate(180deg); }
+
+.currency-dropdown {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    background: #fff;
+    border: 1px solid #e2e2e2;
+    border-radius: 14px;
+    box-shadow: 0 16px 40px rgba(0,0,0,.18);
+    z-index: 30;
+    display: none;
+    overflow: hidden;
+}
+
+.currency-dropdown.aberto { display: flex; flex-direction: column; }
+
+.currency-search {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.currency-search input {
+    padding: 9px 11px;
+    font-size: 14px;
+    border-radius: 9px;
+}
+
+.currency-list {
+    overflow-y: auto;
+    max-height: 280px;
+}
+
+.currency-option {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 13px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    text-align: left;
+}
+
+.currency-option:hover, .currency-option.realce { background: #eafaf1; }
+
+.currency-option .bandeira { font-size: 19px; flex-shrink: 0; }
+
+.currency-option .info { min-width: 0; overflow: hidden; }
+
+.currency-option .codigo { font-weight: 800; font-size: 13px; display: block; }
+
+.currency-option .nome {
+    font-size: 11px;
+    color: #888;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.currency-empty {
+    padding: 18px;
+    text-align: center;
+    color: #999;
+    font-size: 13px;
+}
+
+/* LINHA DE/PARA */
 .swap-row {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
@@ -109,80 +234,86 @@ input:disabled, select:disabled, button:disabled {
 }
 
 .swap-btn {
-    width: 40px;
-    height: 40px;
-    margin-top: 6px;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
-    border: 1px solid #ddd;
+    border: 2px solid #ddd;
     background: #fff;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 17px;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: transform 0.15s ease, background 0.15s ease;
+    transition: transform 0.2s ease, background 0.15s ease, border-color .15s ease;
     color: #27ae60;
 }
 
-.swap-btn:hover {
-    background: #eafaf1;
+.swap-btn:hover { background: #eafaf1; border-color: #27ae60; }
+.swap-btn.girando { transform: rotate(180deg); }
+
+/* CHIPS DE MOEDAS RÁPIDAS */
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 14px;
 }
 
-.swap-btn:active {
-    transform: rotate(180deg);
-}
-
-/* BOTÃO */
-button {
-    width: 100%;
-    margin-top: 16px;
-    padding: 12px;
-    border: none;
-    border-radius: 10px;
-    font-weight: 800;
+.chip {
+    padding: 6px 11px;
+    border-radius: 999px;
+    border: 1.5px solid #e2e2e2;
+    background: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    color: #555;
     cursor: pointer;
-    background: #27ae60;
-    color: #fff;
     font-family: inherit;
-    font-size: 14px;
-    transition: background 0.15s ease;
 }
 
-button:hover:not(:disabled) {
-    background: #219150;
-}
+.chip:hover { border-color: #27ae60; color: #27ae60; }
 
 /* RESULTADO */
-.result {
-    font-size: 30px;
-    font-weight: 800;
-    color: #27ae60;
-    margin-top: 10px;
-    word-break: break-word;
-    min-height: 38px;
+.result-card {
+    background: #fff;
+    border: 2px solid #d7f5e3;
+    border-radius: 16px;
+    padding: 22px;
+    margin-top: 4px;
 }
 
-.result.erro {
-    color: #c0392b;
-    font-size: 16px;
-    font-weight: 700;
+.result-de {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 6px;
 }
+
+.result {
+    font-size: 32px;
+    font-weight: 800;
+    color: #1a8449;
+    word-break: break-word;
+    min-height: 40px;
+    line-height: 1.15;
+}
+
+.result.erro { color: #c0392b; font-size: 16px; font-weight: 700; }
 
 .taxa-info {
     font-size: 13px;
     color: #666;
-    margin-top: 14px;
-    line-height: 1.5;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #eef5f0;
+    line-height: 1.6;
 }
 
-.taxa-info strong {
-    color: #27ae60;
-}
+.taxa-info strong { color: #27ae60; }
 
 .status {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 7px;
     font-size: 12px;
     color: #888;
     margin-top: 18px;
@@ -193,55 +324,43 @@ button:hover:not(:disabled) {
     height: 8px;
     border-radius: 50%;
     background: #27ae60;
+    flex-shrink: 0;
 }
 
-.status .ponto.carregando {
-    background: #f39c12;
-    animation: pulsar 1s infinite ease-in-out;
-}
+.status .ponto.carregando { background: #f39c12; animation: pulsar 1s infinite ease-in-out; }
+.status .ponto.falha { background: #c0392b; }
 
-.status .ponto.falha {
-    background: #c0392b;
-}
-
-@keyframes pulsar {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
-}
+@keyframes pulsar { 0%, 100% { opacity: 1; } 50% { opacity: .3; } }
 
 .fonte-attr {
     font-size: 11px;
     color: #aaa;
-    margin-top: 6px;
+    margin-top: 8px;
 }
 
-.fonte-attr a {
-    color: #aaa;
-    text-decoration: underline;
-}
+.fonte-attr a { color: #aaa; text-decoration: underline; }
+
+.spacer { flex: 1; }
 
 /* RESPONSIVO */
-@media (max-width: 768px) {
-    .wrapper {
+@media (max-width: 900px) {
+    body { align-items: flex-start; }
+    .wrapper { grid-template-columns: 1fr; }
+    .left { border-right: none; border-bottom: 1px solid #eee; }
+    h1 { font-size: 22px; }
+    .result { font-size: 26px; }
+
+    .swap-row {
         grid-template-columns: 1fr;
+        gap: 10px;
     }
 
-    html, body {
-        padding: 12px;
+    .swap-btn {
+        justify-self: center;
+        transform: rotate(90deg);
     }
 
-    .left, .right {
-        padding: 18px;
-    }
-
-    .right {
-        border-left: none;
-        border-top: 1px solid #eee;
-    }
-
-    .result {
-        font-size: 24px;
-    }
+    .swap-btn.girando { transform: rotate(270deg); }
 }
 </style>
 
@@ -253,108 +372,177 @@ button:hover:not(:disabled) {
 
     <!-- INPUT -->
     <div class="left">
-
         <h1>💱 Conversor de Moedas</h1>
-        <p>BRL, USD, EUR, GBP, JPY, CAD, AUD e outras — cotações atualizadas</p>
+        <p class="subtitle">Mais de 160 moedas de todo o mundo, com cotações atualizadas em tempo real</p>
+        <a class="back" href="../../index.html">← Voltar</a>
 
         <label for="valor">Valor</label>
         <input id="valor" type="number" inputmode="decimal" min="0" step="any" placeholder="Ex: 1000">
 
-        <div class="swap-row">
-            <div>
-                <label for="de">De</label>
-                <select id="de">
-                    <option value="BRL">BRL — Real brasileiro</option>
-                    <option value="USD">USD — Dólar americano</option>
-                    <option value="EUR">EUR — Euro</option>
-                    <option value="GBP">GBP — Libra esterlina</option>
-                    <option value="JPY">JPY — Iene japonês</option>
-                    <option value="CAD">CAD — Dólar canadense</option>
-                    <option value="AUD">AUD — Dólar australiano</option>
-                </select>
+        <div class="swap-row" style="margin-top:16px;">
+            <div class="currency-field" id="campoDe">
+                <label>De</label>
+                <button type="button" class="currency-trigger" id="triggerDe" aria-haspopup="listbox">
+                    <span class="bandeira" id="bandeiraDe">🇧🇷</span>
+                    <span class="info">
+                        <span class="codigo" id="codigoDe">BRL</span>
+                        <span class="nome" id="nomeDe">Real brasileiro</span>
+                    </span>
+                    <span class="seta">▾</span>
+                </button>
+                <div class="currency-dropdown" id="dropdownDe">
+                    <div class="currency-search">
+                        <input type="text" placeholder="Buscar moeda ou país..." id="buscaDe">
+                    </div>
+                    <div class="currency-list" id="listaDe"></div>
+                </div>
             </div>
 
             <button type="button" class="swap-btn" id="inverter" title="Inverter moedas" aria-label="Inverter moedas">⇄</button>
 
-            <div>
-                <label for="para">Para</label>
-                <select id="para">
-                    <option value="USD">USD — Dólar americano</option>
-                    <option value="BRL">BRL — Real brasileiro</option>
-                    <option value="EUR">EUR — Euro</option>
-                    <option value="GBP">GBP — Libra esterlina</option>
-                    <option value="JPY">JPY — Iene japonês</option>
-                    <option value="CAD">CAD — Dólar canadense</option>
-                    <option value="AUD">AUD — Dólar australiano</option>
-                </select>
+            <div class="currency-field" id="campoPara">
+                <label>Para</label>
+                <button type="button" class="currency-trigger" id="triggerPara" aria-haspopup="listbox">
+                    <span class="bandeira" id="bandeiraPara">🇺🇸</span>
+                    <span class="info">
+                        <span class="codigo" id="codigoPara">USD</span>
+                        <span class="nome" id="nomePara">Dólar americano</span>
+                    </span>
+                    <span class="seta">▾</span>
+                </button>
+                <div class="currency-dropdown" id="dropdownPara">
+                    <div class="currency-search">
+                        <input type="text" placeholder="Buscar moeda ou país..." id="buscaPara">
+                    </div>
+                    <div class="currency-list" id="listaPara"></div>
+                </div>
             </div>
         </div>
 
-        <button type="button" id="btnConverter">Converter</button>
+        <div class="chips" id="chips"></div>
 
         <div class="status" id="status">
             <span class="ponto carregando" id="statusPonto"></span>
             <span id="statusTexto">Buscando cotações atualizadas...</span>
         </div>
 
-        <div class="fonte-attr">Cotações por <a href="https://www.exchangerate-api.com" target="_blank" rel="noopener">ExchangeRate-API</a></div>
-
+        <div class="fonte-attr">Cotações por <a href="https://www.exchangerate-api.com" target="_blank" rel="noopener">ExchangeRate-API</a> e <a href="https://frankfurter.dev" target="_blank" rel="noopener">Frankfurter</a></div>
     </div>
 
     <!-- RESULTADO -->
     <div class="right">
-
         <h2>Resultado</h2>
 
-        <div class="result" id="resultado">—</div>
+        <div class="result-card">
+            <div class="result-de" id="resultadoDe"></div>
+            <div class="result" id="resultado">—</div>
+            <div class="taxa-info" id="taxaInfo"></div>
+        </div>
 
-        <div class="taxa-info" id="taxaInfo"></div>
-
+        <div class="spacer"></div>
     </div>
 
 </div>
 
 <script>
-const NOMES = {
-    BRL: "Real brasileiro", USD: "Dólar americano", EUR: "Euro",
-    GBP: "Libra esterlina", JPY: "Iene japonês", CAD: "Dólar canadense",
-    AUD: "Dólar australiano"
+/* ====================== DADOS DE MOEDAS (ISO 4217) ====================== */
+/* Nome em pt-BR e bandeira (emoji) para as moedas mais usadas no mundo.
+   Qualquer moeda retornada pela API que não esteja aqui ainda é exibida,
+   usando o próprio código como nome e um globo no lugar da bandeira. */
+const CATALOGO = {
+    AED: ["Dirham dos Emirados Árabes Unidos", "🇦🇪"], AFN: ["Afegane afegão", "🇦🇫"],
+    ALL: ["Lek albanês", "🇦🇱"], AMD: ["Dram armênio", "🇦🇲"], ANG: ["Florim das Antilhas Neerlandesas", "🇨🇼"],
+    AOA: ["Kwanza angolano", "🇦🇴"], ARS: ["Peso argentino", "🇦🇷"], AUD: ["Dólar australiano", "🇦🇺"],
+    AWG: ["Florim de Aruba", "🇦🇼"], AZN: ["Manat azerbaijano", "🇦🇿"], BAM: ["Marco da Bósnia e Herzegovina", "🇧🇦"],
+    BBD: ["Dólar de Barbados", "🇧🇧"], BDT: ["Taka de Bangladesh", "🇧🇩"], BGN: ["Lev búlgaro", "🇧🇬"],
+    BHD: ["Dinar bareinita", "🇧🇭"], BIF: ["Franco do Burundi", "🇧🇮"], BMD: ["Dólar das Bermudas", "🇧🇲"],
+    BND: ["Dólar de Brunei", "🇧🇳"], BOB: ["Boliviano", "🇧🇴"], BRL: ["Real brasileiro", "🇧🇷"],
+    BSD: ["Dólar das Bahamas", "🇧🇸"], BTN: ["Ngultrum butanês", "🇧🇹"], BWP: ["Pula de Botsuana", "🇧🇼"],
+    BYN: ["Rublo bielorrusso", "🇧🇾"], BZD: ["Dólar de Belize", "🇧🇿"], CAD: ["Dólar canadense", "🇨🇦"],
+    CDF: ["Franco congolês", "🇨🇩"], CHF: ["Franco suíço", "🇨🇭"], CLP: ["Peso chileno", "🇨🇱"],
+    CNY: ["Yuan chinês", "🇨🇳"], COP: ["Peso colombiano", "🇨🇴"], CRC: ["Colón costarriquenho", "🇨🇷"],
+    CUP: ["Peso cubano", "🇨🇺"], CVE: ["Escudo cabo-verdiano", "🇨🇻"], CZK: ["Coroa tcheca", "🇨🇿"],
+    DJF: ["Franco do Djibuti", "🇩🇯"], DKK: ["Coroa dinamarquesa", "🇩🇰"], DOP: ["Peso dominicano", "🇩🇴"],
+    DZD: ["Dinar argelino", "🇩🇿"], EGP: ["Libra egípcia", "🇪🇬"], ERN: ["Nakfa da Eritreia", "🇪🇷"],
+    ETB: ["Birr etíope", "🇪🇹"], EUR: ["Euro", "🇪🇺"], FJD: ["Dólar de Fiji", "🇫🇯"],
+    FKP: ["Libra das Malvinas", "🇫🇰"], GBP: ["Libra esterlina", "🇬🇧"], GEL: ["Lari georgiano", "🇬🇪"],
+    GHS: ["Cedi ganês", "🇬🇭"], GIP: ["Libra de Gibraltar", "🇬🇮"], GMD: ["Dalasi gambiano", "🇬🇲"],
+    GNF: ["Franco guineense", "🇬🇳"], GTQ: ["Quetzal guatemalteco", "🇬🇹"], GYD: ["Dólar guianense", "🇬🇾"],
+    HKD: ["Dólar de Hong Kong", "🇭🇰"], HNL: ["Lempira hondurenha", "🇭🇳"], HRK: ["Kuna croata", "🇭🇷"],
+    HTG: ["Gourde haitiano", "🇭🇹"], HUF: ["Florim húngaro", "🇭🇺"], IDR: ["Rupia indonésia", "🇮🇩"],
+    ILS: ["Novo shekel israelense", "🇮🇱"], INR: ["Rupia indiana", "🇮🇳"], IQD: ["Dinar iraquiano", "🇮🇶"],
+    IRR: ["Rial iraniano", "🇮🇷"], ISK: ["Coroa islandesa", "🇮🇸"], JMD: ["Dólar jamaicano", "🇯🇲"],
+    JOD: ["Dinar jordaniano", "🇯🇴"], JPY: ["Iene japonês", "🇯🇵"], KES: ["Xelim queniano", "🇰🇪"],
+    KGS: ["Som do Quirguistão", "🇰🇬"], KHR: ["Riel cambojano", "🇰🇭"], KMF: ["Franco comorense", "🇰🇲"],
+    KPW: ["Won norte-coreano", "🇰🇵"], KRW: ["Won sul-coreano", "🇰🇷"], KWD: ["Dinar kuwaitiano", "🇰🇼"],
+    KYD: ["Dólar das Ilhas Cayman", "🇰🇾"], KZT: ["Tenge cazaque", "🇰🇿"], LAK: ["Kip laosiano", "🇱🇦"],
+    LBP: ["Libra libanesa", "🇱🇧"], LKR: ["Rupia do Sri Lanka", "🇱🇰"], LRD: ["Dólar liberiano", "🇱🇷"],
+    LSL: ["Loti do Lesoto", "🇱🇸"], LYD: ["Dinar líbio", "🇱🇾"], MAD: ["Dirham marroquino", "🇲🇦"],
+    MDL: ["Leu moldávio", "🇲🇩"], MGA: ["Ariary malgaxe", "🇲🇬"], MKD: ["Dinar macedônio", "🇲🇰"],
+    MMK: ["Kyat de Myanmar", "🇲🇲"], MNT: ["Tugrik mongol", "🇲🇳"], MOP: ["Pataca de Macau", "🇲🇴"],
+    MRU: ["Ouguiya mauritana", "🇲🇷"], MUR: ["Rupia mauriciana", "🇲🇺"], MVR: ["Rufiyaa maldiva", "🇲🇻"],
+    MWK: ["Kwacha do Malaui", "🇲🇼"], MXN: ["Peso mexicano", "🇲🇽"], MYR: ["Ringgit malaio", "🇲🇾"],
+    MZN: ["Metical moçambicano", "🇲🇿"], NAD: ["Dólar namibiano", "🇳🇦"], NGN: ["Naira nigeriana", "🇳🇬"],
+    NIO: ["Córdoba nicaraguense", "🇳🇮"], NOK: ["Coroa norueguesa", "🇳🇴"], NPR: ["Rupia nepalesa", "🇳🇵"],
+    NZD: ["Dólar neozelandês", "🇳🇿"], OMR: ["Rial omanense", "🇴🇲"], PAB: ["Balboa panamenho", "🇵🇦"],
+    PEN: ["Sol peruano", "🇵🇪"], PGK: ["Kina da Papua-Nova Guiné", "🇵🇬"], PHP: ["Peso filipino", "🇵🇭"],
+    PKR: ["Rupia paquistanesa", "🇵🇰"], PLN: ["Zloty polonês", "🇵🇱"], PYG: ["Guarani paraguaio", "🇵🇾"],
+    QAR: ["Rial catariano", "🇶🇦"], RON: ["Leu romeno", "🇷🇴"], RSD: ["Dinar sérvio", "🇷🇸"],
+    RUB: ["Rublo russo", "🇷🇺"], RWF: ["Franco ruandês", "🇷🇼"], SAR: ["Rial saudita", "🇸🇦"],
+    SBD: ["Dólar das Ilhas Salomão", "🇸🇧"], SCR: ["Rupia seichelense", "🇸🇨"], SDG: ["Libra sudanesa", "🇸🇩"],
+    SEK: ["Coroa sueca", "🇸🇪"], SGD: ["Dólar de Singapura", "🇸🇬"], SHP: ["Libra de Santa Helena", "🇸🇭"],
+    SLE: ["Leone de Serra Leoa", "🇸🇱"], SOS: ["Xelim somali", "🇸🇴"], SRD: ["Dólar surinamês", "🇸🇷"],
+    SSP: ["Libra sul-sudanesa", "🇸🇸"], STN: ["Dobra de São Tomé e Príncipe", "🇸🇹"], SYP: ["Libra síria", "🇸🇾"],
+    SZL: ["Lilangeni de Essuatíni", "🇸🇿"], THB: ["Baht tailandês", "🇹🇭"], TJS: ["Somoni do Tajiquistão", "🇹🇯"],
+    TMT: ["Manat do Turcomenistão", "🇹🇲"], TND: ["Dinar tunisiano", "🇹🇳"], TOP: ["Paʻanga de Tonga", "🇹🇴"],
+    TRY: ["Lira turca", "🇹🇷"], TTD: ["Dólar de Trinidad e Tobago", "🇹🇹"], TWD: ["Novo dólar taiwanês", "🇹🇼"],
+    TZS: ["Xelim tanzaniano", "🇹🇿"], UAH: ["Hryvnia ucraniana", "🇺🇦"], UGX: ["Xelim ugandense", "🇺🇬"],
+    USD: ["Dólar americano", "🇺🇸"], UYU: ["Peso uruguaio", "🇺🇾"], UZS: ["Som uzbeque", "🇺🇿"],
+    VES: ["Bolívar venezuelano", "🇻🇪"], VND: ["Dong vietnamita", "🇻🇳"], VUV: ["Vatu de Vanuatu", "🇻🇺"],
+    WST: ["Tala samoano", "🇼🇸"], XAF: ["Franco CFA (África Central)", "🌍"], XCD: ["Dólar do Caribe Oriental", "🌎"],
+    XOF: ["Franco CFA (África Ocidental)", "🌍"], XPF: ["Franco CFP", "🌏"], YER: ["Rial iemenita", "🇾🇪"],
+    ZAR: ["Rand sul-africano", "🇿🇦"], ZMW: ["Kwacha zambiano", "🇿🇲"], ZWL: ["Dólar zimbabuano", "🇿🇼"],
 };
 
-// Moedas sem casas decimais na exibição (ex: Iene)
-const SEM_DECIMAIS = new Set(["JPY"]);
+// Moedas em destaque para os chips de acesso rápido
+const DESTAQUES = ["BRL", "USD", "EUR", "GBP", "JPY", "CNY", "ARS", "CAD"];
+
+// Moedas sem casas decimais na exibição (ex: Iene, Won)
+const SEM_DECIMAIS = new Set(["JPY", "KRW", "VND", "IDR", "CLP", "PYG", "ISK", "HUF", "TWD"]);
+
+let MOEDAS_DISPONIVEIS = [];  // preenchido após buscarTaxas(), na ordem do catálogo
+let taxas = null;
+let taxasAtualizadasEm = null;
+let carregando = false;
+let moedaDe = "BRL";
+let moedaPara = "USD";
 
 const elValor = document.getElementById("valor");
-const elDe = document.getElementById("de");
-const elPara = document.getElementById("para");
 const elResultado = document.getElementById("resultado");
+const elResultadoDe = document.getElementById("resultadoDe");
 const elTaxaInfo = document.getElementById("taxaInfo");
-const elBtnConverter = document.getElementById("btnConverter");
 const elInverter = document.getElementById("inverter");
 const elStatusPonto = document.getElementById("statusPonto");
 const elStatusTexto = document.getElementById("statusTexto");
+const elChips = document.getElementById("chips");
 
-let taxas = null;          // tabela de taxas com base fixa (BRL)
-let taxasAtualizadasEm = null;
-let carregando = false;
-
-// Tabela de fallback (aproximada) usada apenas se as duas APIs falharem,
-// para o conversor nunca ficar totalmente inutilizável offline.
+// Tabela de fallback (aproximada) usada apenas se as duas APIs falharem
 const TAXAS_FALLBACK_BASE_USD = {
-    USD: 1, BRL: 5, EUR: 0.90, GBP: 0.78, JPY: 150, CAD: 1.35, AUD: 1.50
+    USD: 1, BRL: 5, EUR: 0.90, GBP: 0.78, JPY: 150, CAD: 1.35, AUD: 1.50, CNY: 7.1, ARS: 1200, MXN: 18
 };
+
+function infoMoeda(codigo) {
+    return CATALOGO[codigo] || [codigo, "🌐"];
+}
 
 function formatarMoeda(valor, codigo) {
     const casas = SEM_DECIMAIS.has(codigo) ? 0 : 2;
     try {
         return new Intl.NumberFormat("pt-BR", {
-            style: "currency",
-            currency: codigo,
-            minimumFractionDigits: casas,
-            maximumFractionDigits: casas
+            style: "currency", currency: codigo,
+            minimumFractionDigits: casas, maximumFractionDigits: casas
         }).format(valor);
     } catch (e) {
-        // Caso o navegador não reconheça o código ISO (raro)
         return `${valor.toFixed(casas)} ${codigo}`;
     }
 }
@@ -366,61 +554,167 @@ function definirStatus(tipo, texto) {
     elStatusTexto.textContent = texto;
 }
 
+/* ====================== BUSCA DE TAXAS ====================== */
 async function buscarTaxas() {
     carregando = true;
-    elBtnConverter.disabled = true;
     definirStatus("carregando", "Buscando cotações atualizadas...");
 
-    // Tenta a Frankfurter primeiro (dados de bancos centrais, sem chave)
-    try {
-        const resp = await fetch("https://api.frankfurter.dev/v1/latest?base=USD");
-        if (!resp.ok) throw new Error("Frankfurter indisponível");
-        const dados = await resp.json();
-        taxas = { USD: 1, ...dados.rates };
-        taxasAtualizadasEm = dados.date ? new Date(dados.date) : new Date();
-        definirStatus("ok", `Cotações atualizadas em ${taxasAtualizadasEm.toLocaleDateString("pt-BR")}`);
-        carregando = false;
-        elBtnConverter.disabled = false;
-        return;
-    } catch (e) {
-        // segue para o próximo provedor
-    }
-
-    // Fallback: open.er-api.com (também sem chave)
+    // Fonte primária: open.er-api.com — cobre ~161 moedas, sem chave
     try {
         const resp = await fetch("https://open.er-api.com/v6/latest/USD");
         if (!resp.ok) throw new Error("open.er-api indisponível");
         const dados = await resp.json();
         if (dados.result !== "success") throw new Error("Resposta inesperada");
         taxas = dados.rates;
-        taxasAtualizadasEm = new Date();
-        definirStatus("ok", "Cotações atualizadas (fonte alternativa)");
-        carregando = false;
-        elBtnConverter.disabled = false;
+        taxasAtualizadasEm = dados.time_last_update_utc ? new Date(dados.time_last_update_utc) : new Date();
+        finalizarCarregamento("ok", `Cotações atualizadas em ${taxasAtualizadasEm.toLocaleDateString("pt-BR")}`);
         return;
-    } catch (e) {
-        // segue para o fallback estático
-    }
+    } catch (e) { /* tenta próxima fonte */ }
 
-    // Último recurso: tabela fixa aproximada (avisando o usuário)
+    // Fallback: Frankfurter (dados de bancos centrais — cobertura menor, ~30 moedas)
+    try {
+        const resp = await fetch("https://api.frankfurter.dev/v1/latest?base=USD");
+        if (!resp.ok) throw new Error("Frankfurter indisponível");
+        const dados = await resp.json();
+        taxas = { USD: 1, ...dados.rates };
+        taxasAtualizadasEm = dados.date ? new Date(dados.date) : new Date();
+        finalizarCarregamento("ok", `Cotações atualizadas em ${taxasAtualizadasEm.toLocaleDateString("pt-BR")} (cobertura reduzida)`);
+        return;
+    } catch (e) { /* segue para o fallback estático */ }
+
+    // Último recurso: tabela fixa aproximada
     taxas = TAXAS_FALLBACK_BASE_USD;
     taxasAtualizadasEm = null;
-    definirStatus("falha", "Sem conexão — usando valores aproximados");
-    carregando = false;
-    elBtnConverter.disabled = false;
+    finalizarCarregamento("falha", "Sem conexão — usando valores aproximados");
 }
 
+function finalizarCarregamento(tipo, texto) {
+    definirStatus(tipo, texto);
+    carregando = false;
+    montarMoedasDisponiveis();
+    montarChips();
+    montarDropdown("De");
+    montarDropdown("Para");
+    atualizarTrigger("De");
+    atualizarTrigger("Para");
+    converter();
+}
+
+function montarMoedasDisponiveis() {
+    const codigos = Object.keys(taxas);
+    // Catálogo primeiro (ordem curada), depois qualquer moeda extra retornada pela API
+    const ordenadas = Object.keys(CATALOGO).filter(c => codigos.includes(c));
+    const extras = codigos.filter(c => !CATALOGO[c]).sort();
+    MOEDAS_DISPONIVEIS = [...ordenadas, ...extras];
+}
+
+/* ====================== UI: CHIPS ====================== */
+function montarChips() {
+    elChips.innerHTML = DESTAQUES.filter(c => taxas[c] !== undefined).map(c => {
+        const [nome, bandeira] = infoMoeda(c);
+        return `<button type="button" class="chip" data-codigo="${c}">${bandeira} ${c}</button>`;
+    }).join("");
+
+    elChips.querySelectorAll(".chip").forEach(btn => {
+        btn.addEventListener("click", () => {
+            moedaPara = btn.dataset.codigo;
+            if (moedaPara === moedaDe) moedaPara = moedaDe === "USD" ? "BRL" : "USD";
+            atualizarTrigger("Para");
+            converter();
+        });
+    });
+}
+
+/* ====================== UI: SELETOR DE MOEDA ====================== */
+function atualizarTrigger(lado) {
+    const codigo = lado === "De" ? moedaDe : moedaPara;
+    const [nome, bandeira] = infoMoeda(codigo);
+    document.getElementById(`bandeira${lado}`).textContent = bandeira;
+    document.getElementById(`codigo${lado}`).textContent = codigo;
+    document.getElementById(`nome${lado}`).textContent = nome;
+}
+
+function montarDropdown(lado, filtro = "") {
+    const lista = document.getElementById(`lista${lado}`);
+    const termo = filtro.trim().toLowerCase();
+
+    const filtradas = MOEDAS_DISPONIVEIS.filter(c => {
+        if (!termo) return true;
+        const [nome] = infoMoeda(c);
+        return c.toLowerCase().includes(termo) || nome.toLowerCase().includes(termo);
+    });
+
+    if (filtradas.length === 0) {
+        lista.innerHTML = `<div class="currency-empty">Nenhuma moeda encontrada</div>`;
+        return;
+    }
+
+    lista.innerHTML = filtradas.map(c => {
+        const [nome, bandeira] = infoMoeda(c);
+        const atual = lado === "De" ? moedaDe : moedaPara;
+        return `<button type="button" class="currency-option ${c === atual ? "realce" : ""}" data-codigo="${c}">
+            <span class="bandeira">${bandeira}</span>
+            <span class="info">
+                <span class="codigo">${c}</span>
+                <span class="nome">${nome}</span>
+            </span>
+        </button>`;
+    }).join("");
+
+    lista.querySelectorAll(".currency-option").forEach(btn => {
+        btn.addEventListener("click", () => {
+            if (lado === "De") moedaDe = btn.dataset.codigo;
+            else moedaPara = btn.dataset.codigo;
+            atualizarTrigger(lado);
+            fecharDropdown(lado);
+            converter();
+        });
+    });
+}
+
+function abrirDropdown(lado) {
+    fecharDropdown(lado === "De" ? "Para" : "De");
+    document.getElementById(`trigger${lado}`).classList.add("aberto");
+    document.getElementById(`dropdown${lado}`).classList.add("aberto");
+    const busca = document.getElementById(`busca${lado}`);
+    busca.value = "";
+    montarDropdown(lado, "");
+    setTimeout(() => busca.focus(), 0);
+}
+
+function fecharDropdown(lado) {
+    document.getElementById(`trigger${lado}`).classList.remove("aberto");
+    document.getElementById(`dropdown${lado}`).classList.remove("aberto");
+}
+
+function alternarDropdown(lado) {
+    const aberto = document.getElementById(`dropdown${lado}`).classList.contains("aberto");
+    if (aberto) fecharDropdown(lado);
+    else abrirDropdown(lado);
+}
+
+document.getElementById("triggerDe").addEventListener("click", () => alternarDropdown("De"));
+document.getElementById("triggerPara").addEventListener("click", () => alternarDropdown("Para"));
+
+document.getElementById("buscaDe").addEventListener("input", (e) => montarDropdown("De", e.target.value));
+document.getElementById("buscaPara").addEventListener("input", (e) => montarDropdown("Para", e.target.value));
+
+document.addEventListener("click", (e) => {
+    if (!document.getElementById("campoDe").contains(e.target)) fecharDropdown("De");
+    if (!document.getElementById("campoPara").contains(e.target)) fecharDropdown("Para");
+});
+
+document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") { fecharDropdown("De"); fecharDropdown("Para"); }
+});
+
+/* ====================== CONVERSÃO ====================== */
 function converter() {
     const valor = parseFloat(elValor.value);
-    const de = elDe.value;
-    const para = elPara.value;
 
     elResultado.classList.remove("erro");
 
-    if (carregando) {
-        elResultado.textContent = "Carregando cotações...";
-        return;
-    }
+    if (carregando) { elResultado.textContent = "Carregando cotações..."; return; }
 
     if (!taxas) {
         elResultado.classList.add("erro");
@@ -431,52 +725,53 @@ function converter() {
     if (isNaN(valor) || valor <= 0) {
         elResultado.classList.add("erro");
         elResultado.textContent = "Digite um valor válido maior que zero";
+        elResultadoDe.textContent = "";
         elTaxaInfo.textContent = "";
         return;
     }
 
-    if (!(de in taxas) || !(para in taxas)) {
+    if (!(moedaDe in taxas) || !(moedaPara in taxas)) {
         elResultado.classList.add("erro");
         elResultado.textContent = "Moeda não suportada pela fonte de dados atual";
         return;
     }
 
-    if (de === para) {
-        elResultado.textContent = formatarMoeda(valor, para);
+    elResultadoDe.textContent = `${formatarMoeda(valor, moedaDe)} equivalem a`;
+
+    if (moedaDe === moedaPara) {
+        elResultado.textContent = formatarMoeda(valor, moedaPara);
         elTaxaInfo.textContent = "Mesma moeda selecionada nos dois campos.";
         return;
     }
 
-    // Conversão via taxa cruzada com base comum (USD)
-    const taxaCruzada = taxas[para] / taxas[de];
+    const taxaCruzada = taxas[moedaPara] / taxas[moedaDe];
     const resultado = valor * taxaCruzada;
 
-    elResultado.textContent = formatarMoeda(resultado, para);
+    elResultado.textContent = formatarMoeda(resultado, moedaPara);
 
-    const dataTexto = taxasAtualizadasEm
-        ? taxasAtualizadasEm.toLocaleDateString("pt-BR")
-        : "indisponível";
+    const dataTexto = taxasAtualizadasEm ? taxasAtualizadasEm.toLocaleDateString("pt-BR") : "indisponível";
+    const [nomeDe] = infoMoeda(moedaDe);
+    const [nomePara] = infoMoeda(moedaPara);
 
     elTaxaInfo.innerHTML =
-        `1 ${de} = <strong>${taxaCruzada.toFixed(6).replace(/0+$/, "").replace(/\.$/, "")} ${para}</strong><br>` +
-        `${NOMES[de] || de} → ${NOMES[para] || para} · atualizado em ${dataTexto}`;
+        `1 ${moedaDe} = <strong>${taxaCruzada.toFixed(6).replace(/0+$/, "").replace(/\.$/, "")} ${moedaPara}</strong><br>` +
+        `${nomeDe} → ${nomePara} · atualizado em ${dataTexto}`;
 }
 
 function inverterMoedas() {
-    const de = elDe.value;
-    const para = elPara.value;
-    elDe.value = para;
-    elPara.value = de;
+    elInverter.classList.add("girando");
+    setTimeout(() => elInverter.classList.remove("girando"), 200);
+    const tmp = moedaDe;
+    moedaDe = moedaPara;
+    moedaPara = tmp;
+    atualizarTrigger("De");
+    atualizarTrigger("Para");
     converter();
 }
 
-elBtnConverter.addEventListener("click", converter);
 elInverter.addEventListener("click", inverterMoedas);
-elValor.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") converter();
-});
-elDe.addEventListener("change", converter);
-elPara.addEventListener("change", converter);
+elValor.addEventListener("input", converter);
+elValor.addEventListener("keydown", (e) => { if (e.key === "Enter") converter(); });
 
 buscarTaxas();
 </script>
