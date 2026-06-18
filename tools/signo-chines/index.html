@@ -12,11 +12,13 @@
 <style>
 
 :root{
-    --red:#27ae60;
-    --red-deep:#1e8449;
-    --red-soft:#2ecc71;
-    --gold:#27ae60;
-    --gold-light:#d5f5e3;
+    --red: #27ae60;
+    --red-deep: #1e8449;
+    --red-soft: #2ecc71;
+    --gold: #27ae60;
+    --gold-light: #d5f5e3;
+    --ink: #2c3e50;
+    --ink-soft: #7f8c8d;
 }
 
 *{
@@ -27,7 +29,7 @@
 
 body{
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-    background:linear-gradient(135deg,#2ecc71,#27ae60);
+    background:linear-gradient(135deg,#2ecc71,#27ae60 );
     min-height:100vh;
     padding:20px;
 }
@@ -45,10 +47,12 @@ body{
 
 .left-panel{
     padding:32px;
+    border-right: 1px solid #eee;
 }
 
 .right-panel{
     background:#e8f8f5;
+    padding: 32px;
 }
 
 .eyebrow{
@@ -71,6 +75,8 @@ body{
 
 h1{
     font-size:clamp(28px,4vw,36px);
+    color: var(--ink);
+    margin-bottom: 15px;
 }
 
 .subtitle{
@@ -83,34 +89,30 @@ h1{
 .info-box{
     background:#f0fff7;
     border-left:4px solid #27ae60;
-    color:#27ae60;
+    color:#1e8449;
+    padding: 15px;
+    font-size: 13px;
+    line-height: 1.5;
+    margin-bottom: 25px;
+    border-radius: 4px;
 }
 
 .section-title{
+    font-size:12px;
+    font-weight:700;
+    color:#27ae60;
+    text-transform:uppercase;
     border-bottom:2px solid #27ae60;
-}
-
-.section-title::after{
-    content:"";
-    position:absolute;
-    left:0;bottom:0;
-    width:46px;height:2px;
-    background:var(--gold);
-}
-
-.section-title::before{
-    content:"";
-    position:absolute;
-    left:0;bottom:5px;
-    width:22px;height:1px;
-    background:var(--gold);
-    opacity:.55;
+    padding-bottom:8px;
+    margin-bottom:20px;
+    position: relative;
 }
 
 .input-row{
     display:grid;
     grid-template-columns:repeat(3,1fr);
     gap:12px;
+    margin-bottom: 20px;
 }
 
 .input-group{
@@ -133,10 +135,10 @@ h1{
     padding:24px;
     border:1px solid #d5f5e3;
     box-shadow:0 8px 25px rgba(39,174,96,.08);
+    margin-bottom: 20px;
 }
 
-.resultado-header,
-.section-title{
+.resultado-header{
     font-size:12px;
     font-weight:700;
     color:#27ae60;
@@ -163,8 +165,7 @@ select:focus{
     border-color:var(--gold);
 }
 
-.btn-primary,
-.btn-secondary{
+.btn-primary{
     width:100%;
     padding:14px;
     border-radius:10px;
@@ -173,39 +174,65 @@ select:focus{
     margin-top:18px;
     cursor:pointer;
     transition:.2s;
+    background: var(--red);
+    color: white;
+    border: none;
 }
 
-.btn-secondary:hover{ background:rgba(201,162,39,.15); }
-.btn-secondary:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+.btn-primary:hover {
+    background: var(--red-deep);
+}
+
+.btn-secondary{
+    width:100%;
+    padding:14px;
+    border-radius:10px;
+    font-weight:700;
+    font-size:14px;
+    margin-top:10px;
+    cursor:pointer;
+    transition:.2s;
+    background: transparent;
+    border: 1.5px solid var(--gold);
+    color: var(--gold);
+}
+
+.btn-secondary:hover{ background:rgba(39,174,96,.1); }
 
 .stamp-wrap{
     display:flex;
     flex-direction:column;
     align-items:center;
     gap:16px;
-    padding:10px 0 30px;
+    padding:10px 0 20px;
 }
 
 .stamp{
-    width:150px;
-    height:150px;
+    width:120px;
+    height:120px;
     border-radius:50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
 }
 
 .stamp::before{
     content:"";
     position:absolute;
-    inset:9px;
+    inset:8px;
     border:1.5px solid rgba(255,255,255,.45);
-    border-radius:13px;
+    border-radius:50%;
 }
 
 .stamp .hanzi{
     font-family:'Long Cang',cursive;
-    font-size:92px;
-    color:#fdf6e8;
+    font-size:70px;
+    color:#fff;
     line-height:1;
     user-select:none;
+    z-index: 2;
 }
 
 .stamp.stamping{
@@ -218,14 +245,10 @@ select:focus{
     100%{ transform:scale(1) rotate(0deg); }
 }
 
-@media (prefers-reduced-motion:reduce){
-    .stamp.stamping{ animation:none; }
-}
-
 .animal-name{
     font-family:'Cormorant Garamond',serif;
     font-weight:700;
-    font-size:28px;
+    font-size:26px;
     color:var(--ink);
     text-align:center;
 }
@@ -243,22 +266,24 @@ select:focus{
     gap:8px;
     justify-content:center;
     flex-wrap:wrap;
+    margin: 15px 0;
 }
 
 .badge{
-    padding:8px 16px;
+    padding:6px 14px;
     border-radius:999px;
     font-size:11px;
     font-weight:600;
+    color: white;
     box-shadow:0 2px 6px rgba(0,0,0,.08);
 }
 
 .range-pill{
-    font:500 12.5px/1 'IBM Plex Mono',monospace;
+    font:500 12px/1 'IBM Plex Mono',monospace;
     color:var(--ink);
-    background:#fff;
-    border:1px solid rgba(0,0,0,.08);
-    padding:8px 16px;
+    background:#f8f9fa;
+    border:1px solid rgba(0,0,0,.05);
+    padding:8px 12px;
     border-radius:8px;
     text-align:center;
 }
@@ -269,24 +294,27 @@ select:focus{
     text-align:center;
     line-height:1.55;
     max-width:320px;
-    margin:0 auto;
+    margin:15px auto 0;
 }
 
 .cutoff-note{
     font-size:11.5px;
     font-style:italic;
-    color:var(--red-deep);
-    background:rgba(163,22,43,.07);
+    color: #c0392b;
+    background:rgba(192, 57, 43, 0.07);
     border-radius:8px;
     padding:10px 14px;
-    margin-top:6px;
+    margin-top:15px;
     text-align:center;
     line-height:1.5;
-    max-width:340px;
 }
 
 .historico-titulo{
     color:#27ae60;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin: 30px 0 15px;
 }
 
 .historico{
@@ -337,76 +365,15 @@ select:focus{
 }
 
 @media (max-width:900px){
-
-    .wrapper{
-        grid-template-columns:1fr;
-    }
-
-    .left-panel{
-        border-right:none;
-        border-bottom:1px solid #e5e5e5;
-    }
-
-    .input-row{
-    background:#f8fffb;
-    border:1px solid #d5f5e3;
-    border-radius:12px;
-    padding:16px;
-}
-
-    .cycle-grid{
-        grid-template-columns:1fr;
-    }
-
-    .stamp{
-        width:140px;
-        height:140px;
-    }
-
-    .stamp .hanzi{
-        font-size:72px;
-    }
-
+    .wrapper{ grid-template-columns:1fr; }
+    .left-panel{ border-right:none; border-bottom:1px solid #eee; }
+    .cycle-grid{ grid-template-columns:1fr; }
 }
 
 @media (max-width:480px){
-
-    body{
-        padding:12px;
-    }
-
-    .left-panel,
-    .right-panel{
-        padding:20px;
-    }
-
-    h1{
-        font-size:28px;
-    }
-
-    .animal-name{
-        font-size:24px;
-    }
-
-    .stamp{
-        width:120px;
-        height:120px;
-    }
-
-    .stamp .hanzi{
-        font-size:60px;
-    }
-
-    .badge-row{
-        flex-direction:column;
-        width:100%;
-    }
-
-    .badge{
-        width:100%;
-        text-align:center;
-    }
-
+    body{ padding:10px; }
+    .left-panel, .right-panel{ padding:20px; }
+    .input-row { grid-template-columns: 1fr; }
 }
 
 </style>
@@ -415,501 +382,272 @@ select:focus{
 <body>
 
 <div class="wrapper">
-
-<div class="left-panel">
-
-<div class="eyebrow"><span class="cjk">農曆</span><span>Calendário Lunar Chinês</span></div>
-
-<h1>Qual é o seu signo do zodíaco chinês?</h1>
-
-<div class="subtitle">
-Escolha uma data e descubra o animal, o elemento e a polaridade Yin/Yang correspondentes — calculados com as datas reais do Ano Novo Chinês, não apenas o ano do calendário ocidental.
-</div>
-
-<div class="info-box">
-O Ano Novo Chinês muda de data todo ano (entre 21 de janeiro e 20 de fevereiro), porque segue o calendário lunissolar. Por isso, nascer em janeiro ou início de fevereiro pode significar pertencer ao signo do ano anterior. Esta calculadora usa as datas exatas de 1900 a 2099; fora desse intervalo, usa uma data aproximada.
-</div>
-
-<div class="section-title">Sua Data</div>
-
-<div class="input-row">
-
-<div class="input-group">
-<label class="input-label">Ano</label>
-<select id="ano"></select>
-</div>
-
-<div class="input-group">
-<label class="input-label">Mês</label>
-<select id="mes"></select>
-</div>
-
-<div class="input-group">
-<label class="input-label">Dia</label>
-<select id="dia"></select>
-</div>
-
-</div>
-
-<button class="btn-primary" id="btnCalcular">Descobrir meu signo</button>
-
-<div class="historico-titulo" style="margin-top:30px;">Ciclo Atual · 12 Anos</div>
-<div class="cycle-grid" id="cycleGrid"></div>
-
-</div>
-
-<div class="right-panel">
-
-    <div class="resultado-header">
-        Resultado
-    </div>
-
-    <div class="resultado-box">
-
-        <div class="stamp-wrap">
-
-            <div class="stamp" id="stamp">
-                <span class="hanzi" id="stampHanzi">?</span>
-            </div>
-
-            <div class="animal-name" id="animalName">
-                Selecione uma data
-            </div>
-
-            <div class="animal-pinyin" id="animalPinyin"></div>
-
+    <div class="left-panel">
+        <div class="eyebrow"><span class="cjk">農曆</span><span>Calendário Lunar Chinês</span></div>
+        <h1>Qual é o seu signo?</h1>
+        <div class="subtitle">
+            Descubra seu animal, elemento e polaridade baseados nas datas reais do Ano Novo Chinês.
+        </div>
+        
+        <div class="info-box">
+            O Ano Novo Chinês varia entre 21/01 e 20/02. Se você nasceu nesse período, pode pertencer ao signo do ano anterior.
         </div>
 
-        <div class="range-pill" id="rangePill"></div>
+        <div class="section-title">Sua Data de Nascimento</div>
+        <div class="input-row">
+            <div class="input-group">
+                <label class="input-label">Ano</label>
+                <select id="ano"></select>
+            </div>
+            <div class="input-group">
+                <label class="input-label">Mês</label>
+                <select id="mes"></select>
+            </div>
+            <div class="input-group">
+                <label class="input-label">Dia</label>
+                <select id="dia"></select>
+            </div>
+        </div>
 
-        <div class="badge-row" id="badgeRow"></div>
+        <button class="btn-primary" id="btnCalcular">Descobrir meu signo</button>
 
-        <div class="trait" id="traitText"></div>
-
-        <div class="cutoff-note" id="cutoffNote" style="display:none;"></div>
-
+        <div class="historico-titulo">Ciclo Atual · 12 Anos</div>
+        <div class="cycle-grid" id="cycleGrid"></div>
     </div>
 
-    <button class="btn-secondary" id="btnCopiar">
-        📋 Copiar resultado
-    </button>
+    <div class="right-panel">
+        <div class="resultado-header">Resultado</div>
+        <div class="resultado-box">
+            <div class="stamp-wrap">
+                <div class="stamp" id="stamp">
+                    <span class="hanzi" id="stampHanzi">?</span>
+                </div>
+                <div class="animal-name" id="animalName">Selecione uma data</div>
+                <div class="animal-pinyin" id="animalPinyin"></div>
+            </div>
 
-    <div class="historico-titulo">
-        Últimas Consultas
+            <div class="range-pill" id="rangePill"></div>
+            <div class="badge-row" id="badgeRow"></div>
+            <div class="trait" id="traitText"></div>
+            <div class="cutoff-note" id="cutoffNote" style="display:none;"></div>
+        </div>
+
+        <button class="btn-secondary" id="btnCopiar">📋 Copiar resultado</button>
+
+        <div class="historico-titulo">Últimas Consultas</div>
+        <ul class="historico" id="historico">
+            <li>Nenhuma consulta realizada</li>
+        </ul>
     </div>
-
-    <ul class="historico" id="historico">
-        <li>Nenhuma consulta realizada</li>
-    </ul>
-
-</div>
-
-<div class="animal-name" id="animalName">Selecione uma data</div>
-<div class="animal-pinyin" id="animalPinyin"></div>
-
-<div class="range-pill" id="rangePill"></div>
-
-<div class="badge-row" id="badgeRow"></div>
-
-<div class="trait" id="traitText"></div>
-
-<div class="cutoff-note" id="cutoffNote" style="display:none;"></div>
-
-</div>
-
-<button class="btn-secondary" id="btnCopiar">📋 Copiar resultado</button>
-
-<div class="historico-titulo">Últimas Consultas</div>
-<ul class="historico" id="historico">
-<li>Nenhuma consulta realizada</li>
-</ul>
-
-</div>
-
 </div>
 
 <script>
-
-// =========================
-// DADOS: ANIMAIS E ELEMENTOS
-// =========================
-
 const ANIMALS = [
-{ pt:"Rato",     hanzi:"鼠", pinyin:"Shǔ",   trait:"Esperto, adaptável e oportunista — sempre encontra um jeito." },
-{ pt:"Boi",      hanzi:"牛", pinyin:"Niú",   trait:"Paciente, confiável e incansável em tudo que se propõe a fazer." },
-{ pt:"Tigre",    hanzi:"虎", pinyin:"Hǔ",    trait:"Corajoso, intenso e nascido para liderar." },
-{ pt:"Coelho",   hanzi:"兔", pinyin:"Tù",    trait:"Gentil, diplomático e atento a cada detalhe." },
-{ pt:"Dragão",   hanzi:"龍", pinyin:"Lóng",  trait:"Carismático, ambicioso e com uma presença que ninguém ignora." },
-{ pt:"Serpente", hanzi:"蛇", pinyin:"Shé",   trait:"Perspicaz, elegante e estrategista nato." },
-{ pt:"Cavalo",   hanzi:"馬", pinyin:"Mǎ",    trait:"Livre, energético e sempre em busca da próxima jornada." },
-{ pt:"Cabra",    hanzi:"羊", pinyin:"Yáng",  trait:"Criativo, sensível e com um gosto refinado para as artes." },
-{ pt:"Macaco",   hanzi:"猴", pinyin:"Hóu",   trait:"Curioso, ágil e rápido para resolver qualquer problema." },
-{ pt:"Galo",     hanzi:"雞", pinyin:"Jī",    trait:"Confiante, observador e organizado até o último detalhe." },
-{ pt:"Cão",      hanzi:"狗", pinyin:"Gǒu",   trait:"Leal, honesto e protetor de quem ama." },
-{ pt:"Porco",    hanzi:"豬", pinyin:"Zhū",   trait:"Generoso, sincero e alguém com quem sempre se pode contar." }
+    { pt:"Rato",     hanzi:"鼠", pinyin:"Shǔ",   trait:"Esperto, adaptável e oportunista — sempre encontra um jeito." },
+    { pt:"Boi",      hanzi:"牛", pinyin:"Niú",   trait:"Paciente, confiável e incansável em tudo que se propõe a fazer." },
+    { pt:"Tigre",    hanzi:"虎", pinyin:"Hǔ",    trait:"Corajoso, intenso e nascido para liderar." },
+    { pt:"Coelho",   hanzi:"兔", pinyin:"Tù",    trait:"Gentil, diplomático e atento a cada detalhe." },
+    { pt:"Dragão",   hanzi:"龍", pinyin:"Lóng",  trait:"Carismático, ambicioso e com uma presença que ninguém ignora." },
+    { pt:"Serpente", hanzi:"蛇", pinyin:"Shé",   trait:"Perspicaz, elegante e estrategista nato." },
+    { pt:"Cavalo",   hanzi:"馬", pinyin:"Mǎ",    trait:"Livre, energético e sempre em busca da próxima jornada." },
+    { pt:"Cabra",    hanzi:"羊", pinyin:"Yáng",  trait:"Criativo, sensível e com um gosto refinado para as artes." },
+    { pt:"Macaco",   hanzi:"猴", pinyin:"Hóu",   trait:"Curioso, ágil e rápido para resolver qualquer problema." },
+    { pt:"Galo",     hanzi:"雞", pinyin:"Jī",    trait:"Confiante, observador e organizado até o último detalhe." },
+    { pt:"Cão",      hanzi:"狗", pinyin:"Gǒu",   trait:"Leal, honesto e protetor de quem ama." },
+    { pt:"Porco",    hanzi:"豬", pinyin:"Zhū",   trait:"Generoso, sincero e alguém com quem sempre se pode contar." }
 ];
 
 const ELEMENTOS = ["Madeira","Fogo","Terra","Metal","Água"];
-
 const ELEMENT_COLORS = {
-"Madeira":"#27ae60",
-"Fogo":"#27ae60",
-"Terra":"#27ae60",
-"Metal":"#27ae60",
-"Água":"#27ae60"
+    "Madeira": "#27ae60",
+    "Fogo": "#e67e22",
+    "Terra": "#d35400",
+    "Metal": "#7f8c8d",
+    "Água": "#2980b9"
 };
 
-// =========================
-// TABELA REAL DO ANO NOVO CHINÊS (1900–2099)
-// Cada posição = mês-dia (MM-DD) gregoriano em que o ano lunar começa.
-// Índice 0 = ano 1900.
-// =========================
-
 const CNY_START = [
-// 1900–1909
-"01-31","02-19","02-08","01-29","02-16","02-04","01-25","02-13","02-02","01-22",
-// 1910–1919
-"02-10","01-30","02-18","02-06","01-26","02-14","02-03","01-23","02-11","02-01",
-// 1920–1929
-"02-20","02-08","01-28","02-16","02-05","01-24","02-13","02-02","01-23","02-10",
-// 1930–1939
-"01-30","02-17","02-06","01-26","02-14","02-04","01-24","02-11","01-31","02-19",
-// 1940–1949
-"02-08","01-27","02-15","02-05","01-25","02-13","02-02","01-22","02-10","01-29",
-// 1950–1959
-"02-17","02-06","01-27","02-14","02-03","01-24","02-12","01-31","02-18","02-08",
-// 1960–1969
-"01-28","02-15","02-05","01-25","02-13","02-02","01-21","02-09","01-30","02-17",
-// 1970–1979
-"02-06","01-27","02-15","02-03","01-23","02-11","01-31","02-18","02-07","01-28",
-// 1980–1989
-"02-16","02-05","01-25","02-13","02-02","02-20","02-09","01-29","02-17","02-06",
-// 1990–1999
-"01-27","02-15","02-04","01-23","02-10","01-31","02-19","02-07","01-28","02-16",
-// 2000–2009
-"02-05","01-24","02-12","02-01","01-22","02-09","01-29","02-18","02-07","01-26",
-// 2010–2019
-"02-14","02-03","01-23","02-10","01-31","02-19","02-08","01-28","02-16","02-05",
-// 2020–2029
-"01-25","02-12","02-01","01-22","02-10","01-29","02-17","02-06","01-26","02-13",
-// 2030–2039
-"02-03","01-23","02-11","01-31","02-19","02-08","01-28","02-15","02-04","01-24",
-// 2040–2049
-"02-12","02-01","01-22","02-10","01-30","02-17","02-06","01-26","02-14","02-02",
-// 2050–2059
-"01-23","02-11","02-01","02-19","02-08","01-28","02-15","02-04","01-24","02-12",
-// 2060–2069
-"02-02","01-21","02-09","01-29","02-17","02-05","01-26","02-14","02-03","01-23",
-// 2070–2079
-"02-11","01-31","02-19","02-07","01-27","02-15","02-05","01-24","02-12","02-02",
-// 2080–2089
-"01-22","02-09","01-29","02-17","02-06","01-26","02-14","02-03","01-24","02-10",
-// 2090–2099
-"01-30","02-18","02-07","01-27","02-15","02-05","01-25","02-12","02-01","01-21"
+    "01-31","02-19","02-08","01-29","02-16","02-04","01-25","02-13","02-02","01-22",
+    "02-10","01-30","02-18","02-06","01-26","02-14","02-03","01-23","02-11","02-01",
+    "02-20","02-08","01-28","02-16","02-05","01-24","02-13","02-02","01-23","02-10",
+    "01-30","02-17","02-06","01-26","02-14","02-04","01-24","02-11","01-31","02-19",
+    "02-08","01-27","02-15","02-05","01-25","02-13","02-02","01-22","02-10","01-29",
+    "02-17","02-06","01-27","02-14","02-03","01-24","02-12","01-31","02-18","02-08",
+    "01-28","02-15","02-05","01-25","02-13","02-02","01-21","02-09","01-30","02-17",
+    "02-06","01-27","02-15","02-03","01-23","02-11","01-31","02-18","02-07","01-28",
+    "02-16","02-05","01-25","02-13","02-02","02-20","02-09","01-29","02-17","02-06",
+    "01-27","02-15","02-04","01-23","02-10","01-31","02-19","02-07","01-28","02-16",
+    "02-05","01-24","02-12","02-01","01-22","02-09","01-29","02-18","02-07","01-26",
+    "02-14","02-03","01-23","02-10","01-31","02-19","02-08","01-28","02-16","02-05",
+    "01-25","02-12","02-01","01-22","02-10","01-29","02-17","02-06","01-26","02-13",
+    "02-03","01-23","02-11","01-31","02-19","02-08","01-28","02-15","02-04","01-24",
+    "02-12","02-01","01-22","02-10","01-30","02-17","02-06","01-26","02-14","02-02",
+    "01-23","02-11","02-01","02-19","02-08","01-28","02-15","02-04","01-24","02-12",
+    "02-02","01-21","02-09","01-29","02-17","02-05","01-26","02-14","02-03","01-23",
+    "02-11","01-31","02-19","02-07","01-27","02-15","02-05","01-24","02-12","02-02",
+    "01-22","02-09","01-29","02-17","02-06","01-26","02-14","02-03","01-24","02-10",
+    "01-30","02-18","02-07","01-27","02-15","02-05","01-25","02-12","02-01","01-21"
 ];
 
 const ANO_MIN = 1900;
 const ANO_MAX = 1900 + CNY_START.length - 1;
+const MESES = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
 
-let historico = JSON.parse(
-localStorage.getItem("historico-zodiaco-chines")
-) || [];
+let historico = JSON.parse(localStorage.getItem("historico-zodiaco-chines")) || [];
 
 const anoSelect = document.getElementById("ano");
 const mesSelect = document.getElementById("mes");
 const diaSelect = document.getElementById("dia");
 
-const MESES = [
-"Janeiro","Fevereiro","Março","Abril","Maio","Junho",
-"Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"
-];
-
-inicializarSelects();
-gerarCicloAtual();
-atualizarHistorico();
-
-document
-.getElementById("btnCalcular")
-.addEventListener("click", calcularEExibir);
-
-document
-.getElementById("btnCopiar")
-.addEventListener("click", copiarResultado);
-
-
-// =========================
-// INICIALIZAR SELECTS (ANO / MÊS / DIA)
-// =========================
-
 function inicializarSelects(){
-
     const hoje = new Date();
-
     for(let a = ANO_MAX; a >= ANO_MIN; a--){
-
         const opt = document.createElement("option");
-        opt.value = a;
-        opt.textContent = a;
+        opt.value = a; opt.textContent = a;
         anoSelect.appendChild(opt);
-
     }
-
     MESES.forEach((nome, i) => {
-
         const opt = document.createElement("option");
-        opt.value = i + 1;
-        opt.textContent = nome;
+        opt.value = i + 1; opt.textContent = nome;
         mesSelect.appendChild(opt);
-
     });
-
-    const anoInicial = hoje.getFullYear() <= ANO_MAX ? hoje.getFullYear() : ANO_MAX;
-
-    anoSelect.value = anoInicial;
+    anoSelect.value = hoje.getFullYear() <= ANO_MAX ? hoje.getFullYear() : ANO_MAX;
     mesSelect.value = hoje.getMonth() + 1;
-
     popularDias();
-
     diaSelect.value = hoje.getDate();
-
     anoSelect.addEventListener("change", popularDias);
     mesSelect.addEventListener("change", popularDias);
-
-    // calcula automaticamente o resultado de hoje ao carregar a página
     calcularEExibir();
-
-}
-
-function diasNoMes(ano, mes){
-    return new Date(ano, mes, 0).getDate();
 }
 
 function popularDias(){
-
     const ano = parseInt(anoSelect.value);
     const mes = parseInt(mesSelect.value);
-    const totalDias = diasNoMes(ano, mes);
+    const totalDias = new Date(ano, mes, 0).getDate();
     const diaSelecionado = parseInt(diaSelect.value) || 1;
-
     diaSelect.innerHTML = "";
-
     for(let d = 1; d <= totalDias; d++){
-
         const opt = document.createElement("option");
-        opt.value = d;
-        opt.textContent = d;
+        opt.value = d; opt.textContent = d;
         diaSelect.appendChild(opt);
-
     }
-
     diaSelect.value = diaSelecionado <= totalDias ? diaSelecionado : totalDias;
-
 }
 
-
-// =========================
-// NÚCLEO: DATA DO ANO NOVO CHINÊS PARA UM ANO
-// =========================
-
 function dataCNY(anoGregoriano){
-
     const idx = anoGregoriano - ANO_MIN;
-
     if(idx >= 0 && idx < CNY_START.length){
-
         const [mm, dd] = CNY_START[idx].split("-").map(Number);
         return { data:new Date(anoGregoriano, mm - 1, dd), aproximado:false };
-
     }
-
-    // fora da tabela: aproximação pelo início da primavera (Lichun, ~4 de fevereiro)
     return { data:new Date(anoGregoriano, 1, 4), aproximado:true };
-
 }
 
 function infoDoAnoLunar(anoLunar){
-
     const branchIndex = (((anoLunar - 1984) % 12) + 12) % 12;
     const stemIndex = (((anoLunar - 1984) % 10) + 10) % 10;
     const elementIndex = Math.floor(stemIndex / 2);
-
     return {
         animal: ANIMALS[branchIndex],
         elemento: ELEMENTOS[elementIndex],
         polaridade: stemIndex % 2 === 0 ? "Yang" : "Yin"
     };
-
 }
 
 function formatarData(date){
-    return String(date.getDate()).padStart(2,"0") + "/" +
-           String(date.getMonth()+1).padStart(2,"0") + "/" +
-           date.getFullYear();
+    return String(date.getDate()).padStart(2,"0") + "/" + String(date.getMonth()+1).padStart(2,"0") + "/" + date.getFullYear();
 }
 
-
-// =========================
-// CALCULAR E EXIBIR
-// =========================
-
 function calcularEExibir(){
-
     const ano = parseInt(anoSelect.value);
     const mes = parseInt(mesSelect.value);
     const dia = parseInt(diaSelect.value);
-
     const { data:cny, aproximado } = dataCNY(ano);
     const dataInformada = new Date(ano, mes - 1, dia);
-
     const antesDoCorte = dataInformada < cny;
     const anoLunar = antesDoCorte ? ano - 1 : ano;
-
     const { animal, elemento, polaridade } = infoDoAnoLunar(anoLunar);
-
     const inicio = dataCNY(anoLunar).data;
     const fim = new Date(dataCNY(anoLunar + 1).data.getTime() - 86400000);
 
-    // --- pintura do selo ---
     const stamp = document.getElementById("stamp");
     stamp.style.background = ELEMENT_COLORS[elemento];
     document.getElementById("stampHanzi").textContent = animal.hanzi;
-
     stamp.classList.remove("stamping");
-    requestAnimationFrame(() => stamp.classList.add("stamping"));
+    void stamp.offsetWidth; // trigger reflow
+    stamp.classList.add("stamping");
 
-    document.getElementById("animalName").textContent =
-        `${elemento} ${animal.pt}`;
-    document.getElementById("animalPinyin").textContent =
-        `${animal.pinyin} · ${polaridade}`;
-
-    document.getElementById("rangePill").textContent =
-        `${formatarData(inicio)} → ${formatarData(fim)}`;
-
+    document.getElementById("animalName").textContent = `${elemento} ${animal.pt}`;
+    document.getElementById("animalPinyin").textContent = `${animal.pinyin} · ${polaridade}`;
+    document.getElementById("rangePill").textContent = `${formatarData(inicio)} → ${formatarData(fim)}`;
+    
     document.getElementById("badgeRow").innerHTML = `
         <span class="badge" style="background:${ELEMENT_COLORS[elemento]}">${elemento}</span>
-        <span class="badge" style="background:${var_red()}">${polaridade}</span>
+        <span class="badge" style="background:#c0392b">${polaridade}</span>
     `;
 
     document.getElementById("traitText").textContent = animal.trait;
-
     const notaEl = document.getElementById("cutoffNote");
-
     if(aproximado){
         notaEl.style.display = "block";
-        notaEl.textContent =
-            `O ano ${ano} está fora da tabela exata (1900–2099). Foi usada uma data aproximada de corte (4 de fevereiro).`;
+        notaEl.textContent = `Ano fora da tabela (1900–2099). Usada data aproximada (04/02).`;
     } else if(antesDoCorte){
         notaEl.style.display = "block";
-        notaEl.textContent =
-            `Sua data (${formatarData(dataInformada)}) é anterior ao Ano Novo Chinês de ${ano}, que começou em ${formatarData(cny)}. Por isso, você pertence ao ano lunar anterior.`;
+        notaEl.textContent = `Sua data é anterior ao Ano Novo Chinês (${formatarData(cny)}). Você pertence ao ano lunar anterior.`;
     } else {
         notaEl.style.display = "none";
     }
 
-    const resumo = `${formatarData(dataInformada)} → ${elemento} ${animal.pt} (${polaridade})`;
+    const resumo = `${formatarData(dataInformada)}: ${elemento} ${animal.pt}`;
     salvarHistorico(resumo);
-
 }
-
-function var_red(){
-    return getComputedStyle(document.documentElement).getPropertyValue("--red").trim();
-}
-
-
-// =========================
-// COPIAR
-// =========================
 
 function copiarResultado(){
-
-    const nome = document.getElementById("animalName").textContent;
-    const pinyin = document.getElementById("animalPinyin").textContent;
-    const range = document.getElementById("rangePill").textContent;
-
-    const texto = `${nome} (${pinyin}) — ${range}`;
-
+    const texto = `${document.getElementById("animalName").textContent} (${document.getElementById("animalPinyin").textContent}) — ${document.getElementById("rangePill").textContent}`;
     navigator.clipboard.writeText(texto);
-
-    const botao = document.getElementById("btnCopiar");
-    const original = botao.textContent;
-
-    botao.textContent = "✓ Copiado";
-
-    setTimeout(() => {
-        botao.textContent = original;
-    }, 1500);
-
+    const btn = document.getElementById("btnCopiar");
+    const old = btn.textContent;
+    btn.textContent = "✓ Copiado";
+    setTimeout(() => btn.textContent = old, 1500);
 }
 
-
-// =========================
-// HISTÓRICO
-// =========================
-
 function salvarHistorico(item){
-
+    if(historico[0] === item) return;
     historico.unshift(item);
-
-    if(historico.length > 20){
-        historico.pop();
-    }
-
-    localStorage.setItem(
-        "historico-zodiaco-chines",
-        JSON.stringify(historico)
-    );
-
+    if(historico.length > 5) historico.pop();
+    localStorage.setItem("historico-zodiaco-chines", JSON.stringify(historico));
     atualizarHistorico();
-
 }
 
 function atualizarHistorico(){
-
     const lista = document.getElementById("historico");
-
     if(historico.length === 0){
-        lista.innerHTML = "<li>Nenhuma consulta realizada</li>";
-        return;
+        lista.innerHTML = "<li>Nenhuma consulta</li>";
+    } else {
+        lista.innerHTML = historico.map(item => `<li>${item}</li>`).join("");
     }
-
-    lista.innerHTML = historico.map(item => `<li>${item}</li>`).join("");
-
 }
 
-
-// =========================
-// CICLO ATUAL DE 12 ANOS (REFERÊNCIA)
-// =========================
-
 function gerarCicloAtual(){
-
     const hoje = new Date();
     const { data:cnyHoje } = dataCNY(hoje.getFullYear());
     const anoBase = hoje < cnyHoje ? hoje.getFullYear() - 1 : hoje.getFullYear();
-
     const grid = document.getElementById("cycleGrid");
     let html = "";
-
     for(let i = 0; i < 12; i++){
-
         const ano = anoBase + i;
         const { animal, elemento } = infoDoAnoLunar(ano);
-        const ativo = i === 0 ? "active" : "";
-
-        html += `
-            <div class="cycle-row ${ativo}">
-                <span class="cjk">${animal.hanzi}</span>
-                <span>${ano} · ${elemento} ${animal.pt}</span>
-            </div>
-        `;
-
+        html += `<div class="cycle-row ${i === 0 ? 'active' : ''}"><span class="cjk">${animal.hanzi}</span><span>${ano} · ${animal.pt}</span></div>`;
     }
-
     grid.innerHTML = html;
-
 }
 
-</script>
+document.getElementById("btnCalcular").addEventListener("click", calcularEExibir);
+document.getElementById("btnCopiar").addEventListener("click", copiarResultado);
 
+inicializarSelects();
+gerarCicloAtual();
+atualizarHistorico();
+</script>
 </body>
 </html>
