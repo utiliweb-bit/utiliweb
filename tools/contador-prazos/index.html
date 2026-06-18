@@ -322,6 +322,11 @@
             color: #2e7d32;
         }
 
+        .status-badge.passado {
+            background: #ede7f6;
+            color: #4527a0;
+        }
+
         .botoes {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -732,8 +737,9 @@
             </div>
 
             <div class="abas">
-                <button class="aba-btn ativo" onclick="mudarAba('diferenca')">📊 Diferença</button>
-                <button class="aba-btn" onclick="mudarAba('futura')">🔮 Data Futura</button>
+                <!-- FIX 1: event passado explicitamente como parâmetro -->
+                <button class="aba-btn ativo" onclick="mudarAba(event, 'diferenca')">📊 Diferença</button>
+                <button class="aba-btn" onclick="mudarAba(event, 'futura')">🔮 Data Futura</button>
             </div>
 
             <div class="input-section">
@@ -796,7 +802,8 @@
                 </div>
 
                 <div class="botoes">
-                    <button class="btn-copiar" onclick="copiarResultado()">📋 Copiar</button>
+                    <!-- FIX 2: event passado explicitamente como parâmetro -->
+                    <button class="btn-copiar" onclick="copiarResultado(event)">📋 Copiar</button>
                     <button class="btn-limpar" onclick="limpar()">🗑️ Limpar</button>
                 </div>
 
@@ -816,12 +823,22 @@
         let lembretes = JSON.parse(localStorage.getItem('lembretes-prazos-responsivo')) || [];
         let abaAtiva = 'diferenca';
 
-        function mudarAba(aba) {
+        // FIX 1: mudarAba agora recebe o evento como parâmetro explícito
+        function mudarAba(evt, aba) {
             abaAtiva = aba;
-            
+
             // Atualizar botões
             document.querySelectorAll('.aba-btn').forEach(btn => btn.classList.remove('ativo'));
-            event.target.classList.add('ativo');
+            if (evt && evt.target) {
+                evt.target.classList.add('ativo');
+            } else {
+                // Fallback quando chamado programaticamente (ex: restaurarLembrete)
+                document.querySelectorAll('.aba-btn').forEach(btn => {
+                    if (btn.getAttribute('onclick').includes(`'${aba}'`)) {
+                        btn.classList.add('ativo');
+                    }
+                });
+            }
 
             // Atualizar conteúdo
             document.querySelectorAll('.aba-conteudo').forEach(el => el.classList.remove('ativo'));
@@ -831,9 +848,8 @@
         }
 
         window.addEventListener('load', () => {
-            // Pré-preencher com data de hoje
-            const hoje = new Date().toISOString().split('T')[0];
-            document.getElementById('dataFinal').value = hoje;
+            // FIX 3: Removido pré-preenchimento de dataFinal com "hoje"
+            // (causava resultado 0 dias ao abrir sem intenção do usuário)
             atualizarLembretes();
         });
 
@@ -862,11 +878,13 @@
             const data1 = new Date(dataInicial);
             const data2 = new Date(dataFinal);
 
-            // Calcular tempo composto (anos, meses, dias)
+            // FIX 4: detectar se data final está no passado ou futuro
+            const noPassado = data2 < data1;
+
             const tempoComposto = calcularTempoComposto(data1, data2);
             const totalDias = Math.floor(Math.abs(data2 - data1) / (1000 * 60 * 60 * 24));
 
-            exibirResultadoDiferenca(tempoComposto, totalDias);
+            exibirResultadoDiferenca(tempoComposto, totalDias, noPassado);
             adicionarLembrete(dataFinal, `Prazo: ${dataFinal}`);
 
             const status = document.getElementById('status');
@@ -877,26 +895,26 @@
         function calcularTempoComposto(data1, data2) {
             let anos = 0, meses = 0, dias = 0;
             
-            // Garantir que data1 seja menor que data2
-            if (data1 > data2) {
-                [data1, data2] = [data2, data1];
-            }
+            // Garantir que dataTemp parta da menor data
+            let dataInicio = data1 <= data2 ? new Date(data1) : new Date(data2);
+            let dataFim    = data1 <= data2 ? new Date(data2) : new Date(data1);
+
+            let dataTemp = new Date(dataInicio);
 
             // Calcular anos
-            let dataTemp = new Date(data1);
-            while (new Date(dataTemp.getFullYear() + 1, dataTemp.getMonth(), dataTemp.getDate()) <= data2) {
+            while (new Date(dataTemp.getFullYear() + 1, dataTemp.getMonth(), dataTemp.getDate()) <= dataFim) {
                 anos++;
                 dataTemp.setFullYear(dataTemp.getFullYear() + 1);
             }
 
             // Calcular meses
-            while (new Date(dataTemp.getFullYear(), dataTemp.getMonth() + 1, dataTemp.getDate()) <= data2) {
+            while (new Date(dataTemp.getFullYear(), dataTemp.getMonth() + 1, dataTemp.getDate()) <= dataFim) {
                 meses++;
                 dataTemp.setMonth(dataTemp.getMonth() + 1);
             }
 
-            // Calcular dias
-            while (dataTemp < data2) {
+            // Calcular dias restantes
+            while (dataTemp < dataFim) {
                 dias++;
                 dataTemp.setDate(dataTemp.getDate() + 1);
             }
@@ -912,13 +930,20 @@
                 return;
             }
 
-            const data = new Date(dataFutura);
+            // Comparar apenas datas (sem hora) para evitar off-by-one
             const hoje = new Date();
-            const diferenca = Math.abs(data - hoje);
-            const diasAte = Math.floor(diferenca / (1000 * 60 * 60 * 24));
+            const hojeStr = hoje.toISOString().split('T')[0];
+            const data = new Date(dataFutura);
+            const hojeData = new Date(hojeStr);
 
-            const dataFormatada = data.toLocaleDateString('pt-BR');
-            exibirResultadoFutura(dataFormatada, diasAte);
+            const diferenca = data - hojeData;
+            const diasAte = Math.round(Math.abs(diferenca) / (1000 * 60 * 60 * 24));
+
+            // FIX 5: detectar se a data já passou
+            const noPassado = diferenca < 0;
+
+            const dataFormatada = data.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+            exibirResultadoFutura(dataFormatada, diasAte, noPassado);
             adicionarLembrete(dataFutura, `Prazo: ${dataFormatada}`);
 
             const status = document.getElementById('status');
@@ -926,7 +951,9 @@
             setTimeout(() => { status.textContent = ''; }, 2000);
         }
 
-        function exibirResultadoDiferenca(tempoComposto, totalDias) {
+        // FIX 4 & 5: exibirResultadoDiferenca e exibirResultadoFutura agora
+        // recebem e usam o parâmetro noPassado para textos e badges corretos
+        function exibirResultadoDiferenca(tempoComposto, totalDias, noPassado) {
             const { anos, meses, dias } = tempoComposto;
 
             document.getElementById('resultado1').style.display = 'flex';
@@ -947,15 +974,17 @@
             if (anos > 0) partes.push(`${anos} ano${anos > 1 ? 's' : ''}`);
             if (meses > 0) partes.push(`${meses} mês${meses > 1 ? 'es' : ''}`);
             if (dias > 0) partes.push(`${dias} dia${dias > 1 ? 's' : ''}`);
-            
+
+            const prefixo = noPassado ? 'Passaram' : 'Faltam';
+
             if (partes.length === 0) {
                 textoComposto = 'Hoje é o dia!';
             } else if (partes.length === 1) {
-                textoComposto = 'Faltam ' + partes[0];
+                textoComposto = `${prefixo} ${partes[0]}`;
             } else if (partes.length === 2) {
-                textoComposto = 'Faltam ' + partes.join(' e ');
+                textoComposto = `${prefixo} ${partes.join(' e ')}`;
             } else {
-                textoComposto = 'Faltam ' + partes[0] + ', ' + partes[1] + ' e ' + partes[2];
+                textoComposto = `${prefixo} ${partes[0]}, ${partes[1]} e ${partes[2]}`;
             }
 
             document.getElementById('totalLabel').textContent = textoComposto;
@@ -964,9 +993,11 @@
             document.getElementById('resultadoItems').style.display = 'block';
             document.getElementById('resultadoTotal').style.display = 'block';
 
-            // Status badge
+            // Badge: se passou, mostrar "Passado" em vez de urgência
             const badge = document.getElementById('statusBadge');
-            if (totalDias <= 30) {
+            if (noPassado) {
+                badge.innerHTML = '<div class="status-badge passado">⏪ Já passou</div>';
+            } else if (totalDias <= 30) {
                 badge.innerHTML = '<div class="status-badge urgente">⚠️ Urgente!</div>';
             } else if (totalDias <= 90) {
                 badge.innerHTML = '<div class="status-badge proximo">⏰ Próximo</div>';
@@ -975,7 +1006,7 @@
             }
         }
 
-        function exibirResultadoFutura(dataFormatada, diasAte) {
+        function exibirResultadoFutura(dataFormatada, diasAte, noPassado) {
             document.getElementById('resultado1').style.display = 'flex';
             document.getElementById('resultado1Label').textContent = 'Data';
             document.getElementById('resultado1Valor').textContent = dataFormatada;
@@ -983,15 +1014,17 @@
             document.getElementById('resultado2').style.display = 'none';
             document.getElementById('resultado3').style.display = 'none';
 
-            document.getElementById('totalLabel').textContent = 'Dias até lá';
+            // FIX 5: label correto dependendo se passou ou não
+            document.getElementById('totalLabel').textContent = noPassado ? 'Dias desde a data' : 'Dias até lá';
             document.getElementById('total').textContent = diasAte;
-            document.getElementById('diasAuxiliar').textContent = '';
+            document.getElementById('diasAuxiliar').textContent = noPassado ? 'Esta data já passou' : '';
             document.getElementById('resultadoItems').style.display = 'block';
             document.getElementById('resultadoTotal').style.display = 'block';
 
-            // Status badge
             const badge = document.getElementById('statusBadge');
-            if (diasAte <= 30) {
+            if (noPassado) {
+                badge.innerHTML = '<div class="status-badge passado">⏪ Já passou</div>';
+            } else if (diasAte <= 30) {
                 badge.innerHTML = '<div class="status-badge urgente">⚠️ Urgente!</div>';
             } else if (diasAte <= 90) {
                 badge.innerHTML = '<div class="status-badge proximo">⏰ Próximo</div>';
@@ -1000,10 +1033,14 @@
             }
         }
 
-        function copiarResultado() {
-            const total = document.getElementById('total').textContent || document.getElementById('totalLabel').textContent;
-            navigator.clipboard.writeText(total).then(() => {
-                const btn = event.target;
+        // FIX 2: copiarResultado agora recebe o evento como parâmetro
+        function copiarResultado(evt) {
+            const totalEl = document.getElementById('total');
+            const labelEl = document.getElementById('totalLabel');
+            const texto = totalEl.textContent.trim() || labelEl.textContent.trim();
+
+            navigator.clipboard.writeText(texto).then(() => {
+                const btn = evt.target;
                 const textoOriginal = btn.textContent;
                 btn.textContent = '✓ Copiado!';
                 setTimeout(() => {
@@ -1049,26 +1086,32 @@
                 return;
             }
 
+            const hojeData = new Date(new Date().toISOString().split('T')[0]);
+
             lista.innerHTML = lembretes.map((lembrete, index) => {
                 const data = new Date(lembrete.data);
-                const hoje = new Date();
-                const diferenca = Math.abs(data - hoje);
-                const dias = Math.floor(diferenca / (1000 * 60 * 60 * 24));
+                // FIX 6: calcular diferença de dias corretamente (sem fuso horário distorcendo)
+                const dataStr = lembrete.data;
+                const dataLocal = new Date(dataStr + 'T00:00:00');
+                const diferencaMs = dataLocal - hojeData;
+                const dias = Math.round(Math.abs(diferencaMs) / (1000 * 60 * 60 * 24));
+                const label = diferencaMs < 0 ? `${dias}d atrás` : `${dias}d`;
 
                 return `
                     <li class="lembrete-item" onclick="restaurarLembrete(${index})">
                         <span>${lembrete.data}</span>
-                        <span>${dias} dias</span>
+                        <span>${label}</span>
                     </li>
                 `;
             }).join('');
         }
 
+        // FIX 1: restaurarLembrete usa mudarAba sem evento (null), fallback por onclick text
         function restaurarLembrete(index) {
             const lembrete = lembretes[index];
             document.getElementById('dataFinal').value = lembrete.data;
             document.getElementById('dataInicial').value = '';
-            mudarAba('diferenca');
+            mudarAba(null, 'diferenca');
             calcularDiferenca();
         }
     </script>
