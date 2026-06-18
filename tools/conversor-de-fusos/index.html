@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Conversor de Fusos Horários | UtiliWeb</title>
+<meta name="description" content="Converta horários entre cidades do mundo em tempo real.">
+<style>
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    min-height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px;
+}
+
+.wrapper {
+    width: 100%;
+    max-width: 1100px;
+    background: #fff;
+    border-radius: 18px;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    box-shadow: 0 20px 60px rgba(0,0,0,.25);
+}
+
+.left, .right {
+    padding: 24px;
+    min-width: 0;
+}
+
+.left {
+    border-right: 1px solid #eee;
+}
+
+.right {
+    background: #f6fff8;
+}
+
+h1 {
+    font-size: 28px;
+    margin-bottom: 6px;
+}
+
+h2 {
+    font-size: 24px;
+    margin-bottom: 16px;
+}
+
+.subtitle {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 18px;
+}
+
+a {
+    display: inline-block;
+    margin-bottom: 14px;
+    text-decoration: none;
+    color: #27ae60;
+    font-weight: 700;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #444;
+}
+
+select, input[type="time"] {
+    width: 100%;
+    padding: 13px;
+    border-radius: 12px;
+    border: 2px solid #ddd;
+    font-size: 16px;
+    background: #fff;
+    color: #333;
+    font-family: inherit;
+    margin-bottom: 16px;
+}
+
+select:focus, input[type="time"]:focus {
+    outline: none;
+    border-color: #27ae60;
+}
+
+input[type="date"] {
+    width: 100%;
+    padding: 13px;
+    border-radius: 12px;
+    border: 2px solid #ddd;
+    font-size: 16px;
+    background: #fff;
+    color: #333;
+    font-family: inherit;
+    margin-bottom: 16px;
+}
+
+input[type="date"]:focus {
+    outline: none;
+    border-color: #27ae60;
+}
+
+.btn-converter {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    background: #27ae60;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 4px;
+}
+
+.btn-converter:hover {
+    opacity: .95;
+}
+
+.btn-inverter {
+    width: 100%;
+    padding: 11px;
+    border: 2px solid #27ae60;
+    border-radius: 12px;
+    background: #fff;
+    color: #27ae60;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.btn-inverter:hover {
+    background: #f6fff8;
+}
+
+.result-card {
+    background: #fff;
+    border: 1px solid #d7f5e3;
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 12px;
+}
+
+.result-city {
+    font-size: 13px;
+    color: #888;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+
+.result-time {
+    font-size: 40px;
+    font-weight: 800;
+    color: #27ae60;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.1;
+}
+
+.result-date {
+    font-size: 14px;
+    color: #666;
+    margin-top: 4px;
+}
+
+.result-offset {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 4px 10px;
+    background: #eaf3de;
+    color: #3b6d11;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.diff-card {
+    background: #fff;
+    border: 1px solid #d7f5e3;
+    border-radius: 14px;
+    padding: 14px 18px;
+    margin-bottom: 12px;
+    font-size: 15px;
+    color: #333;
+    line-height: 1.7;
+}
+
+.diff-card strong {
+    color: #27ae60;
+}
+
+.world-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.world-card {
+    background: #fff;
+    border: 1px solid #e7f7ec;
+    border-radius: 10px;
+    padding: 10px 12px;
+}
+
+.world-city {
+    font-size: 11px;
+    font-weight: 700;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-bottom: 2px;
+}
+
+.world-time {
+    font-size: 20px;
+    font-weight: 800;
+    color: #27ae60;
+    font-variant-numeric: tabular-nums;
+}
+
+.world-date {
+    font-size: 11px;
+    color: #aaa;
+    margin-top: 1px;
+}
+
+.empty-msg {
+    color: #999;
+    font-size: 15px;
+    padding: 8px 0;
+}
+
+.section-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #aaa;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+    margin-top: 4px;
+}
+
+@media (max-width: 900px) {
+    body { align-items: flex-start; padding: 10px; }
+    .wrapper { grid-template-columns: 1fr; }
+    .left { border-right: none; border-bottom: 1px solid #eee; }
+    .left, .right { padding: 18px; }
+    h1 { font-size: 22px; }
+    h2 { font-size: 20px; }
+    .result-time { font-size: 32px; }
+    .world-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 480px) {
+    .world-grid { grid-template-columns: 1fr; }
+}
+
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+
+    <div class="left">
+
+        <h1>🌍 Conversor de Fusos</h1>
+        <p class="subtitle">Converta horários entre cidades do mundo</p>
+
+        <a href="../../index.html">← Voltar</a>
+
+        <label>Cidade / fuso de origem</label>
+        <select id="origem"></select>
+
+        <label>Data</label>
+        <input type="date" id="data">
+
+        <label>Horário</label>
+        <input type="time" id="hora" value="12:00">
+
+        <label>Converter para</label>
+        <select id="destino"></select>
+
+        <button class="btn-converter" onclick="converter()">Converter</button>
+        <button class="btn-inverter" onclick="inverter()">⇅ Inverter cidades</button>
+
+    </div>
+
+    <div class="right">
+
+        <h2>Resultado</h2>
+        <div id="resultado"><p class="empty-msg">Selecione as cidades e clique em Converter.</p></div>
+
+    </div>
+
+</div>
+
+<script>
+
+const FUSOS = [
+    { label: "São Paulo — Brasil (BRT)",          tz: "America/Sao_Paulo" },
+    { label: "Rio de Janeiro — Brasil (BRT)",      tz: "America/Sao_Paulo" },
+    { label: "Brasília — Brasil (BRT)",            tz: "America/Sao_Paulo" },
+    { label: "Manaus — Brasil (AMT)",              tz: "America/Manaus" },
+    { label: "Belém — Brasil (BRT)",               tz: "America/Belem" },
+    { label: "Fortaleza — Brasil (BRT-1)",         tz: "America/Fortaleza" },
+    { label: "Recife — Brasil (BRT-1)",            tz: "America/Recife" },
+    { label: "Porto Alegre — Brasil (BRT)",        tz: "America/Sao_Paulo" },
+    { label: "Cuiabá — Brasil (AMT)",              tz: "America/Cuiaba" },
+    { label: "Porto Velho — Brasil (AMT)",         tz: "America/Porto_Velho" },
+    { label: "Rio Branco — Brasil (ACT)",          tz: "America/Rio_Branco" },
+    { label: "Fernando de Noronha — Brasil (FNT)", tz: "America/Noronha" },
+    { label: "Buenos Aires — Argentina",           tz: "America/Argentina/Buenos_Aires" },
+    { label: "Santiago — Chile",                   tz: "America/Santiago" },
+    { label: "Lima — Peru",                        tz: "America/Lima" },
+    { label: "Bogotá — Colômbia",                  tz: "America/Bogota" },
+    { label: "Caracas — Venezuela",                tz: "America/Caracas" },
+    { label: "La Paz — Bolívia",                   tz: "America/La_Paz" },
+    { label: "Assunção — Paraguai",                tz: "America/Asuncion" },
+    { label: "Montevidéu — Uruguai",               tz: "America/Montevideo" },
+    { label: "Cidade do México — México",          tz: "America/Mexico_City" },
+    { label: "Nova York — EUA (EST/EDT)",          tz: "America/New_York" },
+    { label: "Chicago — EUA (CST/CDT)",            tz: "America/Chicago" },
+    { label: "Denver — EUA (MST/MDT)",             tz: "America/Denver" },
+    { label: "Los Angeles — EUA (PST/PDT)",        tz: "America/Los_Angeles" },
+    { label: "Toronto — Canadá",                   tz: "America/Toronto" },
+    { label: "Vancouver — Canadá",                 tz: "America/Vancouver" },
+    { label: "Londres — Reino Unido (GMT/BST)",    tz: "Europe/London" },
+    { label: "Lisboa — Portugal",                  tz: "Europe/Lisbon" },
+    { label: "Paris — França",                     tz: "Europe/Paris" },
+    { label: "Berlim — Alemanha",                  tz: "Europe/Berlin" },
+    { label: "Madri — Espanha",                    tz: "Europe/Madrid" },
+    { label: "Roma — Itália",                      tz: "Europe/Rome" },
+    { label: "Amsterdam — Holanda",                tz: "Europe/Amsterdam" },
+    { label: "Bruxelas — Bélgica",                 tz: "Europe/Brussels" },
+    { label: "Zurique — Suíça",                    tz: "Europe/Zurich" },
+    { label: "Estocolmo — Suécia",                 tz: "Europe/Stockholm" },
+    { label: "Oslo — Noruega",                     tz: "Europe/Oslo" },
+    { label: "Helsinki — Finlândia",               tz: "Europe/Helsinki" },
+    { label: "Varsóvia — Polônia",                 tz: "Europe/Warsaw" },
+    { label: "Praga — República Tcheca",           tz: "Europe/Prague" },
+    { label: "Viena — Áustria",                    tz: "Europe/Vienna" },
+    { label: "Atenas — Grécia",                    tz: "Europe/Athens" },
+    { label: "Istambul — Turquia",                 tz: "Europe/Istanbul" },
+    { label: "Moscou — Rússia",                    tz: "Europe/Moscow" },
+    { label: "Cairo — Egito",                      tz: "Africa/Cairo" },
+    { label: "Johanesburgo — África do Sul",       tz: "Africa/Johannesburg" },
+    { label: "Lagos — Nigéria",                    tz: "Africa/Lagos" },
+    { label: "Nairóbi — Quênia",                   tz: "Africa/Nairobi" },
+    { label: "Casablanca — Marrocos",              tz: "Africa/Casablanca" },
+    { label: "Dubai — Emirados Árabes",            tz: "Asia/Dubai" },
+    { label: "Riade — Arábia Saudita",             tz: "Asia/Riyadh" },
+    { label: "Tel Aviv — Israel",                  tz: "Asia/Jerusalem" },
+    { label: "Teerã — Irã",                        tz: "Asia/Tehran" },
+    { label: "Karachi — Paquistão",                tz: "Asia/Karachi" },
+    { label: "Mumbai — Índia",                     tz: "Asia/Kolkata" },
+    { label: "Nova Délhi — Índia",                 tz: "Asia/Kolkata" },
+    { label: "Colombo — Sri Lanka",                tz: "Asia/Colombo" },
+    { label: "Dhaka — Bangladesh",                 tz: "Asia/Dhaka" },
+    { label: "Yangon — Mianmar",                   tz: "Asia/Rangoon" },
+    { label: "Bancoque — Tailândia",               tz: "Asia/Bangkok" },
+    { label: "Jacarta — Indonésia",                tz: "Asia/Jakarta" },
+    { label: "Kuala Lumpur — Malásia",             tz: "Asia/Kuala_Lumpur" },
+    { label: "Singapura",                          tz: "Asia/Singapore" },
+    { label: "Manila — Filipinas",                 tz: "Asia/Manila" },
+    { label: "Hong Kong",                          tz: "Asia/Hong_Kong" },
+    { label: "Xangai — China",                     tz: "Asia/Shanghai" },
+    { label: "Pequim — China",                     tz: "Asia/Shanghai" },
+    { label: "Taipé — Taiwan",                     tz: "Asia/Taipei" },
+    { label: "Seul — Coreia do Sul",               tz: "Asia/Seoul" },
+    { label: "Tóquio — Japão",                     tz: "Asia/Tokyo" },
+    { label: "Sydney — Austrália",                 tz: "Australia/Sydney" },
+    { label: "Melbourne — Austrália",              tz: "Australia/Melbourne" },
+    { label: "Brisbane — Austrália",               tz: "Australia/Brisbane" },
+    { label: "Perth — Austrália",                  tz: "Australia/Perth" },
+    { label: "Auckland — Nova Zelândia",            tz: "Pacific/Auckland" },
+    { label: "Honolulu — Havaí (EUA)",             tz: "Pacific/Honolulu" },
+    { label: "Anchorage — Alaska (EUA)",           tz: "America/Anchorage" },
+];
+
+const WORLD_CLOCKS = [
+    { city: "Nova York",  tz: "America/New_York" },
+    { city: "Londres",    tz: "Europe/London" },
+    { city: "Dubai",      tz: "Asia/Dubai" },
+    { city: "Tóquio",     tz: "Asia/Tokyo" },
+    { city: "Sydney",     tz: "Australia/Sydney" },
+    { city: "Los Angeles",tz: "America/Los_Angeles" },
+];
+
+const DIAS_PT = ["domingo","segunda-feira","terça-feira","quarta-feira","quinta-feira","sexta-feira","sábado"];
+const MESES_PT = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
+const MESES_LONGO = ["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
+
+function formatDate(d) {
+    return `${DIAS_PT[d.getDay()]}, ${d.getDate()} de ${MESES_LONGO[d.getMonth()]} de ${d.getFullYear()}`;
+}
+
+function formatTime(d) {
+    return d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', hour12: false });
+}
+
+function getOffset(tz, date) {
+    const utc = new Date(date.toLocaleString('en-US', { timeZone: 'UTC' }));
+    const local = new Date(date.toLocaleString('en-US', { timeZone: tz }));
+    return (local - utc) / 60000;
+}
+
+function offsetLabel(min) {
+    const sign = min >= 0 ? '+' : '-';
+    const abs = Math.abs(min);
+    const h = Math.floor(abs / 60);
+    const m = abs % 60;
+    return `UTC${sign}${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+}
+
+function convertToTZ(dateStr, timeStr, fromTZ, toTZ) {
+    const [y, mo, d] = dateStr.split('-').map(Number);
+    const [h, mi] = timeStr.split(':').map(Number);
+
+    // Build a date string and parse as the source timezone
+    const localStr = `${dateStr}T${timeStr}:00`;
+
+    // Get what UTC time this corresponds to in fromTZ
+    // We do this by finding the offset of fromTZ at this moment
+    const approx = new Date(localStr);
+    const fromOffset = getOffset(fromTZ, approx);
+    const utcMs = approx.getTime() - fromOffset * 60000;
+    const utcDate = new Date(utcMs);
+
+    // Now get destination time
+    const toOffset = getOffset(toTZ, utcDate);
+    const destMs = utcMs + toOffset * 60000;
+    const destDate = new Date(destMs);
+
+    return { destDate, utcDate, fromOffset, toOffset };
+}
+
+function buildSelects() {
+    const o = document.getElementById('origem');
+    const d = document.getElementById('destino');
+    FUSOS.forEach((f, i) => {
+        o.innerHTML += `<option value="${i}">${f.label}</option>`;
+        d.innerHTML += `<option value="${i}">${f.label}</option>`;
+    });
+    // Default: São Paulo → Tokyo
+    o.value = 0;
+    d.value = FUSOS.findIndex(f => f.tz === 'Asia/Tokyo');
+
+    // Set today's date
+    const hoje = new Date();
+    document.getElementById('data').value = hoje.toISOString().slice(0, 10);
+}
+
+function inverter() {
+    const o = document.getElementById('origem');
+    const d = document.getElementById('destino');
+    const tmp = o.value;
+    o.value = d.value;
+    d.value = tmp;
+    converter();
+}
+
+function converter() {
+    const origemIdx = parseInt(document.getElementById('origem').value);
+    const destinoIdx = parseInt(document.getElementById('destino').value);
+    const dataVal = document.getElementById('data').value;
+    const horaVal = document.getElementById('hora').value;
+    const el = document.getElementById('resultado');
+
+    if (!dataVal || !horaVal) {
+        el.innerHTML = '<p class="empty-msg">Preencha a data e o horário.</p>';
+        return;
+    }
+
+    const fromTZ = FUSOS[origemIdx].tz;
+    const toTZ   = FUSOS[destinoIdx].tz;
+    const fromLabel = FUSOS[origemIdx].label.split(' — ')[0];
+    const toLabel   = FUSOS[destinoIdx].label.split(' — ')[0];
+
+    const { destDate, utcDate, fromOffset, toOffset } = convertToTZ(dataVal, horaVal, fromTZ, toTZ);
+
+    const diffMin = toOffset - fromOffset;
+    const diffH = diffMin / 60;
+    let diffTxt;
+    if (diffMin === 0) diffTxt = 'Mesma hora (mesmo fuso)';
+    else {
+        const ahead = diffH > 0;
+        const absH = Math.abs(diffH);
+        const hInt = Math.floor(absH);
+        const mInt = Math.round((absH - hInt) * 60);
+        const partes = [];
+        if (hInt > 0) partes.push(`${hInt}h`);
+        if (mInt > 0) partes.push(`${mInt}min`);
+        diffTxt = `${toLabel} está <strong>${partes.join(' ')}</strong> ${ahead ? 'à frente' : 'atrás'} de ${fromLabel}`;
+    }
+
+    // Origem display
+    const [oy, om, od] = dataVal.split('-').map(Number);
+    const [oh, omi] = horaVal.split(':').map(Number);
+    const origemDateObj = new Date(oy, om-1, od, oh, omi);
+
+    // World clocks
+    const worldHTML = WORLD_CLOCKS.map(wc => {
+        const { destDate: wd } = convertToTZ(dataVal, horaVal, fromTZ, wc.tz);
+        const dayDiff = wd.getDate() - origemDateObj.getDate();
+        let dayTag = '';
+        if (dayDiff === 1 || dayDiff < -20) dayTag = ' <span style="font-size:10px;background:#eaf3de;color:#3b6d11;padding:1px 6px;border-radius:10px;font-weight:700">+1 dia</span>';
+        if (dayDiff === -1 || dayDiff > 20) dayTag = ' <span style="font-size:10px;background:#fcebeb;color:#a32d2d;padding:1px 6px;border-radius:10px;font-weight:700">-1 dia</span>';
+        return `<div class="world-card">
+            <div class="world-city">${wc.city}</div>
+            <div class="world-time">${formatTime(wd)}${dayTag}</div>
+            <div class="world-date">${wd.getDate()} ${MESES_PT[wd.getMonth()]}</div>
+        </div>`;
+    }).join('');
+
+    // Day difference indicator
+    const dayDiffDest = destDate.getDate() - origemDateObj.getDate();
+    let dayBadge = '';
+    if (dayDiffDest === 1 || dayDiffDest < -20) dayBadge = '<span style="font-size:13px;background:#faeeda;color:#854f0b;padding:3px 10px;border-radius:20px;font-weight:700;margin-left:10px">+1 dia</span>';
+    if (dayDiffDest === -1 || dayDiffDest > 20) dayBadge = '<span style="font-size:13px;background:#fcebeb;color:#a32d2d;padding:3px 10px;border-radius:20px;font-weight:700;margin-left:10px">-1 dia</span>';
+
+    el.innerHTML = `
+        <div class="result-card" style="border-color:#d7f5e3">
+            <div class="result-city">📍 ${fromLabel}</div>
+            <div class="result-time">${horaVal}</div>
+            <div class="result-date">${formatDate(origemDateObj)}</div>
+            <span class="result-offset">${offsetLabel(fromOffset)}</span>
+        </div>
+
+        <div style="text-align:center;font-size:22px;color:#27ae60;margin:-4px 0;font-weight:700">↓</div>
+
+        <div class="result-card" style="border-color:#27ae60;border-width:2px;margin-top:4px">
+            <div class="result-city">📍 ${toLabel}</div>
+            <div class="result-time">${formatTime(destDate)}${dayBadge}</div>
+            <div class="result-date">${formatDate(destDate)}</div>
+            <span class="result-offset">${offsetLabel(toOffset)}</span>
+        </div>
+
+        <div class="diff-card">
+            🕐 ${diffTxt}
+        </div>
+
+        <div class="section-label">🌐 Outras cidades neste horário</div>
+        <div class="world-grid">
+            ${worldHTML}
+        </div>
+
+        <p style="font-size:12px;color:#bbb;margin-top:8px;font-style:italic">Fusos horários seguem os dados do sistema. Horário de verão aplicado automaticamente.</p>
+    `;
+}
+
+buildSelects();
+
+</script>
+
+</body>
+</html>
