@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Calculadora de IMC, Taxa Metabólica Basal e necessidade calórica diária">
+    <meta name="keywords" content="imc, calorias, tmb, taxa metabolica basal, peso ideal, mifflin, harris benedict, fitness, saude">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Calculadora de IMC e Calorias</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            width: 100%;
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+            margin: 0;
+        }
+
+        .wrapper {
+            width: 100%;
+            max-width: 1200px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            overflow: hidden;
+            max-height: 90vh;
+        }
+
+        .left-panel {
+            padding: 32px;
+            overflow-y: auto;
+            border-right: 1px solid #e0e0e0;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .right-panel {
+            padding: 32px;
+            background: linear-gradient(135deg, #e8f8f5 0%, #d5f4e6 100%);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        header {
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 6px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: #999;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #e8f8f5 0%, #d5f4e6 100%);
+            border-left: 4px solid #27ae60;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            color: #27ae60;
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .info-box strong {
+            color: #27ae60;
+            font-weight: 700;
+        }
+
+        .modos {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .modo-btn {
+            padding: 10px 6px;
+            background: #e0e0e0;
+            color: #666;
+            border: none;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            line-height: 1.4;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .modo-btn.ativo {
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            color: white;
+        }
+
+        .modo-btn:active {
+            transform: scale(0.98);
+        }
+
+        .section-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #333;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #27ae60;
+        }
+
+        .input-group {
+            margin-bottom: 16px;
+        }
+
+        .input-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .input-hint {
+            font-size: 10px;
+            color: #999;
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        input[type="number"], select {
+            width: 100%;
+            padding: 11px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            background: white;
+            color: #333;
+            transition: all 0.2s ease;
+            -webkit-appearance: none;
+            appearance: none;
+            font-family: inherit;
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        input[type="number"]:focus, select:focus {
+            outline: none;
+            border-color: #27ae60;
+            background: #f0f9f7;
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .toggle-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .toggle-row-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .toggle-btn {
+            padding: 10px;
+            background: #e0e0e0;
+            color: #666;
+            border: none;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .toggle-btn.ativo {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-calcular {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
+            margin-top: 4px;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .btn-calcular:active {
+            transform: scale(0.98);
+        }
+
+        .resultado-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+
+        .resultado-header {
+            font-size: 12px;
+            font-weight: 700;
+            color: #27ae60;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #27ae60;
+        }
+
+        .resultado-total {
+            display: flex;
+            flex-direction: column;
+            padding: 14px;
+            background: white;
+            border-radius: 10px;
+            border: 2px solid #27ae60;
+            margin-bottom: 12px;
+        }
+
+        .resultado-total-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #27ae60;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .resultado-texto {
+            font-size: 26px;
+            font-weight: 700;
+            color: #27ae60;
+            font-family: 'Courier New', monospace;
+            word-break: break-all;
+            line-height: 1.4;
+        }
+
+        .resultado-sub {
+            font-size: 11px;
+            color: #888;
+            margin-top: 6px;
+            font-weight: 600;
+        }
+
+        .breakdown {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(39, 174, 96, 0.2);
+            border-radius: 8px;
+            font-size: 12px;
+        }
+
+        .breakdown-label {
+            color: #555;
+            font-weight: 600;
+        }
+
+        .breakdown-valor {
+            color: #27ae60;
+            font-weight: 700;
+            font-family: 'Courier New', monospace;
+        }
+
+        .botoes {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        button {
+            padding: 11px;
+            border: none;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .btn-copiar {
+            background: white;
+            color: #27ae60;
+            border: 2px solid #27ae60;
+        }
+
+        .btn-copiar:active {
+            background: #27ae60;
+            color: white;
+            transform: scale(0.98);
+        }
+
+        .btn-limpar {
+            background: rgba(255, 255, 255, 0.5);
+            color: #27ae60;
+            border: 2px solid rgba(39, 174, 96, 0.3);
+        }
+
+        .btn-limpar:active {
+            background: rgba(255, 255, 255, 0.8);
+            transform: scale(0.98);
+        }
+
+        .tabela-ref {
+            margin-top: 12px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+
+        .tabela-titulo {
+            font-size: 11px;
+            font-weight: 700;
+            color: #27ae60;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 8px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid rgba(39, 174, 96, 0.3);
+        }
+
+        .tabela-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            font-size: 11px;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .tabela-grid p {
+            margin: 0;
+        }
+
+        .tabela-grid strong {
+            color: #27ae60;
+        }
+
+        .imc-faixa {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .imc-faixa.atual {
+            outline: 2px solid #27ae60;
+        }
+
+        .status {
+            text-align: center;
+            font-size: 11px;
+            color: #27ae60;
+            margin-top: 8px;
+            min-height: 16px;
+            font-weight: 700;
+        }
+
+        .disclaimer {
+            font-size: 10px;
+            color: #999;
+            margin-top: 10px;
+            line-height: 1.5;
+            font-style: italic;
+        }
+
+        /* RESPONSIVO */
+        @media (max-width: 1024px) {
+            .wrapper {
+                grid-template-columns: 1fr;
+                max-height: none;
+                border-radius: 12px;
+            }
+            .left-panel {
+                border-right: none;
+                border-bottom: 1px solid #e0e0e0;
+                padding: 24px;
+            }
+            .right-panel {
+                padding: 24px;
+            }
+            h1 { font-size: 24px; }
+        }
+
+        @media (max-width: 768px) {
+            html, body { padding: 12px; }
+            .wrapper { grid-template-columns: 1fr; max-height: none; border-radius: 12px; }
+            .left-panel { border-right: none; border-bottom: 1px solid #e0e0e0; padding: 16px; }
+            .right-panel { padding: 16px; }
+            h1 { font-size: 22px; }
+            .subtitle { font-size: 12px; }
+            .info-box { font-size: 10px; padding: 10px; margin-bottom: 16px; }
+            .modos { gap: 6px; margin-bottom: 16px; }
+            .modo-btn { padding: 9px 4px; font-size: 10px; }
+            .section-title { font-size: 11px; margin-bottom: 10px; padding-bottom: 6px; }
+            .input-label { font-size: 10px; }
+            input[type="number"], select { font-size: 15px; padding: 10px; }
+            .btn-calcular { padding: 12px; font-size: 12px; }
+            .resultado-header { font-size: 11px; margin-bottom: 10px; }
+            .resultado-total { padding: 12px; margin-bottom: 10px; }
+            .resultado-total-label { font-size: 10px; }
+            .resultado-texto { font-size: 20px; }
+            .botoes { gap: 6px; margin-bottom: 10px; }
+            button { padding: 10px; font-size: 10px; }
+            .tabela-titulo { font-size: 10px; }
+            .status { font-size: 10px; min-height: 14px; }
+        }
+
+        @media (max-width: 480px) {
+            html, body { padding: 8px; }
+            .wrapper { border-radius: 10px; }
+            .left-panel, .right-panel { padding: 12px; }
+            h1 { font-size: 20px; margin-bottom: 4px; }
+            .subtitle { font-size: 11px; }
+            .info-box { font-size: 9px; padding: 8px; margin-bottom: 12px; }
+            .modos { gap: 5px; margin-bottom: 12px; }
+            .modo-btn { padding: 8px 3px; font-size: 9px; }
+            .section-title { font-size: 10px; margin-bottom: 8px; padding-bottom: 4px; }
+            .input-label { font-size: 9px; margin-bottom: 4px; }
+            input[type="number"], select { font-size: 14px; padding: 9px; }
+            .input-row { grid-template-columns: 1fr; gap: 8px; }
+            .toggle-row-3 { grid-template-columns: 1fr; }
+            .btn-calcular { padding: 11px; font-size: 11px; }
+            .resultado-total { padding: 10px; margin-bottom: 8px; }
+            .resultado-texto { font-size: 18px; }
+            .botoes { grid-template-columns: 1fr 1fr; gap: 5px; margin-bottom: 8px; }
+            button { padding: 9px; font-size: 9px; }
+            .breakdown-item { font-size: 11px; padding: 7px 10px; }
+            .status { font-size: 9px; min-height: 12px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="left-panel">
+            <header>
+                <h1>🏃 Calculadora de IMC e Calorias</h1>
+                <p class="subtitle">Índice de massa corporal, TMB e gasto calórico diário</p>
+            </header>
+
+            <div class="info-box">
+                <strong>Dica:</strong> Comece pelo IMC para saber sua faixa de peso, depois use o modo Calorias para descobrir quanto comer por dia de acordo com seu objetivo.
+            </div>
+
+            <div class="modos">
+                <button class="modo-btn ativo" id="btn-imc" onclick="setModo('imc')">⚖️ IMC</button>
+                <button class="modo-btn" id="btn-calorias" onclick="setModo('calorias')">🔥 Calorias (TMB)</button>
+            </div>
+
+            <div class="section-title" id="titulo-secao">Índice de Massa Corporal (IMC)</div>
+
+            <!-- IMC -->
+            <div id="campos-imc">
+                <div class="input-row">
+                    <div class="input-group">
+                        <label class="input-label">Peso (kg)</label>
+                        <input type="number" id="imc-peso" value="70" min="0" step="0.1" oninput="calcular()">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Altura (cm)</label>
+                        <input type="number" id="imc-altura" value="170" min="0" step="0.1" oninput="calcular()">
+                    </div>
+                </div>
+            </div>
+
+            <!-- CALORIAS -->
+            <div id="campos-calorias" style="display:none;">
+                <div class="toggle-row">
+                    <button class="toggle-btn ativo" id="toggle-mifflin" onclick="setFormula('mifflin')">Mifflin-St Jeor</button>
+                    <button class="toggle-btn" id="toggle-harris" onclick="setFormula('harris')">Harris-Benedict</button>
+                </div>
+                <div class="toggle-row">
+                    <button class="toggle-btn ativo" id="toggle-masc" onclick="setSexo('M')">♂ Masculino</button>
+                    <button class="toggle-btn" id="toggle-fem" onclick="setSexo('F')">♀ Feminino</button>
+                </div>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label class="input-label">Peso (kg)</label>
+                        <input type="number" id="cal-peso" value="70" min="0" step="0.1" oninput="calcular()">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Altura (cm)</label>
+                        <input type="number" id="cal-altura" value="170" min="0" step="0.1" oninput="calcular()">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Idade (anos)</label>
+                    <input type="number" id="cal-idade" value="30" min="0" step="1" oninput="calcular()">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Nível de atividade física</label>
+                    <select id="cal-atividade" onchange="calcular()">
+                        <option value="1.2">Sedentário (pouco ou nenhum exercício)</option>
+                        <option value="1.375" selected>Leve (exercício leve, 1-3x/semana)</option>
+                        <option value="1.55">Moderado (exercício moderado, 3-5x/semana)</option>
+                        <option value="1.725">Intenso (exercício pesado, 6-7x/semana)</option>
+                        <option value="1.9">Muito intenso (atleta, trabalho físico + treino)</option>
+                    </select>
+                </div>
+            </div>
+
+            <button class="btn-calcular" onclick="calcular()">Calcular</button>
+        </div>
+
+        <div class="right-panel">
+            <div class="resultado-section">
+                <div class="resultado-header">Resultado</div>
+
+                <div class="resultado-total" id="resultado-box" style="display:none;">
+                    <span class="resultado-total-label" id="label-saida">Resultado</span>
+                    <span class="resultado-texto" id="output">-</span>
+                    <span class="resultado-sub" id="output-sub"></span>
+                </div>
+
+                <div class="breakdown" id="breakdown"></div>
+
+                <div class="botoes">
+                    <button class="btn-copiar" onclick="copiar(event)">📋 Copiar</button>
+                    <button class="btn-limpar" onclick="limpar()">🗑️ Limpar</button>
+                </div>
+
+                <div class="tabela-ref">
+                    <div class="tabela-titulo" id="tabela-titulo-ref">📖 Faixas de IMC (OMS)</div>
+                    <div class="tabela-grid" id="tabela"></div>
+                </div>
+
+                <p class="disclaimer">Esta calculadora oferece estimativas gerais e não substitui orientação de nutricionista, médico ou profissional de educação física. O IMC não diferencia massa muscular de gordura corporal.</p>
+
+                <div class="status" id="status"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let modo = 'imc';
+        let formulaTMB = 'mifflin';
+        let sexo = 'M';
+
+        const FAIXAS_IMC = [
+            { min: 0, max: 18.5, label: 'Abaixo do peso', cor: '#3498db' },
+            { min: 18.5, max: 25, label: 'Peso normal', cor: '#27ae60' },
+            { min: 25, max: 30, label: 'Sobrepeso', cor: '#f39c12' },
+            { min: 30, max: 35, label: 'Obesidade grau I', cor: '#e67e22' },
+            { min: 35, max: 40, label: 'Obesidade grau II', cor: '#e74c3c' },
+            { min: 40, max: Infinity, label: 'Obesidade grau III', cor: '#c0392b' }
+        ];
+
+        const configs = {
+            imc: { titulo: 'Índice de Massa Corporal (IMC)', labelSaida: 'Seu IMC' },
+            calorias: { titulo: 'Calorias e Taxa Metabólica Basal', labelSaida: 'Calorias diárias recomendadas' }
+        };
+
+        function setModo(m) {
+            modo = m;
+            document.querySelectorAll('#btn-imc, #btn-calorias').forEach(b => b.classList.remove('ativo'));
+            document.getElementById('btn-' + m).classList.add('ativo');
+            const c = configs[m];
+            document.getElementById('titulo-secao').textContent = c.titulo;
+            document.getElementById('label-saida').textContent = c.labelSaida;
+
+            document.getElementById('campos-imc').style.display = (m === 'imc') ? 'block' : 'none';
+            document.getElementById('campos-calorias').style.display = (m === 'calorias') ? 'block' : 'none';
+
+            document.getElementById('tabela-titulo-ref').textContent = (m === 'imc') ? '📖 Faixas de IMC (OMS)' : '📖 Como funciona o cálculo';
+
+            document.getElementById('resultado-box').style.display = 'none';
+            renderTabela();
+            calcular();
+        }
+
+        function setFormula(f) {
+            formulaTMB = f;
+            document.getElementById('toggle-mifflin').classList.toggle('ativo', f === 'mifflin');
+            document.getElementById('toggle-harris').classList.toggle('ativo', f === 'harris');
+            calcular();
+            renderTabela();
+        }
+
+        function setSexo(s) {
+            sexo = s;
+            document.getElementById('toggle-masc').classList.toggle('ativo', s === 'M');
+            document.getElementById('toggle-fem').classList.toggle('ativo', s === 'F');
+            calcular();
+        }
+
+        function calcularIMC(peso, alturaCm) {
+            const alturaM = alturaCm / 100;
+            if (alturaM <= 0) return 0;
+            return peso / (alturaM * alturaM);
+        }
+
+        function getFaixaIMC(imc) {
+            return FAIXAS_IMC.find(f => imc >= f.min && imc < f.max) || FAIXAS_IMC[FAIXAS_IMC.length - 1];
+        }
+
+        function calcularTMB(peso, alturaCm, idade, s, formula) {
+            if (formula === 'mifflin') {
+                const base = (10 * peso) + (6.25 * alturaCm) - (5 * idade);
+                return s === 'M' ? base + 5 : base - 161;
+            } else {
+                if (s === 'M') {
+                    return 88.362 + (13.397 * peso) + (4.799 * alturaCm) - (5.677 * idade);
+                } else {
+                    return 447.593 + (9.247 * peso) + (3.098 * alturaCm) - (4.330 * idade);
+                }
+            }
+        }
+
+        function calcular() {
+            const breakdown = document.getElementById('breakdown');
+            breakdown.innerHTML = '';
+            let outputTexto = '-';
+            let outputSub = '';
+            let mostrarResultado = false;
+
+            if (modo === 'imc') {
+                const peso = parseFloat(document.getElementById('imc-peso').value) || 0;
+                const altura = parseFloat(document.getElementById('imc-altura').value) || 0;
+                const imc = calcularIMC(peso, altura);
+                const faixa = getFaixaIMC(imc);
+
+                const alturaM = altura / 100;
+                const pesoMin = 18.5 * alturaM * alturaM;
+                const pesoMax = 25 * alturaM * alturaM;
+
+                outputTexto = imc.toFixed(1);
+                outputSub = faixa.label;
+                breakdown.innerHTML = `
+                    <div class="breakdown-item"><span class="breakdown-label">Classificação</span><span class="breakdown-valor">${faixa.label}</span></div>
+                    <div class="breakdown-item"><span class="breakdown-label">Peso ideal (faixa normal)</span><span class="breakdown-valor">${pesoMin.toFixed(1)} a ${pesoMax.toFixed(1)} kg</span></div>
+                `;
+                mostrarResultado = peso > 0 && altura > 0;
+                renderTabelaIMC(imc);
+
+            } else if (modo === 'calorias') {
+                const peso = parseFloat(document.getElementById('cal-peso').value) || 0;
+                const altura = parseFloat(document.getElementById('cal-altura').value) || 0;
+                const idade = parseFloat(document.getElementById('cal-idade').value) || 0;
+                const fatorAtividade = parseFloat(document.getElementById('cal-atividade').value) || 1.2;
+
+                const tmb = calcularTMB(peso, altura, idade, sexo, formulaTMB);
+                const get = tmb * fatorAtividade;
+
+                const manutencao = get;
+                const perdaPeso = get - 500;
+                const ganhoPeso = get + 500;
+
+                outputTexto = Math.round(manutencao).toLocaleString('pt-BR') + ' kcal/dia';
+                outputSub = 'Para manter o peso atual';
+                breakdown.innerHTML = `
+                    <div class="breakdown-item"><span class="breakdown-label">TMB (taxa basal, em repouso)</span><span class="breakdown-valor">${Math.round(tmb).toLocaleString('pt-BR')} kcal</span></div>
+                    <div class="breakdown-item"><span class="breakdown-label">Para perder peso (déficit)</span><span class="breakdown-valor">${Math.round(perdaPeso).toLocaleString('pt-BR')} kcal</span></div>
+                    <div class="breakdown-item"><span class="breakdown-label">Para ganhar peso (superávit)</span><span class="breakdown-valor">${Math.round(ganhoPeso).toLocaleString('pt-BR')} kcal</span></div>
+                `;
+                mostrarResultado = peso > 0 && altura > 0 && idade > 0;
+            }
+
+            document.getElementById('output').textContent = outputTexto;
+            document.getElementById('output-sub').textContent = outputSub;
+            document.getElementById('resultado-box').style.display = mostrarResultado ? 'flex' : 'none';
+        }
+
+        function copiar(evt) {
+            const val = document.getElementById('output').textContent;
+            const sub = document.getElementById('output-sub').textContent;
+            if (!val || val === '-') return;
+            const texto = val + (sub ? ' — ' + sub : '');
+            navigator.clipboard.writeText(texto).then(() => {
+                const btn = evt.target;
+                const orig = btn.textContent;
+                btn.textContent = '✓ Copiado!';
+                setTimeout(() => btn.textContent = orig, 1500);
+            });
+        }
+
+        function limpar() {
+            document.getElementById('imc-peso').value = 70;
+            document.getElementById('imc-altura').value = 170;
+            document.getElementById('cal-peso').value = 70;
+            document.getElementById('cal-altura').value = 170;
+            document.getElementById('cal-idade').value = 30;
+            document.getElementById('cal-atividade').value = '1.375';
+            document.getElementById('resultado-box').style.display = 'none';
+            mostrarStatus('✓ Campos limpos');
+        }
+
+        function mostrarStatus(msg) {
+            const s = document.getElementById('status');
+            s.textContent = msg;
+            setTimeout(() => s.textContent = '', 2000);
+        }
+
+        function renderTabelaIMC(imcAtual) {
+            const tabela = document.getElementById('tabela');
+            tabela.innerHTML = FAIXAS_IMC.map(f => {
+                const isAtual = imcAtual >= f.min && imcAtual < f.max;
+                const range = f.max === Infinity ? `${f.min}+` : `${f.min} – ${f.max}`;
+                return `<div class="imc-faixa ${isAtual ? 'atual' : ''}" style="background:${f.cor}22; color:${f.cor};">
+                    <span>${f.label}</span><span>${range}</span>
+                </div>`;
+            }).join('');
+        }
+
+        function renderTabela() {
+            const tabela = document.getElementById('tabela');
+
+            if (modo === 'imc') {
+                const peso = parseFloat(document.getElementById('imc-peso').value) || 0;
+                const altura = parseFloat(document.getElementById('imc-altura').value) || 0;
+                renderTabelaIMC(calcularIMC(peso, altura));
+                return;
+            }
+
+            let html = '';
+            if (formulaTMB === 'mifflin') {
+                html = `
+                    <p><strong>Mifflin-St Jeor (homens):</strong> 10×peso + 6,25×altura − 5×idade + 5</p>
+                    <p><strong>Mifflin-St Jeor (mulheres):</strong> 10×peso + 6,25×altura − 5×idade − 161</p>
+                    <p>Considerada a fórmula mais precisa atualmente para estimar a TMB da população em geral.</p>
+                `;
+            } else {
+                html = `
+                    <p><strong>Harris-Benedict (homens):</strong> 88,362 + 13,397×peso + 4,799×altura − 5,677×idade</p>
+                    <p><strong>Harris-Benedict (mulheres):</strong> 447,593 + 9,247×peso + 3,098×altura − 4,330×idade</p>
+                    <p>Fórmula clássica (revisada em 1984), ainda muito usada mas tende a superestimar levemente o gasto calórico comparado à Mifflin-St Jeor.</p>
+                `;
+            }
+            html += `<p>O resultado da TMB é multiplicado pelo <strong>fator de atividade física</strong> para chegar ao Gasto Energético Total (GET) — a base para manter, perder ou ganhar peso.</p>`;
+
+            tabela.innerHTML = html;
+        }
+
+        window.addEventListener('load', () => {
+            renderTabela();
+            calcular();
+        });
+    </script>
+</body>
+</html>
