@@ -291,15 +291,15 @@ Aguardando conversão
 
 <ul class="historico">
 
-<li>令和 → 01/05/2019</li>
+<li>令和 (Reiwa) → 01/05/2019</li>
 
-<li>平成 → 08/01/1989</li>
+<li>平成 (Heisei) → 08/01/1989</li>
 
-<li>昭和 → 25/12/1926</li>
+<li>昭和 (Shōwa) → 25/12/1926</li>
 
-<li>大正 → 30/07/1912</li>
+<li>大正 (Taishō) → 30/07/1912</li>
 
-<li>明治 → 25/01/1868</li>
+<li>明治 (Meiji) → 25/01/1868</li>
 
 </ul>
 
@@ -310,22 +310,27 @@ Aguardando conversão
 const ERAS = [
 {
 nome:"令和",
+romaji:"Reiwa",
 inicio:new Date("2019-05-01")
 },
 {
 nome:"平成",
+romaji:"Heisei",
 inicio:new Date("1989-01-08")
 },
 {
 nome:"昭和",
+romaji:"Shōwa",
 inicio:new Date("1926-12-25")
 },
 {
 nome:"大正",
+romaji:"Taishō",
 inicio:new Date("1912-07-30")
 },
 {
 nome:"明治",
+romaji:"Meiji",
 inicio:new Date("1868-01-25")
 }
 ];
@@ -481,7 +486,7 @@ function converterDataParaEra(texto){
                 ? "元年"
                 : numeroAno + "年";
 
-            return `${era.nome}${anoEra}`;
+            return `${era.nome} (${era.romaji}) ${anoEra}`;
         }
     }
 
