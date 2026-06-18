@@ -3,21 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Sorteador de Números Online | UtiliWeb</title>
-
 <meta name="description" content="Sorteie números aleatórios online gratuitamente. Defina mínimo e máximo e gere instantaneamente.">
 <meta name="keywords" content="utiliweb, sorteador, números aleatórios, random, gerador">
-
 <link rel="stylesheet" href="../../assets/style.css">
-
 <style>
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
-
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
     background: linear-gradient(135deg, #2ecc71, #27ae60);
@@ -27,7 +22,6 @@ body {
     align-items: center;
     padding: 20px;
 }
-
 .wrapper {
     width: 100%;
     max-width: 1100px;
@@ -38,33 +32,27 @@ body {
     grid-template-columns: 1fr 1fr;
     box-shadow: 0 20px 60px rgba(0,0,0,0.25);
 }
-
 .left, .right {
     padding: 25px;
 }
-
 .left {
     border-right: 1px solid #eee;
 }
-
 h1 {
     font-size: 26px;
     margin-bottom: 5px;
 }
-
 .subtitle {
     color: #666;
     font-size: 14px;
     margin-bottom: 15px;
 }
-
 label {
     display: block;
     margin-top: 12px;
     font-size: 14px;
     color: #333;
 }
-
 input {
     width: 100%;
     padding: 12px;
@@ -72,12 +60,10 @@ input {
     border-radius: 10px;
     border: 2px solid #ddd;
 }
-
 input:focus {
     outline: none;
     border-color: #27ae60;
 }
-
 button {
     margin-top: 15px;
     padding: 12px;
@@ -86,18 +72,15 @@ button {
     cursor: pointer;
     font-weight: bold;
 }
-
 .primary {
     background: #27ae60;
     color: #fff;
 }
-
 .secondary {
     background: #fff;
     border: 2px solid #27ae60;
     color: #27ae60;
 }
-
 .result-box {
     font-size: 60px;
     font-weight: bold;
@@ -105,7 +88,6 @@ button {
     margin-top: 40px;
     color: #27ae60;
 }
-
 a {
     display: inline-block;
     margin-bottom: 10px;
@@ -113,87 +95,78 @@ a {
     color: #27ae60;
     font-weight: bold;
 }
-
 /* RESPONSIVO */
 @media(max-width: 900px) {
     .wrapper {
         grid-template-columns: 1fr;
     }
-
     .left {
         border-right: none;
         border-bottom: 1px solid #eee;
     }
-
     .result-box {
         font-size: 42px;
     }
 }
 </style>
-
 </head>
-
 <body>
-
 <div class="wrapper">
-
     <!-- ESQUERDA -->
     <div class="left">
-
         <h1>🎲 Sorteador de Números</h1>
         <p class="subtitle">Gere números aleatórios instantaneamente</p>
-
         <a href="../../index.html">← Voltar</a>
-
         <label>Número mínimo</label>
         <input type="number" id="minimo" value="1">
-
         <label>Número máximo</label>
         <input type="number" id="maximo" value="100">
-
         <button class="primary" onclick="sortear()">Sortear</button>
         <button class="secondary" onclick="limpar()">Limpar</button>
-
     </div>
-
     <!-- DIREITA -->
     <div class="right">
-
         <h2>Resultado</h2>
-
-        <div class="result-box" id="resultado">-</div>
-
+        <div class="result-box" id="resultado" aria-live="polite">-</div>
     </div>
-
 </div>
-
 <script>
+
+const minimoEl = document.getElementById("minimo");
+const maximoEl = document.getElementById("maximo");
+const resultadoEl = document.getElementById("resultado");
+
 function sortear() {
 
-    const min = parseInt(document.getElementById("minimo").value);
-    const max = parseInt(document.getElementById("maximo").value);
-    const res = document.getElementById("resultado");
+    const min = parseInt(minimoEl.value, 10);
+    const max = parseInt(maximoEl.value, 10);
 
     if (isNaN(min) || isNaN(max)) {
-        res.textContent = "Inválido";
+        resultadoEl.textContent = "Inválido";
         return;
     }
 
     if (min > max) {
-        res.textContent = "Erro";
+        resultadoEl.textContent = "Erro";
         return;
     }
 
     const numero = Math.floor(Math.random() * (max - min + 1)) + min;
-    res.textContent = numero;
+    resultadoEl.textContent = numero;
 }
 
 function limpar() {
-    document.getElementById("minimo").value = 1;
-    document.getElementById("maximo").value = 100;
-    document.getElementById("resultado").textContent = "-";
+    minimoEl.value = 1;
+    maximoEl.value = 100;
+    resultadoEl.textContent = "-";
 }
-</script>
 
+function aoApertarEnter(event) {
+    if (event.key === "Enter") sortear();
+}
+
+minimoEl.addEventListener("keydown", aoApertarEnter);
+maximoEl.addEventListener("keydown", aoApertarEnter);
+</script>
 </body>
 </html>
