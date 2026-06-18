@@ -367,81 +367,38 @@ function converter(){
 // ERA → OCIDENTAL
 // =========================
 
-function converterEraParaOcidental(texto){
+// =========================
+// DATA → ERA
+// =========================
 
-    const original = texto;
+function converterDataParaEra(texto){
 
-    texto = texto.toLowerCase();
+    const data = new Date(texto);
 
-    let numero;
-
-    if(original.includes("元")){
-
-        numero = 1;
-
-    }else{
-
-        numero = parseInt(
-        original.replace(/[^\d]/g,"")
-        );
-
+    if(isNaN(data.getTime())){
+        return "Data inválida";
     }
 
-    if(isNaN(numero)){
+    for(let era of ERAS){
 
-        return "Ano inválido";
+        if(data >= era.inicio){
 
+            let numeroAno =
+                data.getFullYear() -
+                era.inicio.getFullYear() + 1;
+
+            let anoEra =
+                numeroAno === 1
+                ? "元年"
+                : numeroAno + "年";
+
+            return `${era.nome}${anoEra}`;
+        }
     }
 
-    if(
-        original.includes("令和") ||
-        texto.includes("reiwa")
-    ){
-
-        return 2019 + numero - 1;
-
-    }
-
-    if(
-        original.includes("平成") ||
-        texto.includes("heisei")
-    ){
-
-        return 1989 + numero - 1;
-
-    }
-
-    if(
-        original.includes("昭和") ||
-        texto.includes("showa")
-    ){
-
-        return 1926 + numero - 1;
-
-    }
-
-    if(
-        original.includes("大正") ||
-        texto.includes("taisho")
-    ){
-
-        return 1912 + numero - 1;
-
-    }
-
-    if(
-        original.includes("明治") ||
-        texto.includes("meiji")
-    ){
-
-        return 1868 + numero - 1;
-
-    }
-
-    return "Era não reconhecida";
+    return "Data fora das eras suportadas";
 
 }
-
 
 // =========================
 // RESULTADO
