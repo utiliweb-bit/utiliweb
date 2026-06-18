@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conversor de Ano Japonês V2</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    background:linear-gradient(135deg,#2ecc71,#27ae60);
+    min-height:100vh;
+    padding:20px;
+}
+
+.wrapper{
+    max-width:1200px;
+    margin:auto;
+    background:#fff;
+    border-radius:16px;
+    overflow:hidden;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    box-shadow:0 20px 60px rgba(0,0,0,.2);
+}
+
+.left-panel{
+    padding:32px;
+    border-right:1px solid #e5e5e5;
+}
+
+.right-panel{
+    padding:32px;
+    background:#e8f8f5;
+}
+
+h1{
+    color:#333;
+    margin-bottom:8px;
+}
+
+.subtitle{
+    color:#888;
+    font-size:14px;
+    margin-bottom:25px;
+}
+
+.info-box{
+    background:#f0fff7;
+    border-left:4px solid #27ae60;
+    padding:15px;
+    border-radius:8px;
+    margin-bottom:25px;
+    color:#27ae60;
+    font-size:13px;
+}
+
+.section-title{
+    font-size:12px;
+    font-weight:bold;
+    color:#444;
+    text-transform:uppercase;
+    border-bottom:2px solid #27ae60;
+    padding-bottom:8px;
+    margin-bottom:18px;
+}
+
+.input-group{
+    margin-bottom:16px;
+}
+
+.input-label{
+    display:block;
+    margin-bottom:6px;
+    font-size:12px;
+    font-weight:bold;
+    color:#666;
+}
+
+select,
+input{
+    width:100%;
+    padding:13px;
+    border:2px solid #ddd;
+    border-radius:8px;
+    font-size:14px;
+}
+
+select:focus,
+input:focus{
+    outline:none;
+    border-color:#27ae60;
+}
+
+.btn-converter{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:10px;
+    background:#27ae60;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.resultado-header{
+    font-size:12px;
+    font-weight:bold;
+    color:#27ae60;
+    border-bottom:2px solid #27ae60;
+    padding-bottom:8px;
+    margin-bottom:20px;
+}
+
+.resultado-box{
+    background:white;
+    border:2px solid #27ae60;
+    border-radius:10px;
+    padding:20px;
+    margin-bottom:15px;
+}
+
+.resultado-label{
+    font-size:11px;
+    color:#666;
+    margin-bottom:10px;
+}
+
+.resultado{
+    font-size:24px;
+    color:#27ae60;
+    font-weight:bold;
+}
+
+.btn-copiar{
+    width:100%;
+    border:none;
+    background:#27ae60;
+    color:white;
+    padding:12px;
+    border-radius:8px;
+    font-weight:bold;
+    cursor:pointer;
+    margin-bottom:25px;
+}
+
+.historico-titulo{
+    color:#27ae60;
+    font-size:12px;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+.historico{
+    list-style:none;
+    margin-bottom:25px;
+}
+
+.historico li{
+    background:rgba(255,255,255,.7);
+    padding:10px;
+    border-radius:8px;
+    margin-bottom:8px;
+    font-size:12px;
+    color:#27ae60;
+}
+
+@media(max-width:900px){
+
+.wrapper{
+    grid-template-columns:1fr;
+}
+
+.left-panel{
+    border-right:none;
+    border-bottom:1px solid #e5e5e5;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+<div class="left-panel">
+
+<h1>🎌 Conversor Japonês V2</h1>
+
+<div class="subtitle">
+Calendário Japonês Oficial ⇄ Calendário Ocidental
+</div>
+
+<div class="info-box">
+Versão com datas reais das eras japonesas.
+Suporta 元年 (Gannen) e mudanças oficiais de era.
+</div>
+
+<div class="section-title">
+Conversão
+</div>
+
+<div class="input-group">
+
+<label class="input-label">
+TIPO DE CONVERSÃO
+</label>
+
+<select id="tipoConversao">
+
+<option value="data">
+Data → Era Japonesa
+</option>
+
+<option value="era">
+Era Japonesa → Ano Ocidental
+</option>
+
+</select>
+
+</div>
+
+<div class="input-group">
+
+<label class="input-label">
+ENTRADA
+</label>
+
+<input
+type="text"
+id="entrada"
+placeholder="01/05/2019 ou 平成30">
+
+</div>
+
+<button class="btn-converter">
+Converter
+</button>
+
+</div>
+
+<div class="right-panel">
+
+<div class="resultado-header">
+Resultado
+</div>
+
+<div class="resultado-box">
+
+<div class="resultado-label">
+RESULTADO
+</div>
+
+<div class="resultado" id="resultado">
+Aguardando conversão
+</div>
+
+</div>
+
+<button class="btn-copiar">
+📋 Copiar
+</button>
+
+<div class="historico-titulo">
+📌 Últimas Conversões
+</div>
+
+<ul class="historico" id="historico">
+
+<li>Nenhuma conversão realizada</li>
+
+</ul>
+
+<div class="historico-titulo">
+🎌 Datas Oficiais das Eras
+</div>
+
+<ul class="historico">
+
+<li>令和 → 01/05/2019</li>
+
+<li>平成 → 08/01/1989</li>
+
+<li>昭和 → 25/12/1926</li>
+
+<li>大正 → 30/07/1912</li>
+
+<li>明治 → 25/01/1868</li>
+
+</ul>
+
+  </div>
+
+<script>
+
+const ERAS = [
+{
+nome:"令和",
+romaji:"reiwa",
+inicio:new Date(2019,4,1)
+},
+{
+nome:"平成",
+romaji:"heisei",
+inicio:new Date(1989,0,8)
+},
+{
+nome:"昭和",
+romaji:"showa",
+inicio:new Date(1926,11,25)
+},
+{
+nome:"大正",
+romaji:"taisho",
+inicio:new Date(1912,6,30)
+},
+{
+nome:"明治",
+romaji:"meiji",
+inicio:new Date(1868,0,25)
+}
+];
+
+let historico = JSON.parse(
+localStorage.getItem("historico-japao-v2")
+) || [];
+
+atualizarHistorico();
+
+document
+.querySelector(".btn-converter")
+.addEventListener("click", converter);
+
+document
+.querySelector(".btn-copiar")
+.addEventListener("click", copiarResultado);
+
+
+// =========================
+// CONVERTER
+// =========================
+
+function converter(){
+
+    const tipo =
+    document.getElementById("tipoConversao").value;
+
+    const entrada =
+    document.getElementById("entrada")
+    .value
+    .trim();
+
+    if(!entrada){
+
+        mostrarResultado("Informe um valor");
+
+        return;
+
+    }
+
+    let resultado;
+
+    if(tipo === "data"){
+
+        resultado = converterDataParaEra(entrada);
+
+    }else{
+
+        resultado = converterEraParaOcidental(entrada);
+
+    }
+
+    mostrarResultado(resultado);
+
+    salvarHistorico(
+        entrada + " → " + resultado
+    );
+
+}
+
+
+// =========================
+// DATA → ERA
+// =========================
+
+function converterDataParaEra(texto){
+
+    const partes = texto.split("/");
+
+    if(partes.length !== 3){
+
+        return "Use dd/mm/aaaa";
+
+    }
+
+    const dia = parseInt(partes[0]);
+    const mes = parseInt(partes[1]) - 1;
+    const ano = parseInt(partes[2]);
+
+    const data = new Date(ano,mes,dia);
+
+    for(let era of ERAS){
+
+        if(data >= era.inicio){
+
+            let numeroAno =
+            ano - era.inicio.getFullYear() + 1;
+
+            let anoEra =
+            numeroAno === 1
+            ? "元年"
+            : numeroAno + "年";
+
+            return `${era.nome}${anoEra}`;
+
+        }
+
+    }
+
+    return "Data fora das eras suportadas";
+
+}
+
+
+// =========================
+// ERA → OCIDENTAL
+// =========================
+
+function converterEraParaOcidental(texto){
+
+    const original = texto;
+
+    texto = texto.toLowerCase();
+
+    let numero;
+
+    if(original.includes("元")){
+
+        numero = 1;
+
+    }else{
+
+        numero = parseInt(
+        original.replace(/[^\d]/g,"")
+        );
+
+    }
+
+    if(isNaN(numero)){
+
+        return "Ano inválido";
+
+    }
+
+    if(
+        original.includes("令和") ||
+        texto.includes("reiwa")
+    ){
+
+        return 2019 + numero - 1;
+
+    }
+
+    if(
+        original.includes("平成") ||
+        texto.includes("heisei")
+    ){
+
+        return 1989 + numero - 1;
+
+    }
+
+    if(
+        original.includes("昭和") ||
+        texto.includes("showa")
+    ){
+
+        return 1926 + numero - 1;
+
+    }
+
+    if(
+        original.includes("大正") ||
+        texto.includes("taisho")
+    ){
+
+        return 1912 + numero - 1;
+
+    }
+
+    if(
+        original.includes("明治") ||
+        texto.includes("meiji")
+    ){
+
+        return 1868 + numero - 1;
+
+    }
+
+    return "Era não reconhecida";
+
+}
+
+
+// =========================
+// RESULTADO
+// =========================
+
+function mostrarResultado(texto){
+
+    document
+    .getElementById("resultado")
+    .textContent = texto;
+
+}
+
+
+// =========================
+// COPIAR
+// =========================
+
+function copiarResultado(){
+
+    const texto =
+    document.getElementById("resultado")
+    .textContent;
+
+    navigator.clipboard.writeText(texto);
+
+    const botao =
+    document.querySelector(".btn-copiar");
+
+    const original =
+    botao.textContent;
+
+    botao.textContent = "✓ Copiado";
+
+    setTimeout(()=>{
+
+        botao.textContent = original;
+
+    },1500);
+
+}
+
+
+// =========================
+// HISTÓRICO
+// =========================
+
+function salvarHistorico(item){
+
+    historico.unshift(item);
+
+    if(historico.length > 20){
+
+        historico.pop();
+
+    }
+
+    localStorage.setItem(
+    "historico-japao-v2",
+    JSON.stringify(historico)
+    );
+
+    atualizarHistorico();
+
+}
+
+
+function atualizarHistorico(){
+
+    const lista =
+    document.getElementById("historico");
+
+    if(historico.length === 0){
+
+        lista.innerHTML =
+        "<li>Nenhuma conversão realizada</li>";
+
+        return;
+
+    }
+
+    lista.innerHTML = historico.map(item => `
+
+<li>${item}</li>
+
+`).join("");
+
+}
+
+</script>
+
+</body>
+</html>
