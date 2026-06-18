@@ -212,20 +212,8 @@ Conversão
 <div class="input-group">
 
 <label class="input-label">
-TIPO DE CONVERSÃO
+DATA
 </label>
-
-<select id="tipoConversao">
-
-<option value="data">
-Data → Era Japonesa
-</option>
-
-<option value="era">
-Era Japonesa → Ano Ocidental
-</option>
-
-</select>
 
 </div>
 
@@ -345,9 +333,6 @@ document
 
 function converter(){
 
-    const tipo =
-    document.getElementById("tipoConversao").value;
-
     const entrada =
     document.getElementById("entrada")
     .value
@@ -355,23 +340,14 @@ function converter(){
 
     if(!entrada){
 
-        mostrarResultado("Informe um valor");
+        mostrarResultado("Selecione uma data");
 
         return;
 
     }
 
-    let resultado;
-
-    if(tipo === "data"){
-
-        resultado = converterDataParaEra(entrada);
-
-    }else{
-
-        resultado = converterEraParaOcidental(entrada);
-
-    }
+    const resultado =
+    converterDataParaEra(entrada);
 
     mostrarResultado(resultado);
 
@@ -385,35 +361,6 @@ function converter(){
 // =========================
 // DATA → ERA
 // =========================
-
-function converterDataParaEra(texto){
-
-    const data = new Date(texto);
-
-    if(isNaN(data.getTime())){
-        return "Data inválida";
-    }
-
-    for(let era of ERAS){
-
-        if(data >= era.inicio){
-
-            let numeroAno =
-                data.getFullYear() -
-                era.inicio.getFullYear() + 1;
-
-            let anoEra =
-                numeroAno === 1
-                ? "元年"
-                : numeroAno + "年";
-
-            return `${era.nome}${anoEra}`;
-        }
-    }
-
-    return "Data fora das eras suportadas";
-
-}
 
 
 // =========================
