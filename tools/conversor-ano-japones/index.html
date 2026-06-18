@@ -212,14 +212,6 @@ Conversão
 <div class="input-group">
 
 <label class="input-label">
-DATA
-</label>
-
-</div>
-
-<div class="input-group">
-
-<label class="input-label">
 ENTRADA
 </label>
 
@@ -342,6 +334,16 @@ let historico = JSON.parse(
 localStorage.getItem("historico-japao-v2")
 ) || [];
 
+const anoSelect = document.getElementById("ano");
+const mesSelect = document.getElementById("mes");
+const diaSelect = document.getElementById("dia");
+
+const MESES = [
+"Janeiro","Fevereiro","Março","Abril","Maio","Junho",
+"Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"
+];
+
+inicializarSelects();
 atualizarHistorico();
 
 document
@@ -354,17 +356,83 @@ document
 
 
 // =========================
+// INICIALIZAR SELECTS (ANO / MÊS / DIA)
+// =========================
+
+function inicializarSelects(){
+
+    const hoje = new Date();
+    const anoAtual = hoje.getFullYear();
+    const ANO_MIN = 1868;
+
+    for(let a = anoAtual; a >= ANO_MIN; a--){
+
+        const opt = document.createElement("option");
+        opt.value = a;
+        opt.textContent = a;
+        anoSelect.appendChild(opt);
+
+    }
+
+    MESES.forEach((nome, i) => {
+
+        const opt = document.createElement("option");
+        opt.value = i + 1;
+        opt.textContent = nome;
+        mesSelect.appendChild(opt);
+
+    });
+
+    anoSelect.value = anoAtual;
+    mesSelect.value = hoje.getMonth() + 1;
+
+    popularDias();
+
+    diaSelect.value = hoje.getDate();
+
+    anoSelect.addEventListener("change", popularDias);
+    mesSelect.addEventListener("change", popularDias);
+
+}
+
+function diasNoMes(ano, mes){
+    return new Date(ano, mes, 0).getDate();
+}
+
+function popularDias(){
+
+    const ano = parseInt(anoSelect.value);
+    const mes = parseInt(mesSelect.value);
+    const totalDias = diasNoMes(ano, mes);
+    const diaSelecionado = parseInt(diaSelect.value) || 1;
+
+    diaSelect.innerHTML = "";
+
+    for(let d = 1; d <= totalDias; d++){
+
+        const opt = document.createElement("option");
+        opt.value = d;
+        opt.textContent = d;
+        diaSelect.appendChild(opt);
+
+    }
+
+    diaSelect.value = diaSelecionado <= totalDias ? diaSelecionado : totalDias;
+
+}
+
+
+// =========================
 // CONVERTER
 // =========================
 
 function converter(){
 
-    const entrada =
-    document.getElementById("entrada")
-    .value
-    .trim();
+    const ano = parseInt(anoSelect.value);
+    const mes = parseInt(mesSelect.value);
+    const dia = parseInt(diaSelect.value);
 
-    if(!entrada){
+    if(!ano || !mes || !dia){
 
         mostrarResultado("Selecione uma data");
 
@@ -372,26 +440,21 @@ function converter(){
 
     }
 
+    const mesFormatado = String(mes).padStart(2, "0");
+    const diaFormatado = String(dia).padStart(2, "0");
+    const entrada = `${ano}-${mesFormatado}-${diaFormatado}`;
+
     const resultado =
     converterDataParaEra(entrada);
 
     mostrarResultado(resultado);
 
     salvarHistorico(
-        entrada + " → " + resultado
+        `${diaFormatado}/${mesFormatado}/${ano} → ${resultado}`
     );
 
 }
 
-
-// =========================
-// DATA → ERA
-// =========================
-
-
-// =========================
-// ERA → OCIDENTAL
-// =========================
 
 // =========================
 // DATA → ERA
@@ -513,7 +576,6 @@ function atualizarHistorico(){
 `).join("");
 
 }
-
 </script>
 
 </body>
