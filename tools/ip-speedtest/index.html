@@ -69,6 +69,11 @@ button {
     cursor: pointer;
 }
 
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
 /* RESULTADO PRINCIPAL */
 .ping {
     font-size: 52px;
@@ -140,13 +145,13 @@ button {
         <h1>⚡ Teste de Velocidade</h1>
         <p>Ping e qualidade da sua conexão em segundos</p>
 
-        <button onclick="testSpeed()">Iniciar teste</button>
+        <button id="startBtn" onclick="testSpeed()">Iniciar teste</button>
 
         <div class="ping" id="ping">--</div>
 
-        <div class="status" id="status">Clique para iniciar</div>
+        <div class="status" id="status" aria-live="polite">Clique para iniciar</div>
 
-        <div class="progress">
+        <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressWrap">
             <div class="bar" id="bar"></div>
         </div>
 
@@ -157,57 +162,101 @@ button {
 
         <h2>Detalhes</h2>
 
-        <div class="info" id="info">Nenhum teste realizado</div>
+        <div class="info" id="info" aria-live="polite">Nenhum teste realizado</div>
 
     </div>
 
 </div>
 
 <script>
+
+const startBtn = document.getElementById("startBtn");
+const pingEl = document.getElementById("ping");
+const statusEl = document.getElementById("status");
+const infoEl = document.getElementById("info");
+const barEl = document.getElementById("bar");
+const progressWrap = document.getElementById("progressWrap");
+
+const TIMEOUT_MS = 5000;
+const SAMPLE_COUNT = 3;
+
+function setProgress(percent) {
+    barEl.style.width = `${percent}%`;
+    progressWrap.setAttribute("aria-valuenow", String(percent));
+}
+
+// Faz uma requisição e mede o tempo de resposta, com timeout via AbortController
+async function timedRequest(timeoutMs) {
+
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+    // cache-buster na própria URL, além do header, pra evitar cache intermediário
+    const url = `https://api.ipify.org?format=json&_=${Date.now()}`;
+
+    const start = performance.now();
+
+    try {
+        await fetch(url, { cache: "no-store", signal: controller.signal });
+        return performance.now() - start;
+    } finally {
+        clearTimeout(timer);
+    }
+}
+
 async function testSpeed() {
 
-    const ping = document.getElementById("ping");
-    const status = document.getElementById("status");
-    const info = document.getElementById("info");
-    const bar = document.getElementById("bar");
+    if (startBtn.disabled) return;
 
-    ping.textContent = "...";
-    status.textContent = "Testando conexão...";
-    bar.style.width = "10%";
-    info.innerHTML = "";
+    startBtn.disabled = true;
+    pingEl.textContent = "...";
+    infoEl.innerHTML = "";
+    setProgress(0);
+
+    const samples = [];
 
     try {
 
-        const start = performance.now();
+        // aquecimento: primeira conexão paga DNS/TLS e distorce o resultado, então é descartada
+        statusEl.textContent = "Aquecendo conexão...";
+        await timedRequest(TIMEOUT_MS);
+        setProgress(15);
 
-        await fetch("https://api.ipify.org?format=json", { cache: "no-store" });
+        for (let i = 0; i < SAMPLE_COUNT; i++) {
+            statusEl.textContent = `Medindo conexão (${i + 1}/${SAMPLE_COUNT})...`;
+            const latency = await timedRequest(TIMEOUT_MS);
+            samples.push(latency);
+            setProgress(15 + Math.round((i + 1) * (85 / SAMPLE_COUNT)));
+        }
 
-        const end = performance.now();
-        const latency = Math.round(end - start);
+        setProgress(100);
 
-        bar.style.width = "100%";
-        ping.textContent = `${latency} ms`;
+        const avg = Math.round(samples.reduce((a, b) => a + b, 0) / samples.length);
+        const jitter = Math.round(Math.max(...samples) - Math.min(...samples));
+
+        pingEl.textContent = `${avg} ms`;
 
         let quality = "";
         let use = "";
 
-        if (latency < 100) {
+        if (avg < 100) {
             quality = "🟢 Excelente";
             use = "Streaming, jogos online, chamadas";
-        } 
-        else if (latency < 300) {
+        }
+        else if (avg < 300) {
             quality = "🟡 Boa";
             use = "Navegação e vídeos (jogos podem atrasar)";
-        } 
+        }
         else {
             quality = "🔴 Lenta";
             use = "Uso básico, pode haver travamentos";
         }
 
-        status.textContent = quality;
+        statusEl.textContent = quality;
 
-        info.innerHTML = `
-            <strong>Ping:</strong> ${latency} ms<br>
+        infoEl.innerHTML = `
+            <strong>Ping médio:</strong> ${avg} ms (${SAMPLE_COUNT} amostras)<br>
+            <strong>Variação (jitter):</strong> ${jitter} ms<br>
             <strong>Qualidade:</strong> ${quality}<br>
             <strong>Uso recomendado:</strong> ${use}<br>
             <strong>Horário:</strong> ${new Date().toLocaleString("pt-BR")}
@@ -215,9 +264,19 @@ async function testSpeed() {
 
     } catch (e) {
 
-        ping.textContent = "--";
-        status.textContent = "Erro no teste";
-        bar.style.width = "0%";
+        pingEl.textContent = "--";
+        setProgress(0);
+
+        if (e.name === "AbortError") {
+            statusEl.textContent = "⏱️ Tempo limite excedido";
+            infoEl.innerHTML = "Não foi possível medir o ping a tempo. Verifique sua conexão e tente novamente.";
+        } else {
+            statusEl.textContent = "Erro no teste";
+            infoEl.innerHTML = "Não foi possível completar o teste. Verifique sua conexão e tente novamente.";
+        }
+
+    } finally {
+        startBtn.disabled = false;
     }
 }
 </script>
