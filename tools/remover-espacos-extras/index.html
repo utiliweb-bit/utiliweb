@@ -3,12 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-
 <title>Remover Espaços Extras | UtiliWeb</title>
-
 <meta name="description" content="Limpe textos removendo espaços extras e organize automaticamente.">
 <meta name="robots" content="index, follow">
-
 <style>
 * {
     margin: 0;
@@ -16,7 +13,6 @@
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
 }
-
 html, body {
     width: 100%;
     min-height: 100vh;
@@ -27,7 +23,6 @@ html, body {
     padding: 16px;
     background: linear-gradient(135deg, #2ecc71, #27ae60);
 }
-
 /* CONTAINER */
 .wrapper {
     width: 100%;
@@ -39,23 +34,19 @@ html, body {
     grid-template-columns: 1fr 1fr;
     overflow: hidden;
 }
-
 /* PAINÉIS */
 .left, .right {
     padding: 28px;
 }
-
 /* TÍTULOS */
 h1 {
     font-size: 22px;
     margin-bottom: 6px;
 }
-
 p {
     font-size: 12px;
     color: #777;
 }
-
 /* TEXTAREA */
 textarea {
     width: 100%;
@@ -67,12 +58,10 @@ textarea {
     font-size: 14px;
     resize: vertical;
 }
-
 textarea:focus {
     outline: none;
     border-color: #27ae60;
 }
-
 /* BOTÕES */
 .btns {
     display: flex;
@@ -80,7 +69,6 @@ textarea:focus {
     margin-top: 14px;
     flex-wrap: wrap;
 }
-
 button {
     flex: 1;
     padding: 12px;
@@ -89,17 +77,14 @@ button {
     font-weight: 700;
     cursor: pointer;
 }
-
 .primary {
     background: #27ae60;
     color: #fff;
 }
-
 .secondary {
     background: #f4f4f4;
     color: #333;
 }
-
 /* RESULTADO */
 .result {
     background: #f4f4f4;
@@ -107,65 +92,56 @@ button {
     border-radius: 10px;
     font-size: 13px;
     word-break: break-word;
+    white-space: pre-wrap;
     min-height: 120px;
 }
-
 /* RESPONSIVO */
 @media (max-width: 768px) {
     .wrapper {
         grid-template-columns: 1fr;
     }
-
     html, body {
         padding: 12px;
     }
-
     .left, .right {
         padding: 18px;
     }
 }
 </style>
-
 </head>
-
 <body>
-
 <div class="wrapper">
-
     <!-- INPUT -->
     <div class="left">
-
         <h1>🧹 Remover Espaços Extras</h1>
         <p>Limpe textos e organize automaticamente</p>
-
         <textarea id="text" placeholder="Digite ou cole seu texto aqui..."></textarea>
-
         <div class="btns">
             <button class="primary" onclick="cleanText()">Limpar</button>
             <button class="secondary" onclick="copyText()">Copiar</button>
             <button class="secondary" onclick="resetAll()">Reset</button>
         </div>
-
     </div>
-
     <!-- RESULTADO -->
     <div class="right">
-
         <h2>Resultado</h2>
-
         <div id="result" class="result">---</div>
-
     </div>
-
 </div>
-
 <script>
 const input = document.getElementById("text");
 const result = document.getElementById("result");
 
 function cleanText() {
-    const cleaned = (input.value || "")
-        .replace(/\s+/g, " ")
+
+    const raw = input.value || "";
+
+    const cleaned = raw
+        .replace(/\r\n?/g, "\n")                          // normaliza quebras de linha (Windows/Mac)
+        .split("\n")                                      // separa por parágrafo/linha
+        .map(linha => linha.replace(/\s+/g, " ").trim())  // colapsa espaços extras só dentro da linha
+        .join("\n")                                       // rejunta preservando as quebras originais
+        .replace(/\n{3,}/g, "\n\n")                       // no máximo 1 linha vazia entre parágrafos
         .trim();
 
     result.textContent = cleaned || "Nada para limpar";
@@ -184,6 +160,5 @@ function resetAll() {
 // UX automático (tempo real)
 input.addEventListener("input", cleanText);
 </script>
-
 </body>
 </html>
