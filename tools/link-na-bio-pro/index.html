@@ -2,525 +2,163 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-
-<title>Link na Bio PRO | UtiliWeb</title>
-
-<meta name="description" content="Crie sua página estilo Linktree com avatar, bio, QR Code e links personalizados.">
-<meta name="theme-color" content="#27ae60">
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>Link na Bio PRO Premium</title>
+<meta name="description" content="Crie sua página profissional de links.">
 <style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    -webkit-tap-highlight-color:transparent;
-}
-
-body{
-    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
-    background:linear-gradient(135deg,#2ecc71,#27ae60);
-    min-height:100dvh;
-    padding:12px;
-}
-
-.wrapper{
-    width:100%;
-    max-width:1200px;
-    margin:auto;
-    background:#fff;
-    border-radius:18px;
-    overflow:hidden;
-    box-shadow:0 20px 60px rgba(0,0,0,.25);
-    display:grid;
-    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
-}
-
-.left,
-.right{
-    padding:24px;
-    min-width:0;
-}
-
-.left{
-    border-right:1px solid #e8e8e8;
-}
-
-h1{
-    font-size:28px;
-    margin-bottom:5px;
-}
-
-.subtitle{
-    color:#777;
-    font-size:13px;
-    margin-bottom:18px;
-}
-
-label{
-    display:block;
-    margin-top:12px;
-    margin-bottom:5px;
-    font-size:12px;
-    font-weight:700;
-    color:#444;
-}
-
-input,
-textarea,
-select{
-    width:100%;
-    padding:13px;
-    border:2px solid #ddd;
-    border-radius:12px;
-    font-size:15px;
-}
-
-input:focus,
-textarea:focus,
-select:focus{
-    outline:none;
-    border-color:#27ae60;
-}
-
-textarea{
-    min-height:160px;
-    resize:vertical;
-}
-
-button{
-    width:100%;
-    padding:14px;
-    border:none;
-    border-radius:12px;
-    margin-top:12px;
-    background:#27ae60;
-    color:#fff;
-    font-weight:700;
-    font-size:15px;
-    cursor:pointer;
-}
-
-button:hover{
-    opacity:.95;
-}
-
-.secondary{
-    background:#fff;
-    color:#27ae60;
-    border:2px solid #27ae60;
-}
-
-.result{
-    margin-top:15px;
-    background:#f7f7f7;
-    padding:14px;
-    border-radius:12px;
-    word-break:break-word;
-    font-size:13px;
-}
-
-.preview-phone{
-    width:100%;
-    max-width:420px;
-    margin:auto;
-    background:#fff;
-    border-radius:24px;
-    padding:20px;
-}
-
-.avatar{
-    width:96px;
-    height:96px;
-    border-radius:50%;
-    object-fit:cover;
-    display:block;
-    margin:0 auto 15px;
-    border:4px solid #eaf8ef;
-}
-
-.profile-name{
-    text-align:center;
-    font-size:24px;
-    font-weight:700;
-}
-
-.profile-bio{
-    text-align:center;
-    color:#666;
-    margin-top:8px;
-    margin-bottom:18px;
-    font-size:14px;
-}
-
-.link-btn{
-    display:block;
-    width:100%;
-    text-align:center;
-    text-decoration:none;
-    padding:15px;
-    border-radius:14px;
-    color:#fff;
-    font-weight:700;
-    margin-top:10px;
-    transition:.25s;
-}
-
-.link-btn:hover{
-    transform:translateY(-2px);
-}
-
-.link-btn:active{
-    transform:scale(.98);
-}
-
-.counter{
-    margin-top:15px;
-    text-align:center;
-    color:#666;
-    font-size:13px;
-}
-
-#qrcode{
-    margin-top:18px;
-    display:flex;
-    justify-content:center;
-}
-
-@media(max-width:900px){
-
-    .wrapper{
-        grid-template-columns:1fr;
-    }
-
-    .left{
-        border-right:none;
-        border-bottom:1px solid #eee;
-    }
-
-    .left,
-    .right{
-        padding:18px;
-    }
-
-    h1{
-        font-size:24px;
-    }
-}
-
+:root{--primary:#27ae60}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;background:linear-gradient(135deg,#2ecc71,#27ae60);padding:12px;min-height:100dvh}
+.wrapper{max-width:1300px;margin:auto;background:#fff;border-radius:20px;overflow:hidden;display:grid;grid-template-columns:420px 1fr;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.left,.right{padding:22px}
+.left{border-right:1px solid #eee;overflow:auto}
+input,textarea,select,button{width:100%;padding:12px;margin-top:8px;border-radius:12px;border:2px solid #ddd;font-size:16px}
+button{background:var(--primary);color:#fff;border:none;font-weight:700;cursor:pointer}
+.secondary{background:#fff;color:var(--primary);border:2px solid var(--primary)}
+.preview{max-width:500px;margin:auto;background:#fff;border-radius:26px;overflow:hidden;border:1px solid #eee}
+.banner{height:160px;background:linear-gradient(135deg,var(--primary),#2ecc71)}
+.avatar{width:110px;height:110px;border-radius:50%;display:block;margin:-55px auto 10px;border:5px solid #fff;object-fit:cover;background:#f1f1f1}
+.name{text-align:center;font-size:24px;font-weight:700}
+.bio{text-align:center;color:#666;padding:0 15px 15px}
+.link{display:block;margin:10px 16px;padding:14px;border-radius:14px;text-decoration:none;color:#fff;font-weight:700;text-align:center;background:var(--primary)}
+.mainlink{font-size:18px;box-shadow:0 8px 20px rgba(0,0,0,.15)}
+.card{background:#f8f8f8;border-radius:12px;padding:12px;margin-top:12px}
+#qrcode{text-align:center;margin:15px}
+@media(max-width:950px){.wrapper{grid-template-columns:1fr}.left{border-right:none;border-bottom:1px solid #eee}}
 </style>
 </head>
 <body>
-
 <div class="wrapper">
-
 <div class="left">
+<h2>🔗 Link na Bio PRO Premium</h2>
 
-<h1>🔗 Link na Bio PRO</h1>
+<label>Banner</label>
+<input type="file" id="bannerFile" accept="image/*">
 
-<div class="subtitle">
-Crie sua página estilo Linktree
-</div>
-
-<label>Foto de Perfil (URL)</label>
-<input id="avatar"
-placeholder="https://site.com/foto.jpg">
+<label>Avatar</label>
+<input type="file" id="avatarFile" accept="image/*">
 
 <label>Nome</label>
-<input id="name"
-placeholder="Seu nome">
+<input id="name" placeholder="Seu nome">
 
 <label>Bio</label>
-<input id="bio"
-placeholder="Criador de conteúdo, músico, empresa...">
+<textarea id="bio" placeholder="Descreva você ou sua marca"></textarea>
 
 <label>Tema</label>
 <select id="theme">
-<option value="green">Verde</option>
-<option value="blue">Azul</option>
-<option value="purple">Roxo</option>
-<option value="dark">Escuro</option>
+<option value="#27ae60">Verde</option>
+<option value="#3498db">Azul</option>
+<option value="#8e44ad">Roxo</option>
+<option value="#222222">Escuro</option>
+<option value="#e67e22">Laranja</option>
 </select>
 
-<label>Links (Nome|URL)</label>
+<label>⭐ Link Principal (Título|URL)</label>
+<input id="mainlink" placeholder="Ouça Agora|https://...">
 
-<textarea id="links"
-placeholder="YouTube|https://youtube.com/@canal
+<label>Links (Título|URL)</label>
+<textarea id="links" placeholder="Instagram|https://instagram.com
+YouTube|https://youtube.com"></textarea>
 
-Instagram|https://instagram.com/perfil
+<button onclick="render()">Atualizar Preview</button>
+<button class="secondary" onclick="exportData()">⬇ Exportar JSON</button>
 
-TikTok|https://tiktok.com/@perfil"></textarea>
-
-<button onclick="generate()">
-Gerar Página
-</button>
-
-<button class="secondary" onclick="copyLink()">
-📋 Copiar Link
-</button>
-
-<button class="secondary" onclick="sharePage()">
-📤 Compartilhar
-</button>
-
-<div class="result" id="result">
-Aguardando...
+<div class="card">
+<b>📊 Score do Perfil</b>
+<div id="score">0/100</div>
 </div>
 
+<div class="card">
+<b>📜 Histórico</b>
+<div id="history">Nenhum</div>
+</div>
 </div>
 
 <div class="right">
-
-<div class="preview-phone">
-
-<div id="page">
-Preview aparecerá aqui
+<div class="preview">
+<div class="banner" id="banner"></div>
+<img class="avatar" id="avatar">
+<div class="name" id="pname">Seu Nome</div>
+<div class="bio" id="pbio">Sua bio aparecerá aqui.</div>
+<div id="main"></div>
+<div id="plist"></div>
+<div id="qrcode">QR Code disponível quando publicado</div>
 </div>
-
-<div id="qrcode"></div>
-
 </div>
-
-</div>
-
 </div>
 
 <script>
+let avatarData='',bannerData='';
 
-let generatedUrl = "";
-
-const themes = {
-green:"#27ae60",
-blue:"#3498db",
-purple:"#8e44ad",
-dark:"#222"
-};
-
-function generate(){
-
-const avatar =
-document.getElementById("avatar").value.trim();
-
-const name =
-document.getElementById("name").value.trim() || "Meu Perfil";
-
-const bio =
-document.getElementById("bio").value.trim();
-
-const theme =
-document.getElementById("theme").value;
-
-const rawLinks =
-document.getElementById("links").value
-.split("\n")
-.map(x=>x.trim())
-.filter(Boolean);
-
-const links = [];
-
-rawLinks.forEach(item=>{
-
-const parts = item.split("|");
-
-if(parts.length >= 2){
-
-links.push({
-title:parts[0].trim(),
-url:parts.slice(1).join("|").trim()
-});
-
+function fileToData(input,cb){
+ const f=input.files[0];
+ if(!f)return;
+ const r=new FileReader();
+ r.onload=e=>cb(e.target.result);
+ r.readAsDataURL(f);
 }
 
-});
+bannerFile.onchange=()=>fileToData(bannerFile,v=>{bannerData=v;render();});
+avatarFile.onchange=()=>fileToData(avatarFile,v=>{avatarData=v;render();});
 
-const data = {
-avatar,
-name,
-bio,
-theme,
-links
-};
-
-generatedUrl =
-location.pathname +
-"?data=" +
-encodeURIComponent(
-btoa(unescape(
-encodeURIComponent(
-JSON.stringify(data)
-)
-))
-);
-
-const fullUrl =
-location.origin +
-generatedUrl;
-
-document.getElementById("result").innerHTML = `
-<strong>Link Gerado:</strong><br><br>
-${fullUrl}
-`;
-
-renderPage(data);
-
-generateQR(fullUrl);
+function saveHistory(name){
+ let h=JSON.parse(localStorage.getItem('bioHist')||'[]');
+ h.unshift(name);
+ h=[...new Set(h)].slice(0,8);
+ localStorage.setItem('bioHist',JSON.stringify(h));
+ history.innerHTML=h.join('<br>');
 }
 
-function renderPage(data){
+function render(){
+ const color=theme.value;
+ document.documentElement.style.setProperty('--primary',color);
 
-let html = "";
+ pname.textContent=name.value||'Seu Nome';
+ pbio.textContent=bio.value||'Sua bio aparecerá aqui.';
 
-if(data.avatar){
+ if(avatarData) avatar.src=avatarData;
+ if(bannerData) banner.style.background=`url(${bannerData}) center/cover`;
 
-html += `
-<img
-src="${data.avatar}"
-class="avatar"
-onerror="this.style.display='none'">
-`;
+ const ml=mainlink.value.split('|');
+ main.innerHTML='';
+ if(ml.length>=2){
+   main.innerHTML=`<a class="link mainlink" href="${ml[1]}" target="_blank">⭐ ${ml[0]}</a>`;
+ }
 
+ const lines=links.value.split('\n').filter(Boolean);
+ plist.innerHTML='';
+ lines.forEach(l=>{
+   const p=l.split('|');
+   if(p.length>=2){
+      plist.innerHTML+=`<a class="link" href="${p[1]}" target="_blank">${p[0]}</a>`;
+   }
+ });
+
+ let score=0;
+ if(name.value) score+=20;
+ if(bio.value) score+=20;
+ if(avatarData) score+=20;
+ if(bannerData) score+=15;
+ if(lines.length) score+=15;
+ if(ml.length>=2) score+=10;
+
+ document.getElementById('score').textContent=score+'/100';
+ saveHistory(name.value||'Perfil sem nome');
 }
 
-html += `
-<div class="profile-name">
-${escapeHtml(data.name)}
-</div>
-
-<div class="profile-bio">
-${escapeHtml(data.bio)}
-</div>
-`;
-
-data.links.forEach(link=>{
-
-html += `
-<a
-class="link-btn"
-href="${link.url}"
-target="_blank"
-style="background:${themes[data.theme]}"
->
-${escapeHtml(link.title)}
-</a>
-`;
-
-});
-
-html += `
-<div class="counter">
-${data.links.length} link(s)
-</div>
-`;
-
-document.getElementById("page").innerHTML = html;
+function exportData(){
+ const data={
+   name:name.value,bio:bio.value,theme:theme.value,
+   mainlink:mainlink.value,links:links.value
+ };
+ const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+ const a=document.createElement('a');
+ a.href=URL.createObjectURL(blob);
+ a.download='link-na-bio.json';
+ a.click();
 }
 
-function copyLink(){
-
-if(!generatedUrl){
-alert("Gere um link primeiro.");
-return;
-}
-
-navigator.clipboard.writeText(
-location.origin + generatedUrl
-);
-
-alert("Link copiado!");
-}
-
-async function sharePage(){
-
-if(!generatedUrl){
-alert("Gere um link primeiro.");
-return;
-}
-
-const url =
-location.origin + generatedUrl;
-
-if(navigator.share){
-
-try{
-
-await navigator.share({
-title:"Meu Link na Bio",
-url:url
-});
-
-}catch(e){}
-
-}else{
-
-navigator.clipboard.writeText(url);
-alert("Link copiado!");
-}
-}
-
-function generateQR(url){
-
-const qr =
-document.getElementById("qrcode");
-
-qr.innerHTML = "";
-
-new QRCode(qr,{
-text:url,
-width:140,
-height:140
-});
-}
-
-function escapeHtml(text){
-
-return text
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;");
-}
-
-const params =
-new URLSearchParams(location.search);
-
-if(params.has("data")){
-
-let data;
-
-try{
-
-data = JSON.parse(
-decodeURIComponent(
-escape(
-atob(params.get("data"))
-)
-)
-);
-
-}catch{
-
-data = null;
-}
-
-if(data){
-
-document.querySelector(".left").style.display = "none";
-
-document.querySelector(".wrapper").style.gridTemplateColumns =
-"1fr";
-
-renderPage(data);
-
-generateQR(location.href);
-
-}
-
-}
-
+history.innerHTML=(JSON.parse(localStorage.getItem('bioHist')||'[]')).join('<br>')||'Nenhum';
 </script>
-
 </body>
 </html>
