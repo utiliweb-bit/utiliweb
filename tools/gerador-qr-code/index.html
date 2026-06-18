@@ -9,7 +9,7 @@
 <meta name="description" content="Gere QR Codes online grátis para links, textos e PIX.">
 <meta name="keywords" content="qr code, gerador qr code, utiliweb">
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
 
 <style>
 * {
@@ -82,19 +82,62 @@ a {
     text-decoration: none;
 }
 
+a:hover {
+    text-decoration: underline;
+}
+
+/* LABELS */
+label {
+    font-size: 12px;
+    font-weight: 700;
+    display: block;
+    margin-top: 14px;
+    color: #444;
+}
+
 /* INPUTS */
-input, select {
+input, select, textarea {
     width: 100%;
     padding: 12px;
     border-radius: 10px;
     border: 2px solid #ddd;
     font-size: 14px;
-    margin-top: 10px;
+    margin-top: 6px;
+    font-family: inherit;
+    color: #1a1a1a;
 }
 
-input:focus, select:focus {
+textarea {
+    height: 80px;
+    resize: none;
+}
+
+input:focus, select:focus, textarea:focus {
     border-color: #27ae60;
     outline: none;
+}
+
+input.invalido, textarea.invalido {
+    border-color: #e74c3c;
+}
+
+.contador {
+    font-size: 11px;
+    color: #999;
+    text-align: right;
+    margin-top: 4px;
+}
+
+.contador.aviso {
+    color: #e67e22;
+    font-weight: 700;
+}
+
+.erro-texto {
+    font-size: 12px;
+    color: #e74c3c;
+    margin-top: 4px;
+    min-height: 14px;
 }
 
 /* BUTTONS */
@@ -116,10 +159,32 @@ button {
     color: white;
     text-transform: uppercase;
     transition: 0.2s;
+    font-family: inherit;
 }
 
-button:active {
+button:hover:not(:disabled) {
+    opacity: 0.9;
+}
+
+button:active:not(:disabled) {
     transform: scale(0.97);
+}
+
+button:disabled {
+    background: #b6e3c8;
+    cursor: not-allowed;
+}
+
+button.secundario {
+    background: #fff;
+    border: 2px solid #27ae60;
+    color: #27ae60;
+}
+
+button.secundario:disabled {
+    border-color: #ddd;
+    color: #aaa;
+    background: #fff;
 }
 
 /* QR */
@@ -129,9 +194,41 @@ button:active {
     padding: 20px;
     border-radius: 12px;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     min-height: 260px;
+    gap: 10px;
+}
+
+.qr-box canvas {
+    max-width: 100%;
+    border-radius: 6px;
+}
+
+.qr-placeholder {
+    color: #aaa;
+    font-size: 13px;
+    text-align: center;
+}
+
+.toast {
+    margin-top: 10px;
+    font-size: 12px;
+    color: #27ae60;
+    font-weight: 700;
+    opacity: 0;
+    transition: opacity .25s ease;
+    min-height: 16px;
+    text-align: center;
+}
+
+.toast.visivel {
+    opacity: 1;
+}
+
+.toast.erro {
+    color: #e74c3c;
 }
 
 /* RESPONSIVO */
@@ -187,23 +284,37 @@ button:active {
 
         <a href="../../index.html">← Voltar</a>
 
-        <input id="text" type="text" placeholder="Digite link ou texto">
+        <label for="text">Conteúdo (link, texto, PIX...)</label>
+        <textarea id="text" placeholder="Digite ou cole um link ou texto" maxlength="1500"></textarea>
+        <div class="contador" id="contador">0 / 1500</div>
+        <div class="erro-texto" id="erroTexto"></div>
 
+        <label for="size">Tamanho</label>
         <select id="size">
-            <option value="120">Pequeno</option>
-            <option value="200" selected>Médio</option>
-            <option value="300">Grande</option>
+            <option value="160">Pequeno</option>
+            <option value="240" selected>Médio</option>
+            <option value="360">Grande</option>
+        </select>
+
+        <label for="correcao">Correção de erro</label>
+        <select id="correcao">
+            <option value="L">Baixa (mais espaço para conteúdo)</option>
+            <option value="M" selected>Média (recomendado)</option>
+            <option value="Q">Alta</option>
+            <option value="H">Máxima (resiste a danos/sujeira)</option>
         </select>
 
         <div class="buttons">
-            <button onclick="generate()">Gerar</button>
-            <button onclick="downloadQR()">Baixar</button>
-            <button onclick="copyText()">Copiar</button>
+            <button type="button" id="btnGerar">Gerar</button>
+            <button type="button" id="btnBaixar" class="secundario" disabled>Baixar</button>
+            <button type="button" id="btnCopiar" class="secundario" disabled>Copiar texto</button>
         </div>
 
-        <div class="qr-box">
-            <div id="qrcode"></div>
+        <div class="qr-box" id="qrBox">
+            <div class="qr-placeholder" id="qrPlaceholder">Seu QR Code vai aparecer aqui</div>
         </div>
+
+        <div class="toast" id="toast"></div>
 
     </div>
 
@@ -215,46 +326,177 @@ button:active {
             Gere QR Codes instantaneamente para links, textos e pagamentos.
             Interface otimizada para celular e desktop.
         </p>
+        <br>
+        <p>
+            <strong>Dica:</strong> para PIX, cole o código "copia e cola" gerado
+            pelo seu banco. Para links, use a URL completa, incluindo "https://".
+        </p>
+        <br>
+        <p>
+            O nível de correção de erro define quanto do QR Code pode ser
+            danificado ou sujo e ainda assim ser lido. Use "Máxima" se for
+            imprimir em adesivos ou superfícies que sofrem desgaste.
+        </p>
 
     </div>
 
 </div>
 
 <script>
-let currentText = "";
+const elText = document.getElementById("text");
+const elSize = document.getElementById("size");
+const elCorrecao = document.getElementById("correcao");
+const elContador = document.getElementById("contador");
+const elErroTexto = document.getElementById("erroTexto");
+const elQrBox = document.getElementById("qrBox");
+const elQrPlaceholder = document.getElementById("qrPlaceholder");
+const elToast = document.getElementById("toast");
 
-function generate() {
-    const text = document.getElementById("text").value.trim();
-    const size = parseInt(document.getElementById("size").value);
+const btnGerar = document.getElementById("btnGerar");
+const btnBaixar = document.getElementById("btnBaixar");
+const btnCopiar = document.getElementById("btnCopiar");
 
-    if (!text) return;
+let canvasAtual = null;
+let textoAtual = "";
+let toastTimeout = null;
 
-    currentText = text;
+// Limite de caracteres alfanuméricos aproximado por nível de correção
+// (capacidade real varia com o tipo de caractere; isso é só um aviso prévio)
+const LIMITE_APROX = { L: 1852, M: 1452, Q: 1042, H: 786 };
 
-    const container = document.getElementById("qrcode");
-    container.innerHTML = "";
-
-    new QRCode(container, {
-        text: text,
-        width: size,
-        height: size
-    });
+function mostrarToast(texto, tipo) {
+    elToast.textContent = texto;
+    elToast.classList.toggle("erro", tipo === "erro");
+    elToast.classList.add("visivel");
+    clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(() => elToast.classList.remove("visivel"), 2500);
 }
 
-function downloadQR() {
-    const img = document.querySelector("#qrcode img");
-    if (!img) return;
+function atualizarContador() {
+    const tamanho = elText.value.length;
+    const correcao = elCorrecao.value;
+    const limite = LIMITE_APROX[correcao] || 1452;
+    elContador.textContent = `${tamanho} / 1500`;
+    elContador.classList.toggle("aviso", tamanho > limite);
+}
 
+function limparResultado() {
+    elQrBox.innerHTML = "";
+    elQrBox.appendChild(elQrPlaceholder);
+    canvasAtual = null;
+    textoAtual = "";
+    btnBaixar.disabled = true;
+    btnCopiar.disabled = true;
+}
+
+function gerar() {
+    const texto = elText.value.trim();
+    const tamanho = parseInt(elSize.value, 10);
+    const correcao = elCorrecao.value;
+
+    elErroTexto.textContent = "";
+    elText.classList.remove("invalido");
+
+    if (!texto) {
+        elErroTexto.textContent = "Digite um link ou texto para gerar o QR Code.";
+        elText.classList.add("invalido");
+        limparResultado();
+        return;
+    }
+
+    try {
+        const qr = qrcode(0, correcao);
+        qr.addData(texto);
+        qr.make();
+
+        const contagemModulos = qr.getModuleCount();
+        const escala = Math.max(1, Math.floor(tamanho / contagemModulos));
+        const tamanhoFinal = contagemModulos * escala;
+
+        const canvas = document.createElement("canvas");
+        canvas.width = tamanhoFinal;
+        canvas.height = tamanhoFinal;
+        const ctx = canvas.getContext("2d");
+
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, tamanhoFinal, tamanhoFinal);
+        ctx.fillStyle = "#000000";
+
+        for (let linha = 0; linha < contagemModulos; linha++) {
+            for (let coluna = 0; coluna < contagemModulos; coluna++) {
+                if (qr.isDark(linha, coluna)) {
+                    ctx.fillRect(coluna * escala, linha * escala, escala, escala);
+                }
+            }
+        }
+
+        elQrBox.innerHTML = "";
+        elQrBox.appendChild(canvas);
+
+        canvasAtual = canvas;
+        textoAtual = texto;
+        btnBaixar.disabled = false;
+        btnCopiar.disabled = false;
+        mostrarToast("QR Code gerado!");
+    } catch (e) {
+        // A biblioteca lança erro quando o texto excede a capacidade
+        // máxima para o nível de correção escolhido.
+        elErroTexto.textContent = "Texto muito longo para o nível de correção escolhido. Reduza o texto ou diminua a correção de erro.";
+        elText.classList.add("invalido");
+        limparResultado();
+        mostrarToast("Não foi possível gerar o QR Code.", "erro");
+    }
+}
+
+function baixar() {
+    if (!canvasAtual) return;
     const link = document.createElement("a");
-    link.href = img.src;
+    link.href = canvasAtual.toDataURL("image/png");
     link.download = "qrcode.png";
     link.click();
 }
 
-function copyText() {
-    if (!currentText) return;
-    navigator.clipboard.writeText(currentText);
+async function copiarTexto() {
+    if (!textoAtual) return;
+    try {
+        if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(textoAtual);
+        } else {
+            const temp = document.createElement("textarea");
+            temp.value = textoAtual;
+            temp.style.position = "fixed";
+            temp.style.opacity = "0";
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand("copy");
+            document.body.removeChild(temp);
+        }
+        mostrarToast("Texto copiado!");
+    } catch (e) {
+        mostrarToast("Não foi possível copiar o texto.", "erro");
+    }
 }
+
+btnGerar.addEventListener("click", gerar);
+btnBaixar.addEventListener("click", baixar);
+btnCopiar.addEventListener("click", copiarTexto);
+
+elText.addEventListener("input", () => {
+    elErroTexto.textContent = "";
+    elText.classList.remove("invalido");
+    atualizarContador();
+});
+
+elCorrecao.addEventListener("change", atualizarContador);
+
+elText.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        gerar();
+    }
+});
+
+atualizarContador();
 </script>
 
 </body>
