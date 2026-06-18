@@ -80,6 +80,17 @@ a {
     text-decoration: none;
 }
 
+a:hover {
+    text-decoration: underline;
+}
+
+label.campo-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: #444;
+}
+
 /* INPUT */
 input[type="number"] {
     width: 100%;
@@ -87,7 +98,9 @@ input[type="number"] {
     border-radius: 10px;
     border: 2px solid #ddd;
     font-size: 14px;
-    margin-top: 10px;
+    margin-top: 6px;
+    font-family: inherit;
+    color: #1a1a1a;
 }
 
 input:focus {
@@ -95,14 +108,45 @@ input:focus {
     outline: none;
 }
 
+input.invalido {
+    border-color: #e74c3c;
+}
+
+.dica {
+    font-size: 11px;
+    color: #999;
+    margin-top: 4px;
+}
+
+.erro-texto {
+    font-size: 12px;
+    color: #e74c3c;
+    margin-top: 4px;
+    min-height: 14px;
+}
+
 /* CHECKBOX */
 .checks {
-    margin-top: 12px;
+    margin-top: 14px;
     display: flex;
-    gap: 14px;
-    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 10px;
     font-size: 13px;
     color: #333;
+}
+
+.checks label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.checks input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #27ae60;
+    cursor: pointer;
 }
 
 /* BUTTONS */
@@ -124,10 +168,32 @@ button {
     color: white;
     text-transform: uppercase;
     transition: 0.2s;
+    font-family: inherit;
 }
 
-button:active {
+button:hover:not(:disabled) {
+    opacity: 0.9;
+}
+
+button:active:not(:disabled) {
     transform: scale(0.97);
+}
+
+button:disabled {
+    background: #b6e3c8;
+    cursor: not-allowed;
+}
+
+button.secundario {
+    background: #fff;
+    border: 2px solid #27ae60;
+    color: #27ae60;
+}
+
+button.secundario:disabled {
+    border-color: #ddd;
+    color: #aaa;
+    background: #fff;
 }
 
 /* RESULT */
@@ -138,8 +204,66 @@ button:active {
     border-radius: 10px;
     word-break: break-all;
     font-weight: 700;
-    font-size: 14px;
+    font-size: 16px;
+    font-family: 'Courier New', monospace;
     min-height: 48px;
+    display: flex;
+    align-items: center;
+}
+
+.result-box.vazio {
+    color: #aaa;
+    font-weight: 400;
+    font-size: 13px;
+    font-family: inherit;
+}
+
+/* FORÇA */
+.forca-container {
+    margin-top: 12px;
+}
+
+.forca-barra {
+    display: flex;
+    gap: 4px;
+    margin-top: 6px;
+}
+
+.forca-segmento {
+    height: 6px;
+    flex: 1;
+    border-radius: 3px;
+    background: #e0e0e0;
+    transition: background 0.2s ease;
+}
+
+.forca-label {
+    font-size: 12px;
+    font-weight: 700;
+    margin-top: 6px;
+}
+
+.forca-bits {
+    font-size: 11px;
+    color: #999;
+}
+
+.toast {
+    margin-top: 10px;
+    font-size: 12px;
+    color: #27ae60;
+    font-weight: 700;
+    opacity: 0;
+    transition: opacity .25s ease;
+    min-height: 16px;
+}
+
+.toast.visivel {
+    opacity: 1;
+}
+
+.toast.erro {
+    color: #e74c3c;
 }
 
 /* RESPONSIVO */
@@ -191,20 +315,38 @@ button:active {
 
         <a href="../../index.html">← Voltar</a>
 
-        <label>Tamanho da senha</label>
-        <input id="length" type="number" value="12" min="6" max="64">
+        <label class="campo-label" for="length">Tamanho da senha</label>
+        <input id="length" type="number" value="16" min="6" max="64">
+        <div class="dica" id="dicaTamanho">Entre 6 e 64 caracteres. Recomendado: 16 ou mais.</div>
+        <div class="erro-texto" id="erroTamanho"></div>
 
         <div class="checks">
-            <label><input type="checkbox" id="numbers" checked> Números</label>
-            <label><input type="checkbox" id="symbols" checked> Símbolos</label>
+            <label><input type="checkbox" id="lowercase" checked> Letras minúsculas (a-z)</label>
+            <label><input type="checkbox" id="uppercase" checked> Letras maiúsculas (A-Z)</label>
+            <label><input type="checkbox" id="numbers" checked> Números (0-9)</label>
+            <label><input type="checkbox" id="symbols" checked> Símbolos (!@#$%...)</label>
         </div>
+        <div class="erro-texto" id="erroCategorias"></div>
 
         <div class="buttons">
-            <button onclick="generate()">Gerar</button>
-            <button onclick="copyPassword()">Copiar</button>
+            <button type="button" id="btnGerar">Gerar</button>
+            <button type="button" id="btnCopiar" class="secundario" disabled>Copiar</button>
         </div>
 
-        <div class="result-box" id="result">---</div>
+        <div class="result-box vazio" id="result">Clique em "Gerar" para criar uma senha</div>
+
+        <div class="forca-container" id="forcaContainer" style="display:none;">
+            <div class="forca-barra" id="forcaBarra">
+                <div class="forca-segmento"></div>
+                <div class="forca-segmento"></div>
+                <div class="forca-segmento"></div>
+                <div class="forca-segmento"></div>
+            </div>
+            <div class="forca-label" id="forcaLabel"></div>
+            <div class="forca-bits" id="forcaBits"></div>
+        </div>
+
+        <div class="toast" id="toast"></div>
 
     </div>
 
@@ -213,8 +355,15 @@ button:active {
 
         <h2>Como funciona</h2>
         <p>
-            Senhas são geradas localmente no navegador usando aleatoriedade criptográfica.
-            Ideal para segurança em redes sociais, bancos e sistemas.
+            Senhas são geradas localmente no seu navegador usando aleatoriedade
+            criptográfica (Web Crypto API), sem envio de dados para nenhum servidor.
+            Ideal para redes sociais, bancos e sistemas em geral.
+        </p>
+        <br>
+        <p>
+            <strong>Dica:</strong> use senhas diferentes para cada serviço e
+            guarde-as em um gerenciador de senhas confiável, em vez de reutilizar
+            a mesma senha em vários lugares.
         </p>
 
     </div>
@@ -222,45 +371,199 @@ button:active {
 </div>
 
 <script>
+const CHARSETS = {
+    lowercase: "abcdefghijklmnopqrstuvwxyz",
+    uppercase: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    numbers: "0123456789",
+    symbols: "!@#$%^&*()-_=+[]{}<>?/"
+};
+
+const elLength = document.getElementById("length");
+const elErroTamanho = document.getElementById("erroTamanho");
+const elDicaTamanho = document.getElementById("dicaTamanho");
+const elErroCategorias = document.getElementById("erroCategorias");
+const elResult = document.getElementById("result");
+const elToast = document.getElementById("toast");
+const elForcaContainer = document.getElementById("forcaContainer");
+const elForcaBarra = document.getElementById("forcaBarra");
+const elForcaLabel = document.getElementById("forcaLabel");
+const elForcaBits = document.getElementById("forcaBits");
+
+const btnGerar = document.getElementById("btnGerar");
+const btnCopiar = document.getElementById("btnCopiar");
+
 let currentPassword = "";
+let toastTimeout = null;
 
-function generate() {
+function mostrarToast(texto, tipo) {
+    elToast.textContent = texto;
+    elToast.classList.toggle("erro", tipo === "erro");
+    elToast.classList.add("visivel");
+    clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(() => elToast.classList.remove("visivel"), 2200);
+}
 
-    const length = parseInt(document.getElementById("length").value) || 12;
-    const useNumbers = document.getElementById("numbers").checked;
-    const useSymbols = document.getElementById("symbols").checked;
+// Gera um inteiro aleatório uniforme em [0, max) usando crypto.getRandomValues,
+// eliminando o viés de módulo (modulo bias) via rejeição de amostragem.
+function indiceAleatorioSemVies(max) {
+    const limite = Math.floor(0x100000000 / max) * max;
+    const buffer = new Uint32Array(1);
+    let valor;
+    do {
+        crypto.getRandomValues(buffer);
+        valor = buffer[0];
+    } while (valor >= limite);
+    return valor % max;
+}
 
-    let chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+function embaralhar(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = indiceAleatorioSemVies(i + 1);
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
 
-    if (useNumbers) chars += "0123456789";
-    if (useSymbols) chars += "!@#$%^&*()-_=+[]{}<>?/";
+function categoriasSelecionadas() {
+    const categorias = [];
+    if (document.getElementById("lowercase").checked) categorias.push(CHARSETS.lowercase);
+    if (document.getElementById("uppercase").checked) categorias.push(CHARSETS.uppercase);
+    if (document.getElementById("numbers").checked) categorias.push(CHARSETS.numbers);
+    if (document.getElementById("symbols").checked) categorias.push(CHARSETS.symbols);
+    return categorias;
+}
 
-    let password = "";
+function gerarSenha(tamanho, categorias) {
+    const todosCaracteres = categorias.join("");
+    const senha = [];
 
-    if (window.crypto && crypto.getRandomValues) {
+    // Garante ao menos 1 caractere de cada categoria selecionada
+    categorias.forEach(categoria => {
+        senha.push(categoria[indiceAleatorioSemVies(categoria.length)]);
+    });
 
-        const array = new Uint32Array(length);
-        crypto.getRandomValues(array);
-
-        for (let i = 0; i < length; i++) {
-            password += chars[array[i] % chars.length];
-        }
-
-    } else {
-
-        for (let i = 0; i < length; i++) {
-            password += chars[Math.floor(Math.random() * chars.length)];
-        }
+    // Preenche o restante com qualquer caractere das categorias ativas
+    for (let i = senha.length; i < tamanho; i++) {
+        senha.push(todosCaracteres[indiceAleatorioSemVies(todosCaracteres.length)]);
     }
 
-    currentPassword = password;
-    document.getElementById("result").textContent = password;
+    return embaralhar(senha).join("");
 }
 
-function copyPassword() {
-    if (!currentPassword) return;
-    navigator.clipboard.writeText(currentPassword);
+function calcularForca(tamanho, tamanhoCharset) {
+    const entropia = tamanho * Math.log2(tamanhoCharset);
+    let nivel, label, cor;
+    if (entropia < 40) { nivel = 1; label = "Fraca"; cor = "#e74c3c"; }
+    else if (entropia < 60) { nivel = 2; label = "Razoável"; cor = "#e67e22"; }
+    else if (entropia < 80) { nivel = 3; label = "Forte"; cor = "#27ae60"; }
+    else { nivel = 4; label = "Muito forte"; cor = "#1e8449"; }
+    return { entropia, nivel, label, cor };
 }
+
+function atualizarIndicadorForca(tamanho, tamanhoCharset) {
+    const { entropia, nivel, label, cor } = calcularForca(tamanho, tamanhoCharset);
+    elForcaContainer.style.display = "block";
+
+    const segmentos = elForcaBarra.querySelectorAll(".forca-segmento");
+    segmentos.forEach((seg, i) => {
+        seg.style.background = i < nivel ? cor : "#e0e0e0";
+    });
+
+    elForcaLabel.textContent = label;
+    elForcaLabel.style.color = cor;
+    elForcaBits.textContent = `~${Math.round(entropia)} bits de entropia`;
+}
+
+function validarTamanho(valorBruto, minimoNecessario) {
+    if (valorBruto === "" || isNaN(valorBruto)) {
+        return `Digite um número entre ${minimoNecessario} e 64.`;
+    }
+    const valor = parseInt(valorBruto, 10);
+    if (valor < minimoNecessario) {
+        return `O tamanho mínimo é ${minimoNecessario} (1 caractere por categoria marcada).`;
+    }
+    if (valor > 64) {
+        return "O tamanho máximo é 64 caracteres.";
+    }
+    return "";
+}
+
+function gerar() {
+    elErroTamanho.textContent = "";
+    elErroCategorias.textContent = "";
+    elLength.classList.remove("invalido");
+
+    const categorias = categoriasSelecionadas();
+
+    if (categorias.length === 0) {
+        elErroCategorias.textContent = "Selecione ao menos uma categoria de caractere.";
+        return;
+    }
+
+    const minimoNecessario = Math.max(6, categorias.length);
+    elDicaTamanho.textContent = `Entre ${minimoNecessario} e 64 caracteres. Recomendado: 16 ou mais.`;
+
+    const erro = validarTamanho(elLength.value, minimoNecessario);
+    if (erro) {
+        elErroTamanho.textContent = erro;
+        elLength.classList.add("invalido");
+        return;
+    }
+
+    const tamanho = parseInt(elLength.value, 10);
+    const senha = gerarSenha(tamanho, categorias);
+    const tamanhoCharsetTotal = categorias.join("").length;
+
+    currentPassword = senha;
+    elResult.textContent = senha;
+    elResult.classList.remove("vazio");
+
+    atualizarIndicadorForca(tamanho, tamanhoCharsetTotal);
+
+    btnCopiar.disabled = false;
+}
+
+async function copiarSenha() {
+    if (!currentPassword) return;
+    try {
+        if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(currentPassword);
+        } else {
+            const temp = document.createElement("textarea");
+            temp.value = currentPassword;
+            temp.style.position = "fixed";
+            temp.style.opacity = "0";
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand("copy");
+            document.body.removeChild(temp);
+        }
+        mostrarToast("Senha copiada!");
+    } catch (e) {
+        mostrarToast("Não foi possível copiar a senha.", "erro");
+    }
+}
+
+btnGerar.addEventListener("click", gerar);
+btnCopiar.addEventListener("click", copiarSenha);
+
+elLength.addEventListener("input", () => {
+    elErroTamanho.textContent = "";
+    elLength.classList.remove("invalido");
+});
+
+elLength.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") gerar();
+});
+
+document.querySelectorAll(".checks input[type=checkbox]").forEach(chk => {
+    chk.addEventListener("change", () => {
+        elErroCategorias.textContent = "";
+    });
+});
+
+// Gera uma senha inicial automaticamente ao carregar a página
+gerar();
 </script>
 
 </body>
