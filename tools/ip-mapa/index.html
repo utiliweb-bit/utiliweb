@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -11,6 +12,7 @@
 <meta name="robots" content="index,follow">
 
 <style>
+
 *{
     margin:0;
     padding:0;
@@ -18,32 +20,34 @@
     -webkit-tap-highlight-color:transparent;
 }
 
-html,
+html{
+    width:100%;
+    min-height:100%;
+}
+
 body{
     width:100%;
     min-height:100vh;
     font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
     background:linear-gradient(135deg,#2ecc71,#27ae60);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:16px;
+    padding:12px;
 }
 
 .wrapper{
     width:100%;
     max-width:1100px;
+    margin:auto;
     background:#fff;
     border-radius:16px;
-    box-shadow:0 20px 60px rgba(0,0,0,.3);
+    box-shadow:0 15px 50px rgba(0,0,0,.18);
     display:grid;
-    grid-template-columns:1fr 1fr;
+    grid-template-columns:420px 1fr;
     overflow:hidden;
 }
 
 .left,
 .right{
-    padding:28px;
+    padding:24px;
 }
 
 .left{
@@ -51,13 +55,13 @@ body{
 }
 
 h1{
-    font-size:24px;
-    margin-bottom:6px;
+    font-size:30px;
+    margin-bottom:8px;
 }
 
 h2{
-    font-size:22px;
-    margin-bottom:10px;
+    font-size:24px;
+    margin-bottom:12px;
 }
 
 h3{
@@ -65,7 +69,7 @@ h3{
 }
 
 .subtitle{
-    font-size:13px;
+    font-size:14px;
     color:#777;
 }
 
@@ -74,7 +78,7 @@ h3{
     margin-top:18px;
     color:#27ae60;
     text-decoration:none;
-    font-weight:600;
+    font-weight:700;
 }
 
 .back:hover{
@@ -89,6 +93,13 @@ h3{
     line-height:1.8;
     font-size:14px;
     animation:fadeIn .3s ease;
+
+    word-break:break-word;
+    overflow-wrap:anywhere;
+}
+
+.info div{
+    margin-bottom:6px;
 }
 
 .actions{
@@ -148,12 +159,10 @@ button:active{
 
 #map{
     width:100%;
-    aspect-ratio:16/9;
-    min-height:320px;
+    min-height:420px;
     border-radius:12px;
     overflow:hidden;
     border:1px solid #ddd;
-    margin-top:15px;
     background:#f5f5f5;
 }
 
@@ -162,6 +171,15 @@ iframe{
     height:100%;
     border:none;
     display:block;
+}
+
+#mapButtonContainer{
+    margin-top:15px;
+}
+
+#mapButtonContainer .action-link{
+    display:block;
+    width:100%;
 }
 
 .seo-box{
@@ -186,50 +204,91 @@ iframe{
     }
 }
 
-@media(max-width:900px){
+@media (max-width:900px){
 
-    html,
     body{
-        padding:10px;
-        align-items:flex-start;
+        padding:8px;
     }
 
     .wrapper{
         grid-template-columns:1fr;
     }
 
-    .right{
-        order:1;
-    }
-
     .left{
-        order:2;
+        order:1;
         border-right:none;
-        border-top:1px solid #eee;
+        border-bottom:1px solid #eee;
     }
 
-    .actions{
-        flex-direction:column;
-    }
-
-    #map{
-        min-height:420px;
+    .right{
+        order:2;
     }
 
     .left,
     .right{
         padding:18px;
     }
+
+    .actions{
+        flex-direction:column;
+    }
+
+    button,
+    .action-link{
+        width:100%;
+        min-height:50px;
+    }
+
+    #map{
+        min-height:280px;
+    }
+
+    h1{
+        font-size:26px;
+    }
+
+    h2{
+        font-size:22px;
+    }
 }
+
+@media (max-width:480px){
+
+    body{
+        padding:5px;
+    }
+
+    .left,
+    .right{
+        padding:14px;
+    }
+
+    h1{
+        font-size:22px;
+    }
+
+    h2{
+        font-size:20px;
+    }
+
+    .info{
+        font-size:13px;
+    }
+
+    #map{
+        min-height:240px;
+    }
+}
+
 </style>
 
 <script type="application/ld+json">
 {
-  "@context":"https://schema.org",
-  "@type":"WebApplication",
-  "name":"IP no Mapa",
-  "applicationCategory":"UtilityApplication",
-  "description":"Ferramenta online para visualizar a localização aproximada de um endereço IP em um mapa."
+ "@context":"https://schema.org",
+ "@type":"WebApplication",
+ "name":"IP no Mapa",
+ "applicationCategory":"UtilityApplication",
+ "description":"Ferramenta online para visualizar a localização aproximada de um endereço IP em um mapa."
 }
 </script>
 
@@ -238,74 +297,71 @@ iframe{
 
 <div class="wrapper">
 
-    <!-- INFORMAÇÕES -->
-    <div class="left">
+<div class="left">
 
-        <h1>🗺️ IP no Mapa</h1>
+<h1>🗺️ IP no Mapa</h1>
 
-        <p class="subtitle">
-            Localização aproximada do seu IP em tempo real
-        </p>
+<p class="subtitle">
+Localização aproximada do seu IP em tempo real
+</p>
 
-        <a href="../../index.html" class="back">
-            ← Voltar
-        </a>
+<a href="../../index.html" class="back">
+← Voltar
+</a>
 
-        <div class="info" id="info">
-            ⏳ Carregando informações...
-        </div>
+<div class="info" id="info">
+⏳ Carregando informações...
+</div>
 
-        <div class="actions">
+<div class="actions">
 
-            <button class="primary" onclick="loadIP()">
-                🔄 Atualizar
-            </button>
+<button class="primary" onclick="loadIP()">
+🔄 Atualizar
+</button>
 
-            <button class="secondary" onclick="copyIP()">
-                📋 Copiar IP
-            </button>
+<button class="secondary" onclick="copyIP()">
+📋 Copiar IP
+</button>
 
-        </div>
+</div>
 
-        <div class="status" id="status"></div>
+<div class="status" id="status"></div>
 
-        <div class="warning">
-            ⚠️ A localização exibida é aproximada e baseada no endereço IP da conexão.
-            Ela normalmente representa a região do provedor de internet e não o endereço exato do usuário.
-        </div>
+<div class="warning">
+⚠️ A localização exibida é aproximada e baseada no endereço IP da conexão. Ela normalmente representa a região do provedor de internet e não o endereço exato do usuário.
+</div>
 
-    </div>
+</div>
 
-    <!-- MAPA -->
-    <div class="right">
+<div class="right">
 
-        <h2>Mapa</h2>
+<h2>Mapa</h2>
 
-        <div id="map"></div>
+<div id="map"></div>
 
-        <div id="mapButtonContainer" style="margin-top:15px;"></div>
+<div id="mapButtonContainer"></div>
 
-        <div class="seo-box">
+<div class="seo-box">
 
-            <h3>Como funciona a localização por IP?</h3>
+<h3>Como funciona a localização por IP?</h3>
 
-            <p>
-                A geolocalização por IP utiliza bancos de dados públicos para estimar a
-                localização associada a uma conexão de internet.
-            </p>
+<p>
+A geolocalização por IP utiliza bancos de dados públicos para estimar a localização associada a uma conexão de internet.
+</p>
 
-            <p>
-                Os resultados normalmente identificam a cidade, região e país do provedor
-                utilizado durante a consulta.
-            </p>
+<p>
+Os resultados normalmente identificam a cidade, região e país do provedor utilizado durante a consulta.
+</p>
 
-        </div>
+</div>
 
-    </div>
+</div>
 
 </div>
 
 <script>
+
+```javascript
 let currentIP = "";
 
 function countryFlag(code){
@@ -325,8 +381,12 @@ async function loadIP(){
 
     const info = document.getElementById("info");
     const status = document.getElementById("status");
+    const map = document.getElementById("map");
+    const mapButtonContainer =
+        document.getElementById("mapButtonContainer");
 
-    status.textContent = "Carregando localização...";
+    status.textContent =
+        "Carregando localização...";
 
     try{
 
@@ -337,27 +397,81 @@ async function loadIP(){
             }
         );
 
-        const data = await response.json();
+        if(!response.ok){
 
-        currentIP = data.ip || "";
+            throw new Error(
+                "Falha ao consultar API"
+            );
 
-        const flag = countryFlag(data.country_code);
+        }
+
+        const data =
+            await response.json();
+
+        currentIP =
+            data.ip || "";
+
+        const flag =
+            countryFlag(
+                data.country_code
+            );
 
         info.innerHTML = `
-            <strong>IP:</strong> ${data.ip || "-"}<br>
-            <strong>Cidade:</strong> ${data.city || "-"}<br>
-            <strong>Região:</strong> ${data.region || "-"}<br>
-            <strong>País:</strong> <span class="flag">${flag}</span> ${data.country_name || "-"}<br>
-            <strong>CEP:</strong> ${data.postal || "-"}<br>
-            <strong>Fuso:</strong> ${data.timezone || "-"}<br>
-            <strong>ISP:</strong> ${data.org || "-"}<br>
-            <strong>Latitude:</strong> ${data.latitude || "-"}<br>
-            <strong>Longitude:</strong> ${data.longitude || "-"}
+            <div>
+                <strong>IP:</strong>
+                ${data.ip || "-"}
+            </div>
+
+            <div>
+                <strong>Cidade:</strong>
+                ${data.city || "-"}
+            </div>
+
+            <div>
+                <strong>Região:</strong>
+                ${data.region || "-"}
+            </div>
+
+            <div>
+                <strong>País:</strong>
+                <span class="flag">
+                    ${flag}
+                </span>
+                ${data.country_name || "-"}
+            </div>
+
+            <div>
+                <strong>CEP:</strong>
+                ${data.postal || "-"}
+            </div>
+
+            <div>
+                <strong>Fuso:</strong>
+                ${data.timezone || "-"}
+            </div>
+
+            <div>
+                <strong>ISP:</strong>
+                ${data.org || "-"}
+            </div>
+
+            <div>
+                <strong>Latitude:</strong>
+                ${data.latitude || "-"}
+            </div>
+
+            <div>
+                <strong>Longitude:</strong>
+                ${data.longitude || "-"}
+            </div>
         `;
 
-        if(data.latitude && data.longitude){
+        if(
+            data.latitude &&
+            data.longitude
+        ){
 
-            document.getElementById("map").innerHTML = `
+            map.innerHTML = `
                 <iframe
                     loading="lazy"
                     allowfullscreen
@@ -366,14 +480,34 @@ async function loadIP(){
                 </iframe>
             `;
 
-            document.getElementById("mapButtonContainer").innerHTML = `
+            mapButtonContainer.innerHTML = `
                 <a
                     class="action-link secondary"
                     target="_blank"
+                    rel="noopener noreferrer"
                     href="https://www.google.com/maps?q=${data.latitude},${data.longitude}">
                     🗺️ Abrir no Google Maps
                 </a>
             `;
+
+        }else{
+
+            map.innerHTML = `
+                <div style="
+                    display:flex;
+                    justify-content:center;
+                    align-items:center;
+                    height:100%;
+                    color:#777;
+                    padding:20px;
+                    text-align:center;
+                ">
+                    Localização indisponível
+                </div>
+            `;
+
+            mapButtonContainer.innerHTML = "";
+
         }
 
         status.textContent =
@@ -381,40 +515,86 @@ async function loadIP(){
 
     }catch(error){
 
-        info.innerHTML =
-            "❌ Não foi possível obter as informações do IP.";
+        console.error(error);
+
+        info.innerHTML = `
+            <div>
+                ❌ Não foi possível obter as informações do IP.
+            </div>
+        `;
+
+        map.innerHTML = `
+            <div style="
+                display:flex;
+                justify-content:center;
+                align-items:center;
+                height:100%;
+                color:#777;
+                padding:20px;
+                text-align:center;
+            ">
+                Falha ao carregar o mapa
+            </div>
+        `;
+
+        mapButtonContainer.innerHTML = "";
 
         status.textContent = "";
 
-        document.getElementById("map").innerHTML = "";
     }
+
 }
 
 async function copyIP(){
 
-    if(!currentIP) return;
+    if(!currentIP){
+
+        alert(
+            "IP ainda não carregado."
+        );
+
+        return;
+
+    }
 
     try{
 
-        await navigator.clipboard.writeText(currentIP);
+        await navigator.clipboard.writeText(
+            currentIP
+        );
 
-        const status = document.getElementById("status");
-        const original = status.textContent;
+        const status =
+            document.getElementById(
+                "status"
+            );
 
-        status.textContent = "✔ IP copiado com sucesso";
+        const original =
+            status.textContent;
+
+        status.textContent =
+            "✔ IP copiado com sucesso";
 
         setTimeout(()=>{
-            status.textContent = original;
+
+            status.textContent =
+                original;
+
         },2000);
 
     }catch(error){
 
-        alert("Não foi possível copiar o IP.");
+        alert(
+            "Não foi possível copiar o IP."
+        );
+
     }
+
 }
 
 loadIP();
+
 </script>
 
 </body>
 </html>
+    
