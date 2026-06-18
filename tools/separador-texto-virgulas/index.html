@@ -3,21 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Separador de Texto por Vírgulas Online | UtiliWeb</title>
-
 <meta name="description" content="Converta listas em texto separado por vírgulas de forma rápida e gratuita com o UtiliWeb.">
 <meta name="keywords" content="utiliweb, separador de texto, vírgulas, lista, conversor">
-
 <link rel="stylesheet" href="../../assets/style.css">
-
 <style>
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
-
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
     background: linear-gradient(135deg, #2ecc71, #27ae60);
@@ -27,7 +22,6 @@ body {
     align-items: center;
     padding: 20px;
 }
-
 .wrapper {
     width: 100%;
     max-width: 1100px;
@@ -38,26 +32,21 @@ body {
     grid-template-columns: 1fr 1fr;
     box-shadow: 0 20px 60px rgba(0,0,0,0.25);
 }
-
 .left, .right {
     padding: 25px;
 }
-
 .left {
     border-right: 1px solid #eee;
 }
-
 h1 {
     font-size: 26px;
     margin-bottom: 5px;
 }
-
 .subtitle {
     color: #666;
     font-size: 14px;
     margin-bottom: 15px;
 }
-
 textarea {
     width: 100%;
     height: 220px;
@@ -66,12 +55,10 @@ textarea {
     border: 2px solid #ddd;
     resize: none;
 }
-
 textarea:focus {
     outline: none;
     border-color: #27ae60;
 }
-
 button {
     margin-top: 12px;
     padding: 12px;
@@ -80,18 +67,22 @@ button {
     cursor: pointer;
     font-weight: bold;
 }
-
 .primary {
     background: #27ae60;
     color: #fff;
 }
-
 .secondary {
     background: #fff;
     border: 2px solid #27ae60;
     color: #27ae60;
 }
-
+.copy-msg {
+    margin-top: 10px;
+    color: #27ae60;
+    font-size: 14px;
+    font-weight: 600;
+    display: none;
+}
 .result-box {
     background: #f6fff8;
     border: 1px solid #d7f5e3;
@@ -100,7 +91,6 @@ button {
     min-height: 200px;
     white-space: pre-wrap;
 }
-
 a {
     display: inline-block;
     margin-bottom: 10px;
@@ -108,71 +98,84 @@ a {
     color: #27ae60;
     font-weight: bold;
 }
-
 @media(max-width: 900px) {
     .wrapper {
         grid-template-columns: 1fr;
     }
-
     .left {
         border-right: none;
         border-bottom: 1px solid #eee;
     }
 }
 </style>
-
 </head>
-
 <body>
-
 <div class="wrapper">
-
     <!-- ESQUERDA -->
     <div class="left">
-
         <h1>🔗 Separador por Vírgulas</h1>
         <p class="subtitle">Transforme listas em texto separado por vírgulas</p>
-
         <a href="../../index.html">← Voltar</a>
-
         <textarea id="text" placeholder="Digite ou cole sua lista (1 item por linha)..."></textarea>
-
         <button class="primary" onclick="converter()">Converter</button>
         <button class="secondary" onclick="copiar()">Copiar</button>
-
+        <div class="copy-msg" id="copyMsg">✓ Texto copiado com sucesso</div>
     </div>
-
     <!-- DIREITA -->
     <div class="right">
-
         <h2>Resultado</h2>
-
-        <div class="result-box" id="resultado">O resultado aparecerá aqui...</div>
-
+        <div class="result-box" id="resultado" aria-live="polite">O resultado aparecerá aqui...</div>
     </div>
-
 </div>
-
 <script>
+
+const inputEl = document.getElementById("text");
+const resultadoEl = document.getElementById("resultado");
+const copyMsgEl = document.getElementById("copyMsg");
+
+const PLACEHOLDER_INICIAL = "O resultado aparecerá aqui...";
+const MENSAGEM_VAZIA = "Nenhum item encontrado.";
+
 function converter() {
 
-    const itens = document.getElementById("text").value
+    const itens = inputEl.value
         .split("\n")
         .map(i => i.trim())
         .filter(i => i);
 
-    document.getElementById("resultado").textContent =
-        itens.length ? itens.join(", ") : "Nenhum item encontrado.";
+    resultadoEl.textContent = itens.length
+        ? itens.join(", ")
+        : MENSAGEM_VAZIA;
 }
 
-function copiar() {
-    const texto = document.getElementById("resultado").textContent;
+async function copiar() {
 
-    if (!texto || texto.includes("aparecerá")) return;
+    const texto = resultadoEl.textContent.trim();
 
-    navigator.clipboard.writeText(texto);
+    if (
+        !texto ||
+        texto === PLACEHOLDER_INICIAL ||
+        texto === MENSAGEM_VAZIA
+    ) {
+        return;
+    }
+
+    try {
+
+        await navigator.clipboard.writeText(texto);
+
+        copyMsgEl.style.display = "block";
+
+        setTimeout(() => {
+            copyMsgEl.style.display = "none";
+        }, 2000);
+
+    } catch (error) {
+
+        alert("Não foi possível copiar o texto.");
+    }
 }
+
 </script>
-
 </body>
 </html>
