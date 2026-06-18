@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+<title>Gerador de Nomes para Bebê | UtiliWeb</title>
+
+<meta name="description" content="Encontre o nome perfeito para o seu bebê. Filtre por sexo, idioma, estilo e inicial.">
+<meta name="keywords" content="gerador nomes bebê, nomes menino, nomes menina, nomes neutros, utiliweb">
+
+<style>
+:root{
+    --pad: clamp(10px, 2vw, 20px);
+    --radius: 18px;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html, body{
+    width:100%;
+    min-height:100dvh;
+    font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial;
+    background:linear-gradient(135deg,#2ecc71,#27ae60);
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding:var(--pad);
+}
+
+.wrapper{
+    width:100%;
+    max-width:1000px;
+    background:#fff;
+    border-radius:var(--radius);
+    box-shadow:0 20px 60px rgba(0,0,0,.3);
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    overflow:hidden;
+    margin:auto;
+}
+
+.left-panel,
+.right-panel{
+    padding:clamp(16px, 3vw, 28px);
+}
+
+.left-panel{
+    border-right:1px solid #eee;
+}
+
+header h1{
+    font-size:clamp(20px, 2.2vw, 24px);
+}
+
+.subtitle{
+    font-size:clamp(12px, 1.4vw, 14px);
+    color:#777;
+    margin-bottom:10px;
+}
+
+a.back{
+    color:#27ae60;
+    text-decoration:none;
+    font-size:13px;
+    font-weight:600;
+    display:inline-block;
+    margin-bottom:16px;
+}
+
+a.back:hover{
+    text-decoration:underline;
+}
+
+.sec-label{
+    font-size:11px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.5px;
+    color:#444;
+    margin-bottom:8px;
+    margin-top:16px;
+    padding-bottom:4px;
+    border-bottom:2px solid #27ae60;
+}
+
+.tog-row{
+    display:grid;
+    gap:6px;
+    margin-bottom:4px;
+}
+
+.tg2{ grid-template-columns:1fr 1fr; }
+.tg3{ grid-template-columns:1fr 1fr 1fr; }
+.tg4{ grid-template-columns:1fr 1fr 1fr 1fr; }
+
+.tog{
+    padding:9px 6px;
+    font-size:12px;
+    background:#fff;
+    border:2px solid #ddd;
+    border-radius:8px;
+    cursor:pointer;
+    color:#555;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.3px;
+    transition:all .15s;
+    font-family:inherit;
+}
+
+.tog:hover{
+    border-color:#27ae60;
+    color:#27ae60;
+}
+
+.tog.active{
+    background:#27ae60;
+    color:#fff;
+    border-color:#27ae60;
+}
+
+label{
+    font-size:12px;
+    font-weight:700;
+    display:block;
+    margin-top:14px;
+    margin-bottom:6px;
+    color:#444;
+}
+
+select, input[type=text]{
+    width:100%;
+    padding:11px 12px;
+    border-radius:10px;
+    border:2px solid #ddd;
+    font-size:14px;
+    outline:none;
+    font-family:inherit;
+    color:#1a1a1a;
+    background:#fff;
+}
+
+select:focus, input[type=text]:focus{
+    border-color:#27ae60;
+}
+
+.qty-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-top:14px;
+    margin-bottom:4px;
+}
+
+.qty-row label{
+    margin:0;
+    white-space:nowrap;
+    font-size:12px;
+}
+
+input[type=range]{
+    flex:1;
+    accent-color:#27ae60;
+}
+
+.qty-val{
+    font-size:14px;
+    font-weight:700;
+    min-width:24px;
+    color:#27ae60;
+}
+
+.info-box{
+    background:#f0faf4;
+    border-left:4px solid #27ae60;
+    border-radius:0 8px 8px 0;
+    padding:10px 12px;
+    font-size:12px;
+    color:#2d6a4f;
+    margin-top:16px;
+    line-height:1.5;
+}
+
+button.gen-btn{
+    width:100%;
+    margin-top:16px;
+    padding:13px;
+    border:none;
+    border-radius:10px;
+    background:#27ae60;
+    color:#fff;
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
+    font-family:inherit;
+    transition:opacity .15s, transform .1s;
+    min-height:44px;
+    touch-action:manipulation;
+}
+
+button.gen-btn:hover{ opacity:.92; }
+button.gen-btn:active{ transform:scale(.98); }
+
+/* DIREITA */
+.right-panel{
+    background:#eafaf1;
+}
+
+.right-panel h2{
+    font-size:18px;
+    margin-bottom:6px;
+}
+
+.btn-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+    margin-bottom:14px;
+    margin-top:14px;
+}
+
+.sec-btn{
+    padding:9px;
+    font-size:12px;
+    background:#fff;
+    border:2px solid #27ae60;
+    border-radius:8px;
+    cursor:pointer;
+    color:#27ae60;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.3px;
+    transition:all .15s;
+    font-family:inherit;
+    min-height:40px;
+    touch-action:manipulation;
+}
+
+.sec-btn:active{ background:#eafaf1; }
+
+.names-list{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.name-card{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:10px 14px;
+    background:#fff;
+    border:1px solid #c8e6c9;
+    border-radius:8px;
+    transition:border-color .15s;
+}
+
+.name-card:hover{ border-color:#27ae60; }
+
+.name-text{
+    font-size:16px;
+    font-weight:700;
+    color:#1b5e20;
+}
+
+.name-origin{
+    font-size:11px;
+    color:#388e3c;
+    margin-top:2px;
+}
+
+.name-actions{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.copy-btn{
+    background:transparent;
+    border:1px solid #c8e6c9;
+    border-radius:6px;
+    padding:4px 9px;
+    font-size:11px;
+    color:#2d6a4f;
+    cursor:pointer;
+    font-weight:700;
+    transition:all .15s;
+    font-family:inherit;
+}
+
+.copy-btn:hover{ background:#eafaf1; }
+
+.fav-btn{
+    background:transparent;
+    border:none;
+    cursor:pointer;
+    font-size:18px;
+    padding:4px;
+    color:#c8e6c9;
+    line-height:1;
+    transition:color .15s;
+}
+
+.fav-btn.faved{ color:#27ae60; }
+
+.empty-state{
+    text-align:center;
+    padding:2rem 1rem;
+    color:#388e3c;
+    font-size:13px;
+    background:#fff;
+    border-radius:8px;
+    border:1px dashed #c8e6c9;
+}
+
+.favs-section{
+    margin-top:16px;
+    padding-top:14px;
+    border-top:1px solid #c8e6c9;
+}
+
+.favs-title{
+    font-size:11px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.5px;
+    color:#27ae60;
+    margin-bottom:8px;
+}
+
+.count-badge{
+    display:inline-block;
+    background:#27ae60;
+    color:#fff;
+    font-size:10px;
+    font-weight:700;
+    border-radius:20px;
+    padding:1px 7px;
+    margin-left:6px;
+    vertical-align:middle;
+}
+
+.fav-pills{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+}
+
+.fav-pill{
+    padding:5px 12px;
+    background:#fff;
+    border:1.5px solid #27ae60;
+    border-radius:20px;
+    font-size:13px;
+    color:#1b5e20;
+    cursor:pointer;
+    font-weight:500;
+    transition:all .15s;
+}
+
+.fav-pill:hover{ background:#eafaf1; }
+
+.disclaimer{
+    font-size:10px;
+    color:#388e3c;
+    margin-top:16px;
+    line-height:1.5;
+    font-style:italic;
+}
+
+@media(max-width:900px){
+    .wrapper{ grid-template-columns:1fr; }
+    .left-panel{ border-right:none; border-bottom:1px solid #eee; }
+    .tg4{ grid-template-columns:1fr 1fr; }
+}
+
+@media(max-width:480px){
+    .tg3{ grid-template-columns:1fr 1fr; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+    <!-- ESQUERDA -->
+    <div class="left-panel">
+
+        <header>
+            <h1>🍼 Gerador de Nomes para Bebê</h1>
+            <p class="subtitle">Encontre o nome perfeito</p>
+        </header>
+
+        <a class="back" href="../../index.html">← Voltar</a>
+
+        <div class="info-box">
+            <strong>Dica:</strong> Escolha o sexo, o idioma de origem e o estilo para filtrar os nomes. Salve seus favoritos clicando no coração ♡.
+        </div>
+
+        <div class="sec-label">Sexo</div>
+        <div class="tog-row tg3">
+            <button class="tog active" id="sx-m" onclick="setSexo('M')">♂ Menino</button>
+            <button class="tog" id="sx-f" onclick="setSexo('F')">♀ Menina</button>
+            <button class="tog" id="sx-u" onclick="setSexo('U')">⚧ Neutro</button>
+        </div>
+
+        <div class="sec-label">Idioma / origem</div>
+        <select id="lang" onchange="render()">
+            <option value="all">Todos os idiomas</option>
+            <option value="pt">Português</option>
+            <option value="en">Inglês</option>
+            <option value="es">Espanhol</option>
+            <option value="fr">Francês</option>
+            <option value="it">Italiano</option>
+            <option value="de">Alemão</option>
+            <option value="ja">Japonês</option>
+            <option value="ar">Árabe</option>
+            <option value="he">Hebraico</option>
+            <option value="la">Latino / clássico</option>
+            <option value="scan">Escandinavo</option>
+            <option value="cel">Celta / irlandês</option>
+        </select>
+
+        <div class="sec-label">Estilo</div>
+        <div class="tog-row tg4">
+            <button class="tog active" id="st-all" onclick="setEstilo('all')">Todos</button>
+            <button class="tog" id="st-class" onclick="setEstilo('class')">Clássico</button>
+            <button class="tog" id="st-mod" onclick="setEstilo('mod')">Moderno</button>
+            <button class="tog" id="st-rare" onclick="setEstilo('rare')">Raro</button>
+        </div>
+
+        <label for="inicial">Inicial (opcional)</label>
+        <input type="text" id="inicial" maxlength="1" placeholder="Ex: A, B, C…" oninput="this.value=this.value.toUpperCase();render()">
+
+        <div class="qty-row">
+            <label for="qty">Quantidade</label>
+            <input type="range" id="qty" min="5" max="20" value="10" step="1" oninput="document.getElementById('qty-val').textContent=this.value;render()">
+            <span class="qty-val" id="qty-val">10</span>
+        </div>
+
+        <button class="gen-btn" onclick="gerar()">✨ Gerar nomes</button>
+
+    </div>
+
+    <!-- DIREITA -->
+    <div class="right-panel">
+
+        <h2>Resultados</h2>
+
+        <div class="btn-row">
+            <button class="sec-btn" onclick="gerar()">↺ Novos nomes</button>
+            <button class="sec-btn" id="copy-all-btn" onclick="copiarTodos()">⎘ Copiar lista</button>
+        </div>
+
+        <div class="names-list" id="names-list">
+            <div class="empty-state">Configure os filtros e clique em <strong>Gerar nomes</strong></div>
+        </div>
+
+        <div class="favs-section" id="favs-section" style="display:none">
+            <div class="favs-title">♥ Favoritos <span class="count-badge" id="fav-count">0</span></div>
+            <div class="fav-pills" id="fav-pills"></div>
+        </div>
+
+        <p class="disclaimer">Esta ferramenta oferece sugestões de nomes para inspirar os pais. A escolha final é sempre uma decisão pessoal e afetiva.</p>
+
+    </div>
+
+</div>
+
+<script>
+const DB={
+  M:{
+    pt:[{n:'Miguel',s:'class',m:'Hebraico — "quem é como Deus"'},{n:'Arthur',s:'class',m:'Celta — "urso"'},{n:'Théo',s:'mod',m:'Grego — "presente de Deus"'},{n:'Davi',s:'class',m:'Hebraico — "amado"'},{n:'Gabriel',s:'class',m:'Hebraico — "homem de Deus"'},{n:'Bernardo',s:'class',m:'Germânico — "urso forte"'},{n:'Lucas',s:'class',m:'Latino — "aquele que traz luz"'},{n:'Mateus',s:'class',m:'Hebraico — "presente de Deus"'},{n:'Pedro',s:'class',m:'Grego — "pedra"'},{n:'Henrique',s:'class',m:'Germânico — "líder do lar"'},{n:'Vinícius',s:'mod',m:'Latino — "da videira"'},{n:'Enzo',s:'mod',m:'Italiano — muito popular no Brasil'},{n:'Cauã',s:'mod',m:'Tupi-guarani — "gavião"'},{n:'Caio',s:'class',m:'Latino clássico'},{n:'Ravi',s:'rare',m:'Sânscrito — "sol"'},{n:'Zion',s:'rare',m:'Hebraico — "terra prometida"'},{n:'Bento',s:'class',m:'Latino — "abençoado"'},{n:'Iago',s:'rare',m:'Galego — variante de Tiago'},{n:'Murilo',s:'mod',m:'Latino — "pequeno muro"'},{n:'Heitor',s:'class',m:'Grego — "aquele que resiste"'}],
+    en:[{n:'Liam',s:'mod',m:'Irlandês — "vontade forte"'},{n:'Noah',s:'class',m:'Hebraico — "descanso"'},{n:'Oliver',s:'class',m:'Nórdico — "exército élfico"'},{n:'Elijah',s:'class',m:'Hebraico — "meu Deus é Javé"'},{n:'James',s:'class',m:'Inglês clássico, muito tradicional'},{n:'Aiden',s:'mod',m:'Irlandês — "pequeno fogo"'},{n:'Ethan',s:'class',m:'Hebraico — "forte e firme"'},{n:'Finn',s:'rare',m:'Irlandês — "branco, justo"'},{n:'Jasper',s:'rare',m:'Persa — "tesouro"'},{n:'Atticus',s:'rare',m:'Latino — "de Atenas"'},{n:'Ezra',s:'mod',m:'Hebraico — "ajuda"'},{n:'Silas',s:'rare',m:'Latino — "floresta"'},{n:'Felix',s:'class',m:'Latino — "feliz, afortunado"'},{n:'Bodhi',s:'rare',m:'Sânscrito — "iluminação"'},{n:'Rowan',s:'mod',m:'Irlandês — "árvore de rowan"'},{n:'Archer',s:'mod',m:'Inglês — "arqueiro"'},{n:'Caspian',s:'rare',m:'Inspirado no Mar Cáspio'},{n:'Logan',s:'mod',m:'Escocês — "pequena caverna"'},{n:'Theo',s:'mod',m:'Grego — "presente de Deus"'},{n:'Mason',s:'mod',m:'Inglês — "pedreiro"'}],
+    es:[{n:'Mateo',s:'class',m:'Hebraico — "presente de Deus"'},{n:'Santiago',s:'class',m:'Hebraico — "Deus protege"'},{n:'Sebastián',s:'class',m:'Grego — "reverenciado"'},{n:'Nicolás',s:'class',m:'Grego — "vitória do povo"'},{n:'Diego',s:'class',m:'Espanhol — variante de Tiago'},{n:'Alejandro',s:'class',m:'Grego — "defensor dos homens"'},{n:'Emilio',s:'class',m:'Latino — "rival, esforçado"'},{n:'Martín',s:'mod',m:'Latino — "de Marte, guerreiro"'},{n:'Valentín',s:'mod',m:'Latino — "saudável, forte"'},{n:'Ignacio',s:'rare',m:'Latino — "ardente"'},{n:'Tadeo',s:'rare',m:'Aramaico — "coração corajoso"'},{n:'Rodrigo',s:'class',m:'Germânico — "glória famosa"'}],
+    fr:[{n:'Léo',s:'mod',m:'Latino — "leão"'},{n:'Louis',s:'class',m:'Germânico — "guerreiro famoso"'},{n:'Hugo',s:'class',m:'Germânico — "espírito, mente"'},{n:'Raphaël',s:'class',m:'Hebraico — "Deus curou"'},{n:'Antoine',s:'class',m:'Latino — forma francesa de Antônio'},{n:'Théodore',s:'class',m:'Grego — "presente de Deus"'},{n:'Axel',s:'mod',m:'Escandinavo — "paz divina"'},{n:'Florian',s:'rare',m:'Latino — "florescente"'},{n:'Maël',s:'rare',m:'Celta bretão — "príncipe, chefe"'},{n:'Titouan',s:'rare',m:'Bretão — variante de Tito'}],
+    it:[{n:'Leonardo',s:'class',m:'Germânico — "leão corajoso"'},{n:'Francesco',s:'class',m:'Latino — "homem livre"'},{n:'Alessandro',s:'class',m:'Grego — "defensor dos homens"'},{n:'Matteo',s:'class',m:'Hebraico — "presente de Deus"'},{n:'Lorenzo',s:'class',m:'Latino — "da cidade de Laurento"'},{n:'Luca',s:'mod',m:'Latino — "aquele que traz luz"'},{n:'Nico',s:'mod',m:'Grego — "vitória do povo"'},{n:'Giulio',s:'rare',m:'Latino clássico — família Júlia'},{n:'Emanuele',s:'rare',m:'Hebraico — "Deus está conosco"'}],
+    de:[{n:'Lukas',s:'class',m:'Latino — "aquele que traz luz"'},{n:'Felix',s:'class',m:'Latino — "feliz"'},{n:'Leon',s:'mod',m:'Grego/Latino — "leão"'},{n:'Elias',s:'class',m:'Hebraico — "meu Deus é Javé"'},{n:'Niklas',s:'mod',m:'Grego — "vitória do povo"'},{n:'Finn',s:'mod',m:'Irlandês/nórdico — "branco"'},{n:'Klaus',s:'class',m:'Alemão — variante de Nicolaus'},{n:'Levin',s:'rare',m:'Germânico — "amigo querido"'},{n:'Thilo',s:'rare',m:'Germânico — "povo poderoso"'}],
+    ja:[{n:'Haruto',s:'mod',m:'Japonês — "sol, voar"'},{n:'Yuto',s:'mod',m:'Japonês — "gentil, voar"'},{n:'Sota',s:'mod',m:'Japonês — "céu amplo"'},{n:'Ren',s:'class',m:'Japonês — "lótus"'},{n:'Kaito',s:'mod',m:'Japonês — "oceano, pipa"'},{n:'Riku',s:'mod',m:'Japonês — "terra"'},{n:'Sora',s:'rare',m:'Japonês — "céu"'},{n:'Hayato',s:'rare',m:'Japonês — "pessoa rápida"'},{n:'Takumi',s:'class',m:'Japonês — "habilidoso, artesão"'},{n:'Kenji',s:'class',m:'Japonês — "segundo filho inteligente"'}],
+    ar:[{n:'Omar',s:'class',m:'Árabe — "longa vida"'},{n:'Karim',s:'class',m:'Árabe — "generoso"'},{n:'Idris',s:'rare',m:'Árabe — "estudioso"'},{n:'Tariq',s:'class',m:'Árabe — "aquele que bate à porta"'},{n:'Zaid',s:'mod',m:'Árabe — "crescimento, abundância"'},{n:'Hamza',s:'class',m:'Árabe — "leão"'},{n:'Khalil',s:'rare',m:'Árabe — "amigo íntimo"'},{n:'Nasir',s:'class',m:'Árabe — "protetor, defensor"'}],
+    he:[{n:'Eitan',s:'class',m:'Hebraico — "forte e firme"'},{n:'Noam',s:'mod',m:'Hebraico — "doçura, prazer"'},{n:'Ariel',s:'class',m:'Hebraico — "leão de Deus"'},{n:'Lior',s:'rare',m:'Hebraico — "minha luz"'},{n:'Oren',s:'rare',m:'Hebraico — "pinheiro"'},{n:'Gal',s:'mod',m:'Hebraico — "onda do mar"'}],
+    la:[{n:'Aurelius',s:'rare',m:'Latino — "dourado"'},{n:'Maximus',s:'class',m:'Latino — "o maior"'},{n:'Lucius',s:'rare',m:'Latino — "luz"'},{n:'Cassius',s:'rare',m:'Latino — "vazio"'},{n:'Julius',s:'class',m:'Latino — da família Júlia'},{n:'Titus',s:'class',m:'Latino — significado incerto'},{n:'Cato',s:'rare',m:'Latino — "sábio"'}],
+    scan:[{n:'Björn',s:'class',m:'Nórdico — "urso"'},{n:'Erik',s:'class',m:'Nórdico — "governante eterno"'},{n:'Leif',s:'class',m:'Nórdico — "herdeiro"'},{n:'Sven',s:'class',m:'Sueco — "jovem guerreiro"'},{n:'Gunnar',s:'class',m:'Nórdico — "guerreiro de batalha"'},{n:'Ragnar',s:'rare',m:'Nórdico — "guerreiro sábio"'},{n:'Axel',s:'mod',m:'Nórdico — "paz divina"'},{n:'Vidar',s:'rare',m:'Nórdico — "guerreiro da floresta"'},{n:'Torsten',s:'rare',m:'Nórdico — "pedra de Thor"'}],
+    cel:[{n:'Ciarán',s:'class',m:'Irlandês — "moreno"'},{n:'Fionn',s:'class',m:'Irlandês — "branco, justo"'},{n:'Cormac',s:'rare',m:'Irlandês — "filho de Corb"'},{n:'Tadhg',s:'rare',m:'Irlandês — "poeta"'},{n:'Oisín',s:'rare',m:'Irlandês — "veadinho"'},{n:'Rían',s:'mod',m:'Irlandês — "pequeno rei"'}],
+  },
+  F:{
+    pt:[{n:'Sofia',s:'class',m:'Grego — "sabedoria"'},{n:'Helena',s:'class',m:'Grego — "luz radiante"'},{n:'Alice',s:'mod',m:'Germânico — "de nobre linhagem"'},{n:'Laura',s:'class',m:'Latino — "loureiro"'},{n:'Valentina',s:'mod',m:'Latino — "forte e saudável"'},{n:'Isabela',s:'class',m:'Hebraico — "Deus é minha promessa"'},{n:'Manuela',s:'class',m:'Hebraico — "Deus está conosco"'},{n:'Beatriz',s:'class',m:'Latino — "viajante abençoada"'},{n:'Cecília',s:'class',m:'Latino — padroeira da música'},{n:'Luísa',s:'class',m:'Germânico — "guerreira famosa"'},{n:'Lívia',s:'mod',m:'Latino — "azulado"'},{n:'Ayla',s:'rare',m:'Turco/hebraico — "halo da lua"'},{n:'Isis',s:'rare',m:'Egípcio — "deusa do trono"'},{n:'Antonella',s:'mod',m:'Latino/italiano — feminino de Antônio'},{n:'Bianca',s:'class',m:'Italiano — "branca, pura"'},{n:'Marina',s:'class',m:'Latino — "do mar"'},{n:'Clara',s:'class',m:'Latino — "clara, brilhante"'},{n:'Yara',s:'rare',m:'Tupi — "mãe d\'água"'},{n:'Lorena',s:'mod',m:'Latino — variante de Laura'},{n:'Ana Luiza',s:'class',m:'Composto muito popular no Brasil'}],
+    en:[{n:'Emma',s:'class',m:'Germânico — "todo, universal"'},{n:'Olivia',s:'mod',m:'Latino — "oliveira"'},{n:'Ava',s:'mod',m:'Latino/hebraico — "vida"'},{n:'Sophia',s:'class',m:'Grego — "sabedoria"'},{n:'Isabella',s:'class',m:'Hebraico — "Deus é minha promessa"'},{n:'Mia',s:'mod',m:'Escandinavo/italiano — "minha"'},{n:'Charlotte',s:'class',m:'Francês — feminino de Carlos'},{n:'Amelia',s:'class',m:'Germânico — "trabalho"'},{n:'Luna',s:'mod',m:'Latino — "lua"'},{n:'Harper',s:'mod',m:'Inglês — "tocadora de harpa"'},{n:'Violet',s:'rare',m:'Latino — "violeta"'},{n:'Willow',s:'rare',m:'Inglês — "árvore salgueiro"'},{n:'Isla',s:'rare',m:'Escocês — "ilha"'},{n:'Aurora',s:'mod',m:'Latino — "aurora, amanhecer"'},{n:'Wren',s:'rare',m:'Inglês — "carriça, passarinho"'},{n:'Sage',s:'rare',m:'Inglês — "sábia"'},{n:'Eloise',s:'rare',m:'Francês — "saúde, ampla"'},{n:'Piper',s:'mod',m:'Inglês — "tocadora de flauta"'}],
+    es:[{n:'Valentina',s:'mod',m:'Latino — "forte e saudável"'},{n:'Sofía',s:'class',m:'Grego — "sabedoria"'},{n:'Camila',s:'mod',m:'Latino — "serva do templo"'},{n:'Lucía',s:'class',m:'Latino — "luz"'},{n:'Valeria',s:'class',m:'Latino — "forte, saudável"'},{n:'Isabella',s:'class',m:'Hebraico — "Deus é minha promessa"'},{n:'Martina',s:'mod',m:'Latino — "de Marte"'},{n:'Elena',s:'class',m:'Grego — "luz radiante"'},{n:'Daniela',s:'class',m:'Hebraico — "Deus é meu juiz"'},{n:'Renata',s:'rare',m:'Latino — "renascida"'},{n:'Ximena',s:'rare',m:'Basco — "que escuta"'}],
+    fr:[{n:'Chloé',s:'class',m:'Grego — "florescer"'},{n:'Camille',s:'class',m:'Latino — "serva do templo"'},{n:'Léa',s:'mod',m:'Hebraico — "dominante"'},{n:'Manon',s:'mod',m:'Francês — diminutivo de Marie'},{n:'Inès',s:'class',m:'Grego — "pura, casta"'},{n:'Juliette',s:'class',m:'Latino — "jovem"'},{n:'Élise',s:'class',m:'Hebraico — "Deus é minha promessa"'},{n:'Anaïs',s:'rare',m:'Hebraico/francês — variante de Ana'},{n:'Maëlle',s:'rare',m:'Celta bretão — "princesa"'},{n:'Eléonore',s:'rare',m:'Provençal — "compaixão"'}],
+    it:[{n:'Giulia',s:'class',m:'Latino — da família Júlia'},{n:'Martina',s:'class',m:'Latino — "de Marte"'},{n:'Sofia',s:'class',m:'Grego — "sabedoria"'},{n:'Aurora',s:'mod',m:'Latino — "aurora"'},{n:'Chiara',s:'class',m:'Latino — "clara, brilhante"'},{n:'Valentina',s:'mod',m:'Latino — "forte"'},{n:'Beatrice',s:'class',m:'Latino — "abençoada"'},{n:'Fiamma',s:'rare',m:'Italiano — "chama de fogo"'},{n:'Ornella',s:'rare',m:'Italiano — "floração de freixo"'}],
+    de:[{n:'Mia',s:'mod',m:'Escandinavo — "amada"'},{n:'Emma',s:'class',m:'Germânico — "todo, universal"'},{n:'Hannah',s:'class',m:'Hebraico — "graça"'},{n:'Lea',s:'mod',m:'Hebraico — "cansada"'},{n:'Luisa',s:'class',m:'Germânico — "guerreira famosa"'},{n:'Lena',s:'mod',m:'Grego — "luz, brilho"'},{n:'Johanna',s:'class',m:'Hebraico — "Deus é gracioso"'},{n:'Frieda',s:'rare',m:'Germânico — "paz"'},{n:'Hedwig',s:'rare',m:'Germânico — "luta, batalha"'}],
+    ja:[{n:'Yui',s:'mod',m:'Japonês — "amor, dependência"'},{n:'Hana',s:'class',m:'Japonês — "flor"'},{n:'Sakura',s:'mod',m:'Japonês — "flor de cerejeira"'},{n:'Aoi',s:'class',m:'Japonês — "azul, malva"'},{n:'Rin',s:'mod',m:'Japonês — "digna, fria"'},{n:'Yuna',s:'mod',m:'Japonês — "suave"'},{n:'Koharu',s:'rare',m:'Japonês — "coração pequeno"'},{n:'Noa',s:'mod',m:'Japonês — "amar"'},{n:'Miyu',s:'rare',m:'Japonês — "futuro gentil"'}],
+    ar:[{n:'Layla',s:'class',m:'Árabe — "noite"'},{n:'Fatima',s:'class',m:'Árabe — "abstinente"'},{n:'Nour',s:'mod',m:'Árabe — "luz"'},{n:'Yasmin',s:'class',m:'Árabe/persa — "jasmim"'},{n:'Amira',s:'class',m:'Árabe — "princesa"'},{n:'Salma',s:'rare',m:'Árabe — "pacífica"'},{n:'Rania',s:'mod',m:'Árabe — "contente"'},{n:'Zara',s:'mod',m:'Árabe/hebraico — "princesa, flor"'}],
+    he:[{n:'Tamar',s:'class',m:'Hebraico — "tamareira"'},{n:'Noa',s:'mod',m:'Hebraico — "movimento"'},{n:'Shira',s:'rare',m:'Hebraico — "canção"'},{n:'Liora',s:'rare',m:'Hebraico — "minha luz"'},{n:'Avital',s:'rare',m:'Hebraico — "meu pai é orvalho"'},{n:'Yael',s:'class',m:'Hebraico — "cabra montesa"'}],
+    la:[{n:'Aurora',s:'class',m:'Latino — "deusa da aurora"'},{n:'Luna',s:'class',m:'Latino — "lua"'},{n:'Flora',s:'class',m:'Latino — "flor"'},{n:'Serena',s:'class',m:'Latino — "serena, calma"'},{n:'Celeste',s:'mod',m:'Latino — "celestial"'},{n:'Victoria',s:'class',m:'Latino — "vitória"'},{n:'Diana',s:'class',m:'Latino — "deusa da caça"'}],
+    scan:[{n:'Astrid',s:'class',m:'Nórdico — "beleza divina"'},{n:'Freya',s:'class',m:'Nórdico — "deusa do amor"'},{n:'Sigrid',s:'class',m:'Nórdico — "vitória bela"'},{n:'Ingrid',s:'class',m:'Nórdico — "bela de Ing"'},{n:'Brynja',s:'rare',m:'Nórdico — "armadura"'},{n:'Solveig',s:'rare',m:'Nórdico — "força solar"'},{n:'Saga',s:'rare',m:'Nórdico — "deusa da sabedoria"'}],
+    cel:[{n:'Aoife',s:'class',m:'Irlandês — "bela, radiante"'},{n:'Siobhán',s:'class',m:'Irlandês — "Deus é gracioso"'},{n:'Niamh',s:'class',m:'Irlandês — "brilhante"'},{n:'Caoimhe',s:'rare',m:'Irlandês — "gentil, bela"'},{n:'Saoirse',s:'rare',m:'Irlandês — "liberdade"'},{n:'Éabha',s:'rare',m:'Irlandês — forma de Eva'}],
+  },
+  U:{
+    all:[{n:'Kai',s:'mod',m:'Havaiano — "mar"'},{n:'Ariel',s:'class',m:'Hebraico — "leão de Deus"'},{n:'Phoenix',s:'rare',m:'Grego — "ave fênix"'},{n:'Eden',s:'class',m:'Hebraico — "paraíso"'},{n:'River',s:'mod',m:'Inglês — "rio"'},{n:'Sage',s:'rare',m:'Inglês — "sábio"'},{n:'Quinn',s:'mod',m:'Irlandês — "inteligente"'},{n:'Noel',s:'class',m:'Francês — "Natal"'},{n:'Sasha',s:'mod',m:'Russo — variante de Alexandre'},{n:'Remy',s:'mod',m:'Francês — "remador"'},{n:'Celeste',s:'mod',m:'Latino — "celestial"'},{n:'Rowan',s:'mod',m:'Irlandês — "árvore de rowan"'},{n:'Elliot',s:'mod',m:'Inglês — "Deus no alto"'},{n:'Skyler',s:'rare',m:'Holandês — "erudito"'},{n:'Noa',s:'mod',m:'Hebraico — "movimento"'},{n:'Nour',s:'mod',m:'Árabe — "luz"'},{n:'Finley',s:'mod',m:'Escocês — "guerreiro justo"'},{n:'Avery',s:'mod',m:'Inglês — "governante élfico"'},{n:'Morgan',s:'rare',m:'Celta — "do mar"'},{n:'Luca',s:'mod',m:'Latino — "luz"'}],
+    pt:[{n:'Ariel',s:'class',m:'Hebraico — "leão de Deus"'},{n:'Eden',s:'class',m:'Hebraico — "paraíso"'},{n:'Kai',s:'mod',m:'Havaiano — "mar"'},{n:'Noel',s:'class',m:'Francês — "Natal"'},{n:'Sasha',s:'mod',m:'Russo — variante de Alexandre'},{n:'Índigo',s:'rare',m:'Grego — "cor azul índigo"'}],
+    en:[{n:'Avery',s:'mod',m:'Inglês — "governante élfico"'},{n:'River',s:'mod',m:'Inglês — "rio"'},{n:'Sage',s:'rare',m:'Inglês — "sábio"'},{n:'Quinn',s:'mod',m:'Irlandês — "inteligente"'},{n:'Rowan',s:'mod',m:'Irlandês — "árvore de rowan"'},{n:'Finley',s:'mod',m:'Escocês — "guerreiro justo"'},{n:'Elliot',s:'mod',m:'Inglês — "Deus no alto"'},{n:'Riley',s:'mod',m:'Irlandês — "corajoso"'},{n:'Skyler',s:'rare',m:'Holandês — "erudito"'},{n:'Phoenix',s:'rare',m:'Grego — "a ave fênix"'}],
+    fr:[{n:'Camille',s:'class',m:'Latino — "serva do templo"'},{n:'Claude',s:'class',m:'Latino — da família Cláudia'},{n:'Dominique',s:'class',m:'Latino — "do Senhor"'},{n:'Alexis',s:'mod',m:'Grego — "defensor"'},{n:'Morgan',s:'rare',m:'Celta — "do mar"'}],
+    ja:[{n:'Haru',s:'mod',m:'Japonês — "primavera"'},{n:'Noa',s:'mod',m:'Japonês — "amar"'},{n:'Sora',s:'rare',m:'Japonês — "céu"'},{n:'Yuki',s:'class',m:'Japonês — "felicidade, neve"'},{n:'Rei',s:'rare',m:'Japonês — "argola, lei"'}],
+    he:[{n:'Noa',s:'mod',m:'Hebraico — "movimento"'},{n:'Gal',s:'mod',m:'Hebraico — "onda"'},{n:'Lior',s:'rare',m:'Hebraico — "minha luz"'},{n:'Ariel',s:'class',m:'Hebraico — "leão de Deus"'}],
+    ar:[{n:'Nour',s:'mod',m:'Árabe — "luz"'},{n:'Amal',s:'class',m:'Árabe — "esperança"'}],
+    la:[{n:'Celeste',s:'mod',m:'Latino — "celestial"'},{n:'Felix',s:'class',m:'Latino — "feliz"'},{n:'Serene',s:'rare',m:'Latino — "serena"'}],
+    scan:[{n:'Signe',s:'rare',m:'Nórdico — "nova vitória"'},{n:'Birger',s:'rare',m:'Nórdico — "proteção"'}],
+    cel:[{n:'Rían',s:'mod',m:'Irlandês — "pequeno rei"'},{n:'Morgan',s:'rare',m:'Celta — "nascido do mar"'}],
+    es:[{n:'Ariel',s:'class',m:'Hebraico — "leão de Deus"'},{n:'Alex',s:'mod',m:'Grego — "defensor"'},{n:'Eden',s:'class',m:'Hebraico — "paraíso"'},{n:'Nico',s:'mod',m:'Grego — "vitória do povo"'}],
+    it:[{n:'Andrea',s:'class',m:'Grego — "guerreiro corajoso"'},{n:'Nico',s:'mod',m:'Grego — "vitória"'},{n:'Luca',s:'mod',m:'Latino — "luz"'},{n:'Celeste',s:'mod',m:'Latino — "celestial"'}],
+    de:[{n:'Finn',s:'mod',m:'Nórdico — "branco"'},{n:'Alex',s:'mod',m:'Grego — "defensor"'},{n:'Kim',s:'mod',m:'Escandinavo — "chefe guerreiro"'}],
+  }
+};
+
+let sexo='M', estilo='all', favs=[], shown=[];
+
+function setSexo(s){
+    sexo=s;
+    document.getElementById('sx-m').className='tog'+(s==='M'?' active':'');
+    document.getElementById('sx-f').className='tog'+(s==='F'?' active':'');
+    document.getElementById('sx-u').className='tog'+(s==='U'?' active':'');
+    render();
+}
+
+function setEstilo(e){
+    estilo=e;
+    ['all','class','mod','rare'].forEach(x=>document.getElementById('st-'+x).classList.toggle('active',x===e));
+    render();
+}
+
+function getPool(){
+    const lang=document.getElementById('lang').value;
+    const src=DB[sexo];
+    let pool=[];
+    if(lang==='all'){
+        if(sexo==='U'&&src.all) pool=[...src.all];
+        else Object.values(src).forEach(arr=>pool.push(...arr));
+    } else {
+        pool=[...(src[lang]||(sexo==='U'?src.all:[]))];
+    }
+    if(estilo!=='all') pool=pool.filter(x=>x.s===estilo);
+    const ini=document.getElementById('inicial').value.trim().toUpperCase();
+    if(ini) pool=pool.filter(x=>x.n.toUpperCase().startsWith(ini));
+    return pool;
+}
+
+function render(){
+    const qty=parseInt(document.getElementById('qty').value)||10;
+    const pool=getPool();
+    if(!pool.length){shown=[];renderNames([]);return;}
+    shown=[...pool].sort(()=>Math.random()-.5).slice(0,Math.min(qty,pool.length));
+    renderNames(shown);
+}
+
+function gerar(){ render(); }
+
+function renderNames(list){
+    const grid=document.getElementById('names-list');
+    if(!list.length){
+        grid.innerHTML='<div class="empty-state">Nenhum nome encontrado.<br>Tente ampliar os filtros.</div>';
+        return;
+    }
+    grid.innerHTML=list.map((item,i)=>{
+        const isFav=favs.some(f=>f.n===item.n);
+        return `<div class="name-card">
+            <div>
+                <div class="name-text">${item.n}</div>
+                <div class="name-origin">${item.m}</div>
+            </div>
+            <div class="name-actions">
+                <button class="copy-btn" onclick="copiarNome('${item.n}',this)">copiar</button>
+                <button class="fav-btn${isFav?' faved':''}" onclick="toggleFav(${i},this)" aria-label="${isFav?'Remover favorito':'Adicionar favorito'}">♡</button>
+            </div>
+        </div>`;
+    }).join('');
+    renderFavs();
+}
+
+function toggleFav(i,btn){
+    const item=shown[i]; if(!item) return;
+    const idx=favs.findIndex(f=>f.n===item.n);
+    if(idx>-1){favs.splice(idx,1);btn.classList.remove('faved');btn.textContent='♡';}
+    else{favs.push({...item});btn.classList.add('faved');btn.textContent='♥';}
+    renderFavs();
+}
+
+function renderFavs(){
+    const sec=document.getElementById('favs-section');
+    const pills=document.getElementById('fav-pills');
+    const badge=document.getElementById('fav-count');
+    badge.textContent=favs.length;
+    if(!favs.length){sec.style.display='none';return;}
+    sec.style.display='block';
+    pills.innerHTML=favs.map((f,i)=>`<span class="fav-pill" title="${f.m}" onclick="removeFav(${i})">${f.n} ×</span>`).join('');
+}
+
+function removeFav(i){
+    favs.splice(i,1);
+    renderFavs();
+    document.querySelectorAll('.fav-btn').forEach((btn,j)=>{
+        if(shown[j]){
+            const faved=favs.some(f=>f.n===shown[j].n);
+            btn.classList.toggle('faved',faved);
+            btn.textContent=faved?'♥':'♡';
+        }
+    });
+}
+
+function copiarNome(nome,btn){
+    navigator.clipboard.writeText(nome).then(()=>{
+        const orig=btn.textContent; btn.textContent='copiado!';
+        setTimeout(()=>btn.textContent=orig,1400);
+    });
+}
+
+function copiarTodos(){
+    if(!shown.length) return;
+    navigator.clipboard.writeText(shown.map(x=>x.n).join(', ')).then(()=>{
+        const btn=document.getElementById('copy-all-btn');
+        const orig=btn.textContent; btn.textContent='✓ Copiado!';
+        setTimeout(()=>btn.textContent=orig,1400);
+    });
+}
+
+render();
+</script>
+
+</body>
+</html>
