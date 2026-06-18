@@ -304,28 +304,23 @@ Aguardando conversão
 const ERAS = [
 {
 nome:"令和",
-romaji:"reiwa",
-inicio:new Date(2019,4,1)
+inicio:new Date("2019-05-01")
 },
 {
 nome:"平成",
-romaji:"heisei",
-inicio:new Date(1989,0,8)
+inicio:new Date("1989-01-08")
 },
 {
 nome:"昭和",
-romaji:"showa",
-inicio:new Date(1926,11,25)
+inicio:new Date("1926-12-25")
 },
 {
 nome:"大正",
-romaji:"taisho",
-inicio:new Date(1912,6,30)
+inicio:new Date("1912-07-30")
 },
 {
 nome:"明治",
-romaji:"meiji",
-inicio:new Date(1868,0,25)
+inicio:new Date("1868-01-25")
 }
 ];
 
@@ -393,36 +388,27 @@ function converter(){
 
 function converterDataParaEra(texto){
 
-    const partes = texto.split("/");
+    const data = new Date(texto);
 
-    if(partes.length !== 3){
-
-        return "Use dd/mm/aaaa";
-
+    if(isNaN(data.getTime())){
+        return "Data inválida";
     }
-
-    const dia = parseInt(partes[0]);
-    const mes = parseInt(partes[1]) - 1;
-    const ano = parseInt(partes[2]);
-
-    const data = new Date(ano,mes,dia);
 
     for(let era of ERAS){
 
         if(data >= era.inicio){
 
             let numeroAno =
-            ano - era.inicio.getFullYear() + 1;
+                data.getFullYear() -
+                era.inicio.getFullYear() + 1;
 
             let anoEra =
-            numeroAno === 1
-            ? "元年"
-            : numeroAno + "年";
+                numeroAno === 1
+                ? "元年"
+                : numeroAno + "年";
 
             return `${era.nome}${anoEra}`;
-
         }
-
     }
 
     return "Data fora das eras suportadas";
