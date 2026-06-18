@@ -88,77 +88,232 @@ YouTube|https://youtube.com"></textarea>
 </div>
 
 <script>
-let avatarData='',bannerData='';
 
-function fileToData(input,cb){
- const f=input.files[0];
- if(!f)return;
- const r=new FileReader();
- r.onload=e=>cb(e.target.result);
- r.readAsDataURL(f);
+let avatarData = '';
+let bannerData = '';
+
+const bannerFile = document.getElementById('bannerFile');
+const avatarFile = document.getElementById('avatarFile');
+const nameInput = document.getElementById('name');
+const bioInput = document.getElementById('bio');
+const themeSelect = document.getElementById('theme');
+const mainLinkInput = document.getElementById('mainlink');
+const linksInput = document.getElementById('links');
+
+function fileToData(input, callback){
+
+    const file = input.files[0];
+
+    if(!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = e => callback(e.target.result);
+
+    reader.readAsDataURL(file);
 }
 
-bannerFile.onchange=()=>fileToData(bannerFile,v=>{bannerData=v;render();});
-avatarFile.onchange=()=>fileToData(avatarFile,v=>{avatarData=v;render();});
+bannerFile.addEventListener('change', () => {
 
-function saveHistory(name){
- let h=JSON.parse(localStorage.getItem('bioHist')||'[]');
- h.unshift(name);
- h=[...new Set(h)].slice(0,8);
- localStorage.setItem('bioHist',JSON.stringify(h));
- history.innerHTML=h.join('<br>');
+    fileToData(bannerFile, value => {
+
+        bannerData = value;
+
+        render();
+
+    });
+
+});
+
+avatarFile.addEventListener('change', () => {
+
+    fileToData(avatarFile, value => {
+
+        avatarData = value;
+
+        render();
+
+    });
+
+});
+
+function saveHistory(profileName){
+
+    const historyBox = document.getElementById('history');
+
+    let historyList =
+        JSON.parse(localStorage.getItem('bioHist') || '[]');
+
+    historyList.unshift(profileName);
+
+    historyList =
+        [...new Set(historyList)]
+        .slice(0,8);
+
+    localStorage.setItem(
+        'bioHist',
+        JSON.stringify(historyList)
+    );
+
+    historyBox.innerHTML =
+        historyList.join('<br>');
 }
 
 function render(){
- const color=theme.value;
- document.documentElement.style.setProperty('--primary',color);
 
- pname.textContent=name.value||'Seu Nome';
- pbio.textContent=bio.value||'Sua bio aparecerá aqui.';
+    const color =
+        themeSelect.value;
 
- if(avatarData) avatar.src=avatarData;
- if(bannerData) banner.style.background=`url(${bannerData}) center/cover`;
+    document.documentElement
+    .style
+    .setProperty('--primary', color);
 
- const ml=mainlink.value.split('|');
- main.innerHTML='';
- if(ml.length>=2){
-   main.innerHTML=`<a class="link mainlink" href="${ml[1]}" target="_blank">⭐ ${ml[0]}</a>`;
- }
+    const profileName =
+        nameInput.value.trim();
 
- const lines=links.value.split('\n').filter(Boolean);
- plist.innerHTML='';
- lines.forEach(l=>{
-   const p=l.split('|');
-   if(p.length>=2){
-      plist.innerHTML+=`<a class="link" href="${p[1]}" target="_blank">${p[0]}</a>`;
-   }
- });
+    const profileBio =
+        bioInput.value.trim();
 
- let score=0;
- if(name.value) score+=20;
- if(bio.value) score+=20;
- if(avatarData) score+=20;
- if(bannerData) score+=15;
- if(lines.length) score+=15;
- if(ml.length>=2) score+=10;
+    document.getElementById('pname').textContent =
+        profileName || 'Seu Nome';
 
- document.getElementById('score').textContent=score+'/100';
- saveHistory(name.value||'Perfil sem nome');
+    document.getElementById('pbio').textContent =
+        profileBio || 'Sua bio aparecerá aqui.';
+
+    if(avatarData){
+
+        document.getElementById('avatar').src =
+            avatarData;
+
+    }
+
+    if(bannerData){
+
+        document.getElementById('banner').style.background =
+            `url(${bannerData}) center/cover`;
+
+    }
+
+    const main =
+        document.getElementById('main');
+
+    main.innerHTML = '';
+
+    const principal =
+        mainLinkInput.value.trim();
+
+    const parts =
+        principal.split('|');
+
+    if(parts.length >= 2){
+
+        main.innerHTML = `
+        <a
+            class="link mainlink"
+            href="${parts[1].trim()}"
+            target="_blank"
+            rel="noopener"
+        >
+            ⭐ ${parts[0].trim()}
+        </a>
+        `;
+    }
+
+    const list =
+        document.getElementById('plist');
+
+    list.innerHTML = '';
+
+    const lines =
+        linksInput.value
+        .split('\n')
+        .map(x => x.trim())
+        .filter(Boolean);
+
+    lines.forEach(line => {
+
+        const p = line.split('|');
+
+        if(p.length >= 2){
+
+            list.innerHTML += `
+            <a
+                class="link"
+                href="${p[1].trim()}"
+                target="_blank"
+                rel="noopener"
+            >
+                ${p[0].trim()}
+            </a>
+            `;
+        }
+
+    });
+
+    let score = 0;
+
+    if(profileName) score += 20;
+    if(profileBio) score += 20;
+    if(avatarData) score += 20;
+    if(bannerData) score += 15;
+    if(lines.length) score += 15;
+    if(parts.length >= 2) score += 10;
+
+    document.getElementById('score').textContent =
+        score + '/100';
+
+    saveHistory(
+        profileName || 'Perfil sem nome'
+    );
 }
 
 function exportData(){
- const data={
-   name:name.value,bio:bio.value,theme:theme.value,
-   mainlink:mainlink.value,links:links.value
- };
- const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
- const a=document.createElement('a');
- a.href=URL.createObjectURL(blob);
- a.download='link-na-bio.json';
- a.click();
+
+    const data = {
+
+        name: nameInput.value,
+        bio: bioInput.value,
+        theme: themeSelect.value,
+        mainlink: mainLinkInput.value,
+        links: linksInput.value
+
+    };
+
+    const blob = new Blob(
+        [JSON.stringify(data,null,2)],
+        {type:'application/json'}
+    );
+
+    const a =
+        document.createElement('a');
+
+    a.href =
+        URL.createObjectURL(blob);
+
+    a.download =
+        'link-na-bio.json';
+
+    a.click();
 }
 
-history.innerHTML=(JSON.parse(localStorage.getItem('bioHist')||'[]')).join('<br>')||'Nenhum';
+nameInput.addEventListener('input', render);
+bioInput.addEventListener('input', render);
+themeSelect.addEventListener('change', render);
+mainLinkInput.addEventListener('input', render);
+linksInput.addEventListener('input', render);
+
+const savedHistory =
+    JSON.parse(
+        localStorage.getItem('bioHist') || '[]'
+    );
+
+document.getElementById('history').innerHTML =
+    savedHistory.length
+    ? savedHistory.join('<br>')
+    : 'Nenhum';
+
+render();
+
 </script>
 </body>
 </html>
