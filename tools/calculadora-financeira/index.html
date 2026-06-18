@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Calculadora Financeira: juros, parcelamento, conversão de moeda e porcentagem">
+    <meta name="keywords" content="calculadora financeira, juros compostos, juros simples, parcelamento, conversor de moeda, porcentagem, desconto">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Calculadora Financeira</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            width: 100%;
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+            margin: 0;
+        }
+
+        .wrapper {
+            width: 100%;
+            max-width: 1200px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            overflow: hidden;
+            max-height: 90vh;
+        }
+
+        .left-panel {
+            padding: 32px;
+            overflow-y: auto;
+            border-right: 1px solid #e0e0e0;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .right-panel {
+            padding: 32px;
+            background: linear-gradient(135deg, #e8f8f5 0%, #d5f4e6 100%);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        header {
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 6px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: #999;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #e8f8f5 0%, #d5f4e6 100%);
+            border-left: 4px solid #27ae60;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            color: #27ae60;
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .info-box strong {
+            color: #27ae60;
+            font-weight: 700;
+        }
+
+        .modos {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .modo-btn {
+            padding: 10px 6px;
+            background: #e0e0e0;
+            color: #666;
+            border: none;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            line-height: 1.4;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .modo-btn.ativo {
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            color: white;
+        }
+
+        .modo-btn:active {
+            transform: scale(0.98);
+        }
+
+        .section-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #333;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #27ae60;
+        }
+
+        .input-group {
+            margin-bottom: 16px;
+        }
+
+        .input-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .input-hint {
+            font-size: 10px;
+            color: #999;
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        input[type="number"], input[type="text"], select {
+            width: 100%;
+            padding: 11px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            background: white;
+            color: #333;
+            transition: all 0.2s ease;
+            -webkit-appearance: none;
+            appearance: none;
+            font-family: inherit;
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        input[type="number"]:focus, input[type="text"]:focus, select:focus {
+            outline: none;
+            border-color: #27ae60;
+            background: #f0f9f7;
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .input-row-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+        }
+
+        .toggle-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .toggle-btn {
+            padding: 10px;
+            background: #e0e0e0;
+            color: #666;
+            border: none;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .toggle-btn.ativo {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-calcular {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
+            margin-top: 4px;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .btn-calcular:active {
+            transform: scale(0.98);
+        }
+
+        .resultado-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+
+        .resultado-header {
+            font-size: 12px;
+            font-weight: 700;
+            color: #27ae60;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #27ae60;
+        }
+
+        .resultado-total {
+            display: flex;
+            flex-direction: column;
+            padding: 14px;
+            background: white;
+            border-radius: 10px;
+            border: 2px solid #27ae60;
+            margin-bottom: 12px;
+        }
+
+        .resultado-total-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #27ae60;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .resultado-texto {
+            font-size: 26px;
+            font-weight: 700;
+            color: #27ae60;
+            font-family: 'Courier New', monospace;
+            word-break: break-all;
+            line-height: 1.4;
+        }
+
+        .resultado-sub {
+            font-size: 11px;
+            color: #888;
+            margin-top: 6px;
+            font-weight: 600;
+        }
+
+        .breakdown {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(39, 174, 96, 0.2);
+            border-radius: 8px;
+            font-size: 12px;
+        }
+
+        .breakdown-label {
+            color: #555;
+            font-weight: 600;
+        }
+
+        .breakdown-valor {
+            color: #27ae60;
+            font-weight: 700;
+            font-family: 'Courier New', monospace;
+        }
+
+        .botoes {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        button {
+            padding: 11px;
+            border: none;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .btn-copiar {
+            background: white;
+            color: #27ae60;
+            border: 2px solid #27ae60;
+        }
+
+        .btn-copiar:active {
+            background: #27ae60;
+            color: white;
+            transform: scale(0.98);
+        }
+
+        .btn-limpar {
+            background: rgba(255, 255, 255, 0.5);
+            color: #27ae60;
+            border: 2px solid rgba(39, 174, 96, 0.3);
+        }
+
+        .btn-limpar:active {
+            background: rgba(255, 255, 255, 0.8);
+            transform: scale(0.98);
+        }
+
+        .tabela-ref {
+            margin-top: 12px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+
+        .tabela-titulo {
+            font-size: 11px;
+            font-weight: 700;
+            color: #27ae60;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 8px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid rgba(39, 174, 96, 0.3);
+        }
+
+        .tabela-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            font-size: 11px;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .tabela-grid p {
+            margin: 0;
+        }
+
+        .tabela-grid strong {
+            color: #27ae60;
+        }
+
+        .status {
+            text-align: center;
+            font-size: 11px;
+            color: #27ae60;
+            margin-top: 8px;
+            min-height: 16px;
+            font-weight: 700;
+        }
+
+        .disclaimer {
+            font-size: 10px;
+            color: #999;
+            margin-top: 10px;
+            line-height: 1.5;
+            font-style: italic;
+        }
+
+        /* RESPONSIVO */
+        @media (max-width: 1024px) {
+            .wrapper {
+                grid-template-columns: 1fr;
+                max-height: none;
+                border-radius: 12px;
+            }
+            .left-panel {
+                border-right: none;
+                border-bottom: 1px solid #e0e0e0;
+                padding: 24px;
+            }
+            .right-panel {
+                padding: 24px;
+            }
+            h1 { font-size: 24px; }
+        }
+
+        @media (max-width: 768px) {
+            html, body { padding: 12px; }
+            .wrapper { grid-template-columns: 1fr; max-height: none; border-radius: 12px; }
+            .left-panel { border-right: none; border-bottom: 1px solid #e0e0e0; padding: 16px; }
+            .right-panel { padding: 16px; }
+            h1 { font-size: 22px; }
+            .subtitle { font-size: 12px; }
+            .info-box { font-size: 10px; padding: 10px; margin-bottom: 16px; }
+            .modos { gap: 6px; margin-bottom: 16px; }
+            .modo-btn { padding: 9px 4px; font-size: 10px; }
+            .section-title { font-size: 11px; margin-bottom: 10px; padding-bottom: 6px; }
+            .input-label { font-size: 10px; }
+            input[type="number"], input[type="text"], select { font-size: 15px; padding: 10px; }
+            .btn-calcular { padding: 12px; font-size: 12px; }
+            .resultado-header { font-size: 11px; margin-bottom: 10px; }
+            .resultado-total { padding: 12px; margin-bottom: 10px; }
+            .resultado-total-label { font-size: 10px; }
+            .resultado-texto { font-size: 20px; }
+            .botoes { gap: 6px; margin-bottom: 10px; }
+            button { padding: 10px; font-size: 10px; }
+            .tabela-titulo { font-size: 10px; }
+            .status { font-size: 10px; min-height: 14px; }
+        }
+
+        @media (max-width: 480px) {
+            html, body { padding: 8px; }
+            .wrapper { border-radius: 10px; }
+            .left-panel, .right-panel { padding: 12px; }
+            h1 { font-size: 20px; margin-bottom: 4px; }
+            .subtitle { font-size: 11px; }
+            .info-box { font-size: 9px; padding: 8px; margin-bottom: 12px; }
+            .modos { gap: 5px; margin-bottom: 12px; }
+            .modo-btn { padding: 8px 3px; font-size: 9px; }
+            .section-title { font-size: 10px; margin-bottom: 8px; padding-bottom: 4px; }
+            .input-label { font-size: 9px; margin-bottom: 4px; }
+            input[type="number"], input[type="text"], select { font-size: 14px; padding: 9px; }
+            .input-row, .input-row-3 { grid-template-columns: 1fr; gap: 8px; }
+            .btn-calcular { padding: 11px; font-size: 11px; }
+            .resultado-total { padding: 10px; margin-bottom: 8px; }
+            .resultado-texto { font-size: 18px; }
+            .botoes { grid-template-columns: 1fr 1fr; gap: 5px; margin-bottom: 8px; }
+            button { padding: 9px; font-size: 9px; }
+            .breakdown-item { font-size: 11px; padding: 7px 10px; }
+            .status { font-size: 9px; min-height: 12px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="left-panel">
+            <header>
+                <h1>💰 Calculadora Financeira</h1>
+                <p class="subtitle">Juros, parcelamento, moeda e porcentagem</p>
+            </header>
+
+            <div class="info-box">
+                <strong>Dica:</strong> Escolha o tipo de cálculo abaixo. Cada modo ajusta os campos automaticamente para o que você precisa calcular.
+            </div>
+
+            <div class="modos">
+                <button class="modo-btn ativo" id="btn-juros" onclick="setModo('juros')">📈 Juros</button>
+                <button class="modo-btn" id="btn-parcela" onclick="setModo('parcela')">🧾 Parcelamento</button>
+                <button class="modo-btn" id="btn-moeda" onclick="setModo('moeda')">💱 Conversor de Moeda</button>
+                <button class="modo-btn" id="btn-porcento" onclick="setModo('porcento')">％ Porcentagem</button>
+            </div>
+
+            <div class="section-title" id="titulo-secao">Juros Compostos / Simples</div>
+
+            <!-- JUROS -->
+            <div id="campos-juros">
+                <div class="toggle-row">
+                    <button class="toggle-btn ativo" id="toggle-composto" onclick="setTipoJuros('composto')">Composto</button>
+                    <button class="toggle-btn" id="toggle-simples" onclick="setTipoJuros('simples')">Simples</button>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Valor inicial (capital)</label>
+                    <input type="number" id="juros-capital" value="1000" min="0" step="0.01" oninput="calcular()">
+                </div>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label class="input-label">Taxa de juros (% por período)</label>
+                        <input type="number" id="juros-taxa" value="2" min="0" step="0.01" oninput="calcular()">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Número de períodos</label>
+                        <input type="number" id="juros-periodos" value="12" min="0" step="1" oninput="calcular()">
+                    </div>
+                </div>
+                <p class="input-hint">A taxa e o número de períodos devem usar a mesma unidade de tempo (ex: taxa mensal com meses, taxa anual com anos).</p>
+            </div>
+
+            <!-- PARCELAMENTO -->
+            <div id="campos-parcela" style="display:none;">
+                <div class="input-group">
+                    <label class="input-label">Valor total da compra</label>
+                    <input type="number" id="parcela-valor" value="1200" min="0" step="0.01" oninput="calcular()">
+                </div>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label class="input-label">Número de parcelas</label>
+                        <input type="number" id="parcela-numero" value="12" min="1" step="1" oninput="calcular()">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Juros ao mês (%)</label>
+                        <input type="number" id="parcela-juros" value="0" min="0" step="0.01" oninput="calcular()">
+                    </div>
+                </div>
+                <p class="input-hint">Deixe os juros em 0% para parcelamento sem juros (divisão simples do valor).</p>
+            </div>
+
+            <!-- CONVERSOR DE MOEDA -->
+            <div id="campos-moeda" style="display:none;">
+                <div class="input-group">
+                    <label class="input-label">Valor</label>
+                    <input type="number" id="moeda-valor" value="100" min="0" step="0.01" oninput="calcular()">
+                </div>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label class="input-label">De</label>
+                        <select id="moeda-de" onchange="calcular()">
+                            <option value="BRL">BRL — Real</option>
+                            <option value="USD">USD — Dólar</option>
+                            <option value="JPY" selected>JPY — Iene</option>
+                            <option value="EUR">EUR — Euro</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Para</label>
+                        <select id="moeda-para" onchange="calcular()">
+                            <option value="BRL" selected>BRL — Real</option>
+                            <option value="USD">USD — Dólar</option>
+                            <option value="JPY">JPY — Iene</option>
+                            <option value="EUR">EUR — Euro</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Taxa de câmbio manual (opcional)</label>
+                    <input type="number" id="moeda-taxa-manual" placeholder="Deixe vazio para usar taxa de referência" min="0" step="0.0001" oninput="calcular()">
+                    <p class="input-hint">Cotações mudam o tempo todo — os valores pré-carregados são apenas referência aproximada. Para um valor exato, confira o câmbio do dia e cole a taxa aqui.</p>
+                </div>
+            </div>
+
+            <!-- PORCENTAGEM -->
+            <div id="campos-porcento" style="display:none;">
+                <div class="toggle-row">
+                    <button class="toggle-btn ativo" id="toggle-pct-de" onclick="setTipoPct('de')">X% de um valor</button>
+                    <button class="toggle-btn" id="toggle-pct-desconto" onclick="setTipoPct('desconto')">Desconto / Acréscimo</button>
+                </div>
+                <div id="pct-campos-de">
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label class="input-label">Porcentagem (%)</label>
+                            <input type="number" id="pct-porcentagem" value="15" step="0.01" oninput="calcular()">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Valor</label>
+                            <input type="number" id="pct-valor" value="200" step="0.01" oninput="calcular()">
+                        </div>
+                    </div>
+                </div>
+                <div id="pct-campos-desconto" style="display:none;">
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label class="input-label">Valor original</label>
+                            <input type="number" id="pct-valor-original" value="200" step="0.01" oninput="calcular()">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Porcentagem (%)</label>
+                            <input type="number" id="pct-porcentagem-2" value="15" step="0.01" oninput="calcular()">
+                        </div>
+                    </div>
+                    <div class="toggle-row">
+                        <button class="toggle-btn ativo" id="toggle-desconto" onclick="setSinalPct('desconto')">Desconto (−)</button>
+                        <button class="toggle-btn" id="toggle-acrescimo" onclick="setSinalPct('acrescimo')">Acréscimo (+)</button>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn-calcular" onclick="calcular()">Calcular</button>
+        </div>
+
+        <div class="right-panel">
+            <div class="resultado-section">
+                <div class="resultado-header">Resultado</div>
+
+                <div class="resultado-total" id="resultado-box" style="display:none;">
+                    <span class="resultado-total-label" id="label-saida">Resultado</span>
+                    <span class="resultado-texto" id="output">-</span>
+                    <span class="resultado-sub" id="output-sub"></span>
+                </div>
+
+                <div class="breakdown" id="breakdown"></div>
+
+                <div class="botoes">
+                    <button class="btn-copiar" onclick="copiar(event)">📋 Copiar</button>
+                    <button class="btn-limpar" onclick="limpar()">🗑️ Limpar</button>
+                </div>
+
+                <div class="tabela-ref">
+                    <div class="tabela-titulo">📖 Como funciona o cálculo</div>
+                    <div class="tabela-grid" id="tabela"></div>
+                </div>
+
+                <p class="disclaimer" id="disclaimer-moeda" style="display:none;">As taxas de câmbio pré-carregadas são aproximadas e servem apenas como referência rápida. Para decisões financeiras reais, sempre confira a cotação atualizada do dia em uma fonte confiável (banco, corretora ou conversor oficial).</p>
+
+                <div class="status" id="status"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let modo = 'juros';
+        let tipoJuros = 'composto';
+        let tipoPct = 'de';
+        let sinalPct = 'desconto';
+
+        // Taxas de referência aproximadas (atualize manualmente para maior precisão)
+        // Base: 1 unidade de cada moeda em USD
+        const TAXAS_USD = {
+            USD: 1,
+            BRL: 1 / 5.45,   // ~5.45 BRL por USD
+            JPY: 1 / 160.4,  // ~160.4 JPY por USD
+            EUR: 1.08        // ~1 EUR = 1.08 USD
+        };
+
+        const NOMES_MOEDA = {
+            BRL: 'Real (BRL)',
+            USD: 'Dólar (USD)',
+            JPY: 'Iene (JPY)',
+            EUR: 'Euro (EUR)'
+        };
+
+        const configs = {
+            juros: { titulo: 'Juros Compostos / Simples', labelSaida: 'Valor final' },
+            parcela: { titulo: 'Parcelamento', labelSaida: 'Valor da parcela' },
+            moeda: { titulo: 'Conversor de Moeda', labelSaida: 'Valor convertido' },
+            porcento: { titulo: 'Porcentagem', labelSaida: 'Resultado' }
+        };
+
+        function setModo(m) {
+            modo = m;
+            document.querySelectorAll('.modo-btn').forEach(b => b.classList.remove('ativo'));
+            document.getElementById('btn-' + m).classList.add('ativo');
+            const c = configs[m];
+            document.getElementById('titulo-secao').textContent = c.titulo;
+            document.getElementById('label-saida').textContent = c.labelSaida;
+
+            ['juros', 'parcela', 'moeda', 'porcento'].forEach(k => {
+                document.getElementById('campos-' + k).style.display = (k === m) ? 'block' : 'none';
+            });
+
+            document.getElementById('disclaimer-moeda').style.display = (m === 'moeda') ? 'block' : 'none';
+
+            document.getElementById('resultado-box').style.display = 'none';
+            renderTabela();
+            calcular();
+        }
+
+        function setTipoJuros(t) {
+            tipoJuros = t;
+            document.getElementById('toggle-composto').classList.toggle('ativo', t === 'composto');
+            document.getElementById('toggle-simples').classList.toggle('ativo', t === 'simples');
+            calcular();
+            renderTabela();
+        }
+
+        function setTipoPct(t) {
+            tipoPct = t;
+            document.getElementById('toggle-pct-de').classList.toggle('ativo', t === 'de');
+            document.getElementById('toggle-pct-desconto').classList.toggle('ativo', t === 'desconto');
+            document.getElementById('pct-campos-de').style.display = (t === 'de') ? 'block' : 'none';
+            document.getElementById('pct-campos-desconto').style.display = (t === 'desconto') ? 'block' : 'none';
+            calcular();
+            renderTabela();
+        }
+
+        function setSinalPct(s) {
+            sinalPct = s;
+            document.getElementById('toggle-desconto').classList.toggle('ativo', s === 'desconto');
+            document.getElementById('toggle-acrescimo').classList.toggle('ativo', s === 'acrescimo');
+            calcular();
+        }
+
+        function formatMoeda(valor, prefixo) {
+            prefixo = prefixo || 'R$';
+            if (!isFinite(valor)) return '-';
+            return prefixo + ' ' + valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function calcular() {
+            const breakdown = document.getElementById('breakdown');
+            breakdown.innerHTML = '';
+            let outputTexto = '-';
+            let outputSub = '';
+            let mostrarResultado = false;
+
+            if (modo === 'juros') {
+                const capital = parseFloat(document.getElementById('juros-capital').value) || 0;
+                const taxa = (parseFloat(document.getElementById('juros-taxa').value) || 0) / 100;
+                const n = parseFloat(document.getElementById('juros-periodos').value) || 0;
+
+                let montante, jurosTotais;
+                if (tipoJuros === 'composto') {
+                    montante = capital * Math.pow(1 + taxa, n);
+                } else {
+                    montante = capital * (1 + taxa * n);
+                }
+                jurosTotais = montante - capital;
+
+                outputTexto = formatMoeda(montante);
+                outputSub = 'Após ' + n + ' período(s) a ' + (taxa * 100).toFixed(2) + '% por período';
+                breakdown.innerHTML = `
+                    <div class="breakdown-item"><span class="breakdown-label">Capital inicial</span><span class="breakdown-valor">${formatMoeda(capital)}</span></div>
+                    <div class="breakdown-item"><span class="breakdown-label">Juros acumulados</span><span class="breakdown-valor">${formatMoeda(jurosTotais)}</span></div>
+                    <div class="breakdown-item"><span class="breakdown-label">Tipo de juros</span><span class="breakdown-valor">${tipoJuros === 'composto' ? 'Composto' : 'Simples'}</span></div>
+                `;
+                mostrarResultado = capital > 0;
+
+            } else if (modo === 'parcela') {
+                const valor = parseFloat(document.getElementById('parcela-valor').value) || 0;
+                const numero = parseFloat(document.getElementById('parcela-numero').value) || 1;
+                const jurosMes = (parseFloat(document.getElementById('parcela-juros').value) || 0) / 100;
+
+                let parcela, totalPago;
+                if (jurosMes === 0) {
+                    parcela = valor / numero;
+                    totalPago = valor;
+                } else {
+                    // Tabela Price (amortização constante com juros compostos)
+                    parcela = valor * (jurosMes * Math.pow(1 + jurosMes, numero)) / (Math.pow(1 + jurosMes, numero) - 1);
+                    totalPago = parcela * numero;
+                }
+                const jurosTotais = totalPago - valor;
+
+                outputTexto = formatMoeda(parcela) + ' / mês';
+                outputSub = 'Total pago: ' + formatMoeda(totalPago) + ' em ' + numero + 'x';
+                breakdown.innerHTML = `
+                    <div class="breakdown-item"><span class="breakdown-label">Valor da compra</span><span class="breakdown-valor">${formatMoeda(valor)}</span></div>
+                    <div class="breakdown-item"><span class="breakdown-label">Juros totais pagos</span><span class="breakdown-valor">${formatMoeda(jurosTotais)}</span></div>
+                    <div class="breakdown-item"><span class="breakdown-label">Total pago no fim</span><span class="breakdown-valor">${formatMoeda(totalPago)}</span></div>
+                `;
+                mostrarResultado = valor > 0 && numero > 0;
+
+            } else if (modo === 'moeda') {
+                const valor = parseFloat(document.getElementById('moeda-valor').value) || 0;
+                const de = document.getElementById('moeda-de').value;
+                const para = document.getElementById('moeda-para').value;
+                const taxaManual = parseFloat(document.getElementById('moeda-taxa-manual').value);
+
+                let resultado, taxaUsada;
+                if (!isNaN(taxaManual) && taxaManual > 0) {
+                    resultado = valor * taxaManual;
+                    taxaUsada = taxaManual;
+                } else {
+                    const taxaConversao = TAXAS_USD[de] / TAXAS_USD[para];
+                    resultado = valor * taxaConversao;
+                    taxaUsada = taxaConversao;
+                }
+
+                outputTexto = resultado.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ' + para;
+                outputSub = '1 ' + de + ' ≈ ' + taxaUsada.toLocaleString('pt-BR', { minimumFractionDigits: 4, maximumFractionDigits: 4 }) + ' ' + para;
+                breakdown.innerHTML = `
+                    <div class="breakdown-item"><span class="breakdown-label">De</span><span class="breakdown-valor">${NOMES_MOEDA[de]}</span></div>
+                    <div class="breakdown-item"><span class="breakdown-label">Para</span><span class="breakdown-valor">${NOMES_MOEDA[para]}</span></div>
+                    <div class="breakdown-item"><span class="breakdown-label">Valor original</span><span class="breakdown-valor">${valor.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2})} ${de}</span></div>
+                `;
+                mostrarResultado = valor > 0;
+
+            } else if (modo === 'porcento') {
+                if (tipoPct === 'de') {
+                    const pct = parseFloat(document.getElementById('pct-porcentagem').value) || 0;
+                    const valor = parseFloat(document.getElementById('pct-valor').value) || 0;
+                    const resultado = (pct / 100) * valor;
+
+                    outputTexto = formatMoeda(resultado);
+                    outputSub = pct + '% de ' + formatMoeda(valor);
+                    breakdown.innerHTML = `
+                        <div class="breakdown-item"><span class="breakdown-label">Valor base</span><span class="breakdown-valor">${formatMoeda(valor)}</span></div>
+                        <div class="breakdown-item"><span class="breakdown-label">Porcentagem</span><span class="breakdown-valor">${pct}%</span></div>
+                    `;
+                    mostrarResultado = valor > 0;
+                } else {
+                    const valorOriginal = parseFloat(document.getElementById('pct-valor-original').value) || 0;
+                    const pct = parseFloat(document.getElementById('pct-porcentagem-2').value) || 0;
+                    const fator = sinalPct === 'desconto' ? (1 - pct / 100) : (1 + pct / 100);
+                    const resultado = valorOriginal * fator;
+                    const diferenca = resultado - valorOriginal;
+
+                    outputTexto = formatMoeda(resultado);
+                    outputSub = (sinalPct === 'desconto' ? 'Desconto de ' : 'Acréscimo de ') + pct + '%';
+                    breakdown.innerHTML = `
+                        <div class="breakdown-item"><span class="breakdown-label">Valor original</span><span class="breakdown-valor">${formatMoeda(valorOriginal)}</span></div>
+                        <div class="breakdown-item"><span class="breakdown-label">${sinalPct === 'desconto' ? 'Valor descontado' : 'Valor acrescido'}</span><span class="breakdown-valor">${formatMoeda(Math.abs(diferenca))}</span></div>
+                    `;
+                    mostrarResultado = valorOriginal > 0;
+                }
+            }
+
+            document.getElementById('output').textContent = outputTexto;
+            document.getElementById('output-sub').textContent = outputSub;
+            document.getElementById('resultado-box').style.display = mostrarResultado ? 'flex' : 'none';
+        }
+
+        function copiar(evt) {
+            const val = document.getElementById('output').textContent;
+            const sub = document.getElementById('output-sub').textContent;
+            if (!val || val === '-') return;
+            const texto = val + (sub ? ' — ' + sub : '');
+            navigator.clipboard.writeText(texto).then(() => {
+                const btn = evt.target;
+                const orig = btn.textContent;
+                btn.textContent = '✓ Copiado!';
+                setTimeout(() => btn.textContent = orig, 1500);
+            });
+        }
+
+        function limpar() {
+            document.getElementById('juros-capital').value = 1000;
+            document.getElementById('juros-taxa').value = 2;
+            document.getElementById('juros-periodos').value = 12;
+            document.getElementById('parcela-valor').value = 1200;
+            document.getElementById('parcela-numero').value = 12;
+            document.getElementById('parcela-juros').value = 0;
+            document.getElementById('moeda-valor').value = 100;
+            document.getElementById('moeda-taxa-manual').value = '';
+            document.getElementById('pct-porcentagem').value = 15;
+            document.getElementById('pct-valor').value = 200;
+            document.getElementById('pct-valor-original').value = 200;
+            document.getElementById('pct-porcentagem-2').value = 15;
+            document.getElementById('resultado-box').style.display = 'none';
+            mostrarStatus('✓ Campos limpos');
+        }
+
+        function mostrarStatus(msg) {
+            const s = document.getElementById('status');
+            s.textContent = msg;
+            setTimeout(() => s.textContent = '', 2000);
+        }
+
+        function renderTabela() {
+            const tabela = document.getElementById('tabela');
+            let html = '';
+
+            if (modo === 'juros') {
+                if (tipoJuros === 'composto') {
+                    html = `
+                        <p><strong>Fórmula:</strong> Capital × (1 + taxa)^períodos</p>
+                        <p>Os juros incidem sobre o saldo acumulado a cada período (juros sobre juros), por isso o crescimento é exponencial.</p>
+                        <p>Use para simular investimentos, financiamentos e dívidas que capitalizam periodicamente.</p>
+                    `;
+                } else {
+                    html = `
+                        <p><strong>Fórmula:</strong> Capital × (1 + taxa × períodos)</p>
+                        <p>Os juros incidem sempre sobre o capital inicial, sem reaplicação — por isso o crescimento é linear.</p>
+                        <p>Menos comum no dia a dia, mas usado em alguns contratos e títulos específicos.</p>
+                    `;
+                }
+            } else if (modo === 'parcela') {
+                html = `
+                    <p><strong>Sem juros:</strong> valor total ÷ número de parcelas.</p>
+                    <p><strong>Com juros:</strong> usa a Tabela Price, o mesmo método usado por bancos e financeiras para parcelas fixas com juros compostos.</p>
+                    <p>O total pago inclui os juros acumulados ao longo de todas as parcelas.</p>
+                `;
+            } else if (modo === 'moeda') {
+                html = `
+                    <p>As taxas pré-carregadas são <strong>aproximadas</strong> (referência: USD/JPY ≈ 160, USD/BRL ≈ 5,45, EUR/USD ≈ 1,08).</p>
+                    <p>Cotações reais mudam minuto a minuto. Para um valor exato, pesquise a taxa do dia e cole no campo "Taxa de câmbio manual".</p>
+                    <p>Bancos e casas de câmbio costumam aplicar um spread (margem) sobre a taxa comercial — o valor final na prática pode ser diferente.</p>
+                `;
+            } else if (modo === 'porcento') {
+                if (tipoPct === 'de') {
+                    html = `
+                        <p><strong>Fórmula:</strong> (porcentagem ÷ 100) × valor</p>
+                        <p>Use para calcular comissões, gorjetas, impostos simples ou qualquer "X% de um valor".</p>
+                    `;
+                } else {
+                    html = `
+                        <p><strong>Desconto:</strong> valor original × (1 − porcentagem/100)</p>
+                        <p><strong>Acréscimo:</strong> valor original × (1 + porcentagem/100)</p>
+                        <p>Útil para calcular preços com promoção, juros de atraso ou reajustes percentuais.</p>
+                    `;
+                }
+            }
+
+            tabela.innerHTML = html;
+        }
+
+        window.addEventListener('load', () => {
+            renderTabela();
+            calcular();
+        });
+    </script>
+</body>
+</html>
