@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>📅 Feriados do Brasil</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="wrapper">
+
+    <div class="left-panel">
+
+        <h1>📅 Feriados do Brasil</h1>
+
+        <div class="subtitle">
+            Calendário Nacional Brasileiro
+        </div>
+
+        <div class="info-box">
+            Gratuito • Sem API • Atualização automática
+        </div>
+
+        <div class="section-title">
+            Pesquisar
+        </div>
+
+        <div class="input-group">
+
+            <label class="input-label">
+                BUSCAR FERIADO
+            </label>
+
+            <input
+            type="text"
+            id="busca"
+            placeholder="Ex.: Carnaval, Natal, Tiradentes">
+
+        </div>
+
+        <div
+        id="listaFeriados"
+        class="lista-feriados">
+
+        </div>
+
+    </div>
+
+
+    <div class="right-panel">
+
+        <div class="resultado-header">
+            Próximo Feriado
+        </div>
+
+        <div class="proximo-box">
+
+            <div
+            id="proximoNome"
+            class="proximo-nome">
+
+                Carregando...
+
+            </div>
+
+            <div
+            id="proximoData"
+            class="proximo-data">
+
+            </div>
+
+            <div
+            id="diasRestantes"
+            class="contagem">
+
+            </div>
+
+        </div>
+
+
+        <div class="ano-atual">
+
+            <div class="ano-label">
+                ANO EXIBIDO
+            </div>
+
+            <div
+            id="anoAtual"
+            class="ano-valor">
+
+            </div>
+
+        </div>
+
+
+        <div class="ano-atual">
+
+            <div class="ano-label">
+                TOTAL DE FERIADOS
+            </div>
+
+            <div
+            id="totalFeriados"
+            class="ano-valor">
+
+            </div>
+
+        </div>
+
+
+        <div class="ano-atual">
+
+            <div class="ano-label">
+                PRÓXIMOS 3 FERIADOS
+            </div>
+
+            <div id="top3">
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
