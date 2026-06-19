@@ -470,12 +470,12 @@
         <div class="input-row" style="margin-bottom:16px;">
             <div class="input-group" style="margin-bottom:0">
                 <label class="input-label">Renda bruta anual (¥)</label>
-                <input type="number" id="renda" value="5000000" min="0" step="10000" oninput="calcular()">
+                <input type="number" id="renda" value="5000000" min="0" step="10000" oninput="autoPrevidencia(); calcular()">
                 <p class="input-hint">Inclua bônus (賞与) no total.</p>
             </div>
             <div class="input-group" style="margin-bottom:0">
                 <label class="input-label">Período trabalhado</label>
-                <select id="periodo" onchange="calcular()">
+                <select id="periodo" onchange="autoPrevidencia(); calcular()">
                     <option value="1">Ano completo (12m)</option>
                     <option value="0.916">11 meses</option>
                     <option value="0.833">10 meses</option>
@@ -499,12 +499,12 @@
             <div class="input-group">
                 <label class="input-label">Seguro saúde (¥) <span class="tag">健康保険</span></label>
                 <input type="number" id="saude" value="300000" min="0" step="1000" oninput="calcular()">
-                <p class="input-hint">Aprox. 10% do salário</p>
+                <p class="input-hint" id="hint-saude">Calculado automaticamente (~10% da renda)</p>
             </div>
             <div class="input-group">
                 <label class="input-label">Nenkin pago (¥) <span class="tag">年金</span></label>
                 <input type="number" id="nenkin" value="180000" min="0" step="1000" oninput="calcular()">
-                <p class="input-hint">Kosei ~18.3% / Kokumin ¥16.980/mês</p>
+                <p class="input-hint" id="hint-nenkin">Calculado automaticamente (Kosei ~9,15%)</p>
             </div>
         </div>
 
@@ -617,6 +617,28 @@
 <script>
     let modo = 'clt';
 
+    function autoPrevidencia() {
+        const rendaInput = parseFloat(document.getElementById('renda').value) || 0;
+        const periodo = parseFloat(document.getElementById('periodo').value) || 1;
+        const renda = rendaInput * periodo;
+
+        if (modo === 'clt') {
+            const saude = Math.min(Math.round(renda * 0.10), 1390000);
+            const nenkin = Math.min(Math.round(renda * 0.0915), 696000);
+            document.getElementById('saude').value = saude;
+            document.getElementById('nenkin').value = nenkin;
+            document.getElementById('hint-saude').textContent = 'Calculado automaticamente (~10% da renda)';
+            document.getElementById('hint-nenkin').textContent = 'Calculado automaticamente (Kosei ~9,15%, parte do empregado)';
+        } else {
+            const saude = Math.min(Math.round(renda * 0.10), 1390000);
+            const nenkin = Math.round(16980 * 12 * periodo);
+            document.getElementById('saude').value = saude;
+            document.getElementById('nenkin').value = nenkin;
+            document.getElementById('hint-saude').textContent = 'Calculado automaticamente (~10% da renda)';
+            document.getElementById('hint-nenkin').textContent = 'Calculado automaticamente (Kokumin: ¥16.980 × meses)';
+        }
+    }
+
     function setModo(m) {
         modo = m;
         document.querySelectorAll('.modo-btn').forEach(b => b.classList.remove('ativo'));
@@ -624,6 +646,7 @@
         document.getElementById('titulo-secao').textContent =
             m === 'clt' ? 'Renda anual — Empregado' : 'Renda anual — Autônomo';
         document.getElementById('campo-despesas').classList.toggle('hidden', m !== 'autonomo');
+        autoPrevidencia();
         calcular();
     }
 
@@ -794,14 +817,13 @@
         document.getElementById('renda').value = 5000000;
         document.getElementById('periodo').value = 1;
         document.getElementById('despesas').value = 0;
-        document.getElementById('saude').value = 300000;
-        document.getElementById('nenkin').value = 180000;
         document.getElementById('dependentes').value = 0;
         document.getElementById('conjuge').value = 0;
         document.getElementById('viuvo').value = 0;
         document.getElementById('medico').value = 0;
         document.getElementById('vida').value = 0;
         document.getElementById('furusato').value = 0;
+        autoPrevidencia();
         document.getElementById('resultado-box').classList.add('hidden');
         mostrarStatus('✓ Campos limpos');
     }
@@ -813,6 +835,7 @@
     }
 
     window.addEventListener('load', () => {
+        autoPrevidencia();
         renderTabela();
         calcular();
     });
