@@ -251,9 +251,10 @@ button.gen-btn:active{ transform:scale(.98); }
 
 .name-card{
     display:flex;
-    align-items:center;
+    align-items:flex-start;
     justify-content:space-between;
-    padding:10px 14px;
+    gap:10px;
+    padding:12px 14px;
     background:#fff;
     border:1px solid #c8e6c9;
     border-radius:8px;
@@ -269,15 +270,18 @@ button.gen-btn:active{ transform:scale(.98); }
 }
 
 .name-origin{
-    font-size:11px;
+    font-size:12px;
     color:#388e3c;
-    margin-top:2px;
+    margin-top:3px;
+    line-height:1.4;
 }
 
 .name-actions{
     display:flex;
     align-items:center;
     gap:8px;
+    flex-shrink:0;
+    padding-top:2px;
 }
 
 .copy-btn{
@@ -400,7 +404,7 @@ button.gen-btn:active{ transform:scale(.98); }
         <a class="back" href="../../index.html">← Voltar</a>
 
         <div class="info-box">
-            <strong>Dica:</strong> Escolha o sexo, o idioma de origem e o estilo para filtrar os nomes. Salve seus favoritos clicando no coração ♡.
+            <strong>Dica:</strong> Escolha o sexo, o idioma (Português, Inglês ou Japonês) e o estilo para filtrar os nomes. Cada nome traz seu significado e origem. Salve seus favoritos clicando no coração ♡.
         </div>
 
         <div class="sec-label">Sexo</div>
@@ -415,16 +419,7 @@ button.gen-btn:active{ transform:scale(.98); }
             <option value="all">Todos os idiomas</option>
             <option value="pt">Português</option>
             <option value="en">Inglês</option>
-            <option value="es">Espanhol</option>
-            <option value="fr">Francês</option>
-            <option value="it">Italiano</option>
-            <option value="de">Alemão</option>
             <option value="ja">Japonês</option>
-            <option value="ar">Árabe</option>
-            <option value="he">Hebraico</option>
-            <option value="la">Latino / clássico</option>
-            <option value="scan">Escandinavo</option>
-            <option value="cel">Celta / irlandês</option>
         </select>
 
         <div class="sec-label">Estilo</div>
@@ -476,47 +471,311 @@ button.gen-btn:active{ transform:scale(.98); }
 <script>
 const DB={
   M:{
-    pt:[{n:'Miguel',s:'class',m:'Hebraico — "quem é como Deus"'},{n:'Arthur',s:'class',m:'Celta — "urso"'},{n:'Théo',s:'mod',m:'Grego — "presente de Deus"'},{n:'Davi',s:'class',m:'Hebraico — "amado"'},{n:'Gabriel',s:'class',m:'Hebraico — "homem de Deus"'},{n:'Bernardo',s:'class',m:'Germânico — "urso forte"'},{n:'Lucas',s:'class',m:'Latino — "aquele que traz luz"'},{n:'Mateus',s:'class',m:'Hebraico — "presente de Deus"'},{n:'Pedro',s:'class',m:'Grego — "pedra"'},{n:'Henrique',s:'class',m:'Germânico — "líder do lar"'},{n:'Vinícius',s:'mod',m:'Latino — "da videira"'},{n:'Enzo',s:'mod',m:'Italiano — muito popular no Brasil'},{n:'Cauã',s:'mod',m:'Tupi-guarani — "gavião"'},{n:'Caio',s:'class',m:'Latino clássico'},{n:'Ravi',s:'rare',m:'Sânscrito — "sol"'},{n:'Zion',s:'rare',m:'Hebraico — "terra prometida"'},{n:'Bento',s:'class',m:'Latino — "abençoado"'},{n:'Iago',s:'rare',m:'Galego — variante de Tiago'},{n:'Murilo',s:'mod',m:'Latino — "pequeno muro"'},{n:'Heitor',s:'class',m:'Grego — "aquele que resiste"'}],
-    en:[{n:'Liam',s:'mod',m:'Irlandês — "vontade forte"'},{n:'Noah',s:'class',m:'Hebraico — "descanso"'},{n:'Oliver',s:'class',m:'Nórdico — "exército élfico"'},{n:'Elijah',s:'class',m:'Hebraico — "meu Deus é Javé"'},{n:'James',s:'class',m:'Inglês clássico, muito tradicional'},{n:'Aiden',s:'mod',m:'Irlandês — "pequeno fogo"'},{n:'Ethan',s:'class',m:'Hebraico — "forte e firme"'},{n:'Finn',s:'rare',m:'Irlandês — "branco, justo"'},{n:'Jasper',s:'rare',m:'Persa — "tesouro"'},{n:'Atticus',s:'rare',m:'Latino — "de Atenas"'},{n:'Ezra',s:'mod',m:'Hebraico — "ajuda"'},{n:'Silas',s:'rare',m:'Latino — "floresta"'},{n:'Felix',s:'class',m:'Latino — "feliz, afortunado"'},{n:'Bodhi',s:'rare',m:'Sânscrito — "iluminação"'},{n:'Rowan',s:'mod',m:'Irlandês — "árvore de rowan"'},{n:'Archer',s:'mod',m:'Inglês — "arqueiro"'},{n:'Caspian',s:'rare',m:'Inspirado no Mar Cáspio'},{n:'Logan',s:'mod',m:'Escocês — "pequena caverna"'},{n:'Theo',s:'mod',m:'Grego — "presente de Deus"'},{n:'Mason',s:'mod',m:'Inglês — "pedreiro"'}],
-    es:[{n:'Mateo',s:'class',m:'Hebraico — "presente de Deus"'},{n:'Santiago',s:'class',m:'Hebraico — "Deus protege"'},{n:'Sebastián',s:'class',m:'Grego — "reverenciado"'},{n:'Nicolás',s:'class',m:'Grego — "vitória do povo"'},{n:'Diego',s:'class',m:'Espanhol — variante de Tiago'},{n:'Alejandro',s:'class',m:'Grego — "defensor dos homens"'},{n:'Emilio',s:'class',m:'Latino — "rival, esforçado"'},{n:'Martín',s:'mod',m:'Latino — "de Marte, guerreiro"'},{n:'Valentín',s:'mod',m:'Latino — "saudável, forte"'},{n:'Ignacio',s:'rare',m:'Latino — "ardente"'},{n:'Tadeo',s:'rare',m:'Aramaico — "coração corajoso"'},{n:'Rodrigo',s:'class',m:'Germânico — "glória famosa"'}],
-    fr:[{n:'Léo',s:'mod',m:'Latino — "leão"'},{n:'Louis',s:'class',m:'Germânico — "guerreiro famoso"'},{n:'Hugo',s:'class',m:'Germânico — "espírito, mente"'},{n:'Raphaël',s:'class',m:'Hebraico — "Deus curou"'},{n:'Antoine',s:'class',m:'Latino — forma francesa de Antônio'},{n:'Théodore',s:'class',m:'Grego — "presente de Deus"'},{n:'Axel',s:'mod',m:'Escandinavo — "paz divina"'},{n:'Florian',s:'rare',m:'Latino — "florescente"'},{n:'Maël',s:'rare',m:'Celta bretão — "príncipe, chefe"'},{n:'Titouan',s:'rare',m:'Bretão — variante de Tito'}],
-    it:[{n:'Leonardo',s:'class',m:'Germânico — "leão corajoso"'},{n:'Francesco',s:'class',m:'Latino — "homem livre"'},{n:'Alessandro',s:'class',m:'Grego — "defensor dos homens"'},{n:'Matteo',s:'class',m:'Hebraico — "presente de Deus"'},{n:'Lorenzo',s:'class',m:'Latino — "da cidade de Laurento"'},{n:'Luca',s:'mod',m:'Latino — "aquele que traz luz"'},{n:'Nico',s:'mod',m:'Grego — "vitória do povo"'},{n:'Giulio',s:'rare',m:'Latino clássico — família Júlia'},{n:'Emanuele',s:'rare',m:'Hebraico — "Deus está conosco"'}],
-    de:[{n:'Lukas',s:'class',m:'Latino — "aquele que traz luz"'},{n:'Felix',s:'class',m:'Latino — "feliz"'},{n:'Leon',s:'mod',m:'Grego/Latino — "leão"'},{n:'Elias',s:'class',m:'Hebraico — "meu Deus é Javé"'},{n:'Niklas',s:'mod',m:'Grego — "vitória do povo"'},{n:'Finn',s:'mod',m:'Irlandês/nórdico — "branco"'},{n:'Klaus',s:'class',m:'Alemão — variante de Nicolaus'},{n:'Levin',s:'rare',m:'Germânico — "amigo querido"'},{n:'Thilo',s:'rare',m:'Germânico — "povo poderoso"'}],
-    ja:[{n:'Haruto',s:'mod',m:'Japonês — "sol, voar"'},{n:'Yuto',s:'mod',m:'Japonês — "gentil, voar"'},{n:'Sota',s:'mod',m:'Japonês — "céu amplo"'},{n:'Ren',s:'class',m:'Japonês — "lótus"'},{n:'Kaito',s:'mod',m:'Japonês — "oceano, pipa"'},{n:'Riku',s:'mod',m:'Japonês — "terra"'},{n:'Sora',s:'rare',m:'Japonês — "céu"'},{n:'Hayato',s:'rare',m:'Japonês — "pessoa rápida"'},{n:'Takumi',s:'class',m:'Japonês — "habilidoso, artesão"'},{n:'Kenji',s:'class',m:'Japonês — "segundo filho inteligente"'}],
-    ar:[{n:'Omar',s:'class',m:'Árabe — "longa vida"'},{n:'Karim',s:'class',m:'Árabe — "generoso"'},{n:'Idris',s:'rare',m:'Árabe — "estudioso"'},{n:'Tariq',s:'class',m:'Árabe — "aquele que bate à porta"'},{n:'Zaid',s:'mod',m:'Árabe — "crescimento, abundância"'},{n:'Hamza',s:'class',m:'Árabe — "leão"'},{n:'Khalil',s:'rare',m:'Árabe — "amigo íntimo"'},{n:'Nasir',s:'class',m:'Árabe — "protetor, defensor"'}],
-    he:[{n:'Eitan',s:'class',m:'Hebraico — "forte e firme"'},{n:'Noam',s:'mod',m:'Hebraico — "doçura, prazer"'},{n:'Ariel',s:'class',m:'Hebraico — "leão de Deus"'},{n:'Lior',s:'rare',m:'Hebraico — "minha luz"'},{n:'Oren',s:'rare',m:'Hebraico — "pinheiro"'},{n:'Gal',s:'mod',m:'Hebraico — "onda do mar"'}],
-    la:[{n:'Aurelius',s:'rare',m:'Latino — "dourado"'},{n:'Maximus',s:'class',m:'Latino — "o maior"'},{n:'Lucius',s:'rare',m:'Latino — "luz"'},{n:'Cassius',s:'rare',m:'Latino — "vazio"'},{n:'Julius',s:'class',m:'Latino — da família Júlia'},{n:'Titus',s:'class',m:'Latino — significado incerto'},{n:'Cato',s:'rare',m:'Latino — "sábio"'}],
-    scan:[{n:'Björn',s:'class',m:'Nórdico — "urso"'},{n:'Erik',s:'class',m:'Nórdico — "governante eterno"'},{n:'Leif',s:'class',m:'Nórdico — "herdeiro"'},{n:'Sven',s:'class',m:'Sueco — "jovem guerreiro"'},{n:'Gunnar',s:'class',m:'Nórdico — "guerreiro de batalha"'},{n:'Ragnar',s:'rare',m:'Nórdico — "guerreiro sábio"'},{n:'Axel',s:'mod',m:'Nórdico — "paz divina"'},{n:'Vidar',s:'rare',m:'Nórdico — "guerreiro da floresta"'},{n:'Torsten',s:'rare',m:'Nórdico — "pedra de Thor"'}],
-    cel:[{n:'Ciarán',s:'class',m:'Irlandês — "moreno"'},{n:'Fionn',s:'class',m:'Irlandês — "branco, justo"'},{n:'Cormac',s:'rare',m:'Irlandês — "filho de Corb"'},{n:'Tadhg',s:'rare',m:'Irlandês — "poeta"'},{n:'Oisín',s:'rare',m:'Irlandês — "veadinho"'},{n:'Rían',s:'mod',m:'Irlandês — "pequeno rei"'}],
+    pt:[
+      {n:"Miguel",s:"class",m:"Hebraico — \"quem é como Deus\""},
+      {n:"Arthur",s:"class",m:"Celta — \"urso\", simboliza força e coragem"},
+      {n:"Davi",s:"mod",m:"Hebraico — \"amado\""},
+      {n:"Gabriel",s:"class",m:"Hebraico — \"força de Deus\" ou \"homem de Deus\""},
+      {n:"Bernardo",s:"rare",m:"Germânico — \"forte como um urso\""},
+      {n:"Lucas",s:"mod",m:"Latino — \"aquele que vem da Lucânia\" / associado a \"luz\""},
+      {n:"Mateus",s:"class",m:"Hebraico — \"dom de Deus\""},
+      {n:"Pedro",s:"mod",m:"Grego — \"pedra\""},
+      {n:"Henrique",s:"rare",m:"Germânico — \"senhor do lar\""},
+      {n:"Vinícius",s:"class",m:"Latino — \"da vinha\""},
+      {n:"Enzo",s:"class",m:"Italiano — forma curta de Lorenzo, \"laureado\""},
+      {n:"Caio",s:"mod",m:"Latino — \"alegrar-se\""},
+      {n:"Heitor",s:"rare",m:"Grego — \"aquele que se mantém firme\""},
+      {n:"João",s:"class",m:"Hebraico — \"Deus é gracioso\""},
+      {n:"José",s:"class",m:"Hebraico — \"Deus aumentará\""},
+      {n:"Antônio",s:"mod",m:"Latino — origem incerta, associado a \"florescer\""},
+      {n:"Francisco",s:"mod",m:"Italiano — \"homem livre\", de Francesco de Assis"},
+      {n:"Carlos",s:"class",m:"Germânico — \"homem livre\""},
+      {n:"Paulo",s:"rare",m:"Latino — \"pequeno, humilde\""},
+      {n:"Rafael",s:"mod",m:"Hebraico — \"Deus curou\""},
+      {n:"Daniel",s:"class",m:"Hebraico — \"Deus é meu juiz\""},
+      {n:"Marcos",s:"mod",m:"Latino — \"dedicado a Marte\", deus da guerra"},
+      {n:"Felipe",s:"rare",m:"Grego — \"amigo dos cavalos\""},
+      {n:"Eduardo",s:"class",m:"Germânico — \"guardião das riquezas\""},
+      {n:"André",s:"mod",m:"Grego — \"homem, viril\""},
+      {n:"Thiago",s:"class",m:"Hebraico — variante de Tiago/Jacó, \"aquele que segue\""},
+      {n:"Fernando",s:"mod",m:"Germânico — \"viagem audaciosa\" ou \"pronto para viajar\""},
+      {n:"Gustavo",s:"class",m:"Sueco — \"cajado dos godos\", bastão real"},
+      {n:"Leonardo",s:"mod",m:"Germânico — \"leão corajoso\""},
+      {n:"Vitor",s:"rare",m:"Latino — \"vencedor\""},
+      {n:"Ricardo",s:"mod",m:"Germânico — \"governante poderoso\""},
+      {n:"Alexandre",s:"class",m:"Grego — \"protetor dos homens\""},
+      {n:"César",s:"mod",m:"Latino — \"cabeludo\" ou relativo à dinastia de Júlio César"},
+      {n:"Júlio",s:"class",m:"Latino — \"descendente de Júpiter\""},
+      {n:"Bruno",s:"mod",m:"Germânico — \"marrom, moreno\""},
+      {n:"Igor",s:"class",m:"Eslavo — \"guerreiro\", forma russa de Ingvar"},
+      {n:"Levi",s:"class",m:"Hebraico — \"unido\""},
+      {n:"Oscar",s:"class",m:"Gaélico — \"lança de Deus\" ou \"amigo dos cervos\""},
+      {n:"Vicente",s:"class",m:"Latino — \"vencedor, conquistador\""},
+      {n:"Benício",s:"rare",m:"Latino — \"abençoado\""},
+      {n:"Theo",s:"mod",m:"Grego — forma curta de Theodoro, \"dom de Deus\""}
+    ],
+    en:[
+      {n:"Liam",s:"class",m:"Irlandês — forma curta de William, \"protetor decidido\""},
+      {n:"Noah",s:"class",m:"Hebraico — \"descanso, conforto\""},
+      {n:"Oliver",s:"mod",m:"Latino — \"oliveira\", símbolo de paz"},
+      {n:"James",s:"class",m:"Hebraico — variante de Jacó, \"aquele que segue\""},
+      {n:"Henry",s:"mod",m:"Germânico — \"senhor do lar\""},
+      {n:"William",s:"class",m:"Germânico — \"protetor decidido\""},
+      {n:"Benjamin",s:"class",m:"Hebraico — \"filho da direita\" ou \"filho querido\""},
+      {n:"Lucas",s:"mod",m:"Latino — associado a \"luz\""},
+      {n:"Theodore",s:"rare",m:"Grego — \"dom de Deus\""},
+      {n:"Ethan",s:"class",m:"Hebraico — \"forte, firme\""},
+      {n:"Alexander",s:"class",m:"Grego — \"protetor dos homens\""},
+      {n:"Sebastian",s:"mod",m:"Grego — \"venerável, reverenciado\""},
+      {n:"Jack",s:"class",m:"Inglês — variante de John, \"Deus é gracioso\""},
+      {n:"Owen",s:"mod",m:"Galês — \"jovem guerreiro\" ou \"bem nascido\""},
+      {n:"Samuel",s:"class",m:"Hebraico — \"Deus ouviu\""},
+      {n:"Daniel",s:"class",m:"Hebraico — \"Deus é meu juiz\""},
+      {n:"Matthew",s:"mod",m:"Hebraico — \"dom de Deus\""},
+      {n:"Joseph",s:"class",m:"Hebraico — \"Deus aumentará\""},
+      {n:"Levi",s:"rare",m:"Hebraico — \"unido\""},
+      {n:"David",s:"class",m:"Hebraico — \"amado\""},
+      {n:"Leo",s:"mod",m:"Latino — \"leão\""},
+      {n:"Wyatt",s:"rare",m:"Inglês antigo — \"corajoso na guerra\""},
+      {n:"Julian",s:"mod",m:"Latino — \"jovem, com cabelo encaracolado\" / da família Júlia"},
+      {n:"Gabriel",s:"class",m:"Hebraico — \"força de Deus\""},
+      {n:"Caleb",s:"mod",m:"Hebraico — \"fiel, devotado\" ou \"cão de caça\""},
+      {n:"Isaac",s:"class",m:"Hebraico — \"ele vai rir\""},
+      {n:"Ryan",s:"mod",m:"Irlandês — \"pequeno rei\""},
+      {n:"Nathan",s:"class",m:"Hebraico — \"ele deu\""},
+      {n:"Adrian",s:"mod",m:"Latino — \"da cidade de Adria\""},
+      {n:"Hudson",s:"rare",m:"Inglês — \"filho de Hudd\", originalmente sobrenome"},
+      {n:"Christopher",s:"class",m:"Grego — \"portador de Cristo\""},
+      {n:"Dominic",s:"mod",m:"Latino — \"pertencente ao Senhor\""},
+      {n:"Felix",s:"rare",m:"Latino — \"feliz, sortudo\""},
+      {n:"Oscar",s:"class",m:"Gaélico — \"amigo dos cervos\""},
+      {n:"Asher",s:"mod",m:"Hebraico — \"feliz, bem-aventurado\""},
+      {n:"Maverick",s:"rare",m:"Inglês — \"independente, que não segue o rebanho\""},
+      {n:"Atlas",s:"rare",m:"Grego — titã que sustentava o céu; \"o que suporta\""},
+      {n:"Elliot",s:"mod",m:"Hebraico — variante de Elias, \"meu Deus é Jeová\""},
+      {n:"Miles",s:"mod",m:"Latino — \"soldado\" ou germânico \"misericordioso\""},
+      {n:"Theo",s:"mod",m:"Grego — forma curta de Theodore, \"dom de Deus\""}
+    ],
+    ja:[
+      {n:"Haruto",s:"class",m:"Japonês — 陽翔, \"sol\" + \"voar\""},
+      {n:"Yuto",s:"class",m:"Japonês — 悠人, \"gentil\" + \"pessoa\""},
+      {n:"Sota",s:"mod",m:"Japonês — 颯太, \"vento forte e refrescante\""},
+      {n:"Ren",s:"mod",m:"Japonês — 蓮, \"lótus\""},
+      {n:"Kaito",s:"class",m:"Japonês — 海翔, \"mar\" + \"voar\""},
+      {n:"Riku",s:"rare",m:"Japonês — 陸, \"terra, continente\""},
+      {n:"Sora",s:"mod",m:"Japonês — 空, \"céu\""},
+      {n:"Hayato",s:"class",m:"Japonês — 隼人, \"pessoa veloz como o falcão\""},
+      {n:"Takumi",s:"mod",m:"Japonês — 匠, \"artesão habilidoso\""},
+      {n:"Kenji",s:"rare",m:"Japonês — 健二, \"saudável, forte\" + \"segundo filho\""},
+      {n:"Daiki",s:"class",m:"Japonês — 大輝, \"grande brilho\""},
+      {n:"Yuki",s:"class",m:"Japonês — 雪 ou 幸, \"neve\" ou \"felicidade\""},
+      {n:"Kazuki",s:"mod",m:"Japonês — 和樹, \"harmonia\" + \"árvore\""},
+      {n:"Hiroto",s:"class",m:"Japonês — 大翔, \"grande voo\""},
+      {n:"Kenta",s:"mod",m:"Japonês — 健太, \"saudável e forte\""},
+      {n:"Ryusei",s:"mod",m:"Japonês — 流星, \"estrela cadente\""},
+      {n:"Hinata",s:"rare",m:"Japonês — 陽向, \"voltado para o sol\""},
+      {n:"Daichi",s:"class",m:"Japonês — 大地, \"grande terra\""},
+      {n:"Itsuki",s:"class",m:"Japonês — 樹, \"árvore\""},
+      {n:"Asahi",s:"mod",m:"Japonês — 朝日, \"sol da manhã\""},
+      {n:"Minato",s:"class",m:"Japonês — 湊, \"porto, refúgio seguro\""},
+      {n:"Akira",s:"rare",m:"Japonês — 明, \"brilhante, claro\""},
+      {n:"Hayate",s:"mod",m:"Japonês — 疾風, \"vento forte e repentino\""},
+      {n:"Ichiro",s:"rare",m:"Japonês — 一郎, \"primeiro filho\""},
+      {n:"Naoki",s:"class",m:"Japonês — 直樹, \"árvore honesta e ereta\""},
+      {n:"Ryo",s:"mod",m:"Japonês — 涼, \"refrescante\" ou \"claro\""},
+      {n:"Shin",s:"class",m:"Japonês — 真, \"verdade, sinceridade\""},
+      {n:"Taro",s:"mod",m:"Japonês — 太郎, \"filho grande/forte\", tradicional para primeiro filho"},
+      {n:"Yamato",s:"class",m:"Japonês — 大和, antigo nome do Japão, \"grande harmonia\""},
+      {n:"Hideki",s:"mod",m:"Japonês — 秀樹, \"árvore esplêndida\""},
+      {n:"Satoshi",s:"class",m:"Japonês — 聡, \"sábio, inteligente\""},
+      {n:"Tsubasa",s:"rare",m:"Japonês — 翼, \"asas\""},
+      {n:"Mamoru",s:"class",m:"Japonês — 守, \"protetor\""},
+      {n:"Jun",s:"mod",m:"Japonês — 純, \"puro, genuíno\""},
+      {n:"Fumio",s:"class",m:"Japonês — 文雄, \"homem de letras\", erudito"},
+      {n:"Isamu",s:"class",m:"Japonês — 勇, \"valente, corajoso\""},
+      {n:"Tadashi",s:"class",m:"Japonês — 正, \"correto, justo\""},
+      {n:"Susumu",s:"rare",m:"Japonês — 進, \"avançar, progredir\""},
+      {n:"Akito",s:"mod",m:"Japonês — 明人, \"pessoa brilhante\""},
+      {n:"Goro",s:"rare",m:"Japonês — 五郎, \"quinto filho\""}
+    ]
   },
   F:{
-    pt:[{n:'Sofia',s:'class',m:'Grego — "sabedoria"'},{n:'Helena',s:'class',m:'Grego — "luz radiante"'},{n:'Alice',s:'mod',m:'Germânico — "de nobre linhagem"'},{n:'Laura',s:'class',m:'Latino — "loureiro"'},{n:'Valentina',s:'mod',m:'Latino — "forte e saudável"'},{n:'Isabela',s:'class',m:'Hebraico — "Deus é minha promessa"'},{n:'Manuela',s:'class',m:'Hebraico — "Deus está conosco"'},{n:'Beatriz',s:'class',m:'Latino — "viajante abençoada"'},{n:'Cecília',s:'class',m:'Latino — padroeira da música'},{n:'Luísa',s:'class',m:'Germânico — "guerreira famosa"'},{n:'Lívia',s:'mod',m:'Latino — "azulado"'},{n:'Ayla',s:'rare',m:'Turco/hebraico — "halo da lua"'},{n:'Isis',s:'rare',m:'Egípcio — "deusa do trono"'},{n:'Antonella',s:'mod',m:'Latino/italiano — feminino de Antônio'},{n:'Bianca',s:'class',m:'Italiano — "branca, pura"'},{n:'Marina',s:'class',m:'Latino — "do mar"'},{n:'Clara',s:'class',m:'Latino — "clara, brilhante"'},{n:'Yara',s:'rare',m:'Tupi — "mãe d\'água"'},{n:'Lorena',s:'mod',m:'Latino — variante de Laura'},{n:'Ana Luiza',s:'class',m:'Composto muito popular no Brasil'}],
-    en:[{n:'Emma',s:'class',m:'Germânico — "todo, universal"'},{n:'Olivia',s:'mod',m:'Latino — "oliveira"'},{n:'Ava',s:'mod',m:'Latino/hebraico — "vida"'},{n:'Sophia',s:'class',m:'Grego — "sabedoria"'},{n:'Isabella',s:'class',m:'Hebraico — "Deus é minha promessa"'},{n:'Mia',s:'mod',m:'Escandinavo/italiano — "minha"'},{n:'Charlotte',s:'class',m:'Francês — feminino de Carlos'},{n:'Amelia',s:'class',m:'Germânico — "trabalho"'},{n:'Luna',s:'mod',m:'Latino — "lua"'},{n:'Harper',s:'mod',m:'Inglês — "tocadora de harpa"'},{n:'Violet',s:'rare',m:'Latino — "violeta"'},{n:'Willow',s:'rare',m:'Inglês — "árvore salgueiro"'},{n:'Isla',s:'rare',m:'Escocês — "ilha"'},{n:'Aurora',s:'mod',m:'Latino — "aurora, amanhecer"'},{n:'Wren',s:'rare',m:'Inglês — "carriça, passarinho"'},{n:'Sage',s:'rare',m:'Inglês — "sábia"'},{n:'Eloise',s:'rare',m:'Francês — "saúde, ampla"'},{n:'Piper',s:'mod',m:'Inglês — "tocadora de flauta"'}],
-    es:[{n:'Valentina',s:'mod',m:'Latino — "forte e saudável"'},{n:'Sofía',s:'class',m:'Grego — "sabedoria"'},{n:'Camila',s:'mod',m:'Latino — "serva do templo"'},{n:'Lucía',s:'class',m:'Latino — "luz"'},{n:'Valeria',s:'class',m:'Latino — "forte, saudável"'},{n:'Isabella',s:'class',m:'Hebraico — "Deus é minha promessa"'},{n:'Martina',s:'mod',m:'Latino — "de Marte"'},{n:'Elena',s:'class',m:'Grego — "luz radiante"'},{n:'Daniela',s:'class',m:'Hebraico — "Deus é meu juiz"'},{n:'Renata',s:'rare',m:'Latino — "renascida"'},{n:'Ximena',s:'rare',m:'Basco — "que escuta"'}],
-    fr:[{n:'Chloé',s:'class',m:'Grego — "florescer"'},{n:'Camille',s:'class',m:'Latino — "serva do templo"'},{n:'Léa',s:'mod',m:'Hebraico — "dominante"'},{n:'Manon',s:'mod',m:'Francês — diminutivo de Marie'},{n:'Inès',s:'class',m:'Grego — "pura, casta"'},{n:'Juliette',s:'class',m:'Latino — "jovem"'},{n:'Élise',s:'class',m:'Hebraico — "Deus é minha promessa"'},{n:'Anaïs',s:'rare',m:'Hebraico/francês — variante de Ana'},{n:'Maëlle',s:'rare',m:'Celta bretão — "princesa"'},{n:'Eléonore',s:'rare',m:'Provençal — "compaixão"'}],
-    it:[{n:'Giulia',s:'class',m:'Latino — da família Júlia'},{n:'Martina',s:'class',m:'Latino — "de Marte"'},{n:'Sofia',s:'class',m:'Grego — "sabedoria"'},{n:'Aurora',s:'mod',m:'Latino — "aurora"'},{n:'Chiara',s:'class',m:'Latino — "clara, brilhante"'},{n:'Valentina',s:'mod',m:'Latino — "forte"'},{n:'Beatrice',s:'class',m:'Latino — "abençoada"'},{n:'Fiamma',s:'rare',m:'Italiano — "chama de fogo"'},{n:'Ornella',s:'rare',m:'Italiano — "floração de freixo"'}],
-    de:[{n:'Mia',s:'mod',m:'Escandinavo — "amada"'},{n:'Emma',s:'class',m:'Germânico — "todo, universal"'},{n:'Hannah',s:'class',m:'Hebraico — "graça"'},{n:'Lea',s:'mod',m:'Hebraico — "cansada"'},{n:'Luisa',s:'class',m:'Germânico — "guerreira famosa"'},{n:'Lena',s:'mod',m:'Grego — "luz, brilho"'},{n:'Johanna',s:'class',m:'Hebraico — "Deus é gracioso"'},{n:'Frieda',s:'rare',m:'Germânico — "paz"'},{n:'Hedwig',s:'rare',m:'Germânico — "luta, batalha"'}],
-    ja:[{n:'Yui',s:'mod',m:'Japonês — "amor, dependência"'},{n:'Hana',s:'class',m:'Japonês — "flor"'},{n:'Sakura',s:'mod',m:'Japonês — "flor de cerejeira"'},{n:'Aoi',s:'class',m:'Japonês — "azul, malva"'},{n:'Rin',s:'mod',m:'Japonês — "digna, fria"'},{n:'Yuna',s:'mod',m:'Japonês — "suave"'},{n:'Koharu',s:'rare',m:'Japonês — "coração pequeno"'},{n:'Noa',s:'mod',m:'Japonês — "amar"'},{n:'Miyu',s:'rare',m:'Japonês — "futuro gentil"'}],
-    ar:[{n:'Layla',s:'class',m:'Árabe — "noite"'},{n:'Fatima',s:'class',m:'Árabe — "abstinente"'},{n:'Nour',s:'mod',m:'Árabe — "luz"'},{n:'Yasmin',s:'class',m:'Árabe/persa — "jasmim"'},{n:'Amira',s:'class',m:'Árabe — "princesa"'},{n:'Salma',s:'rare',m:'Árabe — "pacífica"'},{n:'Rania',s:'mod',m:'Árabe — "contente"'},{n:'Zara',s:'mod',m:'Árabe/hebraico — "princesa, flor"'}],
-    he:[{n:'Tamar',s:'class',m:'Hebraico — "tamareira"'},{n:'Noa',s:'mod',m:'Hebraico — "movimento"'},{n:'Shira',s:'rare',m:'Hebraico — "canção"'},{n:'Liora',s:'rare',m:'Hebraico — "minha luz"'},{n:'Avital',s:'rare',m:'Hebraico — "meu pai é orvalho"'},{n:'Yael',s:'class',m:'Hebraico — "cabra montesa"'}],
-    la:[{n:'Aurora',s:'class',m:'Latino — "deusa da aurora"'},{n:'Luna',s:'class',m:'Latino — "lua"'},{n:'Flora',s:'class',m:'Latino — "flor"'},{n:'Serena',s:'class',m:'Latino — "serena, calma"'},{n:'Celeste',s:'mod',m:'Latino — "celestial"'},{n:'Victoria',s:'class',m:'Latino — "vitória"'},{n:'Diana',s:'class',m:'Latino — "deusa da caça"'}],
-    scan:[{n:'Astrid',s:'class',m:'Nórdico — "beleza divina"'},{n:'Freya',s:'class',m:'Nórdico — "deusa do amor"'},{n:'Sigrid',s:'class',m:'Nórdico — "vitória bela"'},{n:'Ingrid',s:'class',m:'Nórdico — "bela de Ing"'},{n:'Brynja',s:'rare',m:'Nórdico — "armadura"'},{n:'Solveig',s:'rare',m:'Nórdico — "força solar"'},{n:'Saga',s:'rare',m:'Nórdico — "deusa da sabedoria"'}],
-    cel:[{n:'Aoife',s:'class',m:'Irlandês — "bela, radiante"'},{n:'Siobhán',s:'class',m:'Irlandês — "Deus é gracioso"'},{n:'Niamh',s:'class',m:'Irlandês — "brilhante"'},{n:'Caoimhe',s:'rare',m:'Irlandês — "gentil, bela"'},{n:'Saoirse',s:'rare',m:'Irlandês — "liberdade"'},{n:'Éabha',s:'rare',m:'Irlandês — forma de Eva'}],
+    pt:[
+      {n:"Sofia",s:"class",m:"Grego — \"sabedoria\""},
+      {n:"Helena",s:"class",m:"Grego — \"luz radiante\" ou \"a que ilumina\""},
+      {n:"Alice",s:"mod",m:"Germânico — \"nobre, de linhagem nobre\""},
+      {n:"Laura",s:"mod",m:"Latino — \"loureiro\", planta símbolo de vitória"},
+      {n:"Valentina",s:"class",m:"Latino — \"forte e saudável\""},
+      {n:"Isabela",s:"rare",m:"Hebraico — \"Deus é minha promessa\""},
+      {n:"Manuela",s:"mod",m:"Hebraico — \"Deus está conosco\""},
+      {n:"Beatriz",s:"class",m:"Latino — \"a que traz felicidade\" ou \"viajante abençoada\""},
+      {n:"Cecília",s:"mod",m:"Latino — \"cega\", ligado à santa padroeira da música"},
+      {n:"Luísa",s:"rare",m:"Germânico — \"guerreira famosa\""},
+      {n:"Lívia",s:"class",m:"Latino — \"azulada\" ou da gens Lívia romana"},
+      {n:"Bianca",s:"class",m:"Italiano — \"branca, pura\""},
+      {n:"Marina",s:"rare",m:"Latino — \"do mar\""},
+      {n:"Clara",s:"mod",m:"Latino — \"clara, brilhante\""},
+      {n:"Maria",s:"rare",m:"Hebraico — possivelmente \"a desejada\" ou \"senhora\""},
+      {n:"Joana",s:"class",m:"Hebraico — \"Deus é gracioso\", forma feminina de João"},
+      {n:"Camila",s:"class",m:"Latino — \"serva do templo\" ou \"jovem cerimonial\""},
+      {n:"Larissa",s:"mod",m:"Grego — \"a alegre, a doce\", de uma cidade da Tessália"},
+      {n:"Carolina",s:"mod",m:"Germânico — \"pequena guerreira\", feminino de Carlos"},
+      {n:"Juliana",s:"class",m:"Latino — \"jovem\" ou descendente de Júlio"},
+      {n:"Patrícia",s:"rare",m:"Latino — \"nobre, de origem patrícia\""},
+      {n:"Vanessa",s:"class",m:"Nome criado pelo escritor Jonathan Swift no século XVIII"},
+      {n:"Fernanda",s:"mod",m:"Germânico — \"viagem audaciosa\", feminino de Fernando"},
+      {n:"Bruna",s:"class",m:"Germânico — \"morena\""},
+      {n:"Gabriela",s:"class",m:"Hebraico — \"força de Deus\", feminino de Gabriel"},
+      {n:"Letícia",s:"mod",m:"Latino — \"alegria, felicidade\""},
+      {n:"Natália",s:"class",m:"Latino — \"nascimento\", ligado ao nascimento de Cristo"},
+      {n:"Raquel",s:"class",m:"Hebraico — \"ovelha\""},
+      {n:"Tatiana",s:"mod",m:"Russo/Grego — possivelmente \"organizadora\""},
+      {n:"Vitória",s:"mod",m:"Latino — \"vitória, triunfo\""},
+      {n:"Yasmin",s:"class",m:"Persa — \"jasmim\", flor símbolo de graça"},
+      {n:"Bárbara",s:"class",m:"Grego — \"estrangeira\""},
+      {n:"Catarina",s:"rare",m:"Grego — \"pura\""},
+      {n:"Heloísa",s:"class",m:"Germânico — \"saudável e larga\""},
+      {n:"Inês",s:"class",m:"Grego — \"pura, casta\""},
+      {n:"Júlia",s:"mod",m:"Latino — feminino de Júlio, \"descendente de Júpiter\""},
+      {n:"Olívia",s:"class",m:"Latino — \"oliveira\", símbolo de paz"},
+      {n:"Esther",s:"class",m:"Persa — \"estrela\""},
+      {n:"Diana",s:"rare",m:"Latino — deusa romana da caça e da lua, \"divina\""},
+      {n:"Amélia",s:"mod",m:"Germânico — \"trabalho, esforço\""},
+      {n:"Antonella",s:"mod",m:"Italiano — diminutivo de Antonia, \"florescente\""}
+    ],
+    en:[
+      {n:"Emma",s:"class",m:"Germânico — \"universal, completa\""},
+      {n:"Olivia",s:"class",m:"Latino — \"oliveira\", símbolo de paz"},
+      {n:"Charlotte",s:"mod",m:"Francês — feminino de Charles, \"pequena guerreira\""},
+      {n:"Amelia",s:"class",m:"Germânico — \"trabalho, esforço\""},
+      {n:"Sophia",s:"mod",m:"Grego — \"sabedoria\""},
+      {n:"Isabella",s:"class",m:"Hebraico — \"Deus é minha promessa\""},
+      {n:"Ava",s:"mod",m:"Latino — possivelmente de \"avis\", \"pássaro\", ou variante de Eva"},
+      {n:"Mia",s:"rare",m:"Escandinavo/Italiano — \"minha\" ou forma curta de Maria"},
+      {n:"Luna",s:"mod",m:"Latino — \"lua\""},
+      {n:"Harper",s:"rare",m:"Inglês — \"tocador de harpa\", originalmente sobrenome"},
+      {n:"Evelyn",s:"mod",m:"Inglês antigo — possivelmente \"vida\" ou \"desejada\""},
+      {n:"Abigail",s:"rare",m:"Hebraico — \"alegria do pai\""},
+      {n:"Emily",s:"class",m:"Latino — feminino de Emil, \"rival, esforçada\""},
+      {n:"Elizabeth",s:"class",m:"Hebraico — \"Deus é minha promessa\""},
+      {n:"Ella",s:"mod",m:"Germânico — \"toda, completa\" ou forma curta de Eleanor"},
+      {n:"Scarlett",s:"mod",m:"Inglês — \"vermelho vivo\", originalmente nome de tecido"},
+      {n:"Victoria",s:"class",m:"Latino — \"vitória\""},
+      {n:"Madison",s:"mod",m:"Inglês — \"filho de Maud\", originalmente sobrenome"},
+      {n:"Penelope",s:"class",m:"Grego — \"a que tece\", esposa de Ulisses na mitologia"},
+      {n:"Riley",s:"class",m:"Irlandês — \"corajoso, valente\""},
+      {n:"Hazel",s:"mod",m:"Inglês — \"aveleira\", árvore símbolo de sabedoria"},
+      {n:"Eleanor",s:"mod",m:"Provençal — \"a outra Aenor\", variante de Helena"},
+      {n:"Stella",s:"class",m:"Latino — \"estrela\""},
+      {n:"Hannah",s:"mod",m:"Hebraico — \"graça, favor\""},
+      {n:"Aria",s:"rare",m:"Italiano — \"melodia, ária musical\""},
+      {n:"Lucy",s:"class",m:"Latino — \"luz\", feminino de Lúcio"},
+      {n:"Naomi",s:"mod",m:"Hebraico — \"minha alegria, agradável\""},
+      {n:"Maya",s:"mod",m:"Sânscrito — \"ilusão\" ou hebraico \"água\""},
+      {n:"Ruby",s:"class",m:"Inglês — \"rubi\", pedra preciosa vermelha"},
+      {n:"Ivy",s:"mod",m:"Inglês — \"hera\", planta símbolo de fidelidade"},
+      {n:"Claire",s:"mod",m:"Francês — \"clara, brilhante\""},
+      {n:"Audrey",s:"class",m:"Inglês antigo — \"força nobre\""},
+      {n:"Iris",s:"class",m:"Grego — deusa do arco-íris; \"arco-íris\""},
+      {n:"Margaret",s:"class",m:"Grego — \"pérola\""},
+      {n:"Adeline",s:"mod",m:"Germânico — \"nobre\", diminutivo de Adelaide"},
+      {n:"Beatrix",s:"class",m:"Latino — \"a que traz felicidade\""},
+      {n:"Daphne",s:"mod",m:"Grego — \"loureiro\", ninfa da mitologia grega"},
+      {n:"Faye",s:"mod",m:"Inglês antigo — \"fada\""},
+      {n:"Nova",s:"mod",m:"Latino — \"nova\"; também termo astronômico para estrela brilhante"},
+      {n:"Phoebe",s:"mod",m:"Grego — \"brilhante, radiante\""},
+      {n:"Vera",s:"mod",m:"Latino/Russo — \"verdadeira\" ou \"fé\""}
+    ],
+    ja:[
+      {n:"Yui",s:"class",m:"Japonês — 結, \"laço, vínculo\""},
+      {n:"Hana",s:"class",m:"Japonês — 花, \"flor\""},
+      {n:"Sakura",s:"mod",m:"Japonês — 桜, \"flor de cerejeira\""},
+      {n:"Aoi",s:"mod",m:"Japonês — 葵, \"malva\" (flor) ou \"azul/verde\""},
+      {n:"Rin",s:"class",m:"Japonês — 凛, \"digna, austera\""},
+      {n:"Yuna",s:"rare",m:"Japonês — 優奈, \"gentil e elegante\""},
+      {n:"Koharu",s:"mod",m:"Japonês — 小春, \"pequena primavera\", referência ao veranico de outono"},
+      {n:"Miyu",s:"mod",m:"Japonês — 美優, \"bela e gentil\""},
+      {n:"Akari",s:"rare",m:"Japonês — 明里, \"luz\""},
+      {n:"Himari",s:"class",m:"Japonês — 陽葵, \"girassol\" ou \"sol e malva\""},
+      {n:"Mei",s:"mod",m:"Japonês — 芽依, \"broto, germinar\""},
+      {n:"Hinata",s:"class",m:"Japonês — 陽向, \"voltada para o sol\""},
+      {n:"Saki",s:"mod",m:"Japonês — 咲, \"florescer\""},
+      {n:"Kokoro",s:"class",m:"Japonês — 心, \"coração\""},
+      {n:"Yume",s:"class",m:"Japonês — 夢, \"sonho\""},
+      {n:"Misaki",s:"mod",m:"Japonês — 美咲, \"belo florescer\""},
+      {n:"Nozomi",s:"class",m:"Japonês — 希, \"esperança, desejo\""},
+      {n:"Sayuri",s:"rare",m:"Japonês — 小百合, \"pequeno lírio\""},
+      {n:"Umi",s:"class",m:"Japonês — 海, \"mar\""},
+      {n:"Asuka",s:"class",m:"Japonês — 飛鳥, \"voo de pássaro\" / nome histórico do período Asuka"},
+      {n:"Haruka",s:"rare",m:"Japonês — 遥, \"distante, vasta\""},
+      {n:"Izumi",s:"class",m:"Japonês — 泉, \"fonte de água, nascente\""},
+      {n:"Kana",s:"mod",m:"Japonês — 香奈, \"fragrância\""},
+      {n:"Mariko",s:"class",m:"Japonês — 真理子, \"filha da verdade\""},
+      {n:"Natsumi",s:"rare",m:"Japonês — 夏美, \"beleza do verão\""},
+      {n:"Shiori",s:"mod",m:"Japonês — 詩織, \"poema tecido\""},
+      {n:"Akemi",s:"class",m:"Japonês — 明美, \"beleza brilhante\""},
+      {n:"Fumiko",s:"class",m:"Japonês — 文子, \"filha das letras\""},
+      {n:"Hikari",s:"rare",m:"Japonês — 光, \"luz\""},
+      {n:"Kiyomi",s:"mod",m:"Japonês — 清美, \"pura beleza\""},
+      {n:"Tamaki",s:"class",m:"Japonês — 環, \"anel, círculo\""},
+      {n:"Yumeko",s:"mod",m:"Japonês — 夢子, \"filha do sonho\""},
+      {n:"Kaede",s:"class",m:"Japonês — 楓, \"bordo\" (árvore)"},
+      {n:"Sumire",s:"mod",m:"Japonês — 菫, \"violeta\" (flor)"},
+      {n:"Akiko",s:"mod",m:"Japonês — 秋子, \"filha do outono\""},
+      {n:"Chiharu",s:"class",m:"Japonês — 千春, \"mil primaveras\""},
+      {n:"Mitsuko",s:"mod",m:"Japonês — 光子, \"filha da luz\""},
+      {n:"Yuriko",s:"class",m:"Japonês — 百合子, \"filha do lírio\""},
+      {n:"Botan",s:"class",m:"Japonês — 牡丹, \"peônia\" (flor)"},
+      {n:"Wakana",s:"mod",m:"Japonês — 若菜, \"vegetais jovens\", primavera"}
+    ]
   },
   U:{
-    all:[{n:'Kai',s:'mod',m:'Havaiano — "mar"'},{n:'Ariel',s:'class',m:'Hebraico — "leão de Deus"'},{n:'Phoenix',s:'rare',m:'Grego — "ave fênix"'},{n:'Eden',s:'class',m:'Hebraico — "paraíso"'},{n:'River',s:'mod',m:'Inglês — "rio"'},{n:'Sage',s:'rare',m:'Inglês — "sábio"'},{n:'Quinn',s:'mod',m:'Irlandês — "inteligente"'},{n:'Noel',s:'class',m:'Francês — "Natal"'},{n:'Sasha',s:'mod',m:'Russo — variante de Alexandre'},{n:'Remy',s:'mod',m:'Francês — "remador"'},{n:'Celeste',s:'mod',m:'Latino — "celestial"'},{n:'Rowan',s:'mod',m:'Irlandês — "árvore de rowan"'},{n:'Elliot',s:'mod',m:'Inglês — "Deus no alto"'},{n:'Skyler',s:'rare',m:'Holandês — "erudito"'},{n:'Noa',s:'mod',m:'Hebraico — "movimento"'},{n:'Nour',s:'mod',m:'Árabe — "luz"'},{n:'Finley',s:'mod',m:'Escocês — "guerreiro justo"'},{n:'Avery',s:'mod',m:'Inglês — "governante élfico"'},{n:'Morgan',s:'rare',m:'Celta — "do mar"'},{n:'Luca',s:'mod',m:'Latino — "luz"'}],
-    pt:[{n:'Ariel',s:'class',m:'Hebraico — "leão de Deus"'},{n:'Eden',s:'class',m:'Hebraico — "paraíso"'},{n:'Kai',s:'mod',m:'Havaiano — "mar"'},{n:'Noel',s:'class',m:'Francês — "Natal"'},{n:'Sasha',s:'mod',m:'Russo — variante de Alexandre'},{n:'Índigo',s:'rare',m:'Grego — "cor azul índigo"'}],
-    en:[{n:'Avery',s:'mod',m:'Inglês — "governante élfico"'},{n:'River',s:'mod',m:'Inglês — "rio"'},{n:'Sage',s:'rare',m:'Inglês — "sábio"'},{n:'Quinn',s:'mod',m:'Irlandês — "inteligente"'},{n:'Rowan',s:'mod',m:'Irlandês — "árvore de rowan"'},{n:'Finley',s:'mod',m:'Escocês — "guerreiro justo"'},{n:'Elliot',s:'mod',m:'Inglês — "Deus no alto"'},{n:'Riley',s:'mod',m:'Irlandês — "corajoso"'},{n:'Skyler',s:'rare',m:'Holandês — "erudito"'},{n:'Phoenix',s:'rare',m:'Grego — "a ave fênix"'}],
-    fr:[{n:'Camille',s:'class',m:'Latino — "serva do templo"'},{n:'Claude',s:'class',m:'Latino — da família Cláudia'},{n:'Dominique',s:'class',m:'Latino — "do Senhor"'},{n:'Alexis',s:'mod',m:'Grego — "defensor"'},{n:'Morgan',s:'rare',m:'Celta — "do mar"'}],
-    ja:[{n:'Haru',s:'mod',m:'Japonês — "primavera"'},{n:'Noa',s:'mod',m:'Japonês — "amar"'},{n:'Sora',s:'rare',m:'Japonês — "céu"'},{n:'Yuki',s:'class',m:'Japonês — "felicidade, neve"'},{n:'Rei',s:'rare',m:'Japonês — "argola, lei"'}],
-    he:[{n:'Noa',s:'mod',m:'Hebraico — "movimento"'},{n:'Gal',s:'mod',m:'Hebraico — "onda"'},{n:'Lior',s:'rare',m:'Hebraico — "minha luz"'},{n:'Ariel',s:'class',m:'Hebraico — "leão de Deus"'}],
-    ar:[{n:'Nour',s:'mod',m:'Árabe — "luz"'},{n:'Amal',s:'class',m:'Árabe — "esperança"'}],
-    la:[{n:'Celeste',s:'mod',m:'Latino — "celestial"'},{n:'Felix',s:'class',m:'Latino — "feliz"'},{n:'Serene',s:'rare',m:'Latino — "serena"'}],
-    scan:[{n:'Signe',s:'rare',m:'Nórdico — "nova vitória"'},{n:'Birger',s:'rare',m:'Nórdico — "proteção"'}],
-    cel:[{n:'Rían',s:'mod',m:'Irlandês — "pequeno rei"'},{n:'Morgan',s:'rare',m:'Celta — "nascido do mar"'}],
-    es:[{n:'Ariel',s:'class',m:'Hebraico — "leão de Deus"'},{n:'Alex',s:'mod',m:'Grego — "defensor"'},{n:'Eden',s:'class',m:'Hebraico — "paraíso"'},{n:'Nico',s:'mod',m:'Grego — "vitória do povo"'}],
-    it:[{n:'Andrea',s:'class',m:'Grego — "guerreiro corajoso"'},{n:'Nico',s:'mod',m:'Grego — "vitória"'},{n:'Luca',s:'mod',m:'Latino — "luz"'},{n:'Celeste',s:'mod',m:'Latino — "celestial"'}],
-    de:[{n:'Finn',s:'mod',m:'Nórdico — "branco"'},{n:'Alex',s:'mod',m:'Grego — "defensor"'},{n:'Kim',s:'mod',m:'Escandinavo — "chefe guerreiro"'}],
+    pt:[
+      {n:"Ariel",s:"class",m:"Hebraico — \"leão de Deus\""},
+      {n:"Eden",s:"class",m:"Hebraico — \"paraíso, delícia\""},
+      {n:"Kai",s:"mod",m:"Havaiano — \"mar\""},
+      {n:"Noel",s:"mod",m:"Francês/Latino — \"natal, nascimento\""},
+      {n:"Sasha",s:"class",m:"Russo — diminutivo de Alexandre/Alexandra, \"protetor(a)\""},
+      {n:"Cauê",s:"mod",m:"Tupi — \"o sol\""},
+      {n:"Yago",s:"class",m:"Galego — variante de Jacó, \"aquele que segue\""},
+      {n:"Nara",s:"mod",m:"Tupi — possivelmente \"minha mãe\" ou ligado à natureza"},
+      {n:"Maitê",s:"class",m:"Basco — \"amada\""},
+      {n:"Brisa",s:"mod",m:"Português — \"vento leve e suave\""},
+      {n:"Estrela",s:"mod",m:"Português — \"estrela\", corpo celeste luminoso"},
+      {n:"Flor",s:"class",m:"Português — \"flor\""},
+      {n:"Luz",s:"rare",m:"Português — \"luz\""},
+      {n:"Mar",s:"mod",m:"Português — \"mar\""},
+      {n:"Sol",s:"class",m:"Português — \"sol\""},
+      {n:"Iris",s:"rare",m:"Grego — deusa do arco-íris; \"arco-íris\""}
+    ],
+    en:[
+      {n:"Avery",s:"class",m:"Inglês antigo — \"governante dos elfos\", originalmente sobrenome"},
+      {n:"River",s:"class",m:"Inglês — \"rio\""},
+      {n:"Sage",s:"mod",m:"Latino — \"sábio(a)\"; também o nome da planta sálvia"},
+      {n:"Quinn",s:"mod",m:"Irlandês — \"conselheiro, sábio\""},
+      {n:"Rowan",s:"class",m:"Gaélico — \"pequeno ruivo\"; também a árvore tília-brava"},
+      {n:"Finley",s:"rare",m:"Gaélico — \"herói justo\""},
+      {n:"Elliot",s:"mod",m:"Hebraico — variante de Elias, \"meu Deus é Jeová\""},
+      {n:"Riley",s:"class",m:"Irlandês — \"corajoso, valente\""},
+      {n:"Phoenix",s:"rare",m:"Grego — ave mítica que renasce das cinzas; \"renascimento\""},
+      {n:"Charlie",s:"class",m:"Germânico — diminutivo de Charles, \"homem livre\""},
+      {n:"Jordan",s:"class",m:"Hebraico — \"fluir, descer\", referência ao rio Jordão"},
+      {n:"Reese",s:"rare",m:"Galês — \"entusiasmo, ardor\""},
+      {n:"Eden",s:"mod",m:"Hebraico — \"paraíso, delícia\""},
+      {n:"Skyler",s:"mod",m:"Holandês — \"abrigo, refúgio\""},
+      {n:"Wren",s:"class",m:"Inglês — \"carriça\" (pequeno pássaro)"}
+    ],
+    ja:[
+      {n:"Haru",s:"class",m:"Japonês — 陽 ou 春, \"sol\" ou \"primavera\""},
+      {n:"Sora",s:"mod",m:"Japonês — 空, \"céu\""},
+      {n:"Yuki",s:"mod",m:"Japonês — 雪 ou 幸, \"neve\" ou \"felicidade\""},
+      {n:"Rei",s:"class",m:"Japonês — 玲, \"som claro de joia\" ou \"belo, gracioso\""},
+      {n:"Asa",s:"rare",m:"Japonês — 朝, \"manhã\""},
+      {n:"Sui",s:"mod",m:"Japonês — 翠, \"verde-jade\""},
+      {n:"Kanata",s:"class",m:"Japonês — 彼方, \"horizonte distante\""},
+      {n:"Hikari",s:"mod",m:"Japonês — 光, \"luz\""},
+      {n:"Madoka",s:"rare",m:"Japonês — 円, \"círculo, redondo\", simboliza harmonia"}
+    ]
   }
 };
 
