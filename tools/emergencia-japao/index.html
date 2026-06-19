@@ -4,210 +4,94 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
-<title>Emergência no Japão</title>
-
+<title>🚨 Emergência Japão</title>
 
 <style>
 
-*{
-box-sizing:border-box;
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial;
-}
-
-
 body{
-
 margin:0;
-background:#f2f2f2;
-
+font-family:Arial,sans-serif;
+background:#f3f3f3;
 }
-
 
 header{
-
 background:#c62828;
 color:white;
-padding:25px;
+padding:20px;
 text-align:center;
-
 }
-
-
-header h1{
-
-margin:0;
-font-size:28px;
-
-}
-
 
 .container{
-
-max-width:800px;
+max-width:700px;
 margin:auto;
 padding:15px;
-
 }
 
-
-
-.alert{
-
-background:#fff3cd;
-border-left:6px solid #ff9800;
+.box{
+background:white;
+border-radius:15px;
 padding:15px;
+margin:15px 0;
+box-shadow:0 3px 10px #ddd;
+}
+
+button{
+border:0;
+padding:10px;
 border-radius:10px;
-margin-bottom:20px;
-
+cursor:pointer;
+margin:5px;
 }
-
-
-
-.callbox{
-
-display:flex;
-gap:10px;
-flex-wrap:wrap;
-
-}
-
-
 
 .call{
+display:flex;
+gap:10px;
+}
 
+.call a{
 flex:1;
-min-width:150px;
 padding:15px;
-border-radius:12px;
 color:white;
 text-align:center;
-font-size:20px;
+border-radius:12px;
 text-decoration:none;
-
 }
 
+.police{background:#1565c0}
+.help{background:#d32f2f}
+.sea{background:#00897b}
 
-.police{
-
-background:#1565c0;
-
+.jp{
+font-size:22px;
 }
 
-
-.ambulance{
-
-background:#d32f2f;
-
+.romaji{
+color:#1565c0;
+font-weight:bold;
+font-size:18px;
 }
 
-
-.coast{
-
-background:#00897b;
-
+.pt{
+color:#555;
 }
-
-
 
 .search{
-
 width:100%;
 padding:15px;
 border-radius:10px;
 border:1px solid #ccc;
-font-size:16px;
-
 }
 
-
-
-.card{
-
-background:white;
-margin-top:15px;
-padding:18px;
-border-radius:15px;
-box-shadow:0 3px 8px #ddd;
-
+.star{
+float:right;
+font-size:25px;
 }
 
-
-.title{
-
-font-size:20px;
-font-weight:bold;
-
+.favorite{
+color:#ff9800;
 }
-
-
-
-.jp{
-
-font-size:20px;
-margin-top:10px;
-
-}
-
-
-
-.romaji{
-
-color:#1565c0;
-font-size:18px;
-font-weight:bold;
-
-}
-
-
-
-.pt{
-
-color:#555;
-margin-top:5px;
-
-}
-
-
-
-button{
-
-margin-top:10px;
-padding:8px 12px;
-border:0;
-border-radius:8px;
-cursor:pointer;
-
-}
-
-
-
-.copy{
-
-background:#eee;
-
-}
-
-
-
-.audio{
-
-background:#1565c0;
-color:white;
-
-}
-
-
-
-footer{
-
-text-align:center;
-padding:20px;
-color:#777;
-
-}
-
 
 </style>
 
@@ -219,60 +103,57 @@ color:#777;
 
 <header>
 
-<h1>🚨 Emergência no Japão</h1>
+<h1>🚨 Emergência Japão</h1>
 
-<p>Frases rápidas para falar ao telefone</p>
+<p>Ajuda rápida em português</p>
 
 </header>
-
 
 
 <div class="container">
 
 
+<div class="box">
 
-<div class="alert">
+<h2>📞 Ligações</h2>
 
-<b>📞 Números importantes:</b><br><br>
+<div class="call">
 
-👮 Polícia: <b>110</b><br>
-🚑 Ambulância / Bombeiros: <b>119</b><br>
-🌊 Guarda Costeira: <b>118</b>
+<a class="police" href="tel:110">
+👮 110<br>Polícia
+</a>
+
+<a class="help" href="tel:119">
+🚑 119<br>Ambulância
+</a>
+
+<a class="sea" href="tel:118">
+🌊 118<br>Mar
+</a>
+
+</div>
 
 </div>
 
 
 
+<div class="box">
 
-<div class="callbox">
-
-
-<a class="call police" href="tel:110">
-
-👮 Ligar 110
-
-</a>
+<button onclick="localizacao()">
+📍 Mostrar minha localização
+</button>
 
 
-<a class="call ambulance" href="tel:119">
-
-🚑 Ligar 119
-
-</a>
-
-
-<a class="call coast" href="tel:118">
-
-🌊 Ligar 118
-
-</a>
+<button onclick="mostrarEndereco()">
+🏠 Meu endereço
+</button>
 
 
 </div>
 
 
 
-<br>
+<div class="box">
 
 
 <input 
@@ -281,26 +162,16 @@ placeholder="🔎 Procurar frase..."
 onkeyup="buscar(this.value)">
 
 
-
-
-
-<div id="lista">
-
-
-
-</div>
-
-
 </div>
 
 
 
-<footer>
 
-🇯🇵 Ferramenta de emergência para estrangeiros no Japão
+<div id="lista"></div>
 
-</footer>
 
+
+</div>
 
 
 
@@ -311,169 +182,108 @@ onkeyup="buscar(this.value)">
 const frases=[
 
 
-{
-
-jp:"警察を呼んでください",
-
-romaji:"Keisatsu o yonde kudasai",
-
-pt:"Chame a polícia, por favor."
-
-},
+["警察を呼んでください",
+"Keisatsu o yonde kudasai",
+"Chame a polícia"],
 
 
-{
-
-jp:"救急車を呼んでください",
-
-romaji:"Kyūkyūsha o yonde kudasai",
-
-pt:"Chame uma ambulância, por favor."
-
-},
+["救急車を呼んでください",
+"Kyūkyūsha o yonde kudasai",
+"Chame uma ambulância"],
 
 
-{
-
-jp:"火事です",
-
-romaji:"Kaji desu",
-
-pt:"É um incêndio."
-
-},
+["火事です",
+"Kaji desu",
+"É um incêndio"],
 
 
-{
-
-jp:"助けてください",
-
-romaji:"Tasukete kudasai",
-
-pt:"Preciso de ajuda."
-
-},
+["助けてください",
+"Tasukete kudasai",
+"Preciso de ajuda"],
 
 
-{
-
-jp:"日本語が話せません",
-
-romaji:"Nihongo ga hanasemasen",
-
-pt:"Não consigo falar japonês."
-
-},
+["日本語が話せません",
+"Nihongo ga hanasemasen",
+"Não falo japonês"],
 
 
-{
-
-jp:"ゆっくり話してください",
-
-romaji:"Yukkuri hanashite kudasai",
-
-pt:"Fale devagar, por favor."
-
-},
+["ゆっくり話してください",
+"Yukkuri hanashite kudasai",
+"Fale devagar"],
 
 
-{
-
-jp:"住所はここです",
-
-romaji:"Jūsho wa koko desu",
-
-pt:"O endereço é aqui."
-
-},
+["住所はここです",
+"Jūsho wa koko desu",
+"O endereço é aqui"],
 
 
-{
-
-jp:"道に迷いました",
-
-romaji:"Michi ni mayoimashita",
-
-pt:"Estou perdido."
-
-},
+["通訳が必要です",
+"Tsūyaku ga hitsuyō desu",
+"Preciso de intérprete"],
 
 
-{
-
-jp:"怪我をしています",
-
-romaji:"Kega o shiteimasu",
-
-pt:"Estou machucado."
-
-},
+["怪我をしています",
+"Kega o shiteimasu",
+"Estou machucado"],
 
 
-{
-
-jp:"病院に行きたいです",
-
-romaji:"Byōin ni ikitai desu",
-
-pt:"Quero ir ao hospital."
-
-}
-
+["病院に行きたいです",
+"Byōin ni ikitai desu",
+"Quero ir ao hospital"]
 
 ];
 
 
 
+function carregar(){
 
-
-function mostrar(){
 
 let html="";
 
+let fav=
+JSON.parse(localStorage.getItem("fav")||"[]");
 
-frases.forEach(f=>{
+
+frases.forEach((f,i)=>{
+
+
+let ativo=fav.includes(i);
 
 
 html+=`
 
-<div class="card">
+<div class="box frase">
 
 
-<div class="title">
+<span class="star ${ativo?'favorite':''}"
+onclick="favorito(${i})">
+⭐
+</span>
 
-${f.pt}
 
+<div class="pt">
+${f[2]}
 </div>
 
 
 <div class="jp">
-
-${f.jp}
-
+${f[0]}
 </div>
 
 
 <div class="romaji">
-
-${f.romaji}
-
+${f[1]}
 </div>
 
 
-<button class="audio" onclick="falar('${f.jp}')">
-
+<button onclick="ouvir('${f[0]}')">
 🔊 Ouvir
-
 </button>
 
 
-<button class="copy" onclick="copiar('${f.romaji}')">
-
+<button onclick="copiar('${f[1]}')">
 📋 Copiar
-
 </button>
-
 
 
 </div>
@@ -492,24 +302,71 @@ document.getElementById("lista").innerHTML=html;
 
 
 
-function buscar(texto){
+function ouvir(txt){
+
+let fala=new SpeechSynthesisUtterance(txt);
+
+fala.lang="ja-JP";
+
+speechSynthesis.speak(fala);
+
+}
 
 
-let cards=document.querySelectorAll(".card");
+
+function copiar(txt){
+
+navigator.clipboard.writeText(txt);
+
+alert("Copiado!");
+
+}
 
 
-cards.forEach(c=>{
+
+function favorito(i){
+
+let fav=
+JSON.parse(localStorage.getItem("fav")||"[]");
 
 
-if(c.innerText.toLowerCase().includes(texto.toLowerCase())){
+if(fav.includes(i)){
 
-c.style.display="block";
+fav=fav.filter(x=>x!=i);
 
 }else{
 
-c.style.display="none";
+fav.push(i);
 
 }
+
+
+localStorage.setItem(
+"fav",
+JSON.stringify(fav)
+);
+
+
+carregar();
+
+}
+
+
+
+function buscar(t){
+
+document.querySelectorAll(".frase")
+.forEach(x=>{
+
+
+x.style.display=
+x.innerText
+.toLowerCase()
+.includes(t.toLowerCase())
+?
+"block"
+:
+"none";
 
 
 });
@@ -519,38 +376,66 @@ c.style.display="none";
 
 
 
+function localizacao(){
 
-function copiar(t){
 
+navigator.geolocation.getCurrentPosition(
 
-navigator.clipboard.writeText(t);
+p=>{
 
-alert("Copiado!");
+let url=
+`https://maps.google.com/?q=${p.coords.latitude},${p.coords.longitude}`;
+
+window.open(url);
+
+},
+
+()=>{
+
+alert("Não foi possível obter localização");
+
+}
+
+);
+
 
 }
 
 
 
+function mostrarEndereco(){
 
-function falar(texto){
+
+let end=
+localStorage.getItem("endereco");
 
 
-let fala=new SpeechSynthesisUtterance(texto);
+if(!end){
 
-fala.lang="ja-JP";
+end=
+prompt("Digite seu endereço em japonês:");
 
-speechSynthesis.speak(fala);
+localStorage.setItem(
+"endereco",
+end
+);
+
+}
+
+
+alert(
+"住所はここです\n\n"+end
+);
 
 
 }
 
 
 
-mostrar();
+carregar();
 
 
 </script>
-
 
 
 </body>
