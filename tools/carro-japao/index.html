@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>🚗 Carro no Japão</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="wrapper">
+
+    <div class="left-panel">
+
+        <h1>🚗 Carro no Japão</h1>
+
+        <div class="subtitle">
+            Impostos e informações automotivas do Japão
+        </div>
+
+        <div class="info-box">
+
+            自動車税 (Jidōsha-zei)<br>
+            車検 (Shaken)<br>
+            軽自動車 (Kei Jidōsha)
+
+        </div>
+
+
+        <div class="section-title">
+            Dados do Veículo
+        </div>
+
+
+        <div class="input-group">
+
+            <label class="input-label">
+                TIPO DO VEÍCULO
+            </label>
+
+            <select id="tipo">
+
+                <option value="normal">
+                    🚗 普通自動車 (Futsū Jidōsha)
+                </option>
+
+                <option value="kei">
+                    🚙 軽自動車 (Kei Jidōsha)
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="input-group">
+
+            <label class="input-label">
+                CILINDRADA
+            </label>
+
+            <select id="cilindrada">
+
+                <option value="660">660 cc</option>
+                <option value="1000">1000 cc</option>
+                <option value="1500">1500 cc</option>
+                <option value="1800">1800 cc</option>
+                <option value="2000">2000 cc</option>
+                <option value="2500">2500 cc</option>
+                <option value="3000">3000 cc</option>
+                <option value="4000">4000 cc+</option>
+
+            </select>
+
+        </div>
+
+
+        <div class="input-group">
+
+            <label class="input-label">
+                PRIMEIRO REGISTRO
+            </label>
+
+            <select id="registro">
+
+                <option value="novo">
+                    Outubro/2019 ou depois
+                </option>
+
+                <option value="antigo">
+                    Antes de Outubro/2019
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="input-group">
+
+            <label class="input-label">
+                IDADE DO VEÍCULO
+            </label>
+
+            <select id="idade">
+
+                <option value="normal">
+                    Menos de 13 anos
+                </option>
+
+                <option value="13">
+                    Mais de 13 anos
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="input-group">
+
+            <label class="input-label">
+                DATA DO ÚLTIMO 車検 (Shaken)
+            </label>
+
+            <input
+            type="date"
+            id="shaken">
+
+        </div>
+
+
+        <button class="btn-calcular">
+
+            Calcular
+
+        </button>
+
+    </div>
+
+
+
+    <div class="right-panel">
+
+        <div class="resultado-header">
+
+            Resultado
+
+        </div>
+
+
+        <div class="resultado-box">
+
+            <div class="resultado-label">
+
+                自動車税 (Jidōsha-zei)
+
+            </div>
+
+            <div
+            class="resultado"
+            id="resultadoImposto">
+
+                Aguardando cálculo
+
+            </div>
+
+        </div>
+
+
+        <div class="resultado-box">
+
+            <div class="resultado-label">
+
+                Próximo 車検 (Shaken)
+
+            </div>
+
+            <div
+            class="resultado"
+            id="resultadoShaken">
+
+                —
+
+            </div>
+
+        </div>
+
+
+        <button
+        class="btn-copiar">
+
+            📋 Copiar
+
+        </button>
+
+
+        <div class="historico-titulo">
+
+            Últimos cálculos
+
+        </div>
+
+        <ul
+        id="historico"
+        class="historico">
+
+            <li>Nenhum cálculo realizado</li>
+
+        </ul>
+
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
