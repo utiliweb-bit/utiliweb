@@ -104,7 +104,7 @@ h1 { color:#333; font-size:22px; margin-bottom:4px; font-weight:700; }
 
 /* PRESETS */
 .presets-grid {
-  display:grid; grid-template-columns:repeat(3, 1fr);
+  display:grid; grid-template-columns:repeat(2, 1fr);
   gap:6px; margin-bottom:6px;
 }
 .preset-btn {
@@ -323,10 +323,6 @@ h1 { color:#333; font-size:22px; margin-bottom:4px; font-weight:700; }
       </div>
     </div>
 
-    <div class="section-title">Comparar outros serviços (opcional)</div>
-    <div class="servicos-wrap" id="servicos-wrap"></div>
-    <div class="servicos-hint" id="hint-servicos">Nenhum serviço comparado</div>
-
     <div class="botoes-acao">
       <button class="btn btn-calcular" onclick="calcular()">✓ Calcular valor recebido</button>
       <button class="btn btn-limpar" onclick="limpar()">🗑️ Limpar</button>
@@ -378,32 +374,29 @@ h1 { color:#333; font-size:22px; margin-bottom:4px; font-weight:700; }
 <script>
 const SIMBOLOS   = { JPY:'¥', USD:'$', EUR:'€' };
 const LOCALES    = { JPY:'ja-JP', USD:'en-US', EUR:'de-DE' };
-const N_SERVICOS = 3;
+const N_SERVICOS = 0;
+
+// Câmbios base estimados (aprox.) para cada moeda em BRL, usados quando não há busca
+const CAMBIO_BASE = { JPY: 0.0345, USD: 5.20, EUR: 5.70 };
 
 const PRESETS = {
   JPY: [
-    { id:'wise',    nome:'Wise',         emoji:'💙', cambioRel:0.990, taxaPct:0.45, taxaFixa:0   },
-    { id:'sbi',     nome:'SBI Remit',    emoji:'🏦', cambioRel:0.985, taxaPct:0,    taxaFixa:250 },
-    { id:'remitly', nome:'Remitly',      emoji:'🟢', cambioRel:0.980, taxaPct:0,    taxaFixa:400 },
-    { id:'wu',      nome:'W. Union',     emoji:'🟡', cambioRel:0.960, taxaPct:0,    taxaFixa:0   },
-    { id:'sony',    nome:'Sony Bank',    emoji:'🏧', cambioRel:0.975, taxaPct:0,    taxaFixa:500 },
-    { id:'banco',   nome:'Banco Trad.', emoji:'🏛️', cambioRel:0.940, taxaPct:1.0,  taxaFixa:1000},
+    { id:'wise',    nome:'Wise',      emoji:'💙', cambioRel:0.990, taxaPct:0.45, taxaFixa:0   },
+    { id:'sbi',     nome:'SBI Remit', emoji:'🏦', cambioRel:0.985, taxaPct:0,    taxaFixa:250 },
+    { id:'remitly', nome:'Remitly',   emoji:'🟢', cambioRel:0.980, taxaPct:0,    taxaFixa:400 },
+    { id:'wu',      nome:'Western Union', emoji:'🟡', cambioRel:0.960, taxaPct:0, taxaFixa:0  },
   ],
   USD: [
-    { id:'wise',    nome:'Wise',         emoji:'💙', cambioRel:0.992, taxaPct:0.45, taxaFixa:0    },
-    { id:'remitly', nome:'Remitly',      emoji:'🟢', cambioRel:0.985, taxaPct:0,    taxaFixa:3.99 },
-    { id:'wu',      nome:'W. Union',     emoji:'🟡', cambioRel:0.965, taxaPct:0,    taxaFixa:0    },
-    { id:'paypal',  nome:'PayPal',       emoji:'🔵', cambioRel:0.950, taxaPct:3.5,  taxaFixa:0    },
-    { id:'bb',      nome:'Bco. Brasil',  emoji:'🏛️', cambioRel:0.960, taxaPct:1.5,  taxaFixa:0    },
-    { id:'banco',   nome:'Banco Trad.', emoji:'🏦', cambioRel:0.940, taxaPct:2.0,  taxaFixa:0    },
+    { id:'wise',    nome:'Wise',      emoji:'💙', cambioRel:0.992, taxaPct:0.45, taxaFixa:0    },
+    { id:'remitly', nome:'Remitly',   emoji:'🟢', cambioRel:0.985, taxaPct:0,    taxaFixa:3.99 },
+    { id:'wu',      nome:'Western Union', emoji:'🟡', cambioRel:0.965, taxaPct:0, taxaFixa:0   },
+    { id:'paypal',  nome:'PayPal',    emoji:'🔵', cambioRel:0.950, taxaPct:3.5,  taxaFixa:0    },
   ],
   EUR: [
-    { id:'wise',    nome:'Wise',         emoji:'💙', cambioRel:0.992, taxaPct:0.45, taxaFixa:0    },
-    { id:'remitly', nome:'Remitly',      emoji:'🟢', cambioRel:0.984, taxaPct:0,    taxaFixa:2.99 },
-    { id:'wu',      nome:'W. Union',     emoji:'🟡', cambioRel:0.963, taxaPct:0,    taxaFixa:0    },
-    { id:'revolut', nome:'Revolut',      emoji:'⚫', cambioRel:0.975, taxaPct:1.0,  taxaFixa:0    },
-    { id:'bb',      nome:'Bco. Brasil',  emoji:'🏛️', cambioRel:0.958, taxaPct:1.5,  taxaFixa:0    },
-    { id:'banco',   nome:'Banco Trad.', emoji:'🏦', cambioRel:0.935, taxaPct:2.0,  taxaFixa:0    },
+    { id:'wise',    nome:'Wise',      emoji:'💙', cambioRel:0.992, taxaPct:0.45, taxaFixa:0    },
+    { id:'remitly', nome:'Remitly',   emoji:'🟢', cambioRel:0.984, taxaPct:0,    taxaFixa:2.99 },
+    { id:'wu',      nome:'Western Union', emoji:'🟡', cambioRel:0.963, taxaPct:0, taxaFixa:0   },
+    { id:'revolut', nome:'Revolut',   emoji:'⚫', cambioRel:0.975, taxaPct:1.0,  taxaFixa:0    },
   ],
 };
 
@@ -449,11 +442,12 @@ function buildPresets() {
   grid.innerHTML = '';
 
   ps.forEach(p => {
-    // Prefer fetched data for this service, else estimate from commercial rate
+    // Prefer fetched data for this service, else estimate from commercial rate or base rate
     const fetched = (dadosBuscados?.servicos || []).find(s =>
       s.nome.toLowerCase().includes(p.nome.split(/\s/)[0].toLowerCase())
     );
-    const cambio  = fetched?.cambio  ?? (cambioComercial > 0 ? +(cambioComercial * p.cambioRel).toFixed(4) : null);
+    const baseRate = cambioComercial > 0 ? cambioComercial : (CAMBIO_BASE[m] || 0);
+    const cambio  = fetched?.cambio  ?? (baseRate > 0 ? +(baseRate * p.cambioRel).toFixed(4) : null);
     const taxaPct = fetched?.taxa_pct ?? p.taxaPct;
     const taxaFixa= fetched?.taxa_fixa?? p.taxaFixa;
 
@@ -495,31 +489,15 @@ function selecionarPreset(id, cambio, taxaPct, taxaFixa, nome) {
   if (cambio && cambio > 0) document.getElementById('cotacao').value = cambio;
   document.getElementById('taxa-pct').value = taxaPct || 0;
   document.getElementById('taxa-fixa').value = taxaFixa || 0;
-  if (dadosBuscados?.iof_pct) document.getElementById('iof').value = dadosBuscados.iof_pct;
+  const iofEl = document.getElementById('iof');
+  if (dadosBuscados?.iof_pct) {
+    iofEl.value = dadosBuscados.iof_pct;
+  } else if (!iofEl.value || parseFloat(iofEl.value) === 0) {
+    iofEl.value = 0.38; // IOF padrão para remessa internacional
+  }
 
   calcular();
   status('✓ ' + nome + ' selecionado — confirme valores antes de enviar');
-}
-
-// ── serviços de comparação ───────────────────────────────────────────────────
-
-function buildServicos() {
-  const wrap = document.getElementById('servicos-wrap');
-  wrap.innerHTML = '';
-  for (let i = 0; i < N_SERVICOS; i++) {
-    const d = document.createElement('div');
-    d.className = 'servico-card';
-    d.id = 'servico-card-' + i;
-    d.innerHTML =
-      `<input class="servico-nome" type="text" id="serv-nome-${i}" placeholder="Nome do serviço ${i+1}" oninput="calcular()">` +
-      `<div class="servico-grid">` +
-        `<div class="campo-mini"><div class="campo-mini-label">Câmbio</div><input type="number" id="serv-cambio-${i}" placeholder="0.0000" min="0" step="0.0001" oninput="calcular()"></div>` +
-        `<div class="campo-mini"><div class="campo-mini-label">Taxa %</div><input type="number" id="serv-pct-${i}" placeholder="0" min="0" step="0.01" oninput="calcular()"></div>` +
-        `<div class="campo-mini"><div class="campo-mini-label">Taxa fixa</div><input type="number" id="serv-fixo-${i}" placeholder="0" min="0" step="1" oninput="calcular()"></div>` +
-      `</div>` +
-      `<div class="servico-resultado" id="serv-resultado-${i}">—</div>`;
-    wrap.appendChild(d);
-  }
 }
 
 // ── cálculo ──────────────────────────────────────────────────────────────────
@@ -559,48 +537,10 @@ function calcular() {
   document.getElementById('r-taxas').textContent     = totalTaxasBRL > 0 ? fmtBRL(totalTaxasBRL) : '—';
   document.getElementById('r-taxas-sub').textContent = totalTaxasBRL > 0 ? 'Taxa serviço + IOF' : '—';
 
-  // Serviços comparados
-  let servicos = [];
-  for (let i = 0; i < N_SERVICOS; i++) {
-    const nome    = (document.getElementById('serv-nome-' + i)?.value || '').trim();
-    const sCambio = num('serv-cambio-' + i);
-    const sPct    = num('serv-pct-' + i);
-    const sFixo   = num('serv-fixo-' + i);
-    const card    = document.getElementById('servico-card-' + i);
-    const resEl   = document.getElementById('serv-resultado-' + i);
-    const ativo   = sCambio > 0;
-
-    if (card) card.classList.toggle('preenchido', ativo);
-
-    if (ativo && V > 0) {
-      const sr = calcRemessa(V, sCambio, sPct, sFixo, iofPct);
-      if (resEl) resEl.textContent = 'Você recebe ' + fmtBRL(sr.recebido);
-      servicos.push({ nome: nome || 'Serviço ' + (i+1), recebido: sr.recebido });
-    } else {
-      if (resEl) resEl.textContent = ativo ? 'Insira o valor a enviar' : '—';
-    }
-  }
-
-  document.getElementById('hint-servicos').textContent =
-    servicos.length === 0 ? 'Nenhum serviço comparado' :
-    servicos.length === 1 ? '1 serviço comparado' :
-    servicos.length + ' serviços comparados';
-
   // Melhor opção
-  let melhor = null;
-  servicos.forEach(s => { if (!melhor || s.recebido > melhor.recebido) melhor = s; });
-
   if (r.recebido > 0) {
-    if (!melhor || r.recebido >= melhor.recebido) {
-      document.getElementById('r-melhor').textContent     = fmtBRL(r.recebido);
-      document.getElementById('r-melhor-sub').textContent = 'Sua simulação principal';
-    } else {
-      document.getElementById('r-melhor').textContent     = fmtBRL(melhor.recebido);
-      document.getElementById('r-melhor-sub').textContent = melhor.nome;
-    }
-  } else if (melhor) {
-    document.getElementById('r-melhor').textContent     = fmtBRL(melhor.recebido);
-    document.getElementById('r-melhor-sub').textContent = melhor.nome;
+    document.getElementById('r-melhor').textContent     = fmtBRL(r.recebido);
+    document.getElementById('r-melhor-sub').textContent = 'Sua simulação principal';
   } else {
     document.getElementById('r-melhor').textContent     = '—';
     document.getElementById('r-melhor-sub').textContent = '—';
@@ -609,7 +549,6 @@ function calcular() {
   // Gráfico
   const barras = [];
   if (r.recebido > 0) barras.push({ nome:'Minha simulação', valor:r.recebido });
-  servicos.forEach(s => barras.push({ nome:s.nome, valor:s.recebido }));
   const maxVal = barras.length > 0 ? Math.max(...barras.map(b => b.valor)) : 1;
 
   let gHTML = '';
@@ -694,20 +633,9 @@ async function buscarDadosAutomaticos() {
 
     dadosBuscados = parsed;
 
+    // Preenche o câmbio e IOF
     if (parsed.cambio_comercial > 0) document.getElementById('cotacao').value = parsed.cambio_comercial;
     if (parsed.iof_pct)              document.getElementById('iof').value      = parsed.iof_pct;
-
-    // Preenche slots de comparação
-    (parsed.servicos || []).slice(0, N_SERVICOS).forEach((s, i) => {
-      const nEl = document.getElementById('serv-nome-' + i);
-      const cEl = document.getElementById('serv-cambio-' + i);
-      const pEl = document.getElementById('serv-pct-' + i);
-      const fEl = document.getElementById('serv-fixo-' + i);
-      if (nEl) nEl.value = s.nome || 'Serviço ' + (i+1);
-      if (cEl) cEl.value = s.cambio || '';
-      if (pEl) pEl.value = s.taxa_pct || 0;
-      if (fEl) fEl.value = s.taxa_fixa || 0;
-    });
 
     buildPresets();
     calcular();
@@ -728,12 +656,6 @@ function limpar() {
     const el = document.getElementById(id);
     if (el) { el.value = ''; el.classList.remove('tem-valor'); }
   });
-  for (let i = 0; i < N_SERVICOS; i++) {
-    ['nome','cambio','pct','fixo'].forEach(c => {
-      const el = document.getElementById('serv-' + c + '-' + i);
-      if (el) el.value = '';
-    });
-  }
   dadosBuscados = null;
   presetAtivoId = null;
   buildPresets();
@@ -758,14 +680,6 @@ function copiar(evt) {
     'IOF (' + iofPct + '%): ' + fmtBRL(r.iofValor),
     'VALOR RECEBIDO: ' + fmtBRL(r.recebido),
   ];
-  for (let i = 0; i < N_SERVICOS; i++) {
-    const sCambio = num('serv-cambio-' + i);
-    if (sCambio > 0) {
-      const nome = (document.getElementById('serv-nome-' + i)?.value || 'Serviço ' + (i+1)).trim();
-      const sr = calcRemessa(V, sCambio, num('serv-pct-'+i), num('serv-fixo-'+i), iofPct);
-      linhas.push(nome + ': ' + fmtBRL(sr.recebido));
-    }
-  }
   navigator.clipboard.writeText(linhas.join('\n')).then(() => {
     const orig = evt.target.textContent;
     evt.target.textContent = '✓ Copiado!';
@@ -784,16 +698,7 @@ function exportar() {
     '\nTaxa %,' + pct + '\nTaxa fixa,' + fixo + '\nIOF %,' + iofPct +
     '\nTaxa total,' + r.taxaTotal + '\nLiquido enviado,' + r.liquidoEnviado +
     '\nConvertido bruto,' + r.convertidoBruto + '\nIOF (BRL),' + r.iofValor +
-    '\nRecebido (BRL),' + r.recebido +
-    '\n\nServico,Cambio,Taxa %,Taxa fixa,Recebido (BRL)\n';
-  for (let i = 0; i < N_SERVICOS; i++) {
-    const sCambio = num('serv-cambio-' + i);
-    if (sCambio > 0) {
-      const nome = (document.getElementById('serv-nome-' + i)?.value || 'Servico ' + (i+1)).trim();
-      const sr   = calcRemessa(V, sCambio, num('serv-pct-'+i), num('serv-fixo-'+i), iofPct);
-      csv += nome + ',' + sCambio + ',' + num('serv-pct-'+i) + ',' + num('serv-fixo-'+i) + ',' + sr.recebido + '\n';
-    }
-  }
+    '\nRecebido (BRL),' + r.recebido + '\n';
   const a = Object.assign(document.createElement('a'), {
     href: URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'})),
     download:'envio-brasil.csv'
@@ -805,7 +710,6 @@ function exportar() {
 // ── init ─────────────────────────────────────────────────────────────────────
 
 window.addEventListener('load', () => {
-  buildServicos();
   buildPresets();
   calcular();
 });
