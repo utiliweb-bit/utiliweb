@@ -504,6 +504,59 @@ const CATALOGO = {
     ZAR: ["Rand sul-africano", "🇿🇦"], ZMW: ["Kwacha zambiano", "🇿🇲"], ZWL: ["Dólar zimbabuano", "🇿🇼"],
 };
 
+/* Países que usam cada moeda — usado para a busca por nome do país.
+   Algumas moedas (euro, dólar, francos CFA etc.) são usadas por vários países. */
+const PAISES = {
+    AED: ["Emirados Árabes Unidos"], AFN: ["Afeganistão"], ALL: ["Albânia"], AMD: ["Armênia"],
+    ANG: ["Curaçao", "Sint Maarten"], AOA: ["Angola"], ARS: ["Argentina"], AUD: ["Austrália", "Quiribati", "Nauru", "Tuvalu"],
+    AWG: ["Aruba"], AZN: ["Azerbaijão"], BAM: ["Bósnia e Herzegovina"], BBD: ["Barbados"],
+    BDT: ["Bangladesh"], BGN: ["Bulgária"], BHD: ["Bahrein"], BIF: ["Burundi"],
+    BMD: ["Bermudas"], BND: ["Brunei"], BOB: ["Bolívia"], BRL: ["Brasil"],
+    BSD: ["Bahamas"], BTN: ["Butão"], BWP: ["Botsuana"], BYN: ["Belarus", "Bielorrússia"],
+    BZD: ["Belize"], CAD: ["Canadá"], CDF: ["Congo", "República Democrática do Congo"], CHF: ["Suíça", "Liechtenstein"],
+    CLP: ["Chile"], CNY: ["China"], COP: ["Colômbia"], CRC: ["Costa Rica"],
+    CUP: ["Cuba"], CVE: ["Cabo Verde"], CZK: ["República Tcheca", "Chéquia"], DJF: ["Djibuti"],
+    DKK: ["Dinamarca"], DOP: ["República Dominicana"], DZD: ["Argélia"], EGP: ["Egito"],
+    ERN: ["Eritreia"], ETB: ["Etiópia"],
+    EUR: ["Alemanha", "Áustria", "Bélgica", "Chipre", "Croácia", "Eslováquia", "Eslovênia", "Espanha",
+          "Estônia", "Finlândia", "França", "Grécia", "Holanda", "Países Baixos", "Irlanda", "Itália",
+          "Letônia", "Lituânia", "Luxemburgo", "Malta", "Portugal", "Andorra", "Mônaco", "San Marino",
+          "Vaticano", "Kosovo", "Montenegro", "Zona do Euro"],
+    FJD: ["Fiji"], FKP: ["Ilhas Malvinas"],
+    GBP: ["Reino Unido", "Inglaterra", "Escócia", "País de Gales", "Irlanda do Norte", "Ilha de Man", "Jersey", "Guernsey"],
+    GEL: ["Geórgia"],
+    GHS: ["Gana"], GIP: ["Gibraltar"], GMD: ["Gâmbia"], GNF: ["Guiné"],
+    GTQ: ["Guatemala"], GYD: ["Guiana"], HKD: ["Hong Kong"], HNL: ["Honduras"],
+    HRK: ["Croácia"], HTG: ["Haiti"], HUF: ["Hungria"], IDR: ["Indonésia"],
+    ILS: ["Israel"], INR: ["Índia"], IQD: ["Iraque"], IRR: ["Irã"],
+    ISK: ["Islândia"], JMD: ["Jamaica"], JOD: ["Jordânia"], JPY: ["Japão"],
+    KES: ["Quênia"], KGS: ["Quirguistão"], KHR: ["Camboja"], KMF: ["Comores"],
+    KPW: ["Coreia do Norte"], KRW: ["Coreia do Sul"], KWD: ["Kuwait"], KYD: ["Ilhas Cayman"],
+    KZT: ["Cazaquistão"], LAK: ["Laos"], LBP: ["Líbano"], LKR: ["Sri Lanka"],
+    LRD: ["Libéria"], LSL: ["Lesoto"], LYD: ["Líbia"], MAD: ["Marrocos"],
+    MDL: ["Moldávia"], MGA: ["Madagascar"], MKD: ["Macedônia do Norte"], MMK: ["Myanmar", "Birmânia"],
+    MNT: ["Mongólia"], MOP: ["Macau"], MRU: ["Mauritânia"], MUR: ["Maurício", "Maurícia"],
+    MVR: ["Maldivas"], MWK: ["Malaui"], MXN: ["México"], MYR: ["Malásia"],
+    MZN: ["Moçambique"], NAD: ["Namíbia"], NGN: ["Nigéria"], NIO: ["Nicarágua"],
+    NOK: ["Noruega"], NPR: ["Nepal"], NZD: ["Nova Zelândia", "Ilhas Cook", "Niue", "Toquelau"], OMR: ["Omã"],
+    PAB: ["Panamá"], PEN: ["Peru"], PGK: ["Papua-Nova Guiné"], PHP: ["Filipinas"],
+    PKR: ["Paquistão"], PLN: ["Polônia"], PYG: ["Paraguai"], QAR: ["Catar"],
+    RON: ["Romênia"], RSD: ["Sérvia"], RUB: ["Rússia"], RWF: ["Ruanda"],
+    SAR: ["Arábia Saudita"], SBD: ["Ilhas Salomão"], SCR: ["Seicheles"], SDG: ["Sudão"],
+    SEK: ["Suécia"], SGD: ["Singapura"], SHP: ["Santa Helena"], SLE: ["Serra Leoa"],
+    SOS: ["Somália"], SRD: ["Suriname"], SSP: ["Sudão do Sul"], STN: ["São Tomé e Príncipe"],
+    SYP: ["Síria"], SZL: ["Essuatíni", "Suazilândia"], THB: ["Tailândia"], TJS: ["Tajiquistão"],
+    TMT: ["Turcomenistão"], TND: ["Tunísia"], TOP: ["Tonga"], TRY: ["Turquia"],
+    TTD: ["Trinidad e Tobago"], TWD: ["Taiwan"], TZS: ["Tanzânia"], UAH: ["Ucrânia"],
+    UGX: ["Uganda"], USD: ["Estados Unidos", "EUA", "Equador", "El Salvador", "Panamá", "Timor-Leste", "Ilhas Marshall", "Micronésia", "Palau"], UYU: ["Uruguai"], UZS: ["Uzbequistão"],
+    VES: ["Venezuela"], VND: ["Vietnã"], VUV: ["Vanuatu"], WST: ["Samoa"],
+    XAF: ["Camarões", "Gabão", "Chade", "Congo", "Guiné Equatorial", "República Centro-Africana"],
+    XCD: ["Antígua e Barbuda", "Dominica", "Granada", "Santa Lúcia", "São Vicente e Granadinas", "São Cristóvão e Névis", "Anguilla", "Montserrat"],
+    XOF: ["Senegal", "Costa do Marfim", "Mali", "Burquina Fasso", "Benim", "Níger", "Togo", "Guiné-Bissau"],
+    XPF: ["Polinésia Francesa", "Nova Caledônia"], YER: ["Iêmen"], ZAR: ["África do Sul"],
+    ZMW: ["Zâmbia"], ZWL: ["Zimbábue"],
+};
+
 // Moedas em destaque para os chips de acesso rápido
 const DESTAQUES = ["BRL", "USD", "EUR", "GBP", "JPY", "CNY", "ARS", "CAD"];
 
@@ -533,6 +586,19 @@ const TAXAS_FALLBACK_BASE_USD = {
 
 function infoMoeda(codigo) {
     return CATALOGO[codigo] || [codigo, "🌐"];
+}
+
+function paisesMoeda(codigo) {
+    return PAISES[codigo] || [];
+}
+
+// Remove acentos e caixa para comparações de busca mais tolerantes
+// (ex: "japao" encontra "Japão", "frança" encontra "França")
+function normalizar(texto) {
+    return texto
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
 }
 
 function formatarMoeda(valor, codigo) {
@@ -636,12 +702,14 @@ function atualizarTrigger(lado) {
 
 function montarDropdown(lado, filtro = "") {
     const lista = document.getElementById(`lista${lado}`);
-    const termo = filtro.trim().toLowerCase();
+    const termo = normalizar(filtro.trim());
 
     const filtradas = MOEDAS_DISPONIVEIS.filter(c => {
         if (!termo) return true;
         const [nome] = infoMoeda(c);
-        return c.toLowerCase().includes(termo) || nome.toLowerCase().includes(termo);
+        const paises = paisesMoeda(c);
+        const textoBusca = normalizar(`${c} ${nome} ${paises.join(" ")}`);
+        return textoBusca.includes(termo);
     });
 
     if (filtradas.length === 0) {
