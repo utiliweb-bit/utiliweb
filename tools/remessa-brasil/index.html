@@ -12,7 +12,7 @@
         * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 
         html, body {
-            width:100%; min-height:100vh;
+            width:100%; min-height:100vh; overflow-x:hidden;
             font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             background:linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
             display:flex; justify-content:center; align-items:center;
@@ -385,10 +385,37 @@
             .wrapper { border-radius:10px; }
             .left-panel, .right-panel { padding:12px; }
             h1 { font-size:17px; }
+            .subtitle { font-size:12px; }
             .campos-grid { grid-template-columns:1fr; }
             .metrics-top { grid-template-columns:1fr; }
             .botoes-acao { grid-template-columns:1fr 1fr; }
             .servico-grid { grid-template-columns:1fr; }
+
+            /* evita zoom automático em inputs no iOS Safari */
+            .moeda-row select,
+            .valor-input-wrap input,
+            .campo-input,
+            .campo-mini input,
+            .servico-nome,
+            .btn-buscar,
+            .btn-calcular { font-size:16px; }
+
+            .bar-mes { min-width:64px; }
+            .bar-amt { min-width:76px; font-size:9px; }
+            .bar-row { gap:6px; }
+
+            .tabela-row { flex-wrap:wrap; row-gap:2px; }
+            .tabela-row.total .tabela-valor { font-size:12px; }
+        }
+
+        @media (max-width:380px) {
+            h1 { font-size:16px; }
+            .metric-value { font-size:16px; }
+            .bar-mes { min-width:54px; font-size:9px; }
+            .bar-amt { min-width:64px; }
+            .servico-grid { gap:8px; }
+            .botoes-acao { grid-template-columns:1fr; }
+            .btn-calcular { grid-column:1/-1; }
         }
     </style>
 </head>
