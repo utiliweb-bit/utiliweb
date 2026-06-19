@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Emergência no Japão</title>
+
+
+<style>
+
+*{
+box-sizing:border-box;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial;
+}
+
+
+body{
+
+margin:0;
+background:#f2f2f2;
+
+}
+
+
+header{
+
+background:#c62828;
+color:white;
+padding:25px;
+text-align:center;
+
+}
+
+
+header h1{
+
+margin:0;
+font-size:28px;
+
+}
+
+
+.container{
+
+max-width:800px;
+margin:auto;
+padding:15px;
+
+}
+
+
+
+.alert{
+
+background:#fff3cd;
+border-left:6px solid #ff9800;
+padding:15px;
+border-radius:10px;
+margin-bottom:20px;
+
+}
+
+
+
+.callbox{
+
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+
+}
+
+
+
+.call{
+
+flex:1;
+min-width:150px;
+padding:15px;
+border-radius:12px;
+color:white;
+text-align:center;
+font-size:20px;
+text-decoration:none;
+
+}
+
+
+.police{
+
+background:#1565c0;
+
+}
+
+
+.ambulance{
+
+background:#d32f2f;
+
+}
+
+
+.coast{
+
+background:#00897b;
+
+}
+
+
+
+.search{
+
+width:100%;
+padding:15px;
+border-radius:10px;
+border:1px solid #ccc;
+font-size:16px;
+
+}
+
+
+
+.card{
+
+background:white;
+margin-top:15px;
+padding:18px;
+border-radius:15px;
+box-shadow:0 3px 8px #ddd;
+
+}
+
+
+.title{
+
+font-size:20px;
+font-weight:bold;
+
+}
+
+
+
+.jp{
+
+font-size:20px;
+margin-top:10px;
+
+}
+
+
+
+.romaji{
+
+color:#1565c0;
+font-size:18px;
+font-weight:bold;
+
+}
+
+
+
+.pt{
+
+color:#555;
+margin-top:5px;
+
+}
+
+
+
+button{
+
+margin-top:10px;
+padding:8px 12px;
+border:0;
+border-radius:8px;
+cursor:pointer;
+
+}
+
+
+
+.copy{
+
+background:#eee;
+
+}
+
+
+
+.audio{
+
+background:#1565c0;
+color:white;
+
+}
+
+
+
+footer{
+
+text-align:center;
+padding:20px;
+color:#777;
+
+}
+
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+<h1>🚨 Emergência no Japão</h1>
+
+<p>Frases rápidas para falar ao telefone</p>
+
+</header>
+
+
+
+<div class="container">
+
+
+
+<div class="alert">
+
+<b>📞 Números importantes:</b><br><br>
+
+👮 Polícia: <b>110</b><br>
+🚑 Ambulância / Bombeiros: <b>119</b><br>
+🌊 Guarda Costeira: <b>118</b>
+
+</div>
+
+
+
+
+<div class="callbox">
+
+
+<a class="call police" href="tel:110">
+
+👮 Ligar 110
+
+</a>
+
+
+<a class="call ambulance" href="tel:119">
+
+🚑 Ligar 119
+
+</a>
+
+
+<a class="call coast" href="tel:118">
+
+🌊 Ligar 118
+
+</a>
+
+
+</div>
+
+
+
+<br>
+
+
+<input 
+class="search"
+placeholder="🔎 Procurar frase..."
+onkeyup="buscar(this.value)">
+
+
+
+
+
+<div id="lista">
+
+
+
+</div>
+
+
+</div>
+
+
+
+<footer>
+
+🇯🇵 Ferramenta de emergência para estrangeiros no Japão
+
+</footer>
+
+
+
+
+
+<script>
+
+
+const frases=[
+
+
+{
+
+jp:"警察を呼んでください",
+
+romaji:"Keisatsu o yonde kudasai",
+
+pt:"Chame a polícia, por favor."
+
+},
+
+
+{
+
+jp:"救急車を呼んでください",
+
+romaji:"Kyūkyūsha o yonde kudasai",
+
+pt:"Chame uma ambulância, por favor."
+
+},
+
+
+{
+
+jp:"火事です",
+
+romaji:"Kaji desu",
+
+pt:"É um incêndio."
+
+},
+
+
+{
+
+jp:"助けてください",
+
+romaji:"Tasukete kudasai",
+
+pt:"Preciso de ajuda."
+
+},
+
+
+{
+
+jp:"日本語が話せません",
+
+romaji:"Nihongo ga hanasemasen",
+
+pt:"Não consigo falar japonês."
+
+},
+
+
+{
+
+jp:"ゆっくり話してください",
+
+romaji:"Yukkuri hanashite kudasai",
+
+pt:"Fale devagar, por favor."
+
+},
+
+
+{
+
+jp:"住所はここです",
+
+romaji:"Jūsho wa koko desu",
+
+pt:"O endereço é aqui."
+
+},
+
+
+{
+
+jp:"道に迷いました",
+
+romaji:"Michi ni mayoimashita",
+
+pt:"Estou perdido."
+
+},
+
+
+{
+
+jp:"怪我をしています",
+
+romaji:"Kega o shiteimasu",
+
+pt:"Estou machucado."
+
+},
+
+
+{
+
+jp:"病院に行きたいです",
+
+romaji:"Byōin ni ikitai desu",
+
+pt:"Quero ir ao hospital."
+
+}
+
+
+];
+
+
+
+
+
+function mostrar(){
+
+let html="";
+
+
+frases.forEach(f=>{
+
+
+html+=`
+
+<div class="card">
+
+
+<div class="title">
+
+${f.pt}
+
+</div>
+
+
+<div class="jp">
+
+${f.jp}
+
+</div>
+
+
+<div class="romaji">
+
+${f.romaji}
+
+</div>
+
+
+<button class="audio" onclick="falar('${f.jp}')">
+
+🔊 Ouvir
+
+</button>
+
+
+<button class="copy" onclick="copiar('${f.romaji}')">
+
+📋 Copiar
+
+</button>
+
+
+
+</div>
+
+
+`;
+
+
+});
+
+
+document.getElementById("lista").innerHTML=html;
+
+
+}
+
+
+
+function buscar(texto){
+
+
+let cards=document.querySelectorAll(".card");
+
+
+cards.forEach(c=>{
+
+
+if(c.innerText.toLowerCase().includes(texto.toLowerCase())){
+
+c.style.display="block";
+
+}else{
+
+c.style.display="none";
+
+}
+
+
+});
+
+
+}
+
+
+
+
+function copiar(t){
+
+
+navigator.clipboard.writeText(t);
+
+alert("Copiado!");
+
+}
+
+
+
+
+function falar(texto){
+
+
+let fala=new SpeechSynthesisUtterance(texto);
+
+fala.lang="ja-JP";
+
+speechSynthesis.speak(fala);
+
+
+}
+
+
+
+mostrar();
+
+
+</script>
+
+
+
+</body>
+
+</html>
