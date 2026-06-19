@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feriados do Japão</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    background:linear-gradient(135deg,#2ecc71,#27ae60);
+    min-height:100vh;
+    padding:20px;
+}
+
+.wrapper{
+    max-width:1200px;
+    margin:auto;
+    background:#fff;
+    border-radius:16px;
+    overflow:hidden;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    box-shadow:0 20px 60px rgba(0,0,0,.2);
+}
+
+.left-panel{
+    padding:32px;
+    border-right:1px solid #e5e5e5;
+}
+
+.right-panel{
+    padding:32px;
+    background:#e8f8f5;
+}
+
+h1{
+    color:#333;
+    margin-bottom:8px;
+}
+
+.subtitle{
+    color:#888;
+    font-size:14px;
+    margin-bottom:25px;
+}
+
+.info-box{
+    background:#f0fff7;
+    border-left:4px solid #27ae60;
+    padding:15px;
+    border-radius:8px;
+    margin-bottom:25px;
+    color:#27ae60;
+    font-size:13px;
+}
+
+.section-title{
+    font-size:12px;
+    font-weight:bold;
+    color:#444;
+    text-transform:uppercase;
+    border-bottom:2px solid #27ae60;
+    padding-bottom:8px;
+    margin-bottom:18px;
+}
+
+.input-group{
+    margin-bottom:18px;
+}
+
+.input-label{
+    display:block;
+    margin-bottom:6px;
+    font-size:12px;
+    font-weight:bold;
+    color:#666;
+}
+
+input{
+    width:100%;
+    padding:14px;
+    border:2px solid #ddd;
+    border-radius:8px;
+    font-size:14px;
+}
+
+input:focus{
+    outline:none;
+    border-color:#27ae60;
+}
+
+.lista-feriados{
+    margin-top:20px;
+}
+
+.card-feriado{
+    background:white;
+    border:2px solid #27ae60;
+    border-radius:10px;
+    padding:18px;
+    margin-bottom:15px;
+}
+
+.nome-jp{
+    font-size:18px;
+    color:#27ae60;
+    font-weight:bold;
+}
+
+.nome-pt{
+    margin-top:6px;
+    color:#444;
+}
+
+.data{
+    margin-top:10px;
+    font-size:13px;
+    color:#777;
+}
+
+.resultado-header{
+    font-size:12px;
+    font-weight:bold;
+    color:#27ae60;
+    border-bottom:2px solid #27ae60;
+    padding-bottom:8px;
+    margin-bottom:20px;
+}
+
+.proximo-box{
+    background:white;
+    border:2px solid #27ae60;
+    border-radius:10px;
+    padding:20px;
+}
+
+.proximo-nome{
+    color:#27ae60;
+    font-size:22px;
+    font-weight:bold;
+}
+
+.proximo-data{
+    margin-top:10px;
+    color:#555;
+}
+
+.contagem{
+    margin-top:15px;
+    font-size:28px;
+    font-weight:bold;
+    color:#27ae60;
+}
+
+@media(max-width:900px){
+
+.wrapper{
+    grid-template-columns:1fr;
+}
+
+.left-panel{
+    border-right:none;
+    border-bottom:1px solid #e5e5e5;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+<div class="left-panel">
+
+<h1>📅 Feriados do Japão</h1>
+
+<div class="subtitle">
+Calendário de feriados nacionais do Japão
+</div>
+
+<div class="info-box">
+Ferramenta gratuita e sem API.
+Pesquise pelo nome do feriado em português ou japonês.
+</div>
+
+<div class="section-title">
+Pesquisar
+</div>
+
+<div class="input-group">
+
+<label class="input-label">
+BUSCAR FERIADO
+</label>
+
+<input
+type="text"
+id="busca"
+placeholder="Ex.: Golden Week, 元日, Showa">
+
+</div>
+
+<div class="lista-feriados" id="listaFeriados">
+
+</div>
+
+</div>
+
+<div class="right-panel">
+
+<div class="resultado-header">
+Próximo Feriado
+</div>
+
+<div class="proximo-box">
+
+<div class="proximo-nome" id="proximoNome">
+Carregando...
+</div>
+
+<div class="proximo-data" id="proximoData">
+</div>
+
+<div class="contagem" id="diasRestantes">
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+const feriados = [
+
+{
+jp:"元日",
+pt:"Ano Novo",
+data:"2026-01-01"
+},
+
+{
+jp:"成人の日",
+pt:"Dia da Maioridade",
+data:"2026-01-12"
+},
+
+{
+jp:"建国記念の日",
+pt:"Dia da Fundação Nacional",
+data:"2026-02-11"
+},
+
+{
+jp:"天皇誕生日",
+pt:"Aniversário do Imperador",
+data:"2026-02-23"
+},
+
+{
+jp:"春分の日",
+pt:"Equinócio da Primavera",
+data:"2026-03-20"
+},
+
+{
+jp:"昭和の日",
+pt:"Dia de Showa",
+data:"2026-04-29"
+},
+
+{
+jp:"憲法記念日",
+pt:"Dia da Constituição",
+data:"2026-05-03"
+},
+
+{
+jp:"みどりの日",
+pt:"Dia do Verde",
+data:"2026-05-04"
+},
+
+{
+jp:"こどもの日",
+pt:"Dia das Crianças",
+data:"2026-05-05"
+},
+
+{
+jp:"海の日",
+pt:"Dia do Mar",
+data:"2026-07-20"
+},
+
+{
+jp:"山の日",
+pt:"Dia da Montanha",
+data:"2026-08-11"
+},
+
+{
+jp:"敬老の日",
+pt:"Dia do Respeito aos Idosos",
+data:"2026-09-21"
+},
+
+{
+jp:"秋分の日",
+pt:"Equinócio de Outono",
+data:"2026-09-23"
+},
+
+{
+jp:"スポーツの日",
+pt:"Dia do Esporte",
+data:"2026-10-12"
+},
+
+{
+jp:"文化の日",
+pt:"Dia da Cultura",
+data:"2026-11-03"
+},
+
+{
+jp:"勤労感謝の日",
+pt:"Dia de Ação de Graças pelo Trabalho",
+data:"2026-11-23"
+}
+
+];
+
+
+mostrarFeriados(feriados);
+mostrarProximoFeriado();
+
+document
+.getElementById("busca")
+.addEventListener("input", pesquisar);
+
+
+function pesquisar(){
+
+    const texto =
+    document
+    .getElementById("busca")
+    .value
+    .toLowerCase();
+
+    const resultado =
+    feriados.filter(item =>
+
+        item.jp.toLowerCase().includes(texto) ||
+
+        item.pt.toLowerCase().includes(texto)
+
+    );
+
+    mostrarFeriados(resultado);
+
+}
+
+
+function mostrarFeriados(lista){
+
+    const div =
+    document.getElementById("listaFeriados");
+
+    div.innerHTML = lista.map(item => `
+
+    <div class="card-feriado">
+
+        <div class="nome-jp">
+        ${item.jp}
+        </div>
+
+        <div class="nome-pt">
+        ${item.pt}
+        </div>
+
+        <div class="data">
+        ${formatarData(item.data)}
+        </div>
+
+    </div>
+
+    `).join("");
+
+}
+
+
+function formatarData(data){
+
+    const d = new Date(data);
+
+    return d.toLocaleDateString(
+    "pt-BR",
+    {
+        day:"2-digit",
+        month:"2-digit",
+        year:"numeric",
+        weekday:"long"
+    });
+
+}
+
+
+function mostrarProximoFeriado(){
+
+    const hoje = new Date();
+
+    let proximo = null;
+
+    for(let item of feriados){
+
+        const data = new Date(item.data);
+
+        if(data >= hoje){
+
+            proximo = item;
+            break;
+
+        }
+
+    }
+
+    if(!proximo){
+
+        document.getElementById(
+        "proximoNome"
+        ).textContent = "Nenhum";
+
+        return;
+
+    }
+
+    const dataFeriado =
+    new Date(proximo.data);
+
+    const diferenca =
+    Math.ceil(
+
+    (dataFeriado - hoje)
+
+    / (1000*60*60*24)
+
+    );
+
+    document.getElementById(
+    "proximoNome"
+    ).textContent =
+    proximo.jp;
+
+    document.getElementById(
+    "proximoData"
+    ).textContent =
+    proximo.pt + " - " +
+    formatarData(proximo.data);
+
+    document.getElementById(
+    "diasRestantes"
+    ).textContent =
+    diferenca + " dias";
+
+}
+
+</script>
+
+</body>
+</html>
