@@ -5,368 +5,674 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Contador de Calorias | UtiliWeb</title>
 <meta name="description" content="Consulte calorias, proteínas, carboidratos e gorduras de centenas de alimentos e monte seu diário alimentar.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
 <style>
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+:root{
+    --ink:#0e2419;
+    --forest:#0f3326;
+    --forest-deep:#0a2018;
+    --mint:#5fe3a8;
+    --mint-soft:#bff5da;
+    --paper:#fbfaf6;
+    --paper-dim:#f1efe6;
+    --gold:#e8b86d;
+    --line:rgba(15,51,38,.12);
+    --blue:#185fa5;
+    --blue-bg:#e6f1fb;
+    --amber:#854f0b;
+    --amber-bg:#faeeda;
+    --red:#a32d2d;
+    --red-bg:#fcebeb;
+    --font-display:'Fraunces',serif;
+    --font-body:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
 }
 
-html { -webkit-text-size-adjust: 100%; }
-
-body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-    background: linear-gradient(135deg, #2ecc71, #27ae60);
-    min-height: 100dvh;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 12px;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
 }
 
-.wrapper {
-    width: 100%;
-    max-width: 1100px;
-    background: #fff;
-    border-radius: 18px;
-    overflow: hidden;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    box-shadow: 0 20px 60px rgba(0,0,0,.25);
-    margin: auto;
+html{
+    -webkit-text-size-adjust:100%;
 }
 
-.left, .right {
-    padding: 24px;
-    min-width: 0;
+body{
+    font-family:var(--font-body);
+    background:var(--forest-deep);
+    background-image:
+        radial-gradient(circle at 15% 10%, rgba(95,227,168,.10), transparent 45%),
+        radial-gradient(circle at 85% 90%, rgba(232,184,109,.08), transparent 50%);
+    min-height:100dvh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:28px 16px;
+    color:var(--ink);
 }
 
-.left { border-right: 1px solid #eee; }
-.right { background: #f6fff8; }
-
-h1 { font-size: 28px; margin-bottom: 6px; }
-h2 { font-size: 24px; margin-bottom: 16px; }
-
-.subtitle { color: #666; font-size: 14px; margin-bottom: 18px; }
-
-a.back {
-    display: inline-block;
-    margin-bottom: 14px;
-    text-decoration: none;
-    color: #27ae60;
-    font-weight: 700;
+.wrapper{
+    width:100%;
+    max-width:1180px;
+    background:var(--paper);
+    border-radius:28px;
+    overflow:hidden;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    box-shadow:0 40px 90px rgba(0,0,0,.45);
+    border:1px solid rgba(255,255,255,.06);
 }
 
-label {
-    display: block;
-    margin-bottom: 8px;
-    font-size: 14px;
-    font-weight: 700;
-    color: #444;
+/* ---------- LEFT ---------- */
+
+.left{
+    background:var(--forest);
+    background-image:radial-gradient(circle at 30% 0%, rgba(95,227,168,.18), transparent 55%);
+    color:var(--paper);
+    padding:36px 34px;
+    max-height:calc(100dvh - 56px);
+    overflow-y:auto;
 }
 
-input[type="text"], input[type="number"], select {
-    width: 100%;
-    padding: 13px;
-    border-radius: 12px;
-    border: 2px solid #ddd;
-    font-size: 16px;
-    background: #fff;
-    color: #333;
-    font-family: inherit;
+.eyebrow{
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--mint);
+    font-weight:700;
+    margin-bottom:14px;
 }
 
-input[type="text"]:focus, input[type="number"]:focus, select:focus {
-    outline: none;
-    border-color: #27ae60;
+h1{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:30px;
+    line-height:1.1;
+    margin-bottom:8px;
+    letter-spacing:-.01em;
 }
 
-.search-wrap {
-    position: relative;
-    margin-bottom: 8px;
+.subtitle{
+    color:rgba(251,250,246,.65);
+    font-size:14px;
+    margin-bottom:6px;
+    line-height:1.5;
 }
 
-.suggestions {
-    position: absolute;
-    top: calc(100% + 4px);
-    left: 0; right: 0;
-    background: #fff;
-    border: 2px solid #27ae60;
-    border-radius: 12px;
-    max-height: 220px;
-    overflow-y: auto;
-    z-index: 100;
-    display: none;
+.coverage-note{
+    font-size:12px;
+    color:rgba(251,250,246,.4);
+    margin-bottom:22px;
 }
 
-.suggestion-item {
-    padding: 10px 14px;
-    cursor: pointer;
-    font-size: 14px;
-    color: #333;
-    border-bottom: 1px solid #f0f0f0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.back-link{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    margin-bottom:22px;
+    text-decoration:none;
+    color:rgba(251,250,246,.55);
+    font-weight:600;
+    font-size:13px;
+    transition:color .15s ease;
 }
 
-.suggestion-item:last-child { border-bottom: none; }
-.suggestion-item:hover { background: #f6fff8; }
-
-.suggestion-kcal {
-    font-size: 12px;
-    color: #27ae60;
-    font-weight: 700;
+.back-link:hover{
+    color:var(--mint);
 }
 
-.input-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 16px;
+label{
+    display:block;
+    margin-bottom:9px;
+    font-size:11.5px;
+    font-weight:700;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:rgba(251,250,246,.5);
 }
 
-.input-group { margin-bottom: 16px; }
-
-.btn-add {
-    width: 100%;
-    padding: 14px;
-    border: none;
-    border-radius: 12px;
-    background: #27ae60;
-    color: #fff;
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-    margin-top: 4px;
+.search-wrap{
+    position:relative;
+    margin-bottom:8px;
 }
 
-.btn-add:hover { opacity: .95; }
-
-.btn-limpar {
-    width: 100%;
-    padding: 11px;
-    border: 2px solid #27ae60;
-    border-radius: 12px;
-    background: #fff;
-    color: #27ae60;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    margin-top: 10px;
+input[type="text"], input[type="number"], select{
+    width:100%;
+    padding:13px 14px;
+    border-radius:12px;
+    border:1.5px solid rgba(255,255,255,.14);
+    background:rgba(255,255,255,.06);
+    color:var(--paper);
+    font-size:15px;
+    font-weight:600;
+    font-family:var(--font-body);
 }
 
-.btn-limpar:hover { background: #f6fff8; }
-
-/* Painel nutricional do alimento selecionado */
-.nutri-preview {
-    background: #f6fff8;
-    border: 1px solid #d7f5e3;
-    border-radius: 12px;
-    padding: 14px;
-    margin-bottom: 16px;
-    display: none;
+input::placeholder{
+    color:rgba(251,250,246,.35);
+    font-weight:400;
 }
 
-.nutri-name {
-    font-size: 15px;
-    font-weight: 700;
-    color: #333;
-    margin-bottom: 10px;
+input:focus-visible, select:focus-visible{
+    outline:2px solid var(--mint);
+    outline-offset:1px;
+    border-color:var(--mint);
 }
 
-.nutri-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 6px;
+input:hover, select:hover{
+    border-color:rgba(255,255,255,.3);
 }
 
-.nutri-item {
-    background: #fff;
-    border-radius: 8px;
-    padding: 8px 6px;
-    text-align: center;
-    border: 1px solid #e7f7ec;
+select{
+    appearance:none;
+    -webkit-appearance:none;
+    cursor:pointer;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'><path d='M1 3l4 4 4-4' stroke='rgba(251,250,246,0.5)' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+    background-repeat:no-repeat;
+    background-position:right 14px center;
+    padding-right:32px;
 }
 
-.nutri-val {
-    font-size: 16px;
-    font-weight: 800;
-    color: #27ae60;
-    display: block;
+select option{
+    color:#111;
+    background:#fff;
 }
 
-.nutri-lbl {
-    font-size: 10px;
-    color: #888;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
-    margin-top: 2px;
-    display: block;
+.suggestions{
+    position:absolute;
+    top:calc(100% + 6px);
+    left:0; right:0;
+    background:var(--forest-deep);
+    border:1.5px solid var(--mint);
+    border-radius:14px;
+    max-height:260px;
+    overflow-y:auto;
+    z-index:100;
+    display:none;
+    box-shadow:0 16px 40px rgba(0,0,0,.4);
 }
 
-/* Diário */
-.section-label {
-    font-size: 12px;
-    font-weight: 700;
-    color: #aaa;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 10px;
+.suggestion-item{
+    padding:11px 14px;
+    cursor:pointer;
+    font-size:14px;
+    font-weight:600;
+    color:var(--paper);
+    border-bottom:1px solid rgba(255,255,255,.08);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
 }
 
-.total-card {
-    background: #fff;
-    border: 2px solid #27ae60;
-    border-radius: 14px;
-    padding: 16px;
-    margin-bottom: 14px;
+.suggestion-item:last-child{
+    border-bottom:none;
 }
 
-.total-kcal {
-    font-size: 38px;
-    font-weight: 800;
-    color: #27ae60;
-    line-height: 1;
-    margin-bottom: 4px;
+.suggestion-item:hover,
+.suggestion-item.focused{
+    background:rgba(95,227,168,.14);
 }
 
-.total-sub {
-    font-size: 13px;
-    color: #888;
-    margin-bottom: 12px;
+.suggestion-kcal{
+    font-size:12px;
+    color:var(--mint);
+    font-weight:700;
+    white-space:nowrap;
 }
 
-.macro-bar-wrap {
-    margin-bottom: 6px;
+.section{
+    margin-bottom:18px;
 }
 
-.macro-bar-label {
-    display: flex;
-    justify-content: space-between;
-    font-size: 12px;
-    font-weight: 700;
-    margin-bottom: 4px;
+.nutri-preview{
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.1);
+    border-radius:14px;
+    padding:16px;
+    margin-bottom:18px;
+    display:none;
 }
 
-.macro-bar-track {
-    height: 8px;
-    background: #eee;
-    border-radius: 99px;
-    overflow: hidden;
+.nutri-name{
+    font-family:var(--font-display);
+    font-size:16px;
+    font-weight:600;
+    color:var(--paper);
+    margin-bottom:12px;
 }
 
-.macro-bar-fill {
-    height: 100%;
-    border-radius: 99px;
-    transition: width 0.3s;
+.nutri-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:8px;
 }
 
-.macros-row {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 6px;
-    margin-top: 10px;
+.nutri-item{
+    background:rgba(255,255,255,.05);
+    border-radius:10px;
+    padding:10px 6px;
+    text-align:center;
+    border:1px solid rgba(255,255,255,.08);
 }
 
-.macro-pill {
-    background: #f6fff8;
-    border: 1px solid #e7f7ec;
-    border-radius: 8px;
-    padding: 8px 6px;
-    text-align: center;
+.nutri-val{
+    font-family:var(--font-display);
+    font-size:16px;
+    font-weight:600;
+    display:block;
+    color:var(--paper);
 }
 
-.macro-pill-val {
-    font-size: 15px;
-    font-weight: 800;
-    display: block;
+.nutri-lbl{
+    font-size:9.5px;
+    color:rgba(251,250,246,.45);
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+    margin-top:3px;
+    display:block;
 }
 
-.macro-pill-lbl {
-    font-size: 10px;
-    color: #888;
-    font-weight: 700;
-    text-transform: uppercase;
-    margin-top: 1px;
-    display: block;
+.nutri-base{
+    font-size:11px;
+    color:rgba(251,250,246,.4);
+    margin-top:10px;
 }
 
-/* Lista de itens */
-.diary-list {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    max-height: 320px;
-    overflow-y: auto;
+.colher-pill{
+    display:none;
+    font-size:12px;
+    color:var(--mint);
+    font-weight:700;
+    margin-top:10px;
+    background:rgba(95,227,168,.1);
+    border-radius:9px;
+    padding:8px 10px;
+    border:1px solid rgba(95,227,168,.25);
 }
 
-.diary-item {
-    background: #fff;
-    border: 1px solid #e7f7ec;
-    border-radius: 10px;
-    padding: 10px 12px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 8px;
+.input-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-bottom:8px;
 }
 
-.diary-item-info { flex: 1; min-width: 0; }
-
-.diary-item-name {
-    font-size: 14px;
-    font-weight: 700;
-    color: #333;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.qtd-colher{
+    display:none;
+    font-size:11.5px;
+    color:var(--mint);
+    font-weight:600;
+    margin-top:7px;
 }
 
-.diary-item-meta {
-    font-size: 12px;
-    color: #888;
-    margin-top: 2px;
+.actions{
+    display:grid;
+    gap:10px;
+    margin-top:16px;
 }
 
-.diary-item-kcal {
-    font-size: 16px;
-    font-weight: 800;
-    color: #27ae60;
-    white-space: nowrap;
+button{
+    font-family:var(--font-body);
+    cursor:pointer;
 }
 
-.diary-item-del {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #ccc;
-    font-size: 18px;
-    line-height: 1;
-    padding: 0 0 0 6px;
-    margin-top: 0;
-    width: auto;
-    font-weight: 400;
+.btn{
+    padding:14px;
+    border-radius:13px;
+    font-weight:800;
+    font-size:14.5px;
+    border:1.5px solid transparent;
+    transition:transform .12s ease, box-shadow .12s ease, opacity .12s ease;
 }
 
-.diary-item-del:hover { color: #e74c3c; }
-
-.empty-msg { color: #999; font-size: 15px; }
-
-@media (max-width: 900px) {
-    body { align-items: flex-start; }
-    .wrapper { grid-template-columns: 1fr; }
-    .left { border-right: none; border-bottom: 1px solid #eee; }
-    h1 { font-size: 22px; }
-    h2 { font-size: 20px; }
+.btn:focus-visible{
+    outline:2px solid var(--mint);
+    outline-offset:2px;
 }
 
-@media (max-width: 480px) {
-    .input-row { grid-template-columns: 1fr; }
-    .nutri-grid { grid-template-columns: repeat(2, 1fr); }
-    .total-kcal { font-size: 30px; }
+.btn-primary{
+    background:var(--mint);
+    color:var(--forest-deep);
+    box-shadow:0 8px 24px rgba(95,227,168,.25);
+}
+
+.btn-primary:hover{
+    transform:translateY(-1px);
+    box-shadow:0 12px 28px rgba(95,227,168,.35);
+}
+
+.btn-primary:active{
+    transform:translateY(0);
+}
+
+.btn-secondary{
+    background:transparent;
+    border-color:rgba(255,255,255,.18);
+    color:rgba(251,250,246,.7);
+    font-size:13px;
+    padding:11px;
+}
+
+.btn-secondary:hover{
+    border-color:#e08a8a;
+    color:#e08a8a;
+}
+
+.toast{
+    position:fixed;
+    bottom:24px;
+    left:50%;
+    transform:translateX(-50%) translateY(8px);
+    background:var(--forest-deep);
+    color:var(--paper);
+    border:1px solid var(--mint);
+    padding:10px 18px;
+    border-radius:999px;
+    font-size:13px;
+    font-weight:600;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .2s ease, transform .2s ease;
+    white-space:nowrap;
+    z-index:200;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translateX(-50%) translateY(0);
+}
+
+/* ---------- RIGHT ---------- */
+
+.right{
+    padding:36px 38px;
+    background:var(--paper);
+    max-height:calc(100dvh - 56px);
+    overflow-y:auto;
+}
+
+h2{
+    font-family:var(--font-display);
+    font-size:20px;
+    font-weight:600;
+    color:var(--forest-deep);
+    margin-bottom:18px;
+}
+
+.empty-state{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    color:rgba(14,36,25,.45);
+    padding:60px 20px;
+    border:1.5px dashed var(--line);
+    border-radius:18px;
+    gap:10px;
+}
+
+.empty-state svg{
+    opacity:.55;
+}
+
+.empty-state p{
+    font-size:14px;
+    max-width:28ch;
+    line-height:1.5;
+}
+
+.total-card{
+    background:var(--forest);
+    border-radius:18px;
+    padding:22px;
+    margin-bottom:18px;
+    color:var(--paper);
+}
+
+.total-kcal{
+    font-family:var(--font-display);
+    font-size:42px;
+    font-weight:600;
+    line-height:1;
+    margin-bottom:4px;
+    color:var(--mint);
+}
+
+.total-sub{
+    font-size:12.5px;
+    color:rgba(251,250,246,.55);
+    margin-bottom:16px;
+}
+
+.macro-bar-wrap{
+    margin-bottom:14px;
+}
+
+.macro-bar-label{
+    display:flex;
+    justify-content:space-between;
+    font-size:11.5px;
+    font-weight:700;
+    margin-bottom:6px;
+}
+
+.macro-bar-track{
+    height:9px;
+    background:rgba(255,255,255,.1);
+    border-radius:99px;
+    overflow:hidden;
+}
+
+.macro-bar-fill{
+    height:100%;
+    transition:width .3s ease;
+}
+
+.macros-row{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+}
+
+.macro-pill{
+    background:rgba(255,255,255,.06);
+    border-radius:11px;
+    padding:10px 6px;
+    text-align:center;
+}
+
+.macro-pill-val{
+    font-family:var(--font-display);
+    font-size:16px;
+    font-weight:600;
+    display:block;
+}
+
+.macro-pill-lbl{
+    font-size:9.5px;
+    color:rgba(251,250,246,.5);
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+    margin-top:2px;
+    display:block;
+}
+
+.section-label{
+    font-size:11px;
+    font-weight:700;
+    color:rgba(14,36,25,.4);
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    margin-bottom:10px;
+}
+
+.meal-group{
+    margin-bottom:14px;
+}
+
+.meal-head{
+    display:flex;
+    justify-content:space-between;
+    font-size:12.5px;
+    font-weight:700;
+    color:var(--forest);
+    margin-bottom:7px;
+}
+
+.diary-list{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.diary-item{
+    background:var(--paper-dim);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:11px 13px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+}
+
+.diary-item-info{
+    flex:1;
+    min-width:0;
+}
+
+.diary-item-name{
+    font-size:14px;
+    font-weight:700;
+    color:var(--forest-deep);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.diary-item-meta{
+    font-size:11.5px;
+    color:rgba(14,36,25,.5);
+    margin-top:2px;
+}
+
+.diary-item-kcal{
+    font-family:var(--font-display);
+    font-size:15px;
+    font-weight:600;
+    color:var(--forest-deep);
+    white-space:nowrap;
+}
+
+.diary-item-del{
+    background:none;
+    border:none;
+    cursor:pointer;
+    color:rgba(14,36,25,.3);
+    font-size:18px;
+    line-height:1;
+    padding:4px;
+    border-radius:8px;
+    transition:color .15s ease, background .15s ease;
+}
+
+.diary-item-del:hover{
+    color:var(--red);
+    background:var(--red-bg);
+}
+
+.diary-item-del:focus-visible{
+    outline:2px solid var(--red);
+    outline-offset:1px;
+}
+
+.footnote{
+    display:flex;
+    gap:8px;
+    font-size:11.5px;
+    color:rgba(14,36,25,.45);
+    margin-top:14px;
+    line-height:1.55;
+}
+
+.footnote .ic{
+    flex:none;
+    font-weight:700;
+    color:rgba(14,36,25,.35);
+}
+
+.sr-only{
+    position:absolute;
+    width:1px;
+    height:1px;
+    overflow:hidden;
+    clip:rect(0 0 0 0);
+    white-space:nowrap;
+}
+
+@media(prefers-reduced-motion: reduce){
+    *{
+        transition:none !important;
+    }
+}
+
+@media(max-width:920px){
+
+    body{
+        align-items:flex-start;
+        padding:16px 12px;
+    }
+
+    .wrapper{
+        grid-template-columns:1fr;
+        border-radius:22px;
+    }
+
+    .left, .right{
+        max-height:none;
+        overflow-y:visible;
+    }
+
+    .left{
+        padding:30px 26px;
+    }
+
+    .right{
+        padding:30px 26px;
+    }
+
+    h1{
+        font-size:26px;
+    }
+
+    .total-kcal{
+        font-size:36px;
+    }
+}
+
+@media(max-width:480px){
+
+    .input-row{
+        grid-template-columns:1fr;
+    }
+
+    .nutri-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .macros-row{
+        grid-template-columns:1fr;
+    }
 }
 
 </style>
@@ -374,64 +680,86 @@ input[type="text"]:focus, input[type="number"]:focus, select:focus {
 <body>
 
 <div class="wrapper">
-    <div class="left">
-        <h1>🥗 Contador de Calorias</h1>
-        <p class="subtitle">Consulte a tabela nutricional e monte seu diário alimentar</p>
-        <a class="back" href="../../index.html">← Voltar</a>
 
-        <label>Buscar alimento</label>
-        <div class="search-wrap">
-            <input type="text" id="busca" placeholder="Ex: arroz, frango, banana…" autocomplete="off" oninput="buscar()">
-            <div class="suggestions" id="sugestoes"></div>
-        </div>
-        <p style="font-size:12px;color:#aaa;margin-bottom:16px">Tabela com mais de 290 alimentos, incluindo pratos da culinária japonesa</p>
+<div class="left">
 
-        <div class="nutri-preview" id="nutri-preview">
-            <div class="nutri-name" id="nutri-nome">—</div>
-            <div class="nutri-grid">
-                <div class="nutri-item"><span class="nutri-val" id="prev-kcal">0</span><span class="nutri-lbl">kcal</span></div>
-                <div class="nutri-item"><span class="nutri-val" id="prev-prot" style="color:#3498db">0g</span><span class="nutri-lbl">proteína</span></div>
-                <div class="nutri-item"><span class="nutri-val" id="prev-carb" style="color:#e67e22">0g</span><span class="nutri-lbl">carboidrato</span></div>
-                <div class="nutri-item"><span class="nutri-val" id="prev-gord" style="color:#e74c3c">0g</span><span class="nutri-lbl">gordura</span></div>
-            </div>
-            <p style="font-size:11px;color:#aaa;margin-top:8px">Valores por 100g</p>
-            <p id="colher-info" style="display:none;font-size:12px;color:#27ae60;font-weight:700;margin-top:6px;background:#fff;border-radius:8px;padding:6px 8px;border:1px solid #d7f5e3"></p>
-        </div>
+<a href="../../index.html" class="back-link">← Voltar ao UtiliWeb</a>
 
-        <div class="input-row">
-            <div>
-                <label>Quantidade (g)</label>
-                <input type="number" id="quantidade" value="100" min="1" step="1" oninput="atualizarColherQtd()">
-                <p id="qtd-colher" style="display:none;font-size:12px;color:#27ae60;font-weight:700;margin-top:6px">🥄 —</p>
-            </div>
-            <div>
-                <label>Refeição</label>
-                <select id="refeicao">
-                    <option value="Café da manhã">☀️ Café da manhã</option>
-                    <option value="Lanche da manhã">🍎 Lanche da manhã</option>
-                    <option value="Almoço" selected>🍽️ Almoço</option>
-                    <option value="Lanche da tarde">🥪 Lanche da tarde</option>
-                    <option value="Jantar">🌙 Jantar</option>
-                    <option value="Ceia">🌛 Ceia</option>
-                </select>
-            </div>
-        </div>
+<div class="eyebrow">Ferramenta UtiliWeb</div>
 
-        <button class="btn-add" onclick="adicionar()">+ Adicionar ao diário</button>
-        <button class="btn-limpar" onclick="limparDiario()">🗑️ Limpar diário</button>
-    </div>
+<h1>Contador de Calorias</h1>
 
-    <div class="right">
-        <h2>Diário alimentar</h2>
-        <div id="painel"><p class="empty-msg">Adicione alimentos para ver o total.</p></div>
-    </div>
+<p class="subtitle">Consulte a tabela nutricional e monte seu diário alimentar do dia.</p>
+<p class="coverage-note">Mais de 290 alimentos, incluindo pratos da culinária japonesa.</p>
+
+<div class="section">
+<label for="busca">Buscar alimento</label>
+<div class="search-wrap">
+<input type="text" id="busca" placeholder="Ex: arroz, frango, banana…" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="sugestoes" aria-autocomplete="list">
+<div class="suggestions" id="sugestoes" role="listbox"></div>
 </div>
+</div>
+
+<div class="nutri-preview" id="nutri-preview">
+<div class="nutri-name" id="nutri-nome">—</div>
+<div class="nutri-grid">
+<div class="nutri-item"><span class="nutri-val" id="prev-kcal">0</span><span class="nutri-lbl">kcal</span></div>
+<div class="nutri-item"><span class="nutri-val" id="prev-prot" style="color:var(--blue)">0g</span><span class="nutri-lbl">proteína</span></div>
+<div class="nutri-item"><span class="nutri-val" id="prev-carb" style="color:var(--amber)">0g</span><span class="nutri-lbl">carboidrato</span></div>
+<div class="nutri-item"><span class="nutri-val" id="prev-gord" style="color:var(--red)">0g</span><span class="nutri-lbl">gordura</span></div>
+</div>
+<p class="nutri-base">Valores por 100g</p>
+<p class="colher-pill" id="colher-info"></p>
+</div>
+
+<div class="input-row">
+<div>
+<label for="quantidade">Quantidade (g)</label>
+<input type="number" id="quantidade" value="100" min="1" step="1">
+<p class="qtd-colher" id="qtd-colher"></p>
+</div>
+<div>
+<label for="refeicao">Refeição</label>
+<select id="refeicao">
+<option value="Café da manhã">☀ Café da manhã</option>
+<option value="Lanche da manhã">🍎 Lanche da manhã</option>
+<option value="Almoço" selected>🍽 Almoço</option>
+<option value="Lanche da tarde">🥪 Lanche da tarde</option>
+<option value="Jantar">🌙 Jantar</option>
+<option value="Ceia">🌛 Ceia</option>
+</select>
+</div>
+</div>
+
+<div class="actions">
+<button class="btn btn-primary" onclick="adicionar()" type="button">Adicionar ao diário</button>
+<button class="btn btn-secondary" onclick="limparDiario()" type="button">Limpar diário</button>
+</div>
+
+</div>
+
+<div class="right">
+
+<h2>Diário alimentar</h2>
+
+<div class="empty-state" id="empty">
+<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+<path d="M5 3v18M5 3h11l-2 5 2 5H5"/>
+</svg>
+<p>Busque um alimento, ajuste a quantidade e adicione para ver o total aqui.</p>
+</div>
+
+<div id="painel" aria-live="polite"></div>
+
+</div>
+
+</div>
+
+<div class="toast" id="toast"></div>
 
 <script>
 
-// Tabela nutricional por 100g: [kcal, prot(g), carb(g), gord(g)]
 const ALIMENTOS = [
-    // Cereais e farináceos
     ["Arroz branco cozido",          128, 2.5, 28.1, 0.2, 25],
     ["Arroz integral cozido",        124, 2.6, 25.8, 1.0, 25],
     ["Arroz parboilizado cozido",    123, 2.6, 26.2, 0.4, 25],
@@ -467,8 +795,6 @@ const ALIMENTOS = [
     ["Mandioca cozida",              125, 1.0, 30.0, 0.2],
     ["Mandioquinha (batata baroa) cozida", 80, 1.0, 19.0, 0.2],
     ["Cará cozido",                  97,  1.8, 23.2, 0.1],
-
-    // Carnes e aves
     ["Frango grelhado (peito)",      159, 32.0, 0.0, 2.7],
     ["Frango assado (coxa)",         197, 26.0, 0.0, 10.0],
     ["Frango desfiado (cozido)",     163, 28.0, 0.0, 5.0],
@@ -493,8 +819,6 @@ const ALIMENTOS = [
     ["Presunto",                     140, 18.0, 2.0, 6.5],
     ["Peito de peru defumado",       109, 18.5, 1.5, 3.2],
     ["Carne de panela (ensopada)",   195, 25.0, 2.0, 9.5],
-
-    // Peixes e frutos do mar
     ["Atum em lata (em água)",       128, 29.0, 0.0, 1.0],
     ["Salmão grelhado",              182, 25.0, 0.0, 9.0],
     ["Tilápia grelhada",             128, 26.2, 0.0, 2.7],
@@ -505,8 +829,6 @@ const ALIMENTOS = [
     ["Peixe frito (filé empanado)",  235, 16.0, 12.0, 14.0],
     ["Lula refogada",                92,  15.6, 3.1, 1.4],
     ["Polvo cozido",                 92,  17.9, 2.2, 1.0],
-
-    // Ovos e laticínios
     ["Ovo inteiro cozido",           155, 12.6, 1.1, 10.6],
     ["Ovo frito",                    196, 13.6, 0.8, 15.3],
     ["Clara de ovo cozida",          52,  11.1, 0.7, 0.2],
@@ -530,8 +852,6 @@ const ALIMENTOS = [
     ["Cream cheese",                 342, 6.2,  4.1, 34.0, 15],
     ["Manteiga",                     726, 0.9,  0.1, 80.5, 14],
     ["Margarina",                    540, 0.5,  0.9, 60.0, 14],
-
-    // Leguminosas
     ["Feijão carioca cozido",        77,  4.8, 13.6, 0.5, 18],
     ["Feijão preto cozido",          77,  4.5, 14.0, 0.5, 18],
     ["Feijão branco cozido",         87,  6.0, 16.0, 0.4, 18],
@@ -541,8 +861,6 @@ const ALIMENTOS = [
     ["Ervilha cozida",               84,  5.4, 15.6, 0.4, 15],
     ["Soja cozida",                  141, 12.9,11.5, 6.4, 18],
     ["Tofu",                         76,  8.1,  1.9, 4.8],
-
-    // Vegetais e verduras
     ["Alface",                       13,  1.3,  2.3, 0.2],
     ["Rúcula",                       25,  2.6,  3.7, 0.4],
     ["Agrião",                       11,  3.0,  1.5, 0.2],
@@ -587,8 +905,6 @@ const ALIMENTOS = [
     ["Broto de feijão cru",          30,  3.0,  5.9, 0.2],
     ["Palmito em conserva",          26,  2.0,  4.0, 0.5],
     ["Pepino japonês",               13,  0.6,  2.8, 0.1],
-
-    // Frutas
     ["Banana prata",                 92,  1.3, 23.8, 0.1],
     ["Banana nanica",                87,  1.3, 22.4, 0.1],
     ["Maçã",                         56,  0.3, 15.1, 0.2],
@@ -625,8 +941,6 @@ const ALIMENTOS = [
     ["Lichia",                       66,  0.8, 16.5, 0.4],
     ["Damasco seco",                 241, 3.4, 62.6, 0.5],
     ["Tâmara",                       282, 2.5, 75.0, 0.4],
-
-    // Oleaginosas e sementes
     ["Amendoim torrado",             581, 26.0,19.0, 49.0, 9],
     ["Castanha-do-pará",             656, 14.3, 7.1, 63.5],
     ["Castanha de caju torrada",     570, 18.5,28.7, 46.0],
@@ -640,16 +954,12 @@ const ALIMENTOS = [
     ["Semente de abóbora",           559, 30.2,10.7, 49.0, 8],
     ["Semente de girassol",          584, 20.8,20.0, 51.5, 8],
     ["Pasta de amendoim",            588, 25.0,20.0, 50.0, 16],
-
-    // Óleos e gorduras
     ["Azeite de oliva",              884, 0.0,  0.0, 100.0, 13],
     ["Óleo de soja",                 884, 0.0,  0.0, 100.0, 13],
     ["Óleo de canola",               884, 0.0,  0.0, 100.0, 13],
     ["Óleo de girassol",             884, 0.0,  0.0, 100.0, 13],
     ["Óleo de coco",                 862, 0.0,  0.0, 100.0, 13],
     ["Banha de porco",               902, 0.0,  0.0, 100.0, 13],
-
-    // Bebidas
     ["Suco de laranja natural",      44,  0.7, 10.4, 0.1],
     ["Suco de uva integral",         60,  0.3, 14.9, 0.1],
     ["Suco de maçã",                 46,  0.1, 11.3, 0.1],
@@ -670,8 +980,6 @@ const ALIMENTOS = [
     ["Chá mate",                     2,   0.0,  0.4, 0.0],
     ["Chá verde",                    1,   0.0,  0.0, 0.0],
     ["Vitamina de banana (com leite)", 95, 3.0, 16.0, 2.5],
-
-    // Doces e industrializados
     ["Chocolate ao leite",           546, 7.5, 57.9, 31.3],
     ["Chocolate meio amargo 70%",    566, 8.0, 45.0, 40.0],
     ["Biscoito maisena",             451, 7.4, 73.6, 14.2],
@@ -693,8 +1001,6 @@ const ALIMENTOS = [
     ["Achocolatado em pó",           376, 5.0, 80.0, 4.0, 10],
     ["Açúcar refinado",              387, 0.0, 99.5, 0.0, 12],
     ["Adoçante stevia (por dose)",   0,   0.0,  0.0, 0.0],
-
-    // Fast food e refeições prontas
     ["Hambúrguer bovino grelhado",   245, 20.5, 0.0, 17.8],
     ["Cheeseburger (lanche)",        303, 15.0, 28.0, 14.5],
     ["X-salada (lanche)",            330, 16.0, 30.0, 16.5],
@@ -715,8 +1021,6 @@ const ALIMENTOS = [
     ["Feijoada (porção)",            180, 12.0, 14.0, 8.5],
     ["Açaí na tigela (com xarope)",  180, 1.5, 28.0, 7.0],
     ["Caldo de cana",                56,  0.3, 13.1, 0.0],
-
-    // Culinária japonesa
     ["Gohan (arroz japonês cozido)", 130, 2.5, 28.6, 0.3],
     ["Missô (pasta de soja)",        199, 11.7,25.4, 6.0, 16],
     ["Miso shiru (sopa de missô)",   40,  3.0,  4.0, 1.5],
@@ -755,59 +1059,146 @@ const ALIMENTOS = [
 
 let selecionado = null;
 let diario = [];
+let focusedIdx = -1;
+let currentResults = [];
 
-function normalizar(s) {
+const buscaEl = document.getElementById('busca');
+const sugestoesEl = document.getElementById('sugestoes');
+const quantidadeEl = document.getElementById('quantidade');
+const toastEl = document.getElementById('toast');
+const emptyEl = document.getElementById('empty');
+
+try {
+    const saved = localStorage.getItem('utiliweb_diario_calorias');
+    if(saved){
+        diario = JSON.parse(saved);
+    }
+} catch(e){
+    diario = [];
+}
+
+let toastTimer = null;
+
+function showToast(msg){
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toastEl.classList.remove('show'), 1800);
+}
+
+function salvarDiario(){
+    try {
+        localStorage.setItem('utiliweb_diario_calorias', JSON.stringify(diario));
+    } catch(e){}
+}
+
+function normalizar(s){
     return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 }
 
-function buscar() {
-    const q = normalizar(document.getElementById('busca').value);
-    const box = document.getElementById('sugestoes');
-    if (q.length < 2) { box.style.display = 'none'; return; }
-    const res = ALIMENTOS.filter(a => normalizar(a[0]).includes(q)).slice(0, 12);
-    if (!res.length) { box.style.display = 'none'; return; }
-    box.innerHTML = res.map((a, i) =>
-        `<div class="suggestion-item" onclick="selecionar(${ALIMENTOS.indexOf(a)})">
+function buscar(){
+    const q = normalizar(buscaEl.value);
+    focusedIdx = -1;
+
+    if(q.length < 2){
+        sugestoesEl.style.display = 'none';
+        buscaEl.setAttribute('aria-expanded', 'false');
+        currentResults = [];
+        return;
+    }
+
+    currentResults = ALIMENTOS
+        .map((a, i) => ({ a, i }))
+        .filter(({a}) => normalizar(a[0]).includes(q))
+        .slice(0, 12);
+
+    if(!currentResults.length){
+        sugestoesEl.style.display = 'none';
+        buscaEl.setAttribute('aria-expanded', 'false');
+        return;
+    }
+
+    renderSugestoes();
+    sugestoesEl.style.display = 'block';
+    buscaEl.setAttribute('aria-expanded', 'true');
+}
+
+function renderSugestoes(){
+    sugestoesEl.innerHTML = currentResults.map(({a, i}, pos) =>
+        `<div class="suggestion-item${pos === focusedIdx ? ' focused' : ''}" role="option" id="opt-${pos}" onclick="selecionar(${i})">
             <span>${a[0]}</span>
             <span class="suggestion-kcal">${a[1]} kcal</span>
         </div>`
     ).join('');
-    box.style.display = 'block';
 }
 
-function formatColher(n, curto) {
-    const r = Math.round(n * 2) / 2; // arredonda para o ½ mais próximo
-    if (r <= 0) return curto ? '< ½ colher' : 'menos de ½ colher de sopa';
+buscaEl.addEventListener('input', buscar);
+
+buscaEl.addEventListener('keydown', (e) => {
+    if(sugestoesEl.style.display !== 'block' || !currentResults.length) return;
+
+    if(e.key === 'ArrowDown'){
+        e.preventDefault();
+        focusedIdx = Math.min(focusedIdx + 1, currentResults.length - 1);
+        renderSugestoes();
+        try { document.getElementById('opt-' + focusedIdx)?.scrollIntoView({block:'nearest'}); } catch(err){}
+    } else if(e.key === 'ArrowUp'){
+        e.preventDefault();
+        focusedIdx = Math.max(focusedIdx - 1, 0);
+        renderSugestoes();
+        try { document.getElementById('opt-' + focusedIdx)?.scrollIntoView({block:'nearest'}); } catch(err){}
+    } else if(e.key === 'Enter'){
+        e.preventDefault();
+        if(focusedIdx >= 0 && currentResults[focusedIdx]){
+            selecionar(currentResults[focusedIdx].i);
+        }
+    } else if(e.key === 'Escape'){
+        sugestoesEl.style.display = 'none';
+        buscaEl.setAttribute('aria-expanded', 'false');
+    }
+});
+
+function formatColher(n, curto){
+    const r = Math.round(n * 2) / 2;
+    if(r <= 0) return curto ? '< ½ colher' : 'menos de ½ colher de sopa';
     const numTxt = (r % 1 === 0) ? String(r) : r.toFixed(1).replace('.', ',');
-    if (curto) return numTxt + ' c.sopa';
+    if(curto) return numTxt + ' c.sopa';
     const plural = r !== 1;
     return numTxt + (plural ? ' colheres de sopa' : ' colher de sopa');
 }
 
-function atualizarColherQtd() {
+function atualizarColherQtd(){
     const el = document.getElementById('qtd-colher');
-    if (!selecionado || !selecionado[5]) { el.style.display = 'none'; return; }
-    const qtd = parseFloat(document.getElementById('quantidade').value) || 0;
-    if (qtd <= 0) { el.style.display = 'none'; return; }
+    if(!selecionado || !selecionado[5]){
+        el.style.display = 'none';
+        return;
+    }
+    const qtd = parseFloat(quantidadeEl.value) || 0;
+    if(qtd <= 0){
+        el.style.display = 'none';
+        return;
+    }
     const colheres = qtd / selecionado[5];
     el.textContent = `🥄 ${qtd}g ≈ ${formatColher(colheres)}`;
     el.style.display = 'block';
 }
 
-function selecionar(idx) {
+function selecionar(idx){
     selecionado = ALIMENTOS[idx];
-    document.getElementById('busca').value = selecionado[0];
-    document.getElementById('sugestoes').style.display = 'none';
+    buscaEl.value = selecionado[0];
+    sugestoesEl.style.display = 'none';
+    buscaEl.setAttribute('aria-expanded', 'false');
+
     const prev = document.getElementById('nutri-preview');
     prev.style.display = 'block';
-    document.getElementById('nutri-nome').textContent = selecionado[0] + ' — por 100g';
+    document.getElementById('nutri-nome').textContent = selecionado[0];
     document.getElementById('prev-kcal').textContent = selecionado[1];
     document.getElementById('prev-prot').textContent = selecionado[2] + 'g';
     document.getElementById('prev-carb').textContent = selecionado[3] + 'g';
     document.getElementById('prev-gord').textContent = selecionado[4] + 'g';
 
     const colherEl = document.getElementById('colher-info');
-    if (selecionado[5]) {
+    if(selecionado[5]){
         const colheres100g = 100 / selecionado[5];
         colherEl.textContent = `🥄 100g ≈ ${formatColher(colheres100g)} (${selecionado[5]}g por colher)`;
         colherEl.style.display = 'block';
@@ -818,16 +1209,25 @@ function selecionar(idx) {
 }
 
 document.addEventListener('click', e => {
-    if (!e.target.closest('.search-wrap')) {
-        document.getElementById('sugestoes').style.display = 'none';
+    if(!e.target.closest('.search-wrap')){
+        sugestoesEl.style.display = 'none';
+        buscaEl.setAttribute('aria-expanded', 'false');
     }
 });
 
-function adicionar() {
-    if (!selecionado) { alert('Selecione um alimento primeiro.'); return; }
-    const qtd = parseFloat(document.getElementById('quantidade').value) || 100;
+quantidadeEl.addEventListener('input', atualizarColherQtd);
+
+function adicionar(){
+    if(!selecionado){
+        showToast('Selecione um alimento primeiro');
+        buscaEl.focus();
+        return;
+    }
+
+    const qtd = parseFloat(quantidadeEl.value) || 100;
     const ref = document.getElementById('refeicao').value;
     const fator = qtd / 100;
+
     diario.push({
         nome: selecionado[0],
         qtd,
@@ -838,25 +1238,37 @@ function adicionar() {
         gord: +(selecionado[4] * fator).toFixed(1),
         colher: selecionado[5] ? qtd / selecionado[5] : null,
     });
+
+    salvarDiario();
     renderDiario();
+    showToast('Adicionado ao diário');
 }
 
-function remover(i) {
+function remover(i){
     diario.splice(i, 1);
+    salvarDiario();
     renderDiario();
 }
 
-function limparDiario() {
+function limparDiario(){
+    if(!diario.length) return;
+    if(!confirm('Limpar todo o diário alimentar?')) return;
     diario = [];
+    salvarDiario();
     renderDiario();
+    showToast('Diário limpo');
 }
 
-function renderDiario() {
+function renderDiario(){
     const el = document.getElementById('painel');
-    if (!diario.length) {
-        el.innerHTML = '<p class="empty-msg">Adicione alimentos para ver o total.</p>';
+
+    if(!diario.length){
+        emptyEl.style.display = 'flex';
+        el.innerHTML = '';
         return;
     }
+
+    emptyEl.style.display = 'none';
 
     const totKcal = diario.reduce((s, i) => s + i.kcal, 0);
     const totProt = +diario.reduce((s, i) => s + i.prot, 0).toFixed(1);
@@ -870,7 +1282,7 @@ function renderDiario() {
 
     const refeicoes = {};
     diario.forEach((item, idx) => {
-        if (!refeicoes[item.ref]) refeicoes[item.ref] = [];
+        if(!refeicoes[item.ref]) refeicoes[item.ref] = [];
         refeicoes[item.ref].push({ ...item, idx });
     });
 
@@ -880,18 +1292,16 @@ function renderDiario() {
             <div class="diary-item">
                 <div class="diary-item-info">
                     <div class="diary-item-name">${it.nome}</div>
-                    <div class="diary-item-meta">${it.qtd}g${it.colher ? ' (' + formatColher(it.colher, true) + ')' : ''} · P: ${it.prot}g · C: ${it.carb}g · G: ${it.gord}g</div>
+                    <div class="diary-item-meta">${it.qtd}g${it.colher ? ' (' + formatColher(it.colher, true) + ')' : ''} · P ${it.prot}g · C ${it.carb}g · G ${it.gord}g</div>
                 </div>
                 <div class="diary-item-kcal">${it.kcal} kcal</div>
-                <button class="diary-item-del" onclick="remover(${it.idx})">×</button>
+                <button class="diary-item-del" onclick="remover(${it.idx})" type="button" aria-label="Remover ${it.nome} do diário">×</button>
             </div>
         `).join('');
         return `
-            <div style="margin-bottom:10px">
-                <div style="font-size:12px;font-weight:700;color:#27ae60;margin-bottom:5px;display:flex;justify-content:space-between">
-                    <span>${ref}</span><span>${refKcal} kcal</span>
-                </div>
-                ${items}
+            <div class="meal-group">
+                <div class="meal-head"><span>${ref}</span><span>${refKcal} kcal</span></div>
+                <div class="diary-list">${items}</div>
             </div>
         `;
     }).join('');
@@ -903,41 +1313,43 @@ function renderDiario() {
 
             <div class="macro-bar-wrap">
                 <div class="macro-bar-label">
-                    <span style="color:#3498db">Proteína ${pProt}%</span>
-                    <span style="color:#e67e22">Carboidrato ${pCarb}%</span>
-                    <span style="color:#e74c3c">Gordura ${pGord}%</span>
+                    <span style="color:#85b7eb">Proteína ${pProt}%</span>
+                    <span style="color:#fac775">Carboidrato ${pCarb}%</span>
+                    <span style="color:#f09595">Gordura ${pGord}%</span>
                 </div>
                 <div class="macro-bar-track">
                     <div style="display:flex;height:100%">
-                        <div class="macro-bar-fill" style="width:${pProt}%;background:#3498db"></div>
-                        <div class="macro-bar-fill" style="width:${pCarb}%;background:#e67e22"></div>
-                        <div class="macro-bar-fill" style="width:${pGord}%;background:#e74c3c"></div>
+                        <div class="macro-bar-fill" style="width:${pProt}%;background:#378add"></div>
+                        <div class="macro-bar-fill" style="width:${pCarb}%;background:#ef9f27"></div>
+                        <div class="macro-bar-fill" style="width:${pGord}%;background:#e24b4a"></div>
                     </div>
                 </div>
             </div>
 
             <div class="macros-row">
                 <div class="macro-pill">
-                    <span class="macro-pill-val" style="color:#3498db">${totProt}g</span>
+                    <span class="macro-pill-val" style="color:#85b7eb">${totProt}g</span>
                     <span class="macro-pill-lbl">Proteína</span>
                 </div>
                 <div class="macro-pill">
-                    <span class="macro-pill-val" style="color:#e67e22">${totCarb}g</span>
+                    <span class="macro-pill-val" style="color:#fac775">${totCarb}g</span>
                     <span class="macro-pill-lbl">Carboidrato</span>
                 </div>
                 <div class="macro-pill">
-                    <span class="macro-pill-val" style="color:#e74c3c">${totGord}g</span>
+                    <span class="macro-pill-val" style="color:#f09595">${totGord}g</span>
                     <span class="macro-pill-lbl">Gordura</span>
                 </div>
             </div>
         </div>
 
-        <div class="section-label">📋 Refeições do dia</div>
-        <div class="diary-list">${listaHTML}</div>
+        <div class="section-label">Refeições do dia</div>
+        ${listaHTML}
 
-        <p style="font-size:12px;color:#bbb;margin-top:12px;font-style:italic">Valores nutricionais aproximados baseados na Tabela TACO e IBGE. Conversões em colheres de sopa são estimativas (variam por densidade do alimento). Para acompanhamento clínico, consulte um nutricionista.</p>
+        <p class="footnote"><span class="ic">ⓘ</span><span>Valores nutricionais aproximados baseados na Tabela TACO e IBGE. Conversões em colheres de sopa são estimativas e variam por densidade do alimento. Para acompanhamento clínico, consulte um nutricionista.</span></p>
     `;
 }
+
+renderDiario();
 
 </script>
 
