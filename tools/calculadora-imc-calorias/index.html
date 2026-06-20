@@ -5,239 +5,610 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Calculadora de Peso | UtiliWeb</title>
 <meta name="description" content="Calcule seu IMC, taxa metabólica basal e necessidade calórica diária com aconselhamentos por sexo.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
 <style>
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+:root{
+    --ink:#0e2419;
+    --forest:#0f3326;
+    --forest-deep:#0a2018;
+    --mint:#5fe3a8;
+    --mint-soft:#bff5da;
+    --paper:#fbfaf6;
+    --paper-dim:#f1efe6;
+    --gold:#e8b86d;
+    --line:rgba(15,51,38,.12);
+    --blue:#185fa5;
+    --blue-bg:#e6f1fb;
+    --blue-bd:#b5d4f4;
+    --green-txt:#3b6d11;
+    --green-bg:#eaf3de;
+    --green-bd:#c0dd97;
+    --amber-txt:#854f0b;
+    --amber-bg:#faeeda;
+    --amber-bd:#fac775;
+    --red-txt:#a32d2d;
+    --red-bg:#fcebeb;
+    --red-bd:#f7c1c1;
+    --font-display:'Fraunces',serif;
+    --font-body:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
 }
 
-html {
-    -webkit-text-size-adjust: 100%;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
-body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-    background: linear-gradient(135deg, #2ecc71, #27ae60);
-    min-height: 100dvh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 12px;
+html{
+    -webkit-text-size-adjust:100%;
 }
 
-.wrapper {
-    width: 100%;
-    max-width: 1100px;
-    background: #fff;
-    border-radius: 18px;
-    overflow: hidden;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    box-shadow: 0 20px 60px rgba(0,0,0,.25);
+body{
+    font-family:var(--font-body);
+    background:var(--forest-deep);
+    background-image:
+        radial-gradient(circle at 15% 10%, rgba(95,227,168,.10), transparent 45%),
+        radial-gradient(circle at 85% 90%, rgba(232,184,109,.08), transparent 50%);
+    min-height:100dvh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:28px 16px;
+    color:var(--ink);
 }
 
-.left, .right {
-    padding: 24px;
-    min-width: 0;
+.wrapper{
+    width:100%;
+    max-width:1100px;
+    background:var(--paper);
+    border-radius:28px;
+    overflow:hidden;
+    display:grid;
+    grid-template-columns:0.92fr 1.08fr;
+    box-shadow:0 40px 90px rgba(0,0,0,.45);
+    border:1px solid rgba(255,255,255,.06);
 }
 
-.left {
-    border-right: 1px solid #eee;
+/* ---------- LEFT ---------- */
+
+.left{
+    background:var(--forest);
+    background-image:radial-gradient(circle at 30% 0%, rgba(95,227,168,.18), transparent 55%);
+    color:var(--paper);
+    padding:36px 34px;
+    max-height:calc(100dvh - 56px);
+    overflow-y:auto;
 }
 
-.right {
-    background: #f6fff8;
+.eyebrow{
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--mint);
+    font-weight:700;
+    margin-bottom:14px;
 }
 
-h1 {
-    font-size: 28px;
-    margin-bottom: 6px;
+h1{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:30px;
+    line-height:1.1;
+    margin-bottom:8px;
+    letter-spacing:-.01em;
 }
 
-h2 {
-    font-size: 24px;
-    margin-bottom: 12px;
+.subtitle{
+    color:rgba(251,250,246,.65);
+    font-size:14px;
+    margin-bottom:24px;
+    line-height:1.5;
+    max-width:36ch;
 }
 
-.subtitle {
-    color: #666;
-    font-size: 14px;
-    margin-bottom: 18px;
+.back-link{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    margin-bottom:24px;
+    text-decoration:none;
+    color:rgba(251,250,246,.55);
+    font-weight:600;
+    font-size:13px;
+    transition:color .15s ease;
 }
 
-a {
-    display: inline-block;
-    margin-bottom: 14px;
-    text-decoration: none;
-    color: #27ae60;
-    font-weight: 700;
+.back-link:hover{
+    color:var(--mint);
 }
 
-label {
-    display: block;
-    margin-bottom: 8px;
-    font-size: 14px;
-    font-weight: 700;
-    color: #444;
+label{
+    display:block;
+    margin-bottom:9px;
+    font-size:11.5px;
+    font-weight:700;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:rgba(251,250,246,.5);
 }
 
-.hint {
-    font-size: 12px;
-    color: #999;
-    margin-top: 4px;
-    font-weight: 400;
+.section{
+    margin-bottom:22px;
 }
 
-.toggle-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    margin-bottom: 18px;
+.segmented{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+    padding:4px;
+    background:rgba(255,255,255,.05);
+    border-radius:14px;
+    border:1px solid rgba(255,255,255,.08);
 }
 
-.toggle-btn {
-    padding: 11px;
-    border-radius: 12px;
-    border: 2px solid #ddd;
-    background: #fff;
-    font-size: 14px;
-    font-weight: 700;
-    color: #666;
-    cursor: pointer;
-    transition: all 0.15s;
-    margin-top: 0;
-    width: 100%;
+.segmented.three{
+    grid-template-columns:1fr 1fr;
 }
 
-.toggle-btn.ativo {
-    background: #27ae60;
-    border-color: #27ae60;
-    color: #fff;
+.seg-btn{
+    padding:11px 8px;
+    border-radius:10px;
+    border:none;
+    background:transparent;
+    font-size:13.5px;
+    font-weight:700;
+    color:rgba(251,250,246,.55);
+    cursor:pointer;
+    transition:background .15s ease, color .15s ease;
+    font-family:var(--font-body);
 }
 
-.input-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
+.seg-btn.ativo{
+    background:var(--mint);
+    color:var(--forest-deep);
 }
 
-.input-group {
-    margin-bottom: 16px;
+.seg-btn:focus-visible{
+    outline:2px solid var(--mint);
+    outline-offset:2px;
 }
 
-input[type="number"], select {
-    width: 100%;
-    padding: 13px;
-    border-radius: 12px;
-    border: 2px solid #ddd;
-    font-size: 16px;
-    background: #fff;
-    color: #333;
-    font-family: inherit;
+.input-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
 }
 
-input[type="number"]:focus, select:focus {
-    outline: none;
-    border-color: #27ae60;
+.input-group{
+    margin-bottom:14px;
 }
 
-button.btn-calcular {
-    width: 100%;
-    margin-top: 4px;
-    padding: 14px;
-    border: none;
-    border-radius: 12px;
-    background: #27ae60;
-    color: #fff;
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
+.input-group:last-child{
+    margin-bottom:0;
 }
 
-button.btn-calcular:hover {
-    opacity: .95;
+.hint{
+    font-size:11.5px;
+    color:rgba(251,250,246,.4);
+    margin-top:6px;
+    font-weight:400;
+    line-height:1.4;
 }
 
-.result-box {
-    background: #fff;
-    border: 1px solid #d7f5e3;
-    border-radius: 14px;
-    padding: 18px;
-    line-height: 1.8;
-    min-height: 260px;
-    font-size: 15px;
-    color: #333;
+input[type="number"], select{
+    width:100%;
+    padding:13px 14px;
+    border-radius:12px;
+    border:1.5px solid rgba(255,255,255,.14);
+    background:rgba(255,255,255,.06);
+    color:var(--paper);
+    font-size:15px;
+    font-weight:600;
+    font-family:var(--font-body);
 }
 
-.highlight {
-    font-size: 32px;
-    font-weight: 800;
-    color: #27ae60;
-    margin-bottom: 4px;
+select{
+    appearance:none;
+    -webkit-appearance:none;
+    cursor:pointer;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'><path d='M1 3l4 4 4-4' stroke='rgba(251,250,246,0.5)' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+    background-repeat:no-repeat;
+    background-position:right 14px center;
+    padding-right:32px;
 }
 
-.highlight-sub {
-    font-size: 15px;
-    color: #555;
-    margin-bottom: 14px;
+select option{
+    color:#111;
+    background:#fff;
 }
 
-.stat {
-    margin-top: 10px;
-    padding: 12px;
-    background: #f6fff8;
-    border-radius: 10px;
-    border: 1px solid #e7f7ec;
+input[type="number"]::placeholder{
+    color:rgba(251,250,246,.35);
 }
 
-.stat strong {
-    color: #27ae60;
+input[type="number"]:focus-visible, select:focus-visible{
+    outline:2px solid var(--mint);
+    outline-offset:1px;
+    border-color:var(--mint);
 }
 
-.advice {
-    margin-top: 10px;
-    padding: 12px;
-    border-radius: 10px;
-    border: 1px solid;
-    font-size: 14px;
-    line-height: 1.6;
+input[type="number"]:hover, select:hover{
+    border-color:rgba(255,255,255,.3);
 }
 
-.faixa {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 7px 12px;
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 700;
-    margin-bottom: 5px;
+.divider-label{
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:rgba(251,250,246,.4);
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin:22px 0 16px;
 }
 
-.faixa.atual {
-    outline: 3px solid #27ae60;
+.divider-label::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:rgba(255,255,255,.1);
 }
 
-.empty-msg {
-    color: #999;
-    font-size: 15px;
+button.btn-calcular{
+    width:100%;
+    margin-top:10px;
+    padding:16px;
+    border:none;
+    border-radius:14px;
+    background:var(--mint);
+    color:var(--forest-deep);
+    font-size:15.5px;
+    font-weight:800;
+    font-family:var(--font-body);
+    cursor:pointer;
+    transition:transform .12s ease, box-shadow .12s ease;
+    box-shadow:0 8px 24px rgba(95,227,168,.25);
 }
 
-@media (max-width: 900px) {
-    body { align-items: flex-start; padding: 10px; }
-    .wrapper { grid-template-columns: 1fr; }
-    .left { border-right: none; border-bottom: 1px solid #eee; }
-    .left, .right { padding: 18px; }
-    h1 { font-size: 24px; }
-    h2 { font-size: 22px; }
-    .highlight { font-size: 28px; }
+button.btn-calcular:hover{
+    transform:translateY(-1px);
+    box-shadow:0 12px 28px rgba(95,227,168,.35);
 }
 
-@media (max-width: 480px) {
-    .input-row { grid-template-columns: 1fr; }
-    .toggle-row { grid-template-columns: 1fr; }
+button.btn-calcular:active{
+    transform:translateY(0px);
+}
+
+button.btn-calcular:focus-visible{
+    outline:2px solid var(--paper);
+    outline-offset:3px;
+}
+
+/* ---------- RIGHT ---------- */
+
+.right{
+    padding:36px 38px;
+    background:var(--paper);
+    max-height:calc(100dvh - 56px);
+    overflow-y:auto;
+}
+
+h2{
+    font-family:var(--font-display);
+    font-size:20px;
+    font-weight:600;
+    color:var(--forest-deep);
+    margin-bottom:20px;
+}
+
+.empty-state{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    color:rgba(14,36,25,.45);
+    padding:60px 20px;
+    border:1.5px dashed var(--line);
+    border-radius:18px;
+    gap:10px;
+}
+
+.empty-state svg{
+    opacity:.55;
+}
+
+.empty-state p{
+    font-size:14px;
+    max-width:28ch;
+    line-height:1.5;
+}
+
+#resultado{
+    display:none;
+}
+
+#resultado.visible{
+    display:block;
+}
+
+.hero-num{
+    display:flex;
+    align-items:flex-end;
+    gap:12px;
+    margin-bottom:4px;
+}
+
+.hero-num .num{
+    font-family:var(--font-display);
+    font-size:60px;
+    font-weight:600;
+    line-height:.85;
+    color:var(--forest-deep);
+    letter-spacing:-.02em;
+}
+
+.hero-num .unit{
+    font-size:15px;
+    font-weight:700;
+    color:var(--forest);
+    padding-bottom:8px;
+}
+
+.hero-sub{
+    font-size:14px;
+    font-weight:700;
+    margin-bottom:22px;
+    padding-bottom:20px;
+    border-bottom:1px solid var(--line);
+}
+
+.scale-wrap{
+    margin-bottom:18px;
+}
+
+.scale-track{
+    position:relative;
+    height:10px;
+    border-radius:6px;
+    overflow:visible;
+    display:flex;
+    margin-bottom:8px;
+}
+
+.scale-seg{
+    height:10px;
+}
+
+.scale-seg:first-child{
+    border-radius:6px 0 0 6px;
+}
+
+.scale-seg:last-child{
+    border-radius:0 6px 6px 0;
+}
+
+.scale-marker{
+    position:absolute;
+    top:-5px;
+    width:20px;
+    height:20px;
+    border-radius:50%;
+    background:var(--forest-deep);
+    border:3px solid var(--paper);
+    box-shadow:0 0 0 1.5px var(--forest-deep);
+    transform:translateX(-50%);
+    transition:left .4s ease;
+}
+
+.scale-labels{
+    display:flex;
+    justify-content:space-between;
+    font-size:10.5px;
+    color:rgba(14,36,25,.4);
+    font-weight:600;
+}
+
+.card{
+    background:var(--paper-dim);
+    border-radius:14px;
+    padding:16px 16px;
+    border:1px solid var(--line);
+    margin-bottom:12px;
+}
+
+.card .label{
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:rgba(14,36,25,.45);
+    margin-bottom:8px;
+    display:flex;
+    align-items:center;
+    gap:6px;
+}
+
+.card .value{
+    font-family:var(--font-display);
+    font-size:18px;
+    font-weight:600;
+    color:var(--forest-deep);
+    line-height:1.4;
+}
+
+.card .value small{
+    font-family:var(--font-body);
+    font-size:13px;
+    font-weight:500;
+    color:rgba(14,36,25,.55);
+}
+
+.tag-row{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:14px;
+}
+
+.tag{
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:.03em;
+    padding:5px 10px;
+    border-radius:8px;
+}
+
+.tag.uni{
+    background:var(--blue-bg);
+    color:var(--blue);
+}
+
+.tag.sex{
+    background:var(--mint-soft);
+    color:var(--forest);
+}
+
+.advice{
+    border-radius:14px;
+    padding:16px;
+    font-size:13.5px;
+    line-height:1.6;
+    border:1px solid;
+    margin-bottom:12px;
+}
+
+.advice .label{
+    font-size:11px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    margin-bottom:8px;
+    display:block;
+}
+
+.split-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-bottom:12px;
+}
+
+.mini-stat{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:13px 14px;
+}
+
+.mini-stat .l{
+    font-size:11px;
+    color:rgba(14,36,25,.5);
+    font-weight:600;
+    margin-bottom:4px;
+}
+
+.mini-stat .v{
+    font-family:var(--font-display);
+    font-size:17px;
+    font-weight:600;
+    color:var(--forest-deep);
+}
+
+.gord-table{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.gord-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:9px 12px;
+    border-radius:9px;
+    font-size:12.5px;
+    font-weight:700;
+}
+
+.gord-row.atual{
+    outline:2.5px solid var(--forest-deep);
+    outline-offset:1px;
+}
+
+.footnote{
+    font-size:11.5px;
+    color:rgba(14,36,25,.4);
+    font-style:italic;
+    margin-top:6px;
+    line-height:1.5;
+}
+
+.error-msg{
+    background:var(--red-bg);
+    border:1px solid var(--red-bd);
+    color:var(--red-txt);
+    border-radius:12px;
+    padding:14px 16px;
+    font-size:14px;
+    font-weight:600;
+}
+
+@media(prefers-reduced-motion: reduce){
+    *{
+        transition:none !important;
+    }
+}
+
+@media(max-width:900px){
+
+    body{
+        align-items:flex-start;
+        padding:16px 12px;
+    }
+
+    .wrapper{
+        grid-template-columns:1fr;
+        border-radius:22px;
+    }
+
+    .left, .right{
+        max-height:none;
+        overflow-y:visible;
+    }
+
+    .left{
+        padding:30px 26px;
+    }
+
+    .right{
+        padding:30px 26px;
+    }
+
+    h1{
+        font-size:26px;
+    }
+
+    .hero-num .num{
+        font-size:50px;
+    }
+}
+
+@media(max-width:480px){
+
+    .input-row{
+        grid-template-columns:1fr;
+    }
+
+    .split-grid{
+        grid-template-columns:1fr;
+    }
 }
 
 </style>
@@ -246,97 +617,126 @@ button.btn-calcular:hover {
 
 <div class="wrapper">
 
-    <div class="left">
+<div class="left">
 
-        <h1>⚖️ Calculadora de Peso</h1>
-        <p class="subtitle">IMC, taxa metabólica basal e necessidade calórica diária</p>
+<a href="../../index.html" class="back-link">← Voltar ao UtiliWeb</a>
 
-        <a href="../../index.html">← Voltar</a>
+<div class="eyebrow">Ferramenta UtiliWeb</div>
 
-        <label>Sexo</label>
-        <div class="toggle-row">
-            <button class="toggle-btn ativo" id="btn-M" onclick="setSexo('M')">♂ Masculino</button>
-            <button class="toggle-btn" id="btn-F" onclick="setSexo('F')">♀ Feminino</button>
-        </div>
+<h1>Calculadora de Peso</h1>
 
-        <label>Modo</label>
-        <div class="toggle-row">
-            <button class="toggle-btn ativo" id="btn-imc" onclick="setModo('imc')">⚖️ IMC</button>
-            <button class="toggle-btn" id="btn-cal" onclick="setModo('cal')">🔥 Calorias (TMB)</button>
-        </div>
+<p class="subtitle">
+IMC, taxa metabólica basal e necessidade calórica diária, com referências ajustadas por sexo onde a ciência indica diferença.
+</p>
 
-        <!-- CAMPOS IMC -->
-        <div id="campos-imc">
-            <div class="input-row">
-                <div class="input-group">
-                    <label>Peso (kg)</label>
-                    <input type="number" id="imc-p" value="70" min="1" step="0.1">
-                </div>
-                <div class="input-group">
-                    <label>Altura (cm)</label>
-                    <input type="number" id="imc-h" value="170" min="1" step="0.1">
-                </div>
-            </div>
-            <div class="input-group">
-                <label>% de gordura corporal <span style="font-weight:400;color:#999">(opcional)</span></label>
-                <input type="number" id="imc-g" placeholder="ex: 22" min="1" max="70" step="0.1">
-                <p class="hint">Permite aconselhamento de gordura corporal por sexo</p>
-            </div>
-        </div>
+<div class="section">
+<label>Sexo biológico</label>
+<div class="segmented">
+<button class="seg-btn ativo" id="btn-M" onclick="setSexo('M')" type="button">♂ Masculino</button>
+<button class="seg-btn" id="btn-F" onclick="setSexo('F')" type="button">♀ Feminino</button>
+</div>
+</div>
 
-        <!-- CAMPOS CALORIAS -->
-        <div id="campos-cal" style="display:none">
-            <label>Fórmula</label>
-            <div class="toggle-row">
-                <button class="toggle-btn ativo" id="btn-miff" onclick="setFormula('mifflin')">Mifflin-St Jeor</button>
-                <button class="toggle-btn" id="btn-harr" onclick="setFormula('harris')">Harris-Benedict</button>
-            </div>
-            <div class="input-row">
-                <div class="input-group">
-                    <label>Peso (kg)</label>
-                    <input type="number" id="cal-p" value="70" min="1" step="0.1">
-                </div>
-                <div class="input-group">
-                    <label>Altura (cm)</label>
-                    <input type="number" id="cal-h" value="170" min="1" step="0.1">
-                </div>
-            </div>
-            <div class="input-group">
-                <label>Idade (anos)</label>
-                <input type="number" id="cal-i" value="30" min="1" max="120" step="1">
-            </div>
-            <div class="input-group">
-                <label>Nível de atividade física</label>
-                <select id="cal-at">
-                    <option value="1.2">Sedentário — sem exercício</option>
-                    <option value="1.375" selected>Leve — 1 a 3x por semana</option>
-                    <option value="1.55">Moderado — 3 a 5x por semana</option>
-                    <option value="1.725">Intenso — 6 a 7x por semana</option>
-                    <option value="1.9">Muito intenso — atleta ou trabalho físico pesado</option>
-                </select>
-            </div>
-            <div class="input-group">
-                <label>Objetivo</label>
-                <select id="cal-obj">
-                    <option value="manter">Manter o peso</option>
-                    <option value="perder">Perder peso</option>
-                    <option value="ganhar">Ganhar massa muscular</option>
-                </select>
-            </div>
-        </div>
+<div class="section">
+<label>O que calcular</label>
+<div class="segmented">
+<button class="seg-btn ativo" id="btn-imc" onclick="setModo('imc')" type="button">⚖ IMC</button>
+<button class="seg-btn" id="btn-cal" onclick="setModo('cal')" type="button">🔥 Calorias</button>
+</div>
+</div>
 
-        <button class="btn-calcular" onclick="calcular()">Calcular</button>
+<!-- CAMPOS IMC -->
+<div id="campos-imc">
 
-    </div>
+<div class="input-row">
+<div class="input-group">
+<label>Peso (kg)</label>
+<input type="number" id="imc-p" value="70" min="1" step="0.1">
+</div>
+<div class="input-group">
+<label>Altura (cm)</label>
+<input type="number" id="imc-h" value="170" min="1" step="0.1">
+</div>
+</div>
 
-    <div class="right">
+<div class="input-group">
+<label>% de gordura corporal <span style="font-weight:400;text-transform:none;color:rgba(251,250,246,.35)">(opcional)</span></label>
+<input type="number" id="imc-g" placeholder="ex: 22" min="1" max="70" step="0.1">
+<p class="hint">A referência saudável de % de gordura é diferente para homens e mulheres — por isso pedimos o sexo.</p>
+</div>
 
-        <h2>Resultado</h2>
-        <div class="result-box" id="resultado">
-            <p class="empty-msg">Preencha os dados e clique em Calcular.</p>
-        </div>
+</div>
 
-    </div>
+<!-- CAMPOS CALORIAS -->
+<div id="campos-cal" style="display:none">
+
+<div class="section">
+<label>Fórmula</label>
+<div class="segmented">
+<button class="seg-btn ativo" id="btn-miff" onclick="setFormula('mifflin')" type="button">Mifflin-St Jeor</button>
+<button class="seg-btn" id="btn-harr" onclick="setFormula('harris')" type="button">Harris-Benedict</button>
+</div>
+</div>
+
+<div class="input-row">
+<div class="input-group">
+<label>Peso (kg)</label>
+<input type="number" id="cal-p" value="70" min="1" step="0.1">
+</div>
+<div class="input-group">
+<label>Altura (cm)</label>
+<input type="number" id="cal-h" value="170" min="1" step="0.1">
+</div>
+</div>
+
+<div class="input-group">
+<label>Idade (anos)</label>
+<input type="number" id="cal-i" value="30" min="1" max="120" step="1">
+</div>
+
+<div class="input-group">
+<label>Nível de atividade física</label>
+<select id="cal-at">
+<option value="1.2">Sedentário — sem exercício</option>
+<option value="1.375" selected>Leve — 1 a 3x por semana</option>
+<option value="1.55">Moderado — 3 a 5x por semana</option>
+<option value="1.725">Intenso — 6 a 7x por semana</option>
+<option value="1.9">Muito intenso — atleta ou trabalho físico pesado</option>
+</select>
+</div>
+
+<div class="input-group">
+<label>Objetivo</label>
+<select id="cal-obj">
+<option value="manter">Manter o peso</option>
+<option value="perder">Perder peso</option>
+<option value="ganhar">Ganhar massa muscular</option>
+</select>
+</div>
+
+</div>
+
+<div class="divider-label">Pronto</div>
+
+<button class="btn-calcular" onclick="calcular()" type="button">Calcular</button>
+
+</div>
+
+<div class="right">
+
+<h2>Resultado</h2>
+
+<div class="empty-state" id="empty">
+<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+<path d="M12 3a4 4 0 0 1 4 4v1a4 4 0 0 1-8 0V7a4 4 0 0 1 4-4z"/>
+<path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/>
+</svg>
+<p>Preencha os dados ao lado e clique em calcular para ver seu resultado aqui.</p>
+</div>
+
+<div id="resultado"></div>
+
+</div>
 
 </div>
 
@@ -346,13 +746,16 @@ let modo = 'imc';
 let sexo = 'M';
 let formula = 'mifflin';
 
+const empty = document.getElementById('empty');
+const resultado = document.getElementById('resultado');
+
 const FAIXAS = [
-    { min: 0,   max: 18.5, lbl: 'Abaixo do peso',    bg: '#e6f1fb', col: '#185fa5' },
-    { min: 18.5,max: 25,   lbl: 'Peso normal',        bg: '#eaf3de', col: '#3b6d11' },
-    { min: 25,  max: 30,   lbl: 'Sobrepeso',          bg: '#faeeda', col: '#854f0b' },
-    { min: 30,  max: 35,   lbl: 'Obesidade grau I',   bg: '#fcebeb', col: '#a32d2d' },
-    { min: 35,  max: 40,   lbl: 'Obesidade grau II',  bg: '#f7c1c1', col: '#791f1f' },
-    { min: 40,  max: 999,  lbl: 'Obesidade grau III', bg: '#f09595', col: '#501313' }
+    { min: 0,    max: 18.5, lbl: 'Abaixo do peso',    cor: '#185fa5' },
+    { min: 18.5, max: 25,   lbl: 'Peso normal',        cor: '#3b6d11' },
+    { min: 25,   max: 30,   lbl: 'Sobrepeso',          cor: '#854f0b' },
+    { min: 30,   max: 35,   lbl: 'Obesidade grau I',   cor: '#a32d2d' },
+    { min: 35,   max: 40,   lbl: 'Obesidade grau II',  cor: '#791f1f' },
+    { min: 40,   max: 999,  lbl: 'Obesidade grau III', cor: '#501313' }
 ];
 
 const GORD = {
@@ -360,37 +763,39 @@ const GORD = {
     F: { min: 14, fit: 28, max: 35 }
 };
 
-function setSexo(s) {
+function setSexo(s){
     sexo = s;
     document.getElementById('btn-M').classList.toggle('ativo', s === 'M');
     document.getElementById('btn-F').classList.toggle('ativo', s === 'F');
 }
 
-function setModo(m) {
+function setModo(m){
     modo = m;
     document.getElementById('btn-imc').classList.toggle('ativo', m === 'imc');
     document.getElementById('btn-cal').classList.toggle('ativo', m === 'cal');
     document.getElementById('campos-imc').style.display = m === 'imc' ? 'block' : 'none';
     document.getElementById('campos-cal').style.display = m === 'cal' ? 'block' : 'none';
-    document.getElementById('resultado').innerHTML = '<p class="empty-msg">Preencha os dados e clique em Calcular.</p>';
+    empty.style.display = 'flex';
+    resultado.classList.remove('visible');
+    resultado.innerHTML = '';
 }
 
-function setFormula(f) {
+function setFormula(f){
     formula = f;
     document.getElementById('btn-miff').classList.toggle('ativo', f === 'mifflin');
     document.getElementById('btn-harr').classList.toggle('ativo', f === 'harris');
 }
 
-function calcIMC(p, h) {
+function calcIMC(p, h){
     return p / Math.pow(h / 100, 2);
 }
 
-function getFaixa(imc) {
+function getFaixa(imc){
     return FAIXAS.find(f => imc >= f.min && imc < f.max) || FAIXAS[FAIXAS.length - 1];
 }
 
-function calcTMB(p, h, i, s, f) {
-    if (f === 'mifflin') {
+function calcTMB(p, h, i, s, f){
+    if(f === 'mifflin'){
         const b = 10 * p + 6.25 * h - 5 * i;
         return s === 'M' ? b + 5 : b - 161;
     }
@@ -399,101 +804,166 @@ function calcTMB(p, h, i, s, f) {
         : 447.593 + 9.247 * p + 3.098 * h - 4.330 * i;
 }
 
-function calcular() {
-    const el = document.getElementById('resultado');
+function showError(msg){
+    empty.style.display = 'none';
+    resultado.classList.add('visible');
+    resultado.innerHTML = `<div class="error-msg">⚠ ${msg}</div>`;
+}
 
-    if (modo === 'imc') {
+function buildScale(imc){
+
+    const max = 45;
+    const segs = FAIXAS.map(f => {
+        const top = Math.min(f.max, max);
+        const widthPct = ((top - f.min) / max) * 100;
+        return `<div class="scale-seg" style="width:${widthPct}%;background:${f.cor}"></div>`;
+    }).join('');
+
+    const pos = Math.max(2, Math.min(98, (imc / max) * 100));
+
+    return `
+        <div class="scale-wrap">
+            <div class="scale-track">
+                ${segs}
+                <div class="scale-marker" style="left:${pos}%"></div>
+            </div>
+            <div class="scale-labels">
+                <span>0</span><span>18.5</span><span>25</span><span>30</span><span>35</span><span>${max}+</span>
+            </div>
+        </div>
+    `;
+}
+
+function calcular(){
+
+    if(modo === 'imc'){
+
         const p = parseFloat(document.getElementById('imc-p').value) || 0;
         const h = parseFloat(document.getElementById('imc-h').value) || 0;
-        if (!p || !h) { el.innerHTML = '<p class="empty-msg">Preencha peso e altura.</p>'; return; }
+
+        if(!p || !h){
+            showError('Preencha peso e altura para calcular.');
+            return;
+        }
 
         const imc = calcIMC(p, h);
         const faixa = getFaixa(imc);
         const hm = h / 100;
         const pMin = (18.5 * hm * hm).toFixed(1);
         const pMax = (25 * hm * hm).toFixed(1);
-        const diff = p < parseFloat(pMin)
-            ? `+${(parseFloat(pMin) - p).toFixed(1)} kg a ganhar`
-            : p > parseFloat(pMax)
-            ? `-${(p - parseFloat(pMax)).toFixed(1)} kg a perder`
-            : 'Dentro do peso ideal';
 
-        // Aconselhamento IMC por sexo
-        let advBg, advBorder, advText;
-        if (imc < 18.5) {
-            advBg = '#e6f1fb'; advBorder = '#b5d4f4';
-            advText = sexo === 'M'
-                ? '⚠️ Baixo peso pode comprometer os níveis de testosterona, a densidade óssea e a imunidade. Busque orientação nutricional para ganho saudável de massa.'
-                : '⚠️ Baixo peso pode causar irregularidades menstruais, redução da fertilidade e perda de massa óssea. Consulte um nutricionista.';
-        } else if (imc < 25) {
-            advBg = '#eaf3de'; advBorder = '#c0dd97';
-            advText = sexo === 'M'
-                ? '✅ Peso saudável! Para homens, manter o peso nesta faixa favorece a saúde cardiovascular, hormonal e metabólica. Continue com alimentação equilibrada e atividade física regular.'
-                : '✅ Peso saudável! Para mulheres, o peso normal protege a saúde hormonal, reprodutiva e cardiovascular. Mantenha alimentação equilibrada e exercício regular.';
-        } else if (imc < 30) {
-            advBg = '#faeeda'; advBorder = '#fac775';
-            advText = sexo === 'M'
-                ? '⚠️ Sobrepeso aumenta o risco de hipertensão, resistência à insulina e disfunção erétil em homens. Atividade física (150 min/semana) e reeducação alimentar são os primeiros passos.'
-                : '⚠️ Sobrepeso pode influenciar o ciclo menstrual e aumentar o risco de síndrome metabólica em mulheres. Exercício regular e reeducação alimentar ajudam.';
+        let diffLbl, diffVal;
+        if(p < parseFloat(pMin)){
+            diffLbl = 'Para atingir o peso normal';
+            diffVal = `+${(parseFloat(pMin) - p).toFixed(1)} kg`;
+        } else if(p > parseFloat(pMax)){
+            diffLbl = 'Para atingir o peso normal';
+            diffVal = `−${(p - parseFloat(pMax)).toFixed(1)} kg`;
         } else {
-            advBg = '#fcebeb'; advBorder = '#f7c1c1';
-            const grau = imc < 35 ? 'I' : imc < 40 ? 'II' : 'III';
-            advText = sexo === 'M'
-                ? `⛔ Obesidade grau ${grau}. Em homens, eleva fortemente o risco de doenças cardiovasculares, apneia do sono, diabetes tipo 2 e baixa testosterona. Acompanhamento médico é essencial.`
-                : `⛔ Obesidade grau ${grau}. Em mulheres, está ligada a maior risco cardiovascular, irregularidades hormonais, SOP e complicações na gestação. Busque acompanhamento multidisciplinar.`;
+            diffLbl = 'Status';
+            diffVal = 'Dentro do peso normal';
         }
 
-        // Gordura corporal
+        let advCls, advText;
+        if(imc < 18.5){
+            advCls = 'blue';
+            advText = sexo === 'M'
+                ? 'Baixo peso pode comprometer a produção de testosterona, a densidade óssea e a imunidade. Vale buscar orientação nutricional para ganho saudável de massa.'
+                : 'Baixo peso pode causar irregularidades menstruais, queda de fertilidade e perda de massa óssea. Vale consultar um nutricionista.';
+        } else if(imc < 25){
+            advCls = 'green';
+            advText = sexo === 'M'
+                ? 'Peso dentro da faixa saudável. Para homens, isso favorece a saúde cardiovascular, hormonal e metabólica — vale manter a rotina de alimentação equilibrada e atividade física.'
+                : 'Peso dentro da faixa saudável. Para mulheres, isso protege a saúde hormonal, reprodutiva e cardiovascular — vale manter a rotina de alimentação equilibrada e exercício.';
+        } else if(imc < 30){
+            advCls = 'amber';
+            advText = sexo === 'M'
+                ? 'Sobrepeso eleva o risco de hipertensão, resistência à insulina e disfunção erétil em homens. Atividade física regular (150 min/semana) e reeducação alimentar são os primeiros passos.'
+                : 'Sobrepeso pode influenciar o ciclo menstrual e aumentar o risco de síndrome metabólica em mulheres. Exercício regular e reeducação alimentar ajudam a reverter o quadro.';
+        } else {
+            advCls = 'red';
+            const grau = imc < 35 ? 'I' : imc < 40 ? 'II' : 'III';
+            advText = sexo === 'M'
+                ? `Obesidade grau ${grau}. Em homens, eleva fortemente o risco de doenças cardiovasculares, apneia do sono, diabetes tipo 2 e queda de testosterona. Acompanhamento médico é recomendado.`
+                : `Obesidade grau ${grau}. Em mulheres, está associada a maior risco cardiovascular, irregularidades hormonais, SOP e complicações na gestação. Vale buscar acompanhamento multidisciplinar.`;
+        }
+
+        const advColors = {
+            blue:  {bg:'var(--blue-bg)',  bd:'var(--blue-bd)',  tx:'var(--blue)'},
+            green: {bg:'var(--green-bg)', bd:'var(--green-bd)', tx:'var(--green-txt)'},
+            amber: {bg:'var(--amber-bg)', bd:'var(--amber-bd)', tx:'var(--amber-txt)'},
+            red:   {bg:'var(--red-bg)',   bd:'var(--red-bd)',   tx:'var(--red-txt)'}
+        }[advCls];
+
         const g = parseFloat(document.getElementById('imc-g').value) || null;
         let gordBlock = '';
-        if (g !== null) {
+
+        if(g !== null){
             const ref = GORD[sexo];
             const nome = sexo === 'M' ? 'homens' : 'mulheres';
             let gMsg;
-            if (g < ref.min) gMsg = `${g}% está muito abaixo do mínimo saudável para ${nome} — pode indicar desnutrição ou excesso de treinamento.`;
-            else if (g < ref.fit) gMsg = `${g}% está na faixa atlética para ${nome}.`;
-            else if (g < ref.max) gMsg = `${g}% está dentro da faixa aceitável para ${nome}.`;
+            if(g < ref.min) gMsg = `${g}% está abaixo do mínimo saudável para ${nome} — pode indicar desnutrição ou excesso de treino.`;
+            else if(g < ref.fit) gMsg = `${g}% está na faixa atlética para ${nome}.`;
+            else if(g < ref.max) gMsg = `${g}% está dentro da faixa aceitável para ${nome}.`;
             else gMsg = `${g}% está acima do recomendado para ${nome} — risco metabólico aumentado.`;
-            gordBlock = `<div class="stat">💧 <strong>Gordura corporal</strong><br>${gMsg}</div>`;
+
+            gordBlock = `
+                <div class="card">
+                    <div class="label">💧 Gordura corporal <span class="tag sex" style="margin-left:4px">por sexo</span></div>
+                    <div class="value" style="font-size:14px;font-family:var(--font-body);font-weight:600;color:var(--forest-deep)">${gMsg}</div>
+                </div>
+            `;
         }
 
-        // Faixas de referência
-        const faixasHTML = FAIXAS.map(f => {
-            const ok = imc >= f.min && imc < f.max;
-            const range = f.max === 999 ? `${f.min}+` : `${f.min} – ${f.max}`;
-            return `<div class="faixa${ok ? ' atual' : ''}" style="background:${f.bg};color:${f.col}">${f.lbl}<span>${range}</span></div>`;
-        }).join('');
+        resultado.classList.add('visible');
+        empty.style.display = 'none';
 
-        el.innerHTML = `
-            <div class="highlight">${imc.toFixed(1)}</div>
-            <div class="highlight-sub">${faixa.lbl}</div>
+        resultado.innerHTML = `
 
-            <div class="stat">
-                📅 <strong>Peso ideal</strong><br>
-                Entre <strong>${pMin}</strong> e <strong>${pMax} kg</strong> para sua altura<br>
-                ${diff}
+            <div class="tag-row">
+                <span class="tag uni">Fórmula unissex (OMS)</span>
             </div>
 
-            <div class="advice" style="background:${advBg};border-color:${advBorder}">
-                <strong>Aconselhamento — ${sexo === 'M' ? 'masculino' : 'feminino'}</strong><br><br>
+            <div class="hero-num">
+                <span class="num">${imc.toFixed(1)}</span>
+                <span class="unit">IMC</span>
+            </div>
+
+            <div class="hero-sub" style="color:${advColors.tx}">${faixa.lbl}</div>
+
+            ${buildScale(imc)}
+
+            <div class="split-grid">
+                <div class="mini-stat">
+                    <div class="l">Faixa de peso ideal</div>
+                    <div class="v">${pMin}–${pMax} kg</div>
+                </div>
+                <div class="mini-stat">
+                    <div class="l">${diffLbl}</div>
+                    <div class="v">${diffVal}</div>
+                </div>
+            </div>
+
+            <div class="advice" style="background:${advColors.bg};border-color:${advColors.bd};color:${advColors.tx}">
+                <span class="label">Aconselhamento — ${sexo === 'M' ? 'masculino' : 'feminino'}</span>
                 ${advText}
             </div>
 
             ${gordBlock}
 
-            <div class="stat">
-                📊 <strong>Faixas de IMC (OMS)</strong><br><br>
-                ${faixasHTML}
-            </div>
-
-            <p style="font-size:12px;color:#bbb;margin-top:14px;font-style:italic">Estimativas gerais. Não substituem orientação médica ou nutricional. O IMC não diferencia massa muscular de gordura.</p>
+            <p class="footnote">O IMC usa a mesma fórmula e as mesmas faixas para os dois sexos — é um índice populacional, não ajustado por composição corporal. Já a % de gordura ideal varia por sexo, por isso a referência muda acima. Estimativas gerais; não substituem orientação médica ou nutricional.</p>
         `;
 
     } else {
+
         const p = parseFloat(document.getElementById('cal-p').value) || 0;
         const h = parseFloat(document.getElementById('cal-h').value) || 0;
         const i = parseFloat(document.getElementById('cal-i').value) || 0;
-        if (!p || !h || !i) { el.innerHTML = '<p class="empty-msg">Preencha todos os campos.</p>'; return; }
+
+        if(!p || !h || !i){
+            showError('Preencha peso, altura e idade para calcular.');
+            return;
+        }
 
         const at = parseFloat(document.getElementById('cal-at').value);
         const obj = document.getElementById('cal-obj').value;
@@ -503,71 +973,95 @@ function calcular() {
         const sup = get + 300;
 
         let alvo, alvoLabel;
-        if (obj === 'perder') { alvo = def; alvoLabel = 'para perder peso'; }
-        else if (obj === 'ganhar') { alvo = sup; alvoLabel = 'para ganhar massa'; }
-        else { alvo = get; alvoLabel = 'para manter o peso'; }
+        if(obj === 'perder'){ alvo = def; alvoLabel = 'meta para perder peso'; }
+        else if(obj === 'ganhar'){ alvo = sup; alvoLabel = 'meta para ganhar massa'; }
+        else { alvo = get; alvoLabel = 'meta para manter o peso'; }
 
-        // Aconselhamento calorias por sexo + objetivo
-        let advBg, advBorder, advText;
-        if (obj === 'manter') {
-            advBg = '#e6f1fb'; advBorder = '#b5d4f4';
+        let advCls, advText;
+        if(obj === 'manter'){
+            advCls = 'blue';
             advText = sexo === 'M'
-                ? '✅ Para homens, manter a ingestão próxima ao gasto total preserva massa muscular e equilíbrio hormonal.'
-                : '✅ Para mulheres, manter a ingestão adequada é essencial para saúde hormonal e óssea — dietas muito restritivas podem comprometer esses sistemas.';
-        } else if (obj === 'perder') {
-            advBg = '#faeeda'; advBorder = '#fac775';
+                ? 'Para homens, manter a ingestão próxima ao gasto total preserva massa muscular e equilíbrio hormonal.'
+                : 'Para mulheres, manter a ingestão adequada é importante para a saúde hormonal e óssea — dietas muito restritivas podem comprometer esses sistemas mesmo sem o objetivo de perder peso.';
+        } else if(obj === 'perder'){
+            advCls = 'amber';
             advText = sexo === 'M'
-                ? '⚠️ Homens respondem bem a déficits moderados com proteína elevada (1,6–2,2 g/kg) e treino de força. Perda saudável estimada: 0,5–1 kg por semana.'
-                : '⚠️ Mulheres devem evitar déficits muito agressivos — podem impactar o ciclo menstrual e a saúde óssea. Mantenha proteína em 1,6–2 g/kg e não pule refeições.';
+                ? 'Homens costumam responder bem a déficits moderados com proteína elevada (1,6–2,2 g/kg) e treino de força. Perda saudável estimada: 0,5–1 kg por semana.'
+                : 'Mulheres devem evitar déficits muito agressivos, que podem impactar o ciclo menstrual e a saúde óssea. Mantenha proteína em 1,6–2 g/kg e evite pular refeições.';
         } else {
-            advBg = '#eaf3de'; advBorder = '#c0dd97';
+            advCls = 'green';
             advText = sexo === 'M'
-                ? '💪 Superávit de 200–400 kcal com treino de força progressivo permite ganho muscular com mínimo acúmulo de gordura. Priorize proteína de qualidade (1,8–2,2 g/kg).'
-                : '💪 Mulheres têm taxa de síntese muscular menor, mas respondem muito bem ao treino de força. Superávit moderado (200–300 kcal) evita ganho excessivo de gordura. Proteína: 1,8–2,2 g/kg.';
+                ? 'Superávit de 200–400 kcal com treino de força progressivo permite ganho muscular com mínimo acúmulo de gordura. Priorize proteína de qualidade (1,8–2,2 g/kg).'
+                : 'Mulheres têm, em média, taxa de síntese muscular menor, mas respondem bem ao treino de força. Superávit moderado (200–300 kcal) evita ganho excessivo de gordura. Proteína: 1,8–2,2 g/kg.';
         }
 
-        // Tabela de gordura corporal por sexo
+        const advColors = {
+            blue:  {bg:'var(--blue-bg)',  bd:'var(--blue-bd)',  tx:'var(--blue)'},
+            green: {bg:'var(--green-bg)', bd:'var(--green-bd)', tx:'var(--green-txt)'},
+            amber: {bg:'var(--amber-bg)', bd:'var(--amber-bd)', tx:'var(--amber-txt)'}
+        }[advCls];
+
         const ref = GORD[sexo];
         const gordRows = [
-            { lbl: 'Atleta',    range: `${ref.min}–${ref.min + 5}%`,  bg: '#e6f1fb', col: '#185fa5' },
-            { lbl: 'Fitness',   range: `${ref.min + 5}–${ref.fit}%`,  bg: '#eaf3de', col: '#3b6d11' },
-            { lbl: 'Aceitável', range: `${ref.fit}–${ref.max}%`,      bg: '#faeeda', col: '#854f0b' },
-            { lbl: 'Alto risco',range: `>${ref.max}%`,                 bg: '#fcebeb', col: '#a32d2d' },
+            { lbl: 'Atleta',     range: `${ref.min}–${ref.min + 5}%`, cor: 'var(--blue-bg)',  tx: 'var(--blue)' },
+            { lbl: 'Fitness',    range: `${ref.min + 5}–${ref.fit}%`, cor: 'var(--green-bg)', tx: 'var(--green-txt)' },
+            { lbl: 'Aceitável',  range: `${ref.fit}–${ref.max}%`,     cor: 'var(--amber-bg)', tx: 'var(--amber-txt)' },
+            { lbl: 'Alto risco', range: `>${ref.max}%`,               cor: 'var(--red-bg)',   tx: 'var(--red-txt)' }
         ];
+
         const gordTbl = gordRows.map(r =>
-            `<div class="faixa" style="background:${r.bg};color:${r.col}">${r.lbl}<span>${r.range}</span></div>`
+            `<div class="gord-row" style="background:${r.cor};color:${r.tx}"><span>${r.lbl}</span><span>${r.range}</span></div>`
         ).join('');
 
-        el.innerHTML = `
-            <div class="highlight">${Math.round(alvo).toLocaleString('pt-BR')} kcal/dia</div>
-            <div class="highlight-sub">${alvoLabel.charAt(0).toUpperCase() + alvoLabel.slice(1)}</div>
+        resultado.classList.add('visible');
+        empty.style.display = 'none';
 
-            <div class="stat">
-                🔥 <strong>TMB</strong> (taxa em repouso total)<br>
-                <strong>${Math.round(tmb).toLocaleString('pt-BR')} kcal/dia</strong>
+        resultado.innerHTML = `
 
-                <br><br>
-
-                📊 <strong>Gasto total com atividade</strong><br>
-                <strong>${Math.round(get).toLocaleString('pt-BR')} kcal/dia</strong>
+            <div class="tag-row">
+                <span class="tag sex">Ajustado por sexo (${sexo === 'M' ? 'masculino' : 'feminino'})</span>
             </div>
 
-            <div class="stat">
-                📉 Para perder peso (déficit −500 kcal): <strong>${Math.round(def).toLocaleString('pt-BR')} kcal/dia</strong><br>
-                📈 Para ganhar massa (superávit +300 kcal): <strong>${Math.round(sup).toLocaleString('pt-BR')} kcal/dia</strong>
+            <div class="hero-num">
+                <span class="num">${Math.round(alvo).toLocaleString('pt-BR')}</span>
+                <span class="unit">kcal / dia</span>
             </div>
 
-            <div class="advice" style="background:${advBg};border-color:${advBorder}">
-                <strong>Aconselhamento — ${sexo === 'M' ? 'masculino' : 'feminino'}</strong><br><br>
+            <div class="hero-sub" style="color:var(--forest)">${alvoLabel.charAt(0).toUpperCase() + alvoLabel.slice(1)}</div>
+
+            <div class="split-grid">
+                <div class="mini-stat">
+                    <div class="l">TMB em repouso</div>
+                    <div class="v">${Math.round(tmb).toLocaleString('pt-BR')} kcal</div>
+                </div>
+                <div class="mini-stat">
+                    <div class="l">Gasto total com atividade</div>
+                    <div class="v">${Math.round(get).toLocaleString('pt-BR')} kcal</div>
+                </div>
+            </div>
+
+            <div class="split-grid">
+                <div class="mini-stat">
+                    <div class="l">Déficit p/ perder peso</div>
+                    <div class="v">${Math.round(def).toLocaleString('pt-BR')} kcal</div>
+                </div>
+                <div class="mini-stat">
+                    <div class="l">Superávit p/ ganhar massa</div>
+                    <div class="v">${Math.round(sup).toLocaleString('pt-BR')} kcal</div>
+                </div>
+            </div>
+
+            <div class="advice" style="background:${advColors.bg};border-color:${advColors.bd};color:${advColors.tx}">
+                <span class="label">Aconselhamento — ${sexo === 'M' ? 'masculino' : 'feminino'}</span>
                 ${advText}
             </div>
 
-            <div class="stat">
-                💧 <strong>Referência de gordura corporal — ${sexo === 'M' ? 'masculino' : 'feminino'}</strong><br><br>
-                ${gordTbl}
+            <div class="card">
+                <div class="label">💧 Referência de gordura corporal — ${sexo === 'M' ? 'masculino' : 'feminino'}</div>
+                <div class="gord-table">${gordTbl}</div>
             </div>
 
-            <p style="font-size:12px;color:#bbb;margin-top:14px;font-style:italic">Estimativas gerais. Não substituem orientação de nutricionista, médico ou educador físico.</p>
+            <p class="footnote">A TMB já é calculada de forma diferente por sexo nestas fórmulas, porque homens têm em média mais massa muscular, que consome mais energia em repouso. Estimativas gerais; não substituem orientação de nutricionista, médico ou educador físico.</p>
         `;
     }
 }
