@@ -8,7 +8,25 @@
 
 <meta name="description" content="Descubra sua idade exata, signo, dia da semana em que nasceu, próximo aniversário e diversas estatísticas.">
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
 <style>
+
+:root{
+    --ink:#0e2419;
+    --forest:#0f3326;
+    --forest-deep:#0a2018;
+    --mint:#5fe3a8;
+    --mint-soft:#bff5da;
+    --paper:#fbfaf6;
+    --paper-dim:#f1efe6;
+    --gold:#e8b86d;
+    --line:rgba(15,51,38,.12);
+    --font-display:'Fraunces',serif;
+    --font-body:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
+}
 
 *{
     margin:0;
@@ -21,168 +39,472 @@ html{
 }
 
 body{
-    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
-    background:linear-gradient(135deg,#2ecc71,#27ae60);
+    font-family:var(--font-body);
+    background:var(--forest-deep);
+    background-image:
+        radial-gradient(circle at 15% 10%, rgba(95,227,168,.10), transparent 45%),
+        radial-gradient(circle at 85% 90%, rgba(232,184,109,.08), transparent 50%);
     min-height:100dvh;
     display:flex;
     justify-content:center;
     align-items:center;
-    padding:12px;
+    padding:28px 16px;
+    color:var(--ink);
 }
 
 .wrapper{
     width:100%;
-    max-width:1100px;
-    background:#fff;
-    border-radius:18px;
+    max-width:1080px;
+    background:var(--paper);
+    border-radius:28px;
     overflow:hidden;
     display:grid;
-    grid-template-columns:1fr 1fr;
-    box-shadow:0 20px 60px rgba(0,0,0,.25);
+    grid-template-columns:0.95fr 1.05fr;
+    box-shadow:0 40px 90px rgba(0,0,0,.45);
+    border:1px solid rgba(255,255,255,.06);
 }
 
-.left,
-.right{
-    padding:24px;
-    min-width:0;
-}
+/* ---------- LEFT ---------- */
 
 .left{
-    border-right:1px solid #eee;
+    background:var(--forest);
+    background-image:radial-gradient(circle at 30% 0%, rgba(95,227,168,.18), transparent 55%);
+    color:var(--paper);
+    padding:40px 36px;
+    display:flex;
+    flex-direction:column;
+}
+
+.eyebrow{
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--mint);
+    font-weight:700;
+    margin-bottom:14px;
 }
 
 h1{
-    font-size:28px;
-    margin-bottom:6px;
-}
-
-h2{
-    font-size:24px;
-    margin-bottom:12px;
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:34px;
+    line-height:1.1;
+    margin-bottom:10px;
+    letter-spacing:-.01em;
 }
 
 .subtitle{
-    color:#666;
-    font-size:14px;
-    margin-bottom:18px;
+    color:rgba(251,250,246,.65);
+    font-size:14.5px;
+    margin-bottom:26px;
+    line-height:1.5;
+    max-width:34ch;
 }
 
-a{
-    display:inline-block;
-    margin-bottom:14px;
+.back-link{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    margin-bottom:28px;
     text-decoration:none;
-    color:#27ae60;
-    font-weight:700;
+    color:rgba(251,250,246,.55);
+    font-weight:600;
+    font-size:13px;
+    transition:color .15s ease;
+}
+
+.back-link:hover{
+    color:var(--mint);
 }
 
 label{
     display:block;
-    margin-bottom:8px;
-    font-size:14px;
+    margin-bottom:10px;
+    font-size:12px;
     font-weight:700;
-    color:#444;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:rgba(251,250,246,.55);
 }
 
 .date-grid{
     display:grid;
-    grid-template-columns:1fr 1fr 1fr;
+    grid-template-columns:0.8fr 1.3fr 1fr;
     gap:10px;
+}
+
+.select-wrap{
+    position:relative;
+}
+
+.select-wrap::after{
+    content:"";
+    position:absolute;
+    right:14px;
+    top:50%;
+    width:8px;
+    height:8px;
+    border-right:2px solid rgba(255,255,255,.45);
+    border-bottom:2px solid rgba(255,255,255,.45);
+    transform:translateY(-65%) rotate(45deg);
+    pointer-events:none;
 }
 
 select{
     width:100%;
-    padding:13px;
+    padding:14px 30px 14px 14px;
     border-radius:12px;
-    border:2px solid #ddd;
-    font-size:16px;
-    background:#fff;
+    border:1.5px solid rgba(255,255,255,.14);
+    background:rgba(255,255,255,.06);
+    color:var(--paper);
+    font-size:15px;
+    font-weight:600;
+    font-family:var(--font-body);
+    appearance:none;
+    -webkit-appearance:none;
+    cursor:pointer;
+    transition:border-color .15s ease, background .15s ease;
 }
 
-select:focus{
-    outline:none;
-    border-color:#27ae60;
+select:focus-visible{
+    outline:2px solid var(--mint);
+    outline-offset:2px;
+    border-color:var(--mint);
+}
+
+select:hover{
+    border-color:rgba(255,255,255,.3);
+}
+
+select option{
+    color:#111;
+    background:#fff;
 }
 
 button{
     width:100%;
-    margin-top:18px;
-    padding:14px;
+    margin-top:24px;
+    padding:16px;
     border:none;
-    border-radius:12px;
-    background:#27ae60;
-    color:#fff;
-    font-size:16px;
-    font-weight:700;
+    border-radius:14px;
+    background:var(--mint);
+    color:var(--forest-deep);
+    font-size:15.5px;
+    font-weight:800;
+    font-family:var(--font-body);
+    letter-spacing:.01em;
     cursor:pointer;
+    transition:transform .12s ease, box-shadow .12s ease, background .12s ease;
+    box-shadow:0 8px 24px rgba(95,227,168,.25);
 }
 
 button:hover{
-    opacity:.95;
+    transform:translateY(-1px);
+    box-shadow:0 12px 28px rgba(95,227,168,.35);
 }
 
-.result-box{
-    background:#f6fff8;
-    border:1px solid #d7f5e3;
+button:active{
+    transform:translateY(0px);
+}
+
+button:focus-visible{
+    outline:2px solid var(--paper);
+    outline-offset:3px;
+}
+
+.left-foot{
+    margin-top:auto;
+    padding-top:28px;
+    font-size:12px;
+    color:rgba(251,250,246,.35);
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.dot{
+    width:5px;
+    height:5px;
+    border-radius:50%;
+    background:var(--mint);
+    flex:none;
+}
+
+/* ---------- RIGHT ---------- */
+
+.right{
+    padding:40px 38px;
+    background:var(--paper);
+    display:flex;
+    flex-direction:column;
+}
+
+.right-head{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    margin-bottom:22px;
+}
+
+h2{
+    font-family:var(--font-display);
+    font-size:21px;
+    font-weight:600;
+    color:var(--forest-deep);
+}
+
+.empty-state{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    color:rgba(14,36,25,.45);
+    padding:40px 20px;
+    border:1.5px dashed var(--line);
+    border-radius:18px;
+    gap:10px;
+}
+
+.empty-state svg{
+    opacity:.55;
+}
+
+.empty-state p{
+    font-size:14px;
+    max-width:26ch;
+    line-height:1.5;
+}
+
+#resultado{
+    display:none;
+}
+
+#resultado.visible{
+    display:block;
+}
+
+.hero-age{
+    display:flex;
+    align-items:flex-end;
+    gap:14px;
+    margin-bottom:6px;
+}
+
+.hero-age .num{
+    font-family:var(--font-display);
+    font-size:76px;
+    font-weight:600;
+    line-height:.85;
+    color:var(--forest-deep);
+    letter-spacing:-.02em;
+}
+
+.hero-age .unit{
+    font-size:16px;
+    font-weight:700;
+    color:var(--forest);
+    padding-bottom:10px;
+    text-transform:lowercase;
+}
+
+.hero-detail{
+    font-size:14px;
+    color:rgba(14,36,25,.6);
+    margin-bottom:26px;
+    padding-bottom:24px;
+    border-bottom:1px solid var(--line);
+}
+
+.hero-detail strong{
+    color:var(--forest-deep);
+    font-weight:700;
+}
+
+.grid-cards{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-bottom:12px;
+}
+
+.card{
+    background:var(--paper-dim);
     border-radius:14px;
-    padding:18px;
-    line-height:1.8;
-    min-height:260px;
-    font-size:15px;
+    padding:16px 16px;
+    border:1px solid var(--line);
 }
 
-.highlight{
-    font-size:32px;
-    font-weight:800;
-    color:#27ae60;
-    margin-bottom:10px;
+.card .label{
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:.07em;
+    text-transform:uppercase;
+    color:rgba(14,36,25,.45);
+    margin-bottom:8px;
+    display:flex;
+    align-items:center;
+    gap:6px;
 }
 
-.stat{
-    margin-top:10px;
-    padding:12px;
+.card .value{
+    font-family:var(--font-display);
+    font-size:20px;
+    font-weight:600;
+    color:var(--forest-deep);
+    line-height:1.25;
+}
+
+.card.accent{
+    background:var(--forest);
+    border-color:var(--forest);
+    grid-column:1 / -1;
+    display:flex;
+    align-items:center;
+    gap:18px;
+}
+
+.ring{
+    flex:none;
+    position:relative;
+    width:64px;
+    height:64px;
+}
+
+.ring svg{
+    transform:rotate(-90deg);
+}
+
+.ring-track{
+    fill:none;
+    stroke:rgba(255,255,255,.14);
+    stroke-width:6;
+}
+
+.ring-progress{
+    fill:none;
+    stroke:var(--mint);
+    stroke-width:6;
+    stroke-linecap:round;
+    transition:stroke-dasharray .6s ease;
+}
+
+.accent .label{
+    color:rgba(251,250,246,.55);
+}
+
+.accent .value{
+    color:var(--paper);
+}
+
+.accent .value strong{
+    color:var(--mint);
+}
+
+.stats-row{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+    margin-top:12px;
+}
+
+.stat-pill{
+    text-align:center;
+    padding:14px 6px;
+    border-radius:12px;
     background:#fff;
-    border-radius:10px;
-    border:1px solid #e7f7ec;
+    border:1px solid var(--line);
 }
 
-@media(max-width:900px){
+.stat-pill .n{
+    font-family:var(--font-display);
+    font-size:18px;
+    font-weight:600;
+    color:var(--forest-deep);
+    display:block;
+}
+
+.stat-pill .l{
+    font-size:10.5px;
+    color:rgba(14,36,25,.5);
+    text-transform:uppercase;
+    letter-spacing:.04em;
+    margin-top:3px;
+    display:block;
+}
+
+.error-msg{
+    background:#fdeeee;
+    border:1px solid #f3cccc;
+    color:#a23b3b;
+    border-radius:12px;
+    padding:14px 16px;
+    font-size:14px;
+    font-weight:600;
+}
+
+@media(prefers-reduced-motion: reduce){
+    *{
+        transition:none !important;
+    }
+}
+
+@media(max-width:860px){
 
     body{
         align-items:flex-start;
-        padding:10px;
+        padding:16px 12px;
     }
 
     .wrapper{
         grid-template-columns:1fr;
+        border-radius:22px;
     }
 
     .left{
-        border-right:none;
-        border-bottom:1px solid #eee;
+        padding:30px 26px;
     }
 
-    .left,
     .right{
-        padding:18px;
+        padding:30px 26px;
     }
 
     h1{
-        font-size:24px;
-    }
-
-    h2{
-        font-size:22px;
-    }
-
-    .highlight{
         font-size:28px;
+    }
+
+    .hero-age .num{
+        font-size:64px;
     }
 }
 
 @media(max-width:480px){
 
     .date-grid{
+        grid-template-columns:1fr 1.4fr 1fr;
+        gap:8px;
+    }
+
+    select{
+        padding:13px 26px 13px 11px;
+        font-size:14px;
+    }
+
+    .grid-cards{
         grid-template-columns:1fr;
+    }
+
+    .card.accent{
+        flex-direction:row;
+    }
+
+    .stats-row{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .hero-age .num{
+        font-size:54px;
     }
 }
 
@@ -194,21 +516,26 @@ button:hover{
 
 <div class="left">
 
-<h1>🎂 Calculadora de Idade PRO</h1>
+<a href="../../index.html" class="back-link">← Voltar ao UtiliWeb</a>
+
+<div class="eyebrow">Ferramenta UtiliWeb</div>
+
+<h1>Calculadora de&nbsp;Idade</h1>
 
 <p class="subtitle">
-Idade exata, signo, aniversário e estatísticas
+Sua idade exata em anos, meses e dias — com signo, dia da semana de nascimento e a contagem para o próximo aniversário.
 </p>
 
-<a href="../../index.html">← Voltar</a>
-
-<label>Data de nascimento</label>
+<label for="dia">Data de nascimento</label>
 
 <div class="date-grid">
 
-<select id="dia"></select>
+<div class="select-wrap">
+<select id="dia" aria-label="Dia"></select>
+</div>
 
-<select id="mes">
+<div class="select-wrap">
+<select id="mes" aria-label="Mês">
 <option value="0">Janeiro</option>
 <option value="1">Fevereiro</option>
 <option value="2">Março</option>
@@ -222,24 +549,38 @@ Idade exata, signo, aniversário e estatísticas
 <option value="10">Novembro</option>
 <option value="11">Dezembro</option>
 </select>
+</div>
 
-<select id="ano"></select>
+<div class="select-wrap">
+<select id="ano" aria-label="Ano"></select>
+</div>
 
 </div>
 
-<button onclick="calcular()">
-Calcular Idade
-</button>
+<button onclick="calcular()">Calcular idade</button>
+
+<div class="left-foot">
+<span class="dot"></span>
+Os cálculos consideram o calendário gregoriano e a data de hoje.
+</div>
 
 </div>
 
 <div class="right">
 
-<h2>Resultado</h2>
-
-<div class="result-box" id="resultado">
-Selecione sua data de nascimento.
+<div class="right-head">
+<h2>Seu retrato no tempo</h2>
 </div>
+
+<div class="empty-state" id="empty">
+<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+<rect x="3" y="5" width="18" height="16" rx="2"/>
+<path d="M3 9h18M8 3v4M16 3v4"/>
+</svg>
+<p>Escolha o dia, mês e ano de nascimento e clique em calcular para ver o resultado aqui.</p>
+</div>
+
+<div id="resultado"></div>
 
 </div>
 
@@ -249,6 +590,8 @@ Selecione sua data de nascimento.
 
 const diaSelect = document.getElementById("dia");
 const anoSelect = document.getElementById("ano");
+const emptyState = document.getElementById("empty");
+const resultado = document.getElementById("resultado");
 
 for(let d=1; d<=31; d++){
     diaSelect.innerHTML += `<option value="${d}">${d}</option>`;
@@ -260,185 +603,172 @@ for(let a=anoAtual; a>=1900; a--){
     anoSelect.innerHTML += `<option value="${a}">${a}</option>`;
 }
 
-function getSigno(dia,mes){
+const signos = [
+    { nome:"Capricórnio", simbolo:"♑" },
+    { nome:"Aquário",     simbolo:"♒" },
+    { nome:"Peixes",      simbolo:"♓" },
+    { nome:"Áries",       simbolo:"♈" },
+    { nome:"Touro",       simbolo:"♉" },
+    { nome:"Gêmeos",      simbolo:"♊" },
+    { nome:"Câncer",      simbolo:"♋" },
+    { nome:"Leão",        simbolo:"♌" },
+    { nome:"Virgem",      simbolo:"♍" },
+    { nome:"Libra",       simbolo:"♎" },
+    { nome:"Escorpião",   simbolo:"♏" },
+    { nome:"Sagitário",   simbolo:"♐" }
+];
 
-mes += 1;
+function getSigno(dia,mesIndex){
 
-if((mes==1 && dia>=20)||(mes==2 && dia<=18)) return "♒ Aquário";
-if((mes==2 && dia>=19)||(mes==3 && dia<=20)) return "♓ Peixes";
-if((mes==3 && dia>=21)||(mes==4 && dia<=19)) return "♈ Áries";
-if((mes==4 && dia>=20)||(mes==5 && dia<=20)) return "♉ Touro";
-if((mes==5 && dia>=21)||(mes==6 && dia<=20)) return "♊ Gêmeos";
-if((mes==6 && dia>=21)||(mes==7 && dia<=22)) return "♋ Câncer";
-if((mes==7 && dia>=23)||(mes==8 && dia<=22)) return "♌ Leão";
-if((mes==8 && dia>=23)||(mes==9 && dia<=22)) return "♍ Virgem";
-if((mes==9 && dia>=23)||(mes==10 && dia<=22)) return "♎ Libra";
-if((mes==10 && dia>=23)||(mes==11 && dia<=21)) return "♏ Escorpião";
-if((mes==11 && dia>=22)||(mes==12 && dia<=21)) return "♐ Sagitário";
+    const mes = mesIndex + 1;
 
-return "♑ Capricórnio";
+    if((mes==1 && dia>=20)||(mes==2 && dia<=18)) return signos[1];
+    if((mes==2 && dia>=19)||(mes==3 && dia<=20)) return signos[2];
+    if((mes==3 && dia>=21)||(mes==4 && dia<=19)) return signos[3];
+    if((mes==4 && dia>=20)||(mes==5 && dia<=20)) return signos[4];
+    if((mes==5 && dia>=21)||(mes==6 && dia<=20)) return signos[5];
+    if((mes==6 && dia>=21)||(mes==7 && dia<=22)) return signos[6];
+    if((mes==7 && dia>=23)||(mes==8 && dia<=22)) return signos[7];
+    if((mes==8 && dia>=23)||(mes==9 && dia<=22)) return signos[8];
+    if((mes==9 && dia>=23)||(mes==10 && dia<=22)) return signos[9];
+    if((mes==10 && dia>=23)||(mes==11 && dia<=21)) return signos[10];
+    if((mes==11 && dia>=22)||(mes==12 && dia<=21)) return signos[11];
+
+    return signos[0];
+}
+
+function showError(msg){
+    emptyState.style.display = "none";
+    resultado.classList.add("visible");
+    resultado.innerHTML = `<div class="error-msg">⚠ ${msg}</div>`;
 }
 
 function calcular(){
 
-const dia =
-parseInt(document.getElementById("dia").value);
+    const dia = parseInt(diaSelect.value);
+    const mes = parseInt(document.getElementById("mes").value);
+    const ano = parseInt(anoSelect.value);
 
-const mes =
-parseInt(document.getElementById("mes").value);
+    const nascimento = new Date(ano,mes,dia);
+    const hoje = new Date();
 
-const ano =
-parseInt(document.getElementById("ano").value);
+    if(nascimento.getMonth() !== mes || nascimento.getDate() !== dia){
+        showError("Essa data não existe no calendário. Verifique o dia escolhido para esse mês.");
+        return;
+    }
 
-const nascimento =
-new Date(ano,mes,dia);
+    if(nascimento > hoje){
+        showError("Essa data ainda não chegou. Escolha uma data no passado.");
+        return;
+    }
 
-const hoje =
-new Date();
+    let anos = hoje.getFullYear() - nascimento.getFullYear();
+    let meses = hoje.getMonth() - nascimento.getMonth();
+    let dias = hoje.getDate() - nascimento.getDate();
 
-if(nascimento > hoje){
+    if(dias < 0){
+        meses--;
+        const ultimoMes = new Date(hoje.getFullYear(), hoje.getMonth(), 0).getDate();
+        dias += ultimoMes;
+    }
 
-resultado.innerHTML =
-"❌ Data inválida.";
-return;
-}
+    if(meses < 0){
+        anos--;
+        meses += 12;
+    }
 
-let anos =
-hoje.getFullYear() - nascimento.getFullYear();
+    const totalDias = Math.floor((hoje - nascimento) / (1000*60*60*24));
+    const totalHoras = Math.floor(totalDias*24);
+    const totalSemanas = Math.floor(totalDias/7);
+    const totalMeses = anos*12 + meses;
 
-let meses =
-hoje.getMonth() - nascimento.getMonth();
+    const diasSemana = [
+        "Domingo","Segunda-feira","Terça-feira","Quarta-feira",
+        "Quinta-feira","Sexta-feira","Sábado"
+    ];
 
-let dias =
-hoje.getDate() - nascimento.getDate();
+    const diaSemana = diasSemana[nascimento.getDay()];
+    const signo = getSigno(dia,mes);
 
-if(dias < 0){
+    let proxAniversario = new Date(hoje.getFullYear(), mes, dia);
 
-meses--;
+    if(proxAniversario < hoje){
+        proxAniversario = new Date(hoje.getFullYear()+1, mes, dia);
+    }
 
-const ultimoMes =
-new Date(
-hoje.getFullYear(),
-hoje.getMonth(),
-0
-).getDate();
+    const aniversarioAnterior = new Date(proxAniversario);
+    aniversarioAnterior.setFullYear(proxAniversario.getFullYear()-1);
 
-dias += ultimoMes;
-}
+    const cicloTotal = Math.round((proxAniversario - aniversarioAnterior) / (1000*60*60*24));
+    const faltam = Math.ceil((proxAniversario - hoje) / (1000*60*60*24));
+    const progresso = Math.max(0, Math.min(1, (cicloTotal - faltam) / cicloTotal));
 
-if(meses < 0){
+    const raio = 26;
+    const circ = 2 * Math.PI * raio;
+    const dash = circ * progresso;
 
-anos--;
-meses += 12;
-}
+    emptyState.style.display = "none";
+    resultado.classList.add("visible");
 
-const totalDias =
-Math.floor(
-(hoje - nascimento) /
-(1000*60*60*24)
-);
+    resultado.innerHTML = `
 
-const totalHoras =
-Math.floor(totalDias*24);
+    <div class="hero-age">
+        <span class="num">${anos}</span>
+        <span class="unit">anos vividos</span>
+    </div>
 
-const totalSemanas =
-Math.floor(totalDias/7);
+    <div class="hero-detail">
+        Exatamente <strong>${anos} anos, ${meses} meses e ${dias} dias</strong> desde o nascimento em <strong>${diaSemana}</strong>.
+    </div>
 
-const totalMeses =
-anos*12 + meses;
+    <div class="grid-cards">
 
-const diasSemana = [
-"Domingo",
-"Segunda-feira",
-"Terça-feira",
-"Quarta-feira",
-"Quinta-feira",
-"Sexta-feira",
-"Sábado"
-];
+        <div class="card accent">
+            <div class="ring">
+                <svg width="64" height="64" viewBox="0 0 64 64">
+                    <circle class="ring-track" cx="32" cy="32" r="${raio}"/>
+                    <circle class="ring-progress" cx="32" cy="32" r="${raio}"
+                        stroke-dasharray="${dash.toFixed(1)} ${circ.toFixed(1)}"/>
+                </svg>
+            </div>
+            <div>
+                <div class="label">Próximo aniversário</div>
+                <div class="value">Faltam <strong>${faltam}</strong> dia${faltam===1?'':'s'}</div>
+            </div>
+        </div>
 
-const diaSemana =
-diasSemana[nascimento.getDay()];
+        <div class="card">
+            <div class="label">⭐ Signo solar</div>
+            <div class="value">${signo.simbolo} ${signo.nome}</div>
+        </div>
 
-const signo =
-getSigno(dia,mes);
+        <div class="card">
+            <div class="label">🗓️ Dia da semana</div>
+            <div class="value">${diaSemana}</div>
+        </div>
 
-let proxAniversario =
-new Date(
-hoje.getFullYear(),
-mes,
-dia
-);
+    </div>
 
-if(proxAniversario < hoje){
+    <div class="stats-row">
+        <div class="stat-pill">
+            <span class="n">${totalDias.toLocaleString('pt-BR')}</span>
+            <span class="l">Dias</span>
+        </div>
+        <div class="stat-pill">
+            <span class="n">${totalSemanas.toLocaleString('pt-BR')}</span>
+            <span class="l">Semanas</span>
+        </div>
+        <div class="stat-pill">
+            <span class="n">${totalMeses.toLocaleString('pt-BR')}</span>
+            <span class="l">Meses</span>
+        </div>
+        <div class="stat-pill">
+            <span class="n">${totalHoras.toLocaleString('pt-BR')}</span>
+            <span class="l">Horas</span>
+        </div>
+    </div>
 
-proxAniversario =
-new Date(
-hoje.getFullYear()+1,
-mes,
-dia
-);
-}
-
-const faltam =
-Math.ceil(
-(proxAniversario - hoje) /
-(1000*60*60*24)
-);
-
-resultado.innerHTML = `
-
-<div class="highlight">
-${anos} anos
-</div>
-
-📅 <strong>Idade exata</strong><br>
-
-${anos} anos,
-${meses} meses e
-${dias} dias
-
-<div class="stat">
-
-🎉 <strong>Próximo aniversário</strong><br>
-
-Faltam
-<strong>${faltam}</strong>
-dias
-
-</div>
-
-<div class="stat">
-
-⭐ <strong>Signo</strong><br>
-
-${signo}
-
-</div>
-
-<div class="stat">
-
-🗓️ <strong>Dia da semana em que nasceu</strong><br>
-
-${diaSemana}
-
-</div>
-
-<div class="stat">
-
-📊 <strong>Estatísticas</strong><br>
-
-${totalDias.toLocaleString('pt-BR')} dias vividos<br>
-
-${totalSemanas.toLocaleString('pt-BR')} semanas<br>
-
-${totalMeses.toLocaleString('pt-BR')} meses<br>
-
-${totalHoras.toLocaleString('pt-BR')} horas
-
-</div>
-
-`;
+    `;
 }
 
 </script>
