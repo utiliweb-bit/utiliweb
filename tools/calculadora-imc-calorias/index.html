@@ -151,10 +151,6 @@ label{
     border:1px solid rgba(255,255,255,.08);
 }
 
-.segmented.three{
-    grid-template-columns:1fr 1fr;
-}
-
 .seg-btn{
     padding:11px 8px;
     border-radius:10px;
@@ -200,6 +196,10 @@ label{
     line-height:1.4;
 }
 
+.hint.warn{
+    color:var(--gold);
+}
+
 input[type="number"], select{
     width:100%;
     padding:13px 14px;
@@ -210,6 +210,10 @@ input[type="number"], select{
     font-size:15px;
     font-weight:600;
     font-family:var(--font-body);
+}
+
+input[type="number"].field-error{
+    border-color:#e08a8a;
 }
 
 select{
@@ -288,6 +292,24 @@ button.btn-calcular:active{
 button.btn-calcular:focus-visible{
     outline:2px solid var(--paper);
     outline-offset:3px;
+}
+
+.stale-note{
+    display:none;
+    align-items:center;
+    gap:8px;
+    margin-top:12px;
+    padding:10px 12px;
+    border-radius:10px;
+    background:rgba(232,184,109,.12);
+    border:1px solid rgba(232,184,109,.3);
+    color:var(--gold);
+    font-size:12px;
+    font-weight:600;
+}
+
+.stale-note.show{
+    display:flex;
 }
 
 /* ---------- RIGHT ---------- */
@@ -407,6 +429,17 @@ h2{
     transition:left .4s ease;
 }
 
+.scale-marker.edge::after{
+    content:"";
+    position:absolute;
+    top:50%;
+    left:50%;
+    width:0;
+    height:0;
+    border-style:solid;
+    transform:translate(-50%,-50%);
+}
+
 .scale-labels{
     display:flex;
     justify-content:space-between;
@@ -435,19 +468,12 @@ h2{
     gap:6px;
 }
 
-.card .value{
-    font-family:var(--font-display);
-    font-size:18px;
+.card .card-text{
+    font-family:var(--font-body);
+    font-size:13.5px;
     font-weight:600;
     color:var(--forest-deep);
-    line-height:1.4;
-}
-
-.card .value small{
-    font-family:var(--font-body);
-    font-size:13px;
-    font-weight:500;
-    color:rgba(14,36,25,.55);
+    line-height:1.5;
 }
 
 .tag-row{
@@ -543,11 +569,18 @@ h2{
 }
 
 .footnote{
+    display:flex;
+    gap:8px;
     font-size:11.5px;
-    color:rgba(14,36,25,.4);
-    font-style:italic;
+    color:rgba(14,36,25,.45);
     margin-top:6px;
-    line-height:1.5;
+    line-height:1.55;
+}
+
+.footnote .ic{
+    flex:none;
+    font-weight:700;
+    color:rgba(14,36,25,.35);
 }
 
 .error-msg{
@@ -558,6 +591,15 @@ h2{
     padding:14px 16px;
     font-size:14px;
     font-weight:600;
+}
+
+.sr-only{
+    position:absolute;
+    width:1px;
+    height:1px;
+    overflow:hidden;
+    clip:rect(0 0 0 0);
+    white-space:nowrap;
 }
 
 @media(prefers-reduced-motion: reduce){
@@ -630,18 +672,18 @@ IMC, taxa metabólica basal e necessidade calórica diária, com referências aj
 </p>
 
 <div class="section">
-<label>Sexo biológico</label>
-<div class="segmented">
-<button class="seg-btn ativo" id="btn-M" onclick="setSexo('M')" type="button">♂ Masculino</button>
-<button class="seg-btn" id="btn-F" onclick="setSexo('F')" type="button">♀ Feminino</button>
+<label id="lbl-sexo">Sexo biológico</label>
+<div class="segmented" role="radiogroup" aria-labelledby="lbl-sexo">
+<button class="seg-btn ativo" id="btn-M" onclick="setSexo('M')" type="button" role="radio" aria-checked="true">♂ Masculino</button>
+<button class="seg-btn" id="btn-F" onclick="setSexo('F')" type="button" role="radio" aria-checked="false">♀ Feminino</button>
 </div>
 </div>
 
 <div class="section">
-<label>O que calcular</label>
-<div class="segmented">
-<button class="seg-btn ativo" id="btn-imc" onclick="setModo('imc')" type="button">⚖ IMC</button>
-<button class="seg-btn" id="btn-cal" onclick="setModo('cal')" type="button">🔥 Calorias</button>
+<label id="lbl-modo">O que calcular</label>
+<div class="segmented" role="radiogroup" aria-labelledby="lbl-modo">
+<button class="seg-btn ativo" id="btn-imc" onclick="setModo('imc')" type="button" role="radio" aria-checked="true">⚖ IMC</button>
+<button class="seg-btn" id="btn-cal" onclick="setModo('cal')" type="button" role="radio" aria-checked="false">🔥 Calorias</button>
 </div>
 </div>
 
@@ -650,17 +692,17 @@ IMC, taxa metabólica basal e necessidade calórica diária, com referências aj
 
 <div class="input-row">
 <div class="input-group">
-<label>Peso (kg)</label>
-<input type="number" id="imc-p" value="70" min="1" step="0.1">
+<label for="imc-p">Peso (kg)</label>
+<input type="number" id="imc-p" value="70" min="1" max="400" step="0.1">
 </div>
 <div class="input-group">
-<label>Altura (cm)</label>
-<input type="number" id="imc-h" value="170" min="1" step="0.1">
+<label for="imc-h">Altura (cm)</label>
+<input type="number" id="imc-h" value="170" min="50" max="260" step="0.1">
 </div>
 </div>
 
 <div class="input-group">
-<label>% de gordura corporal <span style="font-weight:400;text-transform:none;color:rgba(251,250,246,.35)">(opcional)</span></label>
+<label for="imc-g">% de gordura corporal <span style="font-weight:400;text-transform:none;color:rgba(251,250,246,.35)">(opcional)</span></label>
 <input type="number" id="imc-g" placeholder="ex: 22" min="1" max="70" step="0.1">
 <p class="hint">A referência saudável de % de gordura é diferente para homens e mulheres — por isso pedimos o sexo.</p>
 </div>
@@ -671,31 +713,32 @@ IMC, taxa metabólica basal e necessidade calórica diária, com referências aj
 <div id="campos-cal" style="display:none">
 
 <div class="section">
-<label>Fórmula</label>
-<div class="segmented">
-<button class="seg-btn ativo" id="btn-miff" onclick="setFormula('mifflin')" type="button">Mifflin-St Jeor</button>
-<button class="seg-btn" id="btn-harr" onclick="setFormula('harris')" type="button">Harris-Benedict</button>
+<label id="lbl-formula">Fórmula</label>
+<div class="segmented" role="radiogroup" aria-labelledby="lbl-formula">
+<button class="seg-btn ativo" id="btn-miff" onclick="setFormula('mifflin')" type="button" role="radio" aria-checked="true">Mifflin-St Jeor</button>
+<button class="seg-btn" id="btn-harr" onclick="setFormula('harris')" type="button" role="radio" aria-checked="false">Harris-Benedict</button>
 </div>
 </div>
 
 <div class="input-row">
 <div class="input-group">
-<label>Peso (kg)</label>
-<input type="number" id="cal-p" value="70" min="1" step="0.1">
+<label for="cal-p">Peso (kg)</label>
+<input type="number" id="cal-p" value="70" min="1" max="400" step="0.1">
 </div>
 <div class="input-group">
-<label>Altura (cm)</label>
-<input type="number" id="cal-h" value="170" min="1" step="0.1">
+<label for="cal-h">Altura (cm)</label>
+<input type="number" id="cal-h" value="170" min="50" max="260" step="0.1">
 </div>
 </div>
 
 <div class="input-group">
-<label>Idade (anos)</label>
-<input type="number" id="cal-i" value="30" min="1" max="120" step="1">
+<label for="cal-i">Idade (anos)</label>
+<input type="number" id="cal-i" value="30" min="15" max="100" step="1">
+<p class="hint" id="cal-i-hint" style="display:none">Estas fórmulas foram validadas para adultos. Fora dessa faixa, o resultado é apenas uma estimativa aproximada.</p>
 </div>
 
 <div class="input-group">
-<label>Nível de atividade física</label>
+<label for="cal-at">Nível de atividade física</label>
 <select id="cal-at">
 <option value="1.2">Sedentário — sem exercício</option>
 <option value="1.375" selected>Leve — 1 a 3x por semana</option>
@@ -706,7 +749,7 @@ IMC, taxa metabólica basal e necessidade calórica diária, com referências aj
 </div>
 
 <div class="input-group">
-<label>Objetivo</label>
+<label for="cal-obj">Objetivo</label>
 <select id="cal-obj">
 <option value="manter">Manter o peso</option>
 <option value="perder">Perder peso</option>
@@ -719,6 +762,8 @@ IMC, taxa metabólica basal e necessidade calórica diária, com referências aj
 <div class="divider-label">Pronto</div>
 
 <button class="btn-calcular" onclick="calcular()" type="button">Calcular</button>
+
+<div class="stale-note" id="staleNote">↻ Os dados mudaram — clique em calcular para atualizar o resultado.</div>
 
 </div>
 
@@ -734,7 +779,7 @@ IMC, taxa metabólica basal e necessidade calórica diária, com referências aj
 <p>Preencha os dados ao lado e clique em calcular para ver seu resultado aqui.</p>
 </div>
 
-<div id="resultado"></div>
+<div id="resultado" aria-live="polite"></div>
 
 </div>
 
@@ -745,9 +790,12 @@ IMC, taxa metabólica basal e necessidade calórica diária, com referências aj
 let modo = 'imc';
 let sexo = 'M';
 let formula = 'mifflin';
+let lastCalcKey = null;
 
 const empty = document.getElementById('empty');
 const resultado = document.getElementById('resultado');
+const staleNote = document.getElementById('staleNote');
+const calIHint = document.getElementById('cal-i-hint');
 
 const FAIXAS = [
     { min: 0,    max: 18.5, lbl: 'Abaixo do peso',    cor: '#185fa5' },
@@ -763,27 +811,56 @@ const GORD = {
     F: { min: 14, fit: 28, max: 35 }
 };
 
+function currentFormKey(){
+    return JSON.stringify({
+        modo, sexo, formula,
+        p: document.getElementById('imc-p').value,
+        h: document.getElementById('imc-h').value,
+        g: document.getElementById('imc-g').value,
+        cp: document.getElementById('cal-p').value,
+        ch: document.getElementById('cal-h').value,
+        ci: document.getElementById('cal-i').value,
+        at: document.getElementById('cal-at').value,
+        obj: document.getElementById('cal-obj').value
+    });
+}
+
+function checkStale(){
+    if(lastCalcKey === null) return;
+    staleNote.classList.toggle('show', currentFormKey() !== lastCalcKey);
+}
+
 function setSexo(s){
     sexo = s;
     document.getElementById('btn-M').classList.toggle('ativo', s === 'M');
+    document.getElementById('btn-M').setAttribute('aria-checked', s === 'M');
     document.getElementById('btn-F').classList.toggle('ativo', s === 'F');
+    document.getElementById('btn-F').setAttribute('aria-checked', s === 'F');
+    checkStale();
 }
 
 function setModo(m){
     modo = m;
     document.getElementById('btn-imc').classList.toggle('ativo', m === 'imc');
+    document.getElementById('btn-imc').setAttribute('aria-checked', m === 'imc');
     document.getElementById('btn-cal').classList.toggle('ativo', m === 'cal');
+    document.getElementById('btn-cal').setAttribute('aria-checked', m === 'cal');
     document.getElementById('campos-imc').style.display = m === 'imc' ? 'block' : 'none';
     document.getElementById('campos-cal').style.display = m === 'cal' ? 'block' : 'none';
     empty.style.display = 'flex';
     resultado.classList.remove('visible');
     resultado.innerHTML = '';
+    lastCalcKey = null;
+    staleNote.classList.remove('show');
 }
 
 function setFormula(f){
     formula = f;
     document.getElementById('btn-miff').classList.toggle('ativo', f === 'mifflin');
+    document.getElementById('btn-miff').setAttribute('aria-checked', f === 'mifflin');
     document.getElementById('btn-harr').classList.toggle('ativo', f === 'harris');
+    document.getElementById('btn-harr').setAttribute('aria-checked', f === 'harris');
+    checkStale();
 }
 
 function calcIMC(p, h){
@@ -808,24 +885,30 @@ function showError(msg){
     empty.style.display = 'none';
     resultado.classList.add('visible');
     resultado.innerHTML = `<div class="error-msg">⚠ ${msg}</div>`;
+    lastCalcKey = null;
+    staleNote.classList.remove('show');
 }
 
 function buildScale(imc){
 
     const max = 45;
+    const clipped = Math.max(0, Math.min(imc, max));
+
     const segs = FAIXAS.map(f => {
         const top = Math.min(f.max, max);
         const widthPct = ((top - f.min) / max) * 100;
         return `<div class="scale-seg" style="width:${widthPct}%;background:${f.cor}"></div>`;
     }).join('');
 
-    const pos = Math.max(2, Math.min(98, (imc / max) * 100));
+    const pos = Math.max(2, Math.min(98, (clipped / max) * 100));
+    const isOverflow = imc > max;
+    const isUnderflow = imc < 0;
 
     return `
         <div class="scale-wrap">
             <div class="scale-track">
                 ${segs}
-                <div class="scale-marker" style="left:${pos}%"></div>
+                <div class="scale-marker${isOverflow || isUnderflow ? ' edge' : ''}" style="left:${pos}%" title="${isOverflow ? 'Acima de ' + max : ''}"></div>
             </div>
             <div class="scale-labels">
                 <span>0</span><span>18.5</span><span>25</span><span>30</span><span>35</span><span>${max}+</span>
@@ -843,6 +926,11 @@ function calcular(){
 
         if(!p || !h){
             showError('Preencha peso e altura para calcular.');
+            return;
+        }
+
+        if(p < 1 || p > 400 || h < 50 || h > 260){
+            showError('Verifique os valores de peso e altura — parecem fora de uma faixa humana plausível.');
             return;
         }
 
@@ -895,10 +983,11 @@ function calcular(){
             red:   {bg:'var(--red-bg)',   bd:'var(--red-bd)',   tx:'var(--red-txt)'}
         }[advCls];
 
-        const g = parseFloat(document.getElementById('imc-g').value) || null;
+        const gRaw = document.getElementById('imc-g').value;
+        const g = gRaw !== '' ? parseFloat(gRaw) : null;
         let gordBlock = '';
 
-        if(g !== null){
+        if(g !== null && !isNaN(g)){
             const ref = GORD[sexo];
             const nome = sexo === 'M' ? 'homens' : 'mulheres';
             let gMsg;
@@ -910,7 +999,7 @@ function calcular(){
             gordBlock = `
                 <div class="card">
                     <div class="label">💧 Gordura corporal <span class="tag sex" style="margin-left:4px">por sexo</span></div>
-                    <div class="value" style="font-size:14px;font-family:var(--font-body);font-weight:600;color:var(--forest-deep)">${gMsg}</div>
+                    <div class="card-text">${gMsg}</div>
                 </div>
             `;
         }
@@ -951,8 +1040,11 @@ function calcular(){
 
             ${gordBlock}
 
-            <p class="footnote">O IMC usa a mesma fórmula e as mesmas faixas para os dois sexos — é um índice populacional, não ajustado por composição corporal. Já a % de gordura ideal varia por sexo, por isso a referência muda acima. Estimativas gerais; não substituem orientação médica ou nutricional.</p>
+            <p class="footnote"><span class="ic">ⓘ</span><span>O IMC usa a mesma fórmula e as mesmas faixas para os dois sexos — é um índice populacional, não ajustado por composição corporal. Já a % de gordura ideal varia por sexo, por isso a referência muda acima. Estimativas gerais; não substituem orientação médica ou nutricional.</span></p>
         `;
+
+        lastCalcKey = currentFormKey();
+        staleNote.classList.remove('show');
 
     } else {
 
@@ -962,6 +1054,11 @@ function calcular(){
 
         if(!p || !h || !i){
             showError('Preencha peso, altura e idade para calcular.');
+            return;
+        }
+
+        if(p < 1 || p > 400 || h < 50 || h > 260 || i < 1 || i > 120){
+            showError('Verifique os valores informados — parecem fora de uma faixa humana plausível.');
             return;
         }
 
@@ -1013,6 +1110,10 @@ function calcular(){
             `<div class="gord-row" style="background:${r.cor};color:${r.tx}"><span>${r.lbl}</span><span>${r.range}</span></div>`
         ).join('');
 
+        const idadeNote = (i < 18 || i > 65)
+            ? `<p class="footnote"><span class="ic">ⓘ</span><span>As fórmulas de TMB foram validadas principalmente em adultos de 18 a 65 anos. Para ${i} anos, trate o resultado como uma estimativa aproximada.</span></p>`
+            : '';
+
         resultado.classList.add('visible');
         empty.style.display = 'none';
 
@@ -1061,10 +1162,25 @@ function calcular(){
                 <div class="gord-table">${gordTbl}</div>
             </div>
 
-            <p class="footnote">A TMB já é calculada de forma diferente por sexo nestas fórmulas, porque homens têm em média mais massa muscular, que consome mais energia em repouso. Estimativas gerais; não substituem orientação de nutricionista, médico ou educador físico.</p>
+            <p class="footnote"><span class="ic">ⓘ</span><span>A TMB já é calculada de forma diferente por sexo nestas fórmulas, porque homens têm em média mais massa muscular, que consome mais energia em repouso. Estimativas gerais; não substituem orientação de nutricionista, médico ou educador físico.</span></p>
+
+            ${idadeNote}
         `;
+
+        lastCalcKey = currentFormKey();
+        staleNote.classList.remove('show');
     }
 }
+
+document.querySelectorAll('#campos-imc input, #campos-cal input, #campos-cal select').forEach(el => {
+    el.addEventListener('input', checkStale);
+    el.addEventListener('change', checkStale);
+});
+
+document.getElementById('cal-i').addEventListener('input', function(){
+    const i = parseFloat(this.value) || 0;
+    calIHint.style.display = (i > 0 && (i < 18 || i > 65)) ? 'block' : 'none';
+});
 
 </script>
 
