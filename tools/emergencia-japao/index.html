@@ -1,443 +1,584 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#9c2f1f">
+<title>Emergência Japão | UtiliWeb</title>
+<meta name="description" content="Ajuda rápida em português para emergências no Japão: telefones, localização e frases essenciais em japonês.">
 
-<title>🚨 Emergência Japão</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
 
+/* ============================================
+   Tokens UtiliWeb — adaptados para contexto de emergência.
+   Fundo claro mantido de propósito (não o forest-deep padrão):
+   em pânico, contraste alto e cores de sinalização universais
+   (vermelho/azul/branco) funcionam melhor que um tema escuro.
+   ============================================ */
+:root{
+    --forest:#0f3326;
+    --mint:#5fe3a8;
+    --paper:#fbfaf6;
+    --paper-dim:#f1efe6;
+    --ink:#1c1b1f;
+    --ink-soft:#4a4854;
+    --line:rgba(28,27,31,.12);
+
+    /* vermelho de emergência — mesma família do --stamp-red do sistema,
+       um tom mais saturado aqui propositalmente: é o único app onde
+       a cor precisa gritar "urgente" à primeira vista. */
+    --emerg-red:#c84b31;
+    --emerg-red-deep:#9c2f1f;
+    --emerg-red-soft:#fbe9e4;
+
+    --stamp-blue:#185fa5;
+    --stamp-blue-soft:#e6f1fb;
+    --emerg-teal:#00897b;
+    --emerg-teal-soft:#e1f2f0;
+    --stamp-amber:#b5792a;
+    --stamp-amber-soft:#faf0de;
+
+    --font-display:'Fraunces',serif;
+    --font-body:'Space Grotesk',-apple-system,BlinkMacSystemFont,sans-serif;
+    --font-mono:'JetBrains Mono',monospace;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+
+html{-webkit-text-size-adjust:100%;}
+
 body{
-margin:0;
-font-family:Arial,sans-serif;
-background:#f3f3f3;
+    font-family:var(--font-body);
+    background:var(--paper-dim);
+    color:var(--ink);
+    min-height:100dvh;
+    padding-bottom:40px;
 }
 
+.container{max-width:560px;margin:0 auto;padding:0 16px;}
+
+/* ---------- HEADER ---------- */
 header{
-background:#c62828;
-color:white;
-padding:20px;
-text-align:center;
+    background:var(--emerg-red-deep);
+    background-image:radial-gradient(circle at 20% 0%, rgba(255,255,255,.12), transparent 55%);
+    color:#fff;
+    padding:28px 20px 26px;
+    text-align:center;
 }
 
-.container{
-max-width:700px;
-margin:auto;
-padding:15px;
+.header-icon{font-size:34px;line-height:1;margin-bottom:8px;}
+
+header h1{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:25px;
+    letter-spacing:-.01em;
+    margin-bottom:6px;
 }
 
+header p{
+    font-size:13px;
+    color:rgba(255,255,255,.8);
+    font-weight:500;
+}
+
+/* ---------- CARDS ---------- */
 .box{
-background:white;
-border-radius:15px;
-padding:15px;
-margin:15px 0;
-box-shadow:0 3px 10px #ddd;
+    background:var(--paper);
+    border-radius:16px;
+    padding:18px;
+    margin:14px 0;
+    box-shadow:0 8px 24px rgba(28,27,31,.08);
+    border:1px solid var(--line);
 }
 
-button{
-border:0;
-padding:10px;
-border-radius:10px;
-cursor:pointer;
-margin:5px;
+.box-title{
+    font-family:var(--font-mono);
+    font-size:11px;
+    font-weight:600;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    margin-bottom:12px;
+    display:flex;
+    align-items:center;
+    gap:6px;
 }
+
+/* ---------- LIGAÇÕES (sempre o elemento mais visível da tela) ---------- */
+.call-box{
+    background:var(--emerg-red-deep);
+    border:none;
+}
+
+.call-box .box-title{color:rgba(255,255,255,.7);}
 
 .call{
-display:flex;
-gap:10px;
+    display:flex;
+    gap:10px;
 }
 
 .call a{
-flex:1;
-padding:15px;
-color:white;
-text-align:center;
-border-radius:12px;
-text-decoration:none;
+    flex:1;
+    padding:16px 8px;
+    color:#fff;
+    text-align:center;
+    border-radius:13px;
+    text-decoration:none;
+    font-family:var(--font-body);
+    font-weight:700;
+    transition:transform .1s ease;
 }
 
-.police{background:#1565c0}
-.help{background:#d32f2f}
-.sea{background:#00897b}
+.call a:active{transform:scale(.96);}
 
-.jp{
-font-size:22px;
+.call-icon{font-size:22px;display:block;margin-bottom:4px;}
+.call-num{font-family:var(--font-mono);font-size:20px;display:block;}
+.call-label{font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;opacity:.9;display:block;margin-top:2px;}
+
+.police{background:var(--stamp-blue)}
+.help{background:var(--emerg-red)}
+.sea{background:var(--emerg-teal)}
+
+/* ---------- LOCALIZAÇÃO / ENDEREÇO ---------- */
+.btn{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    font-family:var(--font-body);
+    font-weight:700;
+    font-size:14px;
+    cursor:pointer;
+    transition:transform .1s ease, opacity .1s ease;
 }
 
-.romaji{
-color:#1565c0;
-font-weight:bold;
-font-size:18px;
+.btn:active{transform:scale(.98);}
+
+.btn-blue{background:var(--stamp-blue);color:#fff;}
+.btn-outline{
+    background:transparent;
+    border:1.5px solid var(--line);
+    color:var(--ink-soft);
+}
+
+.endereco-field{
+    width:100%;
+    padding:13px 14px;
+    border-radius:11px;
+    border:1.5px solid var(--line);
+    background:var(--paper-dim);
+    color:var(--ink);
+    font-family:var(--font-body);
+    font-size:14px;
+    font-weight:500;
+    margin-bottom:10px;
+    resize:vertical;
+    min-height:52px;
+}
+
+.endereco-field:focus-visible{outline:2px solid var(--stamp-blue);outline-offset:1px;}
+
+.row-2{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+
+.endereco-status{
+    font-family:var(--font-mono);
+    font-size:10.5px;
+    color:var(--ink-soft);
+    margin-top:8px;
+    min-height:14px;
+}
+
+/* ---------- BUSCA ---------- */
+.search-wrap{position:relative;}
+
+.search{
+    width:100%;
+    padding:14px 16px;
+    border-radius:12px;
+    border:1.5px solid var(--line);
+    background:var(--paper-dim);
+    font-family:var(--font-body);
+    font-size:14.5px;
+    font-weight:500;
+    color:var(--ink);
+}
+
+.search:focus-visible{outline:2px solid var(--stamp-blue);outline-offset:1px;}
+
+.search::placeholder{color:rgba(74,72,84,.45);}
+
+/* ---------- SEÇÃO DE FRASES ---------- */
+.section-label{
+    font-family:var(--font-mono);
+    font-size:10.5px;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    color:var(--ink-soft);
+    margin:22px 4px 10px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.section-label .count{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:99px;
+    padding:1px 8px;
+    font-size:10px;
+}
+
+.frase{
+    background:var(--paper);
+    border-radius:14px;
+    padding:16px;
+    margin-bottom:10px;
+    border:1px solid var(--line);
+    position:relative;
+}
+
+.frase.is-fav{
+    border-color:var(--stamp-amber);
+    background:var(--stamp-amber-soft);
+}
+
+.frase-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:10px;
+    margin-bottom:8px;
 }
 
 .pt{
-color:#555;
-}
-
-.search{
-width:100%;
-padding:15px;
-border-radius:10px;
-border:1px solid #ccc;
+    color:var(--ink-soft);
+    font-size:12.5px;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:.03em;
 }
 
 .star{
-float:right;
-font-size:25px;
+    font-size:22px;
+    line-height:1;
+    cursor:pointer;
+    color:rgba(28,27,31,.25);
+    flex:none;
+    padding:2px;
 }
 
-.favorite{
-color:#ff9800;
+.star.favorite{color:var(--stamp-amber);}
+
+.jp{
+    font-family:var(--font-display);
+    font-size:21px;
+    font-weight:600;
+    color:var(--ink);
+    margin-bottom:4px;
+    line-height:1.3;
+}
+
+.romaji{
+    font-family:var(--font-mono);
+    color:var(--stamp-blue);
+    font-weight:500;
+    font-size:13px;
+    margin-bottom:12px;
+}
+
+.frase-actions{display:flex;gap:8px;}
+
+.btn-mini{
+    flex:1;
+    padding:10px;
+    border:1.5px solid var(--line);
+    background:var(--paper-dim);
+    border-radius:10px;
+    font-family:var(--font-body);
+    font-size:12.5px;
+    font-weight:700;
+    color:var(--ink);
+    cursor:pointer;
+}
+
+.btn-mini:active{background:var(--line);}
+
+.empty-state{
+    text-align:center;
+    padding:36px 20px;
+    color:var(--ink-soft);
+    font-size:13.5px;
+}
+
+.empty-state .ic{font-size:26px;display:block;margin-bottom:8px;}
+
+/* ---------- TOAST (substitui alert() bloqueante) ---------- */
+.toast{
+    position:fixed;
+    bottom:22px;
+    left:50%;
+    transform:translateX(-50%) translateY(10px);
+    background:var(--ink);
+    color:#fff;
+    padding:11px 20px;
+    border-radius:999px;
+    font-size:13px;
+    font-weight:600;
+    font-family:var(--font-body);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .2s ease, transform .2s ease;
+    z-index:200;
+    white-space:nowrap;
+    box-shadow:0 10px 30px rgba(0,0,0,.3);
+}
+
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+footer{
+    text-align:center;
+    font-family:var(--font-mono);
+    font-size:10.5px;
+    color:rgba(28,27,31,.35);
+    margin-top:30px;
+    padding:0 20px;
+    line-height:1.6;
+}
+
+@media(max-width:380px){
+    .jp{font-size:19px;}
+    .call-num{font-size:18px;}
 }
 
 </style>
-
 </head>
-
 
 <body>
 
-
 <header>
-
-<h1>🚨 Emergência Japão</h1>
-
-<p>Ajuda rápida em português</p>
-
+    <div class="header-icon">🚨</div>
+    <h1>Emergência Japão</h1>
+    <p>Ajuda rápida em português</p>
 </header>
-
 
 <div class="container">
 
+    <div class="box call-box">
+        <div class="box-title">📞 Ligações de emergência</div>
+        <div class="call">
+            <a class="police" href="tel:110">
+                <span class="call-icon">👮</span>
+                <span class="call-num">110</span>
+                <span class="call-label">Polícia</span>
+            </a>
+            <a class="help" href="tel:119">
+                <span class="call-icon">🚑</span>
+                <span class="call-num">119</span>
+                <span class="call-label">Ambulância</span>
+            </a>
+            <a class="sea" href="tel:118">
+                <span class="call-icon">🌊</span>
+                <span class="call-num">118</span>
+                <span class="call-label">Mar</span>
+            </a>
+        </div>
+    </div>
 
-<div class="box">
+    <div class="box">
+        <div class="box-title">📍 Localização</div>
+        <button class="btn btn-blue" onclick="localizacao()" type="button">Mostrar minha localização no mapa</button>
+    </div>
 
-<h2>📞 Ligações</h2>
+    <div class="box">
+        <div class="box-title">🏠 Meu endereço (em japonês)</div>
+        <textarea class="endereco-field" id="enderecoInput" placeholder="Ex: 東京都渋谷区..." rows="2"></textarea>
+        <div class="row-2">
+            <button class="btn btn-blue" onclick="salvarEndereco()" type="button">Salvar</button>
+            <button class="btn btn-outline" onclick="copiarEndereco()" type="button">Copiar</button>
+        </div>
+        <div class="endereco-status" id="enderecoStatus"></div>
+    </div>
 
-<div class="call">
+    <div class="box">
+        <div class="box-title">🔎 Buscar frase</div>
+        <div class="search-wrap">
+            <input class="search" id="busca" placeholder="Ex: hospital, polícia, ajuda…" onkeyup="renderizar()" autocomplete="off">
+        </div>
+    </div>
 
-<a class="police" href="tel:110">
-👮 110<br>Polícia
-</a>
+    <div id="favoritosWrap"></div>
 
-<a class="help" href="tel:119">
-🚑 119<br>Ambulância
-</a>
-
-<a class="sea" href="tel:118">
-🌊 118<br>Mar
-</a>
-
-</div>
-
-</div>
-
-
-
-<div class="box">
-
-<button onclick="localizacao()">
-📍 Mostrar minha localização
-</button>
-
-
-<button onclick="mostrarEndereco()">
-🏠 Meu endereço
-</button>
-
-
-</div>
-
-
-
-<div class="box">
-
-
-<input 
-class="search"
-placeholder="🔎 Procurar frase..."
-onkeyup="buscar(this.value)">
-
+    <div class="section-label">Todas as frases <span class="count" id="contagem">10</span></div>
+    <div id="lista"></div>
 
 </div>
 
+<footer>Em emergência real, ligue diretamente para 110 (polícia) ou 119 (ambulância/incêndio). Este app é um apoio de comunicação, não substitui o atendimento oficial.</footer>
 
-
-
-<div id="lista"></div>
-
-
-
-</div>
-
-
-
+<div class="toast" id="toast"></div>
 
 <script>
 
-
-const frases=[
-
-
-["警察を呼んでください",
-"Keisatsu o yonde kudasai",
-"Chame a polícia"],
-
-
-["救急車を呼んでください",
-"Kyūkyūsha o yonde kudasai",
-"Chame uma ambulância"],
-
-
-["火事です",
-"Kaji desu",
-"É um incêndio"],
-
-
-["助けてください",
-"Tasukete kudasai",
-"Preciso de ajuda"],
-
-
-["日本語が話せません",
-"Nihongo ga hanasemasen",
-"Não falo japonês"],
-
-
-["ゆっくり話してください",
-"Yukkuri hanashite kudasai",
-"Fale devagar"],
-
-
-["住所はここです",
-"Jūsho wa koko desu",
-"O endereço é aqui"],
-
-
-["通訳が必要です",
-"Tsūyaku ga hitsuyō desu",
-"Preciso de intérprete"],
-
-
-["怪我をしています",
-"Kega o shiteimasu",
-"Estou machucado"],
-
-
-["病院に行きたいです",
-"Byōin ni ikitai desu",
-"Quero ir ao hospital"]
-
+const frases = [
+    ["警察を呼んでください", "Keisatsu o yonde kudasai", "Chame a polícia"],
+    ["救急車を呼んでください", "Kyūkyūsha o yonde kudasai", "Chame uma ambulância"],
+    ["火事です", "Kaji desu", "É um incêndio"],
+    ["助けてください", "Tasukete kudasai", "Preciso de ajuda"],
+    ["日本語が話せません", "Nihongo ga hanasemasen", "Não falo japonês"],
+    ["ゆっくり話してください", "Yukkuri hanashite kudasai", "Fale devagar"],
+    ["住所はここです", "Jūsho wa koko desu", "O endereço é aqui"],
+    ["通訳が必要です", "Tsūyaku ga hitsuyō desu", "Preciso de intérprete"],
+    ["怪我をしています", "Kega o shiteimasu", "Estou machucado"],
+    ["病院に行きたいです", "Byōin ni ikitai desu", "Quero ir ao hospital"],
 ];
 
+let favoritos = [];
+try { favoritos = JSON.parse(localStorage.getItem("fav") || "[]"); } catch(e) { favoritos = []; }
 
-
-function carregar(){
-
-
-let html="";
-
-let fav=
-JSON.parse(localStorage.getItem("fav")||"[]");
-
-
-frases.forEach((f,i)=>{
-
-
-let ativo=fav.includes(i);
-
-
-html+=`
-
-<div class="box frase">
-
-
-<span class="star ${ativo?'favorite':''}"
-onclick="favorito(${i})">
-⭐
-</span>
-
-
-<div class="pt">
-${f[2]}
-</div>
-
-
-<div class="jp">
-${f[0]}
-</div>
-
-
-<div class="romaji">
-${f[1]}
-</div>
-
-
-<button onclick="ouvir('${f[0]}')">
-🔊 Ouvir
-</button>
-
-
-<button onclick="copiar('${f[1]}')">
-📋 Copiar
-</button>
-
-
-</div>
-
-
-`;
-
-
-});
-
-
-document.getElementById("lista").innerHTML=html;
-
-
+let toastTimer = null;
+function showToast(msg){
+    const t = document.getElementById("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove("show"), 1800);
 }
 
+function normalizar(s){
+    return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
 
+function casaComBusca(f, termo){
+    if(!termo) return true;
+    const alvo = normalizar(f[0] + " " + f[1] + " " + f[2]);
+    return alvo.includes(normalizar(termo));
+}
+
+function cardFrase(f, i, destacado){
+    const ativo = favoritos.includes(i);
+    return `
+        <div class="frase${destacado ? ' is-fav' : ''}" data-idx="${i}">
+            <div class="frase-top">
+                <span class="pt">${f[2]}</span>
+                <span class="star ${ativo ? 'favorite' : ''}" onclick="favoritar(${i})" role="button" aria-label="Favoritar frase">★</span>
+            </div>
+            <div class="jp">${f[0]}</div>
+            <div class="romaji">${f[1]}</div>
+            <div class="frase-actions">
+                <button class="btn-mini" onclick="ouvir('${f[0]}')" type="button">🔊 Ouvir</button>
+                <button class="btn-mini" onclick="copiarFrase('${f[1].replace(/'/g,"\\'")}')" type="button">📋 Copiar</button>
+            </div>
+        </div>
+    `;
+}
+
+function renderizar(){
+    const termo = document.getElementById("busca").value;
+
+    const resultados = frases
+        .map((f, i) => ({ f, i }))
+        .filter(({f}) => casaComBusca(f, termo));
+
+    const favWrap = document.getElementById("favoritosWrap");
+    const favResultados = resultados.filter(({i}) => favoritos.includes(i));
+
+    if(favResultados.length){
+        favWrap.innerHTML = `
+            <div class="section-label">⭐ Favoritas <span class="count">${favResultados.length}</span></div>
+            ${favResultados.map(({f, i}) => cardFrase(f, i, true)).join('')}
+        `;
+    } else {
+        favWrap.innerHTML = '';
+    }
+
+    const lista = document.getElementById("lista");
+    document.getElementById("contagem").textContent = resultados.length;
+
+    if(!resultados.length){
+        lista.innerHTML = `
+            <div class="empty-state">
+                <span class="ic">🔍</span>
+                Nenhuma frase encontrada para "${termo}".
+            </div>
+        `;
+        return;
+    }
+
+    lista.innerHTML = resultados.map(({f, i}) => cardFrase(f, i, false)).join('');
+}
 
 function ouvir(txt){
-
-let fala=new SpeechSynthesisUtterance(txt);
-
-fala.lang="ja-JP";
-
-speechSynthesis.speak(fala);
-
+    try {
+        const fala = new SpeechSynthesisUtterance(txt);
+        fala.lang = "ja-JP";
+        speechSynthesis.speak(fala);
+    } catch(e){
+        showToast("Áudio não disponível neste aparelho");
+    }
 }
 
-
-
-function copiar(txt){
-
-navigator.clipboard.writeText(txt);
-
-alert("Copiado!");
-
+function copiarFrase(txt){
+    navigator.clipboard.writeText(txt).then(() => showToast("Frase copiada!"))
+        .catch(() => showToast("Não foi possível copiar"));
 }
 
-
-
-function favorito(i){
-
-let fav=
-JSON.parse(localStorage.getItem("fav")||"[]");
-
-
-if(fav.includes(i)){
-
-fav=fav.filter(x=>x!=i);
-
-}else{
-
-fav.push(i);
-
+function favoritar(i){
+    if(favoritos.includes(i)){
+        favoritos = favoritos.filter(x => x !== i);
+    } else {
+        favoritos.push(i);
+    }
+    localStorage.setItem("fav", JSON.stringify(favoritos));
+    renderizar();
 }
-
-
-localStorage.setItem(
-"fav",
-JSON.stringify(fav)
-);
-
-
-carregar();
-
-}
-
-
-
-function buscar(t){
-
-document.querySelectorAll(".frase")
-.forEach(x=>{
-
-
-x.style.display=
-x.innerText
-.toLowerCase()
-.includes(t.toLowerCase())
-?
-"block"
-:
-"none";
-
-
-});
-
-
-}
-
-
 
 function localizacao(){
-
-
-navigator.geolocation.getCurrentPosition(
-
-p=>{
-
-let url=
-`https://maps.google.com/?q=${p.coords.latitude},${p.coords.longitude}`;
-
-window.open(url);
-
-},
-
-()=>{
-
-alert("Não foi possível obter localização");
-
+    navigator.geolocation.getCurrentPosition(
+        p => {
+            const url = `https://maps.google.com/?q=${p.coords.latitude},${p.coords.longitude}`;
+            window.open(url, '_blank');
+        },
+        () => showToast("Não foi possível obter sua localização")
+    );
 }
 
-);
-
-
+function salvarEndereco(){
+    const val = document.getElementById("enderecoInput").value.trim();
+    if(!val){
+        showToast("Digite um endereço antes de salvar");
+        return;
+    }
+    localStorage.setItem("endereco", val);
+    document.getElementById("enderecoStatus").textContent = "✓ Salvo neste aparelho";
+    showToast("Endereço salvo");
 }
 
-
-
-function mostrarEndereco(){
-
-
-let end=
-localStorage.getItem("endereco");
-
-
-if(!end){
-
-end=
-prompt("Digite seu endereço em japonês:");
-
-localStorage.setItem(
-"endereco",
-end
-);
-
+function copiarEndereco(){
+    const val = document.getElementById("enderecoInput").value.trim();
+    if(!val){
+        showToast("Nenhum endereço para copiar");
+        return;
+    }
+    navigator.clipboard.writeText(val).then(() => showToast("Endereço copiado!"))
+        .catch(() => showToast("Não foi possível copiar"));
 }
 
-
-alert(
-"住所はここです\n\n"+end
-);
-
-
-}
-
-
-
-carregar();
-
+(function init(){
+    const salvo = localStorage.getItem("endereco");
+    if(salvo){
+        document.getElementById("enderecoInput").value = salvo;
+        document.getElementById("enderecoStatus").textContent = "✓ Salvo neste aparelho";
+    }
+    renderizar();
+})();
 
 </script>
 
-
 </body>
-
 </html>
