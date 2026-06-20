@@ -8,7 +8,28 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Contador de Prazos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --ink: #1c1b1f;
+            --ink-soft: #4a4854;
+            --paper: #faf8f3;
+            --paper-dim: #f0ece2;
+            --line: #2a2832;
+            --accent: #5b4b8a;
+            --accent-soft: #efe9ff;
+            --stamp-red: #c84b31;
+            --stamp-red-soft: #fbe9e4;
+            --stamp-amber: #b5792a;
+            --stamp-amber-soft: #faf0de;
+            --stamp-green: #3f6b4f;
+            --stamp-green-soft: #e8f1ea;
+            --stamp-grey: #6b6878;
+            --stamp-grey-soft: #ece9f0;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -19,38 +40,54 @@
         html, body {
             width: 100%;
             min-height: 100vh;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--ink);
+            background-image:
+                radial-gradient(circle at 15% 10%, rgba(91, 75, 138, 0.35), transparent 45%),
+                radial-gradient(circle at 85% 90%, rgba(200, 75, 49, 0.18), transparent 50%);
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 16px;
+            padding: 24px;
             margin: 0;
+            color: var(--ink);
         }
 
         .wrapper {
             width: 100%;
-            max-width: 1200px;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 1180px;
+            background: var(--paper);
+            border-radius: 4px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 0;
             overflow: hidden;
-            max-height: 90vh;
+            max-height: 92vh;
+            position: relative;
+        }
+
+        /* perforated edge between panels */
+        .wrapper::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            border-left: 2px dashed rgba(28, 27, 31, 0.18);
+            z-index: 1;
         }
 
         .left-panel {
-            padding: 32px;
+            padding: 40px 36px;
             overflow-y: auto;
-            border-right: 1px solid #e0e0e0;
             -webkit-overflow-scrolling: touch;
         }
 
         .right-panel {
-            padding: 32px;
-            background: linear-gradient(135deg, #e8f8f5 0%, #d5f4e6 100%);
+            padding: 40px 36px;
+            background: var(--paper-dim);
             display: flex;
             flex-direction: column;
             overflow-y: auto;
@@ -58,65 +95,95 @@
         }
 
         header {
-            margin-bottom: 24px;
-            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .eyebrow {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10.5px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .eyebrow::before {
+            content: '';
+            width: 16px;
+            height: 1px;
+            background: var(--accent);
         }
 
         h1 {
-            color: #333;
-            font-size: 28px;
-            margin-bottom: 6px;
-            font-weight: 700;
+            font-family: 'Fraunces', serif;
+            font-optical-sizing: auto;
+            color: var(--ink);
+            font-size: 34px;
+            line-height: 1.05;
+            margin-bottom: 8px;
+            font-weight: 600;
+            letter-spacing: -0.01em;
         }
 
         .subtitle {
-            color: #999;
-            font-size: 13px;
-            font-weight: 500;
+            color: var(--ink-soft);
+            font-size: 13.5px;
+            font-weight: 400;
+            line-height: 1.5;
+            max-width: 38ch;
         }
 
         .info-box {
-            background: linear-gradient(135deg, #e8f8f5 0%, #d5f4e6 100%);
-            border-left: 4px solid #27ae60;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 11px;
-            color: #27ae60;
-            margin-bottom: 24px;
-            line-height: 1.5;
+            background: var(--accent-soft);
+            border-left: 2px solid var(--accent);
+            padding: 12px 14px;
+            border-radius: 2px;
+            font-size: 11.5px;
+            color: var(--ink-soft);
+            margin: 22px 0 28px;
+            line-height: 1.55;
         }
 
         .info-box strong {
-            color: #27ae60;
-            font-weight: 700;
+            color: var(--accent);
+            font-weight: 600;
+            font-family: 'Space Grotesk', sans-serif;
         }
 
         .abas {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 24px;
+            gap: 2px;
+            margin-bottom: 28px;
+            background: var(--ink);
+            border-radius: 3px;
+            padding: 3px;
         }
 
         .aba-btn {
             padding: 12px;
-            background: #e0e0e0;
-            color: #666;
+            background: transparent;
+            color: rgba(250, 248, 243, 0.55);
             border: none;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 700;
+            border-radius: 2px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 11.5px;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.6px;
             -webkit-appearance: none;
             appearance: none;
         }
 
         .aba-btn.ativo {
-            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
-            color: white;
+            background: var(--paper);
+            color: var(--ink);
         }
 
         .aba-btn:active {
@@ -136,45 +203,48 @@
         }
 
         .section-title {
-            font-size: 12px;
-            font-weight: 700;
-            color: #333;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10.5px;
+            font-weight: 500;
+            color: var(--ink);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 12px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #27ae60;
+            letter-spacing: 1.2px;
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(28, 27, 31, 0.15);
         }
 
         .input-group {
-            margin-bottom: 12px;
+            margin-bottom: 16px;
         }
 
         .input-label {
             font-size: 11px;
-            font-weight: 700;
-            color: #666;
+            font-weight: 600;
+            color: var(--ink-soft);
             text-transform: uppercase;
-            letter-spacing: 0.3px;
-            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+            margin-bottom: 7px;
             display: block;
         }
 
         .input-hint {
             font-size: 10px;
-            color: #999;
-            margin-top: 3px;
+            color: rgba(74, 72, 84, 0.6);
+            margin-top: 4px;
+            font-style: italic;
         }
 
         input[type="date"] {
             width: 100%;
-            padding: 11px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
+            padding: 12px 13px;
+            border: 1.5px solid rgba(28, 27, 31, 0.18);
+            border-radius: 3px;
             font-size: 14px;
-            font-weight: 600;
-            background: white;
-            color: #333;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 500;
+            background: var(--paper);
+            color: var(--ink);
             transition: all 0.2s ease;
             -webkit-appearance: none;
             appearance: none;
@@ -182,31 +252,31 @@
 
         input[type="date"]:focus {
             outline: none;
-            border-color: #27ae60;
-            background: #f0f9f7;
-        }
-
-        input[type="date"]::placeholder {
-            color: #ccc;
+            border-color: var(--accent);
+            background: var(--accent-soft);
         }
 
         .btn-calcular {
             width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
-            color: white;
+            padding: 15px;
+            background: var(--ink);
+            color: var(--paper);
             border: none;
-            border-radius: 10px;
-            font-size: 13px;
-            font-weight: 700;
+            border-radius: 3px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 12.5px;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
-            margin-top: 16px;
+            letter-spacing: 1px;
+            margin-top: 18px;
             -webkit-appearance: none;
             appearance: none;
+        }
+
+        .btn-calcular:hover {
+            background: var(--accent);
         }
 
         .btn-calcular:active {
@@ -221,29 +291,30 @@
         }
 
         .resultado-header {
-            font-size: 12px;
-            font-weight: 700;
-            color: #27ae60;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10.5px;
+            font-weight: 500;
+            color: var(--ink-soft);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 12px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #27ae60;
+            letter-spacing: 1.2px;
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(28, 27, 31, 0.15);
         }
 
         .resultado-items {
             flex: 0 1 auto;
             overflow-y: auto;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
             -webkit-overflow-scrolling: touch;
         }
 
         .resultado-item {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(39, 174, 96, 0.2);
+            align-items: baseline;
+            padding: 11px 0;
+            border-bottom: 1px dashed rgba(28, 27, 31, 0.15);
             font-size: 12px;
         }
 
@@ -252,127 +323,155 @@
         }
 
         .resultado-label {
-            font-weight: 600;
-            color: #27ae60;
+            font-weight: 500;
+            color: var(--ink-soft);
             flex: 1;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            font-size: 10.5px;
         }
 
         .resultado-valor {
-            font-size: 13px;
-            font-weight: 700;
-            color: #27ae60;
-            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--ink);
+            font-family: 'Fraunces', serif;
             text-align: right;
         }
 
+        /* the "stamp" — signature element */
         .resultado-total {
             display: flex;
             flex-direction: column;
-            padding: 14px;
-            background: white;
-            border-radius: 10px;
-            border: 2px solid #27ae60;
-            margin-bottom: 12px;
+            padding: 22px;
+            background: var(--paper);
+            border-radius: 3px;
+            border: 2px solid var(--ink);
+            margin-bottom: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .resultado-total::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: repeating-linear-gradient(
+                90deg,
+                var(--accent) 0px, var(--accent) 10px,
+                transparent 10px, transparent 16px
+            );
         }
 
         .resultado-total-label {
-            font-size: 13px;
-            font-weight: 700;
-            color: #27ae60;
-            text-transform: uppercase;
-            margin-bottom: 8px;
+            font-family: 'Fraunces', serif;
+            font-size: 17px;
+            font-weight: 500;
+            color: var(--ink);
+            margin-bottom: 10px;
+            line-height: 1.2;
         }
 
         .resultado-total-valor {
-            font-size: 22px;
-            font-weight: 700;
-            color: #27ae60;
-            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--ink);
+            font-family: 'JetBrains Mono', monospace;
+            display: none;
         }
 
         .resultado-dias {
+            font-family: 'JetBrains Mono', monospace;
             font-size: 11px;
-            color: #666;
-            font-style: italic;
-            margin-top: 6px;
+            color: var(--ink-soft);
+            margin-top: 4px;
         }
 
         .status-badge {
-            display: inline-block;
-            padding: 6px 10px;
-            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 12px;
+            border-radius: 2px;
+            font-family: 'JetBrains Mono', monospace;
             font-size: 10px;
-            font-weight: 700;
+            font-weight: 600;
             text-transform: uppercase;
-            margin-top: 8px;
+            letter-spacing: 0.8px;
+            margin-top: 14px;
+            border: 1px solid currentColor;
         }
 
         .status-badge.urgente {
-            background: #ffebee;
-            color: #c62828;
+            background: var(--stamp-red-soft);
+            color: var(--stamp-red);
         }
 
         .status-badge.proximo {
-            background: #fff3e0;
-            color: #e65100;
+            background: var(--stamp-amber-soft);
+            color: var(--stamp-amber);
         }
 
         .status-badge.tranquilo {
-            background: #e8f5e9;
-            color: #2e7d32;
+            background: var(--stamp-green-soft);
+            color: var(--stamp-green);
         }
 
         .status-badge.passado {
-            background: #ede7f6;
-            color: #4527a0;
+            background: var(--stamp-grey-soft);
+            color: var(--stamp-grey);
         }
 
         .botoes {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 8px;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
         }
 
         button {
-            padding: 11px;
+            padding: 12px;
             border: none;
-            border-radius: 8px;
+            border-radius: 3px;
+            font-family: 'Space Grotesk', sans-serif;
             font-size: 11px;
-            font-weight: 700;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
             text-transform: uppercase;
-            letter-spacing: 0.3px;
+            letter-spacing: 0.4px;
             -webkit-appearance: none;
             appearance: none;
         }
 
         .btn-copiar {
-            background: white;
-            color: #27ae60;
-            border: 2px solid #27ae60;
+            background: var(--paper);
+            color: var(--ink);
+            border: 1.5px solid var(--ink);
         }
 
         .btn-copiar:active {
-            background: #27ae60;
-            color: white;
+            background: var(--ink);
+            color: var(--paper);
             transform: scale(0.98);
         }
 
         .btn-limpar {
-            background: rgba(255, 255, 255, 0.5);
-            color: #27ae60;
-            border: 2px solid rgba(39, 174, 96, 0.3);
+            background: transparent;
+            color: var(--ink-soft);
+            border: 1.5px solid rgba(28, 27, 31, 0.2);
         }
 
         .btn-limpar:active {
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(28, 27, 31, 0.06);
             transform: scale(0.98);
         }
 
         .lembretes {
-            margin-top: 12px;
+            margin-top: 6px;
             flex: 1;
             display: flex;
             flex-direction: column;
@@ -380,14 +479,15 @@
         }
 
         .lembretes-titulo {
-            font-size: 11px;
-            font-weight: 700;
-            color: #27ae60;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 500;
+            color: var(--ink-soft);
             text-transform: uppercase;
-            letter-spacing: 0.3px;
-            margin-bottom: 8px;
-            padding-bottom: 6px;
-            border-bottom: 2px solid rgba(39, 174, 96, 0.3);
+            letter-spacing: 0.8px;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(28, 27, 31, 0.15);
         }
 
         .lembretes-lista {
@@ -398,41 +498,42 @@
         }
 
         .lembrete-item {
-            padding: 8px;
-            border-bottom: 1px solid rgba(39, 174, 96, 0.2);
-            font-size: 10px;
-            color: #27ae60;
+            padding: 9px 10px;
+            border-bottom: none;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10.5px;
+            color: var(--ink);
             display: flex;
             justify-content: space-between;
             cursor: pointer;
-            border-radius: 6px;
-            transition: all 0.2s ease;
-            background: rgba(255, 255, 255, 0.3);
-            margin-bottom: 3px;
+            border-radius: 2px;
+            transition: all 0.15s ease;
+            background: var(--paper);
+            margin-bottom: 4px;
+            border: 1px solid rgba(28, 27, 31, 0.1);
         }
 
         .lembrete-item:active {
-            background: rgba(255, 255, 255, 0.7);
-        }
-
-        .lembrete-item:last-child {
-            border-bottom: none;
+            background: var(--accent-soft);
+            border-color: var(--accent);
         }
 
         .lembrete-vazio {
             text-align: center;
-            color: rgba(39, 174, 96, 0.5);
-            font-size: 10px;
-            padding: 8px 0;
+            color: rgba(74, 72, 84, 0.45);
+            font-size: 10.5px;
+            font-style: italic;
+            padding: 10px 0;
         }
 
         .status {
             text-align: center;
-            font-size: 11px;
-            color: #27ae60;
-            margin-top: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10.5px;
+            color: var(--accent);
+            margin-top: 10px;
             min-height: 16px;
-            font-weight: 700;
+            font-weight: 500;
         }
 
         /* RESPONSIVO */
@@ -440,23 +541,26 @@
             .wrapper {
                 grid-template-columns: 1fr;
                 max-height: none;
-                border-radius: 12px;
+                border-radius: 4px;
+            }
+
+            .wrapper::after {
+                display: none;
             }
 
             .left-panel {
-                border-right: none;
-                border-bottom: 1px solid #e0e0e0;
-                padding: 24px;
-                max-height: 50vh;
+                border-bottom: 2px dashed rgba(28, 27, 31, 0.15);
+                padding: 28px 24px;
+                max-height: 54vh;
             }
 
             .right-panel {
-                padding: 24px;
-                max-height: 50vh;
+                padding: 28px 24px;
+                max-height: 54vh;
             }
 
             h1 {
-                font-size: 24px;
+                font-size: 28px;
             }
         }
 
@@ -468,57 +572,55 @@
             .wrapper {
                 grid-template-columns: 1fr;
                 max-height: none;
-                border-radius: 12px;
+                border-radius: 4px;
             }
 
             .left-panel {
-                border-right: none;
-                border-bottom: 1px solid #e0e0e0;
-                padding: 16px;
+                border-bottom: 2px dashed rgba(28, 27, 31, 0.15);
+                padding: 20px 18px;
                 max-height: none;
             }
 
             .right-panel {
-                padding: 16px;
+                padding: 20px 18px;
                 max-height: none;
             }
 
             header {
-                margin-bottom: 16px;
+                margin-bottom: 20px;
             }
 
             h1 {
-                font-size: 22px;
+                font-size: 24px;
             }
 
             .subtitle {
-                font-size: 12px;
+                font-size: 12.5px;
             }
 
             .info-box {
-                font-size: 10px;
-                padding: 10px;
-                margin-bottom: 16px;
+                font-size: 10.5px;
+                padding: 10px 12px;
+                margin: 18px 0 22px;
             }
 
             .abas {
-                gap: 8px;
-                margin-bottom: 16px;
+                margin-bottom: 22px;
             }
 
             .aba-btn {
-                padding: 10px;
-                font-size: 11px;
+                padding: 11px;
+                font-size: 10.5px;
             }
 
             .input-section {
-                margin-bottom: 16px;
+                margin-bottom: 20px;
             }
 
             .section-title {
-                font-size: 11px;
-                margin-bottom: 10px;
-                padding-bottom: 6px;
+                font-size: 10px;
+                margin-bottom: 12px;
+                padding-bottom: 8px;
             }
 
             .input-label {
@@ -530,79 +632,70 @@
             }
 
             input[type="date"] {
-                padding: 10px;
+                padding: 11px;
                 font-size: 13px;
             }
 
             .btn-calcular {
-                padding: 12px;
-                font-size: 12px;
-                margin-top: 12px;
+                padding: 13px;
+                font-size: 11.5px;
+                margin-top: 14px;
             }
 
             .resultado-header {
-                font-size: 11px;
-                margin-bottom: 10px;
-                padding-bottom: 6px;
+                font-size: 10px;
+                margin-bottom: 12px;
+                padding-bottom: 8px;
             }
 
             .resultado-item {
-                padding: 8px 0;
+                padding: 9px 0;
                 font-size: 11px;
             }
 
             .resultado-valor {
-                font-size: 12px;
+                font-size: 16px;
             }
 
             .resultado-total {
-                padding: 12px;
-                margin-bottom: 10px;
+                padding: 16px;
+                margin-bottom: 12px;
             }
 
             .resultado-total-label {
-                font-size: 12px;
-                margin-bottom: 6px;
-            }
-
-            .resultado-total-valor {
-                font-size: 20px;
+                font-size: 15px;
+                margin-bottom: 8px;
             }
 
             .resultado-dias {
                 font-size: 10px;
-                margin-top: 4px;
             }
 
             .botoes {
                 gap: 6px;
-                margin-bottom: 10px;
+                margin-bottom: 12px;
             }
 
             button {
-                padding: 10px;
+                padding: 11px;
                 font-size: 10px;
-            }
-
-            .lembretes {
-                margin-top: 10px;
             }
 
             .lembretes-titulo {
-                font-size: 10px;
-                margin-bottom: 6px;
-                padding-bottom: 4px;
+                font-size: 9.5px;
+                margin-bottom: 8px;
+                padding-bottom: 6px;
             }
 
             .lembrete-item {
-                padding: 7px;
-                font-size: 9px;
-                margin-bottom: 2px;
+                padding: 8px 9px;
+                font-size: 9.5px;
+                margin-bottom: 3px;
             }
 
             .status {
                 font-size: 10px;
-                margin-top: 6px;
+                margin-top: 8px;
                 min-height: 14px;
             }
         }
@@ -612,113 +705,104 @@
                 padding: 8px;
             }
 
-            .wrapper {
-                border-radius: 10px;
-            }
-
             .left-panel,
             .right-panel {
-                padding: 12px;
+                padding: 16px 14px;
             }
 
             header {
-                margin-bottom: 12px;
+                margin-bottom: 16px;
             }
 
             h1 {
-                font-size: 20px;
-                margin-bottom: 4px;
+                font-size: 21px;
+                margin-bottom: 6px;
             }
 
             .subtitle {
-                font-size: 11px;
+                font-size: 11.5px;
             }
 
             .info-box {
-                font-size: 9px;
-                padding: 8px;
-                margin-bottom: 12px;
+                font-size: 10px;
+                padding: 9px 11px;
+                margin: 14px 0 18px;
             }
 
             .abas {
-                gap: 6px;
-                margin-bottom: 12px;
+                margin-bottom: 18px;
             }
 
             .aba-btn {
-                padding: 9px;
+                padding: 10px;
                 font-size: 10px;
             }
 
             .input-section {
-                margin-bottom: 12px;
+                margin-bottom: 16px;
             }
 
             .section-title {
-                font-size: 10px;
-                margin-bottom: 8px;
-                padding-bottom: 4px;
+                font-size: 9.5px;
+                margin-bottom: 10px;
+                padding-bottom: 6px;
             }
 
             .input-label {
-                font-size: 9px;
-                margin-bottom: 4px;
+                font-size: 9.5px;
+                margin-bottom: 5px;
             }
 
             .input-hint {
-                font-size: 8px;
-                margin-top: 2px;
+                font-size: 8.5px;
+                margin-top: 3px;
             }
 
             input[type="date"] {
-                padding: 9px;
-                font-size: 12px;
+                padding: 10px;
+                font-size: 12.5px;
             }
 
             .btn-calcular {
-                padding: 11px;
+                padding: 12px;
                 font-size: 11px;
-                margin-top: 10px;
+                margin-top: 12px;
             }
 
             .resultado-total {
-                padding: 10px;
-                margin-bottom: 8px;
+                padding: 14px;
+                margin-bottom: 10px;
             }
 
-            .resultado-total-valor {
-                font-size: 18px;
+            .resultado-total-label {
+                font-size: 14px;
             }
 
             .botoes {
                 gap: 5px;
-                margin-bottom: 8px;
+                margin-bottom: 10px;
             }
 
             button {
-                padding: 9px;
-                font-size: 9px;
-            }
-
-            .lembretes {
-                margin-top: 8px;
+                padding: 10px;
+                font-size: 9.5px;
             }
 
             .lembretes-titulo {
                 font-size: 9px;
-                margin-bottom: 4px;
-                padding-bottom: 3px;
+                margin-bottom: 6px;
+                padding-bottom: 5px;
             }
 
             .lembrete-item {
-                padding: 6px;
-                font-size: 8px;
-                margin-bottom: 2px;
+                padding: 7px 8px;
+                font-size: 9px;
+                margin-bottom: 3px;
             }
 
             .status {
                 font-size: 9px;
-                margin-top: 4px;
+                margin-top: 6px;
                 min-height: 12px;
             }
         }
@@ -728,33 +812,33 @@
     <div class="wrapper">
         <div class="left-panel">
             <header>
-                <h1>📅 Contador de Prazos</h1>
-                <p class="subtitle">Calcule dias e prazos com facilidade</p>
+                <div class="eyebrow">Calendário · Vistos · Contratos</div>
+                <h1>Contador de Prazos</h1>
+                <p class="subtitle">Calcule a distância exata entre duas datas, ou descubra quando cai o seu próximo prazo.</p>
             </header>
 
             <div class="info-box">
-                <strong>Dica:</strong> Use para controlar vistos, contratos, aluguel e outros prazos importantes.
+                <strong>Dica —</strong> use para acompanhar vencimento de visto, contratos, aluguel e outros prazos importantes.
             </div>
 
             <div class="abas">
-                <!-- FIX 1: event passado explicitamente como parâmetro -->
-                <button class="aba-btn ativo" onclick="mudarAba(event, 'diferenca')">📊 Diferença</button>
-                <button class="aba-btn" onclick="mudarAba(event, 'futura')">🔮 Data Futura</button>
+                <button class="aba-btn ativo" onclick="mudarAba(event, 'diferenca')">Diferença</button>
+                <button class="aba-btn" onclick="mudarAba(event, 'futura')">Data futura</button>
             </div>
 
             <div class="input-section">
                 <!-- ABA 1: Diferença entre datas -->
                 <div id="aba-diferenca" class="aba-conteudo ativo">
-                    <div class="section-title">Calcular Diferença</div>
+                    <div class="section-title">Calcular diferença</div>
                     
                     <div class="input-group">
-                        <label class="input-label">Data Inicial (Opcional)</label>
+                        <label class="input-label">Data inicial (opcional)</label>
                         <input type="date" id="dataInicial">
                         <div class="input-hint">Se vazio, usa hoje</div>
                     </div>
 
                     <div class="input-group">
-                        <label class="input-label">Data Final</label>
+                        <label class="input-label">Data final</label>
                         <input type="date" id="dataFinal">
                         <div class="input-hint">Quando termina?</div>
                     </div>
@@ -762,10 +846,10 @@
 
                 <!-- ABA 2: Calcular data futura -->
                 <div id="aba-futura" class="aba-conteudo">
-                    <div class="section-title">Calcular Data Futura</div>
+                    <div class="section-title">Calcular data futura</div>
                     
                     <div class="input-group">
-                        <label class="input-label">Data Futura</label>
+                        <label class="input-label">Data futura</label>
                         <input type="date" id="dataFutura">
                         <div class="input-hint">Selecione a data exata</div>
                     </div>
@@ -802,13 +886,12 @@
                 </div>
 
                 <div class="botoes">
-                    <!-- FIX 2: event passado explicitamente como parâmetro -->
-                    <button class="btn-copiar" onclick="copiarResultado(event)">📋 Copiar</button>
-                    <button class="btn-limpar" onclick="limpar()">🗑️ Limpar</button>
+                    <button class="btn-copiar" onclick="copiarResultado(event)">Copiar</button>
+                    <button class="btn-limpar" onclick="limpar()">Limpar</button>
                 </div>
 
                 <div class="lembretes">
-                    <div class="lembretes-titulo">📌 Lembretes Recentes</div>
+                    <div class="lembretes-titulo">Lembretes recentes</div>
                     <ul class="lembretes-lista" id="lembretes">
                         <li class="lembrete-vazio">Nenhum lembrete</li>
                     </ul>
@@ -823,16 +906,13 @@
         let lembretes = JSON.parse(localStorage.getItem('lembretes-prazos-responsivo')) || [];
         let abaAtiva = 'diferenca';
 
-        // FIX 1: mudarAba agora recebe o evento como parâmetro explícito
         function mudarAba(evt, aba) {
             abaAtiva = aba;
 
-            // Atualizar botões
             document.querySelectorAll('.aba-btn').forEach(btn => btn.classList.remove('ativo'));
             if (evt && evt.target) {
                 evt.target.classList.add('ativo');
             } else {
-                // Fallback quando chamado programaticamente (ex: restaurarLembrete)
                 document.querySelectorAll('.aba-btn').forEach(btn => {
                     if (btn.getAttribute('onclick').includes(`'${aba}'`)) {
                         btn.classList.add('ativo');
@@ -840,7 +920,6 @@
                 });
             }
 
-            // Atualizar conteúdo
             document.querySelectorAll('.aba-conteudo').forEach(el => el.classList.remove('ativo'));
             document.getElementById(`aba-${aba}`).classList.add('ativo');
 
@@ -848,8 +927,6 @@
         }
 
         window.addEventListener('load', () => {
-            // FIX 3: Removido pré-preenchimento de dataFinal com "hoje"
-            // (causava resultado 0 dias ao abrir sem intenção do usuário)
             atualizarLembretes();
         });
 
@@ -870,7 +947,6 @@
                 return;
             }
 
-            // Se data inicial não for preenchida, usar data atual
             if (!dataInicial) {
                 dataInicial = new Date().toISOString().split('T')[0];
             }
@@ -878,7 +954,6 @@
             const data1 = new Date(dataInicial);
             const data2 = new Date(dataFinal);
 
-            // FIX 4: detectar se data final está no passado ou futuro
             const noPassado = data2 < data1;
 
             const tempoComposto = calcularTempoComposto(data1, data2);
@@ -895,25 +970,21 @@
         function calcularTempoComposto(data1, data2) {
             let anos = 0, meses = 0, dias = 0;
             
-            // Garantir que dataTemp parta da menor data
             let dataInicio = data1 <= data2 ? new Date(data1) : new Date(data2);
             let dataFim    = data1 <= data2 ? new Date(data2) : new Date(data1);
 
             let dataTemp = new Date(dataInicio);
 
-            // Calcular anos
             while (new Date(dataTemp.getFullYear() + 1, dataTemp.getMonth(), dataTemp.getDate()) <= dataFim) {
                 anos++;
                 dataTemp.setFullYear(dataTemp.getFullYear() + 1);
             }
 
-            // Calcular meses
             while (new Date(dataTemp.getFullYear(), dataTemp.getMonth() + 1, dataTemp.getDate()) <= dataFim) {
                 meses++;
                 dataTemp.setMonth(dataTemp.getMonth() + 1);
             }
 
-            // Calcular dias restantes
             while (dataTemp < dataFim) {
                 dias++;
                 dataTemp.setDate(dataTemp.getDate() + 1);
@@ -930,7 +1001,6 @@
                 return;
             }
 
-            // Comparar apenas datas (sem hora) para evitar off-by-one
             const hoje = new Date();
             const hojeStr = hoje.toISOString().split('T')[0];
             const data = new Date(dataFutura);
@@ -939,7 +1009,6 @@
             const diferenca = data - hojeData;
             const diasAte = Math.round(Math.abs(diferenca) / (1000 * 60 * 60 * 24));
 
-            // FIX 5: detectar se a data já passou
             const noPassado = diferenca < 0;
 
             const dataFormatada = data.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
@@ -951,8 +1020,6 @@
             setTimeout(() => { status.textContent = ''; }, 2000);
         }
 
-        // FIX 4 & 5: exibirResultadoDiferenca e exibirResultadoFutura agora
-        // recebem e usam o parâmetro noPassado para textos e badges corretos
         function exibirResultadoDiferenca(tempoComposto, totalDias, noPassado) {
             const { anos, meses, dias } = tempoComposto;
 
@@ -968,7 +1035,6 @@
             document.getElementById('resultado3Label').textContent = 'Dias';
             document.getElementById('resultado3Valor').textContent = dias;
 
-            // Montar texto composto
             let textoComposto = '';
             const partes = [];
             if (anos > 0) partes.push(`${anos} ano${anos > 1 ? 's' : ''}`);
@@ -993,16 +1059,15 @@
             document.getElementById('resultadoItems').style.display = 'block';
             document.getElementById('resultadoTotal').style.display = 'block';
 
-            // Badge: se passou, mostrar "Passado" em vez de urgência
             const badge = document.getElementById('statusBadge');
             if (noPassado) {
-                badge.innerHTML = '<div class="status-badge passado">⏪ Já passou</div>';
+                badge.innerHTML = '<div class="status-badge passado">Já passou</div>';
             } else if (totalDias <= 30) {
-                badge.innerHTML = '<div class="status-badge urgente">⚠️ Urgente!</div>';
+                badge.innerHTML = '<div class="status-badge urgente">Urgente</div>';
             } else if (totalDias <= 90) {
-                badge.innerHTML = '<div class="status-badge proximo">⏰ Próximo</div>';
+                badge.innerHTML = '<div class="status-badge proximo">Próximo</div>';
             } else {
-                badge.innerHTML = '<div class="status-badge tranquilo">✓ Tranquilo</div>';
+                badge.innerHTML = '<div class="status-badge tranquilo">Tranquilo</div>';
             }
         }
 
@@ -1014,35 +1079,32 @@
             document.getElementById('resultado2').style.display = 'none';
             document.getElementById('resultado3').style.display = 'none';
 
-            // FIX 5: label correto dependendo se passou ou não
-            document.getElementById('totalLabel').textContent = noPassado ? 'Dias desde a data' : 'Dias até lá';
-            document.getElementById('total').textContent = diasAte;
+            document.getElementById('totalLabel').textContent = noPassado ? `${diasAte} dias desde a data` : `${diasAte} dias até lá`;
+            document.getElementById('total').textContent = '';
             document.getElementById('diasAuxiliar').textContent = noPassado ? 'Esta data já passou' : '';
             document.getElementById('resultadoItems').style.display = 'block';
             document.getElementById('resultadoTotal').style.display = 'block';
 
             const badge = document.getElementById('statusBadge');
             if (noPassado) {
-                badge.innerHTML = '<div class="status-badge passado">⏪ Já passou</div>';
+                badge.innerHTML = '<div class="status-badge passado">Já passou</div>';
             } else if (diasAte <= 30) {
-                badge.innerHTML = '<div class="status-badge urgente">⚠️ Urgente!</div>';
+                badge.innerHTML = '<div class="status-badge urgente">Urgente</div>';
             } else if (diasAte <= 90) {
-                badge.innerHTML = '<div class="status-badge proximo">⏰ Próximo</div>';
+                badge.innerHTML = '<div class="status-badge proximo">Próximo</div>';
             } else {
-                badge.innerHTML = '<div class="status-badge tranquilo">✓ Tranquilo</div>';
+                badge.innerHTML = '<div class="status-badge tranquilo">Tranquilo</div>';
             }
         }
 
-        // FIX 2: copiarResultado agora recebe o evento como parâmetro
         function copiarResultado(evt) {
-            const totalEl = document.getElementById('total');
             const labelEl = document.getElementById('totalLabel');
-            const texto = totalEl.textContent.trim() || labelEl.textContent.trim();
+            const texto = labelEl.textContent.trim();
 
             navigator.clipboard.writeText(texto).then(() => {
                 const btn = evt.target;
                 const textoOriginal = btn.textContent;
-                btn.textContent = '✓ Copiado!';
+                btn.textContent = 'Copiado!';
                 setTimeout(() => {
                     btn.textContent = textoOriginal;
                 }, 1500);
@@ -1089,8 +1151,6 @@
             const hojeData = new Date(new Date().toISOString().split('T')[0]);
 
             lista.innerHTML = lembretes.map((lembrete, index) => {
-                const data = new Date(lembrete.data);
-                // FIX 6: calcular diferença de dias corretamente (sem fuso horário distorcendo)
                 const dataStr = lembrete.data;
                 const dataLocal = new Date(dataStr + 'T00:00:00');
                 const diferencaMs = dataLocal - hojeData;
@@ -1106,7 +1166,6 @@
             }).join('');
         }
 
-        // FIX 1: restaurarLembrete usa mudarAba sem evento (null), fallback por onclick text
         function restaurarLembrete(index) {
             const lembrete = lembretes[index];
             document.getElementById('dataFinal').value = lembrete.data;
