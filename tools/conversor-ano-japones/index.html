@@ -3,173 +3,363 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Conversor de Ano Japonês V2</title>
+<title>Conversor de Era Japonesa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Noto+Serif+JP:wght@500;700&display=swap" rel="stylesheet">
 
 <style>
+
+:root {
+    --ink: #1c1b1f;
+    --ink-soft: #4a4854;
+    --paper: #faf8f3;
+    --paper-dim: #f0ece2;
+    --accent: #5b4b8a;
+    --accent-soft: #efe9ff;
+    --stamp-grey: #6b6878;
+    --stamp-grey-soft: #ece9f0;
+}
 
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
+    -webkit-tap-highlight-color: transparent;
 }
 
-body{
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-    background:linear-gradient(135deg,#2ecc71,#27ae60);
+html, body{
+    font-family:'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--ink);
+    background-image:
+        radial-gradient(circle at 15% 10%, rgba(91, 75, 138, 0.35), transparent 45%),
+        radial-gradient(circle at 85% 90%, rgba(200, 75, 49, 0.14), transparent 50%);
     min-height:100vh;
-    padding:20px;
+    padding:24px;
+    color: var(--ink);
 }
 
 .wrapper{
-    max-width:1200px;
+    max-width:1180px;
     margin:auto;
-    background:#fff;
-    border-radius:16px;
+    background: var(--paper);
+    border-radius:4px;
     overflow:hidden;
     display:grid;
     grid-template-columns:1fr 1fr;
-    box-shadow:0 20px 60px rgba(0,0,0,.2);
+    box-shadow:0 30px 80px rgba(0,0,0,.45);
+    position: relative;
+}
+
+.wrapper::after{
+    content:'';
+    position:absolute;
+    top:0;
+    bottom:0;
+    left:50%;
+    border-left:2px dashed rgba(28,27,31,.18);
 }
 
 .left-panel{
-    padding:32px;
-    border-right:1px solid #e5e5e5;
+    padding:40px 36px;
 }
 
 .right-panel{
-    padding:32px;
-    background:#e8f8f5;
+    padding:40px 36px;
+    background: var(--paper-dim);
+}
+
+.eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    font-weight:500;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color: var(--accent);
+    margin-bottom:10px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.eyebrow::before{
+    content:'';
+    width:16px;
+    height:1px;
+    background: var(--accent);
 }
 
 h1{
-    color:#333;
+    font-family:'Fraunces', serif;
+    font-optical-sizing:auto;
+    color: var(--ink);
+    font-size:32px;
+    line-height:1.05;
     margin-bottom:8px;
+    font-weight:600;
+    letter-spacing:-0.01em;
 }
 
 .subtitle{
-    color:#888;
-    font-size:14px;
-    margin-bottom:25px;
+    color: var(--ink-soft);
+    font-size:13.5px;
+    line-height:1.5;
+    max-width:38ch;
+    margin-bottom:22px;
 }
 
 .info-box{
-    background:#f0fff7;
-    border-left:4px solid #27ae60;
-    padding:15px;
-    border-radius:8px;
-    margin-bottom:25px;
-    color:#27ae60;
-    font-size:13px;
+    background: var(--accent-soft);
+    border-left:2px solid var(--accent);
+    padding:12px 14px;
+    border-radius:2px;
+    margin-bottom:28px;
+    color: var(--ink-soft);
+    font-size:11.5px;
+    line-height:1.55;
+}
+
+.info-box strong{
+    color: var(--accent);
+    font-weight:600;
+    font-family:'Space Grotesk', sans-serif;
 }
 
 .section-title{
-    font-size:12px;
-    font-weight:bold;
-    color:#444;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    font-weight:500;
+    color: var(--ink);
     text-transform:uppercase;
-    border-bottom:2px solid #27ae60;
-    padding-bottom:8px;
+    letter-spacing:1.2px;
+    border-bottom:1px solid rgba(28,27,31,.15);
+    padding-bottom:10px;
     margin-bottom:18px;
 }
 
+.data-grid{
+    display:grid;
+    grid-template-columns: 1.3fr 1.5fr 0.9fr;
+    gap:10px;
+}
+
 .input-group{
-    margin-bottom:16px;
+    margin-bottom:18px;
 }
 
 .input-label{
     display:block;
-    margin-bottom:6px;
-    font-size:12px;
-    font-weight:bold;
-    color:#666;
+    margin-bottom:7px;
+    font-size:10.5px;
+    font-weight:600;
+    color: var(--ink-soft);
+    text-transform:uppercase;
+    letter-spacing:0.5px;
 }
 
 select,
 input{
     width:100%;
-    padding:13px;
-    border:2px solid #ddd;
-    border-radius:8px;
-    font-size:14px;
+    padding:12px 11px;
+    border:1.5px solid rgba(28,27,31,.18);
+    border-radius:3px;
+    font-size:13.5px;
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:500;
+    background: var(--paper);
+    color: var(--ink);
+    transition: all .2s ease;
+    -webkit-appearance:none;
+    appearance:none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'><path fill='%234a4854' d='M1 1l5 5 5-5'/></svg>");
+    background-repeat:no-repeat;
+    background-position: right 12px center;
+    background-size: 10px 7px;
+    padding-right: 30px;
 }
 
 select:focus,
 input:focus{
     outline:none;
-    border-color:#27ae60;
+    border-color: var(--accent);
+    background-color: var(--accent-soft);
 }
 
 .btn-converter{
     width:100%;
     padding:15px;
     border:none;
-    border-radius:10px;
-    background:#27ae60;
-    color:white;
-    font-weight:bold;
+    border-radius:3px;
+    background: var(--ink);
+    color: var(--paper);
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:600;
+    font-size:12.5px;
+    text-transform:uppercase;
+    letter-spacing:1px;
     cursor:pointer;
+    transition: all .2s ease;
+    margin-top:6px;
+}
+
+.btn-converter:hover{
+    background: var(--accent);
+}
+
+.btn-converter:active{
+    transform: scale(.98);
 }
 
 .resultado-header{
-    font-size:12px;
-    font-weight:bold;
-    color:#27ae60;
-    border-bottom:2px solid #27ae60;
-    padding-bottom:8px;
-    margin-bottom:20px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    font-weight:500;
+    color: var(--ink-soft);
+    text-transform:uppercase;
+    letter-spacing:1.2px;
+    border-bottom:1px solid rgba(28,27,31,.15);
+    padding-bottom:10px;
+    margin-bottom:18px;
 }
 
 .resultado-box{
-    background:white;
-    border:2px solid #27ae60;
-    border-radius:10px;
-    padding:20px;
-    margin-bottom:15px;
+    background: var(--paper);
+    border:2px solid var(--ink);
+    border-radius:3px;
+    padding:24px 22px;
+    margin-bottom:16px;
+    position:relative;
+    overflow:hidden;
+}
+
+.resultado-box::before{
+    content:'';
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:6px;
+    background: repeating-linear-gradient(
+        90deg,
+        var(--accent) 0px, var(--accent) 10px,
+        transparent 10px, transparent 16px
+    );
 }
 
 .resultado-label{
-    font-size:11px;
-    color:#666;
-    margin-bottom:10px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10px;
+    letter-spacing:0.8px;
+    text-transform:uppercase;
+    color: var(--ink-soft);
+    margin-bottom:12px;
 }
 
 .resultado{
-    font-size:24px;
-    color:#27ae60;
-    font-weight:bold;
+    font-family:'Fraunces', serif;
+    font-size:26px;
+    font-weight:600;
+    color: var(--ink);
+    line-height:1.25;
+}
+
+.resultado .kanji{
+    font-family:'Noto Serif JP', serif;
+    font-weight:700;
+}
+
+.resultado-sub{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    color: var(--ink-soft);
+    margin-top:8px;
 }
 
 .btn-copiar{
     width:100%;
-    border:none;
-    background:#27ae60;
-    color:white;
+    border:1.5px solid var(--ink);
+    background: var(--paper);
+    color: var(--ink);
     padding:12px;
-    border-radius:8px;
-    font-weight:bold;
+    border-radius:3px;
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:600;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.4px;
     cursor:pointer;
-    margin-bottom:25px;
+    transition: all .2s ease;
+    margin-bottom:28px;
+}
+
+.btn-copiar:active{
+    background: var(--ink);
+    color: var(--paper);
+    transform: scale(.98);
 }
 
 .historico-titulo{
-    color:#27ae60;
-    font-size:12px;
-    font-weight:bold;
+    font-family:'JetBrains Mono', monospace;
+    color: var(--ink-soft);
+    font-size:10px;
+    font-weight:500;
+    text-transform:uppercase;
+    letter-spacing:0.8px;
     margin-bottom:10px;
+    padding-bottom:8px;
+    border-bottom:1px solid rgba(28,27,31,.15);
 }
 
 .historico{
     list-style:none;
-    margin-bottom:25px;
+    margin-bottom:26px;
 }
 
 .historico li{
-    background:rgba(255,255,255,.7);
-    padding:10px;
-    border-radius:8px;
-    margin-bottom:8px;
-    font-size:12px;
-    color:#27ae60;
+    background: var(--paper);
+    border:1px solid rgba(28,27,31,.1);
+    padding:9px 10px;
+    border-radius:2px;
+    margin-bottom:4px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    color: var(--ink);
+}
+
+.eras-lista li{
+    background: transparent;
+    border: none;
+    border-bottom: 1px dashed rgba(28,27,31,.15);
+    border-radius: 0;
+    padding: 9px 2px;
+    display:flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.eras-lista li:last-child{
+    border-bottom: none;
+}
+
+.eras-lista .era-nome{
+    font-family:'Noto Serif JP', serif;
+    font-weight:700;
+    font-size:13px;
+    color: var(--ink);
+}
+
+.eras-lista .era-romaji{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:500;
+    color: var(--ink-soft);
+    font-size:10.5px;
+    margin-left:6px;
+}
+
+.eras-lista .era-data{
+    font-family:'JetBrains Mono', monospace;
+    font-size:10px;
+    color: var(--ink-soft);
 }
 
 @media(max-width:900px){
@@ -178,9 +368,40 @@ input:focus{
     grid-template-columns:1fr;
 }
 
+.wrapper::after{
+    display:none;
+}
+
 .left-panel{
-    border-right:none;
-    border-bottom:1px solid #e5e5e5;
+    border-bottom:2px dashed rgba(28,27,31,.15);
+}
+
+.left-panel, .right-panel{
+    padding: 28px 24px;
+}
+
+h1{
+    font-size:26px;
+}
+
+}
+
+@media(max-width:480px){
+
+.left-panel, .right-panel{
+    padding: 20px 16px;
+}
+
+.data-grid{
+    grid-template-columns: 1fr;
+}
+
+h1{
+    font-size:22px;
+}
+
+.resultado{
+    font-size:21px;
 }
 
 }
@@ -194,15 +415,12 @@ input:focus{
 
 <div class="left-panel">
 
-<h1>🎌 Conversor Japonês V2</h1>
-
-<div class="subtitle">
-Calendário Japonês Oficial ⇄ Calendário Ocidental
-</div>
+<div class="eyebrow">Calendário Japonês</div>
+<h1>Conversor de Era</h1>
+<div class="subtitle">Converta uma data do calendário ocidental para a era japonesa oficial (元号), com suporte a 元年 (Gannen).</div>
 
 <div class="info-box">
-Versão com datas reais das eras japonesas.
-Suporta 元年 (Gannen) e mudanças oficiais de era.
+<strong>Datas oficiais —</strong> o cálculo usa o dia exato de início de cada era, não apenas o ano civil. Cobre de Meiji (1868) até Reiwa.
 </div>
 
 <div class="section-title">
@@ -212,35 +430,13 @@ Conversão
 <div class="input-group">
 
 <label class="input-label">
-ENTRADA
+Data ocidental
 </label>
 
-<div class="input-group">
-
-<label class="input-label">
-ANO
-</label>
+<div class="data-grid">
 
 <select id="ano"></select>
-
-</div>
-
-<div class="input-group">
-
-<label class="input-label">
-MÊS
-</label>
-
 <select id="mes"></select>
-
-</div>
-
-<div class="input-group">
-
-<label class="input-label">
-DIA
-</label>
-
 <select id="dia"></select>
 
 </div>
@@ -262,22 +458,22 @@ Resultado
 <div class="resultado-box">
 
 <div class="resultado-label">
-RESULTADO
+Era japonesa
 </div>
 
 <div class="resultado" id="resultado">
 Aguardando conversão
 </div>
 
+<div class="resultado-sub" id="resultadoSub"></div>
+
 </div>
 
 <button class="btn-copiar">
-📋 Copiar
+Copiar
 </button>
 
-<div class="historico-titulo">
-📌 Últimas Conversões
-</div>
+<div class="historico-titulo">Últimas conversões</div>
 
 <ul class="historico" id="historico">
 
@@ -285,25 +481,13 @@ Aguardando conversão
 
 </ul>
 
-<div class="historico-titulo">
-🎌 Datas Oficiais das Eras
-</div>
+<div class="historico-titulo">Datas oficiais das eras</div>
 
-<ul class="historico">
-
-<li>令和 (Reiwa) → 01/05/2019</li>
-
-<li>平成 (Heisei) → 08/01/1989</li>
-
-<li>昭和 (Shōwa) → 25/12/1926</li>
-
-<li>大正 (Taishō) → 30/07/1912</li>
-
-<li>明治 (Meiji) → 25/01/1868</li>
-
-</ul>
+<ul class="historico eras-lista" id="erasLista"></ul>
 
   </div>
+
+</div>
 
 <script>
 
@@ -350,6 +534,7 @@ const MESES = [
 
 inicializarSelects();
 atualizarHistorico();
+popularListaEras();
 
 document
 .querySelector(".btn-converter")
@@ -428,6 +613,34 @@ function popularDias(){
 
 
 // =========================
+// LISTA DE ERAS (LADO DIREITO)
+// =========================
+
+function popularListaEras(){
+
+    const lista = document.getElementById("erasLista");
+
+    lista.innerHTML = ERAS.map(era => {
+
+        const d = era.inicio;
+        const dataFormatada =
+            String(d.getDate()).padStart(2,"0") + "/" +
+            String(d.getMonth()+1).padStart(2,"0") + "/" +
+            d.getFullYear();
+
+        return `
+<li>
+  <span><span class="era-nome">${era.nome}</span><span class="era-romaji">${era.romaji}</span></span>
+  <span class="era-data">${dataFormatada}</span>
+</li>
+`;
+
+    }).join("");
+
+}
+
+
+// =========================
 // CONVERTER
 // =========================
 
@@ -455,7 +668,7 @@ function converter(){
     mostrarResultado(resultado);
 
     salvarHistorico(
-        `${diaFormatado}/${mesFormatado}/${ano} → ${resultado}`
+        `${diaFormatado}/${mesFormatado}/${ano} → ${resultado.textoSimples}`
     );
 
 }
@@ -467,30 +680,33 @@ function converter(){
 
 function converterDataParaEra(texto){
 
-    const data = new Date(texto);
+    const data = new Date(texto + "T00:00:00");
 
     if(isNaN(data.getTime())){
-        return "Data inválida";
+        return { html: "Data inválida", textoSimples: "Data inválida" };
     }
 
     for(let era of ERAS){
 
         if(data >= era.inicio){
 
-            let numeroAno =
-                data.getFullYear() -
-                era.inicio.getFullYear() + 1;
+            // O ano da era avança em 1º de janeiro (ano civil), não no
+            // aniversário do início da era. Ex.: Heisei começou em
+            // 08/01/1989, mas já em 01/01/1990 é Heisei 2.
+            let numeroAno = data.getFullYear() - era.inicio.getFullYear() + 1;
 
-            let anoEra =
-                numeroAno === 1
-                ? "元年"
-                : numeroAno + "年";
+            let anoEraTexto = numeroAno === 1 ? "元年" : numeroAno + "年";
+            let anoEraSimples = numeroAno === 1 ? "Gannen" : `Ano ${numeroAno}`;
 
-            return `${era.nome} (${era.romaji}) ${anoEra}`;
+            return {
+                html: `<span class="kanji">${era.nome}</span> ${anoEraTexto}`,
+                textoSimples: `${era.nome} (${era.romaji}) ${anoEraSimples}`,
+                sub: `${era.romaji} · ${anoEraSimples}`
+            };
         }
     }
 
-    return "Data fora das eras suportadas";
+    return { html: "Fora das eras suportadas", textoSimples: "Fora das eras suportadas" };
 
 }
 
@@ -498,11 +714,19 @@ function converterDataParaEra(texto){
 // RESULTADO
 // =========================
 
-function mostrarResultado(texto){
+function mostrarResultado(resultado){
 
-    document
-    .getElementById("resultado")
-    .textContent = texto;
+    const el = document.getElementById("resultado");
+    const sub = document.getElementById("resultadoSub");
+
+    if (typeof resultado === "string") {
+        el.textContent = resultado;
+        sub.textContent = "";
+        return;
+    }
+
+    el.innerHTML = resultado.html;
+    sub.textContent = resultado.sub || "";
 
 }
 
@@ -525,7 +749,7 @@ function copiarResultado(){
     const original =
     botao.textContent;
 
-    botao.textContent = "✓ Copiado";
+    botao.textContent = "Copiado";
 
     setTimeout(()=>{
 
