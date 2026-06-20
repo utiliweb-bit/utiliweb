@@ -18,8 +18,8 @@
 body{
 
 margin:0;
+background:#f1f3f5;
 font-family:Arial;
-background:#f4f4f4;
 
 }
 
@@ -34,10 +34,9 @@ text-align:center;
 }
 
 
-
 .container{
 
-max-width:700px;
+max-width:750px;
 margin:auto;
 padding:15px;
 
@@ -45,21 +44,13 @@ padding:15px;
 
 
 
-.box{
+.card{
 
 background:white;
 padding:20px;
+border-radius:18px;
 margin:15px 0;
-border-radius:15px;
-box-shadow:0 3px 10px #ddd;
-
-}
-
-
-
-input{
-
-width:100%;
+box-shadow:0 4px 12px #ddd;
 
 }
 
@@ -67,13 +58,12 @@ width:100%;
 
 button{
 
-padding:12px;
-border:0;
-border-radius:10px;
 background:#1565c0;
 color:white;
+border:0;
+padding:12px;
+border-radius:12px;
 margin:5px;
-cursor:pointer;
 
 }
 
@@ -82,7 +72,8 @@ cursor:pointer;
 textarea{
 
 width:100%;
-height:150px;
+height:160px;
+font-size:16px;
 
 }
 
@@ -90,23 +81,26 @@ height:150px;
 
 .result{
 
-background:#fafafa;
+background:#eef5ff;
 padding:15px;
-border-radius:10px;
+border-radius:12px;
 
 }
 
 
 
-.jp{
+.tag{
 
-font-size:18px;
+background:#eee;
+padding:8px;
+border-radius:8px;
+display:inline-block;
+margin:3px;
 
 }
 
 
 </style>
-
 
 </head>
 
@@ -115,15 +109,13 @@ font-size:18px;
 <body>
 
 
-
 <header>
 
 <h1>📸 Tradutor de Cartas Japão</h1>
 
-<p>Leia avisos japoneses em português</p>
+<p>Entenda documentos japoneses</p>
 
 </header>
-
 
 
 
@@ -131,22 +123,21 @@ font-size:18px;
 
 
 
-<div class="box">
+<div class="card">
 
-
-<h2>1️⃣ Tire uma foto</h2>
+<h2>📷 Foto da carta</h2>
 
 
 <input 
 type="file"
+id="foto"
 accept="image/*"
-capture="environment"
-id="imagem">
+capture="environment">
 
 
-<button onclick="lerImagem()">
+<button onclick="processar()">
 
-🔎 Ler japonês
+🔎 Ler documento
 
 </button>
 
@@ -156,11 +147,10 @@ id="imagem">
 
 
 
+<div class="card">
 
-<div class="box">
 
-
-<h2>2️⃣ Texto encontrado</h2>
+<h2>🔤 Texto japonês</h2>
 
 
 <textarea id="texto"></textarea>
@@ -185,18 +175,15 @@ id="imagem">
 
 
 
-
-<div class="box">
-
-
-<h2>3️⃣ Tradução</h2>
+<div class="card">
 
 
-<div 
-class="result"
-id="traducao">
+<h2>📝 Explicação</h2>
 
-A tradução aparecerá aqui
+
+<div id="explicacao" class="result">
+
+Aguardando documento...
 
 </div>
 
@@ -206,20 +193,16 @@ A tradução aparecerá aqui
 
 
 
-
-
-<div class="box">
+<div class="card">
 
 
 <h2>📂 Histórico</h2>
 
-
-<div id="historico">
-
-</div>
+<div id="historico"></div>
 
 
 </div>
+
 
 
 
@@ -232,16 +215,14 @@ A tradução aparecerá aqui
 <script>
 
 
-
-async function lerImagem(){
-
-
-let arquivo=
-document.getElementById("imagem")
-.files[0];
+async function processar(){
 
 
-if(!arquivo){
+let file =
+document.getElementById("foto").files[0];
+
+
+if(!file){
 
 alert("Escolha uma imagem");
 
@@ -251,22 +232,26 @@ return;
 
 
 
-document.getElementById("texto")
-.value="Lendo...";
+let img =
+await melhorarImagem(file);
+
+
+
+document.getElementById("texto").value =
+"Lendo japonês...";
 
 
 
 let resultado =
 await Tesseract.recognize(
 
-arquivo,
+img,
 
 'jpn',
 
 {
 
-logger:m=>
-console.log(m)
+logger:e=>console.log(e)
 
 }
 
@@ -274,20 +259,203 @@ console.log(m)
 
 
 
-let texto=
+let texto =
 resultado.data.text;
-
 
 
 document.getElementById("texto")
 .value=texto;
 
 
+analisar(texto);
+
 
 salvar(texto);
 
 
 }
+
+
+
+
+
+function melhorarImagem(file){
+
+
+return new Promise(resolve=>{
+
+
+let img=new Image();
+
+
+img.onload=function(){
+
+
+let canvas=document.createElement("canvas");
+
+
+let ctx=canvas.getContext("2d");
+
+
+
+canvas.width=img.width*2;
+
+canvas.height=img.height*2;
+
+
+
+ctx.drawImage(
+img,
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+
+
+let dados=
+ctx.getImageData(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+
+
+for(let i=0;i<dados.data.length;i+=4){
+
+
+let media=
+(
+dados.data[i]+
+dados.data[i+1]+
+dados.data[i+2]
+)/3;
+
+
+
+dados.data[i]=media;
+dados.data[i+1]=media;
+dados.data[i+2]=media;
+
+
+
+}
+
+
+
+ctx.putImageData(
+dados,
+0,
+0
+);
+
+
+
+canvas.toBlob(
+b=>resolve(b)
+);
+
+
+
+}
+
+
+
+img.src=
+URL.createObjectURL(file);
+
+
+});
+
+
+}
+
+
+
+
+
+function analisar(texto){
+
+
+let r="";
+
+
+if(texto.includes("保険")){
+
+
+r+="🏥 Parece ser documento de seguro saúde<br>";
+
+}
+
+
+if(texto.includes("税")){
+
+
+r+="💴 Pode ser imposto ou pagamento<br>";
+
+}
+
+
+if(texto.includes("市役所")){
+
+
+r+="🏢 Documento da prefeitura<br>";
+
+}
+
+
+if(texto.includes("学校")){
+
+
+r+="🏫 Documento escolar<br>";
+
+}
+
+
+if(texto.includes("銀行")){
+
+
+r+="🏦 Documento bancário<br>";
+
+}
+
+
+let data=
+texto.match(/令和(\d+)年/);
+
+
+
+if(data){
+
+
+let ano=
+2018+
+parseInt(data[1]);
+
+
+r+="📅 Ano japonês detectado: "+ano+"<br>";
+
+}
+
+
+
+if(!r){
+
+r="Não identifiquei a categoria. Use o botão traduzir.";
+
+}
+
+
+document.getElementById("explicacao")
+.innerHTML=r;
+
+
+
+}
+
 
 
 
@@ -299,28 +467,15 @@ let texto=
 document.getElementById("texto").value;
 
 
+window.open(
 
-if(!texto){
+"https://translate.google.com/?sl=ja&tl=pt&text="+
+encodeURIComponent(texto)
 
-return;
-
-}
-
-
-
-let url=
-
-"https://translate.google.com/?sl=ja&tl=pt&text="
-+
-encodeURIComponent(texto);
-
-
-
-window.open(url,"_blank");
+);
 
 
 }
-
 
 
 
@@ -329,42 +484,43 @@ window.open(url,"_blank");
 function copiar(){
 
 
-let t=
-document.getElementById("texto").value;
+navigator.clipboard.writeText(
+
+document.getElementById("texto").value
+
+);
 
 
-navigator.clipboard.writeText(t);
-
-
-alert("Texto copiado");
+alert("Copiado");
 
 }
 
 
 
 
-function salvar(texto){
+
+function salvar(t){
 
 
-let dados=
+let h=
 JSON.parse(
-localStorage.getItem("cartas")||"[]"
+localStorage.getItem("docs")||"[]"
 );
 
 
-
-dados.unshift(texto);
-
+h.unshift(t);
 
 
 localStorage.setItem(
-"cartas",
-JSON.stringify(dados.slice(0,10))
+
+"docs",
+
+JSON.stringify(h.slice(0,10))
+
 );
 
 
-
-mostrarHistorico();
+mostrar();
 
 
 }
@@ -373,39 +529,31 @@ mostrarHistorico();
 
 
 
-function mostrarHistorico(){
+function mostrar(){
 
 
-let dados=
+let h=
 JSON.parse(
-localStorage.getItem("cartas")||"[]"
+localStorage.getItem("docs")||"[]"
 );
 
 
 
 document.getElementById("historico")
 .innerHTML=
-dados.map(x=>`
+h.map(x=>
 
-<div>
+"<p>📄 "+x.substring(0,100)+"...</p>"
 
-📄 ${x.substring(0,80)}...
-
-</div>
-
-<hr>
-
-`).join("");
+).join("");
 
 }
 
 
-
-mostrarHistorico();
+mostrar();
 
 
 </script>
-
 
 
 </body>
