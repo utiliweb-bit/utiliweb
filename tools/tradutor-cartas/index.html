@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>📸 Tradutor de Cartas Japão</title>
+
+
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+
+
+<style>
+
+
+body{
+
+margin:0;
+font-family:Arial;
+background:#f4f4f4;
+
+}
+
+
+header{
+
+background:#1565c0;
+color:white;
+padding:25px;
+text-align:center;
+
+}
+
+
+
+.container{
+
+max-width:700px;
+margin:auto;
+padding:15px;
+
+}
+
+
+
+.box{
+
+background:white;
+padding:20px;
+margin:15px 0;
+border-radius:15px;
+box-shadow:0 3px 10px #ddd;
+
+}
+
+
+
+input{
+
+width:100%;
+
+}
+
+
+
+button{
+
+padding:12px;
+border:0;
+border-radius:10px;
+background:#1565c0;
+color:white;
+margin:5px;
+cursor:pointer;
+
+}
+
+
+
+textarea{
+
+width:100%;
+height:150px;
+
+}
+
+
+
+.result{
+
+background:#fafafa;
+padding:15px;
+border-radius:10px;
+
+}
+
+
+
+.jp{
+
+font-size:18px;
+
+}
+
+
+</style>
+
+
+</head>
+
+
+
+<body>
+
+
+
+<header>
+
+<h1>📸 Tradutor de Cartas Japão</h1>
+
+<p>Leia avisos japoneses em português</p>
+
+</header>
+
+
+
+
+<div class="container">
+
+
+
+<div class="box">
+
+
+<h2>1️⃣ Tire uma foto</h2>
+
+
+<input 
+type="file"
+accept="image/*"
+capture="environment"
+id="imagem">
+
+
+<button onclick="lerImagem()">
+
+🔎 Ler japonês
+
+</button>
+
+
+</div>
+
+
+
+
+
+<div class="box">
+
+
+<h2>2️⃣ Texto encontrado</h2>
+
+
+<textarea id="texto"></textarea>
+
+
+<button onclick="traduzir()">
+
+🌎 Traduzir
+
+</button>
+
+
+<button onclick="copiar()">
+
+📋 Copiar
+
+</button>
+
+
+</div>
+
+
+
+
+
+<div class="box">
+
+
+<h2>3️⃣ Tradução</h2>
+
+
+<div 
+class="result"
+id="traducao">
+
+A tradução aparecerá aqui
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+<div class="box">
+
+
+<h2>📂 Histórico</h2>
+
+
+<div id="historico">
+
+</div>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<script>
+
+
+
+async function lerImagem(){
+
+
+let arquivo=
+document.getElementById("imagem")
+.files[0];
+
+
+if(!arquivo){
+
+alert("Escolha uma imagem");
+
+return;
+
+}
+
+
+
+document.getElementById("texto")
+.value="Lendo...";
+
+
+
+let resultado =
+await Tesseract.recognize(
+
+arquivo,
+
+'jpn',
+
+{
+
+logger:m=>
+console.log(m)
+
+}
+
+);
+
+
+
+let texto=
+resultado.data.text;
+
+
+
+document.getElementById("texto")
+.value=texto;
+
+
+
+salvar(texto);
+
+
+}
+
+
+
+
+function traduzir(){
+
+
+let texto=
+document.getElementById("texto").value;
+
+
+
+if(!texto){
+
+return;
+
+}
+
+
+
+let url=
+
+"https://translate.google.com/?sl=ja&tl=pt&text="
++
+encodeURIComponent(texto);
+
+
+
+window.open(url,"_blank");
+
+
+}
+
+
+
+
+
+
+function copiar(){
+
+
+let t=
+document.getElementById("texto").value;
+
+
+navigator.clipboard.writeText(t);
+
+
+alert("Texto copiado");
+
+}
+
+
+
+
+function salvar(texto){
+
+
+let dados=
+JSON.parse(
+localStorage.getItem("cartas")||"[]"
+);
+
+
+
+dados.unshift(texto);
+
+
+
+localStorage.setItem(
+"cartas",
+JSON.stringify(dados.slice(0,10))
+);
+
+
+
+mostrarHistorico();
+
+
+}
+
+
+
+
+
+function mostrarHistorico(){
+
+
+let dados=
+JSON.parse(
+localStorage.getItem("cartas")||"[]"
+);
+
+
+
+document.getElementById("historico")
+.innerHTML=
+dados.map(x=>`
+
+<div>
+
+📄 ${x.substring(0,80)}...
+
+</div>
+
+<hr>
+
+`).join("");
+
+}
+
+
+
+mostrarHistorico();
+
+
+</script>
+
+
+
+</body>
+
+</html>
