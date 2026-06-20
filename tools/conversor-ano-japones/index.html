@@ -36,11 +36,15 @@ html, body{
         radial-gradient(circle at 85% 90%, rgba(200, 75, 49, 0.14), transparent 50%);
     min-height:100vh;
     width:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
     padding:24px;
     color: var(--ink);
 }
 
 .wrapper{
+    width:100%;
     max-width:1180px;
     margin:auto;
     background: var(--paper);
@@ -398,12 +402,8 @@ body{
     min-height:100vh;
 }
 
-}
-
-@media(max-width:480px){
-
 .left-panel, .right-panel{
-    padding: 20px 16px;
+    padding: 24px 18px;
 }
 
 .data-grid{
@@ -424,6 +424,14 @@ body{
 
 .data-grid select:nth-child(3){
     grid-area: dia;
+}
+
+}
+
+@media(max-width:480px){
+
+.left-panel, .right-panel{
+    padding: 20px 16px;
 }
 
 h1{
