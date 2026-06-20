@@ -35,18 +35,18 @@ html, body{
         radial-gradient(circle at 15% 10%, rgba(91, 75, 138, 0.35), transparent 45%),
         radial-gradient(circle at 85% 90%, rgba(200, 75, 49, 0.14), transparent 50%);
     min-height:100vh;
-    width:100%;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:24px;
     color: var(--ink);
+    overflow-x:hidden;
+}
+
+body{
+    padding:24px;
 }
 
 .wrapper{
     width:100%;
     max-width:1180px;
-    margin:auto;
+    margin:0 auto;
     background: var(--paper);
     border-radius:4px;
     overflow:hidden;
@@ -67,11 +67,13 @@ html, body{
 
 .left-panel{
     padding:40px 36px;
+    min-width:0;
 }
 
 .right-panel{
     padding:40px 36px;
     background: var(--paper-dim);
+    min-width:0;
 }
 
 .eyebrow{
@@ -146,6 +148,8 @@ h1{
     display:grid;
     grid-template-columns: 1.3fr 1.5fr 0.9fr;
     gap:10px;
+    min-width:0;
+    width:100%;
 }
 
 .input-group{
@@ -165,6 +169,7 @@ h1{
 select,
 input{
     width:100%;
+    min-width:0;
     padding:12px 11px;
     border:1.5px solid rgba(28,27,31,.18);
     border-radius:3px;
