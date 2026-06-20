@@ -8,94 +8,71 @@
 
 <title>📸 Tradutor de Cartas Japão</title>
 
-
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-
 
 <style>
 
-
 body{
-
 margin:0;
-background:#f1f3f5;
 font-family:Arial;
-
+background:#f4f4f4;
 }
 
-
 header{
-
-background:#1565c0;
+background:#c62828;
 color:white;
 padding:25px;
 text-align:center;
-
 }
 
-
-.container{
-
+main{
 max-width:750px;
 margin:auto;
 padding:15px;
-
 }
 
-
-
-.card{
+.box{
 
 background:white;
-padding:20px;
-border-radius:18px;
+padding:18px;
 margin:15px 0;
-box-shadow:0 4px 12px #ddd;
+border-radius:15px;
+box-shadow:0 3px 10px #ddd;
 
 }
-
-
 
 button{
 
-background:#1565c0;
-color:white;
-border:0;
 padding:12px;
-border-radius:12px;
+border:0;
+border-radius:10px;
+background:#c62828;
+color:white;
 margin:5px;
 
 }
-
-
 
 textarea{
 
 width:100%;
 height:160px;
-font-size:16px;
 
 }
-
-
-
-.result{
-
-background:#eef5ff;
-padding:15px;
-border-radius:12px;
-
-}
-
 
 
 .tag{
 
+display:inline-block;
 background:#eee;
 padding:8px;
 border-radius:8px;
-display:inline-block;
-margin:3px;
+margin:4px;
+
+}
+
+.jp{
+
+font-size:20px;
 
 }
 
@@ -103,7 +80,6 @@ margin:3px;
 </style>
 
 </head>
-
 
 
 <body>
@@ -118,14 +94,13 @@ margin:3px;
 </header>
 
 
-
-<div class="container">
-
+<main>
 
 
-<div class="card">
+<div class="box">
 
-<h2>📷 Foto da carta</h2>
+
+<h2>📷 Escolha a foto</h2>
 
 
 <input 
@@ -135,9 +110,9 @@ accept="image/*"
 capture="environment">
 
 
-<button onclick="processar()">
+<button onclick="ler()">
 
-🔎 Ler documento
+🔎 Analisar documento
 
 </button>
 
@@ -146,21 +121,13 @@ capture="environment">
 
 
 
+<div class="box">
 
-<div class="card">
 
-
-<h2>🔤 Texto japonês</h2>
+<h2>🇯🇵 Japonês encontrado</h2>
 
 
 <textarea id="texto"></textarea>
-
-
-<button onclick="traduzir()">
-
-🌎 Traduzir
-
-</button>
 
 
 <button onclick="copiar()">
@@ -174,40 +141,36 @@ capture="environment">
 
 
 
-
-<div class="card">
+<div class="box">
 
 
 <h2>📝 Explicação</h2>
 
 
-<div id="explicacao" class="result">
+<div id="resultado">
 
-Aguardando documento...
-
-</div>
-
+Nenhum documento analisado.
 
 </div>
-
-
-
-
-<div class="card">
-
-
-<h2>📂 Histórico</h2>
-
-<div id="historico"></div>
 
 
 </div>
 
 
 
+<div class="box">
+
+
+<h2>📚 Histórico</h2>
+
+<div id="hist"></div>
+
 
 </div>
 
+
+
+</main>
 
 
 
@@ -215,14 +178,83 @@ Aguardando documento...
 <script>
 
 
-async function processar(){
+const banco={
 
 
-let file =
+"国民健康保険":
+["Seguro Nacional de Saúde",
+"Documento relacionado ao seguro médico obrigatório"],
+
+
+"健康保険":
+["Seguro Saúde",
+"Informação sobre plano de saúde"],
+
+
+"市役所":
+["Prefeitura",
+"Documento oficial da prefeitura"],
+
+
+"区役所":
+["Subprefeitura",
+"Serviço administrativo local"],
+
+
+"納付":
+["Pagamento",
+"Pode indicar cobrança ou boleto"],
+
+
+"納期限":
+["Prazo de pagamento",
+"Data limite para pagar"],
+
+
+"住民税":
+["Imposto residencial",
+"Imposto municipal"],
+
+
+"銀行":
+["Banco",
+"Documento bancário"],
+
+
+"学校":
+["Escola",
+"Aviso escolar"],
+
+
+"配達":
+["Entrega",
+"Relacionado a correio"],
+
+
+"不在票":
+["Aviso de ausência",
+"Correio tentou entregar"],
+
+
+"病院":
+["Hospital",
+"Documento médico"]
+
+
+};
+
+
+
+
+
+async function ler(){
+
+
+let img=
 document.getElementById("foto").files[0];
 
 
-if(!file){
+if(!img){
 
 alert("Escolha uma imagem");
 
@@ -231,148 +263,37 @@ return;
 }
 
 
-
-let img =
-await melhorarImagem(file);
+document.getElementById("texto").value="Lendo...";
 
 
-
-document.getElementById("texto").value =
-"Lendo japonês...";
-
-
-
-let resultado =
+let r =
 await Tesseract.recognize(
 
 img,
 
-'jpn',
-
-{
-
-logger:e=>console.log(e)
-
-}
+'jpn'
 
 );
 
 
 
-let texto =
-resultado.data.text;
+let texto=r.data.text;
 
 
 document.getElementById("texto")
 .value=texto;
 
 
+
 analisar(texto);
+
 
 
 salvar(texto);
 
 
-}
-
-
-
-
-
-function melhorarImagem(file){
-
-
-return new Promise(resolve=>{
-
-
-let img=new Image();
-
-
-img.onload=function(){
-
-
-let canvas=document.createElement("canvas");
-
-
-let ctx=canvas.getContext("2d");
-
-
-
-canvas.width=img.width*2;
-
-canvas.height=img.height*2;
-
-
-
-ctx.drawImage(
-img,
-0,
-0,
-canvas.width,
-canvas.height
-);
-
-
-
-let dados=
-ctx.getImageData(
-0,
-0,
-canvas.width,
-canvas.height
-);
-
-
-
-for(let i=0;i<dados.data.length;i+=4){
-
-
-let media=
-(
-dados.data[i]+
-dados.data[i+1]+
-dados.data[i+2]
-)/3;
-
-
-
-dados.data[i]=media;
-dados.data[i+1]=media;
-dados.data[i+2]=media;
-
-
 
 }
-
-
-
-ctx.putImageData(
-dados,
-0,
-0
-);
-
-
-
-canvas.toBlob(
-b=>resolve(b)
-);
-
-
-
-}
-
-
-
-img.src=
-URL.createObjectURL(file);
-
-
-});
-
-
-}
-
 
 
 
@@ -380,99 +301,107 @@ URL.createObjectURL(file);
 function analisar(texto){
 
 
-let r="";
+let html="";
 
 
-if(texto.includes("保険")){
+html+="<div class='jp'>Documento analisado</div><br>";
 
 
-r+="🏥 Parece ser documento de seguro saúde<br>";
 
-}
-
-
-if(texto.includes("税")){
+for(let termo in banco){
 
 
-r+="💴 Pode ser imposto ou pagamento<br>";
-
-}
+if(texto.includes(termo)){
 
 
-if(texto.includes("市役所")){
+html+=`
 
+<div class="tag">
 
-r+="🏢 Documento da prefeitura<br>";
+<b>${termo}</b><br>
 
-}
+${banco[termo][0]}
 
+<br>
 
-if(texto.includes("学校")){
+${banco[termo][1]}
 
+</div>
 
-r+="🏫 Documento escolar<br>";
+`;
 
 }
 
 
-if(texto.includes("銀行")){
+}
 
 
-r+="🏦 Documento bancário<br>";
+
+
+let valor=
+texto.match(/¥[0-9,]+/);
+
+
+
+if(valor){
+
+
+html+=`
+
+<div class="tag">
+
+💴 Valor encontrado:
+
+${valor[0]}
+
+</div>
+
+`;
 
 }
 
 
-let data=
+
+
+let reiwa=
 texto.match(/令和(\d+)年/);
 
 
 
-if(data){
+if(reiwa){
 
 
 let ano=
 2018+
-parseInt(data[1]);
+Number(reiwa[1]);
 
 
-r+="📅 Ano japonês detectado: "+ano+"<br>";
+html+=`
 
-}
+<div class="tag">
 
+📅 Ano:
 
+${ano}
 
-if(!r){
+</div>
 
-r="Não identifiquei a categoria. Use o botão traduzir.";
-
-}
-
-
-document.getElementById("explicacao")
-.innerHTML=r;
-
-
+`;
 
 }
 
 
 
 
+if(html==""){
 
-function traduzir(){
+html="Não encontrei termos conhecidos. Copie o texto para traduzir.";
+
+}
 
 
-let texto=
-document.getElementById("texto").value;
-
-
-window.open(
-
-"https://translate.google.com/?sl=ja&tl=pt&text="+
-encodeURIComponent(texto)
-
-);
+document.getElementById("resultado")
+.innerHTML=html;
 
 
 }
@@ -498,13 +427,15 @@ alert("Copiado");
 
 
 
-
 function salvar(t){
 
 
 let h=
+
 JSON.parse(
-localStorage.getItem("docs")||"[]"
+
+localStorage.getItem("cartas")||"[]"
+
 );
 
 
@@ -513,7 +444,7 @@ h.unshift(t);
 
 localStorage.setItem(
 
-"docs",
+"cartas",
 
 JSON.stringify(h.slice(0,10))
 
@@ -521,7 +452,6 @@ JSON.stringify(h.slice(0,10))
 
 
 mostrar();
-
 
 }
 
@@ -533,24 +463,30 @@ function mostrar(){
 
 
 let h=
+
 JSON.parse(
-localStorage.getItem("docs")||"[]"
+
+localStorage.getItem("cartas")||"[]"
+
 );
 
 
 
-document.getElementById("historico")
-.innerHTML=
+document.getElementById("hist").innerHTML=
+
 h.map(x=>
 
-"<p>📄 "+x.substring(0,100)+"...</p>"
+"📄 "+x.substring(0,80)+"..."
 
-).join("");
+).join("<br><br>");
+
 
 }
 
 
+
 mostrar();
+
 
 
 </script>
