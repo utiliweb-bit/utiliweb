@@ -235,12 +235,18 @@
             font-style: italic;
         }
 
-        input[type="date"] {
+        .data-grid {
+            display: grid;
+            grid-template-columns: 1.3fr 1.5fr 0.9fr;
+            gap: 10px;
+        }
+
+        select {
             width: 100%;
-            padding: 12px 13px;
+            padding: 12px 11px;
             border: 1.5px solid rgba(28, 27, 31, 0.18);
             border-radius: 3px;
-            font-size: 14px;
+            font-size: 13.5px;
             font-family: 'Space Grotesk', sans-serif;
             font-weight: 500;
             background: var(--paper);
@@ -248,12 +254,17 @@
             transition: all 0.2s ease;
             -webkit-appearance: none;
             appearance: none;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'><path fill='%234a4854' d='M1 1l5 5 5-5'/></svg>");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 10px 7px;
+            padding-right: 30px;
         }
 
-        input[type="date"]:focus {
+        select:focus {
             outline: none;
             border-color: var(--accent);
-            background: var(--accent-soft);
+            background-color: var(--accent-soft);
         }
 
         .btn-calcular {
@@ -631,7 +642,7 @@
                 font-size: 9px;
             }
 
-            input[type="date"] {
+            select {
                 padding: 11px;
                 font-size: 13px;
             }
@@ -769,9 +780,29 @@
                 margin-top: 3px;
             }
 
-            input[type="date"] {
+            select {
                 padding: 10px;
                 font-size: 12.5px;
+            }
+
+            .data-grid {
+                grid-template-columns: 1fr 1fr;
+                grid-template-areas:
+                    "mes mes"
+                    "dia ano";
+                gap: 8px;
+            }
+
+            .data-grid select:nth-child(1) {
+                grid-area: ano;
+            }
+
+            .data-grid select:nth-child(2) {
+                grid-area: mes;
+            }
+
+            .data-grid select:nth-child(3) {
+                grid-area: dia;
             }
 
             .btn-calcular {
@@ -844,13 +875,21 @@
                     
                     <div class="input-group">
                         <label class="input-label">Data inicial (opcional)</label>
-                        <input type="date" id="dataInicial">
+                        <div class="data-grid">
+                            <select id="dataInicial-ano"><option value="">Ano</option></select>
+                            <select id="dataInicial-mes"><option value="">Mês</option></select>
+                            <select id="dataInicial-dia"><option value="">Dia</option></select>
+                        </div>
                         <div class="input-hint">Se vazio, usa hoje</div>
                     </div>
 
                     <div class="input-group">
                         <label class="input-label">Data final</label>
-                        <input type="date" id="dataFinal">
+                        <div class="data-grid">
+                            <select id="dataFinal-ano"></select>
+                            <select id="dataFinal-mes"></select>
+                            <select id="dataFinal-dia"></select>
+                        </div>
                         <div class="input-hint">Quando termina?</div>
                     </div>
                 </div>
@@ -861,7 +900,11 @@
                     
                     <div class="input-group">
                         <label class="input-label">Data futura</label>
-                        <input type="date" id="dataFutura">
+                        <div class="data-grid">
+                            <select id="dataFutura-ano"></select>
+                            <select id="dataFutura-mes"></select>
+                            <select id="dataFutura-dia"></select>
+                        </div>
                         <div class="input-hint">Selecione a data exata</div>
                     </div>
                 </div>
@@ -917,6 +960,123 @@
         let lembretes = JSON.parse(localStorage.getItem('lembretes-prazos-responsivo')) || [];
         let abaAtiva = 'diferenca';
 
+        const MESES = [
+            "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+            "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+        ];
+
+        const ANO_MIN = 1950;
+        const ANO_MAX_FUTURO = 10; // anos a mais que o atual, para datas futuras (vistos, contratos)
+
+        function diasNoMes(ano, mes) {
+            return new Date(ano, mes, 0).getDate();
+        }
+
+        function inicializarSeletorData(prefixo, opcional) {
+            const anoSelect = document.getElementById(`${prefixo}-ano`);
+            const mesSelect = document.getElementById(`${prefixo}-mes`);
+            const diaSelect = document.getElementById(`${prefixo}-dia`);
+
+            const hoje = new Date();
+            const anoAtual = hoje.getFullYear();
+            const anoMax = anoAtual + ANO_MAX_FUTURO;
+
+            const optAnoVazio = document.createElement('option');
+            optAnoVazio.value = '';
+            optAnoVazio.textContent = 'Ano';
+            anoSelect.appendChild(optAnoVazio);
+
+            for (let a = anoMax; a >= ANO_MIN; a--) {
+                const opt = document.createElement('option');
+                opt.value = a;
+                opt.textContent = a;
+                anoSelect.appendChild(opt);
+            }
+
+            const optMesVazio = document.createElement('option');
+            optMesVazio.value = '';
+            optMesVazio.textContent = 'Mês';
+            mesSelect.appendChild(optMesVazio);
+
+            MESES.forEach((nome, i) => {
+                const opt = document.createElement('option');
+                opt.value = i + 1;
+                opt.textContent = nome;
+                mesSelect.appendChild(opt);
+            });
+
+            function popularDias() {
+                const temAno = anoSelect.value !== '';
+                const temMes = mesSelect.value !== '';
+                const diaSelecionado = parseInt(diaSelect.value) || '';
+
+                const anoRef = temAno ? parseInt(anoSelect.value) : anoAtual;
+                const mesRef = temMes ? parseInt(mesSelect.value) : 1;
+                const totalDias = diasNoMes(anoRef, mesRef);
+
+                diaSelect.innerHTML = '';
+
+                const optDiaVazio = document.createElement('option');
+                optDiaVazio.value = '';
+                optDiaVazio.textContent = 'Dia';
+                diaSelect.appendChild(optDiaVazio);
+
+                for (let d = 1; d <= totalDias; d++) {
+                    const opt = document.createElement('option');
+                    opt.value = d;
+                    opt.textContent = d;
+                    diaSelect.appendChild(opt);
+                }
+
+                if (diaSelecionado && diaSelecionado <= totalDias) {
+                    diaSelect.value = diaSelecionado;
+                }
+            }
+
+            popularDias();
+
+            if (!opcional) {
+                anoSelect.value = anoAtual;
+                mesSelect.value = hoje.getMonth() + 1;
+                popularDias();
+                diaSelect.value = hoje.getDate();
+            }
+
+            anoSelect.addEventListener('change', popularDias);
+            mesSelect.addEventListener('change', popularDias);
+        }
+
+        function lerData(prefixo) {
+            const ano = document.getElementById(`${prefixo}-ano`).value;
+            const mes = document.getElementById(`${prefixo}-mes`).value;
+            const dia = document.getElementById(`${prefixo}-dia`).value;
+
+            if (!ano || !mes || !dia) return '';
+
+            return `${ano}-${String(mes).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
+        }
+
+        function escreverData(prefixo, dataStr) {
+            const anoSelect = document.getElementById(`${prefixo}-ano`);
+            const mesSelect = document.getElementById(`${prefixo}-mes`);
+            const diaSelect = document.getElementById(`${prefixo}-dia`);
+
+            if (!dataStr) {
+                anoSelect.value = '';
+                mesSelect.value = '';
+                diaSelect.value = '';
+                // repopula os dias no estado vazio/padrão
+                mesSelect.dispatchEvent(new Event('change'));
+                return;
+            }
+
+            const [ano, mes, dia] = dataStr.split('-').map(Number);
+            anoSelect.value = ano;
+            mesSelect.value = mes;
+            mesSelect.dispatchEvent(new Event('change'));
+            diaSelect.value = dia;
+        }
+
         function mudarAba(evt, aba) {
             abaAtiva = aba;
 
@@ -938,6 +1098,9 @@
         }
 
         window.addEventListener('load', () => {
+            inicializarSeletorData('dataInicial', true);
+            inicializarSeletorData('dataFinal', false);
+            inicializarSeletorData('dataFutura', false);
             atualizarLembretes();
         });
 
@@ -950,8 +1113,8 @@
         }
 
         function calcularDiferenca() {
-            let dataInicial = document.getElementById('dataInicial').value;
-            const dataFinal = document.getElementById('dataFinal').value;
+            let dataInicial = lerData('dataInicial');
+            const dataFinal = lerData('dataFinal');
 
             if (!dataFinal) {
                 alert('Por favor, preencha a data final');
@@ -1005,7 +1168,7 @@
         }
 
         function calcularDataFutura() {
-            const dataFutura = document.getElementById('dataFutura').value;
+            const dataFutura = lerData('dataFutura');
 
             if (!dataFutura) {
                 alert('Por favor, preencha a data futura');
@@ -1123,9 +1286,9 @@
         }
 
         function limpar() {
-            document.getElementById('dataInicial').value = '';
-            document.getElementById('dataFinal').value = '';
-            document.getElementById('dataFutura').value = '';
+            escreverData('dataInicial', '');
+            escreverData('dataFinal', '');
+            escreverData('dataFutura', '');
             limparResultado();
         }
 
@@ -1179,8 +1342,8 @@
 
         function restaurarLembrete(index) {
             const lembrete = lembretes[index];
-            document.getElementById('dataFinal').value = lembrete.data;
-            document.getElementById('dataInicial').value = '';
+            escreverData('dataFinal', lembrete.data);
+            escreverData('dataInicial', '');
             mudarAba(null, 'diferenca');
             calcularDiferenca();
         }
