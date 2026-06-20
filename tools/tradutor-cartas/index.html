@@ -8,76 +8,134 @@
 
 <title>📸 Tradutor de Cartas Japão</title>
 
+
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+
 
 <style>
 
-body{
-margin:0;
-font-family:Arial;
-background:#f4f4f4;
+
+*{
+box-sizing:border-box;
 }
 
+
+body{
+
+margin:0;
+background:#f2f2f2;
+font-family:Arial,sans-serif;
+
+}
+
+
 header{
-background:#c62828;
+
+background:#1565c0;
 color:white;
 padding:25px;
 text-align:center;
+
 }
 
+
 main{
+
 max-width:750px;
 margin:auto;
 padding:15px;
+
 }
+
+
 
 .box{
 
 background:white;
-padding:18px;
+padding:20px;
+border-radius:18px;
 margin:15px 0;
-border-radius:15px;
-box-shadow:0 3px 10px #ddd;
+box-shadow:0 3px 12px #ddd;
 
 }
+
+
 
 button{
 
-padding:12px;
-border:0;
-border-radius:10px;
-background:#c62828;
+background:#1565c0;
 color:white;
+border:0;
+padding:12px 15px;
+border-radius:12px;
 margin:5px;
+cursor:pointer;
 
 }
+
+
+
+button:hover{
+
+opacity:.85;
+
+}
+
+
 
 textarea{
 
 width:100%;
-height:160px;
+height:170px;
+padding:10px;
+font-size:16px;
 
 }
+
+
+
+.resultado{
+
+background:#eef5ff;
+padding:15px;
+border-radius:12px;
+
+}
+
 
 
 .tag{
 
-display:inline-block;
-background:#eee;
-padding:8px;
+display:block;
+background:white;
+border-left:5px solid #1565c0;
+padding:12px;
+margin:10px 0;
 border-radius:8px;
-margin:4px;
 
 }
+
+
 
 .jp{
 
 font-size:20px;
+font-weight:bold;
 
 }
 
 
+
+.small{
+
+color:#666;
+
+}
+
+
+
 </style>
+
 
 </head>
 
@@ -85,22 +143,26 @@ font-size:20px;
 <body>
 
 
+
 <header>
 
 <h1>📸 Tradutor de Cartas Japão</h1>
 
-<p>Entenda documentos japoneses</p>
+<p>Entenda avisos e documentos japoneses</p>
 
 </header>
+
+
 
 
 <main>
 
 
+
 <div class="box">
 
 
-<h2>📷 Escolha a foto</h2>
+<h2>📷 Foto do documento</h2>
 
 
 <input 
@@ -110,7 +172,10 @@ accept="image/*"
 capture="environment">
 
 
-<button onclick="ler()">
+<br>
+
+
+<button onclick="lerDocumento()">
 
 🔎 Analisar documento
 
@@ -121,13 +186,21 @@ capture="environment">
 
 
 
+
+
 <div class="box">
 
 
-<h2>🇯🇵 Japonês encontrado</h2>
+<h2>🇯🇵 Texto japonês encontrado</h2>
 
 
-<textarea id="texto"></textarea>
+<textarea id="texto"
+placeholder="O texto aparecerá aqui">
+
+</textarea>
+
+
+<br>
 
 
 <button onclick="copiar()">
@@ -137,33 +210,51 @@ capture="environment">
 </button>
 
 
+<button onclick="abrirTradutor()">
+
+🌎 Abrir Tradutor
+
+</button>
+
+
 </div>
+
+
 
 
 
 <div class="box">
 
 
-<h2>📝 Explicação</h2>
+<h2>📝 Entendimento</h2>
 
 
-<div id="resultado">
+<div 
+id="resultado"
+class="resultado">
 
-Nenhum documento analisado.
+
+Aguardando documento...
+
 
 </div>
 
 
 </div>
+
+
 
 
 
 <div class="box">
 
 
-<h2>📚 Histórico</h2>
+<h2>📂 Histórico</h2>
 
-<div id="hist"></div>
+
+<div id="historico">
+
+</div>
 
 
 </div>
@@ -175,70 +266,102 @@ Nenhum documento analisado.
 
 
 
+
 <script>
 
 
-const banco={
+const banco = {
 
 
 "国民健康保険":
-["Seguro Nacional de Saúde",
-"Documento relacionado ao seguro médico obrigatório"],
+{
+nome:"Seguro Nacional de Saúde",
+desc:"Documento relacionado ao seguro médico obrigatório."
+},
 
 
 "健康保険":
-["Seguro Saúde",
-"Informação sobre plano de saúde"],
+{
+nome:"Seguro Saúde",
+desc:"Informação relacionada ao seguro de saúde."
+},
 
 
 "市役所":
-["Prefeitura",
-"Documento oficial da prefeitura"],
+{
+nome:"Prefeitura",
+desc:"Documento oficial da prefeitura japonesa."
+},
 
 
 "区役所":
-["Subprefeitura",
-"Serviço administrativo local"],
+{
+nome:"Subprefeitura",
+desc:"Serviço administrativo local."
+},
 
 
 "納付":
-["Pagamento",
-"Pode indicar cobrança ou boleto"],
+{
+nome:"Pagamento",
+desc:"Pode indicar cobrança ou pagamento."
+},
 
 
 "納期限":
-["Prazo de pagamento",
-"Data limite para pagar"],
+{
+nome:"Prazo de pagamento",
+desc:"Data limite para realizar pagamento."
+},
 
 
 "住民税":
-["Imposto residencial",
-"Imposto municipal"],
+{
+nome:"Imposto residencial",
+desc:"Imposto municipal japonês."
+},
 
 
 "銀行":
-["Banco",
-"Documento bancário"],
+{
+nome:"Banco",
+desc:"Documento bancário."
+},
 
 
 "学校":
-["Escola",
-"Aviso escolar"],
+{
+nome:"Escola",
+desc:"Aviso ou documento escolar."
+},
 
 
 "配達":
-["Entrega",
-"Relacionado a correio"],
+{
+nome:"Entrega",
+desc:"Relacionado ao correio."
+},
 
 
 "不在票":
-["Aviso de ausência",
-"Correio tentou entregar"],
+{
+nome:"Aviso de ausência",
+desc:"Tentativa de entrega do correio."
+},
 
 
 "病院":
-["Hospital",
-"Documento médico"]
+{
+nome:"Hospital",
+desc:"Documento médico."
+},
+
+
+"契約":
+{
+nome:"Contrato",
+desc:"Documento contratual."
+}
 
 
 };
@@ -247,14 +370,15 @@ const banco={
 
 
 
-async function ler(){
+async function lerDocumento(){
 
 
-let img=
+let arquivo =
 document.getElementById("foto").files[0];
 
 
-if(!img){
+
+if(!arquivo){
 
 alert("Escolha uma imagem");
 
@@ -263,13 +387,15 @@ return;
 }
 
 
-document.getElementById("texto").value="Lendo...";
+
+document.getElementById("texto")
+.value="Lendo imagem...";
 
 
-let r =
-await Tesseract.recognize(
 
-img,
+let resultado = await Tesseract.recognize(
+
+arquivo,
 
 'jpn'
 
@@ -277,7 +403,9 @@ img,
 
 
 
-let texto=r.data.text;
+let texto =
+resultado.data.text;
+
 
 
 document.getElementById("texto")
@@ -285,11 +413,11 @@ document.getElementById("texto")
 
 
 
-analisar(texto);
+interpretar(texto);
 
 
 
-salvar(texto);
+salvarHistorico(texto);
 
 
 
@@ -298,72 +426,104 @@ salvar(texto);
 
 
 
-function analisar(texto){
+
+
+
+function interpretar(texto){
 
 
 let html="";
 
 
-html+="<div class='jp'>Documento analisado</div><br>";
+let encontrado=false;
 
 
 
 for(let termo in banco){
 
 
+
 if(texto.includes(termo)){
 
 
-html+=`
+encontrado=true;
+
+
+html += `
 
 <div class="tag">
 
-<b>${termo}</b><br>
 
-${banco[termo][0]}
+<div class="jp">
 
-<br>
-
-${banco[termo][1]}
+${termo}
 
 </div>
 
+
+<b>${banco[termo].nome}</b>
+
+
+<br>
+
+
+<span class="small">
+
+${banco[termo].desc}
+
+</span>
+
+
+</div>
+
+
 `;
 
-}
-
 
 }
 
 
 
+}
 
-let valor=
-texto.match(/¥[0-9,]+/);
+
+
+
+
+
+let valor =
+texto.match(/¥[\d,]+/);
 
 
 
 if(valor){
 
 
-html+=`
+encontrado=true;
+
+
+html +=`
 
 <div class="tag">
 
 💴 Valor encontrado:
 
-${valor[0]}
+<b>${valor[0]}</b>
+
 
 </div>
 
 `;
+
 
 }
 
 
 
 
-let reiwa=
+
+
+let reiwa =
 texto.match(/令和(\d+)年/);
 
 
@@ -371,40 +531,97 @@ texto.match(/令和(\d+)年/);
 if(reiwa){
 
 
-let ano=
-2018+
-Number(reiwa[1]);
+encontrado=true;
 
 
-html+=`
+let ano =
+2018 + Number(reiwa[1]);
+
+
+
+html +=`
 
 <div class="tag">
 
-📅 Ano:
+📅 Data japonesa:
 
-${ano}
+令和${reiwa[1]}年
+
+<br>
+
+Equivale ao ano:
+
+<b>${ano}</b>
 
 </div>
 
 `;
 
+
+
 }
 
 
 
 
-if(html==""){
 
-html="Não encontrei termos conhecidos. Copie o texto para traduzir.";
+if(!encontrado){
+
+
+html=
+
+"Não encontrei termos conhecidos.<br><br>"+
+"Use o botão 🌎 Abrir Tradutor para ver a tradução completa.";
 
 }
+
+
 
 
 document.getElementById("resultado")
 .innerHTML=html;
 
 
+
 }
+
+
+
+
+
+
+function abrirTradutor(){
+
+
+let texto =
+document.getElementById("texto").value;
+
+
+
+if(!texto){
+
+alert("Nenhum texto encontrado");
+
+return;
+
+}
+
+
+
+let url =
+
+"https://translate.google.com/?sl=ja&tl=pt&text="
++
+encodeURIComponent(texto);
+
+
+
+window.open(url,"_blank");
+
+
+}
+
+
 
 
 
@@ -413,45 +630,55 @@ document.getElementById("resultado")
 function copiar(){
 
 
-navigator.clipboard.writeText(
-
-document.getElementById("texto").value
-
-);
+let texto =
+document.getElementById("texto").value;
 
 
-alert("Copiado");
+
+navigator.clipboard.writeText(texto);
+
+
+
+alert("Texto copiado");
+
 
 }
 
 
 
 
-function salvar(t){
 
 
-let h=
+
+function salvarHistorico(texto){
+
+
+let lista =
 
 JSON.parse(
 
-localStorage.getItem("cartas")||"[]"
+localStorage.getItem("documentos") || "[]"
 
 );
 
 
-h.unshift(t);
+
+lista.unshift(texto);
+
 
 
 localStorage.setItem(
 
-"cartas",
+"documentos",
 
-JSON.stringify(h.slice(0,10))
+JSON.stringify(lista.slice(0,10))
 
 );
 
 
-mostrar();
+
+mostrarHistorico();
+
 
 }
 
@@ -459,33 +686,50 @@ mostrar();
 
 
 
-function mostrar(){
+
+function mostrarHistorico(){
 
 
-let h=
+let lista =
 
 JSON.parse(
 
-localStorage.getItem("cartas")||"[]"
+localStorage.getItem("documentos") || "[]"
 
 );
 
 
 
-document.getElementById("hist").innerHTML=
+document.getElementById("historico")
+.innerHTML =
 
-h.map(x=>
 
-"📄 "+x.substring(0,80)+"..."
 
-).join("<br><br>");
+lista.map(x=>
+
+
+`
+
+<div>
+
+📄 ${x.substring(0,100)}...
+
+</div>
+
+<hr>
+
+
+`
+
+).join("");
+
 
 
 }
 
 
 
-mostrar();
+mostrarHistorico();
 
 
 
