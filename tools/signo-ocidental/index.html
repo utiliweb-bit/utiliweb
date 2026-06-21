@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Signo Ocidental — Descubra seu Mapa Zodiacal</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+    --void-1: #0A0D1A;
+    --void-2: #131A2C;
+    --void-3: #1B2440;
+    --line: rgba(184,194,217,.16);
+
+    --star: #ECEAE1;
+    --star-dim: #97A0BE;
+
+    --gold: #C9A45B;
+    --gold-bright: #E2C078;
+    --silver: #B8C2D9;
+}
+
+*{ margin:0; padding:0; box-sizing:border-box; }
+
+body{
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+    background:var(--void-1);
+    min-height:100vh;
+    padding:36px 20px;
+    position:relative;
+}
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    background-image:
+        radial-gradient(1.5px 1.5px at 12% 18%, rgba(236,234,225,.7), transparent),
+        radial-gradient(1px 1px at 28% 64%, rgba(236,234,225,.5), transparent),
+        radial-gradient(1.5px 1.5px at 45% 12%, rgba(236,234,225,.6), transparent),
+        radial-gradient(1px 1px at 62% 80%, rgba(236,234,225,.4), transparent),
+        radial-gradient(1.5px 1.5px at 78% 30%, rgba(236,234,225,.65), transparent),
+        radial-gradient(1px 1px at 88% 60%, rgba(236,234,225,.45), transparent),
+        radial-gradient(1.5px 1.5px at 95% 88%, rgba(236,234,225,.5), transparent),
+        radial-gradient(1px 1px at 8% 85%, rgba(236,234,225,.4), transparent),
+        radial-gradient(1.5px 1.5px at 36% 92%, rgba(236,234,225,.5), transparent),
+        radial-gradient(1px 1px at 55% 45%, rgba(236,234,225,.35), transparent);
+    background-repeat:no-repeat;
+    z-index:0;
+}
+
+.wrapper{
+    max-width:1180px;
+    margin:auto;
+    background:var(--void-2);
+    border-radius:18px;
+    overflow:hidden;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    box-shadow:0 30px 80px -24px rgba(0,0,0,.7), 0 0 0 1px rgba(184,194,217,.08);
+    position:relative;
+    z-index:1;
+}
+
+.wrapper::before{
+    content:"";
+    position:absolute;
+    top:0; left:0; right:0;
+    height:3px;
+    background:linear-gradient(90deg, transparent, var(--gold-bright), var(--silver), var(--gold-bright), transparent);
+    z-index:3;
+}
+
+.wrapper::after{
+    content:"";
+    position:absolute;
+    top:6%; bottom:6%; left:50%;
+    width:1px;
+    background:linear-gradient(to bottom, transparent, var(--line) 20%, var(--line) 80%, transparent);
+    z-index:2;
+}
+
+.left-panel, .right-panel{
+    padding:44px 40px 36px;
+    position:relative;
+}
+
+.left-panel{ background:linear-gradient(180deg, rgba(255,255,255,.015), transparent 40%); }
+.right-panel{ background:linear-gradient(180deg, rgba(201,164,91,.04), transparent 40%); }
+
+.eyebrow{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    font:600 11px/1 'Inter',sans-serif;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin-bottom:16px;
+}
+
+.eyebrow .glyph{ font-size:15px; color:var(--gold-bright); }
+
+h1{
+    font-family:'Cinzel',serif;
+    font-weight:600;
+    font-size:clamp(26px,3.2vw,34px);
+    line-height:1.25;
+    color:var(--star);
+    margin-bottom:14px;
+}
+
+.subtitle{
+    color:var(--star-dim);
+    font-size:14px;
+    max-width:40ch;
+    margin-bottom:24px;
+    line-height:1.65;
+}
+
+.info-box{
+    background:rgba(184,194,217,.06);
+    border-left:3px solid var(--silver);
+    color:var(--star-dim);
+    padding:13px 16px;
+    font-size:12.5px;
+    font-style:italic;
+    line-height:1.6;
+    margin-bottom:28px;
+    border-radius:0 6px 6px 0;
+}
+
+.section-title{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font:700 11px/1 'Inter',sans-serif;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin-bottom:18px;
+}
+
+.section-title::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:linear-gradient(90deg, var(--line), transparent);
+}
+
+.input-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+    margin-bottom:8px;
+}
+
+.input-group{ display:flex; flex-direction:column; }
+
+.input-label{
+    margin-bottom:8px;
+    font-size:10.5px;
+    font-weight:600;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--star-dim);
+}
+
+select{
+    width:100%;
+    padding:10px 22px 10px 2px;
+    border:none;
+    border-bottom:1.5px solid var(--line);
+    border-radius:0;
+    font-size:14.5px;
+    font-family:'IBM Plex Mono',monospace;
+    background-color:transparent;
+    color:var(--star);
+    appearance:none;
+    -webkit-appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0L5 6L10 0Z' fill='%23C9A45B'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;
+    background-position:right 2px center;
+    background-size:10px 6px;
+    transition:border-color .2s;
+}
+
+select option{ background:var(--void-2); color:var(--star); }
+
+select:focus{ outline:none; border-bottom-color:var(--gold-bright); }
+
+.btn-primary{
+    width:100%;
+    padding:15px;
+    border-radius:9px;
+    font:700 12.5px/1 'Inter',sans-serif;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    margin-top:22px;
+    cursor:pointer;
+    transition:transform .15s, box-shadow .2s;
+    background:linear-gradient(135deg, var(--gold-bright), var(--gold));
+    color:var(--void-1);
+    border:none;
+    box-shadow:0 10px 22px -8px rgba(201,164,91,.45);
+}
+
+.btn-primary:hover{ transform:translateY(-1px); box-shadow:0 14px 26px -8px rgba(201,164,91,.55); }
+.btn-primary:active{ transform:translateY(0); }
+
+.historico-titulo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font:700 11px/1 'Inter',sans-serif;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin:34px 0 18px;
+}
+
+.historico-titulo::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:linear-gradient(90deg, var(--line), transparent);
+}
+
+#wheelHost{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:10px;
+}
+
+.wheel-svg{
+    width:100%;
+    max-width:248px;
+    height:auto;
+    filter:drop-shadow(0 10px 18px rgba(0,0,0,.45));
+}
+
+.wheel-caption{
+    font-size:11px;
+    font-style:italic;
+    color:var(--star-dim);
+    text-align:center;
+}
+
+/* ===== result panel ===== */
+
+.resultado-header{
+    font:700 11px/1 'Inter',sans-serif;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin-bottom:22px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.resultado-header::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:linear-gradient(90deg, var(--line), transparent);
+}
+
+.resultado-box{
+    background:var(--void-3);
+    border-radius:16px;
+    padding:30px 24px 26px;
+    border:1px solid rgba(184,194,217,.12);
+    margin-bottom:22px;
+}
+
+.orb-wrap{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:14px;
+    padding:4px 0 22px;
+}
+
+.orb-shell{ position:relative; width:122px; height:122px; }
+
+.orb{
+    --orb-color:#C9A45B;
+    width:122px;
+    height:122px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    background:radial-gradient(circle at 32% 28%, color-mix(in srgb, var(--orb-color) 55%, white 30%), var(--orb-color) 78%);
+    box-shadow:0 0 0 1px rgba(255,255,255,.12) inset, 0 18px 34px -10px var(--orb-color);
+}
+
+.orb::before{
+    content:"";
+    position:absolute;
+    inset:-9px;
+    border-radius:50%;
+    border:1px solid rgba(184,194,217,.4);
+}
+
+.orb .glyph{
+    font-size:58px;
+    line-height:1;
+    color:#0A0D1A;
+    user-select:none;
+    text-shadow:0 1px 2px rgba(255,255,255,.25);
+}
+
+.orb.revealing{ animation:orbReveal .6s cubic-bezier(.2,.8,.3,1); }
+.orb.revealing::after{
+    content:"";
+    position:absolute;
+    inset:-9px;
+    border-radius:50%;
+    border:1.5px solid var(--orb-color);
+    animation:pingRing .8s ease-out;
+}
+
+@keyframes orbReveal{
+    0%{ transform:scale(.7); opacity:0; }
+    60%{ transform:scale(1.06); opacity:1; }
+    100%{ transform:scale(1); }
+}
+@keyframes pingRing{
+    0%{ transform:scale(.85); opacity:.9; }
+    100%{ transform:scale(1.55); opacity:0; }
+}
+
+.signo-nome{
+    font-family:'Cinzel',serif;
+    font-weight:600;
+    font-size:24px;
+    color:var(--star);
+    text-align:center;
+}
+
+.signo-latim{
+    font-style:italic;
+    font-size:13px;
+    color:var(--star-dim);
+    text-align:center;
+    margin-top:-8px;
+}
+
+.badge-row{
+    display:flex;
+    gap:8px;
+    justify-content:center;
+    flex-wrap:wrap;
+    margin:16px 0;
+}
+
+.badge{
+    padding:6px 15px;
+    border-radius:999px;
+    font-size:10.5px;
+    font-weight:700;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    box-shadow:0 2px 8px rgba(0,0,0,.3);
+}
+
+.range-pill{
+    font:500 12px/1 'IBM Plex Mono',monospace;
+    color:var(--gold-bright);
+    background:rgba(201,164,91,.08);
+    border:1px dashed rgba(201,164,91,.4);
+    padding:9px 12px;
+    border-radius:8px;
+    text-align:center;
+    letter-spacing:.02em;
+}
+
+.meta-line{
+    font:500 11.5px/1 'IBM Plex Mono',monospace;
+    color:var(--silver);
+    text-align:center;
+    margin-top:14px;
+    letter-spacing:.02em;
+}
+
+.trait{
+    font-size:13px;
+    color:var(--star-dim);
+    text-align:center;
+    line-height:1.6;
+    max-width:320px;
+    margin:16px auto 0;
+}
+
+.cusp-note{
+    font-size:11.5px;
+    font-style:italic;
+    color:var(--gold-bright);
+    background:rgba(201,164,91,.1);
+    border-left:3px solid var(--gold);
+    border-radius:0 8px 8px 0;
+    padding:10px 14px;
+    margin-top:16px;
+    line-height:1.55;
+}
+
+.btn-secondary{
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    padding:13px;
+    border-radius:9px;
+    font:700 12px/1 'Inter',sans-serif;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    cursor:pointer;
+    transition:.2s;
+    background:transparent;
+    border:1.5px solid var(--silver);
+    color:var(--silver);
+}
+
+.btn-secondary:hover{ background:rgba(184,194,217,.08); color:var(--star); border-color:var(--star); }
+.btn-secondary svg{ width:14px; height:14px; flex-shrink:0; }
+
+.historico{ list-style:none; }
+
+.historico li{
+    background:var(--void-3);
+    border-left:3px solid var(--silver);
+    padding:11px 13px;
+    border-radius:0 8px 8px 0;
+    margin-bottom:8px;
+    font:500 12.5px/1.4 'IBM Plex Mono',monospace;
+    color:var(--star-dim);
+}
+
+button:focus-visible, select:focus-visible{
+    outline:2px solid var(--gold-bright);
+    outline-offset:2px;
+}
+
+@media (prefers-reduced-motion: reduce){
+    .orb.revealing, .orb.revealing::after{ animation:none; }
+}
+
+@media (max-width:900px){
+    .wrapper{ grid-template-columns:1fr; }
+    .wrapper::after{ display:none; }
+    .left-panel, .right-panel{ padding:36px 28px 30px; }
+}
+
+@media (max-width:480px){
+    body{ padding:14px 10px; }
+    .left-panel, .right-panel{ padding:28px 20px 24px; }
+    .input-row{ grid-template-columns:1fr; gap:14px; }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+    <div class="left-panel">
+        <div class="eyebrow"><span class="glyph">☉</span><span>Mapa Astrológico Ocidental</span></div>
+        <h1>Qual é o seu signo do zodíaco?</h1>
+        <div class="subtitle">
+            Informe seu dia e mês de nascimento para descobrir seu signo solar, elemento, polaridade e planeta regente.
+        </div>
+
+        <div class="info-box">
+            O zodíaco ocidental depende só do dia e do mês — o ano de nascimento não muda o seu signo solar.
+        </div>
+
+        <div class="section-title">Sua data de nascimento</div>
+        <div class="input-row">
+            <div class="input-group">
+                <label class="input-label" for="mes">Mês</label>
+                <select id="mes"></select>
+            </div>
+            <div class="input-group">
+                <label class="input-label" for="dia">Dia</label>
+                <select id="dia"></select>
+            </div>
+        </div>
+
+        <button class="btn-primary" id="btnCalcular">Descobrir meu signo</button>
+
+        <div class="historico-titulo">Roda do zodíaco</div>
+        <div id="wheelHost"></div>
+    </div>
+
+    <div class="right-panel">
+        <div class="resultado-header">Resultado</div>
+        <div class="resultado-box">
+            <div class="orb-wrap">
+                <div class="orb-shell">
+                    <div class="orb" id="orb">
+                        <span class="glyph" id="orbGlyph">?</span>
+                    </div>
+                </div>
+                <div class="signo-nome" id="signoNome">Selecione uma data</div>
+                <div class="signo-latim" id="signoLatim"></div>
+            </div>
+
+            <div class="range-pill" id="rangePill"></div>
+            <div class="badge-row" id="badgeRow"></div>
+            <div class="meta-line" id="metaLine"></div>
+            <div class="trait" id="traitText"></div>
+            <div class="cusp-note" id="cuspNote" style="display:none;"></div>
+        </div>
+
+        <button class="btn-secondary" id="btnCopiar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <span id="btnCopiarLabel">Copiar resultado</span>
+        </button>
+
+        <div class="historico-titulo">Últimas consultas</div>
+        <ul class="historico" id="historico">
+            <li>Nenhuma consulta realizada</li>
+        </ul>
+    </div>
+</div>
+
+<script>
+const SIGNS = {
+    aries:        { pt:"Áries",       latim:"Aries",       glyph:"♈", elemento:"Fogo",  polaridade:"Positiva", modalidade:"Cardinal", regente:"Marte",
+                     startMonth:3, startDay:21, endMonth:4, endDay:19, faixa:"21/03 – 19/04",
+                     trait:"Direto, corajoso e o primeiro a tomar a iniciativa em qualquer situação." },
+    touro:        { pt:"Touro",       latim:"Taurus",       glyph:"♉", elemento:"Terra", polaridade:"Negativa", modalidade:"Fixo",     regente:"Vênus",
+                     startMonth:4, startDay:20, endMonth:5, endDay:20, faixa:"20/04 – 20/05",
+                     trait:"Constante, sensorial e leal às pessoas e aos prazeres que escolhe manter por perto." },
+    gemeos:       { pt:"Gêmeos",      latim:"Gemini",       glyph:"♊", elemento:"Ar",    polaridade:"Positiva", modalidade:"Mutável",  regente:"Mercúrio",
+                     startMonth:5, startDay:21, endMonth:6, endDay:20, faixa:"21/05 – 20/06",
+                     trait:"Curioso, comunicativo e sempre com duas ideias novas para cada uma que termina." },
+    cancer:       { pt:"Câncer",      latim:"Cancer",       glyph:"♋", elemento:"Água",  polaridade:"Negativa", modalidade:"Cardinal", regente:"Lua",
+                     startMonth:6, startDay:21, endMonth:7, endDay:22, faixa:"21/06 – 22/07",
+                     trait:"Intuitivo, protetor e profundamente ligado à própria casa e às próprias memórias." },
+    leao:         { pt:"Leão",        latim:"Leo",          glyph:"♌", elemento:"Fogo",  polaridade:"Positiva", modalidade:"Fixo",     regente:"Sol",
+                     startMonth:7, startDay:23, endMonth:8, endDay:22, faixa:"23/07 – 22/08",
+                     trait:"Caloroso, generoso e feito para brilhar no centro das atenções." },
+    virgem:       { pt:"Virgem",      latim:"Virgo",        glyph:"♍", elemento:"Terra", polaridade:"Negativa", modalidade:"Mutável",  regente:"Mercúrio",
+                     startMonth:8, startDay:23, endMonth:9, endDay:22, faixa:"23/08 – 22/09",
+                     trait:"Analítico, dedicado e movido pela vontade de fazer tudo um pouco melhor." },
+    libra:        { pt:"Libra",       latim:"Libra",        glyph:"♎", elemento:"Ar",    polaridade:"Positiva", modalidade:"Cardinal", regente:"Vênus",
+                     startMonth:9, startDay:23, endMonth:10, endDay:22, faixa:"23/09 – 22/10",
+                     trait:"Diplomático, estético e em busca constante de equilíbrio nas relações." },
+    escorpiao:    { pt:"Escorpião",   latim:"Scorpio",      glyph:"♏", elemento:"Água",  polaridade:"Negativa", modalidade:"Fixo",     regente:"Plutão",
+                     startMonth:10, startDay:23, endMonth:11, endDay:21, faixa:"23/10 – 21/11",
+                     trait:"Intenso, perceptivo e capaz de transformar qualquer crise em renascimento." },
+    sagitario:    { pt:"Sagitário",   latim:"Sagittarius",  glyph:"♐", elemento:"Fogo",  polaridade:"Positiva", modalidade:"Mutável",  regente:"Júpiter",
+                     startMonth:11, startDay:22, endMonth:12, endDay:21, faixa:"22/11 – 21/12",
+                     trait:"Expansivo, otimista e sempre de olho no próximo horizonte." },
+    capricornio:  { pt:"Capricórnio", latim:"Capricornus",  glyph:"♑", elemento:"Terra", polaridade:"Negativa", modalidade:"Cardinal", regente:"Saturno",
+                     startMonth:12, startDay:22, endMonth:1, endDay:19, faixa:"22/12 – 19/01",
+                     trait:"Disciplinado, ambicioso e disposto a construir devagar o que vai durar." },
+    aquario:      { pt:"Aquário",     latim:"Aquarius",     glyph:"♒", elemento:"Ar",    polaridade:"Positiva", modalidade:"Fixo",     regente:"Urano",
+                     startMonth:1, startDay:20, endMonth:2, endDay:18, faixa:"20/01 – 18/02",
+                     trait:"Original, independente e mais interessado no futuro do que na tradição." },
+    peixes:       { pt:"Peixes",      latim:"Pisces",       glyph:"♓", elemento:"Água",  polaridade:"Negativa", modalidade:"Mutável",  regente:"Netuno",
+                     startMonth:2, startDay:19, endMonth:3, endDay:20, faixa:"19/02 – 20/03",
+                     trait:"Sonhador, empático e fluido entre a imaginação e o mundo real." }
+};
+
+const ORDER = ["aries","touro","gemeos","cancer","leao","virgem","libra","escorpiao","sagitario","capricornio","aquario","peixes"];
+
+const ELEMENT_COLORS = { "Fogo":"#D9713B", "Terra":"#708C5B", "Ar":"#9AB6D9", "Água":"#4C6B8A" };
+const POLARITY_COLORS = { "Positiva":"#C9A45B", "Negativa":"#5C6FA8" };
+
+const MESES = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+
+// Histórico fica apenas em memória durante a sessão.
+let historico = [];
+
+const mesSelect = document.getElementById("mes");
+const diaSelect = document.getElementById("dia");
+
+function inicializarSelects(){
+    const hoje = new Date();
+    MESES.forEach((nome, i) => {
+        const opt = document.createElement("option");
+        opt.value = i + 1; opt.textContent = nome;
+        mesSelect.appendChild(opt);
+    });
+    mesSelect.value = hoje.getMonth() + 1;
+    popularDias();
+    diaSelect.value = hoje.getDate();
+    mesSelect.addEventListener("change", popularDias);
+    calcularEExibir();
+}
+
+function popularDias(){
+    const mes = parseInt(mesSelect.value);
+    const totalDias = new Date(2001, mes, 0).getDate(); // ano-base não bissexto
+    const diaSelecionado = parseInt(diaSelect.value) || 1;
+    diaSelect.innerHTML = "";
+    for(let d = 1; d <= totalDias; d++){
+        const opt = document.createElement("option");
+        opt.value = d; opt.textContent = d;
+        diaSelect.appendChild(opt);
+    }
+    diaSelect.value = diaSelecionado <= totalDias ? diaSelecionado : totalDias;
+}
+
+function signoIdPorData(mes, dia){
+    if((mes===3 && dia>=21) || (mes===4 && dia<=19)) return "aries";
+    if((mes===4 && dia>=20) || (mes===5 && dia<=20)) return "touro";
+    if((mes===5 && dia>=21) || (mes===6 && dia<=20)) return "gemeos";
+    if((mes===6 && dia>=21) || (mes===7 && dia<=22)) return "cancer";
+    if((mes===7 && dia>=23) || (mes===8 && dia<=22)) return "leao";
+    if((mes===8 && dia>=23) || (mes===9 && dia<=22)) return "virgem";
+    if((mes===9 && dia>=23) || (mes===10 && dia<=22)) return "libra";
+    if((mes===10 && dia>=23) || (mes===11 && dia<=21)) return "escorpiao";
+    if((mes===11 && dia>=22) || (mes===12 && dia<=21)) return "sagitario";
+    if((mes===12 && dia>=22) || (mes===1 && dia<=19)) return "capricornio";
+    if((mes===1 && dia>=20) || (mes===2 && dia<=18)) return "aquario";
+    return "peixes";
+}
+
+function vizinhos(id){
+    const i = ORDER.indexOf(id);
+    return { anterior: ORDER[(i - 1 + 12) % 12], proximo: ORDER[(i + 1) % 12] };
+}
+
+function isCorClara(hex){
+    const c = hex.replace('#','');
+    const r = parseInt(c.substring(0,2),16);
+    const g = parseInt(c.substring(2,4),16);
+    const b = parseInt(c.substring(4,6),16);
+    return (0.299*r + 0.587*g + 0.114*b)/255 > 0.6;
+}
+
+function calcularEExibir(){
+    const mes = parseInt(mesSelect.value);
+    const dia = parseInt(diaSelect.value);
+    const id = signoIdPorData(mes, dia);
+    const s = SIGNS[id];
+    const cor = ELEMENT_COLORS[s.elemento];
+
+    const orb = document.getElementById("orb");
+    orb.style.setProperty('--orb-color', cor);
+    document.getElementById("orbGlyph").textContent = s.glyph;
+    orb.classList.remove("revealing");
+    void orb.offsetWidth; // reflow
+    orb.classList.add("revealing");
+
+    document.getElementById("signoNome").textContent = s.pt;
+    document.getElementById("signoLatim").textContent = s.latim;
+    document.getElementById("rangePill").textContent = s.faixa;
+
+    const polCor = POLARITY_COLORS[s.polaridade];
+    document.getElementById("badgeRow").innerHTML = `
+        <span class="badge" style="background:${cor};color:${isCorClara(cor) ? '#0A0D1A' : '#ECEAE1'}">${s.elemento}</span>
+        <span class="badge" style="background:${polCor};color:${isCorClara(polCor) ? '#0A0D1A' : '#ECEAE1'}">${s.polaridade}</span>
+    `;
+
+    document.getElementById("metaLine").textContent = `${s.modalidade} · Regido por ${s.regente}`;
+    document.getElementById("traitText").textContent = s.trait;
+
+    const nota = document.getElementById("cuspNote");
+    let cuspideId = null;
+    if(mes === s.startMonth && dia === s.startDay) cuspideId = vizinhos(id).anterior;
+    else if(mes === s.endMonth && dia === s.endDay) cuspideId = vizinhos(id).proximo;
+
+    if(cuspideId){
+        nota.style.display = "block";
+        nota.textContent = `Sua data está na cúspide com ${SIGNS[cuspideId].pt}. Algumas fontes calculam esse limite com um dia de diferença.`;
+    } else {
+        nota.style.display = "none";
+    }
+
+    gerarRoda(id);
+
+    const resumo = `${String(dia).padStart(2,"0")}/${String(mes).padStart(2,"0")} · ${s.pt}`;
+    salvarHistorico(resumo);
+}
+
+function copiarResultado(){
+    const texto = `${document.getElementById("signoNome").textContent} (${document.getElementById("signoLatim").textContent}) — ${document.getElementById("rangePill").textContent}`;
+    navigator.clipboard.writeText(texto);
+    const label = document.getElementById("btnCopiarLabel");
+    const old = label.textContent;
+    label.textContent = "Copiado";
+    setTimeout(() => label.textContent = old, 1500);
+}
+
+function salvarHistorico(item){
+    if(historico[0] === item) return;
+    historico.unshift(item);
+    if(historico.length > 5) historico.pop();
+    atualizarHistorico();
+}
+
+function atualizarHistorico(){
+    const lista = document.getElementById("historico");
+    lista.innerHTML = historico.length === 0
+        ? "<li>Nenhuma consulta realizada</li>"
+        : historico.map(item => `<li>${item}</li>`).join("");
+}
+
+function gerarRoda(idAtivo){
+    const cx = 124, cy = 124, r = 90, nodeR = 16;
+    let nodes = "";
+    for(let i = 0; i < 12; i++){
+        const id = ORDER[i];
+        const s = SIGNS[id];
+        const angle = (-90 + i * 30) * Math.PI / 180;
+        const x = (cx + r * Math.cos(angle)).toFixed(1);
+        const y = (cy + r * Math.sin(angle)).toFixed(1);
+        const isActive = id === idAtivo;
+        const radius = isActive ? nodeR + 4 : nodeR;
+        const cor = ELEMENT_COLORS[s.elemento];
+        const fill = isActive ? cor : "rgba(255,255,255,.04)";
+        const stroke = isActive ? "#E2C078" : "rgba(184,194,217,.35)";
+        const textColor = isActive ? (isCorClara(cor) ? "#0A0D1A" : "#ECEAE1") : "#C7CEDC";
+        const fontSize = isActive ? 20 : 16;
+        nodes += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="rgba(184,194,217,.12)" stroke-width="1"/>
+        <g>
+            <circle cx="${x}" cy="${y}" r="${radius}" fill="${fill}" stroke="${stroke}" stroke-width="1.5"${isActive ? ` style="filter:drop-shadow(0 0 7px ${cor}99)"` : ''}/>
+            <text x="${x}" y="${(parseFloat(y) + fontSize * 0.34).toFixed(1)}" text-anchor="middle" font-size="${fontSize}" fill="${textColor}">${s.glyph}</text>
+            <title>${s.pt} · ${s.faixa}</title>
+        </g>`;
+    }
+    const ativo = SIGNS[idAtivo];
+    const svg = `
+        <svg viewBox="0 0 248 248" class="wheel-svg" role="img" aria-label="Roda do zodíaco com o signo atual em destaque">
+            <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(184,194,217,.2)" stroke-width="1" stroke-dasharray="2 5"/>
+            ${nodes}
+            <circle cx="${cx}" cy="${cy}" r="36" fill="#161D33" stroke="#E2C078" stroke-width="1.5"/>
+            <text x="${cx}" y="${cy - 4}" text-anchor="middle" font-size="30" fill="${ELEMENT_COLORS[ativo.elemento]}">${ativo.glyph}</text>
+            <text x="${cx}" y="${cy + 18}" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="10" fill="#97A0BE">${ativo.pt}</text>
+        </svg>
+        <div class="wheel-caption">Signo selecionado em destaque — passe o cursor sobre cada glifo</div>
+    `;
+    document.getElementById("wheelHost").innerHTML = svg;
+}
+
+document.getElementById("btnCalcular").addEventListener("click", calcularEExibir);
+document.getElementById("btnCopiar").addEventListener("click", copiarResultado);
+
+inicializarSelects();
+atualizarHistorico();
+</script>
+</body>
+</html>
