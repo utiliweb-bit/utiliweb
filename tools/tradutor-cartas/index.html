@@ -1,741 +1,873 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-
-<title>📸 Tradutor de Cartas Japão</title>
-
-
+<title>Tradutor de Cartas Japão</title>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-
-
 <style>
+*{box-sizing:border-box;margin:0;padding:0}
 
-
-*{
-box-sizing:border-box;
+:root{
+  --ink:#1a1a2e;
+  --ink2:#4a4a6a;
+  --ink3:#8888aa;
+  --surface:#ffffff;
+  --surface2:#f5f5f8;
+  --surface3:#ededf2;
+  --accent:#e8365d;
+  --accent2:#ff6b6b;
+  --jp:#c0392b;
+  --border:#e0e0ea;
+  --green:#00b894;
+  --amber:#f39c12;
+  --blue:#2980b9;
+  --radius:16px;
+  --radius-sm:10px;
 }
-
 
 body{
-
-margin:0;
-background:#f2f2f2;
-font-family:Arial,sans-serif;
-
+  background:var(--surface2);
+  font-family:'Helvetica Neue',Arial,sans-serif;
+  color:var(--ink);
+  min-height:100vh;
 }
-
 
 header{
-
-background:#1565c0;
-color:white;
-padding:25px;
-text-align:center;
-
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  padding:20px 24px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  position:sticky;
+  top:0;
+  z-index:10;
 }
 
+.logo{
+  width:40px;height:40px;
+  background:var(--ink);
+  border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;
+  flex-shrink:0;
+}
+
+header h1{
+  font-size:18px;
+  font-weight:700;
+  letter-spacing:-.3px;
+}
+
+header p{
+  font-size:13px;
+  color:var(--ink3);
+  margin-top:1px;
+}
 
 main{
-
-max-width:750px;
-margin:auto;
-padding:15px;
-
+  max-width:720px;
+  margin:0 auto;
+  padding:24px 16px 48px;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
 }
 
-
-
-.box{
-
-background:white;
-padding:20px;
-border-radius:18px;
-margin:15px 0;
-box-shadow:0 3px 12px #ddd;
-
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  overflow:hidden;
 }
 
-
-
-button{
-
-background:#1565c0;
-color:white;
-border:0;
-padding:12px 15px;
-border-radius:12px;
-margin:5px;
-cursor:pointer;
-
+.card-header{
+  padding:16px 20px 14px;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  gap:10px;
 }
 
-
-
-button:hover{
-
-opacity:.85;
-
+.card-icon{
+  width:32px;height:32px;
+  border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;
+  flex-shrink:0;
 }
 
+.card-icon.red{background:#fff0f2;}
+.card-icon.blue{background:#f0f5ff;}
+.card-icon.green{background:#f0fff8;}
+.card-icon.amber{background:#fffbf0;}
 
-
-textarea{
-
-width:100%;
-height:170px;
-padding:10px;
-font-size:16px;
-
+.card-header h2{
+  font-size:15px;
+  font-weight:600;
 }
 
-
-
-.resultado{
-
-background:#eef5ff;
-padding:15px;
-border-radius:12px;
-
+.card-body{
+  padding:20px;
 }
 
-
-
-.tag{
-
-display:block;
-background:white;
-border-left:5px solid #1565c0;
-padding:12px;
-margin:10px 0;
-border-radius:8px;
-
+.upload-zone{
+  border:2px dashed var(--border);
+  border-radius:var(--radius-sm);
+  padding:32px 20px;
+  text-align:center;
+  cursor:pointer;
+  transition:all .2s;
+  position:relative;
 }
 
-
-
-.jp{
-
-font-size:20px;
-font-weight:bold;
-
+.upload-zone:hover,.upload-zone.drag{
+  border-color:var(--accent);
+  background:#fff5f7;
 }
 
-
-
-.small{
-
-color:#666;
-
+.upload-zone input{
+  position:absolute;inset:0;opacity:0;cursor:pointer;
+  width:100%;height:100%;
 }
 
+.upload-zone .icon{font-size:36px;margin-bottom:10px;}
+.upload-zone h3{font-size:15px;font-weight:600;margin-bottom:4px;}
+.upload-zone p{font-size:13px;color:var(--ink3);}
 
+.preview-wrap{
+  position:relative;
+  border-radius:var(--radius-sm);
+  overflow:hidden;
+  background:var(--surface2);
+}
 
+.preview-wrap img{
+  width:100%;
+  max-height:300px;
+  object-fit:contain;
+  display:block;
+}
+
+.preview-clear{
+  position:absolute;
+  top:8px;right:8px;
+  background:rgba(0,0,0,.6);
+  color:white;
+  border:none;
+  border-radius:50%;
+  width:28px;height:28px;
+  cursor:pointer;
+  font-size:16px;
+  display:flex;align-items:center;justify-content:center;
+}
+
+.btn-primary{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  width:100%;
+  padding:14px;
+  background:var(--ink);
+  color:white;
+  border:none;
+  border-radius:var(--radius-sm);
+  font-size:15px;
+  font-weight:600;
+  cursor:pointer;
+  transition:all .2s;
+  margin-top:12px;
+}
+
+.btn-primary:hover{background:#2d2d4e;}
+.btn-primary:disabled{background:var(--surface3);color:var(--ink3);cursor:not-allowed;}
+
+.btn-secondary{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:8px 14px;
+  background:var(--surface2);
+  color:var(--ink2);
+  border:1px solid var(--border);
+  border-radius:8px;
+  font-size:13px;
+  font-weight:500;
+  cursor:pointer;
+  transition:all .15s;
+  text-decoration:none;
+}
+
+.btn-secondary:hover{background:var(--surface3);border-color:#ccc;}
+
+.btn-row{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:12px;
+}
+
+.ocr-output{
+  font-family:'Hiragino Sans','Yu Gothic',sans-serif;
+  font-size:17px;
+  line-height:1.9;
+  color:var(--ink);
+  background:var(--surface2);
+  border-radius:var(--radius-sm);
+  padding:16px;
+  min-height:80px;
+  white-space:pre-wrap;
+  word-break:break-all;
+}
+
+.ocr-output.placeholder{
+  color:var(--ink3);
+  font-family:'Helvetica Neue',Arial,sans-serif;
+  font-size:14px;
+}
+
+.progress-bar-wrap{
+  background:var(--surface3);
+  border-radius:4px;
+  height:4px;
+  margin-top:12px;
+  overflow:hidden;
+  display:none;
+}
+
+.progress-bar{
+  height:100%;
+  background:var(--accent);
+  border-radius:4px;
+  width:0%;
+  transition:width .3s;
+}
+
+.status-txt{
+  font-size:12px;
+  color:var(--ink3);
+  margin-top:6px;
+  text-align:center;
+  display:none;
+}
+
+.analysis-empty{
+  text-align:center;
+  padding:32px 16px;
+  color:var(--ink3);
+  font-size:14px;
+}
+
+.analysis-empty .big{font-size:32px;margin-bottom:8px;}
+
+.ai-section{
+  border-radius:var(--radius-sm);
+  overflow:hidden;
+}
+
+.ai-typing{
+  font-size:14px;
+  color:var(--ink2);
+  line-height:1.7;
+  padding:4px 0;
+}
+
+.ai-typing .cursor{
+  display:inline-block;
+  width:2px;height:16px;
+  background:var(--accent);
+  margin-left:2px;
+  vertical-align:middle;
+  animation:blink .7s infinite;
+}
+
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+.tag-grid{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.tag-item{
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  padding:12px 14px;
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+}
+
+.tag-jp{
+  font-family:'Hiragino Sans','Yu Gothic',sans-serif;
+  font-size:16px;
+  font-weight:700;
+  color:var(--jp);
+  min-width:80px;
+}
+
+.tag-info{}
+.tag-name{font-size:14px;font-weight:600;margin-bottom:2px;}
+.tag-desc{font-size:13px;color:var(--ink3);}
+
+.highlight-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 12px;
+  border-radius:20px;
+  font-size:13px;
+  font-weight:600;
+  margin:4px;
+}
+
+.badge-money{background:#fff3cd;color:#856404;}
+.badge-date{background:#d1e7dd;color:#0f5132;}
+.badge-alert{background:#f8d7da;color:#842029;}
+.badge-info{background:#cfe2ff;color:#084298;}
+
+.summary-box{
+  background:linear-gradient(135deg,#1a1a2e 0%,#2d2d4e 100%);
+  color:white;
+  border-radius:var(--radius-sm);
+  padding:20px;
+  margin-bottom:16px;
+}
+
+.summary-box .label{
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.8px;
+  opacity:.6;
+  margin-bottom:6px;
+}
+
+.summary-box .title{
+  font-size:18px;
+  font-weight:700;
+  margin-bottom:8px;
+}
+
+.summary-box .desc{
+  font-size:14px;
+  opacity:.8;
+  line-height:1.6;
+}
+
+.action-items{
+  margin-top:16px;
+}
+
+.action-item{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  padding:10px 0;
+  border-top:1px solid var(--border);
+}
+
+.action-item:first-child{border-top:none;}
+
+.action-dot{
+  width:6px;height:6px;
+  border-radius:50%;
+  background:var(--accent);
+  margin-top:6px;
+  flex-shrink:0;
+}
+
+.action-item p{font-size:14px;line-height:1.5;color:var(--ink2);}
+
+.hist-item{
+  padding:12px 0;
+  border-top:1px solid var(--border);
+  cursor:pointer;
+}
+
+.hist-item:first-child{border-top:none;}
+
+.hist-item:hover .hist-text{color:var(--ink);}
+
+.hist-jp{
+  font-family:'Hiragino Sans','Yu Gothic',sans-serif;
+  font-size:13px;
+  color:var(--ink);
+  margin-bottom:3px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.hist-time{font-size:11px;color:var(--ink3);}
+
+.section-label{
+  font-size:11px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.8px;
+  color:var(--ink3);
+  margin-bottom:12px;
+}
+
+.divider{height:1px;background:var(--border);margin:16px 0;}
+
+.spinner{
+  display:inline-block;
+  width:16px;height:16px;
+  border:2px solid rgba(255,255,255,.3);
+  border-top-color:white;
+  border-radius:50%;
+  animation:spin .7s linear infinite;
+}
+
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.no-hist{
+  text-align:center;
+  padding:24px;
+  color:var(--ink3);
+  font-size:14px;
+}
+
+@media(max-width:480px){
+  header{padding:16px;}
+  main{padding:16px 12px 40px;}
+  .summary-box .title{font-size:16px;}
+}
 </style>
-
-
 </head>
-
-
 <body>
 
-
-
 <header>
-
-<h1>📸 Tradutor de Cartas Japão</h1>
-
-<p>Entenda avisos e documentos japoneses</p>
-
+  <div class="logo">🇯🇵</div>
+  <div>
+    <h1>Tradutor de Cartas</h1>
+    <p>Documentos japoneses para Brasileiros no Japão</p>
+  </div>
 </header>
-
-
-
 
 <main>
 
-
-
-<div class="box">
-
-
-<h2>📷 Foto do documento</h2>
-
-
-<input 
-type="file"
-id="foto"
-accept="image/*"
-capture="environment">
-
-
-<br>
-
-
-<button onclick="lerDocumento()">
-
-🔎 Analisar documento
-
-</button>
-
-
-</div>
-
-
-
-
-
-<div class="box">
-
-
-<h2>🇯🇵 Texto japonês encontrado</h2>
-
-
-<textarea id="texto"
-placeholder="O texto aparecerá aqui">
-
-</textarea>
-
-
-<br>
-
-
-<button onclick="copiar()">
-
-📋 Copiar
-
-</button>
-
-
-<button onclick="abrirTradutor()">
-
-🌎 Abrir Tradutor
-
-</button>
-
-
-</div>
-
-
-
-
-
-<div class="box">
-
-
-<h2>📝 Entendimento</h2>
-
-
-<div 
-id="resultado"
-class="resultado">
-
-
-Aguardando documento...
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-<div class="box">
-
-
-<h2>📂 Histórico</h2>
-
-
-<div id="historico">
-
-</div>
-
-
-</div>
-
-
+  <!-- UPLOAD -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon red">📷</div>
+      <h2>Foto do documento</h2>
+    </div>
+    <div class="card-body">
+      <div class="upload-zone" id="uploadZone">
+        <input type="file" id="foto" accept="image/*" capture="environment" onchange="onFileSelect(event)">
+        <div id="uploadPlaceholder">
+          <div class="icon">📄</div>
+          <h3>Toque para tirar foto ou escolher imagem</h3>
+          <p>Cartas, boletos, avisos — qualquer documento japonês</p>
+        </div>
+        <div id="previewWrap" class="preview-wrap" style="display:none">
+          <img id="previewImg" src="" alt="Documento">
+          <button class="preview-clear" onclick="clearFile(event)" title="Remover">✕</button>
+        </div>
+      </div>
+
+      <div class="progress-bar-wrap" id="progressWrap">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+      <div class="status-txt" id="statusTxt"></div>
+
+      <button class="btn-primary" id="btnAnalysar" onclick="lerDocumento()" disabled>
+        <span id="btnLabel">🔎 Analisar documento</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- OCR RESULT -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon blue">🇯🇵</div>
+      <h2>Texto extraído</h2>
+    </div>
+    <div class="card-body">
+      <div class="ocr-output placeholder" id="ocrOutput">
+        O texto japonês aparecerá aqui após a análise…
+      </div>
+      <div class="btn-row" id="btnRow" style="display:none">
+        <button class="btn-secondary" onclick="copiar()">📋 Copiar texto</button>
+        <a class="btn-secondary" id="btnTradutor" href="#" target="_blank" onclick="return abrirTradutor()">🌎 Google Translate</a>
+        <button class="btn-secondary" onclick="abrirDeepL()">🔤 DeepL</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI ANALYSIS -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon green">🤖</div>
+      <h2>Análise inteligente</h2>
+    </div>
+    <div class="card-body" id="analysisBody">
+      <div class="analysis-empty">
+        <div class="big">🧾</div>
+        <p>A análise aparecerá após você analisar um documento</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- HISTORY -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon amber">📂</div>
+      <h2>Histórico</h2>
+    </div>
+    <div class="card-body" id="historicoBody">
+      <div class="no-hist">Nenhum documento analisado ainda</div>
+    </div>
+  </div>
 
 </main>
 
-
-
-
-
 <script>
+let textoAtual = "";
 
-
-const banco = {
-
-
-"国民健康保険":
-{
-nome:"Seguro Nacional de Saúde",
-desc:"Documento relacionado ao seguro médico obrigatório."
-},
-
-
-"健康保険":
-{
-nome:"Seguro Saúde",
-desc:"Informação relacionada ao seguro de saúde."
-},
-
-
-"市役所":
-{
-nome:"Prefeitura",
-desc:"Documento oficial da prefeitura japonesa."
-},
-
-
-"区役所":
-{
-nome:"Subprefeitura",
-desc:"Serviço administrativo local."
-},
-
-
-"納付":
-{
-nome:"Pagamento",
-desc:"Pode indicar cobrança ou pagamento."
-},
-
-
-"納期限":
-{
-nome:"Prazo de pagamento",
-desc:"Data limite para realizar pagamento."
-},
-
-
-"住民税":
-{
-nome:"Imposto residencial",
-desc:"Imposto municipal japonês."
-},
-
-
-"銀行":
-{
-nome:"Banco",
-desc:"Documento bancário."
-},
-
-
-"学校":
-{
-nome:"Escola",
-desc:"Aviso ou documento escolar."
-},
-
-
-"配達":
-{
-nome:"Entrega",
-desc:"Relacionado ao correio."
-},
-
-
-"不在票":
-{
-nome:"Aviso de ausência",
-desc:"Tentativa de entrega do correio."
-},
-
-
-"病院":
-{
-nome:"Hospital",
-desc:"Documento médico."
-},
-
-
-"契約":
-{
-nome:"Contrato",
-desc:"Documento contratual."
+function onFileSelect(e){
+  const f = e.target.files[0];
+  if(!f) return;
+  const url = URL.createObjectURL(f);
+  document.getElementById('previewImg').src = url;
+  document.getElementById('previewWrap').style.display = 'block';
+  document.getElementById('uploadPlaceholder').style.display = 'none';
+  document.getElementById('btnAnalysar').disabled = false;
 }
 
+function clearFile(e){
+  e.stopPropagation();
+  e.preventDefault();
+  document.getElementById('foto').value = '';
+  document.getElementById('previewWrap').style.display = 'none';
+  document.getElementById('uploadPlaceholder').style.display = 'block';
+  document.getElementById('btnAnalysar').disabled = true;
+  textoAtual = '';
+}
 
-};
+function setStatus(msg, progress){
+  const pw = document.getElementById('progressWrap');
+  const pb = document.getElementById('progressBar');
+  const st = document.getElementById('statusTxt');
+  pw.style.display = 'block';
+  st.style.display = 'block';
+  st.textContent = msg;
+  pb.style.width = progress + '%';
+}
 
-
-
-
+function hideStatus(){
+  document.getElementById('progressWrap').style.display = 'none';
+  document.getElementById('statusTxt').style.display = 'none';
+}
 
 async function lerDocumento(){
+  const arquivo = document.getElementById("foto").files[0];
+  if(!arquivo){ alert("Escolha uma imagem"); return; }
 
+  const btn = document.getElementById('btnAnalysar');
+  const label = document.getElementById('btnLabel');
+  btn.disabled = true;
+  label.innerHTML = '<span class="spinner"></span> Lendo imagem…';
 
-let arquivo =
-document.getElementById("foto").files[0];
+  const ocrEl = document.getElementById("ocrOutput");
+  ocrEl.classList.remove('placeholder');
+  ocrEl.textContent = '';
 
+  document.getElementById('btnRow').style.display = 'none';
+  document.getElementById('analysisBody').innerHTML = `
+    <div class="analysis-empty">
+      <div class="big" style="animation:spin 1s linear infinite;display:inline-block">⚙️</div>
+      <p>Processando documento…</p>
+    </div>`;
 
+  setStatus('Inicializando OCR…', 5);
 
-if(!arquivo){
+  try {
+    const resultado = await Tesseract.recognize(arquivo, 'jpn', {
+      logger: m => {
+        if(m.status === 'recognizing text'){
+          const pct = Math.round(m.progress * 80) + 10;
+          setStatus(`Lendo caracteres japoneses… ${pct}%`, pct);
+        }
+      }
+    });
 
-alert("Escolha uma imagem");
+    textoAtual = resultado.data.text.trim();
 
-return;
+    if(!textoAtual){
+      ocrEl.classList.add('placeholder');
+      ocrEl.textContent = 'Não foi possível extrair texto. Tente uma foto mais nítida.';
+      hideStatus();
+      btn.disabled = false;
+      label.textContent = '🔎 Analisar documento';
+      return;
+    }
 
+    ocrEl.textContent = textoAtual;
+    document.getElementById('btnRow').style.display = 'flex';
+    setStatus('Analisando com IA…', 90);
+    label.innerHTML = '<span class="spinner"></span> Analisando com IA…';
+
+    await analisarComIA(textoAtual);
+
+    hideStatus();
+    btn.disabled = false;
+    label.textContent = '🔎 Analisar novamente';
+    salvarHistorico(textoAtual);
+
+  } catch(err){
+    console.error(err);
+    hideStatus();
+    btn.disabled = false;
+    label.textContent = '🔎 Analisar documento';
+    ocrEl.classList.add('placeholder');
+    ocrEl.textContent = 'Erro ao processar. Tente novamente com uma imagem mais clara.';
+  }
 }
 
+async function analisarComIA(texto){
+  const body = document.getElementById('analysisBody');
 
+  const prompt = `Você é um assistente especializado em ajudar brasileiros no Japão a entender documentos japoneses.
 
-document.getElementById("texto")
-.value="Lendo imagem...";
+Analise este texto extraído de um documento japonês e responda em português do Brasil:
 
+TEXTO DO DOCUMENTO:
+${texto}
 
-
-let resultado = await Tesseract.recognize(
-
-arquivo,
-
-'jpn'
-
-);
-
-
-
-let texto =
-resultado.data.text;
-
-
-
-document.getElementById("texto")
-.value=texto;
-
-
-
-interpretar(texto);
-
-
-
-salvarHistorico(texto);
-
-
-
+Responda em JSON com esta estrutura exata:
+{
+  "tipo": "nome curto do tipo de documento (ex: Aviso de Entrega, Imposto Municipal, etc.)",
+  "resumo": "resumo em 1-2 frases do que é este documento",
+  "urgente": true ou false (se requer ação imediata),
+  "prazo": "data limite se houver, ou null",
+  "valor": "valor monetário se houver (ex: ¥12,500), ou null",
+  "acoes": ["ação 1 que o brasileiro deve tomar", "ação 2", ...],
+  "termos": [{"japones": "termo em japonês", "portugues": "tradução", "explicacao": "breve explicação"}],
+  "aviso": "aviso importante se houver (ex: documento vencido, multa possível), ou null"
 }
 
+Retorne APENAS o JSON, sem markdown, sem texto adicional.`;
 
+  try {
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({
+        model: "claude-sonnet-4-6",
+        max_tokens: 1000,
+        messages: [{role:"user", content: prompt}]
+      })
+    });
 
+    const data = await res.json();
+    const raw = data.content?.[0]?.text || '';
 
+    let parsed;
+    try {
+      const clean = raw.replace(/```json|```/g,'').trim();
+      parsed = JSON.parse(clean);
+    } catch(e){
+      renderFallback(texto);
+      return;
+    }
 
+    renderAnalysis(parsed);
 
-
-function interpretar(texto){
-
-
-let html="";
-
-
-let encontrado=false;
-
-
-
-for(let termo in banco){
-
-
-
-if(texto.includes(termo)){
-
-
-encontrado=true;
-
-
-html += `
-
-<div class="tag">
-
-
-<div class="jp">
-
-${termo}
-
-</div>
-
-
-<b>${banco[termo].nome}</b>
-
-
-<br>
-
-
-<span class="small">
-
-${banco[termo].desc}
-
-</span>
-
-
-</div>
-
-
-`;
-
-
+  } catch(err){
+    console.error(err);
+    renderFallback(texto);
+  }
 }
 
+function renderAnalysis(d){
+  const body = document.getElementById('analysisBody');
 
+  const urgClass = d.urgente ? 'badge-alert' : 'badge-info';
+  const urgTxt = d.urgente ? '⚠️ Ação necessária' : 'ℹ️ Informativo';
 
+  let badgesHtml = `<span class="highlight-badge ${urgClass}">${urgTxt}</span>`;
+  if(d.valor) badgesHtml += `<span class="highlight-badge badge-money">💴 ${d.valor}</span>`;
+  if(d.prazo) badgesHtml += `<span class="highlight-badge badge-date">📅 Prazo: ${d.prazo}</span>`;
+
+  let termosHtml = '';
+  if(d.termos && d.termos.length){
+    termosHtml = `
+    <div class="divider"></div>
+    <div class="section-label">Termos identificados</div>
+    <div class="tag-grid">
+      ${d.termos.map(t => `
+        <div class="tag-item">
+          <div class="tag-jp">${t.japones}</div>
+          <div class="tag-info">
+            <div class="tag-name">${t.portugues}</div>
+            <div class="tag-desc">${t.explicacao}</div>
+          </div>
+        </div>
+      `).join('')}
+    </div>`;
+  }
+
+  let acoesHtml = '';
+  if(d.acoes && d.acoes.length){
+    acoesHtml = `
+    <div class="divider"></div>
+    <div class="section-label">O que você deve fazer</div>
+    <div class="action-items">
+      ${d.acoes.map(a => `
+        <div class="action-item">
+          <div class="action-dot"></div>
+          <p>${a}</p>
+        </div>
+      `).join('')}
+    </div>`;
+  }
+
+  let avisoHtml = '';
+  if(d.aviso){
+    avisoHtml = `
+    <div style="background:#fff0f2;border:1px solid #f8bdc8;border-radius:10px;padding:12px 14px;margin-top:12px;font-size:14px;color:#842029;">
+      ⚠️ <strong>Atenção:</strong> ${d.aviso}
+    </div>`;
+  }
+
+  body.innerHTML = `
+    <div class="summary-box">
+      <div class="label">Tipo de documento</div>
+      <div class="title">${d.tipo}</div>
+      <div class="desc">${d.resumo}</div>
+    </div>
+
+    <div style="margin-bottom:4px">${badgesHtml}</div>
+
+    ${avisoHtml}
+    ${termosHtml}
+    ${acoesHtml}
+  `;
 }
 
+function renderFallback(texto){
+  const body = document.getElementById('analysisBody');
+  const banco = {
+    "国民健康保険":{nome:"Seguro Nacional de Saúde",desc:"Documento do seguro médico obrigatório"},
+    "健康保険":{nome:"Seguro Saúde",desc:"Informação sobre seguro de saúde"},
+    "市役所":{nome:"Prefeitura",desc:"Documento oficial da prefeitura"},
+    "区役所":{nome:"Subprefeitura",desc:"Serviço administrativo local"},
+    "納付":{nome:"Pagamento",desc:"Cobrança ou pagamento pendente"},
+    "納期限":{nome:"Prazo de pagamento",desc:"Data limite para pagamento"},
+    "住民税":{nome:"Imposto residencial",desc:"Imposto municipal japonês"},
+    "銀行":{nome:"Banco",desc:"Documento bancário"},
+    "学校":{nome:"Escola",desc:"Aviso ou documento escolar"},
+    "配達":{nome:"Entrega",desc:"Relacionado ao correio ou entrega"},
+    "不在票":{nome:"Aviso de ausência",desc:"Tentativa de entrega do correio"},
+    "病院":{nome:"Hospital",desc:"Documento médico"},
+    "契約":{nome:"Contrato",desc:"Documento contratual"},
+    "年金":{nome:"Pensão (Nenkin)",desc:"Previdência social japonesa"}
+  };
 
+  let tags = '';
+  let found = false;
+  for(let k in banco){
+    if(texto.includes(k)){
+      found = true;
+      tags += `<div class="tag-item">
+        <div class="tag-jp">${k}</div>
+        <div class="tag-info">
+          <div class="tag-name">${banco[k].nome}</div>
+          <div class="tag-desc">${banco[k].desc}</div>
+        </div>
+      </div>`;
+    }
+  }
 
+  const valor = texto.match(/[¥￥][\d,]+/);
+  const reiwa = texto.match(/令和(\d+)年/);
 
+  let extras = '';
+  if(valor) extras += `<span class="highlight-badge badge-money">💴 ${valor[0]}</span>`;
+  if(reiwa){
+    const ano = 2018 + parseInt(reiwa[1]);
+    extras += `<span class="highlight-badge badge-date">📅 令和${reiwa[1]}年 = ${ano}</span>`;
+  }
 
+  if(!found && !extras){
+    body.innerHTML = `
+      <div class="analysis-empty">
+        <div class="big">🔍</div>
+        <p>Não reconheci os termos neste documento.<br>Use o Google Translate ou DeepL para tradução completa.</p>
+      </div>`;
+    return;
+  }
 
-let valor =
-texto.match(/¥[\d,]+/);
-
-
-
-if(valor){
-
-
-encontrado=true;
-
-
-html +=`
-
-<div class="tag">
-
-💴 Valor encontrado:
-
-<b>${valor[0]}</b>
-
-
-</div>
-
-`;
-
-
+  body.innerHTML = `
+    ${extras ? `<div style="margin-bottom:12px">${extras}</div>` : ''}
+    ${found ? `<div class="section-label">Termos identificados</div><div class="tag-grid">${tags}</div>` : ''}
+  `;
 }
-
-
-
-
-
-
-let reiwa =
-texto.match(/令和(\d+)年/);
-
-
-
-if(reiwa){
-
-
-encontrado=true;
-
-
-let ano =
-2018 + Number(reiwa[1]);
-
-
-
-html +=`
-
-<div class="tag">
-
-📅 Data japonesa:
-
-令和${reiwa[1]}年
-
-<br>
-
-Equivale ao ano:
-
-<b>${ano}</b>
-
-</div>
-
-`;
-
-
-
-}
-
-
-
-
-
-if(!encontrado){
-
-
-html=
-
-"Não encontrei termos conhecidos.<br><br>"+
-"Use o botão 🌎 Abrir Tradutor para ver a tradução completa.";
-
-}
-
-
-
-
-document.getElementById("resultado")
-.innerHTML=html;
-
-
-
-}
-
-
-
-
-
-
-function abrirTradutor(){
-
-
-let texto =
-document.getElementById("texto").value;
-
-
-
-if(!texto){
-
-alert("Nenhum texto encontrado");
-
-return;
-
-}
-
-
-
-let url =
-
-"https://translate.google.com/?sl=ja&tl=pt&text="
-+
-encodeURIComponent(texto);
-
-
-
-window.open(url,"_blank");
-
-
-}
-
-
-
-
-
-
 
 function copiar(){
-
-
-let texto =
-document.getElementById("texto").value;
-
-
-
-navigator.clipboard.writeText(texto);
-
-
-
-alert("Texto copiado");
-
-
+  if(!textoAtual){ alert("Nenhum texto"); return; }
+  navigator.clipboard.writeText(textoAtual).then(() => {
+    const btn = event.target;
+    const orig = btn.textContent;
+    btn.textContent = '✅ Copiado!';
+    setTimeout(() => btn.textContent = orig, 2000);
+  });
 }
 
+function abrirTradutor(){
+  if(!textoAtual){ return false; }
+  const url = "https://translate.google.com/?sl=ja&tl=pt&text=" + encodeURIComponent(textoAtual);
+  window.open(url, '_blank');
+  return false;
+}
 
-
-
-
-
+function abrirDeepL(){
+  if(!textoAtual){ return; }
+  const url = "https://www.deepl.com/translator#ja/pt-BR/" + encodeURIComponent(textoAtual);
+  window.open(url, '_blank');
+}
 
 function salvarHistorico(texto){
-
-
-let lista =
-
-JSON.parse(
-
-localStorage.getItem("documentos") || "[]"
-
-);
-
-
-
-lista.unshift(texto);
-
-
-
-localStorage.setItem(
-
-"documentos",
-
-JSON.stringify(lista.slice(0,10))
-
-);
-
-
-
-mostrarHistorico();
-
-
+  const ts = new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+  let lista = JSON.parse(localStorage.getItem("cartas_hist") || "[]");
+  lista.unshift({texto, ts});
+  localStorage.setItem("cartas_hist", JSON.stringify(lista.slice(0,10)));
+  mostrarHistorico();
 }
-
-
-
-
-
 
 function mostrarHistorico(){
-
-
-let lista =
-
-JSON.parse(
-
-localStorage.getItem("documentos") || "[]"
-
-);
-
-
-
-document.getElementById("historico")
-.innerHTML =
-
-
-
-lista.map(x=>
-
-
-`
-
-<div>
-
-📄 ${x.substring(0,100)}...
-
-</div>
-
-<hr>
-
-
-`
-
-).join("");
-
-
-
+  const lista = JSON.parse(localStorage.getItem("cartas_hist") || "[]");
+  const el = document.getElementById('historicoBody');
+  if(!lista.length){
+    el.innerHTML = '<div class="no-hist">Nenhum documento analisado ainda</div>';
+    return;
+  }
+  el.innerHTML = lista.map((item,i) => `
+    <div class="hist-item" onclick="carregarHist(${i})">
+      <div class="hist-jp">${item.texto.substring(0,80).replace(/\n/g,' ')}…</div>
+      <div class="hist-time">📅 ${item.ts}</div>
+    </div>
+  `).join('');
 }
 
-
+function carregarHist(i){
+  const lista = JSON.parse(localStorage.getItem("cartas_hist") || "[]");
+  if(!lista[i]) return;
+  textoAtual = lista[i].texto;
+  const ocrEl = document.getElementById("ocrOutput");
+  ocrEl.classList.remove('placeholder');
+  ocrEl.textContent = textoAtual;
+  document.getElementById('btnRow').style.display = 'flex';
+  analisarComIA(textoAtual);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
 
 mostrarHistorico();
-
-
-
 </script>
-
-
 </body>
-
 </html>
