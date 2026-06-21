@@ -7,153 +7,155 @@
 <meta name="description" content="Converta horários entre cidades do mundo em tempo real.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
-  --night:#0c0c14;
-  --night-2:#13131f;
-  --night-3:#1c1c2e;
-  --night-4:#252540;
-  --night-5:#2e2e52;
-  --amber:#e8a020;
-  --amber-dim:#c4861a;
-  --amber-pale:rgba(232,160,32,.12);
-  --amber-glow:rgba(232,160,32,.22);
-  --paper:#f9f8f5;
-  --paper-dim:#f1f0eb;
-  --paper-deep:#e8e6df;
-  --ink:#0c0c14;
-  --ink-2:#2a2a3e;
-  --ink-3:#4a4a6a;
-  --ink-4:#8888aa;
-  --ink-5:#b8b8cc;
-  --line-dark:rgba(255,255,255,.07);
-  --line-light:rgba(12,12,20,.08);
-  --blue-accent:#4060e0;
-  --green-soft:#1a8a4a;
-  --green-bg:#e6f5ed;
-  --red-soft:#c02020;
-  --red-bg:#fce8e8;
-  --font-display:'Space Grotesk',sans-serif;
-  --font-body:'Inter',system-ui,sans-serif;
-  --r-sm:10px;
-  --r-md:14px;
-  --r-lg:18px;
-  --r-xl:24px;
+  /* Slate scale */
+  --s0:#f8f9fb;
+  --s1:#f0f2f5;
+  --s2:#e2e6ec;
+  --s3:#c8d0da;
+  --s4:#97a3b4;
+  --s5:#5c6b80;
+  --s6:#3d4f62;
+  --s7:#253244;
+  --s8:#182030;
+  --s9:#0f1520;
+
+  /* Amber accent */
+  --a0:#fffbf0;
+  --a1:#fef3c7;
+  --a2:#fde68a;
+  --a3:#f59e0b;
+  --a4:#d97706;
+  --a5:#b45309;
+  --a6:#78350f;
+
+  /* Semantic */
+  --emerald:#059669;
+  --emerald-bg:#ecfdf5;
+  --rose:#dc2626;
+  --rose-bg:#fef2f2;
+
+  --font:'DM Sans',system-ui,sans-serif;
+  --mono:'DM Mono',monospace;
+
+  --panel-l:var(--s9);
+  --panel-r:var(--s0);
+  --border-dark:rgba(255,255,255,.07);
+  --border-light:rgba(15,21,32,.08);
+  --r:12px;
 }
+
 *{margin:0;padding:0;box-sizing:border-box;}
 html{-webkit-text-size-adjust:100%;}
 body{
-  font-family:var(--font-body);
-  background:var(--night);
+  font-family:var(--font);
+  background:var(--s8);
   background-image:
-    radial-gradient(ellipse 60% 50% at 20% 0%, rgba(64,96,224,.18), transparent),
-    radial-gradient(ellipse 40% 60% at 80% 100%, rgba(232,160,32,.1), transparent);
+    radial-gradient(ellipse 55% 45% at 15% 0%, rgba(93,150,210,.12), transparent),
+    radial-gradient(ellipse 45% 55% at 85% 100%, rgba(245,158,11,.07), transparent);
   min-height:100dvh;
   display:flex;
   justify-content:center;
   align-items:center;
   padding:24px 14px;
-  color:var(--ink);
-}
-.wrapper{
-  width:100%;
-  max-width:1120px;
-  display:grid;
-  grid-template-columns:420px 1fr;
-  min-height:560px;
-  border-radius:var(--r-xl);
-  overflow:hidden;
-  box-shadow:0 60px 120px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.06);
 }
 
-/* ─── LEFT PANEL ─── */
+.wrapper{
+  width:100%;
+  max-width:1100px;
+  display:grid;
+  grid-template-columns:400px 1fr;
+  min-height:580px;
+  border-radius:20px;
+  overflow:hidden;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.06),
+    0 32px 80px rgba(0,0,0,.55),
+    0 8px 24px rgba(0,0,0,.3);
+}
+
+/* ─── LEFT ─── */
 .left{
-  background:var(--night-2);
-  background-image:radial-gradient(ellipse 80% 60% at 50% 0%, rgba(64,96,224,.14), transparent);
-  padding:36px 32px;
+  background:var(--panel-l);
+  padding:36px 32px 32px;
   display:flex;
   flex-direction:column;
   gap:0;
   overflow-y:auto;
-  position:relative;
+  border-right:1px solid rgba(255,255,255,.05);
 }
-.left::-webkit-scrollbar{width:3px;}
-.left::-webkit-scrollbar-thumb{background:var(--night-5);border-radius:3px;}
+.left::-webkit-scrollbar{width:2px;}
+.left::-webkit-scrollbar-thumb{background:var(--s7);border-radius:2px;}
 
 .back-link{
   display:inline-flex;
   align-items:center;
   gap:5px;
-  color:var(--ink-4);
+  color:var(--s5);
   text-decoration:none;
-  font-size:12px;
-  font-weight:600;
-  letter-spacing:.04em;
-  margin-bottom:28px;
+  font-size:11.5px;
+  font-weight:500;
+  letter-spacing:.03em;
+  margin-bottom:32px;
   transition:color .15s;
 }
-.back-link:hover{color:var(--ink-5);}
+.back-link:hover{color:var(--s4);}
+.back-link svg{opacity:.6;}
 
-.brand{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin-bottom:6px;
-}
-.brand-dot{
-  width:8px;height:8px;
-  border-radius:50%;
-  background:var(--amber);
-  box-shadow:0 0 10px var(--amber);
-}
-.eyebrow{
+.wordmark{
   font-size:10px;
-  font-weight:700;
+  font-weight:600;
   letter-spacing:.18em;
   text-transform:uppercase;
-  color:var(--ink-4);
+  color:var(--a3);
+  margin-bottom:10px;
+  display:flex;
+  align-items:center;
+  gap:8px;
 }
+.wordmark-line{flex:none;width:20px;height:1.5px;background:var(--a3);opacity:.6;border-radius:1px;}
+
 h1{
-  font-family:var(--font-display);
-  font-size:26px;
-  font-weight:700;
-  color:#fdfcfa;
-  letter-spacing:-.02em;
-  line-height:1.15;
-  margin-bottom:4px;
+  font-family:var(--font);
+  font-size:24px;
+  font-weight:600;
+  color:#f4f6f9;
+  letter-spacing:-.025em;
+  line-height:1.2;
+  margin-bottom:5px;
 }
 .subtitle{
   font-size:13px;
-  color:var(--ink-4);
-  margin-bottom:30px;
-  line-height:1.5;
+  color:var(--s5);
+  margin-bottom:32px;
+  line-height:1.55;
+  font-weight:400;
 }
 
-.form-block{margin-bottom:20px;}
+.form-block{margin-bottom:18px;}
 
 .form-label{
-  font-size:10px;
-  font-weight:700;
-  letter-spacing:.12em;
+  font-size:10.5px;
+  font-weight:600;
+  letter-spacing:.1em;
   text-transform:uppercase;
-  color:var(--ink-4);
+  color:var(--s5);
   margin-bottom:7px;
   display:block;
 }
 
-.city-selector{
-  position:relative;
-}
+.city-selector{position:relative;}
 .city-selector select{
   width:100%;
-  padding:12px 36px 12px 14px;
-  background:var(--night-3);
-  border:1.5px solid var(--line-dark);
-  border-radius:var(--r-sm);
-  color:#fdfcfa;
-  font-size:14px;
-  font-family:var(--font-display);
+  padding:11px 36px 11px 13px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:var(--r);
+  color:#eef1f5;
+  font-size:13.5px;
+  font-family:var(--font);
   font-weight:500;
   appearance:none;
   cursor:pointer;
@@ -161,108 +163,96 @@ h1{
 }
 .city-selector select:focus{
   outline:none;
-  border-color:var(--amber);
-  background:var(--night-4);
+  border-color:var(--a3);
+  background:rgba(255,255,255,.08);
 }
-.city-selector select:hover{border-color:rgba(255,255,255,.18);}
+.city-selector select:hover{border-color:rgba(255,255,255,.16);}
 .city-selector::after{
   content:"";
   pointer-events:none;
   position:absolute;
-  right:14px;top:50%;
+  right:13px;top:50%;
   transform:translateY(-50%);
-  width:10px;height:10px;
-  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'><path d='M1 3.5l4 3.5 4-3.5' stroke='rgba(136,136,170,0.8)' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  width:10px;height:6px;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M1 1l4 4 4-4' stroke='rgba(92,107,128,0.9)' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
   background-repeat:no-repeat;
   background-position:center;
 }
-.city-selector select option{background:var(--night-2);color:#fdfcfa;}
+.city-selector select option{background:#182030;color:#eef1f5;}
 
-.datetime-row{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
-.field-wrap{position:relative;}
+.datetime-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 input[type="date"],input[type="time"]{
   width:100%;
-  padding:11px 14px;
-  background:var(--night-3);
-  border:1.5px solid var(--line-dark);
-  border-radius:var(--r-sm);
-  color:#fdfcfa;
-  font-size:14px;
-  font-family:var(--font-display);
+  padding:11px 13px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:var(--r);
+  color:#eef1f5;
+  font-size:13.5px;
+  font-family:var(--font);
   font-weight:500;
   transition:border-color .15s, background .15s;
   color-scheme:dark;
 }
 input[type="date"]:focus,input[type="time"]:focus{
   outline:none;
-  border-color:var(--amber);
-  background:var(--night-4);
+  border-color:var(--a3);
+  background:rgba(255,255,255,.08);
 }
-input[type="date"]:hover,input[type="time"]:hover{border-color:rgba(255,255,255,.18);}
+input[type="date"]:hover,input[type="time"]:hover{border-color:rgba(255,255,255,.16);}
 
-.swap-row{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin:4px 0;
+.divider{
+  display:flex;align-items:center;gap:10px;
+  margin:6px 0;
 }
-.swap-line{flex:1;height:1px;background:var(--line-dark);}
+.divider-line{flex:1;height:1px;background:rgba(255,255,255,.06);}
 .btn-swap{
-  width:34px;height:34px;
+  width:32px;height:32px;
   border-radius:50%;
-  background:var(--night-4);
-  border:1.5px solid var(--line-dark);
-  color:var(--ink-4);
-  font-size:14px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.09);
+  color:var(--s4);
+  font-size:13px;
   cursor:pointer;
   display:flex;align-items:center;justify-content:center;
-  transition:background .15s, border-color .15s, color .15s, transform .2s;
+  transition:background .15s, color .15s, transform .25s;
   flex:none;
+  font-family:var(--mono);
 }
 .btn-swap:hover{
-  background:var(--night-5);
-  border-color:rgba(255,255,255,.2);
-  color:#fdfcfa;
+  background:rgba(255,255,255,.12);
+  color:#eef1f5;
   transform:rotate(180deg);
 }
 
 .btn-convert{
   width:100%;
-  padding:14px;
-  background:var(--amber);
+  padding:13px;
+  background:var(--a3);
   border:none;
-  border-radius:var(--r-sm);
-  color:var(--night);
-  font-family:var(--font-display);
-  font-size:15px;
-  font-weight:700;
+  border-radius:var(--r);
+  color:var(--a6);
+  font-family:var(--font);
+  font-size:14px;
+  font-weight:600;
   cursor:pointer;
   letter-spacing:.01em;
-  margin-top:6px;
-  transition:background .15s, transform .12s, box-shadow .15s;
-  box-shadow:0 4px 18px rgba(232,160,32,.3);
+  margin-top:8px;
+  transition:background .15s, transform .12s;
 }
-.btn-convert:hover{
-  background:#f0ab25;
-  transform:translateY(-1px);
-  box-shadow:0 8px 24px rgba(232,160,32,.4);
-}
+.btn-convert:hover{background:var(--a4);transform:translateY(-1px);}
 .btn-convert:active{transform:translateY(0);}
 
-/* ─── RIGHT PANEL ─── */
+/* ─── RIGHT ─── */
 .right{
-  background:var(--paper);
-  padding:36px 36px;
+  background:var(--panel-r);
+  padding:36px 32px 32px;
   display:flex;
   flex-direction:column;
   overflow-y:auto;
 }
-.right::-webkit-scrollbar{width:3px;}
-.right::-webkit-scrollbar-thumb{background:var(--paper-deep);border-radius:3px;}
+.right::-webkit-scrollbar{width:2px;}
+.right::-webkit-scrollbar-thumb{background:var(--s2);border-radius:2px;}
 
 .right-head{
   display:flex;
@@ -271,53 +261,42 @@ input[type="date"]:hover,input[type="time"]:hover{border-color:rgba(255,255,255,
   margin-bottom:24px;
 }
 h2{
-  font-family:var(--font-display);
-  font-size:18px;
-  font-weight:700;
-  color:var(--ink-2);
+  font-size:15px;
+  font-weight:600;
+  color:var(--s7);
   letter-spacing:-.01em;
 }
-.live-badge{
-  display:flex;
-  align-items:center;
-  gap:6px;
-  background:var(--paper-dim);
-  border:1px solid var(--line-light);
+.dst-badge{
+  display:flex;align-items:center;gap:6px;
+  background:var(--emerald-bg);
+  border:1px solid rgba(5,150,105,.15);
   border-radius:20px;
-  padding:5px 12px;
+  padding:4px 12px;
   font-size:11px;
   font-weight:600;
-  color:var(--ink-3);
+  color:var(--emerald);
+  letter-spacing:.01em;
 }
-.live-dot{
-  width:6px;height:6px;
-  border-radius:50%;
-  background:var(--green-soft);
-  animation:pulse 2s infinite;
+.dst-dot{
+  width:5px;height:5px;border-radius:50%;
+  background:var(--emerald);
+  animation:pulse 2.2s infinite;
 }
-@keyframes pulse{
-  0%,100%{opacity:1;}
-  50%{opacity:.4;}
-}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.35;}}
 
+/* Empty state */
 .empty-state{
   flex:1;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:12px;
-  color:var(--ink-5);
-  text-align:center;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:14px;color:var(--s4);text-align:center;
   padding:40px 20px;
-  border:1.5px dashed var(--line-light);
-  border-radius:var(--r-lg);
+  border:1.5px dashed var(--s2);
+  border-radius:16px;
 }
-.empty-state svg{opacity:.4;}
-.empty-state p{font-size:14px;max-width:22ch;line-height:1.55;color:var(--ink-4);}
+.empty-state p{font-size:13.5px;max-width:24ch;line-height:1.6;color:var(--s4);font-weight:400;}
 
-/* Result layout */
-.result-wrap{display:flex;flex-direction:column;gap:12px;}
+/* Results */
+.result-wrap{display:flex;flex-direction:column;gap:14px;}
 
 .conversion-pair{
   display:grid;
@@ -327,254 +306,159 @@ h2{
 }
 .city-card{
   background:#fff;
-  border:1px solid var(--line-light);
-  border-radius:var(--r-md);
+  border:1px solid var(--s2);
+  border-radius:14px;
   padding:18px 16px;
-  box-shadow:0 2px 8px rgba(12,12,20,.05);
 }
 .city-card.dest{
-  border-color:var(--amber);
+  border-color:var(--a3);
   border-width:1.5px;
-  background:#fff;
 }
-.city-card .cc-tag{
-  font-size:10px;
-  font-weight:700;
-  letter-spacing:.1em;
-  text-transform:uppercase;
-  color:var(--ink-4);
-  margin-bottom:10px;
-  display:flex;
-  align-items:center;
-  gap:6px;
+.cc-tag{
+  font-size:10px;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;
+  color:var(--s4);margin-bottom:10px;
 }
-.city-card.dest .cc-tag{color:var(--amber-dim);}
-.city-card .cc-name{
-  font-family:var(--font-display);
-  font-size:15px;
-  font-weight:700;
-  color:var(--ink-2);
+.city-card.dest .cc-tag{color:var(--a4);}
+.cc-name{
+  font-size:14px;font-weight:600;color:var(--s7);
   margin-bottom:6px;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
-.city-card .cc-time{
-  font-family:var(--font-display);
-  font-size:36px;
-  font-weight:700;
-  color:var(--ink);
-  letter-spacing:-.03em;
-  line-height:1;
-  margin-bottom:4px;
+.cc-time{
+  font-family:var(--mono);
+  font-size:34px;font-weight:500;
+  color:var(--s8);
+  letter-spacing:-.02em;
+  line-height:1;margin-bottom:5px;
 }
-.city-card.dest .cc-time{color:var(--amber-dim);}
-.city-card .cc-date{
-  font-size:12px;
-  color:var(--ink-4);
-  margin-bottom:8px;
-  line-height:1.4;
-}
-.city-card .cc-offset{
+.city-card.dest .cc-time{color:var(--a4);}
+.cc-date{font-size:11.5px;color:var(--s4);margin-bottom:9px;line-height:1.4;}
+.cc-offset{
   display:inline-block;
-  padding:3px 9px;
-  border-radius:6px;
-  font-size:10.5px;
-  font-weight:700;
-  background:var(--paper-dim);
-  color:var(--ink-3);
-  letter-spacing:.04em;
+  padding:3px 8px;border-radius:6px;
+  font-size:10px;font-weight:600;
+  font-family:var(--mono);
+  background:var(--s1);color:var(--s5);
+  letter-spacing:.03em;
 }
-.city-card.dest .cc-offset{
-  background:var(--amber-pale);
-  color:var(--amber-dim);
-}
+.city-card.dest .cc-offset{background:var(--a1);color:var(--a5);}
 
 .arrow-col{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:4px;
+  display:flex;flex-direction:column;align-items:center;gap:5px;
 }
-.arrow-chevron{
-  font-size:18px;
-  color:var(--ink-5);
-  line-height:1;
-}
+.arrow-icon{font-size:16px;color:var(--s3);}
 .diff-pill{
-  background:var(--paper-dim);
-  border:1px solid var(--line-light);
+  background:var(--s1);
+  border:1px solid var(--s2);
   border-radius:20px;
   padding:4px 10px;
-  font-size:10.5px;
-  font-weight:700;
-  color:var(--ink-3);
-  white-space:nowrap;
-  text-align:center;
+  font-size:10px;font-weight:600;
+  color:var(--s5);white-space:nowrap;text-align:center;
+  font-family:var(--mono);
 }
 
 /* Timeline */
 .timeline-section{
   background:#fff;
-  border:1px solid var(--line-light);
-  border-radius:var(--r-md);
+  border:1px solid var(--s2);
+  border-radius:14px;
   padding:16px 18px;
-  box-shadow:0 2px 8px rgba(12,12,20,.04);
 }
-.timeline-label{
-  font-size:10px;
-  font-weight:700;
-  letter-spacing:.12em;
-  text-transform:uppercase;
-  color:var(--ink-4);
-  margin-bottom:12px;
-}
-.timeline-track-wrap{
-  position:relative;
-  margin-bottom:10px;
+.section-label{
+  font-size:10px;font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--s4);margin-bottom:12px;
 }
 .timeline-hours{
-  display:flex;
-  justify-content:space-between;
-  font-size:9.5px;
-  font-weight:600;
-  color:var(--ink-5);
-  margin-bottom:6px;
-  letter-spacing:.02em;
+  display:flex;justify-content:space-between;
+  font-size:9px;font-weight:500;font-family:var(--mono);
+  color:var(--s4);margin-bottom:7px;
 }
 .timeline-bar{
-  height:6px;
-  border-radius:3px;
-  background:var(--paper-dim);
-  position:relative;
-  overflow:visible;
+  height:5px;border-radius:3px;
+  background:var(--s1);position:relative;overflow:visible;
 }
-.timeline-bar-night{
-  position:absolute;
-  height:100%;
-  background:rgba(12,12,40,.08);
-  border-radius:3px;
+.tl-night{
+  position:absolute;height:100%;
+  background:rgba(37,50,68,.08);border-radius:3px;
 }
 .tl-marker{
-  position:absolute;
-  top:-7px;
-  transform:translateX(-50%);
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:2px;
+  position:absolute;top:-8px;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:3px;
   transition:left .4s cubic-bezier(.34,1.4,.64,1);
 }
-.tl-marker-pin{
-  width:20px;height:20px;
-  border-radius:50%;
-  border:2.5px solid var(--paper);
-  box-shadow:0 0 0 1.5px currentColor, 0 2px 8px rgba(0,0,0,.15);
-  display:flex;align-items:center;justify-content:center;
+.tl-pin{
+  width:19px;height:19px;border-radius:50%;
+  border:2.5px solid var(--s0);
 }
-.tl-marker-pin.origin{color:var(--ink-2);background:var(--ink-2);}
-.tl-marker-pin.dest{color:var(--amber);background:var(--amber);}
-.tl-marker-label{
-  font-size:9px;
-  font-weight:700;
-  color:var(--ink-3);
-  white-space:nowrap;
-  letter-spacing:.02em;
+.tl-pin.origin{background:var(--s6);}
+.tl-pin.dest{background:var(--a3);}
+.tl-lbl{
+  font-size:9px;font-weight:600;font-family:var(--mono);
+  color:var(--s5);white-space:nowrap;
 }
-.tl-marker.dest-m .tl-marker-label{color:var(--amber-dim);}
+.tl-marker.dest-m .tl-lbl{color:var(--a4);}
+.tl-legend{
+  display:flex;gap:16px;margin-top:16px;
+  font-size:11px;font-weight:500;color:var(--s5);
+}
+.tl-leg-dot{
+  width:9px;height:9px;border-radius:50%;flex:none;margin-top:1px;
+}
 
 /* World clocks */
-.world-section{}
-.world-label{
-  font-size:10px;
-  font-weight:700;
-  letter-spacing:.12em;
-  text-transform:uppercase;
-  color:var(--ink-4);
-  margin-bottom:10px;
-}
 .world-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:8px;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:8px;
 }
 .world-card{
-  background:#fff;
-  border:1px solid var(--line-light);
-  border-radius:var(--r-sm);
-  padding:11px 13px;
-  box-shadow:0 1px 4px rgba(12,12,20,.04);
+  background:#fff;border:1px solid var(--s2);
+  border-radius:var(--r);padding:12px 14px;
   transition:border-color .15s;
 }
-.world-card:hover{border-color:var(--line-light);box-shadow:0 2px 8px rgba(12,12,20,.08);}
+.world-card:hover{border-color:var(--s3);}
 .wc-city{
-  font-size:9.5px;
-  font-weight:700;
-  letter-spacing:.08em;
-  text-transform:uppercase;
-  color:var(--ink-4);
-  margin-bottom:4px;
+  font-size:9.5px;font-weight:600;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--s4);margin-bottom:4px;
 }
 .wc-time{
-  font-family:var(--font-display);
-  font-size:21px;
-  font-weight:700;
-  color:var(--ink);
-  letter-spacing:-.02em;
-  line-height:1.1;
+  font-family:var(--mono);font-size:20px;font-weight:500;
+  color:var(--s7);letter-spacing:-.01em;line-height:1.1;
 }
-.wc-date{
-  font-size:10.5px;
-  color:var(--ink-5);
-  margin-top:3px;
-}
+.wc-date{font-size:10.5px;color:var(--s4);margin-top:3px;}
 .wc-badge{
-  display:inline-block;
-  font-size:9px;
-  font-weight:700;
-  padding:1px 6px;
-  border-radius:5px;
-  margin-left:4px;
-  vertical-align:2px;
+  display:inline-block;font-size:9px;font-weight:700;
+  padding:1px 6px;border-radius:5px;margin-left:4px;vertical-align:2px;
 }
-.wc-badge.ahead{background:var(--green-bg);color:var(--green-soft);}
-.wc-badge.behind{background:var(--red-bg);color:var(--red-soft);}
+.wc-badge.ahead{background:var(--emerald-bg);color:var(--emerald);}
+.wc-badge.behind{background:var(--rose-bg);color:var(--rose);}
+
+.day-badge{
+  display:inline-block;font-size:9.5px;font-weight:700;
+  padding:2px 8px;border-radius:6px;margin-left:6px;vertical-align:3px;
+}
+.day-badge.next{background:var(--a1);color:var(--a5);}
+.day-badge.prev{background:var(--rose-bg);color:var(--rose);}
 
 .footnote{
-  font-size:11px;
-  color:var(--ink-5);
-  margin-top:8px;
-  line-height:1.5;
+  font-size:11px;color:var(--s4);margin-top:6px;line-height:1.5;
 }
-
-/* Day change badge */
-.day-badge{
-  display:inline-block;
-  font-size:10px;
-  font-weight:700;
-  padding:2px 8px;
-  border-radius:6px;
-  margin-left:6px;
-  vertical-align:3px;
-}
-.day-badge.next{background:#faeeda;color:#633806;}
-.day-badge.prev{background:var(--red-bg);color:var(--red-soft);}
 
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;}}
 
-@media(max-width:960px){
-  body{align-items:flex-start;padding:12px 10px;}
-  .wrapper{grid-template-columns:1fr;border-radius:var(--r-lg);}
+@media(max-width:900px){
+  body{align-items:flex-start;padding:10px;}
+  .wrapper{grid-template-columns:1fr;border-radius:16px;}
   .left,.right{overflow-y:visible;}
-  h1{font-size:22px;}
+  h1{font-size:21px;}
   .world-grid{grid-template-columns:repeat(2,1fr);}
   .conversion-pair{grid-template-columns:1fr;gap:8px;}
   .arrow-col{flex-direction:row;}
-  .arrow-chevron{transform:rotate(90deg);}
+  .arrow-icon{transform:rotate(90deg);}
 }
 @media(max-width:480px){
   .world-grid{grid-template-columns:1fr 1fr;}
   .datetime-row{grid-template-columns:1fr;}
+  .left,.right{padding:24px 18px;}
 }
 </style>
 </head>
@@ -583,15 +467,18 @@ h2{
 
 <!-- ─── LEFT ─── -->
 <div class="left">
-  <a href="../../index.html" class="back-link">← UtiliWeb</a>
+  <a href="../../index.html" class="back-link">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 11L5 7l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    UtiliWeb
+  </a>
 
-  <div class="brand">
-    <div class="brand-dot"></div>
-    <span class="eyebrow">Ferramenta UtiliWeb</span>
+  <div class="wordmark">
+    <div class="wordmark-line"></div>
+    Ferramenta
   </div>
 
   <h1>Conversor de Fusos Horários</h1>
-  <p class="subtitle">Converta horários entre qualquer cidade do mundo</p>
+  <p class="subtitle">Converta horários entre qualquer cidade do mundo com DST automático</p>
 
   <div class="form-block">
     <label class="form-label" for="origem">Cidade de origem</label>
@@ -600,10 +487,10 @@ h2{
     </div>
   </div>
 
-  <div class="swap-row">
-    <div class="swap-line"></div>
+  <div class="divider">
+    <div class="divider-line"></div>
     <button class="btn-swap" onclick="inverter()" title="Inverter cidades" aria-label="Inverter cidades">⇅</button>
-    <div class="swap-line"></div>
+    <div class="divider-line"></div>
   </div>
 
   <div class="form-block">
@@ -616,12 +503,8 @@ h2{
   <div class="form-block">
     <label class="form-label">Data e horário de origem</label>
     <div class="datetime-row">
-      <div class="field-wrap">
-        <input type="date" id="data">
-      </div>
-      <div class="field-wrap">
-        <input type="time" id="hora" value="12:00">
-      </div>
+      <input type="date" id="data">
+      <input type="time" id="hora" value="12:00">
     </div>
   </div>
 
@@ -631,18 +514,17 @@ h2{
 <!-- ─── RIGHT ─── -->
 <div class="right">
   <div class="right-head">
-    <h2>Resultado</h2>
-    <div class="live-badge">
-      <div class="live-dot"></div>
-      <span>DST automático</span>
+    <h2>Resultado da conversão</h2>
+    <div class="dst-badge">
+      <div class="dst-dot"></div>
+      DST automático
     </div>
   </div>
 
   <div id="empty" class="empty-state">
-    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round">
       <circle cx="12" cy="12" r="9"/>
       <path d="M12 7v5l3 3"/>
-      <path d="M3.6 9h.4M3.6 15h.4M20 9h.4M20 15h.4M9 3.6v.4M15 3.6v.4M9 20v.4M15 20v.4"/>
     </svg>
     <p>Selecione as cidades e clique em Converter</p>
   </div>
@@ -653,7 +535,6 @@ h2{
 </div>
 
 </div>
-
 <script>
 const FUSOS=[
   {label:"São Paulo — Brasil",tz:"America/Sao_Paulo"},
@@ -744,95 +625,70 @@ const WORLD_CLOCKS=[
   {city:"Los Angeles",tz:"America/Los_Angeles"},
 ];
 
-const DIAS_PT=["dom","seg","ter","qua","qui","sex","sáb"];
-const MESES_PT=["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
-const MESES_LONGO=["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
+const DIAS=["dom","seg","ter","qua","qui","sex","sáb"];
+const MESES_C=["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
+const MESES_L=["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
 
-function formatDateLong(d){return `${DIAS_PT[d.getDay()]}, ${d.getDate()} de ${MESES_LONGO[d.getMonth()]}`;}
-function formatDateShort(d){return `${d.getDate()} ${MESES_PT[d.getMonth()]}`;}
-function formatTime(d){return d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit',hour12:false});}
+function fmtLong(d){return`${DIAS[d.getDay()]}, ${d.getDate()} de ${MESES_L[d.getMonth()]}`;}
+function fmtShort(d){return`${d.getDate()} ${MESES_C[d.getMonth()]}`;}
+function fmtTime(d){return d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit',hour12:false});}
 
 function getOffset(tz,date){
   const utc=new Date(date.toLocaleString('en-US',{timeZone:'UTC'}));
-  const local=new Date(date.toLocaleString('en-US',{timeZone:tz}));
-  return (local-utc)/60000;
+  const loc=new Date(date.toLocaleString('en-US',{timeZone:tz}));
+  return(loc-utc)/60000;
 }
-function offsetLabel(min){
-  const sign=min>=0?'+':'-';
-  const abs=Math.abs(min);
-  const h=Math.floor(abs/60);
-  const m=abs%60;
-  return `UTC${sign}${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+function offsetLabel(m){
+  const s=m>=0?'+':'-';const a=Math.abs(m);
+  return`UTC${s}${String(Math.floor(a/60)).padStart(2,'0')}:${String(a%60).padStart(2,'0')}`;
 }
 
 function convertToTZ(dateStr,timeStr,fromTZ,toTZ){
-  const localStr=`${dateStr}T${timeStr}:00`;
-  const approx=new Date(localStr);
+  const approx=new Date(`${dateStr}T${timeStr}:00`);
   const fromOffset=getOffset(fromTZ,approx);
   const utcMs=approx.getTime()-fromOffset*60000;
   const utcDate=new Date(utcMs);
   const toOffset=getOffset(toTZ,utcDate);
-  const destMs=utcMs+toOffset*60000;
-  const destDate=new Date(destMs);
-  return {destDate,utcDate,fromOffset,toOffset};
+  return{destDate:new Date(utcMs+toOffset*60000),utcDate,fromOffset,toOffset};
 }
 
-function buildTimeline(originHour, originMin, destHour, destMin, originLabel, destLabel){
-  const originPct=((originHour*60+originMin)/(24*60))*100;
-  const destPct=((destHour*60+destMin)/(24*60))*100;
-  const originPctClamped=Math.max(1,Math.min(99,originPct));
-  const destPctClamped=Math.max(1,Math.min(99,destPct));
-
-  const hourMarks=[0,4,8,12,16,20,24];
-  const hoursHtml=hourMarks.map(h=>`<span>${h===24?'24h':h+'h'}</span>`).join('');
-
-  return `
-    <div class="timeline-section">
-      <div class="timeline-label">Posição nas 24h do dia</div>
-      <div class="timeline-hours">${hoursHtml}</div>
-      <div class="timeline-bar">
-        <div class="timeline-bar-night" style="left:0;width:33.3%"></div>
-        <div class="timeline-bar-night" style="left:83.3%;width:16.7%"></div>
-        <div class="tl-marker" style="left:${originPctClamped}%">
-          <div class="tl-marker-pin origin"></div>
-          <div class="tl-marker-label">${String(originHour).padStart(2,'0')}:${String(originMin).padStart(2,'0')}</div>
-        </div>
-        <div class="tl-marker dest-m" style="left:${destPctClamped}%;margin-top:0">
-          <div class="tl-marker-pin dest"></div>
-          <div class="tl-marker-label" style="color:var(--amber-dim)">${String(destHour).padStart(2,'0')}:${String(destMin).padStart(2,'0')}</div>
-        </div>
-      </div>
-      <div style="display:flex;gap:14px;margin-top:16px;font-size:11px;font-weight:600;color:var(--ink-4);">
-        <div style="display:flex;align-items:center;gap:5px;">
-          <div style="width:10px;height:10px;border-radius:50%;background:var(--ink-2)"></div>
-          ${originLabel}
-        </div>
-        <div style="display:flex;align-items:center;gap:5px;">
-          <div style="width:10px;height:10px;border-radius:50%;background:var(--amber)"></div>
-          ${destLabel}
-        </div>
-      </div>
-    </div>`;
+function dayDiffBadge(dest,origin){
+  const diff=dest.getDate()-origin.getDate();
+  const md=dest.getMonth()-origin.getMonth();
+  if(diff===1||diff<-20||md>0)return'<span class="day-badge next">+1 dia</span>';
+  if(diff===-1||diff>20||md<0)return'<span class="day-badge prev">−1 dia</span>';
+  return'';
 }
 
-function buildDiffText(diffMin,fromLabel,toLabel){
-  if(diffMin===0) return 'Mesmo fuso horário';
-  const ahead=diffMin>0;
-  const abs=Math.abs(diffMin);
-  const h=Math.floor(abs/60);
-  const m=abs%60;
-  const partes=[];
-  if(h>0) partes.push(`${h}h`);
-  if(m>0) partes.push(`${m}min`);
-  return `${toLabel} está <strong style="color:var(--ink-2)">${partes.join(' ')}</strong> ${ahead?'à frente':'atrás'} de ${fromLabel}`;
-}
-
-function dayDiffBadge(destDate,origemDate){
-  const diff=destDate.getDate()-origemDate.getDate();
-  const monthDiff=destDate.getMonth()-origemDate.getMonth();
-  if(diff===1||diff<-20||monthDiff>0) return '<span class="day-badge next">+1 dia</span>';
-  if(diff===-1||diff>20||monthDiff<0) return '<span class="day-badge prev">−1 dia</span>';
-  return '';
+function buildTimeline(oh,om,dh,dm,oLbl,dLbl){
+  const op=Math.max(1,Math.min(99,((oh*60+om)/(1440))*100));
+  const dp=Math.max(1,Math.min(99,((dh*60+dm)/(1440))*100));
+  const hrs=[0,4,8,12,16,20,24].map(h=>`<span>${h===24?'24h':h+'h'}</span>`).join('');
+  return`
+<div class="timeline-section">
+  <div class="section-label">Posição nas 24h do dia</div>
+  <div class="timeline-hours">${hrs}</div>
+  <div class="timeline-bar">
+    <div class="tl-night" style="left:0;width:33.3%"></div>
+    <div class="tl-night" style="left:83.3%;width:16.7%"></div>
+    <div class="tl-marker" style="left:${op}%">
+      <div class="tl-pin origin"></div>
+      <div class="tl-lbl">${String(oh).padStart(2,'0')}:${String(om).padStart(2,'0')}</div>
+    </div>
+    <div class="tl-marker dest-m" style="left:${dp}%">
+      <div class="tl-pin dest"></div>
+      <div class="tl-lbl">${String(dh).padStart(2,'0')}:${String(dm).padStart(2,'0')}</div>
+    </div>
+  </div>
+  <div class="tl-legend">
+    <div style="display:flex;align-items:center;gap:7px;">
+      <div class="tl-leg-dot" style="background:#3d4f62"></div>${oLbl}
+    </div>
+    <div style="display:flex;align-items:center;gap:7px;">
+      <div class="tl-leg-dot" style="background:#f59e0b"></div>${dLbl}
+    </div>
+  </div>
+</div>`;
 }
 
 function buildSelects(){
@@ -850,101 +706,87 @@ function buildSelects(){
 function inverter(){
   const o=document.getElementById('origem');
   const d=document.getElementById('destino');
-  const tmp=o.value; o.value=d.value; d.value=tmp;
+  const t=o.value;o.value=d.value;d.value=t;
   converter();
 }
 
 function converter(){
-  const oriIdx=parseInt(document.getElementById('origem').value);
-  const dstIdx=parseInt(document.getElementById('destino').value);
-  const dataVal=document.getElementById('data').value;
-  const horaVal=document.getElementById('hora').value;
-
+  const oi=parseInt(document.getElementById('origem').value);
+  const di=parseInt(document.getElementById('destino').value);
+  const dv=document.getElementById('data').value;
+  const hv=document.getElementById('hora').value;
   const el=document.getElementById('result-inner');
   const empty=document.getElementById('empty');
-  const resWrap=document.getElementById('resultado');
+  const rw=document.getElementById('resultado');
 
-  if(!dataVal||!horaVal){
-    empty.style.display='flex'; resWrap.style.display='none';
-    return;
-  }
+  if(!dv||!hv){empty.style.display='flex';rw.style.display='none';return;}
 
-  const fromTZ=FUSOS[oriIdx].tz;
-  const toTZ=FUSOS[dstIdx].tz;
-  const fromLabel=FUSOS[oriIdx].label.split(' — ')[0];
-  const toLabel=FUSOS[dstIdx].label.split(' — ')[0];
+  const fTZ=FUSOS[oi].tz,tTZ=FUSOS[di].tz;
+  const fLbl=FUSOS[oi].label.split(' — ')[0];
+  const tLbl=FUSOS[di].label.split(' — ')[0];
 
-  const {destDate,fromOffset,toOffset}=convertToTZ(dataVal,horaVal,fromTZ,toTZ);
+  const{destDate,fromOffset,toOffset}=convertToTZ(dv,hv,fTZ,tTZ);
   const diffMin=toOffset-fromOffset;
 
-  const [oy,om,od]=dataVal.split('-').map(Number);
-  const [oh,omi]=horaVal.split(':').map(Number);
-  const origemDateObj=new Date(oy,om-1,od,oh,omi);
-  const badge=dayDiffBadge(destDate,origemDateObj);
+  const[oy,om,od]=dv.split('-').map(Number);
+  const[oh,omi]=hv.split(':').map(Number);
+  const oriObj=new Date(oy,om-1,od,oh,omi);
+  const badge=dayDiffBadge(destDate,oriObj);
 
   const diffPill=diffMin===0?'Mesmo fuso':(()=>{
-    const ahead=diffMin>0;
-    const abs=Math.abs(diffMin);
-    const h=Math.floor(abs/60);
-    const m=abs%60;
-    const p=[];
-    if(h>0)p.push(`${h}h`);
-    if(m>0)p.push(`${m}min`);
-    return (ahead?'▲ ':'▼ ')+p.join(' ');
+    const a=Math.abs(diffMin),h=Math.floor(a/60),m=a%60;
+    const p=[];if(h>0)p.push(`${h}h`);if(m>0)p.push(`${m}min`);
+    return(diffMin>0?'▲ ':'▼ ')+p.join(' ');
   })();
 
-  // World clocks
   const worldHtml=WORLD_CLOCKS.map(wc=>{
-    const {destDate:wd}=convertToTZ(dataVal,horaVal,fromTZ,wc.tz);
-    const diff=wd.getDate()-origemDateObj.getDate();
-    const mDiff=wd.getMonth()-origemDateObj.getMonth();
-    let badge2='';
-    if(diff===1||diff<-20||mDiff>0) badge2=`<span class="wc-badge ahead">+1</span>`;
-    if(diff===-1||diff>20||mDiff<0) badge2=`<span class="wc-badge behind">−1</span>`;
-    return `<div class="world-card">
+    const{destDate:wd}=convertToTZ(dv,hv,fTZ,wc.tz);
+    const diff=wd.getDate()-oriObj.getDate();
+    const md=wd.getMonth()-oriObj.getMonth();
+    let b2='';
+    if(diff===1||diff<-20||md>0)b2='<span class="wc-badge ahead">+1</span>';
+    if(diff===-1||diff>20||md<0)b2='<span class="wc-badge behind">−1</span>';
+    return`<div class="world-card">
       <div class="wc-city">${wc.city}</div>
-      <div class="wc-time">${formatTime(wd)}${badge2}</div>
-      <div class="wc-date">${formatDateShort(wd)}</div>
+      <div class="wc-time">${fmtTime(wd)}${b2}</div>
+      <div class="wc-date">${fmtShort(wd)}</div>
     </div>`;
   }).join('');
 
-  const tlHour=destDate.getHours();
-  const tlMin=destDate.getMinutes();
-
   el.innerHTML=`
-    <div class="conversion-pair">
-      <div class="city-card">
-        <div class="cc-tag">Origem</div>
-        <div class="cc-name">${fromLabel}</div>
-        <div class="cc-time">${horaVal}</div>
-        <div class="cc-date">${formatDateLong(origemDateObj)}</div>
-        <span class="cc-offset">${offsetLabel(fromOffset)}</span>
-      </div>
-      <div class="arrow-col">
-        <div class="arrow-chevron">→</div>
-        <div class="diff-pill">${diffPill}</div>
-      </div>
-      <div class="city-card dest">
-        <div class="cc-tag">Destino</div>
-        <div class="cc-name">${toLabel}</div>
-        <div class="cc-time">${formatTime(destDate)}${badge}</div>
-        <div class="cc-date">${formatDateLong(destDate)}</div>
-        <span class="cc-offset">${offsetLabel(toOffset)}</span>
-      </div>
-    </div>
+<div class="conversion-pair">
+  <div class="city-card">
+    <div class="cc-tag">Origem</div>
+    <div class="cc-name">${fLbl}</div>
+    <div class="cc-time">${hv}</div>
+    <div class="cc-date">${fmtLong(oriObj)}</div>
+    <span class="cc-offset">${offsetLabel(fromOffset)}</span>
+  </div>
+  <div class="arrow-col">
+    <div class="arrow-icon">→</div>
+    <div class="diff-pill">${diffPill}</div>
+  </div>
+  <div class="city-card dest">
+    <div class="cc-tag">Destino</div>
+    <div class="cc-name">${tLbl}</div>
+    <div class="cc-time">${fmtTime(destDate)}${badge}</div>
+    <div class="cc-date">${fmtLong(destDate)}</div>
+    <span class="cc-offset">${offsetLabel(toOffset)}</span>
+  </div>
+</div>
 
-    ${buildTimeline(oh,omi,tlHour,tlMin,fromLabel,toLabel)}
+${buildTimeline(oh,omi,destDate.getHours(),destDate.getMinutes(),fLbl,tLbl)}
 
-    <div class="world-section">
-      <div class="world-label">Outras cidades neste horário</div>
-      <div class="world-grid">${worldHtml}</div>
-    </div>
+<div>
+  <div class="section-label" style="margin-bottom:10px">Outras cidades neste horário</div>
+  <div class="world-grid">${worldHtml}</div>
+</div>
 
-    <p class="footnote">Horário de verão (DST) aplicado automaticamente pelo sistema. Resultados baseados nos dados de fuso do navegador.</p>
-  `;
+<p class="footnote">DST aplicado automaticamente pelo navegador. Resultados baseados nos dados de fuso do sistema.</p>
+`;
 
   empty.style.display='none';
-  resWrap.style.display='block';
+  rw.style.display='block';
 }
 
 buildSelects();
