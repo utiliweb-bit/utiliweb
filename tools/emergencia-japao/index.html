@@ -472,7 +472,9 @@ footer{
             <button class="btn btn-blue" onclick="salvarEndereco()" type="button">Salvar</button>
             <button class="btn btn-outline" onclick="copiarEndereco()" type="button">Copiar</button>
         </div>
+        <button class="btn btn-outline" onclick="ouvirEndereco()" type="button" style="margin-top:8px;">🔊 Ouvir meu endereço em japonês</button>
         <div class="endereco-status" id="enderecoStatus"></div>
+        <div class="loc-hint">O celular pronuncia o kanji corretamente — mais confiável do que tentar ler romaji, já que um mesmo kanji pode ter mais de uma leitura.</div>
     </div>
 
     <div class="box">
@@ -738,6 +740,12 @@ function salvarEndereco(){
     localStorage.setItem("endereco", val);
     document.getElementById("enderecoStatus").textContent = "✓ Salvo neste aparelho";
     showToast("Endereço salvo");
+}
+
+function ouvirEndereco(){
+    const val = document.getElementById("enderecoInput").value.trim();
+    if(!val){ showToast("Salve um endereço primeiro"); return; }
+    ouvir(val);
 }
 
 function copiarEndereco(){
