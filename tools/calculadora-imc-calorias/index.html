@@ -5,1184 +5,938 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Calculadora de Peso | UtiliWeb</title>
 <meta name="description" content="Calcule seu IMC, taxa metabólica basal e necessidade calórica diária com aconselhamentos por sexo.">
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
 <style>
-
 :root{
-    --ink:#0e2419;
-    --forest:#0f3326;
-    --forest-deep:#0a2018;
-    --mint:#5fe3a8;
-    --mint-soft:#bff5da;
-    --paper:#fbfaf6;
-    --paper-dim:#f1efe6;
-    --gold:#e8b86d;
-    --line:rgba(15,51,38,.12);
-    --blue:#185fa5;
-    --blue-bg:#e6f1fb;
-    --blue-bd:#b5d4f4;
-    --green-txt:#3b6d11;
-    --green-bg:#eaf3de;
-    --green-bd:#c0dd97;
-    --amber-txt:#854f0b;
-    --amber-bg:#faeeda;
-    --amber-bd:#fac775;
-    --red-txt:#a32d2d;
-    --red-bg:#fcebeb;
-    --red-bd:#f7c1c1;
-    --font-display:'Fraunces',serif;
-    --font-body:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
+  --ink:#1a1118;
+  --indigo:#2d1f6e;
+  --indigo-deep:#1b1244;
+  --indigo-mid:#3d2a96;
+  --violet:#6c4fc7;
+  --violet-light:#e8e3fa;
+  --violet-pale:#f3f1fd;
+  --gold:#c97a18;
+  --gold-bg:#fdf3e2;
+  --gold-bd:#f5c96a;
+  --paper:#fdfcfa;
+  --paper-dim:#f5f3ef;
+  --line:rgba(45,31,110,.10);
+  --line-soft:rgba(45,31,110,.06);
+  --blue:#185fa5;
+  --blue-bg:#e6f1fb;
+  --blue-bd:#b5d4f4;
+  --green-txt:#27500a;
+  --green-bg:#eaf3de;
+  --green-bd:#97c459;
+  --amber-txt:#633806;
+  --amber-bg:#faeeda;
+  --amber-bd:#fac775;
+  --red-txt:#791f1f;
+  --red-bg:#fcebeb;
+  --red-bd:#f7c1c1;
+  --font-display:'Fraunces',serif;
+  --font-body:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
+  --radius-sm:10px;
+  --radius-md:14px;
+  --radius-lg:20px;
+  --shadow-card:0 2px 12px rgba(45,31,110,.08);
 }
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-html{
-    -webkit-text-size-adjust:100%;
-}
-
+*{margin:0;padding:0;box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;}
 body{
-    font-family:var(--font-body);
-    background:var(--forest-deep);
-    background-image:
-        radial-gradient(circle at 15% 10%, rgba(95,227,168,.10), transparent 45%),
-        radial-gradient(circle at 85% 90%, rgba(232,184,109,.08), transparent 50%);
-    min-height:100dvh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:28px 16px;
-    color:var(--ink);
+  font-family:var(--font-body);
+  background:#1b1244;
+  background-image:
+    radial-gradient(ellipse at 20% 0%, rgba(108,79,199,.32) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 100%, rgba(201,122,24,.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(45,31,110,.4) 0%, transparent 80%);
+  min-height:100dvh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:28px 16px;
+  color:var(--ink);
 }
-
 .wrapper{
-    width:100%;
-    max-width:1100px;
-    background:var(--paper);
-    border-radius:28px;
-    overflow:hidden;
-    display:grid;
-    grid-template-columns:0.92fr 1.08fr;
-    box-shadow:0 40px 90px rgba(0,0,0,.45);
-    border:1px solid rgba(255,255,255,.06);
+  width:100%;
+  max-width:1100px;
+  background:var(--paper);
+  border-radius:28px;
+  overflow:hidden;
+  display:grid;
+  grid-template-columns:0.9fr 1.1fr;
+  box-shadow:0 48px 100px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.07);
 }
 
-/* ---------- LEFT ---------- */
-
+/* ─── LEFT ─── */
 .left{
-    background:var(--forest);
-    background-image:radial-gradient(circle at 30% 0%, rgba(95,227,168,.18), transparent 55%);
-    color:var(--paper);
-    padding:36px 34px;
-    max-height:calc(100dvh - 56px);
-    overflow-y:auto;
+  background:var(--indigo-deep);
+  background-image:
+    radial-gradient(ellipse at 0% 0%, rgba(108,79,199,.4) 0%, transparent 60%),
+    radial-gradient(ellipse at 100% 100%, rgba(201,122,24,.12) 0%, transparent 55%);
+  color:#fdfcfa;
+  padding:38px 34px;
+  max-height:calc(100dvh - 56px);
+  overflow-y:auto;
 }
+.left::-webkit-scrollbar{width:4px;}
+.left::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:4px;}
 
 .eyebrow{
-    font-size:11px;
-    letter-spacing:.18em;
-    text-transform:uppercase;
-    color:var(--mint);
-    font-weight:700;
-    margin-bottom:14px;
+  font-size:10.5px;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:rgba(232,227,250,.55);
+  font-weight:700;
+  margin-bottom:16px;
 }
-
 h1{
-    font-family:var(--font-display);
-    font-weight:600;
-    font-size:30px;
-    line-height:1.1;
-    margin-bottom:8px;
-    letter-spacing:-.01em;
+  font-family:var(--font-display);
+  font-weight:600;
+  font-size:29px;
+  line-height:1.1;
+  margin-bottom:8px;
+  letter-spacing:-.01em;
+  color:#fdfcfa;
 }
-
 .subtitle{
-    color:rgba(251,250,246,.65);
-    font-size:14px;
-    margin-bottom:24px;
-    line-height:1.5;
-    max-width:36ch;
+  color:rgba(253,252,250,.5);
+  font-size:13.5px;
+  margin-bottom:28px;
+  line-height:1.55;
+  max-width:34ch;
 }
-
 .back-link{
-    display:inline-flex;
-    align-items:center;
-    gap:6px;
-    margin-bottom:24px;
-    text-decoration:none;
-    color:rgba(251,250,246,.55);
-    font-weight:600;
-    font-size:13px;
-    transition:color .15s ease;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  margin-bottom:26px;
+  text-decoration:none;
+  color:rgba(253,252,250,.4);
+  font-weight:600;
+  font-size:12.5px;
+  transition:color .15s;
 }
-
-.back-link:hover{
-    color:var(--mint);
-}
+.back-link:hover{color:rgba(232,227,250,.9);}
 
 label{
-    display:block;
-    margin-bottom:9px;
-    font-size:11.5px;
-    font-weight:700;
-    letter-spacing:.06em;
-    text-transform:uppercase;
-    color:rgba(251,250,246,.5);
+  display:block;
+  margin-bottom:8px;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:rgba(253,252,250,.42);
 }
-
-.section{
-    margin-bottom:22px;
-}
+.section{margin-bottom:22px;}
 
 .segmented{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:8px;
-    padding:4px;
-    background:rgba(255,255,255,.05);
-    border-radius:14px;
-    border:1px solid rgba(255,255,255,.08);
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:5px;
+  padding:4px;
+  background:rgba(255,255,255,.05);
+  border-radius:var(--radius-sm);
+  border:1px solid rgba(255,255,255,.07);
 }
-
 .seg-btn{
-    padding:11px 8px;
-    border-radius:10px;
-    border:none;
-    background:transparent;
-    font-size:13.5px;
-    font-weight:700;
-    color:rgba(251,250,246,.55);
-    cursor:pointer;
-    transition:background .15s ease, color .15s ease;
-    font-family:var(--font-body);
+  padding:10px 8px;
+  border-radius:8px;
+  border:none;
+  background:transparent;
+  font-size:13px;
+  font-weight:700;
+  color:rgba(253,252,250,.45);
+  cursor:pointer;
+  transition:background .15s, color .15s;
+  font-family:var(--font-body);
+  letter-spacing:-.01em;
 }
-
 .seg-btn.ativo{
-    background:var(--mint);
-    color:var(--forest-deep);
+  background:var(--violet);
+  color:#fdfcfa;
+  box-shadow:0 2px 8px rgba(108,79,199,.4);
 }
+.seg-btn:focus-visible{outline:2px solid rgba(232,227,250,.6);outline-offset:2px;}
 
-.seg-btn:focus-visible{
-    outline:2px solid var(--mint);
-    outline-offset:2px;
-}
+.input-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 
-.input-row{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
-}
-
-.input-group{
-    margin-bottom:14px;
-}
-
-.input-group:last-child{
-    margin-bottom:0;
-}
+.input-group{margin-bottom:14px;}
+.input-group:last-child{margin-bottom:0;}
 
 .hint{
-    font-size:11.5px;
-    color:rgba(251,250,246,.4);
-    margin-top:6px;
-    font-weight:400;
-    line-height:1.4;
+  font-size:11.5px;
+  color:rgba(253,252,250,.32);
+  margin-top:6px;
+  font-weight:400;
+  line-height:1.45;
 }
+.hint.warn{color:var(--gold-bd);}
 
-.hint.warn{
-    color:var(--gold);
+.field-wrap{position:relative;}
+.field-unit{
+  position:absolute;
+  right:13px;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:12px;
+  font-weight:700;
+  color:rgba(253,252,250,.3);
+  pointer-events:none;
+  letter-spacing:.04em;
 }
 
 input[type="number"], select{
-    width:100%;
-    padding:13px 14px;
-    border-radius:12px;
-    border:1.5px solid rgba(255,255,255,.14);
-    background:rgba(255,255,255,.06);
-    color:var(--paper);
-    font-size:15px;
-    font-weight:600;
-    font-family:var(--font-body);
+  width:100%;
+  padding:12px 36px 12px 14px;
+  border-radius:var(--radius-sm);
+  border:1.5px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.055);
+  color:#fdfcfa;
+  font-size:15px;
+  font-weight:600;
+  font-family:var(--font-body);
+  transition:border-color .15s, background .15s;
 }
-
-input[type="number"].field-error{
-    border-color:#e08a8a;
-}
-
+input[type="number"].no-unit{padding-right:14px;}
+input[type="number"].field-error{border-color:#f09595;}
 select{
-    appearance:none;
-    -webkit-appearance:none;
-    cursor:pointer;
-    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'><path d='M1 3l4 4 4-4' stroke='rgba(251,250,246,0.5)' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
-    background-repeat:no-repeat;
-    background-position:right 14px center;
-    padding-right:32px;
+  appearance:none;
+  -webkit-appearance:none;
+  cursor:pointer;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'><path d='M1 3l4 4 4-4' stroke='rgba(253,252,250,0.45)' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat:no-repeat;
+  background-position:right 14px center;
+  padding-right:34px;
 }
-
-select option{
-    color:#111;
-    background:#fff;
-}
-
-input[type="number"]::placeholder{
-    color:rgba(251,250,246,.35);
-}
-
+select option{color:#111;background:#fff;}
+input[type="number"]::placeholder{color:rgba(253,252,250,.25);}
 input[type="number"]:focus-visible, select:focus-visible{
-    outline:2px solid var(--mint);
-    outline-offset:1px;
-    border-color:var(--mint);
+  outline:none;
+  border-color:var(--violet);
+  background:rgba(108,79,199,.12);
 }
-
-input[type="number"]:hover, select:hover{
-    border-color:rgba(255,255,255,.3);
-}
+input[type="number"]:hover, select:hover{border-color:rgba(255,255,255,.22);}
 
 .divider-label{
-    font-size:11px;
-    font-weight:700;
-    letter-spacing:.08em;
-    text-transform:uppercase;
-    color:rgba(251,250,246,.4);
-    display:flex;
-    align-items:center;
-    gap:10px;
-    margin:22px 0 16px;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:rgba(253,252,250,.28);
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:24px 0 16px;
 }
-
-.divider-label::after{
-    content:"";
-    flex:1;
-    height:1px;
-    background:rgba(255,255,255,.1);
-}
+.divider-label::after{content:"";flex:1;height:1px;background:rgba(255,255,255,.08);}
 
 button.btn-calcular{
-    width:100%;
-    margin-top:10px;
-    padding:16px;
-    border:none;
-    border-radius:14px;
-    background:var(--mint);
-    color:var(--forest-deep);
-    font-size:15.5px;
-    font-weight:800;
-    font-family:var(--font-body);
-    cursor:pointer;
-    transition:transform .12s ease, box-shadow .12s ease;
-    box-shadow:0 8px 24px rgba(95,227,168,.25);
+  width:100%;
+  margin-top:2px;
+  padding:15px;
+  border:none;
+  border-radius:var(--radius-sm);
+  background:var(--violet);
+  color:#fdfcfa;
+  font-size:15px;
+  font-weight:800;
+  font-family:var(--font-body);
+  cursor:pointer;
+  transition:transform .12s, box-shadow .12s, background .12s;
+  box-shadow:0 6px 20px rgba(108,79,199,.4);
+  letter-spacing:.01em;
 }
-
 button.btn-calcular:hover{
-    transform:translateY(-1px);
-    box-shadow:0 12px 28px rgba(95,227,168,.35);
+  transform:translateY(-1px);
+  box-shadow:0 10px 26px rgba(108,79,199,.5);
+  background:#7a5ed4;
 }
-
-button.btn-calcular:active{
-    transform:translateY(0px);
-}
-
-button.btn-calcular:focus-visible{
-    outline:2px solid var(--paper);
-    outline-offset:3px;
-}
+button.btn-calcular:active{transform:translateY(0);}
+button.btn-calcular:focus-visible{outline:2px solid rgba(232,227,250,.7);outline-offset:3px;}
+button.btn-calcular:disabled{opacity:.55;cursor:default;transform:none;}
 
 .stale-note{
-    display:none;
-    align-items:center;
-    gap:8px;
-    margin-top:12px;
-    padding:10px 12px;
-    border-radius:10px;
-    background:rgba(232,184,109,.12);
-    border:1px solid rgba(232,184,109,.3);
-    color:var(--gold);
-    font-size:12px;
-    font-weight:600;
+  display:none;
+  align-items:center;
+  gap:8px;
+  margin-top:12px;
+  padding:10px 12px;
+  border-radius:var(--radius-sm);
+  background:rgba(201,122,24,.1);
+  border:1px solid rgba(201,122,24,.28);
+  color:var(--gold-bd);
+  font-size:12px;
+  font-weight:600;
 }
+.stale-note.show{display:flex;}
 
-.stale-note.show{
-    display:flex;
-}
-
-/* ---------- RIGHT ---------- */
-
+/* ─── RIGHT ─── */
 .right{
-    padding:36px 38px;
-    background:var(--paper);
-    max-height:calc(100dvh - 56px);
-    overflow-y:auto;
+  padding:38px 40px;
+  background:var(--paper);
+  max-height:calc(100dvh - 56px);
+  overflow-y:auto;
 }
+.right::-webkit-scrollbar{width:4px;}
+.right::-webkit-scrollbar-thumb{background:rgba(45,31,110,.12);border-radius:4px;}
 
 h2{
-    font-family:var(--font-display);
-    font-size:20px;
-    font-weight:600;
-    color:var(--forest-deep);
-    margin-bottom:20px;
+  font-family:var(--font-display);
+  font-size:20px;
+  font-weight:600;
+  color:var(--indigo-deep);
+  margin-bottom:22px;
 }
-
 .empty-state{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    color:rgba(14,36,25,.45);
-    padding:60px 20px;
-    border:1.5px dashed var(--line);
-    border-radius:18px;
-    gap:10px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  color:rgba(26,17,40,.32);
+  padding:70px 20px;
+  border:1.5px dashed rgba(45,31,110,.14);
+  border-radius:var(--radius-lg);
+  gap:12px;
 }
+.empty-state svg{opacity:.45;}
+.empty-state p{font-size:14px;max-width:26ch;line-height:1.55;}
 
-.empty-state svg{
-    opacity:.55;
-}
+#resultado{display:none;}
+#resultado.visible{display:block;}
 
-.empty-state p{
-    font-size:14px;
-    max-width:28ch;
-    line-height:1.5;
-}
-
-#resultado{
-    display:none;
-}
-
-#resultado.visible{
-    display:block;
-}
+.hero-block{margin-bottom:24px;padding-bottom:22px;border-bottom:1px solid var(--line);}
 
 .hero-num{
-    display:flex;
-    align-items:flex-end;
-    gap:12px;
-    margin-bottom:4px;
+  display:flex;
+  align-items:flex-end;
+  gap:10px;
+  margin-bottom:5px;
 }
-
 .hero-num .num{
-    font-family:var(--font-display);
-    font-size:60px;
-    font-weight:600;
-    line-height:.85;
-    color:var(--forest-deep);
-    letter-spacing:-.02em;
+  font-family:var(--font-display);
+  font-size:64px;
+  font-weight:600;
+  line-height:.85;
+  color:var(--indigo-deep);
+  letter-spacing:-.03em;
 }
-
 .hero-num .unit{
-    font-size:15px;
-    font-weight:700;
-    color:var(--forest);
-    padding-bottom:8px;
+  font-size:14px;
+  font-weight:700;
+  color:rgba(27,18,68,.45);
+  padding-bottom:9px;
+  letter-spacing:.03em;
+  text-transform:uppercase;
 }
-
 .hero-sub{
-    font-size:14px;
-    font-weight:700;
-    margin-bottom:22px;
-    padding-bottom:20px;
-    border-bottom:1px solid var(--line);
+  font-size:15px;
+  font-weight:700;
+  letter-spacing:.01em;
 }
 
-.scale-wrap{
-    margin-bottom:18px;
-}
-
+.scale-wrap{margin-bottom:20px;}
 .scale-track{
-    position:relative;
-    height:10px;
-    border-radius:6px;
-    overflow:visible;
-    display:flex;
-    margin-bottom:8px;
+  position:relative;
+  height:8px;
+  border-radius:6px;
+  overflow:visible;
+  display:flex;
+  margin-bottom:10px;
 }
-
-.scale-seg{
-    height:10px;
-}
-
-.scale-seg:first-child{
-    border-radius:6px 0 0 6px;
-}
-
-.scale-seg:last-child{
-    border-radius:0 6px 6px 0;
-}
-
+.scale-seg{height:8px;}
+.scale-seg:first-child{border-radius:6px 0 0 6px;}
+.scale-seg:last-child{border-radius:0 6px 6px 0;}
 .scale-marker{
-    position:absolute;
-    top:-5px;
-    width:20px;
-    height:20px;
-    border-radius:50%;
-    background:var(--forest-deep);
-    border:3px solid var(--paper);
-    box-shadow:0 0 0 1.5px var(--forest-deep);
-    transform:translateX(-50%);
-    transition:left .4s ease;
+  position:absolute;
+  top:-6px;
+  width:20px;
+  height:20px;
+  border-radius:50%;
+  background:var(--indigo-deep);
+  border:3px solid var(--paper);
+  box-shadow:0 0 0 1.5px var(--indigo-deep), 0 2px 8px rgba(27,18,68,.25);
+  transform:translateX(-50%);
+  transition:left .45s cubic-bezier(.34,1.56,.64,1);
 }
-
-.scale-marker.edge::after{
-    content:"";
-    position:absolute;
-    top:50%;
-    left:50%;
-    width:0;
-    height:0;
-    border-style:solid;
-    transform:translate(-50%,-50%);
-}
-
 .scale-labels{
-    display:flex;
-    justify-content:space-between;
-    font-size:10.5px;
-    color:rgba(14,36,25,.4);
-    font-weight:600;
+  display:flex;
+  justify-content:space-between;
+  font-size:10.5px;
+  color:rgba(26,17,40,.35);
+  font-weight:600;
+  letter-spacing:.02em;
 }
 
 .card{
-    background:var(--paper-dim);
-    border-radius:14px;
-    padding:16px 16px;
-    border:1px solid var(--line);
-    margin-bottom:12px;
+  background:var(--paper-dim);
+  border-radius:var(--radius-md);
+  padding:15px 16px;
+  border:1px solid var(--line);
+  margin-bottom:10px;
 }
-
 .card .label{
-    font-size:11px;
-    font-weight:700;
-    letter-spacing:.06em;
-    text-transform:uppercase;
-    color:rgba(14,36,25,.45);
-    margin-bottom:8px;
-    display:flex;
-    align-items:center;
-    gap:6px;
+  font-size:10.5px;
+  font-weight:700;
+  letter-spacing:.07em;
+  text-transform:uppercase;
+  color:rgba(26,17,40,.38);
+  margin-bottom:8px;
+  display:flex;
+  align-items:center;
+  gap:6px;
 }
-
 .card .card-text{
-    font-family:var(--font-body);
-    font-size:13.5px;
-    font-weight:600;
-    color:var(--forest-deep);
-    line-height:1.5;
+  font-size:13.5px;
+  font-weight:600;
+  color:var(--indigo-deep);
+  line-height:1.5;
 }
 
-.tag-row{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    margin-bottom:14px;
-}
-
+.tag-row{display:flex;align-items:center;gap:7px;margin-bottom:16px;}
 .tag{
-    font-size:11px;
-    font-weight:700;
-    letter-spacing:.03em;
-    padding:5px 10px;
-    border-radius:8px;
+  font-size:10.5px;
+  font-weight:700;
+  letter-spacing:.04em;
+  padding:4px 10px;
+  border-radius:7px;
 }
-
-.tag.uni{
-    background:var(--blue-bg);
-    color:var(--blue);
-}
-
-.tag.sex{
-    background:var(--mint-soft);
-    color:var(--forest);
-}
+.tag.uni{background:var(--violet-light);color:var(--indigo-mid);}
+.tag.sex{background:var(--gold-bg);color:var(--gold);}
 
 .advice{
-    border-radius:14px;
-    padding:16px;
-    font-size:13.5px;
-    line-height:1.6;
-    border:1px solid;
-    margin-bottom:12px;
+  border-radius:var(--radius-md);
+  padding:15px 16px;
+  font-size:13.5px;
+  line-height:1.6;
+  border:1px solid;
+  margin-bottom:10px;
 }
-
 .advice .label{
-    font-size:11px;
-    font-weight:700;
-    text-transform:uppercase;
-    letter-spacing:.06em;
-    margin-bottom:8px;
-    display:block;
+  font-size:10.5px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.07em;
+  margin-bottom:8px;
+  display:block;
 }
 
 .split-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
-    margin-bottom:12px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-bottom:10px;
 }
-
 .mini-stat{
-    background:#fff;
-    border:1px solid var(--line);
-    border-radius:12px;
-    padding:13px 14px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:var(--radius-sm);
+  padding:13px 14px;
+  box-shadow:var(--shadow-card);
 }
-
 .mini-stat .l{
-    font-size:11px;
-    color:rgba(14,36,25,.5);
-    font-weight:600;
-    margin-bottom:4px;
+  font-size:11px;
+  color:rgba(26,17,40,.42);
+  font-weight:600;
+  margin-bottom:5px;
+  line-height:1.3;
 }
-
 .mini-stat .v{
-    font-family:var(--font-display);
-    font-size:17px;
-    font-weight:600;
-    color:var(--forest-deep);
+  font-family:var(--font-display);
+  font-size:18px;
+  font-weight:600;
+  color:var(--indigo-deep);
 }
 
-.gord-table{
-    display:flex;
-    flex-direction:column;
-    gap:6px;
-}
-
+.gord-table{display:flex;flex-direction:column;gap:5px;}
 .gord-row{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:9px 12px;
-    border-radius:9px;
-    font-size:12.5px;
-    font-weight:700;
-}
-
-.gord-row.atual{
-    outline:2.5px solid var(--forest-deep);
-    outline-offset:1px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:9px 12px;
+  border-radius:8px;
+  font-size:12.5px;
+  font-weight:700;
 }
 
 .footnote{
-    display:flex;
-    gap:8px;
-    font-size:11.5px;
-    color:rgba(14,36,25,.45);
-    margin-top:6px;
-    line-height:1.55;
+  display:flex;
+  gap:8px;
+  font-size:11.5px;
+  color:rgba(26,17,40,.38);
+  margin-top:8px;
+  line-height:1.55;
 }
-
-.footnote .ic{
-    flex:none;
-    font-weight:700;
-    color:rgba(14,36,25,.35);
-}
+.footnote .ic{flex:none;font-weight:700;color:rgba(26,17,40,.28);}
 
 .error-msg{
-    background:var(--red-bg);
-    border:1px solid var(--red-bd);
-    color:var(--red-txt);
-    border-radius:12px;
-    padding:14px 16px;
-    font-size:14px;
-    font-weight:600;
+  background:var(--red-bg);
+  border:1px solid var(--red-bd);
+  color:var(--red-txt);
+  border-radius:var(--radius-sm);
+  padding:14px 16px;
+  font-size:14px;
+  font-weight:600;
 }
 
-.sr-only{
-    position:absolute;
-    width:1px;
-    height:1px;
-    overflow:hidden;
-    clip:rect(0 0 0 0);
-    white-space:nowrap;
-}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
 
-@media(prefers-reduced-motion: reduce){
-    *{
-        transition:none !important;
-    }
-}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;}}
 
 @media(max-width:900px){
-
-    body{
-        align-items:flex-start;
-        padding:16px 12px;
-    }
-
-    .wrapper{
-        grid-template-columns:1fr;
-        border-radius:22px;
-    }
-
-    .left, .right{
-        max-height:none;
-        overflow-y:visible;
-    }
-
-    .left{
-        padding:30px 26px;
-    }
-
-    .right{
-        padding:30px 26px;
-    }
-
-    h1{
-        font-size:26px;
-    }
-
-    .hero-num .num{
-        font-size:50px;
-    }
+  body{align-items:flex-start;padding:14px 10px;}
+  .wrapper{grid-template-columns:1fr;border-radius:20px;}
+  .left,.right{max-height:none;overflow-y:visible;}
+  .left{padding:30px 24px;}
+  .right{padding:30px 24px;}
+  h1{font-size:26px;}
+  .hero-num .num{font-size:52px;}
 }
-
 @media(max-width:480px){
-
-    .input-row{
-        grid-template-columns:1fr;
-    }
-
-    .split-grid{
-        grid-template-columns:1fr;
-    }
+  .input-row{grid-template-columns:1fr;}
+  .split-grid{grid-template-columns:1fr;}
 }
-
 </style>
 </head>
 <body>
-
 <div class="wrapper">
 
+<!-- ─── LEFT ─── -->
 <div class="left">
+  <a href="../../index.html" class="back-link">← Voltar ao UtiliWeb</a>
+  <div class="eyebrow">Ferramenta UtiliWeb</div>
+  <h1>Calculadora de Peso</h1>
+  <p class="subtitle">IMC, taxa metabólica basal e necessidade calórica diária, com referências ajustadas por sexo.</p>
 
-<a href="../../index.html" class="back-link">← Voltar ao UtiliWeb</a>
+  <div class="section">
+    <label id="lbl-sexo">Sexo biológico</label>
+    <div class="segmented" role="radiogroup" aria-labelledby="lbl-sexo">
+      <button class="seg-btn ativo" id="btn-M" onclick="setSexo('M')" type="button" role="radio" aria-checked="true">♂ Masculino</button>
+      <button class="seg-btn" id="btn-F" onclick="setSexo('F')" type="button" role="radio" aria-checked="false">♀ Feminino</button>
+    </div>
+  </div>
 
-<div class="eyebrow">Ferramenta UtiliWeb</div>
+  <div class="section">
+    <label id="lbl-modo">O que calcular</label>
+    <div class="segmented" role="radiogroup" aria-labelledby="lbl-modo">
+      <button class="seg-btn ativo" id="btn-imc" onclick="setModo('imc')" type="button" role="radio" aria-checked="true">⚖ IMC</button>
+      <button class="seg-btn" id="btn-cal" onclick="setModo('cal')" type="button" role="radio" aria-checked="false">🔥 Calorias</button>
+    </div>
+  </div>
 
-<h1>Calculadora de Peso</h1>
+  <!-- CAMPOS IMC -->
+  <div id="campos-imc">
+    <div class="input-row">
+      <div class="input-group">
+        <label for="imc-p">Peso</label>
+        <div class="field-wrap">
+          <input type="number" id="imc-p" value="70" min="1" max="400" step="0.1">
+          <span class="field-unit">kg</span>
+        </div>
+      </div>
+      <div class="input-group">
+        <label for="imc-h">Altura</label>
+        <div class="field-wrap">
+          <input type="number" id="imc-h" value="170" min="50" max="260" step="0.1">
+          <span class="field-unit">cm</span>
+        </div>
+      </div>
+    </div>
+    <div class="input-group">
+      <label for="imc-g">% Gordura corporal <span style="font-weight:400;text-transform:none;opacity:.5">(opcional)</span></label>
+      <div class="field-wrap">
+        <input type="number" id="imc-g" placeholder="ex: 22" min="1" max="70" step="0.1">
+        <span class="field-unit">%</span>
+      </div>
+      <p class="hint">A referência saudável de % de gordura é diferente por sexo.</p>
+    </div>
+  </div>
 
-<p class="subtitle">
-IMC, taxa metabólica basal e necessidade calórica diária, com referências ajustadas por sexo onde a ciência indica diferença.
-</p>
+  <!-- CAMPOS CALORIAS -->
+  <div id="campos-cal" style="display:none">
+    <div class="section">
+      <label id="lbl-formula">Fórmula</label>
+      <div class="segmented" role="radiogroup" aria-labelledby="lbl-formula">
+        <button class="seg-btn ativo" id="btn-miff" onclick="setFormula('mifflin')" type="button" role="radio" aria-checked="true">Mifflin-St Jeor</button>
+        <button class="seg-btn" id="btn-harr" onclick="setFormula('harris')" type="button" role="radio" aria-checked="false">Harris-Benedict</button>
+      </div>
+    </div>
+    <div class="input-row">
+      <div class="input-group">
+        <label for="cal-p">Peso</label>
+        <div class="field-wrap">
+          <input type="number" id="cal-p" value="70" min="1" max="400" step="0.1">
+          <span class="field-unit">kg</span>
+        </div>
+      </div>
+      <div class="input-group">
+        <label for="cal-h">Altura</label>
+        <div class="field-wrap">
+          <input type="number" id="cal-h" value="170" min="50" max="260" step="0.1">
+          <span class="field-unit">cm</span>
+        </div>
+      </div>
+    </div>
+    <div class="input-group">
+      <label for="cal-i">Idade</label>
+      <div class="field-wrap">
+        <input type="number" id="cal-i" value="30" min="15" max="100" step="1">
+        <span class="field-unit">anos</span>
+      </div>
+      <p class="hint warn" id="cal-i-hint" style="display:none">Fórmulas validadas para adultos — resultado aproximado fora dessa faixa.</p>
+    </div>
+    <div class="input-group">
+      <label for="cal-at">Nível de atividade</label>
+      <select id="cal-at">
+        <option value="1.2">Sedentário — sem exercício</option>
+        <option value="1.375" selected>Leve — 1 a 3x por semana</option>
+        <option value="1.55">Moderado — 3 a 5x por semana</option>
+        <option value="1.725">Intenso — 6 a 7x por semana</option>
+        <option value="1.9">Muito intenso — atleta / trabalho pesado</option>
+      </select>
+    </div>
+    <div class="input-group">
+      <label for="cal-obj">Objetivo</label>
+      <select id="cal-obj">
+        <option value="manter">Manter o peso</option>
+        <option value="perder">Perder peso</option>
+        <option value="ganhar">Ganhar massa muscular</option>
+      </select>
+    </div>
+  </div>
 
-<div class="section">
-<label id="lbl-sexo">Sexo biológico</label>
-<div class="segmented" role="radiogroup" aria-labelledby="lbl-sexo">
-<button class="seg-btn ativo" id="btn-M" onclick="setSexo('M')" type="button" role="radio" aria-checked="true">♂ Masculino</button>
-<button class="seg-btn" id="btn-F" onclick="setSexo('F')" type="button" role="radio" aria-checked="false">♀ Feminino</button>
+  <div class="divider-label">Pronto</div>
+  <button class="btn-calcular" onclick="calcular()" type="button" id="btn-calc">Calcular</button>
+  <div class="stale-note" id="staleNote">↻ Os dados mudaram — atualize o resultado.</div>
 </div>
-</div>
 
-<div class="section">
-<label id="lbl-modo">O que calcular</label>
-<div class="segmented" role="radiogroup" aria-labelledby="lbl-modo">
-<button class="seg-btn ativo" id="btn-imc" onclick="setModo('imc')" type="button" role="radio" aria-checked="true">⚖ IMC</button>
-<button class="seg-btn" id="btn-cal" onclick="setModo('cal')" type="button" role="radio" aria-checked="false">🔥 Calorias</button>
-</div>
-</div>
-
-<!-- CAMPOS IMC -->
-<div id="campos-imc">
-
-<div class="input-row">
-<div class="input-group">
-<label for="imc-p">Peso (kg)</label>
-<input type="number" id="imc-p" value="70" min="1" max="400" step="0.1">
-</div>
-<div class="input-group">
-<label for="imc-h">Altura (cm)</label>
-<input type="number" id="imc-h" value="170" min="50" max="260" step="0.1">
-</div>
-</div>
-
-<div class="input-group">
-<label for="imc-g">% de gordura corporal <span style="font-weight:400;text-transform:none;color:rgba(251,250,246,.35)">(opcional)</span></label>
-<input type="number" id="imc-g" placeholder="ex: 22" min="1" max="70" step="0.1">
-<p class="hint">A referência saudável de % de gordura é diferente para homens e mulheres — por isso pedimos o sexo.</p>
-</div>
-
-</div>
-
-<!-- CAMPOS CALORIAS -->
-<div id="campos-cal" style="display:none">
-
-<div class="section">
-<label id="lbl-formula">Fórmula</label>
-<div class="segmented" role="radiogroup" aria-labelledby="lbl-formula">
-<button class="seg-btn ativo" id="btn-miff" onclick="setFormula('mifflin')" type="button" role="radio" aria-checked="true">Mifflin-St Jeor</button>
-<button class="seg-btn" id="btn-harr" onclick="setFormula('harris')" type="button" role="radio" aria-checked="false">Harris-Benedict</button>
-</div>
-</div>
-
-<div class="input-row">
-<div class="input-group">
-<label for="cal-p">Peso (kg)</label>
-<input type="number" id="cal-p" value="70" min="1" max="400" step="0.1">
-</div>
-<div class="input-group">
-<label for="cal-h">Altura (cm)</label>
-<input type="number" id="cal-h" value="170" min="50" max="260" step="0.1">
-</div>
-</div>
-
-<div class="input-group">
-<label for="cal-i">Idade (anos)</label>
-<input type="number" id="cal-i" value="30" min="15" max="100" step="1">
-<p class="hint" id="cal-i-hint" style="display:none">Estas fórmulas foram validadas para adultos. Fora dessa faixa, o resultado é apenas uma estimativa aproximada.</p>
-</div>
-
-<div class="input-group">
-<label for="cal-at">Nível de atividade física</label>
-<select id="cal-at">
-<option value="1.2">Sedentário — sem exercício</option>
-<option value="1.375" selected>Leve — 1 a 3x por semana</option>
-<option value="1.55">Moderado — 3 a 5x por semana</option>
-<option value="1.725">Intenso — 6 a 7x por semana</option>
-<option value="1.9">Muito intenso — atleta ou trabalho físico pesado</option>
-</select>
-</div>
-
-<div class="input-group">
-<label for="cal-obj">Objetivo</label>
-<select id="cal-obj">
-<option value="manter">Manter o peso</option>
-<option value="perder">Perder peso</option>
-<option value="ganhar">Ganhar massa muscular</option>
-</select>
-</div>
-
-</div>
-
-<div class="divider-label">Pronto</div>
-
-<button class="btn-calcular" onclick="calcular()" type="button">Calcular</button>
-
-<div class="stale-note" id="staleNote">↻ Os dados mudaram — clique em calcular para atualizar o resultado.</div>
-
-</div>
-
+<!-- ─── RIGHT ─── -->
 <div class="right">
-
-<h2>Resultado</h2>
-
-<div class="empty-state" id="empty">
-<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-<path d="M12 3a4 4 0 0 1 4 4v1a4 4 0 0 1-8 0V7a4 4 0 0 1 4-4z"/>
-<path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/>
-</svg>
-<p>Preencha os dados ao lado e clique em calcular para ver seu resultado aqui.</p>
-</div>
-
-<div id="resultado" aria-live="polite"></div>
-
+  <h2>Resultado</h2>
+  <div class="empty-state" id="empty">
+    <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+      <path d="M12 3a4 4 0 0 1 4 4v1a4 4 0 0 1-8 0V7a4 4 0 0 1 4-4z"/>
+      <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/>
+    </svg>
+    <p>Preencha os dados ao lado e clique em calcular para ver seu resultado.</p>
+  </div>
+  <div id="resultado" aria-live="polite"></div>
 </div>
 
 </div>
 
 <script>
+let modo='imc', sexo='M', formula='mifflin', lastCalcKey=null;
+const empty=document.getElementById('empty');
+const resultado=document.getElementById('resultado');
+const staleNote=document.getElementById('staleNote');
+const calIHint=document.getElementById('cal-i-hint');
+const btnCalc=document.getElementById('btn-calc');
 
-let modo = 'imc';
-let sexo = 'M';
-let formula = 'mifflin';
-let lastCalcKey = null;
-
-const empty = document.getElementById('empty');
-const resultado = document.getElementById('resultado');
-const staleNote = document.getElementById('staleNote');
-const calIHint = document.getElementById('cal-i-hint');
-
-const FAIXAS = [
-    { min: 0,    max: 18.5, lbl: 'Abaixo do peso',    cor: '#185fa5' },
-    { min: 18.5, max: 25,   lbl: 'Peso normal',        cor: '#3b6d11' },
-    { min: 25,   max: 30,   lbl: 'Sobrepeso',          cor: '#854f0b' },
-    { min: 30,   max: 35,   lbl: 'Obesidade grau I',   cor: '#a32d2d' },
-    { min: 35,   max: 40,   lbl: 'Obesidade grau II',  cor: '#791f1f' },
-    { min: 40,   max: 999,  lbl: 'Obesidade grau III', cor: '#501313' }
+const FAIXAS=[
+  {min:0,   max:18.5, lbl:'Abaixo do peso',    cor:'#378add'},
+  {min:18.5,max:25,   lbl:'Peso normal',        cor:'#639922'},
+  {min:25,  max:30,   lbl:'Sobrepeso',          cor:'#ba7517'},
+  {min:30,  max:35,   lbl:'Obesidade grau I',   cor:'#d85a30'},
+  {min:35,  max:40,   lbl:'Obesidade grau II',  cor:'#993c1d'},
+  {min:40,  max:999,  lbl:'Obesidade grau III', cor:'#791f1f'}
 ];
 
-const GORD = {
-    M: { min: 6,  fit: 18, max: 25 },
-    F: { min: 14, fit: 28, max: 35 }
-};
+const GORD={M:{min:6,fit:18,max:25}, F:{min:14,fit:28,max:35}};
 
 function currentFormKey(){
-    return JSON.stringify({
-        modo, sexo, formula,
-        p: document.getElementById('imc-p').value,
-        h: document.getElementById('imc-h').value,
-        g: document.getElementById('imc-g').value,
-        cp: document.getElementById('cal-p').value,
-        ch: document.getElementById('cal-h').value,
-        ci: document.getElementById('cal-i').value,
-        at: document.getElementById('cal-at').value,
-        obj: document.getElementById('cal-obj').value
-    });
+  return JSON.stringify({
+    modo,sexo,formula,
+    p:document.getElementById('imc-p').value,
+    h:document.getElementById('imc-h').value,
+    g:document.getElementById('imc-g').value,
+    cp:document.getElementById('cal-p').value,
+    ch:document.getElementById('cal-h').value,
+    ci:document.getElementById('cal-i').value,
+    at:document.getElementById('cal-at').value,
+    obj:document.getElementById('cal-obj').value
+  });
 }
 
 function checkStale(){
-    if(lastCalcKey === null) return;
-    staleNote.classList.toggle('show', currentFormKey() !== lastCalcKey);
+  if(lastCalcKey===null) return;
+  staleNote.classList.toggle('show', currentFormKey()!==lastCalcKey);
 }
 
 function setSexo(s){
-    sexo = s;
-    document.getElementById('btn-M').classList.toggle('ativo', s === 'M');
-    document.getElementById('btn-M').setAttribute('aria-checked', s === 'M');
-    document.getElementById('btn-F').classList.toggle('ativo', s === 'F');
-    document.getElementById('btn-F').setAttribute('aria-checked', s === 'F');
-    checkStale();
+  sexo=s;
+  ['M','F'].forEach(x=>{
+    document.getElementById('btn-'+x).classList.toggle('ativo',s===x);
+    document.getElementById('btn-'+x).setAttribute('aria-checked',s===x);
+  });
+  checkStale();
 }
 
 function setModo(m){
-    modo = m;
-    document.getElementById('btn-imc').classList.toggle('ativo', m === 'imc');
-    document.getElementById('btn-imc').setAttribute('aria-checked', m === 'imc');
-    document.getElementById('btn-cal').classList.toggle('ativo', m === 'cal');
-    document.getElementById('btn-cal').setAttribute('aria-checked', m === 'cal');
-    document.getElementById('campos-imc').style.display = m === 'imc' ? 'block' : 'none';
-    document.getElementById('campos-cal').style.display = m === 'cal' ? 'block' : 'none';
-    empty.style.display = 'flex';
-    resultado.classList.remove('visible');
-    resultado.innerHTML = '';
-    lastCalcKey = null;
-    staleNote.classList.remove('show');
+  modo=m;
+  ['imc','cal'].forEach(x=>{
+    document.getElementById('btn-'+x).classList.toggle('ativo',m===x);
+    document.getElementById('btn-'+x).setAttribute('aria-checked',m===x);
+  });
+  document.getElementById('campos-imc').style.display=m==='imc'?'block':'none';
+  document.getElementById('campos-cal').style.display=m==='cal'?'block':'none';
+  empty.style.display='flex';
+  resultado.classList.remove('visible');
+  resultado.innerHTML='';
+  lastCalcKey=null;
+  staleNote.classList.remove('show');
 }
 
 function setFormula(f){
-    formula = f;
-    document.getElementById('btn-miff').classList.toggle('ativo', f === 'mifflin');
-    document.getElementById('btn-miff').setAttribute('aria-checked', f === 'mifflin');
-    document.getElementById('btn-harr').classList.toggle('ativo', f === 'harris');
-    document.getElementById('btn-harr').setAttribute('aria-checked', f === 'harris');
-    checkStale();
+  formula=f;
+  ['miff','harr'].forEach(x=>{
+    const id=x==='miff'?'mifflin':'harris';
+    document.getElementById('btn-'+x).classList.toggle('ativo',f===id);
+    document.getElementById('btn-'+x).setAttribute('aria-checked',f===id);
+  });
+  checkStale();
 }
 
-function calcIMC(p, h){
-    return p / Math.pow(h / 100, 2);
-}
+function calcIMC(p,h){return p/Math.pow(h/100,2);}
+function getFaixa(imc){return FAIXAS.find(f=>imc>=f.min&&imc<f.max)||FAIXAS[FAIXAS.length-1];}
 
-function getFaixa(imc){
-    return FAIXAS.find(f => imc >= f.min && imc < f.max) || FAIXAS[FAIXAS.length - 1];
-}
-
-function calcTMB(p, h, i, s, f){
-    if(f === 'mifflin'){
-        const b = 10 * p + 6.25 * h - 5 * i;
-        return s === 'M' ? b + 5 : b - 161;
-    }
-    return s === 'M'
-        ? 88.362 + 13.397 * p + 4.799 * h - 5.677 * i
-        : 447.593 + 9.247 * p + 3.098 * h - 4.330 * i;
+function calcTMB(p,h,i,s,f){
+  if(f==='mifflin'){const b=10*p+6.25*h-5*i; return s==='M'?b+5:b-161;}
+  return s==='M'?88.362+13.397*p+4.799*h-5.677*i:447.593+9.247*p+3.098*h-4.330*i;
 }
 
 function showError(msg){
-    empty.style.display = 'none';
-    resultado.classList.add('visible');
-    resultado.innerHTML = `<div class="error-msg">⚠ ${msg}</div>`;
-    lastCalcKey = null;
-    staleNote.classList.remove('show');
+  empty.style.display='none';
+  resultado.classList.add('visible');
+  resultado.innerHTML=`<div class="error-msg">⚠ ${msg}</div>`;
+  lastCalcKey=null;
+  staleNote.classList.remove('show');
 }
 
 function buildScale(imc){
-
-    const max = 45;
-    const clipped = Math.max(0, Math.min(imc, max));
-
-    const segs = FAIXAS.map(f => {
-        const top = Math.min(f.max, max);
-        const widthPct = ((top - f.min) / max) * 100;
-        return `<div class="scale-seg" style="width:${widthPct}%;background:${f.cor}"></div>`;
-    }).join('');
-
-    const pos = Math.max(2, Math.min(98, (clipped / max) * 100));
-    const isOverflow = imc > max;
-    const isUnderflow = imc < 0;
-
-    return `
-        <div class="scale-wrap">
-            <div class="scale-track">
-                ${segs}
-                <div class="scale-marker${isOverflow || isUnderflow ? ' edge' : ''}" style="left:${pos}%" title="${isOverflow ? 'Acima de ' + max : ''}"></div>
-            </div>
-            <div class="scale-labels">
-                <span>0</span><span>18.5</span><span>25</span><span>30</span><span>35</span><span>${max}+</span>
-            </div>
-        </div>
-    `;
+  const max=45;
+  const clipped=Math.max(0,Math.min(imc,max));
+  const segs=FAIXAS.map(f=>{
+    const top=Math.min(f.max,max);
+    const w=((top-f.min)/max)*100;
+    return `<div class="scale-seg" style="width:${w}%;background:${f.cor}"></div>`;
+  }).join('');
+  const pos=Math.max(2,Math.min(98,(clipped/max)*100));
+  const isOver=imc>max;
+  return `
+    <div class="scale-wrap">
+      <div class="scale-track">
+        ${segs}
+        <div class="scale-marker${isOver?' edge':''}" style="left:${pos}%"></div>
+      </div>
+      <div class="scale-labels">
+        <span>0</span><span>18.5</span><span>25</span><span>30</span><span>35</span><span>${max}+</span>
+      </div>
+    </div>`;
 }
 
 function calcular(){
-
-    if(modo === 'imc'){
-
-        const p = parseFloat(document.getElementById('imc-p').value) || 0;
-        const h = parseFloat(document.getElementById('imc-h').value) || 0;
-
-        if(!p || !h){
-            showError('Preencha peso e altura para calcular.');
-            return;
-        }
-
-        if(p < 1 || p > 400 || h < 50 || h > 260){
-            showError('Verifique os valores de peso e altura — parecem fora de uma faixa humana plausível.');
-            return;
-        }
-
-        const imc = calcIMC(p, h);
-        const faixa = getFaixa(imc);
-        const hm = h / 100;
-        const pMin = (18.5 * hm * hm).toFixed(1);
-        const pMax = (25 * hm * hm).toFixed(1);
-
-        let diffLbl, diffVal;
-        if(p < parseFloat(pMin)){
-            diffLbl = 'Para atingir o peso normal';
-            diffVal = `+${(parseFloat(pMin) - p).toFixed(1)} kg`;
-        } else if(p > parseFloat(pMax)){
-            diffLbl = 'Para atingir o peso normal';
-            diffVal = `−${(p - parseFloat(pMax)).toFixed(1)} kg`;
-        } else {
-            diffLbl = 'Status';
-            diffVal = 'Dentro do peso normal';
-        }
-
-        let advCls, advText;
-        if(imc < 18.5){
-            advCls = 'blue';
-            advText = sexo === 'M'
-                ? 'Baixo peso pode comprometer a produção de testosterona, a densidade óssea e a imunidade. Vale buscar orientação nutricional para ganho saudável de massa.'
-                : 'Baixo peso pode causar irregularidades menstruais, queda de fertilidade e perda de massa óssea. Vale consultar um nutricionista.';
-        } else if(imc < 25){
-            advCls = 'green';
-            advText = sexo === 'M'
-                ? 'Peso dentro da faixa saudável. Para homens, isso favorece a saúde cardiovascular, hormonal e metabólica — vale manter a rotina de alimentação equilibrada e atividade física.'
-                : 'Peso dentro da faixa saudável. Para mulheres, isso protege a saúde hormonal, reprodutiva e cardiovascular — vale manter a rotina de alimentação equilibrada e exercício.';
-        } else if(imc < 30){
-            advCls = 'amber';
-            advText = sexo === 'M'
-                ? 'Sobrepeso eleva o risco de hipertensão, resistência à insulina e disfunção erétil em homens. Atividade física regular (150 min/semana) e reeducação alimentar são os primeiros passos.'
-                : 'Sobrepeso pode influenciar o ciclo menstrual e aumentar o risco de síndrome metabólica em mulheres. Exercício regular e reeducação alimentar ajudam a reverter o quadro.';
-        } else {
-            advCls = 'red';
-            const grau = imc < 35 ? 'I' : imc < 40 ? 'II' : 'III';
-            advText = sexo === 'M'
-                ? `Obesidade grau ${grau}. Em homens, eleva fortemente o risco de doenças cardiovasculares, apneia do sono, diabetes tipo 2 e queda de testosterona. Acompanhamento médico é recomendado.`
-                : `Obesidade grau ${grau}. Em mulheres, está associada a maior risco cardiovascular, irregularidades hormonais, SOP e complicações na gestação. Vale buscar acompanhamento multidisciplinar.`;
-        }
-
-        const advColors = {
-            blue:  {bg:'var(--blue-bg)',  bd:'var(--blue-bd)',  tx:'var(--blue)'},
-            green: {bg:'var(--green-bg)', bd:'var(--green-bd)', tx:'var(--green-txt)'},
-            amber: {bg:'var(--amber-bg)', bd:'var(--amber-bd)', tx:'var(--amber-txt)'},
-            red:   {bg:'var(--red-bg)',   bd:'var(--red-bd)',   tx:'var(--red-txt)'}
-        }[advCls];
-
-        const gRaw = document.getElementById('imc-g').value;
-        const g = gRaw !== '' ? parseFloat(gRaw) : null;
-        let gordBlock = '';
-
-        if(g !== null && !isNaN(g)){
-            const ref = GORD[sexo];
-            const nome = sexo === 'M' ? 'homens' : 'mulheres';
-            let gMsg;
-            if(g < ref.min) gMsg = `${g}% está abaixo do mínimo saudável para ${nome} — pode indicar desnutrição ou excesso de treino.`;
-            else if(g < ref.fit) gMsg = `${g}% está na faixa atlética para ${nome}.`;
-            else if(g < ref.max) gMsg = `${g}% está dentro da faixa aceitável para ${nome}.`;
-            else gMsg = `${g}% está acima do recomendado para ${nome} — risco metabólico aumentado.`;
-
-            gordBlock = `
-                <div class="card">
-                    <div class="label">💧 Gordura corporal <span class="tag sex" style="margin-left:4px">por sexo</span></div>
-                    <div class="card-text">${gMsg}</div>
-                </div>
-            `;
-        }
-
-        resultado.classList.add('visible');
-        empty.style.display = 'none';
-
-        resultado.innerHTML = `
-
-            <div class="tag-row">
-                <span class="tag uni">Fórmula unissex (OMS)</span>
-            </div>
-
-            <div class="hero-num">
-                <span class="num">${imc.toFixed(1)}</span>
-                <span class="unit">IMC</span>
-            </div>
-
-            <div class="hero-sub" style="color:${advColors.tx}">${faixa.lbl}</div>
-
-            ${buildScale(imc)}
-
-            <div class="split-grid">
-                <div class="mini-stat">
-                    <div class="l">Faixa de peso ideal</div>
-                    <div class="v">${pMin}–${pMax} kg</div>
-                </div>
-                <div class="mini-stat">
-                    <div class="l">${diffLbl}</div>
-                    <div class="v">${diffVal}</div>
-                </div>
-            </div>
-
-            <div class="advice" style="background:${advColors.bg};border-color:${advColors.bd};color:${advColors.tx}">
-                <span class="label">Aconselhamento — ${sexo === 'M' ? 'masculino' : 'feminino'}</span>
-                ${advText}
-            </div>
-
-            ${gordBlock}
-
-            <p class="footnote"><span class="ic">ⓘ</span><span>O IMC usa a mesma fórmula e as mesmas faixas para os dois sexos — é um índice populacional, não ajustado por composição corporal. Já a % de gordura ideal varia por sexo, por isso a referência muda acima. Estimativas gerais; não substituem orientação médica ou nutricional.</span></p>
-        `;
-
-        lastCalcKey = currentFormKey();
-        staleNote.classList.remove('show');
-
-    } else {
-
-        const p = parseFloat(document.getElementById('cal-p').value) || 0;
-        const h = parseFloat(document.getElementById('cal-h').value) || 0;
-        const i = parseFloat(document.getElementById('cal-i').value) || 0;
-
-        if(!p || !h || !i){
-            showError('Preencha peso, altura e idade para calcular.');
-            return;
-        }
-
-        if(p < 1 || p > 400 || h < 50 || h > 260 || i < 1 || i > 120){
-            showError('Verifique os valores informados — parecem fora de uma faixa humana plausível.');
-            return;
-        }
-
-        const at = parseFloat(document.getElementById('cal-at').value);
-        const obj = document.getElementById('cal-obj').value;
-        const tmb = calcTMB(p, h, i, sexo, formula);
-        const get = tmb * at;
-        const def = get - 500;
-        const sup = get + 300;
-
-        let alvo, alvoLabel;
-        if(obj === 'perder'){ alvo = def; alvoLabel = 'meta para perder peso'; }
-        else if(obj === 'ganhar'){ alvo = sup; alvoLabel = 'meta para ganhar massa'; }
-        else { alvo = get; alvoLabel = 'meta para manter o peso'; }
-
-        let advCls, advText;
-        if(obj === 'manter'){
-            advCls = 'blue';
-            advText = sexo === 'M'
-                ? 'Para homens, manter a ingestão próxima ao gasto total preserva massa muscular e equilíbrio hormonal.'
-                : 'Para mulheres, manter a ingestão adequada é importante para a saúde hormonal e óssea — dietas muito restritivas podem comprometer esses sistemas mesmo sem o objetivo de perder peso.';
-        } else if(obj === 'perder'){
-            advCls = 'amber';
-            advText = sexo === 'M'
-                ? 'Homens costumam responder bem a déficits moderados com proteína elevada (1,6–2,2 g/kg) e treino de força. Perda saudável estimada: 0,5–1 kg por semana.'
-                : 'Mulheres devem evitar déficits muito agressivos, que podem impactar o ciclo menstrual e a saúde óssea. Mantenha proteína em 1,6–2 g/kg e evite pular refeições.';
-        } else {
-            advCls = 'green';
-            advText = sexo === 'M'
-                ? 'Superávit de 200–400 kcal com treino de força progressivo permite ganho muscular com mínimo acúmulo de gordura. Priorize proteína de qualidade (1,8–2,2 g/kg).'
-                : 'Mulheres têm, em média, taxa de síntese muscular menor, mas respondem bem ao treino de força. Superávit moderado (200–300 kcal) evita ganho excessivo de gordura. Proteína: 1,8–2,2 g/kg.';
-        }
-
-        const advColors = {
-            blue:  {bg:'var(--blue-bg)',  bd:'var(--blue-bd)',  tx:'var(--blue)'},
-            green: {bg:'var(--green-bg)', bd:'var(--green-bd)', tx:'var(--green-txt)'},
-            amber: {bg:'var(--amber-bg)', bd:'var(--amber-bd)', tx:'var(--amber-txt)'}
-        }[advCls];
-
-        const ref = GORD[sexo];
-        const gordRows = [
-            { lbl: 'Atleta',     range: `${ref.min}–${ref.min + 5}%`, cor: 'var(--blue-bg)',  tx: 'var(--blue)' },
-            { lbl: 'Fitness',    range: `${ref.min + 5}–${ref.fit}%`, cor: 'var(--green-bg)', tx: 'var(--green-txt)' },
-            { lbl: 'Aceitável',  range: `${ref.fit}–${ref.max}%`,     cor: 'var(--amber-bg)', tx: 'var(--amber-txt)' },
-            { lbl: 'Alto risco', range: `>${ref.max}%`,               cor: 'var(--red-bg)',   tx: 'var(--red-txt)' }
-        ];
-
-        const gordTbl = gordRows.map(r =>
-            `<div class="gord-row" style="background:${r.cor};color:${r.tx}"><span>${r.lbl}</span><span>${r.range}</span></div>`
-        ).join('');
-
-        const idadeNote = (i < 18 || i > 65)
-            ? `<p class="footnote"><span class="ic">ⓘ</span><span>As fórmulas de TMB foram validadas principalmente em adultos de 18 a 65 anos. Para ${i} anos, trate o resultado como uma estimativa aproximada.</span></p>`
-            : '';
-
-        resultado.classList.add('visible');
-        empty.style.display = 'none';
-
-        resultado.innerHTML = `
-
-            <div class="tag-row">
-                <span class="tag sex">Ajustado por sexo (${sexo === 'M' ? 'masculino' : 'feminino'})</span>
-            </div>
-
-            <div class="hero-num">
-                <span class="num">${Math.round(alvo).toLocaleString('pt-BR')}</span>
-                <span class="unit">kcal / dia</span>
-            </div>
-
-            <div class="hero-sub" style="color:var(--forest)">${alvoLabel.charAt(0).toUpperCase() + alvoLabel.slice(1)}</div>
-
-            <div class="split-grid">
-                <div class="mini-stat">
-                    <div class="l">TMB em repouso</div>
-                    <div class="v">${Math.round(tmb).toLocaleString('pt-BR')} kcal</div>
-                </div>
-                <div class="mini-stat">
-                    <div class="l">Gasto total com atividade</div>
-                    <div class="v">${Math.round(get).toLocaleString('pt-BR')} kcal</div>
-                </div>
-            </div>
-
-            <div class="split-grid">
-                <div class="mini-stat">
-                    <div class="l">Déficit p/ perder peso</div>
-                    <div class="v">${Math.round(def).toLocaleString('pt-BR')} kcal</div>
-                </div>
-                <div class="mini-stat">
-                    <div class="l">Superávit p/ ganhar massa</div>
-                    <div class="v">${Math.round(sup).toLocaleString('pt-BR')} kcal</div>
-                </div>
-            </div>
-
-            <div class="advice" style="background:${advColors.bg};border-color:${advColors.bd};color:${advColors.tx}">
-                <span class="label">Aconselhamento — ${sexo === 'M' ? 'masculino' : 'feminino'}</span>
-                ${advText}
-            </div>
-
-            <div class="card">
-                <div class="label">💧 Referência de gordura corporal — ${sexo === 'M' ? 'masculino' : 'feminino'}</div>
-                <div class="gord-table">${gordTbl}</div>
-            </div>
-
-            <p class="footnote"><span class="ic">ⓘ</span><span>A TMB já é calculada de forma diferente por sexo nestas fórmulas, porque homens têm em média mais massa muscular, que consome mais energia em repouso. Estimativas gerais; não substituem orientação de nutricionista, médico ou educador físico.</span></p>
-
-            ${idadeNote}
-        `;
-
-        lastCalcKey = currentFormKey();
-        staleNote.classList.remove('show');
-    }
+  btnCalc.disabled=true;
+  btnCalc.textContent='Calculando…';
+  setTimeout(()=>{
+    _calcular();
+    btnCalc.disabled=false;
+    btnCalc.textContent='Calcular';
+  }, 80);
 }
 
-document.querySelectorAll('#campos-imc input, #campos-cal input, #campos-cal select').forEach(el => {
-    el.addEventListener('input', checkStale);
-    el.addEventListener('change', checkStale);
+function _calcular(){
+  if(modo==='imc'){
+    const p=parseFloat(document.getElementById('imc-p').value)||0;
+    const h=parseFloat(document.getElementById('imc-h').value)||0;
+    if(!p||!h){showError('Preencha peso e altura para calcular.');return;}
+    if(p<1||p>400||h<50||h>260){showError('Verifique os valores — parecem fora de uma faixa humana plausível.');return;}
+
+    const imc=calcIMC(p,h);
+    const faixa=getFaixa(imc);
+    const hm=h/100;
+    const pMin=(18.5*hm*hm).toFixed(1);
+    const pMax=(25*hm*hm).toFixed(1);
+
+    let diffLbl,diffVal;
+    if(p<parseFloat(pMin)){diffLbl='Para peso normal';diffVal=`+${(parseFloat(pMin)-p).toFixed(1)} kg`;}
+    else if(p>parseFloat(pMax)){diffLbl='Para peso normal';diffVal=`−${(p-parseFloat(pMax)).toFixed(1)} kg`;}
+    else{diffLbl='Status';diffVal='Dentro do normal';}
+
+    let advCls,advText;
+    if(imc<18.5){
+      advCls='blue';
+      advText=sexo==='M'
+        ?'Baixo peso pode comprometer a produção de testosterona, a densidade óssea e a imunidade. Vale buscar orientação nutricional para ganho saudável de massa.'
+        :'Baixo peso pode causar irregularidades menstruais, queda de fertilidade e perda de massa óssea. Vale consultar um nutricionista.';
+    }else if(imc<25){
+      advCls='green';
+      advText=sexo==='M'
+        ?'Peso dentro da faixa saudável. Para homens, isso favorece a saúde cardiovascular, hormonal e metabólica — mantenha a alimentação equilibrada e a atividade física.'
+        :'Peso dentro da faixa saudável. Para mulheres, isso protege a saúde hormonal, reprodutiva e cardiovascular — mantenha a alimentação equilibrada e exercício regular.';
+    }else if(imc<30){
+      advCls='amber';
+      advText=sexo==='M'
+        ?'Sobrepeso eleva o risco de hipertensão, resistência à insulina e disfunção erétil. Atividade física regular (150 min/semana) e reeducação alimentar são os primeiros passos.'
+        :'Sobrepeso pode influenciar o ciclo menstrual e aumentar o risco de síndrome metabólica. Exercício regular e reeducação alimentar ajudam a reverter o quadro.';
+    }else{
+      advCls='red';
+      const grau=imc<35?'I':imc<40?'II':'III';
+      advText=sexo==='M'
+        ?`Obesidade grau ${grau}. Em homens, eleva fortemente o risco cardiovascular, apneia do sono, diabetes tipo 2 e queda de testosterona. Acompanhamento médico é recomendado.`
+        :`Obesidade grau ${grau}. Em mulheres, está associada a maior risco cardiovascular, irregularidades hormonais, SOP e complicações na gestação. Busque acompanhamento multidisciplinar.`;
+    }
+
+    const advColors={
+      blue: {bg:'var(--blue-bg)',  bd:'var(--blue-bd)',  tx:'var(--blue)'},
+      green:{bg:'var(--green-bg)', bd:'var(--green-bd)', tx:'var(--green-txt)'},
+      amber:{bg:'var(--amber-bg)', bd:'var(--amber-bd)', tx:'var(--amber-txt)'},
+      red:  {bg:'var(--red-bg)',   bd:'var(--red-bd)',   tx:'var(--red-txt)'}
+    }[advCls];
+
+    const gRaw=document.getElementById('imc-g').value;
+    const g=gRaw!==''?parseFloat(gRaw):null;
+    let gordBlock='';
+    if(g!==null&&!isNaN(g)){
+      const ref=GORD[sexo];
+      const nome=sexo==='M'?'homens':'mulheres';
+      let gMsg;
+      if(g<ref.min) gMsg=`${g}% está abaixo do mínimo saudável para ${nome} — pode indicar desnutrição ou excesso de treino.`;
+      else if(g<ref.fit) gMsg=`${g}% está na faixa atlética para ${nome}.`;
+      else if(g<ref.max) gMsg=`${g}% está dentro da faixa aceitável para ${nome}.`;
+      else gMsg=`${g}% está acima do recomendado para ${nome} — risco metabólico aumentado.`;
+      gordBlock=`<div class="card"><div class="label">💧 Gordura corporal <span class="tag sex" style="margin-left:4px">por sexo</span></div><div class="card-text">${gMsg}</div></div>`;
+    }
+
+    resultado.classList.add('visible');
+    empty.style.display='none';
+    resultado.innerHTML=`
+      <div class="tag-row"><span class="tag uni">Fórmula unissex (OMS)</span></div>
+      <div class="hero-block">
+        <div class="hero-num">
+          <span class="num">${imc.toFixed(1)}</span>
+          <span class="unit">IMC</span>
+        </div>
+        <div class="hero-sub" style="color:${advColors.tx}">${faixa.lbl}</div>
+      </div>
+      ${buildScale(imc)}
+      <div class="split-grid">
+        <div class="mini-stat"><div class="l">Faixa de peso ideal</div><div class="v">${pMin}–${pMax} kg</div></div>
+        <div class="mini-stat"><div class="l">${diffLbl}</div><div class="v">${diffVal}</div></div>
+      </div>
+      <div class="advice" style="background:${advColors.bg};border-color:${advColors.bd};color:${advColors.tx}">
+        <span class="label">Aconselhamento — ${sexo==='M'?'masculino':'feminino'}</span>
+        ${advText}
+      </div>
+      ${gordBlock}
+      <p class="footnote"><span class="ic">ⓘ</span><span>O IMC usa a mesma fórmula e as mesmas faixas para os dois sexos. Já a % de gordura ideal varia por sexo. Estimativas gerais; não substituem orientação médica ou nutricional.</span></p>`;
+
+    lastCalcKey=currentFormKey();
+    staleNote.classList.remove('show');
+
+  }else{
+    const p=parseFloat(document.getElementById('cal-p').value)||0;
+    const h=parseFloat(document.getElementById('cal-h').value)||0;
+    const i=parseFloat(document.getElementById('cal-i').value)||0;
+    if(!p||!h||!i){showError('Preencha peso, altura e idade para calcular.');return;}
+    if(p<1||p>400||h<50||h>260||i<1||i>120){showError('Verifique os valores — parecem fora de uma faixa humana plausível.');return;}
+
+    const at=parseFloat(document.getElementById('cal-at').value);
+    const obj=document.getElementById('cal-obj').value;
+    const tmb=calcTMB(p,h,i,sexo,formula);
+    const get=tmb*at;
+    const def=get-500;
+    const sup=get+300;
+
+    let alvo,alvoLabel;
+    if(obj==='perder'){alvo=def;alvoLabel='meta para perder peso';}
+    else if(obj==='ganhar'){alvo=sup;alvoLabel='meta para ganhar massa';}
+    else{alvo=get;alvoLabel='meta para manter o peso';}
+
+    let advCls,advText;
+    if(obj==='manter'){
+      advCls='blue';
+      advText=sexo==='M'
+        ?'Para homens, manter a ingestão próxima ao gasto total preserva massa muscular e equilíbrio hormonal.'
+        :'Para mulheres, manter a ingestão adequada é importante para a saúde hormonal e óssea — dietas muito restritivas podem comprometer esses sistemas.';
+    }else if(obj==='perder'){
+      advCls='amber';
+      advText=sexo==='M'
+        ?'Homens costumam responder bem a déficits moderados com proteína elevada (1,6–2,2 g/kg) e treino de força. Perda saudável estimada: 0,5–1 kg por semana.'
+        :'Mulheres devem evitar déficits muito agressivos, que podem impactar o ciclo menstrual e a saúde óssea. Mantenha proteína em 1,6–2 g/kg e evite pular refeições.';
+    }else{
+      advCls='green';
+      advText=sexo==='M'
+        ?'Superávit de 200–400 kcal com treino de força progressivo permite ganho muscular com mínimo acúmulo de gordura. Priorize proteína de qualidade (1,8–2,2 g/kg).'
+        :'Mulheres têm, em média, taxa de síntese muscular menor, mas respondem bem ao treino de força. Superávit moderado (200–300 kcal) evita ganho excessivo de gordura. Proteína: 1,8–2,2 g/kg.';
+    }
+
+    const advColors={
+      blue: {bg:'var(--blue-bg)',  bd:'var(--blue-bd)',  tx:'var(--blue)'},
+      green:{bg:'var(--green-bg)', bd:'var(--green-bd)', tx:'var(--green-txt)'},
+      amber:{bg:'var(--amber-bg)', bd:'var(--amber-bd)', tx:'var(--amber-txt)'}
+    }[advCls];
+
+    const ref=GORD[sexo];
+    const gordRows=[
+      {lbl:'Atleta',    range:`${ref.min}–${ref.min+5}%`, cor:'var(--blue-bg)',  tx:'var(--blue)'},
+      {lbl:'Fitness',   range:`${ref.min+5}–${ref.fit}%`, cor:'var(--green-bg)', tx:'var(--green-txt)'},
+      {lbl:'Aceitável', range:`${ref.fit}–${ref.max}%`,   cor:'var(--amber-bg)', tx:'var(--amber-txt)'},
+      {lbl:'Alto risco',range:`>${ref.max}%`,              cor:'var(--red-bg)',   tx:'var(--red-txt)'}
+    ];
+
+    const gordTbl=gordRows.map(r=>`<div class="gord-row" style="background:${r.cor};color:${r.tx}"><span>${r.lbl}</span><span>${r.range}</span></div>`).join('');
+
+    const idadeNote=(i<18||i>65)
+      ?`<p class="footnote"><span class="ic">ⓘ</span><span>As fórmulas de TMB foram validadas principalmente em adultos de 18–65 anos. Para ${i} anos, trate o resultado como uma estimativa aproximada.</span></p>`:'';
+
+    resultado.classList.add('visible');
+    empty.style.display='none';
+    resultado.innerHTML=`
+      <div class="tag-row"><span class="tag sex">Ajustado por sexo — ${sexo==='M'?'masculino':'feminino'}</span></div>
+      <div class="hero-block">
+        <div class="hero-num">
+          <span class="num">${Math.round(alvo).toLocaleString('pt-BR')}</span>
+          <span class="unit">kcal/dia</span>
+        </div>
+        <div class="hero-sub" style="color:var(--indigo-mid)">${alvoLabel.charAt(0).toUpperCase()+alvoLabel.slice(1)}</div>
+      </div>
+      <div class="split-grid">
+        <div class="mini-stat"><div class="l">TMB em repouso</div><div class="v">${Math.round(tmb).toLocaleString('pt-BR')} kcal</div></div>
+        <div class="mini-stat"><div class="l">Gasto total</div><div class="v">${Math.round(get).toLocaleString('pt-BR')} kcal</div></div>
+      </div>
+      <div class="split-grid">
+        <div class="mini-stat"><div class="l">Déficit — perder peso</div><div class="v">${Math.round(def).toLocaleString('pt-BR')} kcal</div></div>
+        <div class="mini-stat"><div class="l">Superávit — ganhar massa</div><div class="v">${Math.round(sup).toLocaleString('pt-BR')} kcal</div></div>
+      </div>
+      <div class="advice" style="background:${advColors.bg};border-color:${advColors.bd};color:${advColors.tx}">
+        <span class="label">Aconselhamento — ${sexo==='M'?'masculino':'feminino'}</span>
+        ${advText}
+      </div>
+      <div class="card">
+        <div class="label">💧 Referência de gordura corporal — ${sexo==='M'?'masculino':'feminino'}</div>
+        <div class="gord-table">${gordTbl}</div>
+      </div>
+      <p class="footnote"><span class="ic">ⓘ</span><span>A TMB é calculada diferente por sexo pois homens têm em média mais massa muscular, que consome mais energia em repouso. Estimativas gerais; não substituem orientação de nutricionista, médico ou educador físico.</span></p>
+      ${idadeNote}`;
+
+    lastCalcKey=currentFormKey();
+    staleNote.classList.remove('show');
+  }
+}
+
+document.querySelectorAll('#campos-imc input, #campos-cal input, #campos-cal select').forEach(el=>{
+  el.addEventListener('input',checkStale);
+  el.addEventListener('change',checkStale);
 });
 
-document.getElementById('cal-i').addEventListener('input', function(){
-    const i = parseFloat(this.value) || 0;
-    calIHint.style.display = (i > 0 && (i < 18 || i > 65)) ? 'block' : 'none';
+document.getElementById('cal-i').addEventListener('input',function(){
+  const i=parseFloat(this.value)||0;
+  calIHint.style.display=(i>0&&(i<18||i>65))?'block':'none';
 });
-
 </script>
-
 </body>
 </html>
