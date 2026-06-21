@@ -149,7 +149,7 @@ input[type="text"], input[type="number"], select{
     border:1.5px solid rgba(255,255,255,.14);
     background:rgba(255,255,255,.06);
     color:var(--paper);
-    font-size:15px;
+    font-size:16px;
     font-weight:600;
     font-family:var(--font-body);
 }
@@ -644,11 +644,11 @@ h2{
     }
 
     .left{
-        padding:30px 26px;
+        padding:28px 24px;
     }
 
     .right{
-        padding:30px 26px;
+        padding:28px 24px;
     }
 
     h1{
@@ -657,6 +657,88 @@ h2{
 
     .total-kcal{
         font-size:36px;
+    }
+}
+
+@media(max-width:600px){
+
+    body{
+        padding:0;
+    }
+
+    .wrapper{
+        border-radius:0;
+        box-shadow:none;
+        border:none;
+        max-width:100%;
+    }
+
+    .left{
+        padding:max(18px, env(safe-area-inset-top)) 18px 22px;
+    }
+
+    .right{
+        padding:24px 18px max(24px, env(safe-area-inset-bottom));
+    }
+
+    .back-link{
+        margin-bottom:16px;
+        font-size:12.5px;
+    }
+
+    .eyebrow{
+        margin-bottom:10px;
+    }
+
+    h1{
+        font-size:23px;
+        margin-bottom:6px;
+    }
+
+    .subtitle{
+        font-size:13px;
+        margin-bottom:4px;
+    }
+
+    .coverage-note{
+        margin-bottom:16px;
+    }
+
+    .section{
+        margin-bottom:14px;
+    }
+
+    .nutri-preview{
+        padding:14px;
+        margin-bottom:14px;
+    }
+
+    h2{
+        font-size:18px;
+        margin-bottom:14px;
+    }
+
+    .empty-state{
+        padding:40px 18px;
+    }
+
+    .total-card{
+        padding:18px;
+    }
+
+    .total-kcal{
+        font-size:34px;
+    }
+
+    .diary-item{
+        padding:10px 12px;
+    }
+
+    .toast{
+        bottom:max(20px, env(safe-area-inset-bottom));
+        max-width:calc(100vw - 32px);
+        white-space:normal;
+        text-align:center;
     }
 }
 
@@ -671,7 +753,20 @@ h2{
     }
 
     .macros-row{
-        grid-template-columns:1fr;
+        grid-template-columns:repeat(3,1fr);
+        gap:6px;
+    }
+
+    .macro-pill{
+        padding:8px 4px;
+    }
+
+    .macro-pill-val{
+        font-size:14px;
+    }
+
+    .macro-pill-lbl{
+        font-size:8.5px;
     }
 }
 
