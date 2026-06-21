@@ -1,136 +1,802 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feriados do Brasil</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
 
-<title>📅 Feriados do Brasil</title>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
 
-<link rel="stylesheet" href="style.css">
+:root{
+  --paper:#f3ebd8;
+  --surface:#fffdf6;
+  --ink:#221d16;
+  --ink2:#564d3e;
+  --ink3:#7a7060;
+  --border:#ddccac;
 
+  --ouro:#b9831f;
+  --ouro-soft:#f6e9c6;
+
+  --verde:#1f6b46;
+  --verde-soft:#e3efe6;
+
+  --azul:#234a72;
+  --azul-soft:#e4ecf4;
+
+  --carmim:#a23262;
+  --carmim-soft:#f6e3ec;
+
+  --lacre:#8f2a2a;
+  --lacre-soft:#f3e2df;
+}
+
+html{scroll-behavior:smooth}
+
+body{
+  font-family:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(185,131,31,.07), transparent 45%),
+    radial-gradient(circle at 95% 100%, rgba(31,107,70,.06), transparent 45%),
+    var(--paper);
+  color:var(--ink);
+  min-height:100vh;
+  padding:28px 20px;
+}
+
+/* ─── WRAPPER ─── */
+
+.wrapper{
+  max-width:1180px;
+  margin:auto;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:18px;
+  overflow:hidden;
+  display:grid;
+  grid-template-columns:1.15fr 1fr;
+  box-shadow:0 24px 60px rgba(40,28,10,.12);
+}
+
+.left-panel{
+  padding:36px 36px 28px;
+  border-right:1px solid var(--border);
+}
+
+.right-panel{
+  padding:36px 32px;
+  background:
+    linear-gradient(180deg, var(--ouro-soft) 0%, transparent 140px),
+    var(--paper);
+}
+
+/* ─── BRAND ─── */
+
+.brand-title{
+  font-family:'Fraunces',serif;
+  font-size:26px;
+  font-weight:700;
+  letter-spacing:-.3px;
+}
+
+.brand-sub{
+  font-size:13px;
+  color:var(--ink3);
+  margin-top:4px;
+  margin-bottom:28px;
+}
+
+/* ─── BUSCA ─── */
+
+.input-group{
+  margin-bottom:22px;
+}
+
+.input-label{
+  display:block;
+  margin-bottom:7px;
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:.6px;
+  text-transform:uppercase;
+  color:var(--ink2);
+}
+
+input{
+  width:100%;
+  padding:13px 15px;
+  border:1.5px solid var(--border);
+  border-radius:9px;
+  font-size:14px;
+  font-family:inherit;
+  color:var(--ink);
+  background:var(--paper);
+  transition:border-color .15s, box-shadow .15s, background .15s;
+}
+
+input::placeholder{color:var(--ink3)}
+
+input:focus{
+  outline:none;
+  border-color:var(--ouro);
+  background:var(--surface);
+  box-shadow:0 0 0 3px rgba(185,131,31,.16);
+}
+
+/* ─── LISTA ─── */
+
+.lista-feriados{
+  margin-top:6px;
+}
+
+.mes-label{
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:.7px;
+  text-transform:uppercase;
+  color:var(--ink3);
+  padding:14px 2px 8px;
+}
+
+.mes-label:first-child{padding-top:4px}
+
+.card-feriado{
+  position:relative;
+  display:flex;
+  gap:14px;
+  align-items:flex-start;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-left:4px solid var(--cor-categoria, var(--ink3));
+  border-radius:10px;
+  padding:14px 16px;
+  margin-bottom:10px;
+  cursor:pointer;
+  transition:border-color .15s, box-shadow .15s, transform .1s;
+}
+
+.card-feriado:hover{
+  box-shadow:0 4px 14px rgba(40,28,10,.1);
+  transform:translateY(-1px);
+}
+
+.card-feriado.ativo{
+  border-color:var(--ink);
+  border-left-color:var(--cor-categoria, var(--ink));
+  box-shadow:0 4px 14px rgba(40,28,10,.12);
+}
+
+.card-feriado.eh-hoje::after{
+  content:'hoje';
+  position:absolute;
+  top:-7px;
+  right:10px;
+  background:var(--ink);
+  color:var(--surface);
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.5px;
+  text-transform:uppercase;
+  padding:3px 9px;
+  border-radius:20px;
+  transform:rotate(-3deg);
+}
+
+.card-corpo{flex:1;min-width:0}
+
+.nome-feriado{
+  font-family:'Fraunces',serif;
+  color:var(--ink);
+  font-size:17px;
+  font-weight:600;
+}
+
+.data{
+  margin-top:5px;
+  color:var(--ink3);
+  font-size:12.5px;
+}
+
+.badges{
+  margin-top:9px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  padding:3px 10px;
+  border-radius:20px;
+  font-size:11px;
+  font-weight:600;
+}
+
+.badge-carnaval{background:var(--carmim-soft);color:var(--carmim)}
+.badge-pascoa{background:var(--azul-soft);color:var(--azul)}
+.badge-natal{background:var(--lacre-soft);color:var(--lacre)}
+.badge-prolongado{background:var(--ouro-soft);color:var(--ouro)}
+.badge-civico{background:var(--verde-soft);color:var(--verde)}
+
+.sem-resultado{
+  display:none;
+  text-align:center;
+  padding:40px 16px;
+  color:var(--ink3);
+  font-size:14px;
+}
+
+/* ─── PAINEL DIREITO ─── */
+
+.eyebrow{
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:.7px;
+  text-transform:uppercase;
+  color:var(--ouro);
+  margin-bottom:18px;
+}
+
+/* SELO — o elemento de assinatura: um carimbo de cera com a contagem de dias */
+
+.selo-area{
+  display:flex;
+  align-items:center;
+  gap:22px;
+  margin-bottom:28px;
+}
+
+.selo{
+  position:relative;
+  flex-shrink:0;
+  width:118px;
+  height:118px;
+  border-radius:50%;
+  border:3px solid var(--ouro);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  transform:rotate(-4deg);
+  background:var(--surface);
+}
+
+.selo::before{
+  content:'';
+  position:absolute;
+  inset:9px;
+  border:1.5px dashed var(--ouro);
+  border-radius:50%;
+  opacity:.55;
+}
+
+.selo::after{
+  content:'';
+  position:absolute;
+  inset:-4px;
+  border:1px solid var(--ouro);
+  border-radius:50%;
+  opacity:.22;
+  transform:rotate(5deg);
+}
+
+.selo-num{
+  font-family:'Fraunces',serif;
+  font-size:30px;
+  font-weight:700;
+  color:var(--ouro);
+  line-height:1;
+  transform:rotate(4deg);
+}
+
+.selo-label{
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:.6px;
+  text-transform:uppercase;
+  color:var(--ink2);
+  margin-top:3px;
+  transform:rotate(4deg);
+}
+
+.selo-info{min-width:0}
+
+.selo-nome{
+  font-family:'Fraunces',serif;
+  font-size:21px;
+  font-weight:700;
+  color:var(--ink);
+  line-height:1.25;
+}
+
+.selo-data{
+  font-size:13px;
+  color:var(--ink3);
+  margin-top:6px;
+}
+
+/* DETALHE */
+
+.detalhe-box{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:18px 20px;
+  margin-bottom:24px;
+  box-shadow:0 2px 8px rgba(40,28,10,.06);
+}
+
+.detalhe-eyebrow{
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:.6px;
+  text-transform:uppercase;
+  color:var(--ink3);
+  margin-bottom:8px;
+}
+
+.detalhe-nome{
+  font-family:'Fraunces',serif;
+  font-size:18px;
+  font-weight:600;
+  color:var(--ink);
+}
+
+.detalhe-data{
+  font-size:13px;
+  color:var(--ink3);
+  margin-top:5px;
+}
+
+.detalhe-badges{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:10px;
+}
+
+/* ESTATÍSTICAS */
+
+.stats-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-bottom:20px;
+}
+
+.stat-ticket{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:14px 16px;
+}
+
+.stat-label{
+  font-size:10.5px;
+  font-weight:600;
+  letter-spacing:.5px;
+  text-transform:uppercase;
+  color:var(--ink3);
+  margin-bottom:6px;
+}
+
+.stat-valor{
+  font-family:'Fraunces',serif;
+  font-size:24px;
+  font-weight:700;
+  color:var(--ink);
+}
+
+.top3-box{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:16px 18px;
+}
+
+.top3-lista{margin-top:8px}
+
+.top3-item{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  padding:8px 0;
+  border-bottom:1px solid var(--border);
+  font-size:13.5px;
+}
+
+.top3-item:last-child{border-bottom:none;padding-bottom:0}
+
+.top3-nome{color:var(--ink);font-weight:500}
+.top3-dias{color:var(--ouro);font-weight:600;flex-shrink:0;white-space:nowrap}
+
+/* ─── RESPONSIVO ─── */
+
+@media(max-width:880px){
+  .wrapper{grid-template-columns:1fr}
+  .right-panel{
+    order:-1;
+    border-bottom:1px solid var(--border);
+  }
+  .left-panel{
+    border-right:none;
+    border-top:1px solid var(--border);
+  }
+  .left-panel,.right-panel{padding:28px 22px}
+}
+
+</style>
 </head>
-
 <body>
 
 <div class="wrapper">
 
-    <div class="left-panel">
+  <!-- PAINEL ESQUERDO: busca + lista -->
+  <div class="left-panel">
 
-        <h1>📅 Feriados do Brasil</h1>
-
-        <div class="subtitle">
-            Calendário Nacional Brasileiro
-        </div>
-
-        <div class="info-box">
-            Gratuito • Sem API • Atualização automática
-        </div>
-
-        <div class="section-title">
-            Pesquisar
-        </div>
-
-        <div class="input-group">
-
-            <label class="input-label">
-                BUSCAR FERIADO
-            </label>
-
-            <input
-            type="text"
-            id="busca"
-            placeholder="Ex.: Carnaval, Natal, Tiradentes">
-
-        </div>
-
-        <div
-        id="listaFeriados"
-        class="lista-feriados">
-
-        </div>
-
+    <div class="brand">
+      <div class="brand-title">Feriados do Brasil</div>
+      <div class="brand-sub">Calendário nacional · atualização automática</div>
     </div>
 
-
-    <div class="right-panel">
-
-        <div class="resultado-header">
-            Próximo Feriado
-        </div>
-
-        <div class="proximo-box">
-
-            <div
-            id="proximoNome"
-            class="proximo-nome">
-
-                Carregando...
-
-            </div>
-
-            <div
-            id="proximoData"
-            class="proximo-data">
-
-            </div>
-
-            <div
-            id="diasRestantes"
-            class="contagem">
-
-            </div>
-
-        </div>
-
-
-        <div class="ano-atual">
-
-            <div class="ano-label">
-                ANO EXIBIDO
-            </div>
-
-            <div
-            id="anoAtual"
-            class="ano-valor">
-
-            </div>
-
-        </div>
-
-
-        <div class="ano-atual">
-
-            <div class="ano-label">
-                TOTAL DE FERIADOS
-            </div>
-
-            <div
-            id="totalFeriados"
-            class="ano-valor">
-
-            </div>
-
-        </div>
-
-
-        <div class="ano-atual">
-
-            <div class="ano-label">
-                PRÓXIMOS 3 FERIADOS
-            </div>
-
-            <div id="top3">
-
-            </div>
-
-        </div>
-
+    <div class="input-group">
+      <label class="input-label" for="busca">Buscar feriado</label>
+      <input
+        type="text"
+        id="busca"
+        placeholder="Ex.: Carnaval, Natal, Tiradentes…"
+        autocomplete="off">
     </div>
+
+    <div id="listaFeriados" class="lista-feriados"></div>
+    <div id="semResultado" class="sem-resultado">Nenhum feriado encontrado.</div>
+
+  </div>
+
+  <!-- PAINEL DIREITO: próximo feriado + detalhe + estatísticas -->
+  <div class="right-panel">
+
+    <div class="eyebrow">Próximo feriado</div>
+
+    <div class="selo-area">
+      <div class="selo">
+        <div class="selo-num" id="diasRestantes">—</div>
+        <div class="selo-label">dias</div>
+      </div>
+      <div class="selo-info">
+        <div class="selo-nome" id="proximoNome">Carregando…</div>
+        <div class="selo-data" id="proximoData"></div>
+      </div>
+    </div>
+
+    <div id="detalheBox" class="detalhe-box" style="display:none">
+      <div class="detalhe-eyebrow">Selecionado</div>
+      <div class="detalhe-nome" id="detalheNome"></div>
+      <div class="detalhe-data" id="detalheData"></div>
+      <div class="detalhe-badges" id="detalheBadges"></div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-ticket">
+        <div class="stat-label">Ano exibido</div>
+        <div class="stat-valor" id="anoAtual"></div>
+      </div>
+      <div class="stat-ticket">
+        <div class="stat-label">Total de feriados</div>
+        <div class="stat-valor" id="totalFeriados"></div>
+      </div>
+    </div>
+
+    <div class="top3-box">
+      <div class="stat-label">Próximos feriados</div>
+      <div id="top3" class="top3-lista"></div>
+    </div>
+
+  </div>
 
 </div>
 
-<script src="script.js"></script>
+<script>
+// =========================
+// ANO ATUAL
+// =========================
 
+const ANO = new Date().getFullYear();
+document.getElementById("anoAtual").textContent = ANO;
+
+// =========================
+// DIAS DA SEMANA / MESES
+// =========================
+
+const DIAS_SEMANA = [
+  "domingo", "segunda-feira", "terça-feira", "quarta-feira",
+  "quinta-feira", "sexta-feira", "sábado"
+];
+
+const MESES = [
+  "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+  "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+];
+
+// =========================
+// FORMATAÇÃO DE DATAS
+// =========================
+
+function formatarISO(data) {
+  const ano = data.getFullYear();
+  const mes = String(data.getMonth() + 1).padStart(2, "0");
+  const dia = String(data.getDate()).padStart(2, "0");
+  return `${ano}-${mes}-${dia}`;
+}
+
+// Evita problemas de fuso horário ao reconstruir uma data a partir de "AAAA-MM-DD"
+function parseISO(iso) {
+  const [ano, mes, dia] = iso.split("-").map(Number);
+  return new Date(ano, mes - 1, dia);
+}
+
+function formatarData(iso) {
+  const d = parseISO(iso);
+  const curta = d.toLocaleDateString("pt-BR", {
+    day: "2-digit", month: "2-digit", year: "numeric"
+  });
+  return `${curta} · ${DIAS_SEMANA[d.getDay()]}`;
+}
+
+// =========================
+// CÁLCULO DA PÁSCOA
+// (Algoritmo de Meeus/Jones/Butcher)
+// =========================
+
+function calcularPascoa(ano) {
+  const a = ano % 19;
+  const b = Math.floor(ano / 100);
+  const c = ano % 100;
+  const d = Math.floor(b / 4);
+  const e = b % 4;
+  const f = Math.floor((b + 8) / 25);
+  const g = Math.floor((b - f + 1) / 3);
+  const h = (19 * a + b - d - g + 15) % 30;
+  const i = Math.floor(c / 4);
+  const k = c % 4;
+  const l = (32 + 2 * e + 2 * i - h - k) % 7;
+  const m = Math.floor((a + 11 * h + 22 * l) / 451);
+
+  const mes = Math.floor((h + l - 7 * m + 114) / 31);
+  const dia = ((h + l - 7 * m + 114) % 31) + 1;
+
+  return new Date(ano, mes - 1, dia);
+}
+
+function deslocarDias(data, dias) {
+  const nova = new Date(data);
+  nova.setDate(nova.getDate() + dias);
+  return nova;
+}
+
+// =========================
+// DATAS MÓVEIS (baseadas na Páscoa)
+// =========================
+
+const pascoa = calcularPascoa(ANO);
+const carnaval = deslocarDias(pascoa, -47);
+const sextaSanta = deslocarDias(pascoa, -2);
+const corpusChristi = deslocarDias(pascoa, 60);
+
+// =========================
+// FERIADOS NACIONAIS
+// categoria: "civico" | "carnaval" | "pascoa" | "natal"
+// =========================
+
+let feriados = [
+  { nome: "Confraternização Universal", data: `${ANO}-01-01`, categoria: "civico" },
+  { nome: "Carnaval", data: formatarISO(carnaval), categoria: "carnaval" },
+  { nome: "Sexta-feira Santa", data: formatarISO(sextaSanta), categoria: "pascoa" },
+  { nome: "Páscoa", data: formatarISO(pascoa), categoria: "pascoa" },
+  { nome: "Tiradentes", data: `${ANO}-04-21`, categoria: "civico" },
+  { nome: "Dia do Trabalho", data: `${ANO}-05-01`, categoria: "civico" },
+  { nome: "Corpus Christi", data: formatarISO(corpusChristi), categoria: "pascoa" },
+  { nome: "Independência do Brasil", data: `${ANO}-09-07`, categoria: "civico" },
+  { nome: "Nossa Senhora Aparecida", data: `${ANO}-10-12`, categoria: "pascoa" },
+  { nome: "Finados", data: `${ANO}-11-02`, categoria: "pascoa" },
+  { nome: "Proclamação da República", data: `${ANO}-11-15`, categoria: "civico" },
+  { nome: "Dia da Consciência Negra", data: `${ANO}-11-20`, categoria: "civico" },
+  { nome: "Natal", data: `${ANO}-12-25`, categoria: "natal" }
+];
+
+feriados.sort((a, b) => parseISO(a.data) - parseISO(b.data));
+
+// =========================
+// HELPERS DE NEGÓCIO
+// =========================
+
+function ehProlongado(iso) {
+  const diaSemana = parseISO(iso).getDay();
+  // Cai numa sexta ou numa segunda → emenda natural com o fim de semana
+  return diaSemana === 1 || diaSemana === 5;
+}
+
+function ehHoje(iso) {
+  return iso === hojeISO;
+}
+
+const ICONE_CATEGORIA = {
+  carnaval: "🎭",
+  pascoa: "✝️",
+  natal: "🎄",
+  civico: "🇧🇷"
+};
+
+// =========================
+// ESTADO
+// =========================
+
+const hoje = new Date();
+hoje.setHours(0, 0, 0, 0);
+const hojeISO = formatarISO(hoje);
+
+let feriadoSelecionado = null;
+
+document.getElementById("totalFeriados").textContent = feriados.length;
+
+// =========================
+// RENDERIZAR LISTA (agrupada por mês)
+// =========================
+
+function renderizarBadges(item) {
+  let html = "";
+
+  if (item.categoria === "carnaval") {
+    html += `<span class="badge badge-carnaval">🎭 Carnaval</span>`;
+  }
+  if (item.categoria === "pascoa") {
+    html += `<span class="badge badge-pascoa">✝️ Semana Santa / Páscoa</span>`;
+  }
+  if (item.categoria === "natal") {
+    html += `<span class="badge badge-natal">🎄 Natal</span>`;
+  }
+  if (item.categoria === "civico") {
+    html += `<span class="badge badge-civico">🇧🇷 Feriado cívico</span>`;
+  }
+  if (ehProlongado(item.data)) {
+    html += `<span class="badge badge-prolongado">⭐ Feriado prolongado</span>`;
+  }
+
+  return html;
+}
+
+const COR_CATEGORIA = {
+  carnaval: "var(--carmim)",
+  pascoa: "var(--azul)",
+  natal: "var(--lacre)",
+  civico: "var(--verde)"
+};
+
+function mostrarFeriados(lista) {
+  const container = document.getElementById("listaFeriados");
+  const vazio = document.getElementById("semResultado");
+
+  if (!lista.length) {
+    container.innerHTML = "";
+    vazio.style.display = "block";
+    return;
+  }
+  vazio.style.display = "none";
+
+  const grupos = {};
+  for (const item of lista) {
+    const mes = MESES[parseISO(item.data).getMonth()];
+    if (!grupos[mes]) grupos[mes] = [];
+    grupos[mes].push(item);
+  }
+
+  container.innerHTML = Object.entries(grupos).map(([mes, itens]) => `
+    <div class="mes-label">${mes}</div>
+    ${itens.map(item => {
+      const ativo = feriadoSelecionado === item.data;
+      const cor = COR_CATEGORIA[item.categoria] || "var(--ink3)";
+      return `
+        <div
+          class="card-feriado${ativo ? " ativo" : ""}${ehHoje(item.data) ? " eh-hoje" : ""}"
+          style="--cor-categoria:${cor}"
+          onclick="selecionarFeriado('${item.data}')"
+        >
+          <div class="card-corpo">
+            <div class="nome-feriado">${item.nome}</div>
+            <div class="data">${formatarData(item.data)}</div>
+            <div class="badges">${renderizarBadges(item)}</div>
+          </div>
+        </div>
+      `;
+    }).join("")}
+  `).join("");
+}
+
+// =========================
+// SELECIONAR FERIADO (mostra detalhe)
+// =========================
+
+function selecionarFeriado(iso) {
+  feriadoSelecionado = iso;
+  const item = feriados.find(f => f.data === iso);
+  if (!item) return;
+
+  document.getElementById("detalheBox").style.display = "block";
+  document.getElementById("detalheNome").textContent = item.nome;
+  document.getElementById("detalheData").textContent = formatarData(item.data);
+  document.getElementById("detalheBadges").innerHTML = renderizarBadges(item);
+
+  mostrarFeriados(feriadosFiltrados());
+}
+
+// =========================
+// PESQUISA
+// =========================
+
+function feriadosFiltrados() {
+  const texto = document.getElementById("busca").value.toLowerCase().trim();
+  if (!texto) return feriados;
+  return feriados.filter(item => item.nome.toLowerCase().includes(texto));
+}
+
+document.getElementById("busca").addEventListener("input", () => {
+  mostrarFeriados(feriadosFiltrados());
+});
+
+// =========================
+// PRÓXIMO FERIADO (selo)
+// =========================
+
+function mostrarProximoFeriado() {
+  let proximo = feriados.find(item => parseISO(item.data) >= hoje);
+
+  if (!proximo) {
+    proximo = { nome: "Confraternização Universal", data: `${ANO + 1}-01-01` };
+  }
+
+  const diferenca = Math.ceil((parseISO(proximo.data) - hoje) / (1000 * 60 * 60 * 24));
+
+  document.getElementById("proximoNome").textContent = proximo.nome;
+  document.getElementById("proximoData").textContent = formatarData(proximo.data);
+  document.getElementById("diasRestantes").textContent = diferenca === 0 ? "Hoje" : diferenca;
+}
+
+// =========================
+// PRÓXIMOS FERIADOS (lista lateral)
+// =========================
+
+function mostrarTop3() {
+  const proximos = feriados
+    .filter(item => parseISO(item.data) >= hoje)
+    .slice(0, 3);
+
+  document.getElementById("top3").innerHTML = proximos.map(item => {
+    const dias = Math.ceil((parseISO(item.data) - hoje) / (1000 * 60 * 60 * 24));
+    return `
+      <div class="top3-item">
+        <span class="top3-nome">${ICONE_CATEGORIA[item.categoria] || ""} ${item.nome}</span>
+        <span class="top3-dias">${dias === 0 ? "hoje" : `${dias}d`}</span>
+      </div>
+    `;
+  }).join("");
+}
+
+// =========================
+// INICIALIZAÇÃO
+// =========================
+
+mostrarFeriados(feriados);
+mostrarProximoFeriado();
+mostrarTop3();
+
+</script>
 </body>
 </html>
