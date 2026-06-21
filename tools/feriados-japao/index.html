@@ -1,103 +1,824 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Feriados do Japão</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Serif+JP:wght@400;700&display=swap');
 
-<title>📅 Feriados do Japão</title>
+*{margin:0;padding:0;box-sizing:border-box}
 
-<link rel="stylesheet" href="style.css">
+:root{
+  --ink:#111318;
+  --ink2:#454c5e;
+  --ink3:#8891a8;
+  --ink4:#b8bed0;
+  --page:#f7f7f9;
+  --surface:#ffffff;
+  --border:#e6e8f0;
+  --red:#c0392b;
+  --red-soft:#fdf2f2;
+  --gold:#b8860b;
+  --gold-soft:#fdf8ed;
+  --blue:#1a56a8;
+  --blue-soft:#eef3fb;
+  --purple:#6b3fa0;
+  --purple-soft:#f4f0fb;
+  --green:#177a4a;
+  --green-soft:#edf7f2;
+}
 
+html{scroll-behavior:smooth}
+
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--page);
+  color:var(--ink);
+  min-height:100vh;
+}
+
+/* ─── LAYOUT ─── */
+
+.app{
+  display:grid;
+  grid-template-columns:420px 1fr;
+  grid-template-rows:auto 1fr;
+  min-height:100vh;
+}
+
+/* ─── SIDEBAR ─── */
+
+.sidebar{
+  grid-row:1/-1;
+  background:var(--surface);
+  border-right:1px solid var(--border);
+  display:flex;
+  flex-direction:column;
+  height:100vh;
+  position:sticky;
+  top:0;
+  overflow:hidden;
+}
+
+.sidebar-top{
+  padding:32px 28px 24px;
+  border-bottom:1px solid var(--border);
+  flex-shrink:0;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:24px;
+}
+
+.brand-mark{
+  width:42px;height:42px;
+  background:var(--ink);
+  border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+
+.brand-mark svg{width:22px;height:22px;fill:white}
+
+.brand-name{font-size:17px;font-weight:600;letter-spacing:-.3px;line-height:1.2}
+.brand-sub{font-size:12px;color:var(--ink3);margin-top:2px}
+
+.search-wrap{position:relative}
+
+.search-wrap svg{
+  position:absolute;left:13px;top:50%;transform:translateY(-50%);
+  width:16px;height:16px;stroke:var(--ink3);fill:none;pointer-events:none;
+}
+
+#busca{
+  width:100%;
+  padding:11px 14px 11px 38px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  font-size:14px;
+  font-family:inherit;
+  color:var(--ink);
+  background:var(--page);
+  transition:border .15s,box-shadow .15s;
+}
+
+#busca:focus{
+  outline:none;
+  border-color:#888;
+  background:var(--surface);
+  box-shadow:0 0 0 3px rgba(0,0,0,.06);
+}
+
+#busca::placeholder{color:var(--ink4)}
+
+.list-wrap{
+  flex:1;
+  overflow-y:auto;
+  padding:16px 16px 24px;
+  scrollbar-width:thin;
+  scrollbar-color:var(--border) transparent;
+}
+
+.list-wrap::-webkit-scrollbar{width:4px}
+.list-wrap::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+
+.month-group{margin-bottom:8px}
+
+.month-label{
+  font-size:11px;
+  font-weight:600;
+  color:var(--ink3);
+  text-transform:uppercase;
+  letter-spacing:.8px;
+  padding:10px 12px 6px;
+}
+
+.holiday-row{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:12px;
+  border-radius:10px;
+  cursor:pointer;
+  transition:background .12s;
+  border:1px solid transparent;
+}
+
+.holiday-row:hover{background:var(--page)}
+.holiday-row.active{background:var(--ink);border-color:transparent}
+.holiday-row.active .h-jp{color:rgba(255,255,255,.55)}
+.holiday-row.active .h-pt{color:white}
+.holiday-row.active .h-date{color:rgba(255,255,255,.45)}
+.holiday-row.active .h-dot{background:rgba(255,255,255,.3)}
+.holiday-row.active .dot-golden{background:#ffd700}
+.holiday-row.active .dot-furikae{background:#7eb8f7}
+.holiday-row.active .dot-kokumin{background:#c8a6f5}
+
+.h-dot{
+  width:8px;height:8px;
+  border-radius:50%;
+  background:var(--ink4);
+  flex-shrink:0;
+}
+
+.dot-golden{background:var(--gold)}
+.dot-furikae{background:var(--blue)}
+.dot-kokumin{background:var(--purple)}
+.dot-hoje{background:var(--red);box-shadow:0 0 0 3px rgba(192,57,43,.15)}
+
+.h-main{flex:1;min-width:0}
+.h-jp{font-size:11px;color:var(--ink3);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.h-pt{font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.h-date{font-size:12px;color:var(--ink3);margin-top:2px}
+
+.empty-search{
+  text-align:center;
+  padding:40px 20px;
+  color:var(--ink3);
+  font-size:14px;
+  display:none;
+}
+
+/* ─── MAIN PANEL ─── */
+
+.main{
+  background:var(--page);
+  overflow-y:auto;
+}
+
+/* COUNTDOWN HERO */
+
+.hero{
+  background:var(--ink);
+  padding:48px 48px 40px;
+  position:relative;
+  overflow:hidden;
+}
+
+.hero::before{
+  content:'祝';
+  font-family:'Noto Serif JP',serif;
+  font-size:200px;
+  color:rgba(255,255,255,.04);
+  position:absolute;
+  right:-20px;top:-30px;
+  line-height:1;
+  pointer-events:none;
+  user-select:none;
+}
+
+.hero-eyebrow{
+  font-size:11px;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  color:rgba(255,255,255,.4);
+  margin-bottom:16px;
+}
+
+.hero-jp{
+  font-family:'Noto Serif JP',serif;
+  font-size:32px;
+  color:white;
+  font-weight:700;
+  line-height:1.2;
+  margin-bottom:4px;
+}
+
+.hero-romaji{
+  font-size:14px;
+  color:rgba(255,255,255,.45);
+  margin-bottom:16px;
+}
+
+.hero-pt{
+  font-size:18px;
+  color:rgba(255,255,255,.8);
+  font-weight:500;
+  margin-bottom:32px;
+}
+
+.hero-meta{
+  display:flex;
+  gap:32px;
+  align-items:flex-end;
+}
+
+.hero-stat{}
+.hero-stat-num{
+  font-size:48px;
+  font-weight:600;
+  color:white;
+  line-height:1;
+  letter-spacing:-2px;
+}
+
+.hero-stat-num.hoje-txt{font-size:32px;letter-spacing:0}
+
+.hero-stat-label{
+  font-size:12px;
+  color:rgba(255,255,255,.4);
+  margin-top:4px;
+  text-transform:uppercase;
+  letter-spacing:.6px;
+}
+
+.hero-date-full{
+  font-size:15px;
+  color:rgba(255,255,255,.55);
+  line-height:1.5;
+}
+
+.hero-badges{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:24px;
+}
+
+.hbadge{
+  font-size:11px;
+  font-weight:600;
+  padding:4px 10px;
+  border-radius:20px;
+  letter-spacing:.3px;
+}
+
+.hbadge-golden{background:#ffd700;color:#6b4c00}
+.hbadge-furikae{background:var(--blue-soft);color:var(--blue)}
+.hbadge-kokumin{background:var(--purple-soft);color:var(--purple)}
+
+/* DETAIL SECTION */
+
+.detail{
+  padding:40px 48px 48px;
+}
+
+.detail-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+  margin-bottom:16px;
+}
+
+.stat-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:20px 22px;
+}
+
+.stat-card-label{
+  font-size:11px;
+  font-weight:600;
+  color:var(--ink3);
+  text-transform:uppercase;
+  letter-spacing:.7px;
+  margin-bottom:10px;
+}
+
+.stat-card-value{
+  font-size:22px;
+  font-weight:600;
+  color:var(--ink);
+  line-height:1.2;
+}
+
+.stat-card-sub{
+  font-size:13px;
+  color:var(--ink3);
+  margin-top:4px;
+}
+
+.stat-card-jp{
+  font-family:'Noto Serif JP',serif;
+  font-size:28px;
+  font-weight:700;
+  color:var(--ink);
+  margin-bottom:4px;
+}
+
+/* YEAR OVERVIEW */
+
+.year-section{
+  margin-top:32px;
+}
+
+.section-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:20px;
+}
+
+.section-head h2{
+  font-size:15px;
+  font-weight:600;
+}
+
+.pill{
+  font-size:12px;
+  background:var(--page);
+  border:1px solid var(--border);
+  padding:4px 12px;
+  border-radius:20px;
+  color:var(--ink2);
+}
+
+.timeline{
+  position:relative;
+  padding-left:20px;
+}
+
+.timeline::before{
+  content:'';
+  position:absolute;
+  left:3px;top:8px;bottom:8px;
+  width:1px;
+  background:var(--border);
+}
+
+.tl-item{
+  position:relative;
+  padding:0 0 20px 20px;
+  cursor:pointer;
+}
+
+.tl-item:last-child{padding-bottom:0}
+
+.tl-dot{
+  position:absolute;
+  left:-5px;top:5px;
+  width:9px;height:9px;
+  border-radius:50%;
+  background:var(--ink4);
+  border:2px solid var(--page);
+  transition:background .15s;
+}
+
+.tl-item:hover .tl-dot{background:var(--ink2)}
+.tl-item.tl-past .tl-dot{background:var(--border)}
+.tl-item.tl-today .tl-dot{background:var(--red);border-color:var(--red-soft);box-shadow:0 0 0 3px rgba(192,57,43,.12)}
+.tl-item.tl-active .tl-dot{background:var(--ink)}
+.tl-item.tl-golden .tl-dot{background:var(--gold)}
+
+.tl-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:14px 16px;
+  transition:border-color .15s,box-shadow .15s;
+}
+
+.tl-item:hover .tl-card{border-color:#bbb;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.tl-item.tl-active .tl-card{border-color:var(--ink);box-shadow:0 2px 12px rgba(0,0,0,.1)}
+.tl-item.tl-past .tl-card{opacity:.5}
+.tl-item.tl-today .tl-card{border-color:var(--red);box-shadow:0 0 0 3px rgba(192,57,43,.08)}
+
+.tl-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.tl-jp-small{font-size:12px;color:var(--ink3);margin-bottom:3px;font-family:'Noto Serif JP',serif}
+.tl-pt{font-size:14px;font-weight:500}
+.tl-date-pill{
+  font-size:11px;
+  font-weight:600;
+  background:var(--page);
+  padding:3px 9px;
+  border-radius:20px;
+  color:var(--ink3);
+  white-space:nowrap;
+  flex-shrink:0;
+}
+
+.tl-item.tl-today .tl-date-pill{background:var(--red-soft);color:var(--red)}
+.tl-item.tl-golden .tl-date-pill{background:var(--gold-soft);color:var(--gold)}
+
+.tl-badges{
+  display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;
+}
+
+.tbadge{
+  font-size:10px;font-weight:600;
+  padding:2px 8px;border-radius:10px;
+}
+
+.tbadge-golden{background:var(--gold-soft);color:var(--gold)}
+.tbadge-furikae{background:var(--blue-soft);color:var(--blue)}
+.tbadge-kokumin{background:var(--purple-soft);color:var(--purple)}
+.tbadge-hoje{background:var(--red-soft);color:var(--red)}
+
+/* ─── RESPONSIVE ─── */
+
+@media(max-width:860px){
+  .app{
+    grid-template-columns:1fr;
+    grid-template-rows:auto auto 1fr;
+  }
+  .sidebar{
+    grid-row:auto;
+    height:auto;
+    position:static;
+    border-right:none;
+    border-bottom:1px solid var(--border);
+  }
+  .list-wrap{
+    max-height:320px;
+  }
+  .hero{padding:32px 24px 28px}
+  .hero::before{font-size:120px}
+  .hero-jp{font-size:24px}
+  .detail{padding:28px 24px 40px}
+  .detail-row{grid-template-columns:1fr}
+  .hero-meta{gap:20px}
+  .hero-stat-num{font-size:36px}
+}
+</style>
 </head>
-
 <body>
 
-<div class="wrapper">
+<div class="app">
 
-    <div class="left-panel">
-
-        <h1>📅 Feriados do Japão</h1>
-
-        <div class="subtitle">
-            Calendário Oficial Japonês
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-top">
+      <div class="brand">
+        <div class="brand-mark">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/>
+          </svg>
         </div>
-
-        <div class="info-box">
-            Gratuito • Sem API • Atualização automática
+        <div>
+          <div class="brand-name">Feriados do Japão</div>
+          <div class="brand-sub">Calendário <span id="anoAtual"></span> — atualização automática</div>
         </div>
+      </div>
+      <div class="search-wrap">
+        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input type="text" id="busca" placeholder="Buscar por nome, romaji ou japonês…" autocomplete="off">
+      </div>
+    </div>
+    <div class="list-wrap">
+      <div class="empty-search" id="emptySearch">Nenhum feriado encontrado.</div>
+      <div id="listaFeriados"></div>
+    </div>
+  </aside>
 
-        <div class="section-title">
-            Pesquisar
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- HERO: próximo feriado -->
+    <div class="hero">
+      <div class="hero-eyebrow">Próximo feriado</div>
+      <div class="hero-jp" id="heroJp">—</div>
+      <div class="hero-romaji" id="heroRomaji"></div>
+      <div class="hero-pt" id="heroPt"></div>
+      <div class="hero-meta">
+        <div class="hero-stat">
+          <div class="hero-stat-num" id="heroDias">—</div>
+          <div class="hero-stat-label">dias restantes</div>
         </div>
-
-        <div class="input-group">
-
-            <label class="input-label">
-                BUSCAR FERIADO
-            </label>
-
-            <input
-            type="text"
-            id="busca"
-            placeholder="Ex.: Ganjitsu, 元日, Ano Novo">
-
-        </div>
-
-        <div id="listaFeriados"
-             class="lista-feriados">
-
-        </div>
-
+        <div class="hero-date-full" id="heroDataFull"></div>
+      </div>
+      <div class="hero-badges" id="heroBadges"></div>
     </div>
 
-
-    <div class="right-panel">
-
-        <div class="resultado-header">
-            Próximo Feriado
+    <!-- DETAIL: feriado selecionado -->
+    <div class="detail">
+      <div class="detail-row" id="detailCards" style="display:none">
+        <div class="stat-card">
+          <div class="stat-card-label">Nome em japonês</div>
+          <div class="stat-card-jp" id="detailJp"></div>
+          <div class="stat-card-sub" id="detailRomaji"></div>
         </div>
-
-        <div class="proximo-box">
-
-            <div id="proximoNome"
-                 class="proximo-nome">
-
-                Carregando...
-
-            </div>
-
-            <div id="proximoData"
-                 class="proximo-data">
-
-            </div>
-
-            <div id="diasRestantes"
-                 class="contagem">
-
-            </div>
-
+        <div class="stat-card">
+          <div class="stat-card-label">Data</div>
+          <div class="stat-card-value" id="detailData"></div>
+          <div class="stat-card-sub" id="detailDow"></div>
         </div>
+      </div>
 
-
-        <div class="ano-atual">
-
-            <div class="ano-label">
-                ANO EXIBIDO
-            </div>
-
-            <div id="anoAtual"
-                 class="ano-valor">
-
-            </div>
-
+      <!-- TIMELINE -->
+      <div class="year-section">
+        <div class="section-head">
+          <h2>Todos os feriados</h2>
+          <span class="pill" id="totalPill"></span>
         </div>
-
+        <div class="timeline" id="timeline"></div>
+      </div>
     </div>
 
+  </main>
 </div>
 
-<script src="script.js"></script>
+<script>
+const ANO = new Date().getFullYear();
+document.querySelectorAll('#anoAtual').forEach(el => el.textContent = ANO);
 
+// ── HELPERS ──
+
+function fmtISO(d){
+  const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),dd=String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${dd}`;
+}
+
+const DIAS_JP=['日','月','火','水','木','金','土'];
+const DIAS_PT=['domingo','segunda-feira','terça-feira','quarta-feira','quinta-feira','sexta-feira','sábado'];
+const MESES_PT=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+
+function parseDateUTC(iso){
+  const [y,m,d]=iso.split('-').map(Number);
+  return new Date(y,m-1,d);
+}
+
+function fmtBR(iso){
+  const d=parseDateUTC(iso);
+  return d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'});
+}
+
+function fmtFull(iso){
+  const d=parseDateUTC(iso);
+  return `${d.getDate()} de ${MESES_PT[d.getMonth()]}`;
+}
+
+function dowJP(iso){
+  const d=parseDateUTC(iso);
+  return DIAS_JP[d.getDay()]+'曜日';
+}
+
+function dowPT(iso){
+  const d=parseDateUTC(iso);
+  return DIAS_PT[d.getDay()];
+}
+
+// ── CÁLCULOS DE DATA ──
+
+function nthMonday(mes,n){
+  const d=new Date(ANO,mes-1,1);
+  while(d.getDay()!==1)d.setDate(d.getDate()+1);
+  d.setDate(d.getDate()+(n-1)*7);
+  return fmtISO(d);
+}
+
+function equinoxMar(){
+  const dia=Math.floor(20.8431+0.242194*(ANO-1980)-Math.floor((ANO-1980)/4));
+  return `${ANO}-03-${String(dia).padStart(2,'0')}`;
+}
+
+function equinoxSep(){
+  const dia=Math.floor(23.2488+0.242194*(ANO-1980)-Math.floor((ANO-1980)/4));
+  return `${ANO}-09-${String(dia).padStart(2,'0')}`;
+}
+
+// ── FERIADOS BASE ──
+
+let feriados=[
+  {jp:'元日',romaji:'Ganjitsu',pt:'Ano Novo',data:`${ANO}-01-01`},
+  {jp:'成人の日',romaji:'Seijin no Hi',pt:'Dia da Maioridade',data:nthMonday(1,2)},
+  {jp:'建国記念の日',romaji:'Kenkoku Kinen no Hi',pt:'Dia da Fundação Nacional',data:`${ANO}-02-11`},
+  {jp:'天皇誕生日',romaji:'Tennō Tanjōbi',pt:'Aniversário do Imperador',data:`${ANO}-02-23`},
+  {jp:'春分の日',romaji:'Shunbun no Hi',pt:'Equinócio da Primavera',data:equinoxMar()},
+  {jp:'昭和の日',romaji:'Shōwa no Hi',pt:'Dia de Shōwa',data:`${ANO}-04-29`,golden:true},
+  {jp:'憲法記念日',romaji:'Kenpō Kinenbi',pt:'Dia da Constituição',data:`${ANO}-05-03`,golden:true},
+  {jp:'みどりの日',romaji:'Midori no Hi',pt:'Dia do Verde',data:`${ANO}-05-04`,golden:true},
+  {jp:'こどもの日',romaji:'Kodomo no Hi',pt:'Dia das Crianças',data:`${ANO}-05-05`,golden:true},
+  {jp:'海の日',romaji:'Umi no Hi',pt:'Dia do Mar',data:nthMonday(7,3)},
+  {jp:'山の日',romaji:'Yama no Hi',pt:'Dia da Montanha',data:`${ANO}-08-11`},
+  {jp:'敬老の日',romaji:'Keirō no Hi',pt:'Dia do Respeito aos Idosos',data:nthMonday(9,3)},
+  {jp:'秋分の日',romaji:'Shūbun no Hi',pt:'Equinócio de Outono',data:equinoxSep()},
+  {jp:'スポーツの日',romaji:'Supōtsu no Hi',pt:'Dia do Esporte',data:nthMonday(10,2)},
+  {jp:'文化の日',romaji:'Bunka no Hi',pt:'Dia da Cultura',data:`${ANO}-11-03`},
+  {jp:'勤労感謝の日',romaji:'Kinrō Kansha no Hi',pt:'Dia de Ação de Graças pelo Trabalho',data:`${ANO}-11-23`},
+];
+
+function existeData(iso){return feriados.some(f=>f.data===iso)}
+
+function addFeriado(obj){if(!existeData(obj.data))feriados.push(obj)}
+
+// Furikae
+for(const item of [...feriados]){
+  const d=parseDateUTC(item.data);
+  if(d.getDay()===0){
+    d.setDate(d.getDate()+1);
+    while(existeData(fmtISO(d)))d.setDate(d.getDate()+1);
+    addFeriado({jp:'振替休日',romaji:'Furikae Kyūjitsu',pt:'Feriado Substituto',data:fmtISO(d),furikae:true});
+  }
+}
+
+// Kokumin
+feriados.sort((a,b)=>parseDateUTC(a.data)-parseDateUTC(b.data));
+for(let i=0;i<feriados.length-1;i++){
+  const a=parseDateUTC(feriados[i].data),b=parseDateUTC(feriados[i+1].data);
+  if((b-a)/(864e5)===2){
+    const meio=new Date(a);meio.setDate(meio.getDate()+1);
+    addFeriado({jp:'国民の休日',romaji:'Kokumin no Kyūjitsu',pt:'Feriado Nacional Especial',data:fmtISO(meio),kokumin:true});
+  }
+}
+
+feriados.sort((a,b)=>parseDateUTC(a.data)-parseDateUTC(b.data));
+
+// ── ESTADO ──
+
+const hoje = new Date();
+hoje.setHours(0,0,0,0);
+const hojeISO = fmtISO(hoje);
+let feriadoAtivo = null;
+
+// ── HERO ──
+
+function renderHero(){
+  let proximo=null;
+  for(const f of feriados){
+    if(parseDateUTC(f.data)>=hoje){proximo=f;break}
+  }
+  if(!proximo) proximo={jp:'元日',romaji:'Ganjitsu',pt:'Ano Novo',data:`${ANO+1}-01-01`};
+
+  const diff=Math.ceil((parseDateUTC(proximo.data)-hoje)/864e5);
+
+  document.getElementById('heroJp').textContent=proximo.jp;
+  document.getElementById('heroRomaji').textContent=proximo.romaji;
+  document.getElementById('heroPt').textContent=proximo.pt;
+
+  const diasEl=document.getElementById('heroDias');
+  if(diff===0){
+    diasEl.textContent='Hoje';
+    diasEl.className='hero-stat-num hoje-txt';
+    document.getElementById('heroDataFull').innerHTML=`${fmtFull(proximo.data)}<br>${dowPT(proximo.data)}`;
+  } else {
+    diasEl.textContent=diff;
+    diasEl.className='hero-stat-num';
+    document.getElementById('heroDataFull').innerHTML=`${fmtFull(proximo.data)}<br>${dowPT(proximo.data)}`;
+  }
+
+  let badges='';
+  if(proximo.golden) badges+=`<span class="hbadge hbadge-golden">⭐ Golden Week</span>`;
+  if(proximo.furikae) badges+=`<span class="hbadge hbadge-furikae">振替休日</span>`;
+  if(proximo.kokumin) badges+=`<span class="hbadge hbadge-kokumin">国民の休日</span>`;
+  document.getElementById('heroBadges').innerHTML=badges;
+}
+
+// ── SIDEBAR LIST ──
+
+function renderSidebar(lista){
+  const container=document.getElementById('listaFeriados');
+  const empty=document.getElementById('emptySearch');
+
+  if(!lista.length){
+    container.innerHTML='';
+    empty.style.display='block';
+    return;
+  }
+  empty.style.display='none';
+
+  const grupos={};
+  for(const f of lista){
+    const mes=MESES_PT[parseDateUTC(f.data).getMonth()];
+    if(!grupos[mes])grupos[mes]=[];
+    grupos[mes].push(f);
+  }
+
+  container.innerHTML=Object.entries(grupos).map(([mes,items])=>`
+    <div class="month-group">
+      <div class="month-label">${mes}</div>
+      ${items.map(f=>{
+        const isHoje=f.data===hojeISO;
+        const isAtivo=feriadoAtivo&&feriadoAtivo.data===f.data;
+        let dotCls='h-dot';
+        if(isHoje) dotCls+=' dot-hoje';
+        else if(f.golden) dotCls+=' dot-golden';
+        else if(f.furikae) dotCls+=' dot-furikae';
+        else if(f.kokumin) dotCls+=' dot-kokumin';
+        return `<div class="holiday-row${isAtivo?' active':''}" onclick="selectFeriado('${f.data}')">
+          <div class="${dotCls}"></div>
+          <div class="h-main">
+            <div class="h-jp">${f.jp} · ${f.romaji}</div>
+            <div class="h-pt">${f.pt}</div>
+            <div class="h-date">${fmtBR(f.data)} · ${dowJP(f.data)}</div>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+  `).join('');
+}
+
+// ── TIMELINE ──
+
+function renderTimeline(lista){
+  document.getElementById('totalPill').textContent=`${lista.length} feriados`;
+
+  document.getElementById('timeline').innerHTML=lista.map(f=>{
+    const fd=parseDateUTC(f.data);
+    const isPast=fd<hoje;
+    const isHoje=f.data===hojeISO;
+    const isAtivo=feriadoAtivo&&feriadoAtivo.data===f.data;
+
+    let cls='tl-item';
+    if(isPast&&!isHoje) cls+=' tl-past';
+    if(isHoje) cls+=' tl-today';
+    if(isAtivo) cls+=' tl-active';
+    if(f.golden) cls+=' tl-golden';
+
+    let badges='';
+    if(isHoje) badges+=`<span class="tbadge tbadge-hoje">Hoje</span>`;
+    if(f.golden) badges+=`<span class="tbadge tbadge-golden">Golden Week</span>`;
+    if(f.furikae) badges+=`<span class="tbadge tbadge-furikae">振替休日</span>`;
+    if(f.kokumin) badges+=`<span class="tbadge tbadge-kokumin">国民の休日</span>`;
+
+    return `<div class="${cls}" onclick="selectFeriado('${f.data}')">
+      <div class="tl-dot"></div>
+      <div class="tl-card">
+        <div class="tl-top">
+          <div>
+            <div class="tl-jp-small">${f.jp}</div>
+            <div class="tl-pt">${f.pt}</div>
+          </div>
+          <div class="tl-date-pill">${fmtFull(f.data)}</div>
+        </div>
+        ${badges?`<div class="tl-badges">${badges}</div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── SELECIONAR FERIADO ──
+
+function selectFeriado(iso){
+  feriadoAtivo=feriados.find(f=>f.data===iso)||null;
+  if(!feriadoAtivo) return;
+
+  document.getElementById('detailCards').style.display='grid';
+  document.getElementById('detailJp').textContent=feriadoAtivo.jp;
+  document.getElementById('detailRomaji').textContent=feriadoAtivo.romaji;
+  document.getElementById('detailData').textContent=fmtBR(feriadoAtivo.data);
+  document.getElementById('detailDow').textContent=`${dowJP(feriadoAtivo.data)} · ${dowPT(feriadoAtivo.data)}`;
+
+  renderSidebar(feriados);
+  renderTimeline(feriados);
+}
+
+// ── BUSCA ──
+
+document.getElementById('busca').addEventListener('input',function(){
+  const q=this.value.toLowerCase().trim();
+  if(!q){renderSidebar(feriados);renderTimeline(feriados);return}
+  const r=feriados.filter(f=>
+    f.jp.includes(q)||
+    f.romaji.toLowerCase().includes(q)||
+    f.pt.toLowerCase().includes(q)
+  );
+  renderSidebar(r);
+  renderTimeline(r);
+});
+
+// ── INIT ──
+
+renderHero();
+renderSidebar(feriados);
+renderTimeline(feriados);
+</script>
 </body>
 </html>
