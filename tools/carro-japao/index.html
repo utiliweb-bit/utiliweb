@@ -1,224 +1,439 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Carro no Japão | UtiliWeb</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --s0:#f8f9fb;
+  --s1:#f0f2f5;
+  --s2:#e2e6ec;
+  --s3:#c8d0da;
+  --s4:#97a3b4;
+  --s5:#5c6b80;
+  --s6:#3d4f62;
+  --s7:#253244;
+  --s8:#182030;
+  --s9:#0f1520;
+  --a0:#fffbf0;
+  --a1:#fef3c7;
+  --a2:#fde68a;
+  --a3:#f59e0b;
+  --a4:#d97706;
+  --a5:#b45309;
+  --a6:#78350f;
+  --em:#059669;
+  --em-bg:#ecfdf5;
+  --rose:#dc2626;
+  --rose-bg:#fef2f2;
+  --font:'DM Sans',system-ui,sans-serif;
+  --mono:'DM Mono',monospace;
+  --r:12px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;}
+body{
+  font-family:var(--font);
+  background:var(--s8);
+  background-image:
+    radial-gradient(ellipse 55% 45% at 15% 0%, rgba(93,150,210,.12), transparent),
+    radial-gradient(ellipse 40% 55% at 85% 100%, rgba(245,158,11,.07), transparent);
+  min-height:100dvh;
+  display:flex;justify-content:center;align-items:flex-start;
+  padding:24px 14px;
+}
+.wrapper{
+  width:100%;max-width:1060px;
+  display:grid;grid-template-columns:380px 1fr;
+  border-radius:20px;overflow:hidden;margin:auto;
+  box-shadow:0 0 0 1px rgba(255,255,255,.06),0 32px 80px rgba(0,0,0,.55),0 8px 24px rgba(0,0,0,.3);
+}
 
-<title>🚗 Carro no Japão</title>
+/* ── LEFT ── */
+.left{
+  background:var(--s8);
+  padding:32px 28px;
+  border-right:1px solid rgba(255,255,255,.07);
+  display:flex;flex-direction:column;gap:0;
+}
+.back-link{
+  display:inline-flex;align-items:center;gap:5px;
+  color:var(--s4);text-decoration:none;font-size:12px;font-weight:500;
+  margin-bottom:28px;transition:color .15s;
+}
+.back-link:hover{color:var(--s3);}
+.wordmark{
+  font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--a3);margin-bottom:10px;display:flex;align-items:center;gap:8px;
+}
+.wordmark-line{width:20px;height:1.5px;background:var(--a3);opacity:.6;border-radius:1px;}
+h1{font-size:22px;font-weight:600;color:#f0f3f7;letter-spacing:-.025em;line-height:1.2;margin-bottom:5px;}
+.subtitle{font-size:13px;color:var(--s4);margin-bottom:18px;line-height:1.6;}
 
-<link rel="stylesheet" href="style.css">
+.kanji-box{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:var(--r);
+  padding:13px 15px;
+  margin-bottom:24px;
+  display:flex;flex-direction:column;gap:5px;
+}
+.kanji-row{
+  font-size:12.5px;color:var(--s3);line-height:1.5;
+  display:flex;align-items:baseline;gap:6px;
+}
+.kanji-jp{font-family:var(--mono);color:var(--a3);font-size:12px;}
 
+.section-label{
+  font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--s4);margin-bottom:14px;padding-bottom:10px;
+  border-bottom:1px solid rgba(255,255,255,.07);
+}
+
+.form-block{margin-bottom:16px;}
+.form-label{
+  font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--s3);margin-bottom:7px;display:block;
+}
+.field-select,.field-date{
+  width:100%;
+  padding:11px 36px 11px 13px;
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.13);
+  border-radius:var(--r);
+  color:#eef1f5;font-size:14px;font-family:var(--font);font-weight:500;
+  transition:border-color .15s,background .15s;
+}
+.field-select{
+  appearance:none;cursor:pointer;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M1 1l4 4 4-4' stroke='rgba(180,195,215,0.8)' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat:no-repeat;background-position:right 13px center;
+}
+.field-date{padding-right:13px;color-scheme:dark;}
+.field-select:focus,.field-date:focus{outline:none;border-color:var(--a3);background-color:rgba(255,255,255,.1);}
+.field-select:hover,.field-date:hover{border-color:rgba(255,255,255,.24);}
+.field-select option{background:#182030;color:#eef1f5;}
+
+.btn-calc{
+  width:100%;padding:13px;
+  background:var(--a3);border:none;border-radius:var(--r);
+  color:var(--a6);font-family:var(--font);font-size:14px;font-weight:600;
+  cursor:pointer;margin-top:8px;
+  transition:background .15s,transform .12s;
+}
+.btn-calc:hover{background:var(--a4);transform:translateY(-1px);}
+.btn-calc:active{transform:translateY(0);}
+
+/* ── RIGHT ── */
+.right{
+  background:var(--s0);
+  padding:32px 28px;
+  display:flex;flex-direction:column;gap:0;
+  overflow-y:auto;
+}
+.right-head{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:22px;
+}
+h2{font-size:16px;font-weight:600;color:var(--s8);letter-spacing:-.01em;}
+
+.btn-copy{
+  display:flex;align-items:center;gap:6px;
+  padding:7px 14px;
+  background:#fff;border:1px solid var(--s2);border-radius:8px;
+  font-family:var(--font);font-size:12.5px;font-weight:600;color:var(--s6);
+  cursor:pointer;transition:border-color .15s,background .15s;
+}
+.btn-copy:hover{border-color:var(--s3);background:var(--s1);}
+.btn-copy svg{flex:none;}
+
+/* Result cards */
+.result-cards{display:flex;flex-direction:column;gap:12px;margin-bottom:22px;}
+.result-card{
+  background:#fff;border:1px solid var(--s2);border-radius:14px;padding:20px 18px;
+}
+.result-card.highlight{border-color:var(--a3);border-width:1.5px;background:var(--a0);}
+.rc-label{
+  font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--s4);margin-bottom:12px;
+  display:flex;align-items:center;gap:7px;
+}
+.rc-label .jp{font-family:var(--mono);color:var(--s5);font-size:10px;letter-spacing:.02em;}
+.rc-main{
+  font-family:var(--mono);font-size:32px;font-weight:500;
+  color:var(--s8);letter-spacing:-.02em;line-height:1;margin-bottom:6px;
+}
+.result-card.highlight .rc-main{color:var(--a4);}
+.rc-sub{font-size:13px;color:var(--s5);line-height:1.6;}
+.result-card.highlight .rc-sub{color:var(--a5);}
+.rc-meta{
+  display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;
+}
+.rc-tag{
+  display:inline-block;padding:3px 9px;border-radius:6px;
+  font-size:10.5px;font-weight:600;font-family:var(--mono);
+  background:var(--s1);color:var(--s5);
+}
+.result-card.highlight .rc-tag{background:var(--a1);color:var(--a5);}
+
+.rc-badge-ok{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:3px 9px;border-radius:6px;
+  font-size:10.5px;font-weight:600;
+  background:var(--em-bg);color:var(--em);
+}
+.rc-badge-warn{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:3px 9px;border-radius:6px;
+  font-size:10.5px;font-weight:600;
+  background:var(--rose-bg);color:var(--rose);
+}
+
+/* History */
+.hist-label{
+  font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--s4);margin-bottom:10px;
+}
+.hist-list{list-style:none;display:flex;flex-direction:column;gap:6px;}
+.hist-list li{
+  background:#fff;border:1px solid var(--s2);border-radius:var(--r);
+  padding:10px 13px;font-size:13px;color:var(--s6);font-family:var(--mono);
+}
+.hist-list li.empty{color:var(--s4);font-family:var(--font);font-style:italic;}
+
+@media(max-width:860px){
+  body{align-items:flex-start;padding:10px;}
+  .wrapper{grid-template-columns:1fr;border-radius:16px;}
+  .left{border-right:none;border-bottom:1px solid rgba(255,255,255,.07);}
+}
+@media(max-width:480px){
+  .left,.right{padding:22px 16px;}
+  h1{font-size:20px;}
+  .rc-main{font-size:26px;}
+}
+</style>
 </head>
-
 <body>
-
 <div class="wrapper">
 
-    <div class="left-panel">
-
-        <h1>🚗 Carro no Japão</h1>
-
-        <div class="subtitle">
-            Impostos e informações automotivas do Japão
-        </div>
-
-        <div class="info-box">
-
-            自動車税 (Jidōsha-zei)<br>
-            車検 (Shaken)<br>
-            軽自動車 (Kei Jidōsha)
-
-        </div>
-
-
-        <div class="section-title">
-            Dados do Veículo
-        </div>
-
-
-        <div class="input-group">
-
-            <label class="input-label">
-                TIPO DO VEÍCULO
-            </label>
-
-            <select id="tipo">
-
-                <option value="normal">
-                    🚗 普通自動車 (Futsū Jidōsha)
-                </option>
-
-                <option value="kei">
-                    🚙 軽自動車 (Kei Jidōsha)
-                </option>
-
-            </select>
-
-        </div>
-
-
-        <div class="input-group">
-
-            <label class="input-label">
-                CILINDRADA
-            </label>
-
-            <select id="cilindrada">
-
-                <option value="660">660 cc</option>
-                <option value="1000">1000 cc</option>
-                <option value="1500">1500 cc</option>
-                <option value="1800">1800 cc</option>
-                <option value="2000">2000 cc</option>
-                <option value="2500">2500 cc</option>
-                <option value="3000">3000 cc</option>
-                <option value="4000">4000 cc+</option>
-
-            </select>
-
-        </div>
-
-
-        <div class="input-group">
-
-            <label class="input-label">
-                PRIMEIRO REGISTRO
-            </label>
-
-            <select id="registro">
-
-                <option value="novo">
-                    Outubro/2019 ou depois
-                </option>
-
-                <option value="antigo">
-                    Antes de Outubro/2019
-                </option>
-
-            </select>
-
-        </div>
-
-
-        <div class="input-group">
-
-            <label class="input-label">
-                IDADE DO VEÍCULO
-            </label>
-
-            <select id="idade">
-
-                <option value="normal">
-                    Menos de 13 anos
-                </option>
-
-                <option value="13">
-                    Mais de 13 anos
-                </option>
-
-            </select>
-
-        </div>
-
-
-        <div class="input-group">
-
-            <label class="input-label">
-                DATA DO ÚLTIMO 車検 (Shaken)
-            </label>
-
-            <input
-            type="date"
-            id="shaken">
-
-        </div>
-
-
-        <button class="btn-calcular">
-
-            Calcular
-
-        </button>
-
-    </div>
-
-
-
-    <div class="right-panel">
-
-        <div class="resultado-header">
-
-            Resultado
-
-        </div>
-
-
-        <div class="resultado-box">
-
-            <div class="resultado-label">
-
-                自動車税 (Jidōsha-zei)
-
-            </div>
-
-            <div
-            class="resultado"
-            id="resultadoImposto">
-
-                Aguardando cálculo
-
-            </div>
-
-        </div>
-
-
-        <div class="resultado-box">
-
-            <div class="resultado-label">
-
-                Próximo 車検 (Shaken)
-
-            </div>
-
-            <div
-            class="resultado"
-            id="resultadoShaken">
-
-                —
-
-            </div>
-
-        </div>
-
-
-        <button
-        class="btn-copiar">
-
-            📋 Copiar
-
-        </button>
-
-
-        <div class="historico-titulo">
-
-            Últimos cálculos
-
-        </div>
-
-        <ul
-        id="historico"
-        class="historico">
-
-            <li>Nenhum cálculo realizado</li>
-
-        </ul>
-
-    </div>
-
+<!-- ── LEFT ── -->
+<div class="left">
+  <a href="../../index.html" class="back-link">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 11L5 7l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    UtiliWeb
+  </a>
+
+  <div class="wordmark"><div class="wordmark-line"></div>Ferramenta</div>
+  <h1>Carro no Japão</h1>
+  <p class="subtitle">Calcule impostos e verifique o prazo do próximo shaken</p>
+
+  <div class="kanji-box">
+    <div class="kanji-row"><span class="kanji-jp">自動車税</span>Jidōsha-zei — imposto anual</div>
+    <div class="kanji-row"><span class="kanji-jp">車検</span>Shaken — inspeção veicular</div>
+    <div class="kanji-row"><span class="kanji-jp">軽自動車</span>Kei Jidōsha — carro compacto</div>
+  </div>
+
+  <div class="section-label">Dados do veículo</div>
+
+  <div class="form-block">
+    <label class="form-label" for="tipo">Tipo do veículo</label>
+    <select class="field-select" id="tipo">
+      <option value="normal">普通自動車 — Futsū Jidōsha</option>
+      <option value="kei">軽自動車 — Kei Jidōsha</option>
+    </select>
+  </div>
+
+  <div class="form-block">
+    <label class="form-label" for="cilindrada">Cilindrada</label>
+    <select class="field-select" id="cilindrada">
+      <option value="660">660 cc</option>
+      <option value="1000">1000 cc</option>
+      <option value="1500">1500 cc</option>
+      <option value="1800">1800 cc</option>
+      <option value="2000">2000 cc</option>
+      <option value="2500">2500 cc</option>
+      <option value="3000">3000 cc</option>
+      <option value="4000">4000 cc ou mais</option>
+    </select>
+  </div>
+
+  <div class="form-block">
+    <label class="form-label" for="registro">Primeiro registro</label>
+    <select class="field-select" id="registro">
+      <option value="novo">Outubro/2019 ou depois</option>
+      <option value="antigo">Antes de outubro/2019</option>
+    </select>
+  </div>
+
+  <div class="form-block">
+    <label class="form-label" for="idade">Idade do veículo</label>
+    <select class="field-select" id="idade">
+      <option value="normal">Menos de 13 anos</option>
+      <option value="13">13 anos ou mais</option>
+    </select>
+  </div>
+
+  <div class="form-block">
+    <label class="form-label" for="shaken">Data do último 車検 (Shaken)</label>
+    <input class="field-date" type="date" id="shaken">
+  </div>
+
+  <button class="btn-calc" id="btnCalc">Calcular</button>
 </div>
 
-<script src="script.js"></script>
+<!-- ── RIGHT ── -->
+<div class="right">
+  <div class="right-head">
+    <h2>Resultado</h2>
+    <button class="btn-copy" id="btnCopy">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="5" y="5" width="9" height="9" rx="2"/><path d="M11 5V3a2 2 0 00-2-2H3a2 2 0 00-2 2v6a2 2 0 002 2h2"/></svg>
+      Copiar
+    </button>
+  </div>
 
+  <div class="result-cards">
+    <div class="result-card highlight">
+      <div class="rc-label">自動車税 <span class="jp">Jidōsha-zei</span></div>
+      <div class="rc-main" id="rcMain">—</div>
+      <div class="rc-sub" id="rcSub">Aguardando cálculo</div>
+      <div class="rc-meta" id="rcMeta"></div>
+    </div>
+
+    <div class="result-card">
+      <div class="rc-label">車検 <span class="jp">Shaken</span></div>
+      <div class="rc-main" id="shakenMain">—</div>
+      <div class="rc-sub" id="shakenSub">Data não informada</div>
+      <div class="rc-meta" id="shakenMeta"></div>
+    </div>
+  </div>
+
+  <div class="hist-label">Últimos cálculos</div>
+  <ul class="hist-list" id="historico">
+    <li class="empty">Nenhum cálculo realizado</li>
+  </ul>
+</div>
+
+</div>
+<script>
+const ANO = new Date().getFullYear();
+
+const impostoNormal=[
+  {limite:1000,valor:25000},
+  {limite:1500,valor:30500},
+  {limite:2000,valor:36000},
+  {limite:2500,valor:43500},
+  {limite:3000,valor:50000},
+  {limite:4000,valor:65500},
+  {limite:99999,valor:75500}
+];
+const impostoKei={novo:10800,antigo:12900};
+
+function buscarImpostoNormal(cc){
+  for(const i of impostoNormal) if(cc<=i.limite) return i.valor;
+  return 0;
+}
+function fmt(v){return"¥"+v.toLocaleString("ja-JP");}
+
+let historico=JSON.parse(localStorage.getItem("carro-japao-historico"))||[];
+
+function renderHistorico(){
+  const ul=document.getElementById("historico");
+  if(!historico.length){
+    ul.innerHTML='<li class="empty">Nenhum cálculo realizado</li>';return;
+  }
+  ul.innerHTML=historico.map(i=>`<li>${i}</li>`).join("");
+}
+
+function salvar(txt){
+  historico.unshift(txt);
+  if(historico.length>10) historico.pop();
+  localStorage.setItem("carro-japao-historico",JSON.stringify(historico));
+  renderHistorico();
+}
+
+document.getElementById("btnCalc").addEventListener("click",calcular);
+
+function calcular(){
+  const tipo=document.getElementById("tipo").value;
+  const cc=Number(document.getElementById("cilindrada").value);
+  const registro=document.getElementById("registro").value;
+  const idade=document.getElementById("idade").value;
+
+  let imposto=0;
+  if(tipo==="kei"){
+    imposto=registro==="novo"?impostoKei.novo:impostoKei.antigo;
+  }else{
+    imposto=buscarImpostoNormal(cc);
+    if(registro==="antigo") imposto=Math.round(imposto*1.05);
+  }
+  if(idade==="13") imposto=Math.round(imposto*1.15);
+
+  const mensal=Math.round(imposto/12);
+  const cat=tipo==="kei"?"軽自動車 (Kei)":cc+" cc";
+
+  document.getElementById("rcMain").textContent=fmt(imposto);
+  document.getElementById("rcSub").textContent="≈ "+fmt(mensal)+" / mês  ·  Pagamento: maio";
+  document.getElementById("rcMeta").innerHTML=
+    `<span class="rc-tag">${cat}</span>`+
+    (idade==="13"?'<span class="rc-tag">+15% (13 anos+)</span>':'')+
+    (registro==="antigo"&&tipo!=="kei"?'<span class="rc-tag">+5% (pré-2019)</span>':'');
+
+  salvar(cat+" → "+fmt(imposto));
+  calcularShaken();
+}
+
+function calcularShaken(){
+  const val=document.getElementById("shaken").value;
+  if(!val){
+    document.getElementById("shakenMain").textContent="—";
+    document.getElementById("shakenSub").textContent="Data não informada";
+    document.getElementById("shakenMeta").innerHTML="";
+    return;
+  }
+  const ultimo=new Date(val);
+  const proximo=new Date(ultimo);
+  proximo.setFullYear(proximo.getFullYear()+2);
+  const hoje=new Date(); hoje.setHours(0,0,0,0); proximo.setHours(0,0,0,0);
+  const dias=Math.ceil((proximo-hoje)/(864e5));
+
+  document.getElementById("shakenMain").textContent=
+    proximo.toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric"});
+
+  let badge,sub;
+  if(dias>0){
+    sub=`Faltam ${dias} dias`;
+    badge=dias<60
+      ?`<span class="rc-badge-warn">Atenção: menos de 60 dias</span>`
+      :`<span class="rc-badge-ok">Em dia</span>`;
+  }else if(dias===0){
+    sub="Vence hoje";
+    badge='<span class="rc-badge-warn">Vence hoje</span>';
+  }else{
+    sub=`Atrasado há ${Math.abs(dias)} dias`;
+    badge='<span class="rc-badge-warn">Atrasado</span>';
+  }
+  document.getElementById("shakenSub").textContent=sub;
+  document.getElementById("shakenMeta").innerHTML=badge;
+}
+
+document.getElementById("btnCopy").addEventListener("click",()=>{
+  const main=document.getElementById("rcMain").textContent;
+  const sub=document.getElementById("rcSub").textContent;
+  const sm=document.getElementById("shakenMain").textContent;
+  const ss=document.getElementById("shakenSub").textContent;
+  const txt=`🚗 Carro no Japão\n\n自動車税 (Jidōsha-zei)\n${main}\n${sub}\n\n車検 (Shaken)\n${sm} — ${ss}`;
+  navigator.clipboard.writeText(txt);
+  const btn=document.getElementById("btnCopy");
+  const orig=btn.innerHTML;
+  btn.innerHTML='<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 8l4 4 8-8"/></svg> Copiado';
+  setTimeout(()=>{btn.innerHTML=orig;},1600);
+});
+
+renderHistorico();
+</script>
 </body>
 </html>
