@@ -7,18 +7,33 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Long+Cang&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Long+Cang&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
 
 :root{
-    --red: #27ae60;
-    --red-deep: #1e8449;
-    --red-soft: #2ecc71;
-    --gold: #27ae60;
-    --gold-light: #d5f5e3;
-    --ink: #2c3e50;
-    --ink-soft: #7f8c8d;
+    /* night sky — page backdrop */
+    --night-1: #1B2230;
+    --night-2: #11151F;
+
+    /* rice paper — input scroll */
+    --paper: #F6EFDC;
+    --paper-deep: #ECE0C2;
+    --paper-line: #D9C99C;
+    --ink: #2B2420;
+    --ink-soft: #6B5F4D;
+
+    /* lacquer — result panel */
+    --lacquer-1: #2B161B;
+    --lacquer-2: #170D10;
+    --lacquer-card: #34191F;
+    --cloud: #C7BFB2;
+
+    /* seal & gold leaf */
+    --seal: #A8283A;
+    --seal-deep: #7E1E2C;
+    --gold: #C9A961;
+    --gold-bright: #E3CD8E;
 }
 
 *{
@@ -28,32 +43,74 @@
 }
 
 body{
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-    background:linear-gradient(135deg,#2ecc71,#27ae60 );
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+    background:
+        radial-gradient(ellipse 600px 500px at 88% -6%, rgba(201,169,97,.16), transparent 60%),
+        radial-gradient(ellipse 700px 600px at 6% 100%, rgba(168,40,58,.10), transparent 55%),
+        linear-gradient(160deg, var(--night-1), var(--night-2) 65%);
     min-height:100vh;
-    padding:20px;
+    padding:36px 20px;
 }
 
 .wrapper{
-    max-width:1200px;
+    max-width:1180px;
     margin:auto;
-    background:#fff;
-    border-radius:16px;
+    background:var(--paper);
+    border-radius:18px;
     overflow:hidden;
     display:grid;
-    grid-template-columns:1fr 1fr;
-    box-shadow:0 20px 60px rgba(0,0,0,.2);
+    grid-template-columns:1.05fr 1fr;
+    box-shadow:0 30px 70px -20px rgba(0,0,0,.55), 0 0 0 1px rgba(201,169,97,.15);
+    position:relative;
 }
+
+.wrapper::before{
+    content:"";
+    position:absolute;
+    top:0; left:0; right:0;
+    height:4px;
+    background:linear-gradient(90deg, var(--seal), var(--gold-bright), var(--seal));
+    z-index:3;
+}
+
+.wrapper::after{
+    content:"";
+    position:absolute;
+    top:5%; bottom:5%; left:50%;
+    width:1px;
+    background:linear-gradient(to bottom, transparent, var(--gold) 18%, var(--gold) 82%, transparent);
+    opacity:.55;
+    z-index:2;
+}
+
+/* ===== LEFT PANEL — the scroll ===== */
 
 .left-panel{
-    padding:32px;
-    border-right: 1px solid #eee;
+    position:relative;
+    overflow:hidden;
+    padding:44px 40px 36px;
+    background:
+        radial-gradient(circle at 18% 12%, rgba(126,30,44,.05), transparent 42%),
+        radial-gradient(circle at 85% 90%, rgba(126,30,44,.04), transparent 45%),
+        var(--paper);
 }
 
-.right-panel{
-    background:#e8f8f5;
-    padding: 32px;
+.left-panel::before{
+    content:"曆";
+    position:absolute;
+    font-family:'Long Cang',cursive;
+    font-size:340px;
+    line-height:1;
+    color:var(--ink);
+    opacity:.035;
+    right:-55px;
+    bottom:-90px;
+    pointer-events:none;
+    user-select:none;
+    z-index:0;
 }
+
+.left-panel > *{ position:relative; z-index:1; }
 
 .eyebrow{
     display:flex;
@@ -62,57 +119,69 @@ body{
     font:600 11px/1 'Inter',sans-serif;
     letter-spacing:.22em;
     text-transform:uppercase;
-    color:var(--red-deep);
-    margin-bottom:14px;
+    color:var(--seal-deep);
+    margin-bottom:16px;
 }
 
 .eyebrow .cjk{
     font-family:'Long Cang',cursive;
-    font-size:18px;
-    color:var(--red);
+    font-size:19px;
+    color:var(--seal);
     letter-spacing:0;
 }
 
 h1{
-    font-size:clamp(28px,4vw,36px);
-    color: var(--ink);
-    margin-bottom: 15px;
+    font-family:'Cormorant Garamond',serif;
+    font-weight:700;
+    font-size:clamp(30px,3.6vw,40px);
+    line-height:1.12;
+    color:var(--ink);
+    margin-bottom:14px;
 }
 
 .subtitle{
     color:var(--ink-soft);
     font-size:14px;
-    margin-bottom:24px;
-    line-height:1.5;
+    max-width:38ch;
+    margin-bottom:26px;
+    line-height:1.6;
 }
 
 .info-box{
-    background:#f0fff7;
-    border-left:4px solid #27ae60;
-    color:#1e8449;
-    padding: 15px;
-    font-size: 13px;
-    line-height: 1.5;
-    margin-bottom: 25px;
-    border-radius: 4px;
+    background:var(--paper-deep);
+    border-left:3px solid var(--seal);
+    color:var(--ink);
+    padding:14px 16px;
+    font-size:12.5px;
+    font-style:italic;
+    line-height:1.6;
+    margin-bottom:30px;
+    border-radius:0 6px 6px 0;
 }
 
 .section-title{
-    font-size:12px;
-    font-weight:700;
-    color:#27ae60;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font:700 11px/1 'Inter',sans-serif;
+    letter-spacing:.16em;
     text-transform:uppercase;
-    border-bottom:2px solid #27ae60;
-    padding-bottom:8px;
-    margin-bottom:20px;
-    position: relative;
+    color:var(--seal-deep);
+    margin-bottom:18px;
+}
+
+.section-title::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:linear-gradient(90deg, var(--paper-line), transparent);
 }
 
 .input-row{
     display:grid;
     grid-template-columns:repeat(3,1fr);
-    gap:12px;
-    margin-bottom: 20px;
+    gap:18px;
+    margin-bottom:8px;
 }
 
 .input-group{
@@ -121,144 +190,224 @@ h1{
 }
 
 .input-label{
-    margin-bottom:6px;
-    font-size:11px;
+    margin-bottom:8px;
+    font-size:10.5px;
     font-weight:600;
-    letter-spacing:.06em;
+    letter-spacing:.08em;
     text-transform:uppercase;
     color:var(--ink-soft);
 }
 
-.resultado-box{
-    background:#fff;
-    border-radius:14px;
-    padding:24px;
-    border:1px solid #d5f5e3;
-    box-shadow:0 8px 25px rgba(39,174,96,.08);
-    margin-bottom: 20px;
-}
-
-.resultado-header{
-    font-size:12px;
-    font-weight:700;
-    color:#27ae60;
-    text-transform:uppercase;
-    border-bottom:2px solid #27ae60;
-    padding-bottom:8px;
-    margin-bottom:20px;
-}  
-
 select{
     width:100%;
-    padding:12px;
-    border:1.5px solid #ddd0ba;
-    border-radius:8px;
-    font-size:14px;
-    font-family:'Inter',sans-serif;
-    background:#fff;
+    padding:10px 22px 10px 2px;
+    border:none;
+    border-bottom:1.5px solid var(--paper-line);
+    border-radius:0;
+    font-size:14.5px;
+    font-family:'IBM Plex Mono',monospace;
+    background-color:transparent;
     color:var(--ink);
+    appearance:none;
+    -webkit-appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0L5 6L10 0Z' fill='%23A8283A'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;
+    background-position:right 2px center;
+    background-size:10px 6px;
+    transition:border-color .2s;
 }
 
 select:focus{
-    outline:2px solid var(--gold);
-    outline-offset:1px;
-    border-color:var(--gold);
+    outline:none;
+    border-bottom-color:var(--seal);
 }
 
 .btn-primary{
     width:100%;
-    padding:14px;
-    border-radius:10px;
-    font-weight:700;
-    font-size:14px;
-    margin-top:18px;
+    padding:15px;
+    border-radius:9px;
+    font:700 12.5px/1 'Inter',sans-serif;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    margin-top:22px;
     cursor:pointer;
-    transition:.2s;
-    background: var(--red);
-    color: white;
-    border: none;
+    transition:transform .15s, box-shadow .2s, background .2s;
+    background:linear-gradient(135deg, var(--seal), var(--seal-deep));
+    color:var(--paper);
+    border:none;
+    box-shadow:0 10px 22px -8px rgba(126,30,44,.55);
 }
 
-.btn-primary:hover {
-    background: var(--red-deep);
+.btn-primary:hover{
+    transform:translateY(-1px);
+    box-shadow:0 14px 26px -8px rgba(126,30,44,.65);
 }
 
-.btn-secondary{
+.btn-primary:active{ transform:translateY(0); }
+
+.historico-titulo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font:700 11px/1 'Inter',sans-serif;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    margin:34px 0 18px;
+}
+
+.left-panel .historico-titulo{ color:var(--seal-deep); }
+.left-panel .historico-titulo::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:linear-gradient(90deg, var(--paper-line), transparent);
+}
+
+#cycleGrid{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:10px;
+}
+
+.wheel-svg{
     width:100%;
-    padding:14px;
-    border-radius:10px;
-    font-weight:700;
-    font-size:14px;
-    margin-top:10px;
-    cursor:pointer;
-    transition:.2s;
-    background: transparent;
-    border: 1.5px solid var(--gold);
-    color: var(--gold);
+    max-width:248px;
+    height:auto;
+    filter:drop-shadow(0 8px 16px rgba(43,36,32,.15));
 }
 
-.btn-secondary:hover{ background:rgba(39,174,96,.1); }
+.wheel-caption{
+    font-size:11px;
+    font-style:italic;
+    color:var(--ink-soft);
+    text-align:center;
+}
+
+/* ===== RIGHT PANEL — the seal ===== */
+
+.right-panel{
+    position:relative;
+    overflow:hidden;
+    padding:44px 40px 36px;
+    background:
+        radial-gradient(circle at 80% 8%, rgba(201,169,97,.08), transparent 45%),
+        linear-gradient(165deg, var(--lacquer-1), var(--lacquer-2) 70%);
+}
+
+.right-panel::before{
+    content:"印";
+    position:absolute;
+    font-family:'Long Cang',cursive;
+    font-size:300px;
+    line-height:1;
+    color:var(--gold);
+    opacity:.05;
+    top:-50px;
+    left:-50px;
+    pointer-events:none;
+    user-select:none;
+    z-index:0;
+}
+
+.right-panel > *{ position:relative; z-index:1; }
+
+.resultado-header{
+    font:700 11px/1 'Inter',sans-serif;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin-bottom:22px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.resultado-header::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:linear-gradient(90deg, rgba(201,169,97,.4), transparent);
+}
+
+.resultado-box{
+    background:var(--lacquer-card);
+    border-radius:16px;
+    padding:28px 24px;
+    border:1px solid rgba(201,169,97,.18);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.03);
+    margin-bottom:22px;
+}
 
 .stamp-wrap{
     display:flex;
     flex-direction:column;
     align-items:center;
     gap:16px;
-    padding:10px 0 20px;
+    padding:6px 0 22px;
 }
 
 .stamp{
-    width:120px;
-    height:120px;
+    --stamp-color:#A8283A;
+    width:118px;
+    height:118px;
     border-radius:50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    background:var(--stamp-color);
+}
+
+@supports (background:color-mix(in srgb, red 50%, white)){
+    .stamp{
+        background:radial-gradient(circle at 33% 28%, color-mix(in srgb, var(--stamp-color) 60%, white 40%), var(--stamp-color) 75%);
+    }
 }
 
 .stamp::before{
     content:"";
     position:absolute;
-    inset:8px;
-    border:1.5px solid rgba(255,255,255,.45);
+    inset:7px;
+    border:1.5px solid rgba(255,255,255,.5);
     border-radius:50%;
 }
 
 .stamp .hanzi{
     font-family:'Long Cang',cursive;
-    font-size:70px;
+    font-size:66px;
     color:#fff;
     line-height:1;
     user-select:none;
-    z-index: 2;
+    z-index:2;
+    text-shadow:0 2px 6px rgba(0,0,0,.25);
 }
 
 .stamp.stamping{
-    animation:stampImpact .45s ease;
+    animation:stampImpact .5s cubic-bezier(.2,.8,.3,1);
 }
 
 @keyframes stampImpact{
-    0%{ transform:scale(1.35) rotate(-7deg); opacity:0; }
-    55%{ transform:scale(.93) rotate(2deg); opacity:1; }
+    0%{ transform:scale(1.4) rotate(-8deg); opacity:0; }
+    55%{ transform:scale(.92) rotate(2deg); opacity:1; }
     100%{ transform:scale(1) rotate(0deg); }
 }
 
 .animal-name{
     font-family:'Cormorant Garamond',serif;
     font-weight:700;
-    font-size:26px;
-    color:var(--ink);
+    font-size:27px;
+    color:var(--paper);
     text-align:center;
 }
 
 .animal-pinyin{
     font-style:italic;
     font-size:13px;
-    color:var(--ink-soft);
+    color:var(--cloud);
     text-align:center;
     margin-top:-8px;
+    opacity:.75;
 }
 
 .badge-row{
@@ -266,114 +415,116 @@ select:focus{
     gap:8px;
     justify-content:center;
     flex-wrap:wrap;
-    margin: 15px 0;
+    margin:16px 0;
 }
 
 .badge{
-    padding:6px 14px;
+    padding:6px 15px;
     border-radius:999px;
-    font-size:11px;
-    font-weight:600;
-    color: white;
-    box-shadow:0 2px 6px rgba(0,0,0,.08);
+    font-size:10.5px;
+    font-weight:700;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    box-shadow:0 2px 8px rgba(0,0,0,.18);
 }
 
 .range-pill{
     font:500 12px/1 'IBM Plex Mono',monospace;
-    color:var(--ink);
-    background:#f8f9fa;
-    border:1px solid rgba(0,0,0,.05);
-    padding:8px 12px;
+    color:var(--gold-bright);
+    background:rgba(201,169,97,.08);
+    border:1px dashed rgba(201,169,97,.4);
+    padding:9px 12px;
     border-radius:8px;
     text-align:center;
+    letter-spacing:.02em;
 }
 
 .trait{
     font-size:13px;
-    color:var(--ink-soft);
+    color:var(--cloud);
     text-align:center;
-    line-height:1.55;
+    line-height:1.6;
     max-width:320px;
-    margin:15px auto 0;
+    margin:18px auto 0;
 }
 
 .cutoff-note{
     font-size:11.5px;
     font-style:italic;
-    color: #c0392b;
-    background:rgba(192, 57, 43, 0.07);
-    border-radius:8px;
+    color:var(--gold-bright);
+    background:rgba(168,40,58,.18);
+    border-left:3px solid var(--seal);
+    border-radius:0 8px 8px 0;
     padding:10px 14px;
-    margin-top:15px;
-    text-align:center;
-    line-height:1.5;
+    margin-top:16px;
+    text-align:left;
+    line-height:1.55;
 }
 
-.historico-titulo{
-    color:#27ae60;
-    font-size: 12px;
-    font-weight: 700;
-    text-transform: uppercase;
-    margin: 30px 0 15px;
+.btn-secondary{
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    padding:13px;
+    border-radius:9px;
+    font:700 12px/1 'Inter',sans-serif;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    cursor:pointer;
+    transition:.2s;
+    background:transparent;
+    border:1.5px solid var(--gold);
+    color:var(--gold-bright);
+}
+
+.btn-secondary:hover{ background:rgba(201,169,97,.1); }
+.btn-secondary svg{ width:14px; height:14px; flex-shrink:0; }
+
+.right-panel .historico-titulo{ color:var(--gold); }
+.right-panel .historico-titulo::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:linear-gradient(90deg, rgba(201,169,97,.4), transparent);
 }
 
 .historico{
     list-style:none;
-    margin-bottom:26px;
 }
 
 .historico li{
-    background:#fff;
-    border-left:4px solid #27ae60;
-    padding:12px;
-    border-radius:8px;
+    background:var(--lacquer-card);
+    border-left:3px solid var(--gold);
+    padding:11px 13px;
+    border-radius:0 8px 8px 0;
     margin-bottom:8px;
-    font-size:13px;
-    box-shadow:0 2px 6px rgba(0,0,0,.05);
+    font:500 12.5px/1.4 'IBM Plex Mono',monospace;
+    color:var(--cloud);
 }
 
-.cycle-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:8px;
+/* focus visibility */
+button:focus-visible, select:focus-visible{
+    outline:2px solid var(--gold-bright);
+    outline-offset:2px;
 }
 
-.cycle-row{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    padding:8px 10px;
-    border-radius:8px;
-    background:rgba(255,255,255,.65);
-    font-size:11.5px;
-    color:var(--ink-soft);
-}
-
-.cycle-row .cjk{
-    font-family:'Long Cang',cursive;
-    font-size:16px;
-    color:var(--red-deep);
-    width:18px;
-    text-align:center;
-    flex-shrink:0;
-}
-
-.cycle-row.active{
-    background:var(--gold-light);
-    color:var(--ink);
-    font-weight:600;
+@media (prefers-reduced-motion: reduce){
+    .stamp.stamping{ animation:none; }
 }
 
 @media (max-width:900px){
     .wrapper{ grid-template-columns:1fr; }
-    .left-panel{ border-right:none; border-bottom:1px solid #eee; }
-    .cycle-grid{ grid-template-columns:1fr; }
+    .wrapper::after{ display:none; }
+    .left-panel{ padding:36px 28px 30px; }
+    .right-panel{ padding:36px 28px 30px; }
 }
 
 @media (max-width:480px){
-    body{ padding:10px; }
-    .left-panel, .right-panel{ padding:20px; }
-    .input-row { grid-template-columns: 1fr; }
+    body{ padding:14px 10px; }
+    .left-panel, .right-panel{ padding:28px 20px 24px; }
+    .input-row{ grid-template-columns:1fr; gap:14px; }
 }
 
 </style>
@@ -384,35 +535,35 @@ select:focus{
 <div class="wrapper">
     <div class="left-panel">
         <div class="eyebrow"><span class="cjk">農曆</span><span>Calendário Lunar Chinês</span></div>
-        <h1>Qual é o seu signo?</h1>
+        <h1>Qual é o seu signo lunar?</h1>
         <div class="subtitle">
-            Descubra seu animal, elemento e polaridade baseados nas datas reais do Ano Novo Chinês.
-        </div>
-        
-        <div class="info-box">
-            O Ano Novo Chinês varia entre 21/01 e 20/02. Se você nasceu nesse período, pode pertencer ao signo do ano anterior.
+            Informe sua data de nascimento para descobrir seu animal, elemento e polaridade, calculados a partir das datas reais do Ano Novo Chinês.
         </div>
 
-        <div class="section-title">Sua Data de Nascimento</div>
+        <div class="info-box">
+            O Ano Novo Chinês cai entre 21/01 e 20/02. Quem nasce nesse intervalo, antes da virada, pertence ao signo do ano anterior.
+        </div>
+
+        <div class="section-title">Sua data de nascimento</div>
         <div class="input-row">
             <div class="input-group">
-                <label class="input-label">Ano</label>
+                <label class="input-label" for="ano">Ano</label>
                 <select id="ano"></select>
             </div>
             <div class="input-group">
-                <label class="input-label">Mês</label>
+                <label class="input-label" for="mes">Mês</label>
                 <select id="mes"></select>
             </div>
             <div class="input-group">
-                <label class="input-label">Dia</label>
+                <label class="input-label" for="dia">Dia</label>
                 <select id="dia"></select>
             </div>
         </div>
 
         <button class="btn-primary" id="btnCalcular">Descobrir meu signo</button>
 
-        <div class="historico-titulo">Ciclo Atual · 12 Anos</div>
-        <div class="cycle-grid" id="cycleGrid"></div>
+        <div class="historico-titulo">Ciclo atual · 12 anos</div>
+        <div id="cycleGrid"></div>
     </div>
 
     <div class="right-panel">
@@ -432,9 +583,12 @@ select:focus{
             <div class="cutoff-note" id="cutoffNote" style="display:none;"></div>
         </div>
 
-        <button class="btn-secondary" id="btnCopiar">📋 Copiar resultado</button>
+        <button class="btn-secondary" id="btnCopiar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <span id="btnCopiarLabel">Copiar resultado</span>
+        </button>
 
-        <div class="historico-titulo">Últimas Consultas</div>
+        <div class="historico-titulo">Últimas consultas</div>
         <ul class="historico" id="historico">
             <li>Nenhuma consulta realizada</li>
         </ul>
@@ -459,11 +613,17 @@ const ANIMALS = [
 
 const ELEMENTOS = ["Madeira","Fogo","Terra","Metal","Água"];
 const ELEMENT_COLORS = {
-    "Madeira": "#27ae60",
-    "Fogo": "#e67e22",
-    "Terra": "#d35400",
-    "Metal": "#7f8c8d",
-    "Água": "#2980b9"
+    "Madeira": "#5C8A5A",
+    "Fogo": "#BD4A35",
+    "Terra": "#BB8E45",
+    "Metal": "#93999E",
+    "Água": "#3E6189"
+};
+const POLARITY_COLORS = { "Yang": "#C9A961", "Yin": "#3E6189" };
+
+const WHEEL = {
+    paper:"#F6EFDC", paperDeep:"#ECE0C2", paperLine:"#D9C99C",
+    ink:"#2B2420", inkSoft:"#6B5F4D", seal:"#A8283A", goldBright:"#E3CD8E"
 };
 
 const CNY_START = [
@@ -493,7 +653,8 @@ const ANO_MIN = 1900;
 const ANO_MAX = 1900 + CNY_START.length - 1;
 const MESES = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
 
-let historico = JSON.parse(localStorage.getItem("historico-zodiaco-chines")) || [];
+// Histórico fica apenas em memória durante a sessão.
+let historico = [];
 
 const anoSelect = document.getElementById("ano");
 const mesSelect = document.getElementById("mes");
@@ -558,6 +719,14 @@ function formatarData(date){
     return String(date.getDate()).padStart(2,"0") + "/" + String(date.getMonth()+1).padStart(2,"0") + "/" + date.getFullYear();
 }
 
+function isCorClara(hex){
+    const c = hex.replace('#','');
+    const r = parseInt(c.substring(0,2),16);
+    const g = parseInt(c.substring(2,4),16);
+    const b = parseInt(c.substring(4,6),16);
+    return (0.299*r + 0.587*g + 0.114*b)/255 > 0.6;
+}
+
 function calcularEExibir(){
     const ano = parseInt(anoSelect.value);
     const mes = parseInt(mesSelect.value);
@@ -570,8 +739,10 @@ function calcularEExibir(){
     const inicio = dataCNY(anoLunar).data;
     const fim = new Date(dataCNY(anoLunar + 1).data.getTime() - 86400000);
 
+    const cor = ELEMENT_COLORS[elemento];
     const stamp = document.getElementById("stamp");
-    stamp.style.background = ELEMENT_COLORS[elemento];
+    stamp.style.setProperty('--stamp-color', cor);
+    stamp.style.boxShadow = `0 16px 32px -10px ${cor}99, inset 0 0 0 2px rgba(255,255,255,.18)`;
     document.getElementById("stampHanzi").textContent = animal.hanzi;
     stamp.classList.remove("stamping");
     void stamp.offsetWidth; // trigger reflow
@@ -580,10 +751,11 @@ function calcularEExibir(){
     document.getElementById("animalName").textContent = `${elemento} ${animal.pt}`;
     document.getElementById("animalPinyin").textContent = `${animal.pinyin} · ${polaridade}`;
     document.getElementById("rangePill").textContent = `${formatarData(inicio)} → ${formatarData(fim)}`;
-    
+
+    const polCor = POLARITY_COLORS[polaridade];
     document.getElementById("badgeRow").innerHTML = `
-        <span class="badge" style="background:${ELEMENT_COLORS[elemento]}">${elemento}</span>
-        <span class="badge" style="background:#c0392b">${polaridade}</span>
+        <span class="badge" style="background:${cor};color:${isCorClara(cor) ? '#2B2420' : '#F6EFDC'}">${elemento}</span>
+        <span class="badge" style="background:${polCor};color:${isCorClara(polCor) ? '#2B2420' : '#F6EFDC'}">${polaridade}</span>
     `;
 
     document.getElementById("traitText").textContent = animal.trait;
@@ -598,31 +770,30 @@ function calcularEExibir(){
         notaEl.style.display = "none";
     }
 
-    const resumo = `${formatarData(dataInformada)}: ${elemento} ${animal.pt}`;
+    const resumo = `${formatarData(dataInformada)} · ${elemento} ${animal.pt}`;
     salvarHistorico(resumo);
 }
 
 function copiarResultado(){
     const texto = `${document.getElementById("animalName").textContent} (${document.getElementById("animalPinyin").textContent}) — ${document.getElementById("rangePill").textContent}`;
     navigator.clipboard.writeText(texto);
-    const btn = document.getElementById("btnCopiar");
-    const old = btn.textContent;
-    btn.textContent = "✓ Copiado";
-    setTimeout(() => btn.textContent = old, 1500);
+    const label = document.getElementById("btnCopiarLabel");
+    const old = label.textContent;
+    label.textContent = "Copiado";
+    setTimeout(() => label.textContent = old, 1500);
 }
 
 function salvarHistorico(item){
     if(historico[0] === item) return;
     historico.unshift(item);
     if(historico.length > 5) historico.pop();
-    localStorage.setItem("historico-zodiaco-chines", JSON.stringify(historico));
     atualizarHistorico();
 }
 
 function atualizarHistorico(){
     const lista = document.getElementById("historico");
     if(historico.length === 0){
-        lista.innerHTML = "<li>Nenhuma consulta</li>";
+        lista.innerHTML = "<li>Nenhuma consulta realizada</li>";
     } else {
         lista.innerHTML = historico.map(item => `<li>${item}</li>`).join("");
     }
@@ -632,14 +803,39 @@ function gerarCicloAtual(){
     const hoje = new Date();
     const { data:cnyHoje } = dataCNY(hoje.getFullYear());
     const anoBase = hoje < cnyHoje ? hoje.getFullYear() - 1 : hoje.getFullYear();
-    const grid = document.getElementById("cycleGrid");
-    let html = "";
+
+    const cx = 124, cy = 124, r = 90, nodeR = 17;
+    let nodes = "";
     for(let i = 0; i < 12; i++){
         const ano = anoBase + i;
         const { animal, elemento } = infoDoAnoLunar(ano);
-        html += `<div class="cycle-row ${i === 0 ? 'active' : ''}"><span class="cjk">${animal.hanzi}</span><span>${ano} · ${animal.pt}</span></div>`;
+        const angle = (-90 + i * 30) * Math.PI / 180;
+        const x = (cx + r * Math.cos(angle)).toFixed(1);
+        const y = (cy + r * Math.sin(angle)).toFixed(1);
+        const isActive = i === 0;
+        const radius = isActive ? nodeR + 4 : nodeR;
+        const fill = isActive ? WHEEL.seal : WHEEL.paperDeep;
+        const stroke = isActive ? WHEEL.goldBright : WHEEL.paperLine;
+        const textColor = isActive ? WHEEL.paper : WHEEL.ink;
+        const fontSize = isActive ? 21 : 17;
+        nodes += `<g>
+            <circle cx="${x}" cy="${y}" r="${radius}" fill="${fill}" stroke="${stroke}" stroke-width="1.5"${isActive ? ' style="filter:drop-shadow(0 0 6px rgba(168,40,58,.55))"' : ''}/>
+            <text x="${x}" y="${(parseFloat(y) + fontSize * 0.34).toFixed(1)}" text-anchor="middle" font-family="'Long Cang',cursive" font-size="${fontSize}" fill="${textColor}">${animal.hanzi}</text>
+            <title>${ano} · ${elemento} ${animal.pt}</title>
+        </g>`;
     }
-    grid.innerHTML = html;
+    const atual = infoDoAnoLunar(anoBase);
+    const svg = `
+        <svg viewBox="0 0 248 248" class="wheel-svg" role="img" aria-label="Roda do ciclo zodiacal de 12 anos, com o ano atual em destaque">
+            <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${WHEEL.paperLine}" stroke-width="1" stroke-dasharray="2 5"/>
+            ${nodes}
+            <circle cx="${cx}" cy="${cy}" r="38" fill="${WHEEL.paper}" stroke="${WHEEL.goldBright}" stroke-width="1.5"/>
+            <text x="${cx}" y="${cy - 6}" text-anchor="middle" font-family="'Long Cang',cursive" font-size="32" fill="${WHEEL.seal}">${atual.animal.hanzi}</text>
+            <text x="${cx}" y="${cy + 16}" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="11" fill="${WHEEL.inkSoft}">${anoBase}</text>
+        </svg>
+        <div class="wheel-caption">Ano vigente em destaque — passe o cursor sobre cada selo para ver o ano</div>
+    `;
+    document.getElementById("cycleGrid").innerHTML = svg;
 }
 
 document.getElementById("btnCalcular").addEventListener("click", calcularEExibir);
