@@ -13,12 +13,6 @@
 
 <style>
 
-/* ============================================
-   Tokens UtiliWeb — adaptados para contexto de emergência.
-   Fundo claro mantido de propósito (não o forest-deep padrão):
-   em pânico, contraste alto e cores de sinalização universais
-   (vermelho/azul/branco) funcionam melhor que um tema escuro.
-   ============================================ */
 :root{
     --forest:#0f3326;
     --mint:#5fe3a8;
@@ -28,9 +22,6 @@
     --ink-soft:#4a4854;
     --line:rgba(28,27,31,.12);
 
-    /* vermelho de emergência — mesma família do --stamp-red do sistema,
-       um tom mais saturado aqui propositalmente: é o único app onde
-       a cor precisa gritar "urgente" à primeira vista. */
     --emerg-red:#c84b31;
     --emerg-red-deep:#9c2f1f;
     --emerg-red-soft:#fbe9e4;
@@ -48,7 +39,6 @@
 }
 
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-
 html{-webkit-text-size-adjust:100%;}
 
 body{
@@ -61,7 +51,6 @@ body{
 
 .container{max-width:560px;margin:0 auto;padding:0 16px;}
 
-/* ---------- HEADER ---------- */
 header{
     background:var(--emerg-red-deep);
     background-image:radial-gradient(circle at 20% 0%, rgba(255,255,255,.12), transparent 55%);
@@ -86,7 +75,6 @@ header p{
     font-weight:500;
 }
 
-/* ---------- CARDS ---------- */
 .box{
     background:var(--paper);
     border-radius:16px;
@@ -109,18 +97,10 @@ header p{
     gap:6px;
 }
 
-/* ---------- LIGAÇÕES (sempre o elemento mais visível da tela) ---------- */
-.call-box{
-    background:var(--emerg-red-deep);
-    border:none;
-}
-
+.call-box{background:var(--emerg-red-deep);border:none;}
 .call-box .box-title{color:rgba(255,255,255,.7);}
 
-.call{
-    display:flex;
-    gap:10px;
-}
+.call{display:flex;gap:10px;}
 
 .call a{
     flex:1;
@@ -144,7 +124,6 @@ header p{
 .help{background:var(--emerg-red)}
 .sea{background:var(--emerg-teal)}
 
-/* ---------- LOCALIZAÇÃO / ENDEREÇO ---------- */
 .btn{
     width:100%;
     padding:14px;
@@ -158,12 +137,38 @@ header p{
 }
 
 .btn:active{transform:scale(.98);}
-
 .btn-blue{background:var(--stamp-blue);color:#fff;}
-.btn-outline{
-    background:transparent;
-    border:1.5px solid var(--line);
+.btn-outline{background:transparent;border:1.5px solid var(--line);color:var(--ink-soft);}
+
+.loc-result{
+    margin-top:12px;
+    padding-top:12px;
+    border-top:1px dashed var(--line);
+    display:none;
+}
+
+.loc-coords{
+    font-family:var(--font-mono);
+    font-size:12.5px;
+    color:var(--ink);
+    margin-bottom:4px;
+}
+
+.loc-address{
+    font-size:12.5px;
     color:var(--ink-soft);
+    margin-bottom:12px;
+    line-height:1.5;
+}
+
+.loc-actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;}
+.loc-actions .btn-mini{padding:10px 6px;font-size:11px;}
+
+.loc-hint{
+    font-size:11px;
+    color:rgba(74,72,84,.55);
+    margin-top:10px;
+    line-height:1.5;
 }
 
 .endereco-field{
@@ -182,7 +187,6 @@ header p{
 }
 
 .endereco-field:focus-visible{outline:2px solid var(--stamp-blue);outline-offset:1px;}
-
 .row-2{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
 
 .endereco-status{
@@ -193,7 +197,6 @@ header p{
     min-height:14px;
 }
 
-/* ---------- BUSCA ---------- */
 .search-wrap{position:relative;}
 
 .search{
@@ -209,10 +212,8 @@ header p{
 }
 
 .search:focus-visible{outline:2px solid var(--stamp-blue);outline-offset:1px;}
-
 .search::placeholder{color:rgba(74,72,84,.45);}
 
-/* ---------- SEÇÃO DE FRASES ---------- */
 .section-label{
     font-family:var(--font-mono);
     font-size:10.5px;
@@ -243,10 +244,7 @@ header p{
     position:relative;
 }
 
-.frase.is-fav{
-    border-color:var(--stamp-amber);
-    background:var(--stamp-amber-soft);
-}
+.frase.is-fav{border-color:var(--stamp-amber);background:var(--stamp-amber-soft);}
 
 .frase-top{
     display:flex;
@@ -292,33 +290,27 @@ header p{
     margin-bottom:12px;
 }
 
-.frase-actions{display:flex;gap:8px;}
+.frase-actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;}
 
 .btn-mini{
-    flex:1;
-    padding:10px;
+    padding:10px 4px;
     border:1.5px solid var(--line);
     background:var(--paper-dim);
     border-radius:10px;
     font-family:var(--font-body);
-    font-size:12.5px;
+    font-size:11.5px;
     font-weight:700;
     color:var(--ink);
     cursor:pointer;
+    text-align:center;
 }
 
 .btn-mini:active{background:var(--line);}
+.btn-mini.destaque{background:var(--stamp-blue);border-color:var(--stamp-blue);color:#fff;}
 
-.empty-state{
-    text-align:center;
-    padding:36px 20px;
-    color:var(--ink-soft);
-    font-size:13.5px;
-}
-
+.empty-state{text-align:center;padding:36px 20px;color:var(--ink-soft);font-size:13.5px;}
 .empty-state .ic{font-size:26px;display:block;margin-bottom:8px;}
 
-/* ---------- TOAST (substitui alert() bloqueante) ---------- */
 .toast{
     position:fixed;
     bottom:22px;
@@ -341,6 +333,70 @@ header p{
 
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
+/* ---------- MODO "MOSTRAR TELA" ---------- */
+.fullscreen-phrase{
+    position:fixed;
+    inset:0;
+    background:#fff;
+    z-index:500;
+    display:none;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:32px 24px;
+    text-align:center;
+}
+
+.fullscreen-phrase.show{display:flex;}
+
+.fs-close{
+    position:absolute;
+    top:18px;
+    right:18px;
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    border:1.5px solid var(--line);
+    background:var(--paper-dim);
+    font-size:18px;
+    color:var(--ink);
+    cursor:pointer;
+}
+
+.fs-pt{
+    font-size:14px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:var(--ink-soft);
+    margin-bottom:18px;
+}
+
+.fs-jp{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:clamp(32px, 10vw, 56px);
+    line-height:1.25;
+    color:var(--ink);
+    margin-bottom:16px;
+}
+
+.fs-romaji{
+    font-family:var(--font-mono);
+    font-size:16px;
+    color:var(--stamp-blue);
+    font-weight:600;
+}
+
+.fs-hint{
+    position:absolute;
+    bottom:26px;
+    left:24px;
+    right:24px;
+    font-size:11.5px;
+    color:rgba(74,72,84,.5);
+}
+
 footer{
     text-align:center;
     font-family:var(--font-mono);
@@ -354,6 +410,8 @@ footer{
 @media(max-width:380px){
     .jp{font-size:19px;}
     .call-num{font-size:18px;}
+    .frase-actions{grid-template-columns:1fr 1fr;}
+    .frase-actions .btn-mini:last-child{grid-column:span 2;}
 }
 
 </style>
@@ -392,7 +450,19 @@ footer{
 
     <div class="box">
         <div class="box-title">📍 Localização</div>
-        <button class="btn btn-blue" onclick="localizacao()" type="button">Mostrar minha localização no mapa</button>
+        <button class="btn btn-blue" onclick="localizacao()" type="button" id="btnLocalizacao">Mostrar minha localização</button>
+
+        <div class="loc-result" id="locResult">
+            <div class="loc-coords" id="locCoords">—</div>
+            <div class="loc-address" id="locAddress">Buscando endereço aproximado…</div>
+            <div class="loc-actions">
+                <button class="btn-mini destaque" onclick="abrirMapa()" type="button">🗺️ Maps</button>
+                <button class="btn-mini" onclick="compartilharLocalizacao()" type="button">📤 Enviar</button>
+                <button class="btn-mini" onclick="copiarLocalizacao()" type="button">📋 Copiar</button>
+            </div>
+        </div>
+
+        <div class="loc-hint">Em ligação, leia o bairro (区) ou cite um ponto de referência (estação, loja, prédio) — é mais rápido do que soletrar o endereço.</div>
     </div>
 
     <div class="box">
@@ -414,7 +484,7 @@ footer{
 
     <div id="favoritosWrap"></div>
 
-    <div class="section-label">Todas as frases <span class="count" id="contagem">10</span></div>
+    <div class="section-label">Todas as frases <span class="count" id="contagem">14</span></div>
     <div id="lista"></div>
 
 </div>
@@ -422,6 +492,14 @@ footer{
 <footer>Em emergência real, ligue diretamente para 110 (polícia) ou 119 (ambulância/incêndio). Este app é um apoio de comunicação, não substitui o atendimento oficial.</footer>
 
 <div class="toast" id="toast"></div>
+
+<div class="fullscreen-phrase" id="fsPhrase">
+    <button class="fs-close" onclick="fecharTela()" type="button" aria-label="Fechar">✕</button>
+    <div class="fs-pt" id="fsPt">—</div>
+    <div class="fs-jp" id="fsJp">—</div>
+    <div class="fs-romaji" id="fsRomaji">—</div>
+    <div class="fs-hint">Mostre esta tela para a pessoa ler · toque em ✕ para fechar</div>
+</div>
 
 <script>
 
@@ -434,12 +512,18 @@ const frases = [
     ["ゆっくり話してください", "Yukkuri hanashite kudasai", "Fale devagar"],
     ["住所はここです", "Jūsho wa koko desu", "O endereço é aqui"],
     ["通訳が必要です", "Tsūyaku ga hitsuyō desu", "Preciso de intérprete"],
+    ["ポルトガル語の通訳が必要です", "Porutogarugo no tsūyaku ga hitsuyō desu", "Preciso de um intérprete em português"],
     ["怪我をしています", "Kega o shiteimasu", "Estou machucado"],
     ["病院に行きたいです", "Byōin ni ikitai desu", "Quero ir ao hospital"],
+    ["最寄りの病院はどこですか", "Moyori no byōin wa doko desu ka", "Qual é o hospital mais próximo?"],
+    ["道に迷いました", "Michi ni mayoimashita", "Estou perdido(a)"],
+    ["携帯の翻訳アプリを使ってもいいですか", "Keitai no hon'yaku apuri o tsukattemo ii desu ka", "Posso usar o tradutor do celular?"],
 ];
 
 let favoritos = [];
 try { favoritos = JSON.parse(localStorage.getItem("fav") || "[]"); } catch(e) { favoritos = []; }
+
+let ultimaLocalizacao = null; // { lat, lon, address }
 
 let toastTimer = null;
 function showToast(msg){
@@ -448,6 +532,10 @@ function showToast(msg){
     t.classList.add("show");
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => t.classList.remove("show"), 1800);
+}
+
+function vibrar(ms){
+    try { if(navigator.vibrate) navigator.vibrate(ms); } catch(e){}
 }
 
 function normalizar(s){
@@ -471,6 +559,7 @@ function cardFrase(f, i, destacado){
             <div class="jp">${f[0]}</div>
             <div class="romaji">${f[1]}</div>
             <div class="frase-actions">
+                <button class="btn-mini destaque" onclick="mostrarTela(${i})" type="button">🖥️ Mostrar</button>
                 <button class="btn-mini" onclick="ouvir('${f[0]}')" type="button">🔊 Ouvir</button>
                 <button class="btn-mini" onclick="copiarFrase('${f[1].replace(/'/g,"\\'")}')" type="button">📋 Copiar</button>
             </div>
@@ -488,14 +577,10 @@ function renderizar(){
     const favWrap = document.getElementById("favoritosWrap");
     const favResultados = resultados.filter(({i}) => favoritos.includes(i));
 
-    if(favResultados.length){
-        favWrap.innerHTML = `
-            <div class="section-label">⭐ Favoritas <span class="count">${favResultados.length}</span></div>
-            ${favResultados.map(({f, i}) => cardFrase(f, i, true)).join('')}
-        `;
-    } else {
-        favWrap.innerHTML = '';
-    }
+    favWrap.innerHTML = favResultados.length ? `
+        <div class="section-label">⭐ Favoritas <span class="count">${favResultados.length}</span></div>
+        ${favResultados.map(({f, i}) => cardFrase(f, i, true)).join('')}
+    ` : '';
 
     const lista = document.getElementById("lista");
     document.getElementById("contagem").textContent = resultados.length;
@@ -513,10 +598,30 @@ function renderizar(){
     lista.innerHTML = resultados.map(({f, i}) => cardFrase(f, i, false)).join('');
 }
 
+/* ---------- MOSTRAR TELA (para quem não fala japonês) ---------- */
+function mostrarTela(i){
+    const f = frases[i];
+    document.getElementById("fsPt").textContent = f[2];
+    document.getElementById("fsJp").textContent = f[0];
+    document.getElementById("fsRomaji").textContent = f[1];
+    document.getElementById("fsPhrase").classList.add("show");
+    vibrar(40);
+}
+
+function fecharTela(){
+    document.getElementById("fsPhrase").classList.remove("show");
+}
+
+document.addEventListener("keydown", e => {
+    if(e.key === "Escape") fecharTela();
+});
+
+/* ---------- ÁUDIO ---------- */
 function ouvir(txt){
     try {
         const fala = new SpeechSynthesisUtterance(txt);
         fala.lang = "ja-JP";
+        fala.rate = 0.85; // mais devagar — ajuda quem está ouvindo a pronunciar de volta
         speechSynthesis.speak(fala);
     } catch(e){
         showToast("Áudio não disponível neste aparelho");
@@ -533,27 +638,103 @@ function favoritar(i){
         favoritos = favoritos.filter(x => x !== i);
     } else {
         favoritos.push(i);
+        vibrar(30);
     }
     localStorage.setItem("fav", JSON.stringify(favoritos));
     renderizar();
 }
 
+/* ---------- LOCALIZAÇÃO ---------- */
 function localizacao(){
+    const btn = document.getElementById("btnLocalizacao");
+    btn.textContent = "Buscando localização…";
+
     navigator.geolocation.getCurrentPosition(
-        p => {
-            const url = `https://maps.google.com/?q=${p.coords.latitude},${p.coords.longitude}`;
-            window.open(url, '_blank');
+        async p => {
+            const lat = p.coords.latitude;
+            const lon = p.coords.longitude;
+            ultimaLocalizacao = { lat, lon, address: null };
+
+            btn.textContent = "Atualizar localização";
+            document.getElementById("locResult").style.display = "block";
+            document.getElementById("locCoords").textContent = `${lat.toFixed(5)}, ${lon.toFixed(5)}`;
+            document.getElementById("locAddress").textContent = "Buscando endereço aproximado…";
+
+            buscarEnderecoAproximado(lat, lon);
         },
-        () => showToast("Não foi possível obter sua localização")
+        () => {
+            btn.textContent = "Mostrar minha localização";
+            showToast("Não foi possível obter sua localização");
+        },
+        { enableHighAccuracy: true, timeout: 10000 }
     );
 }
 
+async function buscarEnderecoAproximado(lat, lon){
+    const elAddress = document.getElementById("locAddress");
+    try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 6000);
+
+        const resp = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&accept-language=pt,ja`,
+            { signal: controller.signal }
+        );
+        clearTimeout(timeoutId);
+
+        const data = await resp.json();
+        const endereco = data && data.display_name ? data.display_name : null;
+
+        if(endereco){
+            elAddress.textContent = endereco;
+            if(ultimaLocalizacao) ultimaLocalizacao.address = endereco;
+        } else {
+            elAddress.textContent = "Endereço aproximado indisponível — use as coordenadas acima.";
+        }
+    } catch(e){
+        elAddress.textContent = "Endereço aproximado indisponível — use as coordenadas acima.";
+    }
+}
+
+function mapsUrl(){
+    if(!ultimaLocalizacao) return null;
+    return `https://maps.google.com/?q=${ultimaLocalizacao.lat},${ultimaLocalizacao.lon}`;
+}
+
+function abrirMapa(){
+    const url = mapsUrl();
+    if(!url){ showToast("Busque sua localização primeiro"); return; }
+    window.open(url, '_blank');
+}
+
+function textoLocalizacaoCompleto(){
+    const url = mapsUrl();
+    const endereco = ultimaLocalizacao && ultimaLocalizacao.address ? `${ultimaLocalizacao.address}\n` : '';
+    return `Minha localização:\n${endereco}${url}`;
+}
+
+function compartilharLocalizacao(){
+    if(!ultimaLocalizacao){ showToast("Busque sua localização primeiro"); return; }
+    const texto = textoLocalizacaoCompleto();
+
+    if(navigator.share){
+        navigator.share({ title: 'Minha localização', text: texto }).catch(() => {});
+    } else {
+        navigator.clipboard.writeText(texto).then(() => showToast("Localização copiada — cole na conversa"))
+            .catch(() => showToast("Não foi possível compartilhar"));
+    }
+}
+
+function copiarLocalizacao(){
+    if(!ultimaLocalizacao){ showToast("Busque sua localização primeiro"); return; }
+    navigator.clipboard.writeText(textoLocalizacaoCompleto()).then(() => showToast("Localização copiada!"))
+        .catch(() => showToast("Não foi possível copiar"));
+}
+
+/* ---------- ENDEREÇO SALVO ---------- */
 function salvarEndereco(){
     const val = document.getElementById("enderecoInput").value.trim();
-    if(!val){
-        showToast("Digite um endereço antes de salvar");
-        return;
-    }
+    if(!val){ showToast("Digite um endereço antes de salvar"); return; }
     localStorage.setItem("endereco", val);
     document.getElementById("enderecoStatus").textContent = "✓ Salvo neste aparelho";
     showToast("Endereço salvo");
@@ -561,10 +742,7 @@ function salvarEndereco(){
 
 function copiarEndereco(){
     const val = document.getElementById("enderecoInput").value.trim();
-    if(!val){
-        showToast("Nenhum endereço para copiar");
-        return;
-    }
+    if(!val){ showToast("Nenhum endereço para copiar"); return; }
     navigator.clipboard.writeText(val).then(() => showToast("Endereço copiado!"))
         .catch(() => showToast("Não foi possível copiar"));
 }
