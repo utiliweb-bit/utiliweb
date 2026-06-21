@@ -13,21 +13,21 @@
 <style>
 
 :root{
-    --ink:#0e2419;
-    --forest:#0f3326;
-    --forest-deep:#0a2018;
-    --mint:#5fe3a8;
-    --mint-soft:#bff5da;
-    --paper:#fbfaf6;
-    --paper-dim:#f1efe6;
-    --gold:#e8b86d;
-    --line:rgba(15,51,38,.12);
-    --blue:#185fa5;
-    --blue-bg:#e6f1fb;
-    --amber:#854f0b;
-    --amber-bg:#faeeda;
-    --red:#a32d2d;
-    --red-bg:#fcebeb;
+    --ink:#1c1410;
+    --forest:#1b3650;
+    --forest-deep:#0f2438;
+    --mint:#e8763f;
+    --mint-soft:#f7cba8;
+    --paper:#faf6ee;
+    --paper-dim:#efe6d4;
+    --gold:#d9a441;
+    --line:rgba(27,54,80,.14);
+    --blue:#2f8077;
+    --blue-bg:#e1efec;
+    --amber:#8a5a12;
+    --amber-bg:#faf0db;
+    --red:#a8412e;
+    --red-bg:#fbe9e2;
     --font-display:'Fraunces',serif;
     --font-body:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
 }
@@ -47,8 +47,8 @@ body{
     font-family:var(--font-body);
     background:var(--forest-deep);
     background-image:
-        radial-gradient(circle at 15% 10%, rgba(95,227,168,.10), transparent 45%),
-        radial-gradient(circle at 85% 90%, rgba(232,184,109,.08), transparent 50%);
+        radial-gradient(circle at 15% 10%, rgba(232,118,63,.10), transparent 45%),
+        radial-gradient(circle at 85% 90%, rgba(217,164,65,.08), transparent 50%);
     min-height:100dvh;
     display:flex;
     justify-content:center;
@@ -73,7 +73,7 @@ body{
 
 .left{
     background:var(--forest);
-    background-image:radial-gradient(circle at 30% 0%, rgba(95,227,168,.18), transparent 55%);
+    background-image:radial-gradient(circle at 30% 0%, rgba(232,118,63,.16), transparent 55%);
     color:var(--paper);
     padding:36px 34px;
     max-height:calc(100dvh - 56px);
@@ -217,7 +217,7 @@ select option{
 
 .suggestion-item:hover,
 .suggestion-item.focused{
-    background:rgba(95,227,168,.14);
+    background:rgba(232,118,63,.16);
 }
 
 .suggestion-kcal{
@@ -292,10 +292,10 @@ select option{
     color:var(--mint);
     font-weight:700;
     margin-top:10px;
-    background:rgba(95,227,168,.1);
+    background:rgba(232,118,63,.1);
     border-radius:9px;
     padding:8px 10px;
-    border:1px solid rgba(95,227,168,.25);
+    border:1px solid rgba(232,118,63,.28);
 }
 
 .input-row{
@@ -341,12 +341,12 @@ button{
 .btn-primary{
     background:var(--mint);
     color:var(--forest-deep);
-    box-shadow:0 8px 24px rgba(95,227,168,.25);
+    box-shadow:0 8px 24px rgba(232,118,63,.28);
 }
 
 .btn-primary:hover{
     transform:translateY(-1px);
-    box-shadow:0 12px 28px rgba(95,227,168,.35);
+    box-shadow:0 12px 28px rgba(232,118,63,.4);
 }
 
 .btn-primary:active{
@@ -362,8 +362,8 @@ button{
 }
 
 .btn-secondary:hover{
-    border-color:#e08a8a;
-    color:#e08a8a;
+    border-color:#d97a62;
+    color:#d97a62;
 }
 
 .toast{
@@ -1313,30 +1313,30 @@ function renderDiario(){
 
             <div class="macro-bar-wrap">
                 <div class="macro-bar-label">
-                    <span style="color:#85b7eb">Proteína ${pProt}%</span>
-                    <span style="color:#fac775">Carboidrato ${pCarb}%</span>
-                    <span style="color:#f09595">Gordura ${pGord}%</span>
+                    <span style="color:#7fc4ba">Proteína ${pProt}%</span>
+                    <span style="color:#f0c469">Carboidrato ${pCarb}%</span>
+                    <span style="color:#f0a07e">Gordura ${pGord}%</span>
                 </div>
                 <div class="macro-bar-track">
                     <div style="display:flex;height:100%">
-                        <div class="macro-bar-fill" style="width:${pProt}%;background:#378add"></div>
-                        <div class="macro-bar-fill" style="width:${pCarb}%;background:#ef9f27"></div>
-                        <div class="macro-bar-fill" style="width:${pGord}%;background:#e24b4a"></div>
+                        <div class="macro-bar-fill" style="width:${pProt}%;background:#3a9088"></div>
+                        <div class="macro-bar-fill" style="width:${pCarb}%;background:#dba038"></div>
+                        <div class="macro-bar-fill" style="width:${pGord}%;background:#d2674a"></div>
                     </div>
                 </div>
             </div>
 
             <div class="macros-row">
                 <div class="macro-pill">
-                    <span class="macro-pill-val" style="color:#85b7eb">${totProt}g</span>
+                    <span class="macro-pill-val" style="color:#7fc4ba">${totProt}g</span>
                     <span class="macro-pill-lbl">Proteína</span>
                 </div>
                 <div class="macro-pill">
-                    <span class="macro-pill-val" style="color:#fac775">${totCarb}g</span>
+                    <span class="macro-pill-val" style="color:#f0c469">${totCarb}g</span>
                     <span class="macro-pill-lbl">Carboidrato</span>
                 </div>
                 <div class="macro-pill">
-                    <span class="macro-pill-val" style="color:#f09595">${totGord}g</span>
+                    <span class="macro-pill-val" style="color:#f0a07e">${totGord}g</span>
                     <span class="macro-pill-lbl">Gordura</span>
                 </div>
             </div>
