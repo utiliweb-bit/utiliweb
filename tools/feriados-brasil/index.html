@@ -421,7 +421,17 @@ input:focus{
 /* ─── RESPONSIVO ─── */
 
 @media(max-width:880px){
-  .wrapper{grid-template-columns:1fr}
+  body{padding:0}
+
+  .wrapper{
+    grid-template-columns:1fr;
+    max-width:100%;
+    width:100%;
+    min-height:100vh;
+    border-radius:0;
+    border:none;
+    box-shadow:none;
+  }
   .right-panel{
     order:-1;
     border-bottom:1px solid var(--border);
@@ -430,7 +440,7 @@ input:focus{
     border-right:none;
     border-top:1px solid var(--border);
   }
-  .left-panel,.right-panel{padding:28px 22px}
+  .left-panel,.right-panel{padding:24px 18px}
 }
 
 </style>
