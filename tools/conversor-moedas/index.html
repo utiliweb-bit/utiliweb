@@ -1,847 +1,609 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>FinTrack | Conversor de Moedas Global</title>
+    <meta name="description" content="Conversor de moedas profissional com taxas em tempo real.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand: #0066FF;
+            --brand-light: #E6F0FF;
+            --bg: #F8FAFC;
+            --surface: #FFFFFF;
+            --text-main: #0F172A;
+            --text-muted: #64748B;
+            --border: #E2E8F0;
+            --success: #10B981;
+            --radius-xl: 24px;
+            --radius-lg: 16px;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
 
-<title>Conversor de Moedas | UtiliWeb</title>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-<meta name="description" content="Converta mais de 160 moedas — BRL, USD, EUR, GBP, JPY e moedas de todo o mundo — com cotações atualizadas em tempo real.">
-<meta name="robots" content="index, follow">
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
 
-<style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
-}
+        .dashboard {
+            width: 100%;
+            max-width: 1100px;
+            background: var(--surface);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
 
-html { -webkit-text-size-adjust: 100%; }
+        /* PAINEL ESQUERDO (CONTROLES) */
+        .controls {
+            padding: 48px;
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
 
-body {
-    width: 100%;
-    min-height: 100dvh;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 16px;
-    background: linear-gradient(135deg, #2ecc71, #27ae60);
-}
+        .header {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
 
-/* WRAPPER */
-.wrapper {
-    width: 100%;
-    max-width: 1100px;
-    background: #fff;
-    border-radius: 18px;
-    box-shadow: 0 20px 60px rgba(0,0,0,.25);
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    overflow: hidden;
-    margin: auto;
-}
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 24px;
+            color: var(--brand);
+            margin-bottom: 8px;
+        }
 
-/* PAINÉIS */
-.left, .right {
-    padding: 28px;
-    min-width: 0;
-}
+        .brand-logo span {
+            background: var(--brand);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 18px;
+        }
 
-.left { border-right: 1px solid #eee; }
+        h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
 
-.right {
-    background: #f6fff8;
-    display: flex;
-    flex-direction: column;
-}
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 16px;
+        }
 
-a.back {
-    display: inline-block;
-    margin-bottom: 14px;
-    text-decoration: none;
-    color: #27ae60;
-    font-weight: 700;
-    font-size: 14px;
-}
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
 
-/* TITULOS */
-h1 { font-size: 26px; margin-bottom: 6px; }
-h2 { font-size: 20px; margin-bottom: 16px; color: #1a1a1a; }
+        .field-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-main);
+            display: flex;
+            justify-content: space-between;
+        }
 
-.subtitle { color: #666; font-size: 14px; margin-bottom: 20px; }
+        .field-label span {
+            color: var(--brand);
+            cursor: pointer;
+        }
 
-/* INPUTS */
-label {
-    font-size: 13px;
-    font-weight: 700;
-    color: #444;
-    display: block;
-    margin-bottom: 8px;
-}
+        .amount-input-wrapper {
+            position: relative;
+        }
 
-label.label-sep { margin-top: 16px; }
+        .amount-input-wrapper input {
+            width: 100%;
+            padding: 16px 20px;
+            font-size: 24px;
+            font-weight: 700;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-lg);
+            font-family: 'Outfit', sans-serif;
+            transition: all 0.2s;
+            background: #F1F5F9;
+        }
 
-input {
-    width: 100%;
-    padding: 13px;
-    border-radius: 12px;
-    border: 2px solid #ddd;
-    font-size: 17px;
-    font-family: inherit;
-    background: #fff;
-    color: #1a1a1a;
-}
+        .amount-input-wrapper input:focus {
+            outline: none;
+            border-color: var(--brand);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(0, 102, 255, 0.1);
+        }
 
-input:focus { outline: none; border-color: #27ae60; }
+        .converter-row {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            gap: 16px;
+        }
 
-input:disabled, button:disabled { opacity: 0.6; cursor: not-allowed; }
+        .currency-selector {
+            position: relative;
+        }
 
-/* SELETOR DE MOEDA CUSTOMIZADO */
-.currency-field { position: relative; }
+        .currency-trigger {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+        }
 
-.currency-trigger {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 11px 13px;
-    border-radius: 12px;
-    border: 2px solid #ddd;
-    background: #fff;
-    cursor: pointer;
-    font-family: inherit;
-    font-size: 15px;
-    color: #1a1a1a;
-    text-align: left;
-}
+        .currency-trigger:hover {
+            border-color: var(--brand);
+        }
 
-.currency-trigger:hover { border-color: #b9e8cc; }
+        .currency-trigger .flag {
+            font-size: 24px;
+            line-height: 1;
+        }
 
-.currency-trigger.aberto { border-color: #27ae60; }
+        .currency-trigger .code {
+            font-weight: 700;
+            font-size: 16px;
+            flex: 1;
+        }
 
-.currency-trigger .bandeira {
-    font-size: 22px;
-    line-height: 1;
-    flex-shrink: 0;
-}
+        .currency-trigger .chevron {
+            color: var(--text-muted);
+            font-size: 12px;
+        }
 
-.currency-trigger .info {
-    flex: 1;
-    min-width: 0;
-    overflow: hidden;
-}
+        .swap-button {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--brand);
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: var(--shadow-md);
+            z-index: 2;
+        }
 
-.currency-trigger .codigo {
-    font-weight: 800;
-    display: block;
-}
+        .swap-button:hover {
+            transform: scale(1.1) rotate(180deg);
+        }
 
-.currency-trigger .nome {
-    font-size: 11px;
-    color: #888;
-    display: block;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
+        .quick-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
 
-.currency-trigger .seta {
-    color: #aaa;
-    font-size: 12px;
-    flex-shrink: 0;
-    transition: transform 0.15s ease;
-}
+        .chip {
+            padding: 8px 14px;
+            border-radius: 100px;
+            background: white;
+            border: 1px solid var(--border);
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
 
-.currency-trigger.aberto .seta { transform: rotate(180deg); }
+        .chip:hover {
+            border-color: var(--brand);
+            color: var(--brand);
+            background: var(--brand-light);
+        }
 
-.currency-dropdown {
-    position: absolute;
-    top: calc(100% + 6px);
-    left: 0;
-    right: 0;
-    background: #fff;
-    border: 1px solid #e2e2e2;
-    border-radius: 14px;
-    box-shadow: 0 16px 40px rgba(0,0,0,.18);
-    z-index: 30;
-    display: none;
-    overflow: hidden;
-}
+        /* PAINEL DIREITO (RESULTADO) */
+        .summary {
+            background: #0F172A;
+            color: white;
+            padding: 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
 
-.currency-dropdown.aberto { display: flex; flex-direction: column; }
+        .summary::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(0, 102, 255, 0.15) 0%, transparent 70%);
+            pointer-events: none;
+        }
 
-.currency-search {
-    padding: 10px;
-    border-bottom: 1px solid #eee;
-}
+        .summary-label {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--brand);
+            margin-bottom: 16px;
+        }
 
-.currency-search input {
-    padding: 9px 11px;
-    font-size: 14px;
-    border-radius: 9px;
-}
+        .result-main {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 40px;
+        }
 
-.currency-list {
-    overflow-y: auto;
-    max-height: 280px;
-}
+        .result-from {
+            font-size: 18px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
 
-.currency-option {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 9px 13px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-family: inherit;
-    text-align: left;
-}
+        .result-to {
+            font-family: 'Outfit', sans-serif;
+            font-size: 48px;
+            font-weight: 800;
+            line-height: 1.1;
+            word-break: break-all;
+        }
 
-.currency-option:hover, .currency-option.realce { background: #eafaf1; }
+        .rate-info-box {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
 
-.currency-option .bandeira { font-size: 19px; flex-shrink: 0; }
+        .rate-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+        }
 
-.currency-option .info { min-width: 0; overflow: hidden; }
+        .rate-row span:first-child {
+            color: var(--text-muted);
+        }
 
-.currency-option .codigo { font-weight: 800; font-size: 13px; display: block; }
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: #94A3B8;
+            margin-top: auto;
+        }
 
-.currency-option .nome {
-    font-size: 11px;
-    color: #888;
-    display: block;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+        }
 
-.currency-empty {
-    padding: 18px;
-    text-align: center;
-    color: #999;
-    font-size: 13px;
-}
+        .dot.loading { background: #F59E0B; animation: pulse 1.5s infinite; }
 
-/* LINHA DE/PARA */
-.swap-row {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: end;
-    gap: 8px;
-}
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
 
-.swap-btn {
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    border: 2px solid #ddd;
-    background: #fff;
-    cursor: pointer;
-    font-size: 17px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.2s ease, background 0.15s ease, border-color .15s ease;
-    color: #27ae60;
-}
+        /* DROPDOWN CUSTOMIZADO */
+        .dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            z-index: 100;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            max-height: 400px;
+        }
 
-.swap-btn:hover { background: #eafaf1; border-color: #27ae60; }
-.swap-btn.girando { transform: rotate(180deg); }
+        .dropdown.active { display: flex; }
 
-/* CHIPS DE MOEDAS RÁPIDAS */
-.chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 14px;
-}
+        .search-box {
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+        }
 
-.chip {
-    padding: 6px 11px;
-    border-radius: 999px;
-    border: 1.5px solid #e2e2e2;
-    background: #fff;
-    font-size: 12px;
-    font-weight: 700;
-    color: #555;
-    cursor: pointer;
-    font-family: inherit;
-}
+        .search-box input {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            font-size: 14px;
+        }
 
-.chip:hover { border-color: #27ae60; color: #27ae60; }
+        .options-list {
+            overflow-y: auto;
+            padding: 8px;
+        }
 
-/* RESULTADO */
-.result-card {
-    background: #fff;
-    border: 2px solid #d7f5e3;
-    border-radius: 16px;
-    padding: 22px;
-    margin-top: 4px;
-}
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
 
-.result-de {
-    font-size: 13px;
-    color: #888;
-    margin-bottom: 6px;
-}
+        .option-item:hover { background: var(--bg); }
 
-.result {
-    font-size: 32px;
-    font-weight: 800;
-    color: #1a8449;
-    word-break: break-word;
-    min-height: 40px;
-    line-height: 1.15;
-}
+        .option-item .code { font-weight: 700; width: 45px; }
+        .option-item .name { font-size: 13px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-.result.erro { color: #c0392b; font-size: 16px; font-weight: 700; }
+        @media (max-width: 950px) {
+            .dashboard { grid-template-columns: 1fr; }
+            .summary { padding: 40px; }
+            .controls { padding: 32px; }
+        }
 
-.taxa-info {
-    font-size: 13px;
-    color: #666;
-    margin-top: 16px;
-    padding-top: 16px;
-    border-top: 1px solid #eef5f0;
-    line-height: 1.6;
-}
-
-.taxa-info strong { color: #27ae60; }
-
-.status {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    font-size: 12px;
-    color: #888;
-    margin-top: 18px;
-}
-
-.status .ponto {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #27ae60;
-    flex-shrink: 0;
-}
-
-.status .ponto.carregando { background: #f39c12; animation: pulsar 1s infinite ease-in-out; }
-.status .ponto.falha { background: #c0392b; }
-
-@keyframes pulsar { 0%, 100% { opacity: 1; } 50% { opacity: .3; } }
-
-.fonte-attr {
-    font-size: 11px;
-    color: #aaa;
-    margin-top: 8px;
-}
-
-.fonte-attr a { color: #aaa; text-decoration: underline; }
-
-.spacer { flex: 1; }
-
-/* RESPONSIVO */
-@media (max-width: 900px) {
-    body { align-items: flex-start; }
-    .wrapper { grid-template-columns: 1fr; }
-    .left { border-right: none; border-bottom: 1px solid #eee; }
-    h1 { font-size: 22px; }
-    .result { font-size: 26px; }
-
-    .swap-row {
-        grid-template-columns: 1fr;
-        gap: 10px;
-    }
-
-    .swap-btn {
-        justify-self: center;
-        transform: rotate(90deg);
-    }
-
-    .swap-btn.girando { transform: rotate(270deg); }
-}
-</style>
-
+        @media (max-width: 600px) {
+            .converter-row { grid-template-columns: 1fr; }
+            .swap-button { justify-self: center; transform: rotate(90deg); }
+            .swap-button:hover { transform: scale(1.1) rotate(270deg); }
+            h1 { font-size: 26px; }
+            .result-to { font-size: 36px; }
+        }
+    </style>
 </head>
-
 <body>
 
-<div class="wrapper">
+<div class="dashboard">
+    <div class="controls">
+        <div class="header">
+            <div class="brand-logo"><span>⇄</span> FinTrack</div>
+            <h1>Conversor de Moedas</h1>
+            <p class="subtitle">Taxas de câmbio globais atualizadas em tempo real.</p>
+        </div>
 
-    <!-- INPUT -->
-    <div class="left">
-        <h1>💱 Conversor de Moedas</h1>
-        <p class="subtitle">Mais de 160 moedas de todo o mundo, com cotações atualizadas em tempo real</p>
-        <a class="back" href="../../index.html">← Voltar</a>
-
-        <label for="valor">Valor</label>
-        <input id="valor" type="number" inputmode="decimal" min="0" step="any" placeholder="Ex: 1000">
-
-        <div class="swap-row" style="margin-top:16px;">
-            <div class="currency-field" id="campoDe">
-                <label>De</label>
-                <button type="button" class="currency-trigger" id="triggerDe" aria-haspopup="listbox">
-                    <span class="bandeira" id="bandeiraDe">🇧🇷</span>
-                    <span class="info">
-                        <span class="codigo" id="codigoDe">BRL</span>
-                        <span class="nome" id="nomeDe">Real brasileiro</span>
-                    </span>
-                    <span class="seta">▾</span>
-                </button>
-                <div class="currency-dropdown" id="dropdownDe">
-                    <div class="currency-search">
-                        <input type="text" placeholder="Buscar moeda ou país..." id="buscaDe">
-                    </div>
-                    <div class="currency-list" id="listaDe"></div>
-                </div>
+        <div class="input-group">
+            <div class="field-label">
+                <label for="valor">VALOR PARA CONVERTER</label>
+                <span onclick="document.getElementById('valor').value=''; converter()">Limpar</span>
             </div>
-
-            <button type="button" class="swap-btn" id="inverter" title="Inverter moedas" aria-label="Inverter moedas">⇄</button>
-
-            <div class="currency-field" id="campoPara">
-                <label>Para</label>
-                <button type="button" class="currency-trigger" id="triggerPara" aria-haspopup="listbox">
-                    <span class="bandeira" id="bandeiraPara">🇺🇸</span>
-                    <span class="info">
-                        <span class="codigo" id="codigoPara">USD</span>
-                        <span class="nome" id="nomePara">Dólar americano</span>
-                    </span>
-                    <span class="seta">▾</span>
-                </button>
-                <div class="currency-dropdown" id="dropdownPara">
-                    <div class="currency-search">
-                        <input type="text" placeholder="Buscar moeda ou país..." id="buscaPara">
-                    </div>
-                    <div class="currency-list" id="listaPara"></div>
-                </div>
+            <div class="amount-input-wrapper">
+                <input id="valor" type="number" inputmode="decimal" placeholder="0.00" oninput="converter()">
             </div>
         </div>
 
-        <div class="chips" id="chips"></div>
+        <div class="input-group">
+            <label class="field-label">SELECIONE AS MOEDAS</label>
+            <div class="converter-row">
+                <div class="currency-selector">
+                    <button class="currency-trigger" id="triggerDe" onclick="toggleDropdown('De')">
+                        <span class="flag" id="flagDe">🇧🇷</span>
+                        <span class="code" id="codeDe">BRL</span>
+                        <span class="chevron">▼</span>
+                    </button>
+                    <div class="dropdown" id="dropdownDe">
+                        <div class="search-box"><input type="text" placeholder="Buscar moeda..." id="searchDe" oninput="filterList('De')"></div>
+                        <div class="options-list" id="listDe"></div>
+                    </div>
+                </div>
 
-        <div class="status" id="status">
-            <span class="ponto carregando" id="statusPonto"></span>
-            <span id="statusTexto">Buscando cotações atualizadas...</span>
+                <button class="swap-button" onclick="swapCurrencies()" title="Inverter">⇄</button>
+
+                <div class="currency-selector">
+                    <button class="currency-trigger" id="triggerPara" onclick="toggleDropdown('Para')">
+                        <span class="flag" id="flagPara">🇺🇸</span>
+                        <span class="code" id="codePara">USD</span>
+                        <span class="chevron">▼</span>
+                    </button>
+                    <div class="dropdown" id="dropdownPara">
+                        <div class="search-box"><input type="text" placeholder="Buscar moeda..." id="searchPara" oninput="filterList('Para')"></div>
+                        <div class="options-list" id="listPara"></div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="fonte-attr">Cotações por <a href="https://www.exchangerate-api.com" target="_blank" rel="noopener">ExchangeRate-API</a> e <a href="https://frankfurter.dev" target="_blank" rel="noopener">Frankfurter</a></div>
+        <div class="input-group">
+            <label class="field-label">MOEDAS POPULARES</label>
+            <div class="quick-chips" id="chips"></div>
+        </div>
     </div>
 
-    <!-- RESULTADO -->
-    <div class="right">
-        <h2>Resultado</h2>
-
-        <div class="result-card">
-            <div class="result-de" id="resultadoDe"></div>
-            <div class="result" id="resultado">—</div>
-            <div class="taxa-info" id="taxaInfo"></div>
+    <div class="summary">
+        <div class="summary-label">Resultado da Conversão</div>
+        
+        <div class="result-main">
+            <div class="result-from" id="resFrom">1,00 BRL =</div>
+            <div class="result-to" id="resTo">0,18 USD</div>
         </div>
 
-        <div class="spacer"></div>
-    </div>
+        <div class="rate-info-box">
+            <div class="rate-row">
+                <span>Taxa de Câmbio</span>
+                <span id="rateValue">1 BRL = 0.1824 USD</span>
+            </div>
+            <div class="rate-row">
+                <span>Inverso</span>
+                <span id="rateInverse">1 USD = 5.4821 BRL</span>
+            </div>
+        </div>
 
+        <div class="status-badge">
+            <div class="dot" id="statusDot"></div>
+            <span id="statusText">Buscando cotações...</span>
+        </div>
+    </div>
 </div>
 
 <script>
-/* ====================== DADOS DE MOEDAS (ISO 4217) ====================== */
-/* Nome em pt-BR e bandeira (emoji) para as moedas mais usadas no mundo.
-   Qualquer moeda retornada pela API que não esteja aqui ainda é exibida,
-   usando o próprio código como nome e um globo no lugar da bandeira. */
-const CATALOGO = {
-    AED: ["Dirham dos Emirados Árabes Unidos", "🇦🇪"], AFN: ["Afegane afegão", "🇦🇫"],
-    ALL: ["Lek albanês", "🇦🇱"], AMD: ["Dram armênio", "🇦🇲"], ANG: ["Florim das Antilhas Neerlandesas", "🇨🇼"],
-    AOA: ["Kwanza angolano", "🇦🇴"], ARS: ["Peso argentino", "🇦🇷"], AUD: ["Dólar australiano", "🇦🇺"],
-    AWG: ["Florim de Aruba", "🇦🇼"], AZN: ["Manat azerbaijano", "🇦🇿"], BAM: ["Marco da Bósnia e Herzegovina", "🇧🇦"],
-    BBD: ["Dólar de Barbados", "🇧🇧"], BDT: ["Taka de Bangladesh", "🇧🇩"], BGN: ["Lev búlgaro", "🇧🇬"],
-    BHD: ["Dinar bareinita", "🇧🇭"], BIF: ["Franco do Burundi", "🇧🇮"], BMD: ["Dólar das Bermudas", "🇧🇲"],
-    BND: ["Dólar de Brunei", "🇧🇳"], BOB: ["Boliviano", "🇧🇴"], BRL: ["Real brasileiro", "🇧🇷"],
-    BSD: ["Dólar das Bahamas", "🇧🇸"], BTN: ["Ngultrum butanês", "🇧🇹"], BWP: ["Pula de Botsuana", "🇧🇼"],
-    BYN: ["Rublo bielorrusso", "🇧🇾"], BZD: ["Dólar de Belize", "🇧🇿"], CAD: ["Dólar canadense", "🇨🇦"],
-    CDF: ["Franco congolês", "🇨🇩"], CHF: ["Franco suíço", "🇨🇭"], CLP: ["Peso chileno", "🇨🇱"],
-    CNY: ["Yuan chinês", "🇨🇳"], COP: ["Peso colombiano", "🇨🇴"], CRC: ["Colón costarriquenho", "🇨🇷"],
-    CUP: ["Peso cubano", "🇨🇺"], CVE: ["Escudo cabo-verdiano", "🇨🇻"], CZK: ["Coroa tcheca", "🇨🇿"],
-    DJF: ["Franco do Djibuti", "🇩🇯"], DKK: ["Coroa dinamarquesa", "🇩🇰"], DOP: ["Peso dominicano", "🇩🇴"],
-    DZD: ["Dinar argelino", "🇩🇿"], EGP: ["Libra egípcia", "🇪🇬"], ERN: ["Nakfa da Eritreia", "🇪🇷"],
-    ETB: ["Birr etíope", "🇪🇹"], EUR: ["Euro", "🇪🇺"], FJD: ["Dólar de Fiji", "🇫🇯"],
-    FKP: ["Libra das Malvinas", "🇫🇰"], GBP: ["Libra esterlina", "🇬🇧"], GEL: ["Lari georgiano", "🇬🇪"],
-    GHS: ["Cedi ganês", "🇬🇭"], GIP: ["Libra de Gibraltar", "🇬🇮"], GMD: ["Dalasi gambiano", "🇬🇲"],
-    GNF: ["Franco guineense", "🇬🇳"], GTQ: ["Quetzal guatemalteco", "🇬🇹"], GYD: ["Dólar guianense", "🇬🇾"],
-    HKD: ["Dólar de Hong Kong", "🇭🇰"], HNL: ["Lempira hondurenha", "🇭🇳"], HRK: ["Kuna croata", "🇭🇷"],
-    HTG: ["Gourde haitiano", "🇭🇹"], HUF: ["Florim húngaro", "🇭🇺"], IDR: ["Rupia indonésia", "🇮🇩"],
-    ILS: ["Novo shekel israelense", "🇮🇱"], INR: ["Rupia indiana", "🇮🇳"], IQD: ["Dinar iraquiano", "🇮🇶"],
-    IRR: ["Rial iraniano", "🇮🇷"], ISK: ["Coroa islandesa", "🇮🇸"], JMD: ["Dólar jamaicano", "🇯🇲"],
-    JOD: ["Dinar jordaniano", "🇯🇴"], JPY: ["Iene japonês", "🇯🇵"], KES: ["Xelim queniano", "🇰🇪"],
-    KGS: ["Som do Quirguistão", "🇰🇬"], KHR: ["Riel cambojano", "🇰🇭"], KMF: ["Franco comorense", "🇰🇲"],
-    KPW: ["Won norte-coreano", "🇰🇵"], KRW: ["Won sul-coreano", "🇰🇷"], KWD: ["Dinar kuwaitiano", "🇰🇼"],
-    KYD: ["Dólar das Ilhas Cayman", "🇰🇾"], KZT: ["Tenge cazaque", "🇰🇿"], LAK: ["Kip laosiano", "🇱🇦"],
-    LBP: ["Libra libanesa", "🇱🇧"], LKR: ["Rupia do Sri Lanka", "🇱🇰"], LRD: ["Dólar liberiano", "🇱🇷"],
-    LSL: ["Loti do Lesoto", "🇱🇸"], LYD: ["Dinar líbio", "🇱🇾"], MAD: ["Dirham marroquino", "🇲🇦"],
-    MDL: ["Leu moldávio", "🇲🇩"], MGA: ["Ariary malgaxe", "🇲🇬"], MKD: ["Dinar macedônio", "🇲🇰"],
-    MMK: ["Kyat de Myanmar", "🇲🇲"], MNT: ["Tugrik mongol", "🇲🇳"], MOP: ["Pataca de Macau", "🇲🇴"],
-    MRU: ["Ouguiya mauritana", "🇲🇷"], MUR: ["Rupia mauriciana", "🇲🇺"], MVR: ["Rufiyaa maldiva", "🇲🇻"],
-    MWK: ["Kwacha do Malaui", "🇲🇼"], MXN: ["Peso mexicano", "🇲🇽"], MYR: ["Ringgit malaio", "🇲🇾"],
-    MZN: ["Metical moçambicano", "🇲🇿"], NAD: ["Dólar namibiano", "🇳🇦"], NGN: ["Naira nigeriana", "🇳🇬"],
-    NIO: ["Córdoba nicaraguense", "🇳🇮"], NOK: ["Coroa norueguesa", "🇳🇴"], NPR: ["Rupia nepalesa", "🇳🇵"],
-    NZD: ["Dólar neozelandês", "🇳🇿"], OMR: ["Rial omanense", "🇴🇲"], PAB: ["Balboa panamenho", "🇵🇦"],
-    PEN: ["Sol peruano", "🇵🇪"], PGK: ["Kina da Papua-Nova Guiné", "🇵🇬"], PHP: ["Peso filipino", "🇵🇭"],
-    PKR: ["Rupia paquistanesa", "🇵🇰"], PLN: ["Zloty polonês", "🇵🇱"], PYG: ["Guarani paraguaio", "🇵🇾"],
-    QAR: ["Rial catariano", "🇶🇦"], RON: ["Leu romeno", "🇷🇴"], RSD: ["Dinar sérvio", "🇷🇸"],
-    RUB: ["Rublo russo", "🇷🇺"], RWF: ["Franco ruandês", "🇷🇼"], SAR: ["Rial saudita", "🇸🇦"],
-    SBD: ["Dólar das Ilhas Salomão", "🇸🇧"], SCR: ["Rupia seichelense", "🇸🇨"], SDG: ["Libra sudanesa", "🇸🇩"],
-    SEK: ["Coroa sueca", "🇸🇪"], SGD: ["Dólar de Singapura", "🇸🇬"], SHP: ["Libra de Santa Helena", "🇸🇭"],
-    SLE: ["Leone de Serra Leoa", "🇸🇱"], SOS: ["Xelim somali", "🇸🇴"], SRD: ["Dólar surinamês", "🇸🇷"],
-    SSP: ["Libra sul-sudanesa", "🇸🇸"], STN: ["Dobra de São Tomé e Príncipe", "🇸🇹"], SYP: ["Libra síria", "🇸🇾"],
-    SZL: ["Lilangeni de Essuatíni", "🇸🇿"], THB: ["Baht tailandês", "🇹🇭"], TJS: ["Somoni do Tajiquistão", "🇹🇯"],
-    TMT: ["Manat do Turcomenistão", "🇹🇲"], TND: ["Dinar tunisiano", "🇹🇳"], TOP: ["Paʻanga de Tonga", "🇹🇴"],
-    TRY: ["Lira turca", "🇹🇷"], TTD: ["Dólar de Trinidad e Tobago", "🇹🇹"], TWD: ["Novo dólar taiwanês", "🇹🇼"],
-    TZS: ["Xelim tanzaniano", "🇹🇿"], UAH: ["Hryvnia ucraniana", "🇺🇦"], UGX: ["Xelim ugandense", "🇺🇬"],
-    USD: ["Dólar americano", "🇺🇸"], UYU: ["Peso uruguaio", "🇺🇾"], UZS: ["Som uzbeque", "🇺🇿"],
-    VES: ["Bolívar venezuelano", "🇻🇪"], VND: ["Dong vietnamita", "🇻🇳"], VUV: ["Vatu de Vanuatu", "🇻🇺"],
-    WST: ["Tala samoano", "🇼🇸"], XAF: ["Franco CFA (África Central)", "🌍"], XCD: ["Dólar do Caribe Oriental", "🌎"],
-    XOF: ["Franco CFA (África Ocidental)", "🌍"], XPF: ["Franco CFP", "🌏"], YER: ["Rial iemenita", "🇾🇪"],
-    ZAR: ["Rand sul-africano", "🇿🇦"], ZMW: ["Kwacha zambiano", "🇿🇲"], ZWL: ["Dólar zimbabuano", "🇿🇼"],
-};
+    const CATALOGO = {
+        AED: ["Dirham dos Emirados Árabes", "🇦🇪"], ARS: ["Peso argentino", "🇦🇷"], AUD: ["Dólar australiano", "🇦🇺"],
+        BRL: ["Real brasileiro", "🇧🇷"], CAD: ["Dólar canadense", "🇨🇦"], CHF: ["Franco suíço", "🇨🇭"],
+        CLP: ["Peso chileno", "🇨🇱"], CNY: ["Yuan chinês", "🇨🇳"], COP: ["Peso colombiano", "🇨🇴"],
+        CZK: ["Coroa tcheca", "🇨🇿"], DKK: ["Coroa dinamarquesa", "🇩🇰"], EGP: ["Libra egípcia", "🇪🇬"],
+        EUR: ["Euro", "🇪🇺"], GBP: ["Libra esterlina", "🇬🇧"], HKD: ["Dólar de Hong Kong", "🇭🇰"],
+        HUF: ["Florim húngaro", "🇭🇺"], IDR: ["Rupia indonésia", "🇮🇩"], ILS: ["Novo shekel israelense", "🇮🇱"],
+        INR: ["Rupia indiana", "🇮🇳"], JPY: ["Iene japonês", "🇯🇵"], KRW: ["Won sul-coreano", "🇰🇷"],
+        MXN: ["Peso mexicano", "🇲🇽"], MYR: ["Ringgit malaio", "🇲🇾"], NOK: ["Coroa norueguesa", "🇳🇴"],
+        NZD: ["Dólar neozelandês", "🇳🇿"], PHP: ["Peso filipino", "🇵🇭"], PLN: ["Zloty polonês", "🇵🇱"],
+        RON: ["Leu romeno", "🇷🇴"], RUB: ["Rublo russo", "🇷🇺"], SAR: ["Rial saudita", "🇸🇦"],
+        SEK: ["Coroa sueca", "🇸🇪"], SGD: ["Dólar de Singapura", "🇸🇬"], THB: ["Baht tailandês", "🇹🇭"],
+        TRY: ["Lira turca", "🇹🇷"], TWD: ["Novo dólar taiwanês", "🇹🇼"], USD: ["Dólar americano", "🇺🇸"],
+        UYU: ["Peso uruguaio", "🇺🇾"], ZAR: ["Rand sul-africano", "🇿🇦"]
+    };
 
-/* Países que usam cada moeda — usado para a busca por nome do país.
-   Algumas moedas (euro, dólar, francos CFA etc.) são usadas por vários países. */
-const PAISES = {
-    AED: ["Emirados Árabes Unidos"], AFN: ["Afeganistão"], ALL: ["Albânia"], AMD: ["Armênia"],
-    ANG: ["Curaçao", "Sint Maarten"], AOA: ["Angola"], ARS: ["Argentina"], AUD: ["Austrália", "Quiribati", "Nauru", "Tuvalu"],
-    AWG: ["Aruba"], AZN: ["Azerbaijão"], BAM: ["Bósnia e Herzegovina"], BBD: ["Barbados"],
-    BDT: ["Bangladesh"], BGN: ["Bulgária"], BHD: ["Bahrein"], BIF: ["Burundi"],
-    BMD: ["Bermudas"], BND: ["Brunei"], BOB: ["Bolívia"], BRL: ["Brasil"],
-    BSD: ["Bahamas"], BTN: ["Butão"], BWP: ["Botsuana"], BYN: ["Belarus", "Bielorrússia"],
-    BZD: ["Belize"], CAD: ["Canadá"], CDF: ["Congo", "República Democrática do Congo"], CHF: ["Suíça", "Liechtenstein"],
-    CLP: ["Chile"], CNY: ["China"], COP: ["Colômbia"], CRC: ["Costa Rica"],
-    CUP: ["Cuba"], CVE: ["Cabo Verde"], CZK: ["República Tcheca", "Chéquia"], DJF: ["Djibuti"],
-    DKK: ["Dinamarca"], DOP: ["República Dominicana"], DZD: ["Argélia"], EGP: ["Egito"],
-    ERN: ["Eritreia"], ETB: ["Etiópia"],
-    EUR: ["Alemanha", "Áustria", "Bélgica", "Chipre", "Croácia", "Eslováquia", "Eslovênia", "Espanha",
-          "Estônia", "Finlândia", "França", "Grécia", "Holanda", "Países Baixos", "Irlanda", "Itália",
-          "Letônia", "Lituânia", "Luxemburgo", "Malta", "Portugal", "Andorra", "Mônaco", "San Marino",
-          "Vaticano", "Kosovo", "Montenegro", "Zona do Euro"],
-    FJD: ["Fiji"], FKP: ["Ilhas Malvinas"],
-    GBP: ["Reino Unido", "Inglaterra", "Escócia", "País de Gales", "Irlanda do Norte", "Ilha de Man", "Jersey", "Guernsey"],
-    GEL: ["Geórgia"],
-    GHS: ["Gana"], GIP: ["Gibraltar"], GMD: ["Gâmbia"], GNF: ["Guiné"],
-    GTQ: ["Guatemala"], GYD: ["Guiana"], HKD: ["Hong Kong"], HNL: ["Honduras"],
-    HRK: ["Croácia"], HTG: ["Haiti"], HUF: ["Hungria"], IDR: ["Indonésia"],
-    ILS: ["Israel"], INR: ["Índia"], IQD: ["Iraque"], IRR: ["Irã"],
-    ISK: ["Islândia"], JMD: ["Jamaica"], JOD: ["Jordânia"], JPY: ["Japão"],
-    KES: ["Quênia"], KGS: ["Quirguistão"], KHR: ["Camboja"], KMF: ["Comores"],
-    KPW: ["Coreia do Norte"], KRW: ["Coreia do Sul"], KWD: ["Kuwait"], KYD: ["Ilhas Cayman"],
-    KZT: ["Cazaquistão"], LAK: ["Laos"], LBP: ["Líbano"], LKR: ["Sri Lanka"],
-    LRD: ["Libéria"], LSL: ["Lesoto"], LYD: ["Líbia"], MAD: ["Marrocos"],
-    MDL: ["Moldávia"], MGA: ["Madagascar"], MKD: ["Macedônia do Norte"], MMK: ["Myanmar", "Birmânia"],
-    MNT: ["Mongólia"], MOP: ["Macau"], MRU: ["Mauritânia"], MUR: ["Maurício", "Maurícia"],
-    MVR: ["Maldivas"], MWK: ["Malaui"], MXN: ["México"], MYR: ["Malásia"],
-    MZN: ["Moçambique"], NAD: ["Namíbia"], NGN: ["Nigéria"], NIO: ["Nicarágua"],
-    NOK: ["Noruega"], NPR: ["Nepal"], NZD: ["Nova Zelândia", "Ilhas Cook", "Niue", "Toquelau"], OMR: ["Omã"],
-    PAB: ["Panamá"], PEN: ["Peru"], PGK: ["Papua-Nova Guiné"], PHP: ["Filipinas"],
-    PKR: ["Paquistão"], PLN: ["Polônia"], PYG: ["Paraguai"], QAR: ["Catar"],
-    RON: ["Romênia"], RSD: ["Sérvia"], RUB: ["Rússia"], RWF: ["Ruanda"],
-    SAR: ["Arábia Saudita"], SBD: ["Ilhas Salomão"], SCR: ["Seicheles"], SDG: ["Sudão"],
-    SEK: ["Suécia"], SGD: ["Singapura"], SHP: ["Santa Helena"], SLE: ["Serra Leoa"],
-    SOS: ["Somália"], SRD: ["Suriname"], SSP: ["Sudão do Sul"], STN: ["São Tomé e Príncipe"],
-    SYP: ["Síria"], SZL: ["Essuatíni", "Suazilândia"], THB: ["Tailândia"], TJS: ["Tajiquistão"],
-    TMT: ["Turcomenistão"], TND: ["Tunísia"], TOP: ["Tonga"], TRY: ["Turquia"],
-    TTD: ["Trinidad e Tobago"], TWD: ["Taiwan"], TZS: ["Tanzânia"], UAH: ["Ucrânia"],
-    UGX: ["Uganda"], USD: ["Estados Unidos", "EUA", "Equador", "El Salvador", "Panamá", "Timor-Leste", "Ilhas Marshall", "Micronésia", "Palau"], UYU: ["Uruguai"], UZS: ["Uzbequistão"],
-    VES: ["Venezuela"], VND: ["Vietnã"], VUV: ["Vanuatu"], WST: ["Samoa"],
-    XAF: ["Camarões", "Gabão", "Chade", "Congo", "Guiné Equatorial", "República Centro-Africana"],
-    XCD: ["Antígua e Barbuda", "Dominica", "Granada", "Santa Lúcia", "São Vicente e Granadinas", "São Cristóvão e Névis", "Anguilla", "Montserrat"],
-    XOF: ["Senegal", "Costa do Marfim", "Mali", "Burquina Fasso", "Benim", "Níger", "Togo", "Guiné-Bissau"],
-    XPF: ["Polinésia Francesa", "Nova Caledônia"], YER: ["Iêmen"], ZAR: ["África do Sul"],
-    ZMW: ["Zâmbia"], ZWL: ["Zimbábue"],
-};
+    const DESTAQUES = ["BRL", "USD", "EUR", "GBP", "JPY", "ARS", "CAD", "CNY"];
+    let taxas = {};
+    let moedaDe = "BRL";
+    let moedaPara = "USD";
 
-// Moedas em destaque para os chips de acesso rápido
-const DESTAQUES = ["BRL", "USD", "EUR", "GBP", "JPY", "CNY", "ARS", "CAD"];
+    async function fetchRates() {
+        const dot = document.getElementById('statusDot');
+        const text = document.getElementById('statusText');
+        dot.className = 'dot loading';
+        text.textContent = 'Atualizando taxas...';
 
-// Moedas sem casas decimais na exibição (ex: Iene, Won)
-const SEM_DECIMAIS = new Set(["JPY", "KRW", "VND", "IDR", "CLP", "PYG", "ISK", "HUF", "TWD"]);
-
-let MOEDAS_DISPONIVEIS = [];  // preenchido após buscarTaxas(), na ordem do catálogo
-let taxas = null;
-let taxasAtualizadasEm = null;
-let carregando = false;
-let moedaDe = "BRL";
-let moedaPara = "USD";
-
-const elValor = document.getElementById("valor");
-const elResultado = document.getElementById("resultado");
-const elResultadoDe = document.getElementById("resultadoDe");
-const elTaxaInfo = document.getElementById("taxaInfo");
-const elInverter = document.getElementById("inverter");
-const elStatusPonto = document.getElementById("statusPonto");
-const elStatusTexto = document.getElementById("statusTexto");
-const elChips = document.getElementById("chips");
-
-// Tabela de fallback (aproximada) usada apenas se as duas APIs falharem
-const TAXAS_FALLBACK_BASE_USD = {
-    USD: 1, BRL: 5, EUR: 0.90, GBP: 0.78, JPY: 150, CAD: 1.35, AUD: 1.50, CNY: 7.1, ARS: 1200, MXN: 18
-};
-
-function infoMoeda(codigo) {
-    return CATALOGO[codigo] || [codigo, "🌐"];
-}
-
-function paisesMoeda(codigo) {
-    return PAISES[codigo] || [];
-}
-
-// Remove acentos e caixa para comparações de busca mais tolerantes
-// (ex: "japao" encontra "Japão", "frança" encontra "França")
-function normalizar(texto) {
-    return texto
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "");
-}
-
-function formatarMoeda(valor, codigo) {
-    const casas = SEM_DECIMAIS.has(codigo) ? 0 : 2;
-    try {
-        return new Intl.NumberFormat("pt-BR", {
-            style: "currency", currency: codigo,
-            minimumFractionDigits: casas, maximumFractionDigits: casas
-        }).format(valor);
-    } catch (e) {
-        return `${valor.toFixed(casas)} ${codigo}`;
-    }
-}
-
-function definirStatus(tipo, texto) {
-    elStatusPonto.classList.remove("carregando", "falha");
-    if (tipo === "carregando") elStatusPonto.classList.add("carregando");
-    if (tipo === "falha") elStatusPonto.classList.add("falha");
-    elStatusTexto.textContent = texto;
-}
-
-/* ====================== BUSCA DE TAXAS ====================== */
-async function buscarTaxas() {
-    carregando = true;
-    definirStatus("carregando", "Buscando cotações atualizadas...");
-
-    // Fonte primária: open.er-api.com — cobre ~161 moedas, sem chave
-    try {
-        const resp = await fetch("https://open.er-api.com/v6/latest/USD");
-        if (!resp.ok) throw new Error("open.er-api indisponível");
-        const dados = await resp.json();
-        if (dados.result !== "success") throw new Error("Resposta inesperada");
-        taxas = dados.rates;
-        taxasAtualizadasEm = dados.time_last_update_utc ? new Date(dados.time_last_update_utc) : new Date();
-        finalizarCarregamento("ok", `Cotações atualizadas em ${taxasAtualizadasEm.toLocaleDateString("pt-BR")}`);
-        return;
-    } catch (e) { /* tenta próxima fonte */ }
-
-    // Fallback: Frankfurter (dados de bancos centrais — cobertura menor, ~30 moedas)
-    try {
-        const resp = await fetch("https://api.frankfurter.dev/v1/latest?base=USD");
-        if (!resp.ok) throw new Error("Frankfurter indisponível");
-        const dados = await resp.json();
-        taxas = { USD: 1, ...dados.rates };
-        taxasAtualizadasEm = dados.date ? new Date(dados.date) : new Date();
-        finalizarCarregamento("ok", `Cotações atualizadas em ${taxasAtualizadasEm.toLocaleDateString("pt-BR")} (cobertura reduzida)`);
-        return;
-    } catch (e) { /* segue para o fallback estático */ }
-
-    // Último recurso: tabela fixa aproximada
-    taxas = TAXAS_FALLBACK_BASE_USD;
-    taxasAtualizadasEm = null;
-    finalizarCarregamento("falha", "Sem conexão — usando valores aproximados");
-}
-
-function finalizarCarregamento(tipo, texto) {
-    definirStatus(tipo, texto);
-    carregando = false;
-    montarMoedasDisponiveis();
-    montarChips();
-    montarDropdown("De");
-    montarDropdown("Para");
-    atualizarTrigger("De");
-    atualizarTrigger("Para");
-    converter();
-}
-
-function montarMoedasDisponiveis() {
-    const codigos = Object.keys(taxas);
-    // Catálogo primeiro (ordem curada), depois qualquer moeda extra retornada pela API
-    const ordenadas = Object.keys(CATALOGO).filter(c => codigos.includes(c));
-    const extras = codigos.filter(c => !CATALOGO[c]).sort();
-    MOEDAS_DISPONIVEIS = [...ordenadas, ...extras];
-}
-
-/* ====================== UI: CHIPS ====================== */
-function montarChips() {
-    elChips.innerHTML = DESTAQUES.filter(c => taxas[c] !== undefined).map(c => {
-        const [nome, bandeira] = infoMoeda(c);
-        return `<button type="button" class="chip" data-codigo="${c}">${bandeira} ${c}</button>`;
-    }).join("");
-
-    elChips.querySelectorAll(".chip").forEach(btn => {
-        btn.addEventListener("click", () => {
-            moedaPara = btn.dataset.codigo;
-            if (moedaPara === moedaDe) moedaPara = moedaDe === "USD" ? "BRL" : "USD";
-            atualizarTrigger("Para");
+        try {
+            const res = await fetch('https://open.er-api.com/v6/latest/USD');
+            const data = await res.json();
+            taxas = data.rates;
+            dot.className = 'dot';
+            text.textContent = 'Taxas atualizadas em tempo real';
+            renderChips();
+            renderList('De');
+            renderList('Para');
             converter();
-        });
-    });
-}
-
-/* ====================== UI: SELETOR DE MOEDA ====================== */
-function atualizarTrigger(lado) {
-    const codigo = lado === "De" ? moedaDe : moedaPara;
-    const [nome, bandeira] = infoMoeda(codigo);
-    document.getElementById(`bandeira${lado}`).textContent = bandeira;
-    document.getElementById(`codigo${lado}`).textContent = codigo;
-    document.getElementById(`nome${lado}`).textContent = nome;
-}
-
-function montarDropdown(lado, filtro = "") {
-    const lista = document.getElementById(`lista${lado}`);
-    const termo = normalizar(filtro.trim());
-
-    const filtradas = MOEDAS_DISPONIVEIS.filter(c => {
-        if (!termo) return true;
-        const [nome] = infoMoeda(c);
-        const paises = paisesMoeda(c);
-        const textoBusca = normalizar(`${c} ${nome} ${paises.join(" ")}`);
-        return textoBusca.includes(termo);
-    });
-
-    if (filtradas.length === 0) {
-        lista.innerHTML = `<div class="currency-empty">Nenhuma moeda encontrada</div>`;
-        return;
+        } catch (e) {
+            text.textContent = 'Erro ao carregar taxas. Usando offline.';
+            dot.className = 'dot';
+        }
     }
 
-    lista.innerHTML = filtradas.map(c => {
-        const [nome, bandeira] = infoMoeda(c);
-        const atual = lado === "De" ? moedaDe : moedaPara;
-        return `<button type="button" class="currency-option ${c === atual ? "realce" : ""}" data-codigo="${c}">
-            <span class="bandeira">${bandeira}</span>
-            <span class="info">
-                <span class="codigo">${c}</span>
-                <span class="nome">${nome}</span>
-            </span>
-        </button>`;
-    }).join("");
-
-    lista.querySelectorAll(".currency-option").forEach(btn => {
-        btn.addEventListener("click", () => {
-            if (lado === "De") moedaDe = btn.dataset.codigo;
-            else moedaPara = btn.dataset.codigo;
-            atualizarTrigger(lado);
-            fecharDropdown(lado);
-            converter();
-        });
-    });
-}
-
-function abrirDropdown(lado) {
-    fecharDropdown(lado === "De" ? "Para" : "De");
-    document.getElementById(`trigger${lado}`).classList.add("aberto");
-    document.getElementById(`dropdown${lado}`).classList.add("aberto");
-    const busca = document.getElementById(`busca${lado}`);
-    busca.value = "";
-    montarDropdown(lado, "");
-    setTimeout(() => busca.focus(), 0);
-}
-
-function fecharDropdown(lado) {
-    document.getElementById(`trigger${lado}`).classList.remove("aberto");
-    document.getElementById(`dropdown${lado}`).classList.remove("aberto");
-}
-
-function alternarDropdown(lado) {
-    const aberto = document.getElementById(`dropdown${lado}`).classList.contains("aberto");
-    if (aberto) fecharDropdown(lado);
-    else abrirDropdown(lado);
-}
-
-document.getElementById("triggerDe").addEventListener("click", () => alternarDropdown("De"));
-document.getElementById("triggerPara").addEventListener("click", () => alternarDropdown("Para"));
-
-document.getElementById("buscaDe").addEventListener("input", (e) => montarDropdown("De", e.target.value));
-document.getElementById("buscaPara").addEventListener("input", (e) => montarDropdown("Para", e.target.value));
-
-document.addEventListener("click", (e) => {
-    if (!document.getElementById("campoDe").contains(e.target)) fecharDropdown("De");
-    if (!document.getElementById("campoPara").contains(e.target)) fecharDropdown("Para");
-});
-
-document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") { fecharDropdown("De"); fecharDropdown("Para"); }
-});
-
-/* ====================== CONVERSÃO ====================== */
-function converter() {
-    const valor = parseFloat(elValor.value);
-
-    elResultado.classList.remove("erro");
-
-    if (carregando) { elResultado.textContent = "Carregando cotações..."; return; }
-
-    if (!taxas) {
-        elResultado.classList.add("erro");
-        elResultado.textContent = "Não foi possível obter as cotações. Tente novamente.";
-        return;
+    function renderChips() {
+        const container = document.getElementById('chips');
+        container.innerHTML = DESTAQUES.map(c => `
+            <div class="chip" onclick="selectPara('${c}')">${CATALOGO[c][1]} ${c}</div>
+        `).join('');
     }
 
-    if (isNaN(valor) || valor <= 0) {
-        elResultado.classList.add("erro");
-        elResultado.textContent = "Digite um valor válido maior que zero";
-        elResultadoDe.textContent = "";
-        elTaxaInfo.textContent = "";
-        return;
+    function renderList(lado) {
+        const container = document.getElementById('list' + lado);
+        const search = document.getElementById('search' + lado).value.toLowerCase();
+        
+        const html = Object.keys(CATALOGO)
+            .filter(c => c.toLowerCase().includes(search) || CATALOGO[c][0].toLowerCase().includes(search))
+            .map(c => `
+                <div class="option-item" onclick="selectCurrency('${lado}', '${c}')">
+                    <span class="flag">${CATALOGO[c][1]}</span>
+                    <span class="code">${c}</span>
+                    <span class="name">${CATALOGO[c][0]}</span>
+                </div>
+            `).join('');
+        container.innerHTML = html;
     }
 
-    if (!(moedaDe in taxas) || !(moedaPara in taxas)) {
-        elResultado.classList.add("erro");
-        elResultado.textContent = "Moeda não suportada pela fonte de dados atual";
-        return;
+    function toggleDropdown(lado) {
+        const d = document.getElementById('dropdown' + lado);
+        const isOpen = d.classList.contains('active');
+        document.querySelectorAll('.dropdown').forEach(el => el.classList.remove('active'));
+        if (!isOpen) {
+            d.classList.add('active');
+            document.getElementById('search' + lado).focus();
+        }
     }
 
-    elResultadoDe.textContent = `${formatarMoeda(valor, moedaDe)} equivalem a`;
-
-    if (moedaDe === moedaPara) {
-        elResultado.textContent = formatarMoeda(valor, moedaPara);
-        elTaxaInfo.textContent = "Mesma moeda selecionada nos dois campos.";
-        return;
+    function selectCurrency(lado, code) {
+        if (lado === 'De') moedaDe = code;
+        else moedaPara = code;
+        
+        document.getElementById('flag' + lado).textContent = CATALOGO[code][1];
+        document.getElementById('code' + lado).textContent = code;
+        document.querySelectorAll('.dropdown').forEach(el => el.classList.remove('active'));
+        converter();
     }
 
-    const taxaCruzada = taxas[moedaPara] / taxas[moedaDe];
-    const resultado = valor * taxaCruzada;
+    function selectPara(code) {
+        moedaPara = code;
+        if (moedaDe === moedaPara) moedaDe = code === 'USD' ? 'BRL' : 'USD';
+        selectCurrency('De', moedaDe);
+        selectCurrency('Para', moedaPara);
+    }
 
-    elResultado.textContent = formatarMoeda(resultado, moedaPara);
+    function swapCurrencies() {
+        const temp = moedaDe;
+        moedaDe = moedaPara;
+        moedaPara = temp;
+        selectCurrency('De', moedaDe);
+        selectCurrency('Para', moedaPara);
+    }
 
-    const dataTexto = taxasAtualizadasEm ? taxasAtualizadasEm.toLocaleDateString("pt-BR") : "indisponível";
-    const [nomeDe] = infoMoeda(moedaDe);
-    const [nomePara] = infoMoeda(moedaPara);
+    function filterList(lado) { renderList(lado); }
 
-    elTaxaInfo.innerHTML =
-        `1 ${moedaDe} = <strong>${taxaCruzada.toFixed(6).replace(/0+$/, "").replace(/\.$/, "")} ${moedaPara}</strong><br>` +
-        `${nomeDe} → ${nomePara} · atualizado em ${dataTexto}`;
-}
+    function converter() {
+        const valor = parseFloat(document.getElementById('valor').value) || 1;
+        if (!taxas[moedaDe] || !taxas[moedaPara]) return;
 
-function inverterMoedas() {
-    elInverter.classList.add("girando");
-    setTimeout(() => elInverter.classList.remove("girando"), 200);
-    const tmp = moedaDe;
-    moedaDe = moedaPara;
-    moedaPara = tmp;
-    atualizarTrigger("De");
-    atualizarTrigger("Para");
-    converter();
-}
+        const baseUSD = valor / taxas[moedaDe];
+        const resultado = baseUSD * taxas[moedaPara];
+        
+        const taxaDireta = taxas[moedaPara] / taxas[moedaDe];
+        const taxaInversa = taxas[moedaDe] / taxas[moedaPara];
 
-elInverter.addEventListener("click", inverterMoedas);
-elValor.addEventListener("input", converter);
-elValor.addEventListener("keydown", (e) => { if (e.key === "Enter") converter(); });
+        document.getElementById('resFrom').textContent = `${valor.toLocaleString('pt-BR', {minimumFractionDigits: 2})} ${moedaDe} =`;
+        document.getElementById('resTo').textContent = `${resultado.toLocaleString('pt-BR', {minimumFractionDigits: 2})} ${moedaPara}`;
+        
+        document.getElementById('rateValue').textContent = `1 ${moedaDe} = ${taxaDireta.toFixed(4)} ${moedaPara}`;
+        document.getElementById('rateInverse').textContent = `1 ${moedaPara} = ${taxaInversa.toFixed(4)} ${moedaDe}`;
+    }
 
-buscarTaxas();
+    // Fechar dropdown ao clicar fora
+    window.onclick = function(event) {
+        if (!event.target.closest('.currency-selector')) {
+            document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('active'));
+        }
+    };
+
+    fetchRates();
 </script>
 
 </body>
