@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>ThermoFlow | Conversor de Temperatura Inteligente</title>
+    <title>Utiliweb | Conversor de Temperatura Inteligente</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" rel="stylesheet">
@@ -25,6 +25,10 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        html {
+            overflow-x: hidden;
+        }
+
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg);
@@ -36,6 +40,7 @@
             padding: 12px;
             overflow-x: hidden;
             transition: background 0.5s ease;
+            width: 100%;
         }
 
         /* Fundo Dinâmico */
@@ -62,6 +67,8 @@
             grid-template-columns: 1fr 350px;
             overflow: hidden;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            /* Garante que o container nunca ultrapasse a largura disponível */
+            min-width: 0;
         }
 
         /* LADO ESQUERDO */
@@ -70,6 +77,9 @@
             display: flex;
             flex-direction: column;
             gap: 32px;
+            /* Evita que o conteúdo interno force expansão */
+            min-width: 0;
+            overflow: hidden;
         }
 
         header h1 {
@@ -110,6 +120,8 @@
             color: white;
             transition: all 0.3s;
             text-align: center;
+            /* Impede que o input ultrapasse o container */
+            max-width: 100%;
         }
 
         input:focus {
@@ -126,6 +138,8 @@
             background: rgba(15, 23, 42, 0.6);
             padding: 6px;
             border-radius: 14px;
+            /* Impede overflow horizontal */
+            width: 100%;
         }
 
         .scale-btn {
@@ -138,6 +152,10 @@
             border-radius: 10px;
             cursor: pointer;
             transition: all 0.2s;
+            /* Evita que o texto quebre o layout */
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .scale-btn.active {
@@ -186,6 +204,9 @@
             display: flex;
             flex-direction: column;
             gap: 32px;
+            /* Evita overflow */
+            min-width: 0;
+            overflow: hidden;
         }
 
         .side-panel h2 {
@@ -238,20 +259,69 @@
             margin-bottom: 4px;
         }
 
+        /* Tablet: empilha os painéis */
         @media (max-width: 850px) {
-            .container { grid-template-columns: 1fr; }
-            .side-panel { border-left: none; border-top: 1px solid rgba(255, 255, 255, 0.05); padding: 32px; }
+            .container {
+                grid-template-columns: 1fr;
+            }
+            .side-panel {
+                border-left: none;
+                border-top: 1px solid rgba(255, 255, 255, 0.05);
+                padding: 32px;
+            }
         }
 
+        /* Mobile pequeno */
         @media (max-width: 480px) {
-            body { padding: 8px; }
-            .main-panel { padding: 24px; gap: 24px; }
-            header h1 { font-size: 26px; }
-            .scale-btn { font-size: 11px; padding: 8px 4px; }
-            input { font-size: 22px; padding: 12px; }
-            .result-display { padding: 24px; min-height: 160px; }
-            .result-item.main { font-size: 28px; }
-            .result-item { font-size: 16px; }
+            body {
+                padding: 8px;
+                align-items: flex-start;
+                padding-top: 16px;
+            }
+            .container {
+                border-radius: 16px;
+            }
+            .main-panel {
+                padding: 20px 16px;
+                gap: 20px;
+            }
+            .side-panel {
+                padding: 20px 16px;
+                gap: 24px;
+            }
+            header h1 {
+                font-size: 24px;
+            }
+            .subtitle {
+                font-size: 13px;
+            }
+            .scale-selector {
+                gap: 4px;
+                padding: 4px;
+            }
+            .scale-btn {
+                font-size: 10px;
+                padding: 8px 2px;
+            }
+            input {
+                font-size: 22px;
+                padding: 14px 10px;
+            }
+            .result-display {
+                padding: 20px 12px;
+                min-height: 140px;
+            }
+            .result-item.main {
+                font-size: 28px;
+            }
+            .result-item {
+                font-size: 14px;
+                max-width: 100%;
+            }
+            .ref-item {
+                padding: 12px;
+                font-size: 13px;
+            }
         }
     </style>
 </head>
