@@ -1,749 +1,685 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Calculadora de Porcentagem PREMIUM | Elite Tools</title>
+    <meta name="description" content="A calculadora de porcentagem mais avançada e elegante. Descontos, juros compostos, inflação e muito mais.">
+    
+    <!-- Fontes e Ícones -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #10b981;
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --radius: 16px;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
 
-<title>Calculadora de Porcentagem PRO | UtiliWeb</title>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-<meta name="description" content="Calculadora de porcentagem completa com desconto, aumento, imposto, cashback, comissão e reajuste salarial.">
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            min-height: 100dvh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: var(--text-main);
+        }
 
-<style>
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 24px;
+            animation: fadeIn 0.6s ease-out;
+        }
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    -webkit-tap-highlight-color:transparent;
-}
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-body{
-    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
-    background:linear-gradient(135deg,#2ecc71,#27ae60);
-    min-height:100dvh;
-    display:flex;
-    justify-content:center;
-    align-items:flex-start;
-    padding:16px;
-}
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: var(--radius);
+            padding: 32px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
 
-.wrapper{
-    width:100%;
-    max-width:1200px;
-    background:#fff;
-    border-radius:18px;
-    overflow:hidden;
-    box-shadow:0 20px 60px rgba(0,0,0,.25);
-    display:grid;
-    grid-template-columns:1fr 1fr;
-}
+        header {
+            margin-bottom: 28px;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 16px;
+        }
 
-.left,
-.right{
-    padding:24px;
-    min-width:0;
-}
+        h1 {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-.left{
-    border-right:1px solid #eee;
-}
+        .badge {
+            background: var(--primary);
+            color: white;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 20px;
+            vertical-align: middle;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
 
-h1{
-    font-size:28px;
-    margin-bottom:6px;
-}
+        .form-group {
+            margin-bottom: 20px;
+        }
 
-h2{
-    font-size:22px;
-    margin-bottom:12px;
-}
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
 
-.subtitle{
-    color:#777;
-    font-size:14px;
-    margin-bottom:18px;
-}
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
 
-label{
-    display:block;
-    margin-top:14px;
-    margin-bottom:6px;
-    font-size:13px;
-    font-weight:700;
-    color:#444;
-}
+        .input-icon {
+            position: absolute;
+            left: 14px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
 
-input,
-select{
-    width:100%;
-    padding:13px;
-    border-radius:12px;
-    border:2px solid #ddd;
-    font-size:15px;
-}
+        input, select {
+            width: 100%;
+            padding: 14px 14px 14px 40px;
+            border-radius: 12px;
+            border: 2px solid var(--border);
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+        }
 
-input:focus,
-select:focus{
-    outline:none;
-    border-color:#27ae60;
-}
+        select {
+            padding-left: 14px;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            background-size: 18px;
+        }
 
-.result{
-    background:#f8fff9;
-    border:1px solid #d7f5e3;
-    border-radius:14px;
-    padding:18px;
-    min-height:220px;
-    line-height:1.8;
-}
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
 
-.big{
-    font-size:34px;
-    font-weight:800;
-    color:#27ae60;
-    margin-bottom:10px;
-}
+        .btn-group {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 12px;
+            margin-top: 24px;
+        }
 
-.progress{
-    height:16px;
-    background:#eee;
-    border-radius:999px;
-    overflow:hidden;
-    margin-top:12px;
-}
+        button {
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
 
-.bar{
-    height:100%;
-    width:0%;
-    background:#27ae60;
-    transition:.3s;
-}
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
 
-.actions{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
-    margin-top:16px;
-}
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
 
-button{
-    padding:13px;
-    border:none;
-    border-radius:12px;
-    font-weight:700;
-    cursor:pointer;
-}
+        .btn-secondary {
+            background: white;
+            color: var(--text-main);
+            border: 2px solid var(--border);
+        }
 
-.primary{
-    background:#27ae60;
-    color:#fff;
-}
+        .btn-secondary:hover {
+            background: #f1f5f9;
+        }
 
-.secondary{
-    background:#fff;
-    color:#27ae60;
-    border:2px solid #27ae60;
-}
+        /* Lado Direito - Resultados */
+        .results-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
 
-.history{
-    margin-top:20px;
-}
+        .result-display {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border-radius: var(--radius);
+            padding: 24px;
+            border: 1px solid var(--border);
+            text-align: center;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
 
-.history-box{
-    background:#f8fff9;
-    border:1px solid #d7f5e3;
-    border-radius:12px;
-    padding:12px;
-    max-height:240px;
-    overflow:auto;
-    font-size:14px;
-    line-height:1.8;
-}
+        .result-value {
+            font-size: 42px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 8px;
+            word-break: break-all;
+        }
 
-.muted{
-    color:#777;
-    font-size:13px;
-}
+        .result-desc {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
 
-.card{
-    margin-top:12px;
-    background:#fff;
-    border:1px solid #d7f5e3;
-    border-radius:10px;
-    padding:12px;
-}
+        .history-panel {
+            flex-grow: 1;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
 
-@media(max-width:900px){
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
 
-    .wrapper{
-        grid-template-columns:1fr;
-    }
+        .history-list {
+            list-style: none;
+            overflow-y: auto;
+            max-height: 300px;
+            padding-right: 4px;
+        }
 
-    .left{
-        border-right:none;
-        border-bottom:1px solid #eee;
-    }
+        .history-item {
+            padding: 12px;
+            background: #f8fafc;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            font-size: 13px;
+            border-left: 4px solid var(--primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: slideIn 0.3s ease-out;
+        }
 
-    .left,
-    .right{
-        padding:18px;
-    }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
 
-}
+        .progress-container {
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            margin-top: 16px;
+            overflow: hidden;
+        }
 
-@media(max-width:500px){
+        .progress-bar {
+            height: 100%;
+            background: var(--primary);
+            width: 0%;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-    .actions{
-        grid-template-columns:1fr;
-    }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
 
-    h1{
-        font-size:24px;
-    }
+        .stat-card {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            font-size: 11px;
+        }
 
-    .big{
-        font-size:28px;
-    }
+        .stat-label {
+            color: var(--text-muted);
+            display: block;
+            margin-bottom: 2px;
+        }
 
-}
+        .stat-val {
+            font-weight: 700;
+            color: var(--text-main);
+        }
 
-</style>
+        /* Responsividade */
+        @media (max-width: 900px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            body {
+                padding: 10px;
+                align-items: flex-start;
+            }
+        }
+
+        /* Scrollbar Custom */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        .copy-toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e293b;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 14px;
+            display: none;
+            z-index: 100;
+        }
+    </style>
 </head>
 <body>
 
-<div class="wrapper">
+<div class="container">
+    <!-- Painel de Input -->
+    <div class="glass-card">
+        <header>
+            <h1>💎 Porcentagem <span class="badge">Premium</span></h1>
+            <p style="color: var(--text-muted); font-size: 14px; margin-top: 4px;">Funcionalidades avançadas para cálculos precisos.</p>
+        </header>
 
-<div class="left">
+        <div class="form-group">
+            <label>O que você deseja calcular?</label>
+            <select id="calcType">
+                <optgroup label="Básico">
+                    <option value="percentOf">Quanto é X% de Y</option>
+                    <option value="whatPercent">X é quantos % de Y</option>
+                    <option value="variation">Variação percentual (De X para Y)</option>
+                </optgroup>
+                <optgroup label="Financeiro">
+                    <option value="increase">Aumentar valor (Markup)</option>
+                    <option value="discount">Aplicar desconto</option>
+                    <option value="compound">Juros Compostos (Projeção)</option>
+                    <option value="margin">Margem de Lucro</option>
+                </optgroup>
+                <optgroup label="Trabalhista & Impostos">
+                    <option value="salary">Reajuste Salarial</option>
+                    <option value="commission">Comissão de Vendas</option>
+                    <option value="tax">Adicionar Imposto / IVA</option>
+                </optgroup>
+            </select>
+        </div>
 
-<h1>📊 Calculadora de Porcentagem PRO</h1>
+        <div id="inputsContainer">
+            <div class="form-group">
+                <label id="label1">Valor Base</label>
+                <div class="input-wrapper">
+                    <span class="input-icon" id="icon1">R$</span>
+                    <input type="number" id="val1" placeholder="0,00" step="any">
+                </div>
+            </div>
 
-<div class="subtitle">
-Desconto, aumento, imposto, cashback, comissão e muito mais.
+            <div class="form-group">
+                <label id="label2">Porcentagem</label>
+                <div class="input-wrapper">
+                    <span class="input-icon" id="icon2">%</span>
+                    <input type="number" id="val2" placeholder="0" step="any">
+                </div>
+            </div>
+
+            <div class="form-group" id="group3" style="display: none;">
+                <label id="label3">Tempo (Meses)</label>
+                <div class="input-wrapper">
+                    <span class="input-icon" id="icon3">📅</span>
+                    <input type="number" id="val3" placeholder="12" step="1">
+                </div>
+            </div>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn-primary" onclick="calculate()">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                Calcular Agora
+            </button>
+            <button class="btn-secondary" onclick="resetAll()">
+                Limpar
+            </button>
+        </div>
+    </div>
+
+    <!-- Painel de Resultados -->
+    <div class="results-panel">
+        <div class="glass-card result-display">
+            <div id="emptyState">
+                <svg width="48" height="48" fill="none" stroke="#e2e8f0" viewBox="0 0 24 24" style="margin-bottom: 12px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <p style="color: var(--text-muted)">Aguardando dados...</p>
+            </div>
+            <div id="resultContent" style="display: none;">
+                <div class="result-value" id="mainResult">R$ 0,00</div>
+                <div class="result-desc" id="resultDetail">O resultado aparecerá aqui.</div>
+                
+                <div class="progress-container">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+
+                <div class="stats-grid" id="extraStats">
+                    <!-- Stats dinâmicos -->
+                </div>
+
+                <button class="btn-secondary" style="margin-top: 20px; width: 100%; padding: 10px;" onclick="copyResult()">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                    Copiar
+                </button>
+            </div>
+        </div>
+
+        <div class="glass-card history-panel">
+            <div class="history-header">
+                <h2 style="font-size: 16px; font-weight: 700;">Histórico Recente</h2>
+                <button onclick="clearHistory()" style="background: none; border: none; color: var(--primary); font-size: 12px; cursor: pointer; padding: 0;">Limpar</button>
+            </div>
+            <ul class="history-list" id="historyList">
+                <!-- Itens de histórico -->
+            </ul>
+        </div>
+    </div>
 </div>
 
-<label>Modo de cálculo</label>
-
-<select id="tipo">
-
-<option value="percentOf">
-Quanto é X% de Y
-</option>
-
-<option value="whatPercent">
-X é quantos % de Y
-</option>
-
-<option value="increase">
-Aumentar valor
-</option>
-
-<option value="discount">
-Aplicar desconto
-</option>
-
-<option value="tax">
-Adicionar imposto
-</option>
-
-<option value="cashback">
-Cashback
-</option>
-
-<option value="salary">
-Reajuste salarial
-</option>
-
-<option value="commission">
-Comissão
-</option>
-
-</select>
-
-<label id="label1">
-Valor
-</label>
-
-<input
-type="number"
-id="valor1"
-placeholder="Digite um valor">
-
-<label id="label2">
-Porcentagem
-</label>
-
-<input
-type="number"
-id="valor2"
-placeholder="Digite uma porcentagem">
-
-<div class="actions">
-
-<button class="primary" onclick="calcular()">
-Calcular
-</button>
-
-<button class="secondary" onclick="limpar()">
-Limpar
-</button>
-
-</div>
-
-</div>
-
-<div class="right">
-
-<h2>Resultado</h2>
-
-<div class="result" id="resultado">
-
-<div class="muted">
-Preencha os campos para calcular.
-</div>
-
-</div>
-
-<div class="history">
-
-<h2>📜 Histórico</h2>
-
-<div class="history-box" id="historico">
-Nenhum cálculo realizado.
-</div>
-
-</div>
-
-</div>
-
-</div>
+<div class="copy-toast" id="toast">Copiado para a área de transferência!</div>
 
 <script>
-
-const tipo =
-document.getElementById("tipo");
-
-const valor1 =
-document.getElementById("valor1");
-
-const valor2 =
-document.getElementById("valor2");
-
-const resultado =
-document.getElementById("resultado");
-
-const historicoBox =
-document.getElementById("historico");
-
-function moeda(v){
-
-return Number(v)
-.toLocaleString(
-'pt-BR',
-{
-minimumFractionDigits:2,
-maximumFractionDigits:2
-}
-);
-
-}
-
-function atualizarLabels(){
-
-switch(tipo.value){
-
-case "percentOf":
-document.getElementById("label1").innerText =
-"Valor Total";
-document.getElementById("label2").innerText =
-"Porcentagem (%)";
-break;
-
-case "whatPercent":
-document.getElementById("label1").innerText =
-"Parte";
-document.getElementById("label2").innerText =
-"Total";
-break;
-
-default:
-document.getElementById("label1").innerText =
-"Valor";
-document.getElementById("label2").innerText =
-"Porcentagem (%)";
-}
-
-}
-
-tipo.addEventListener(
-"change",
-()=>{
-atualizarLabels();
-calcular();
-}
-);
-
-valor1.addEventListener("input",calcular);
-valor2.addEventListener("input",calcular);
-
-function salvarHistorico(texto){
-
-let hist =
-JSON.parse(
-localStorage.getItem("utiliweb_percent_history")
-|| "[]"
-);
-
-hist.unshift(texto);
-
-hist = hist.slice(0,15);
-
-localStorage.setItem(
-"utiliweb_percent_history",
-JSON.stringify(hist)
-);
-
-mostrarHistorico();
-}
-
-function mostrarHistorico(){
-
-let hist =
-JSON.parse(
-localStorage.getItem("utiliweb_percent_history")
-|| "[]"
-);
-
-if(hist.length===0){
-
-historicoBox.innerHTML =
-"Nenhum cálculo realizado.";
-
-return;
-}
-
-historicoBox.innerHTML =
-hist.map(item =>
-`• ${item}`
-).join("<br>");
-
-}
-
-function calcular(){
-
-const a =
-parseFloat(valor1.value);
-
-const b =
-parseFloat(valor2.value);
-
-if(
-isNaN(a) ||
-isNaN(b)
-){
-return;
-}
-
-let html = "";
-let textoHist = "";
-let resultadoFinal = 0;
-let percentualBarra = 0;
-
-switch(tipo.value){
-
-case "percentOf":
-
-resultadoFinal =
-(a*b)/100;
-
-percentualBarra = b;
-
-html = `
-<div class="big">
-${moeda(resultadoFinal)}
-</div>
-
-📊 ${b}% de ${moeda(a)}
-
-<div class="card">
-Fórmula:<br>
-(${a} × ${b}) ÷ 100
-</div>
-`;
-
-textoHist =
-`${b}% de ${a} = ${resultadoFinal.toFixed(2)}`;
-
-break;
-
-case "whatPercent":
-
-resultadoFinal =
-(a/b)*100;
-
-percentualBarra =
-resultadoFinal;
-
-html = `
-<div class="big">
-${resultadoFinal.toFixed(2)}%
-</div>
-
-📊 ${a} representa
-${resultadoFinal.toFixed(2)}%
-de ${b}
-`;
-
-textoHist =
-`${a} é ${resultadoFinal.toFixed(2)}% de ${b}`;
-
-break;
-
-case "increase":
-
-const aumento =
-(a*b)/100;
-
-resultadoFinal =
-a + aumento;
-
-percentualBarra = b;
-
-html = `
-<div class="big">
-${moeda(resultadoFinal)}
-</div>
-
-📈 Valor original:
-${moeda(a)}
-
-<br>
-
-➕ Acréscimo:
-${moeda(aumento)}
-
-<br>
-
-📊 Aumento:
-${b}%
-`;
-
-textoHist =
-`${a} + ${b}% = ${resultadoFinal.toFixed(2)}`;
-
-break;
-
-case "discount":
-
-const desconto =
-(a*b)/100;
-
-resultadoFinal =
-a - desconto;
-
-percentualBarra = b;
-
-html = `
-<div class="big">
-${moeda(resultadoFinal)}
-</div>
-
-🏷️ Valor original:
-${moeda(a)}
-
-<br>
-
-💰 Economia:
-${moeda(desconto)}
-
-<br>
-
-📉 Desconto:
-${b}%
-`;
-
-textoHist =
-`${a} - ${b}% = ${resultadoFinal.toFixed(2)}`;
-
-break;
-
-case "tax":
-
-const imposto =
-(a*b)/100;
-
-resultadoFinal =
-a + imposto;
-
-percentualBarra = b;
-
-html = `
-<div class="big">
-${moeda(resultadoFinal)}
-</div>
-
-🧾 Imposto:
-${moeda(imposto)}
-
-<br>
-
-📊 Alíquota:
-${b}%
-`;
-
-textoHist =
-`Imposto ${b}% sobre ${a}`;
-
-break;
-
-case "cashback":
-
-resultadoFinal =
-(a*b)/100;
-
-percentualBarra = b;
-
-html = `
-<div class="big">
-${moeda(resultadoFinal)}
-</div>
-
-💸 Cashback recebido
-
-<br>
-
-Compra:
-${moeda(a)}
-
-<br>
-
-Taxa:
-${b}%
-`;
-
-textoHist =
-`Cashback ${b}% de ${a}`;
-
-break;
-
-case "salary":
-
-const ganho =
-(a*b)/100;
-
-resultadoFinal =
-a + ganho;
-
-percentualBarra = b;
-
-html = `
-<div class="big">
-${moeda(resultadoFinal)}
-</div>
-
-💼 Novo salário
-
-<br>
-
-📈 Aumento mensal:
-${moeda(ganho)}
-
-<br>
-
-📅 Ganho anual:
-${moeda(ganho*12)}
-`;
-
-textoHist =
-`Salário ${a} reajuste ${b}%`;
-
-break;
-
-case "commission":
-
-resultadoFinal =
-(a*b)/100;
-
-percentualBarra = b;
-
-html = `
-<div class="big">
-${moeda(resultadoFinal)}
-</div>
-
-💰 Comissão
-
-<br>
-
-Vendas:
-${moeda(a)}
-
-<br>
-
-Taxa:
-${b}%
-`;
-
-textoHist =
-`Comissão ${b}% de ${a}`;
-
-break;
-}
-
-html += `
-
-<div class="progress">
-<div
-class="bar"
-style="width:${Math.min(percentualBarra,100)}%">
-</div>
-</div>
-
-`;
-
-html += `
-<div style="margin-top:12px;">
-<button
-class="secondary"
-onclick="copiarResultado()">
-📋 Copiar Resultado
-</button>
-</div>
-`;
-
-resultado.innerHTML = html;
-
-clearTimeout(window.histTimer);
-
-window.histTimer =
-setTimeout(
-()=>salvarHistorico(textoHist),
-800
-);
-
-}
-
-function copiarResultado(){
-
-navigator.clipboard.writeText(
-resultado.innerText
-);
-
-alert("Resultado copiado!");
-}
-
-function limpar(){
-
-valor1.value = "";
-valor2.value = "";
-
-resultado.innerHTML =
-'<div class="muted">Preencha os campos para calcular.</div>';
-
-}
-
-atualizarLabels();
-mostrarHistorico();
-
+    const elements = {
+        calcType: document.getElementById('calcType'),
+        val1: document.getElementById('val1'),
+        val2: document.getElementById('val2'),
+        val3: document.getElementById('val3'),
+        label1: document.getElementById('label1'),
+        label2: document.getElementById('label2'),
+        label3: document.getElementById('label3'),
+        icon1: document.getElementById('icon1'),
+        icon2: document.getElementById('icon2'),
+        group3: document.getElementById('group3'),
+        mainResult: document.getElementById('mainResult'),
+        resultDetail: document.getElementById('resultDetail'),
+        emptyState: document.getElementById('emptyState'),
+        resultContent: document.getElementById('resultContent'),
+        progressBar: document.getElementById('progressBar'),
+        extraStats: document.getElementById('extraStats'),
+        historyList: document.getElementById('historyList'),
+        toast: document.getElementById('toast')
+    };
+
+    const config = {
+        percentOf: { l1: 'Valor Total', i1: 'R$', l2: 'Porcentagem', i2: '%', h3: true },
+        whatPercent: { l1: 'Parte (Valor)', i1: 'R$', l2: 'Total', i2: 'R$', h3: true },
+        variation: { l1: 'Valor Inicial', i1: 'R$', l2: 'Valor Final', i2: 'R$', h3: true },
+        increase: { l1: 'Valor Original', i1: 'R$', l2: 'Aumento', i2: '%', h3: true },
+        discount: { l1: 'Valor Original', i1: 'R$', l2: 'Desconto', i2: '%', h3: true },
+        compound: { l1: 'Capital Inicial', i1: 'R$', l2: 'Taxa de Juros', i2: '%', h3: false, l3: 'Período (Meses)' },
+        margin: { l1: 'Custo do Produto', i1: 'R$', l2: 'Margem Desejada', i2: '%', h3: true },
+        salary: { l1: 'Salário Atual', i1: 'R$', l2: 'Reajuste', i2: '%', h3: true },
+        commission: { l1: 'Total de Vendas', i1: 'R$', l2: 'Comissão', i2: '%', h3: true },
+        tax: { l1: 'Valor Base', i1: 'R$', l2: 'Alíquota Imposto', i2: '%', h3: true }
+    };
+
+    function updateUI() {
+        const type = elements.calcType.value;
+        const cfg = config[type];
+        
+        elements.label1.innerText = cfg.l1;
+        elements.icon1.innerText = cfg.i1;
+        elements.label2.innerText = cfg.l2;
+        elements.icon2.innerText = cfg.i2;
+        
+        if (cfg.h3) {
+            elements.group3.style.display = 'none';
+        } else {
+            elements.group3.style.display = 'block';
+            elements.label3.innerText = cfg.l3;
+        }
+    }
+
+    function formatCurrency(v) {
+        return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v);
+    }
+
+    function formatPercent(v) {
+        return v.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
+    }
+
+    function calculate() {
+        const type = elements.calcType.value;
+        const v1 = parseFloat(elements.val1.value);
+        const v2 = parseFloat(elements.val2.value);
+        const v3 = parseFloat(elements.val3.value) || 0;
+
+        if (isNaN(v1) || isNaN(v2)) return;
+
+        let result = 0;
+        let detail = "";
+        let stats = "";
+        let progress = 0;
+        let historyText = "";
+
+        switch (type) {
+            case 'percentOf':
+                result = (v1 * v2) / 100;
+                detail = `${v2}% de ${formatCurrency(v1)}`;
+                progress = v2;
+                historyText = `${v2}% de ${v1}`;
+                break;
+            case 'whatPercent':
+                result = (v1 / v2) * 100;
+                detail = `${formatCurrency(v1)} representa ${formatPercent(result)} de ${formatCurrency(v2)}`;
+                progress = result;
+                historyText = `${v1} de ${v2} = ${result.toFixed(2)}%`;
+                break;
+            case 'variation':
+                result = ((v2 - v1) / v1) * 100;
+                detail = `Variação de ${formatPercent(result)}`;
+                stats = `<div class="stat-card"><span class="stat-label">Diferença</span><span class="stat-val">${formatCurrency(v2-v1)}</span></div>`;
+                progress = Math.abs(result);
+                historyText = `De ${v1} para ${v2} (${result.toFixed(2)}%)`;
+                break;
+            case 'increase':
+                const inc = (v1 * v2) / 100;
+                result = v1 + inc;
+                detail = `Valor final com aumento de ${v2}%`;
+                stats = `<div class="stat-card"><span class="stat-label">Acréscimo</span><span class="stat-val">${formatCurrency(inc)}</span></div>`;
+                progress = v2;
+                historyText = `${v1} + ${v2}% = ${result.toFixed(2)}`;
+                break;
+            case 'discount':
+                const desc = (v1 * v2) / 100;
+                result = v1 - desc;
+                detail = `Valor final com desconto de ${v2}%`;
+                stats = `<div class="stat-card"><span class="stat-label">Economia</span><span class="stat-val">${formatCurrency(desc)}</span></div>`;
+                progress = v2;
+                historyText = `${v1} - ${v2}% = ${result.toFixed(2)}`;
+                break;
+            case 'compound':
+                result = v1 * Math.pow((1 + (v2/100)), v3);
+                detail = `Montante final após ${v3} meses`;
+                const totalInterest = result - v1;
+                stats = `<div class="stat-card"><span class="stat-label">Total Juros</span><span class="stat-val">${formatCurrency(totalInterest)}</span></div>
+                         <div class="stat-card"><span class="stat-label">Rendimento</span><span class="stat-val">${((totalInterest/v1)*100).toFixed(2)}%</span></div>`;
+                progress = (totalInterest / v1) * 10;
+                historyText = `Juros Comp. ${v1} @ ${v2}% x ${v3}m`;
+                break;
+            case 'margin':
+                result = v1 / (1 - (v2/100));
+                const lucro = result - v1;
+                detail = `Preço sugerido para margem de ${v2}%`;
+                stats = `<div class="stat-card"><span class="stat-label">Lucro Bruto</span><span class="stat-val">${formatCurrency(lucro)}</span></div>`;
+                progress = v2;
+                historyText = `Margem ${v2}% sobre ${v1}`;
+                break;
+            case 'salary':
+                const ganho = (v1 * v2) / 100;
+                result = v1 + ganho;
+                detail = `Novo salário com reajuste de ${v2}%`;
+                stats = `<div class="stat-card"><span class="stat-label">Aumento Mensal</span><span class="stat-val">${formatCurrency(ganho)}</span></div>
+                         <div class="stat-card"><span class="stat-label">Aumento Anual</span><span class="stat-val">${formatCurrency(ganho * 12)}</span></div>`;
+                progress = v2;
+                historyText = `Reajuste ${v2}% em ${v1}`;
+                break;
+            case 'commission':
+                result = (v1 * v2) / 100;
+                detail = `Comissão total sobre vendas`;
+                progress = v2;
+                historyText = `Comissão ${v2}% de ${v1}`;
+                break;
+            case 'tax':
+                const t = (v1 * v2) / 100;
+                result = v1 + t;
+                detail = `Total com impostos inclusos`;
+                stats = `<div class="stat-card"><span class="stat-label">Valor Imposto</span><span class="stat-val">${formatCurrency(t)}</span></div>`;
+                progress = v2;
+                historyText = `Imposto ${v2}% sobre ${v1}`;
+                break;
+        }
+
+        // Mostrar Resultado
+        elements.emptyState.style.display = 'none';
+        elements.resultContent.style.display = 'block';
+        
+        if (type === 'whatPercent' || type === 'variation') {
+            elements.mainResult.innerText = result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
+        } else {
+            elements.mainResult.innerText = formatCurrency(result);
+        }
+        
+        elements.resultDetail.innerText = detail;
+        elements.progressBar.style.width = Math.min(progress, 100) + '%';
+        elements.extraStats.innerHTML = stats;
+
+        saveHistory(historyText);
+    }
+
+    function saveHistory(text) {
+        let history = JSON.parse(localStorage.getItem('premium_calc_history') || '[]');
+        const time = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        history.unshift({ text, time });
+        history = history.slice(0, 10);
+        localStorage.setItem('premium_calc_history', JSON.stringify(history));
+        renderHistory();
+    }
+
+    function renderHistory() {
+        const history = JSON.parse(localStorage.getItem('premium_calc_history') || '[]');
+        if (history.length === 0) {
+            elements.historyList.innerHTML = '<li style="color: var(--text-muted); font-size: 12px; text-align: center; margin-top: 20px;">Nenhum cálculo recente</li>';
+            return;
+        }
+        elements.historyList.innerHTML = history.map(item => `
+            <li class="history-item">
+                <span>${item.text}</span>
+                <span style="font-size: 10px; color: var(--text-muted)">${item.time}</span>
+            </li>
+        `).join('');
+    }
+
+    function clearHistory() {
+        localStorage.removeItem('premium_calc_history');
+        renderHistory();
+    }
+
+    function resetAll() {
+        elements.val1.value = '';
+        elements.val2.value = '';
+        elements.val3.value = '';
+        elements.emptyState.style.display = 'flex';
+        elements.resultContent.style.display = 'none';
+    }
+
+    function copyResult() {
+        const text = elements.mainResult.innerText + " (" + elements.resultDetail.innerText + ")";
+        navigator.clipboard.writeText(text);
+        
+        elements.toast.style.display = 'block';
+        setTimeout(() => {
+            elements.toast.style.display = 'none';
+        }, 2000);
+    }
+
+    elements.calcType.addEventListener('change', () => {
+        updateUI();
+        calculate();
+    });
+    
+    [elements.val1, elements.val2, elements.val3].forEach(el => {
+        el.addEventListener('input', calculate);
+    });
+
+    // Init
+    updateUI();
+    renderHistory();
 </script>
 
 </body>
