@@ -3,164 +3,460 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Gerador de Bio Viral PRO | UtiliWeb</title>
-<meta name="description" content="Gerador de bios para Instagram, TikTok, YouTube e Twitch.">
+<title>BioGen Pro | Gerador de Bio Viral Profissional</title>
+
+<!-- Google Fonts: Inter -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
 <style>
-:root{--green:#27ae60}
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial;background:linear-gradient(135deg,#2ecc71,#27ae60);min-height:100dvh;padding:14px}
-.wrapper{max-width:1200px;margin:auto;background:#fff;border-radius:18px;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;box-shadow:0 20px 60px rgba(0,0,0,.25)}
-.left,.right{padding:24px}
-.left{border-right:1px solid #eee}
-h1{font-size:28px}.subtitle{color:#777;margin:6px 0 16px}
-input,select,button{width:100%;padding:12px;border-radius:10px;border:2px solid #ddd;margin-top:10px}
-input:focus,select:focus{outline:none;border-color:var(--green)}
-button{background:var(--green);color:#fff;border:none;font-weight:700;cursor:pointer}
-.preview,.bio-card,.box{background:#f8fff9;border:1px solid #d7f5e3;border-radius:12px;padding:12px;margin-top:12px}
-.bio-card button{margin-top:8px}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.small{font-size:13px;color:#666}
-@media(max-width:900px){.wrapper{grid-template-columns:1fr}.left{border-right:none;border-bottom:1px solid #eee}}
+:root {
+    --primary: #0f172a;
+    --accent: #8b5cf6; /* Violet 500 */
+    --accent-hover: #7c3aed;
+    --bg: #f8fafc;
+    --card-bg: #ffffff;
+    --border: #e2e8f0;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --radius: 16px;
+    --shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background-color: var(--bg);
+    color: var(--text-main);
+    min-height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 1100px;
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    overflow: hidden;
+}
+
+/* Painel de Configuração */
+.config-panel {
+    padding: 40px;
+    background: #ffffff;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.brand-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--accent);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 800;
+}
+
+h1 {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.input-field {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 14px;
+    color: var(--text-main);
+    background: #fff;
+    transition: all 0.2s;
+}
+
+.input-field:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+.btn-generate {
+    width: 100%;
+    padding: 14px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-generate:hover { background: var(--accent-hover); }
+
+/* Painel de Preview */
+.preview-panel {
+    padding: 40px;
+    background: #fcfcfd;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    overflow-y: auto;
+    max-height: 90vh;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.section-header::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+}
+
+/* Estilo do Card de Bio */
+.bio-card {
+    background: white;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.bio-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
+}
+
+.bio-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.bio-number {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent);
+    background: var(--bg);
+    padding: 4px 10px;
+    border-radius: 6px;
+}
+
+.bio-content {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text-main);
+    white-space: pre-wrap;
+    background: #f8fafc;
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+}
+
+.bio-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.char-count {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.btn-copy {
+    padding: 8px 16px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-copy:hover { opacity: 0.9; }
+
+/* Grid de Extras */
+.extras-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.extra-card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+}
+
+.extra-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.extra-content {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-main);
+}
+
+/* Responsividade */
+@media (max-width: 950px) {
+    .container { grid-template-columns: 1fr; max-width: 600px; }
+    .config-panel { border-right: none; border-bottom: 1px solid var(--border); padding: 32px; }
+    .preview-panel { padding: 32px; max-height: none; }
+}
+
+@media (max-width: 480px) {
+    body { padding: 10px; }
+    .config-panel, .preview-panel { padding: 24px 16px; }
+    .extras-grid { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
-<div class="wrapper">
-<div class="left">
-<h1>🔥 Gerador de Bio Viral</h1>
-<div class="subtitle">Instagram, TikTok, YouTube e Twitch</div>
 
-<input id="name" placeholder="Seu nome ou marca">
+<div class="container">
+    <!-- Painel de Configuração -->
+    <div class="config-panel">
+        <div class="brand">
+            <div class="brand-icon">B</div>
+            <h1>BioGen Pro</h1>
+        </div>
+        
+        <div class="form-group">
+            <label>Nome ou Marca</label>
+            <input id="name" type="text" class="input-field" placeholder="Ex: João Silva">
+        </div>
 
-<select id="platform">
-<option>Instagram</option>
-<option>TikTok</option>
-<option>YouTube</option>
-<option>Twitch</option>
-</select>
+        <div class="form-group">
+            <label>Plataforma Alvo</label>
+            <select id="platform" class="input-field">
+                <option value="Instagram">Instagram</option>
+                <option value="TikTok">TikTok</option>
+                <option value="YouTube">YouTube</option>
+                <option value="Twitch">Twitch</option>
+            </select>
+        </div>
 
-<select id="niche">
-<option>Música</option><option>Games</option><option>Fitness</option>
-<option>Tecnologia</option><option>Finanças</option><option>Marketing</option>
-<option>Anime</option><option>Humor</option><option>Viagem</option>
-<option>Culinária</option><option>Moda</option><option>IA</option>
-</select>
+        <div class="form-group">
+            <label>Nicho / Área</label>
+            <select id="niche" class="input-field">
+                <option value="Música">Música</option>
+                <option value="Games">Games</option>
+                <option value="Fitness">Fitness</option>
+                <option value="Tecnologia">Tecnologia</option>
+                <option value="Finanças">Finanças</option>
+                <option value="Marketing">Marketing</option>
+                <option value="Anime">Anime</option>
+                <option value="Humor">Humor</option>
+                <option value="Viagem">Viagem</option>
+                <option value="Culinária">Culinária</option>
+                <option value="Moda">Moda</option>
+                <option value="IA">Inteligência Artificial</option>
+            </select>
+        </div>
 
-<select id="style">
-<option>Viral</option>
-<option>Profissional</option>
-<option>Minimalista</option>
-<option>Criador</option>
-</select>
+        <div class="form-group">
+            <label>Tom de Voz</label>
+            <select id="style" class="input-field">
+                <option value="Viral">Viral & Impactante</option>
+                <option value="Profissional">Profissional & Sóbrio</option>
+                <option value="Minimalista">Minimalista & Clean</option>
+                <option value="Criativo">Criativo & Descontraído</option>
+            </select>
+        </div>
 
-<button onclick="generate()">Gerar 5 Bios</button>
+        <button class="btn-generate" onclick="generate()">Gerar Estratégias</button>
 
-<div class="box">
-<b>📛 Usernames</b>
-<div id="users" class="small">---</div>
-</div>
+        <div class="extra-card" style="margin-top: 8px;">
+            <div class="extra-title">🕒 Histórico Recente</div>
+            <div id="history" style="font-size: 12px; color: var(--text-muted);">Nenhum registro.</div>
+        </div>
+    </div>
 
-<div class="box">
-<b>💡 Slogan</b>
-<div id="slogan" class="small">---</div>
-</div>
+    <!-- Painel de Resultados -->
+    <div class="preview-panel">
+        <div class="section-header">Resultados Gerados</div>
+        
+        <div id="placeholder" style="text-align: center; padding: 40px; color: var(--text-muted);">
+            <div style="font-size: 48px; margin-bottom: 16px;">✨</div>
+            <p>Configure sua marca e clique em gerar para ver as sugestões de bio.</p>
+        </div>
 
-<div class="box">
-<b>📜 Histórico</b>
-<div id="history" class="small">Nenhum</div>
-</div>
+        <div id="resultsArea" style="display: none; flex-direction: column; gap: 24px;">
+            <div id="biosContainer" style="display: flex; flex-direction: column; gap: 20px;">
+                <!-- Cards de Bio aqui -->
+            </div>
 
-</div>
-
-<div class="right">
-<h2>📱 Preview</h2>
-<div id="preview" class="preview">Preencha os dados e gere suas bios.</div>
-<div id="bios"></div>
-</div>
+            <div class="section-header">Sugestões de Identidade</div>
+            
+            <div class="extras-grid">
+                <div class="extra-card">
+                    <div class="extra-title">🆔 Usernames Sugeridos</div>
+                    <div id="users" class="extra-content">---</div>
+                </div>
+                <div class="extra-card">
+                    <div class="extra-title">💡 Slogan de Impacto</div>
+                    <div id="slogan" class="extra-content">---</div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
-const slogans={
-"Música":"Transformando emoções em música.",
-"Games":"Jogando, evoluindo e compartilhando.",
-"Fitness":"Evolução diária, sem atalhos.",
-"Tecnologia":"Tecnologia sem complicação.",
-"Finanças":"Decisões melhores, resultados maiores.",
-"Marketing":"Ideias que geram resultados.",
-"Anime":"Vivendo cada episódio.",
-"Humor":"Mais risadas, menos estresse.",
-"Viagem":"Colecionando experiências.",
-"Culinária":"Sabores que inspiram.",
-"Moda":"Estilo em cada detalhe.",
-"IA":"O futuro começa agora."
+const slogans = {
+    "Música": "Transformando batidas em memórias inesquecíveis.",
+    "Games": "Level up diário. O jogo só acaba quando eu venço.",
+    "Fitness": "Sua melhor versão está a um treino de distância.",
+    "Tecnologia": "Descomplicando o futuro, um código por vez.",
+    "Finanças": "Dominando o dinheiro para conquistar a liberdade.",
+    "Marketing": "Criatividade que converte em resultados reais.",
+    "Anime": "Vivendo entre o mundo real e o meu anime favorito.",
+    "Humor": "Doses diárias de dopamina em formato de vídeo.",
+    "Viagem": "Colecionando carimbos e histórias pelo mundo.",
+    "Culinária": "Onde o sabor encontra a arte de cozinhar.",
+    "Moda": "Expressando personalidade através do estilo.",
+    "IA": "Explorando a fronteira entre humano e artificial."
 };
 
-function saveHistory(item){
- let h=JSON.parse(localStorage.getItem('bioHistory')||'[]');
- h.unshift(item);
- h=h.slice(0,10);
- localStorage.setItem('bioHistory',JSON.stringify(h));
- renderHistory();
+function saveHistory(name) {
+    let h = JSON.parse(localStorage.getItem('bioHistory') || '[]');
+    const entry = `${new Date().toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})} - ${name}`;
+    h.unshift(entry);
+    h = h.slice(0, 5);
+    localStorage.setItem('bioHistory', JSON.stringify(h));
+    renderHistory();
 }
 
-function renderHistory(){
- let h=JSON.parse(localStorage.getItem('bioHistory')||'[]');
- document.getElementById('history').innerHTML=h.length?h.join('<br>'):'Nenhum';
+function renderHistory() {
+    let h = JSON.parse(localStorage.getItem('bioHistory') || '[]');
+    document.getElementById('history').innerHTML = h.length ? h.join('<br>') : 'Nenhum registro.';
 }
 
-function copyText(t,b){
- navigator.clipboard.writeText(t);
- b.textContent='✅ Copiado';
- setTimeout(()=>b.textContent='📋 Copiar',1500);
+function copyText(text, btn) {
+    navigator.clipboard.writeText(text);
+    const original = btn.innerHTML;
+    btn.innerHTML = '✅ Copiado';
+    btn.style.background = 'var(--success)';
+    setTimeout(() => {
+        btn.innerHTML = original;
+        btn.style.background = 'var(--primary)';
+    }, 1500);
 }
 
-function generate(){
- const name=document.getElementById('name').value||'Criador';
- const niche=document.getElementById('niche').value;
- const style=document.getElementById('style').value;
- const platform=document.getElementById('platform').value;
+function generate() {
+    const name = document.getElementById('name').value || 'Criador';
+    const niche = document.getElementById('niche').value;
+    const style = document.getElementById('style').value;
+    const platform = document.getElementById('platform').value;
 
- const templates=[
- `🔥 ${name}\n🎯 ${niche}\n🚀 Conteúdo novo toda semana\n👇 Acompanhe agora`,
- `✨ ${name}\n📌 ${niche}\n💡 Dicas e experiências reais\n👇 Faça parte da comunidade`,
- `⚡ ${name}\n🌎 ${niche}\n📈 Evoluindo todos os dias\n👇 Confira o conteúdo`,
- `🎯 ${name}\n🔥 ${niche}\n📲 Atualizações frequentes\n👇 Veja mais`,
- `🚀 ${name}\n💬 ${niche}\n⭐ Conteúdo exclusivo\n👇 Siga para acompanhar`
- ];
+    document.getElementById('placeholder').style.display = 'none';
+    document.getElementById('resultsArea').style.display = 'flex';
 
- document.getElementById('preview').innerHTML=`
- <b>${name}</b><br>
- <span class="small">${platform} • ${niche} • ${style}</span>
- `;
+    const templates = [
+        `🔥 ${name} | ${niche}\n🚀 Criando o futuro do ${niche.toLowerCase()}\n✨ Conteúdo novo toda semana\n👇 Acompanhe a jornada`,
+        `✨ ${name}\n📌 Expert em ${niche}\n💡 Dicas práticas e bastidores reais\n👇 Entre para a comunidade`,
+        `⚡ ${name}\n🌎 Explorando o universo do ${niche.toLowerCase()}\n📈 Evolução constante\n👇 Confira o link abaixo`,
+        `🎯 ${name}\n🔥 Referência em ${niche}\n📲 O melhor conteúdo da área\n👇 Saiba mais aqui`,
+        `🚀 ${name}\n💬 Falando sobre ${niche}\n⭐ Transformando ideias em realidade\n👇 Conecte-se comigo`
+    ];
 
- const bios=document.getElementById('bios');
- bios.innerHTML='';
+    const container = document.getElementById('biosContainer');
+    container.innerHTML = '';
 
- templates.forEach((bio,i)=>{
-   const chars=bio.length;
-   const card=document.createElement('div');
-   card.className='bio-card';
-   card.innerHTML=`
-   <b>Bio ${i+1}</b>
-   <pre style="white-space:pre-wrap;margin-top:8px">${bio}</pre>
-   <div class="small">Caracteres: ${chars}</div>
-   <button>📋 Copiar</button>`;
-   card.querySelector('button').onclick=(e)=>copyText(bio,e.target);
-   bios.appendChild(card);
- });
+    templates.forEach((bio, i) => {
+        const card = document.createElement('div');
+        card.className = 'bio-card';
+        card.innerHTML = `
+            <div class="bio-header">
+                <span class="bio-number">ESTRATÉGIA 0${i+1}</span>
+                <span class="char-count">${bio.length} / 150 caracteres</span>
+            </div>
+            <div class="bio-content">${bio}</div>
+            <div class="bio-footer">
+                <span style="font-size: 11px; color: var(--text-muted); font-weight: 600;">ESTILO: ${style.toUpperCase()}</span>
+                <button class="btn-copy" onclick="copyText(\`${bio}\`, this)">📋 Copiar Bio</button>
+            </div>
+        `;
+        container.appendChild(card);
+    });
 
- const slug=name.toLowerCase().replace(/[^a-z0-9]/gi,'');
- document.getElementById('users').innerHTML=`
- @${slug}<br>
- @${slug}.oficial<br>
- @${slug}.${niche.toLowerCase()}<br>
- @${slug}tv<br>
- @real${slug}`;
+    const slug = name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/gi, '');
+    document.getElementById('users').innerHTML = `
+        <div style="font-family: monospace; font-size: 14px; color: var(--accent); font-weight: 600;">
+        @${slug}<br>@${slug}.oficial<br>@${slug}.${niche.toLowerCase().substring(0,5)}<br>@real${slug}
+        </div>
+    `;
 
- document.getElementById('slogan').textContent=slogans[niche]||'Crie. Compartilhe. Cresça.';
-
- saveHistory(new Date().toLocaleTimeString()+' - '+name);
+    document.getElementById('slogan').innerText = slogans[niche] || 'Crie. Compartilhe. Cresça.';
+    
+    saveHistory(name);
 }
-renderHistory();
+
+window.onload = renderHistory;
 </script>
+
 </body>
 </html>
