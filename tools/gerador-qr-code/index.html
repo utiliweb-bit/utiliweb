@@ -3,500 +3,939 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-
 <title>Gerador de QR Code | UtiliWeb</title>
+<meta name="description" content="Gere QR Codes online grátis para links, textos e PIX. Rápido, responsivo e sem instalação.">
+<meta name="keywords" content="qr code, gerador qr code, utiliweb, pix qr code">
 
-<meta name="description" content="Gere QR Codes online grátis para links, textos e PIX.">
-<meta name="keywords" content="qr code, gerador qr code, utiliweb">
-
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
 
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
+/* ─── RESET & BASE ─────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  margin: 0; padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+:root {
+  --brand:        #16a34a;
+  --brand-dark:   #15803d;
+  --brand-light:  #dcfce7;
+  --brand-xlight: #f0fdf4;
+  --accent:       #0ea5e9;
+  --danger:       #ef4444;
+  --warn:         #f59e0b;
+  --text-primary: #0f172a;
+  --text-secondary:#475569;
+  --text-muted:   #94a3b8;
+  --border:       #e2e8f0;
+  --border-focus: #16a34a;
+  --surface:      #ffffff;
+  --surface-alt:  #f8fafc;
+  --surface-green:#f0fdf4;
+  --shadow-sm:    0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:    0 4px 16px rgba(0,0,0,.08), 0 2px 6px rgba(0,0,0,.06);
+  --shadow-lg:    0 20px 60px rgba(0,0,0,.14), 0 8px 24px rgba(0,0,0,.08);
+  --radius-sm:    8px;
+  --radius-md:    12px;
+  --radius-lg:    20px;
+  --transition:   .18s ease;
 }
 
 html, body {
-    width: 100%;
-    min-height: 100vh;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial;
-    background: linear-gradient(135deg, #2ecc71, #27ae60);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 16px;
+  width: 100%; min-height: 100vh;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #052e16 0%, #14532d 40%, #166534 100%);
+  display: flex; justify-content: center; align-items: flex-start;
+  padding: 24px 16px;
+  color: var(--text-primary);
+  line-height: 1.5;
 }
 
-/* WRAPPER */
+/* ─── WRAPPER ──────────────────────────────────────────────────────────────── */
 .wrapper {
-    width: 100%;
-    max-width: 1100px;
-    background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    overflow: hidden;
-    max-height: 90vh;
+  width: 100%; max-width: 1080px;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  overflow: hidden;
 }
 
-/* LEFT */
+/* ─── LEFT PANEL ───────────────────────────────────────────────────────────── */
 .left-panel {
-    padding: 28px;
-    overflow-y: auto;
-    border-right: 1px solid #e0e0e0;
+  padding: 36px 32px;
+  overflow-y: auto;
+  border-right: 1px solid var(--border);
 }
 
-/* RIGHT */
+/* ─── RIGHT PANEL ──────────────────────────────────────────────────────────── */
 .right-panel {
-    padding: 28px;
-    background: #eafaf1;
-    overflow-y: auto;
+  padding: 36px 28px;
+  background: var(--surface-green);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
-/* HEADER */
-header {
-    text-align: center;
-    margin-bottom: 18px;
+/* ─── BACK LINK ────────────────────────────────────────────────────────────── */
+.back-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 13px; font-weight: 600;
+  color: var(--brand); text-decoration: none;
+  margin-bottom: 24px;
+  transition: color var(--transition);
+}
+.back-link:hover { color: var(--brand-dark); }
+.back-link svg { flex-shrink: 0; }
+
+/* ─── HEADER ───────────────────────────────────────────────────────────────── */
+.page-header { margin-bottom: 28px; }
+
+.page-header .badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--brand-light); color: var(--brand-dark);
+  font-size: 11px; font-weight: 700; letter-spacing: .06em;
+  text-transform: uppercase; padding: 4px 10px;
+  border-radius: 100px; margin-bottom: 10px;
 }
 
-h1 {
-    font-size: 26px;
-    color: #333;
+.page-header h1 {
+  font-size: 28px; font-weight: 800;
+  color: var(--text-primary); letter-spacing: -.5px;
+  line-height: 1.2;
 }
 
-.subtitle {
-    font-size: 13px;
-    color: #777;
+.page-header .subtitle {
+  font-size: 14px; color: var(--text-secondary);
+  margin-top: 6px;
 }
 
-/* VOLTAR */
-a {
-    display: inline-block;
-    margin-bottom: 14px;
-    color: #27ae60;
-    font-weight: 600;
-    text-decoration: none;
+/* ─── TABS ─────────────────────────────────────────────────────────────────── */
+.tabs {
+  display: flex; gap: 4px;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 4px;
+  margin-bottom: 20px;
 }
 
-a:hover {
-    text-decoration: underline;
+.tab-btn {
+  flex: 1; padding: 8px 12px;
+  border: none; background: transparent;
+  border-radius: 6px;
+  font-size: 13px; font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition);
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  text-transform: none;
+  letter-spacing: 0;
 }
 
-/* LABELS */
-label {
-    font-size: 12px;
-    font-weight: 700;
-    display: block;
-    margin-top: 14px;
-    color: #444;
+.tab-btn:hover:not(.active) { background: var(--surface); color: var(--text-primary); }
+
+.tab-btn.active {
+  background: var(--surface);
+  color: var(--brand-dark);
+  box-shadow: var(--shadow-sm);
 }
 
-/* INPUTS */
-input, select, textarea {
-    width: 100%;
-    padding: 12px;
-    border-radius: 10px;
-    border: 2px solid #ddd;
-    font-size: 14px;
-    margin-top: 6px;
-    font-family: inherit;
-    color: #1a1a1a;
+/* ─── FORM GROUP ───────────────────────────────────────────────────────────── */
+.form-group { margin-bottom: 16px; }
+
+.form-group label {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 700;
+  color: var(--text-secondary);
+  letter-spacing: .04em; text-transform: uppercase;
+  margin-bottom: 7px;
+}
+
+.form-group label svg { color: var(--brand); }
+
+/* ─── INPUTS ───────────────────────────────────────────────────────────────── */
+input[type="text"],
+input[type="url"],
+input[type="color"],
+select,
+textarea {
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border);
+  font-size: 14px; font-weight: 400;
+  font-family: inherit;
+  color: var(--text-primary);
+  background: var(--surface);
+  transition: border-color var(--transition), box-shadow var(--transition);
+  appearance: none; -webkit-appearance: none;
 }
 
 textarea {
-    height: 80px;
-    resize: none;
+  height: 90px; resize: vertical;
+  line-height: 1.6;
 }
 
 input:focus, select:focus, textarea:focus {
-    border-color: #27ae60;
-    outline: none;
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(22,163,74,.12);
+  outline: none;
 }
 
-input.invalido, textarea.invalido {
-    border-color: #e74c3c;
+input.invalid, textarea.invalid {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 3px rgba(239,68,68,.10);
 }
 
-.contador {
-    font-size: 11px;
-    color: #999;
-    text-align: right;
-    margin-top: 4px;
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+  cursor: pointer;
 }
 
-.contador.aviso {
-    color: #e67e22;
-    font-weight: 700;
+.char-counter {
+  font-size: 11px; color: var(--text-muted);
+  text-align: right; margin-top: 5px;
+  font-weight: 500;
+}
+.char-counter.warn { color: var(--warn); font-weight: 700; }
+
+.field-error {
+  font-size: 12px; color: var(--danger);
+  margin-top: 5px; font-weight: 500;
+  display: flex; align-items: center; gap: 4px;
+  min-height: 18px;
 }
 
-.erro-texto {
-    font-size: 12px;
-    color: #e74c3c;
-    margin-top: 4px;
-    min-height: 14px;
+/* ─── COLOR ROW ────────────────────────────────────────────────────────────── */
+.color-row {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 12px;
 }
 
-/* BUTTONS */
-.buttons {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 8px;
-    margin-top: 15px;
+.color-picker-wrap {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  cursor: pointer;
+  transition: border-color var(--transition);
+}
+.color-picker-wrap:hover { border-color: var(--brand); }
+.color-picker-wrap:focus-within { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(22,163,74,.12); }
+
+.color-picker-wrap input[type="color"] {
+  width: 28px; height: 28px;
+  padding: 0; border: none;
+  border-radius: 6px; cursor: pointer;
+  background: transparent;
+  box-shadow: none;
+}
+.color-picker-wrap input[type="color"]:focus { box-shadow: none; }
+
+.color-picker-wrap span {
+  font-size: 13px; font-weight: 600;
+  color: var(--text-secondary);
+  pointer-events: none;
 }
 
-button {
-    padding: 12px;
-    border-radius: 10px;
-    border: none;
-    cursor: pointer;
-    font-weight: 700;
-    font-size: 12px;
-    background: #27ae60;
-    color: white;
-    text-transform: uppercase;
-    transition: 0.2s;
-    font-family: inherit;
+/* ─── OPTIONS ROW ──────────────────────────────────────────────────────────── */
+.options-row {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 12px;
 }
 
-button:hover:not(:disabled) {
-    opacity: 0.9;
+/* ─── DIVIDER ──────────────────────────────────────────────────────────────── */
+.divider {
+  border: none; border-top: 1px solid var(--border);
+  margin: 20px 0;
 }
 
-button:active:not(:disabled) {
-    transform: scale(0.97);
+/* ─── BUTTONS ──────────────────────────────────────────────────────────────── */
+.btn-row {
+  display: flex; gap: 10px;
+  margin-top: 4px;
 }
 
-button:disabled {
-    background: #b6e3c8;
-    cursor: not-allowed;
+.btn {
+  flex: 1; display: inline-flex;
+  align-items: center; justify-content: center; gap: 7px;
+  padding: 12px 18px;
+  border-radius: var(--radius-sm);
+  border: none; cursor: pointer;
+  font-size: 13px; font-weight: 700;
+  font-family: inherit;
+  letter-spacing: .02em;
+  transition: all var(--transition);
+  white-space: nowrap;
+  text-transform: none;
 }
 
-button.secundario {
-    background: #fff;
-    border: 2px solid #27ae60;
-    color: #27ae60;
+.btn-primary {
+  background: var(--brand);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(22,163,74,.30);
+}
+.btn-primary:hover:not(:disabled) {
+  background: var(--brand-dark);
+  box-shadow: 0 4px 14px rgba(22,163,74,.40);
+  transform: translateY(-1px);
+}
+.btn-primary:active:not(:disabled) { transform: translateY(0); box-shadow: none; }
+
+.btn-secondary {
+  background: var(--surface);
+  color: var(--brand-dark);
+  border: 1.5px solid var(--brand);
+}
+.btn-secondary:hover:not(:disabled) {
+  background: var(--brand-xlight);
+  transform: translateY(-1px);
+}
+.btn-secondary:active:not(:disabled) { transform: translateY(0); }
+
+.btn:disabled {
+  opacity: .45; cursor: not-allowed; transform: none !important;
+  box-shadow: none !important;
 }
 
-button.secundario:disabled {
-    border-color: #ddd;
-    color: #aaa;
-    background: #fff;
+/* ─── QR PREVIEW BOX ───────────────────────────────────────────────────────── */
+.qr-preview {
+  margin-top: 24px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-alt);
+  min-height: 280px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 24px;
+  gap: 16px;
+  transition: border-color var(--transition);
+  position: relative;
+  overflow: hidden;
 }
 
-/* QR */
-.qr-box {
-    margin-top: 20px;
-    background: #f7f7f7;
-    padding: 20px;
-    border-radius: 12px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 260px;
-    gap: 10px;
+.qr-preview.has-qr {
+  border-color: var(--brand);
+  background: var(--surface);
 }
 
-.qr-box canvas {
-    max-width: 100%;
-    border-radius: 6px;
+.qr-preview canvas {
+  border-radius: 6px;
+  box-shadow: var(--shadow-md);
+  max-width: 100%;
+  animation: qrFadeIn .25s ease;
 }
 
-.qr-placeholder {
-    color: #aaa;
-    font-size: 13px;
-    text-align: center;
+@keyframes qrFadeIn {
+  from { opacity: 0; transform: scale(.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.qr-empty-state {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 10px;
+  color: var(--text-muted);
+}
+
+.qr-empty-state .icon-wrap {
+  width: 64px; height: 64px;
+  background: var(--border);
+  border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center;
+}
+
+.qr-empty-state p {
+  font-size: 13px; font-weight: 500;
+  text-align: center;
+}
+
+.qr-label {
+  font-size: 11px; font-weight: 700;
+  letter-spacing: .06em; text-transform: uppercase;
+  color: var(--brand);
+  background: var(--brand-light);
+  padding: 3px 10px; border-radius: 100px;
+}
+
+/* ─── TOAST ────────────────────────────────────────────────────────────────── */
+.toast-wrap {
+  position: fixed;
+  bottom: 24px; left: 50%; transform: translateX(-50%);
+  z-index: 999;
+  pointer-events: none;
 }
 
 .toast {
-    margin-top: 10px;
-    font-size: 12px;
-    color: #27ae60;
-    font-weight: 700;
-    opacity: 0;
-    transition: opacity .25s ease;
-    min-height: 16px;
-    text-align: center;
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 18px;
+  border-radius: 100px;
+  font-size: 13px; font-weight: 600;
+  background: var(--text-primary); color: #fff;
+  box-shadow: 0 8px 24px rgba(0,0,0,.2);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity .22s ease, transform .22s ease;
+  white-space: nowrap;
 }
 
-.toast.visivel {
-    opacity: 1;
+.toast.visible {
+  opacity: 1; transform: translateY(0);
 }
 
-.toast.erro {
-    color: #e74c3c;
+.toast.success { background: var(--brand); }
+.toast.error   { background: var(--danger); }
+
+/* ─── RIGHT PANEL CONTENT ──────────────────────────────────────────────────── */
+.right-panel .panel-title {
+  font-size: 15px; font-weight: 800;
+  color: var(--text-primary); letter-spacing: -.2px;
+  display: flex; align-items: center; gap: 8px;
 }
 
-/* RESPONSIVO */
-@media (max-width: 900px) {
-    .wrapper {
-        grid-template-columns: 1fr;
-        max-height: none;
-        border-radius: 12px;
-    }
+.right-panel .panel-title svg { color: var(--brand); }
 
-    .left-panel {
-        border-right: none;
-        border-bottom: 1px solid #e0e0e0;
-    }
-
-    .buttons {
-        grid-template-columns: 1fr;
-    }
+.info-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex; gap: 12px;
 }
 
-@media (max-width: 480px) {
-    html, body {
-        padding: 10px;
-    }
+.info-card .card-icon {
+  width: 36px; height: 36px; flex-shrink: 0;
+  background: var(--brand-light);
+  border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--brand-dark);
+}
 
-    .wrapper {
-        border-radius: 10px;
-    }
+.info-card .card-body h3 {
+  font-size: 13px; font-weight: 700;
+  color: var(--text-primary); margin-bottom: 4px;
+}
 
-    .left-panel, .right-panel {
-        padding: 16px;
-    }
+.info-card .card-body p {
+  font-size: 12px; color: var(--text-secondary);
+  line-height: 1.6;
+}
 
-    h1 {
-        font-size: 20px;
-    }
+.correction-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.correction-table th {
+  text-align: left; padding: 7px 10px;
+  font-weight: 700; font-size: 11px;
+  letter-spacing: .04em; text-transform: uppercase;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+}
+
+.correction-table td {
+  padding: 8px 10px;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--surface-alt);
+  vertical-align: top;
+}
+
+.correction-table tr:last-child td { border-bottom: none; }
+
+.level-badge {
+  display: inline-block;
+  padding: 2px 8px; border-radius: 100px;
+  font-size: 11px; font-weight: 700;
+  background: var(--brand-light); color: var(--brand-dark);
+}
+
+.tip-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+
+.tip-list li {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 13px; color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.tip-list li::before {
+  content: "";
+  display: block; flex-shrink: 0;
+  width: 6px; height: 6px;
+  background: var(--brand);
+  border-radius: 50%;
+  margin-top: 7px;
+}
+
+/* ─── RESPONSIVE ───────────────────────────────────────────────────────────── */
+@media (max-width: 860px) {
+  .wrapper {
+    grid-template-columns: 1fr;
+    border-radius: var(--radius-md);
+  }
+  .left-panel {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    padding: 28px 24px;
+  }
+  .right-panel { padding: 28px 24px; }
+  .options-row { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 520px) {
+  html, body { padding: 12px 10px; }
+  .wrapper { border-radius: var(--radius-sm); }
+  .left-panel, .right-panel { padding: 20px 16px; }
+  .page-header h1 { font-size: 22px; }
+  .btn-row { flex-direction: column; }
+  .color-row { grid-template-columns: 1fr; }
+  .tabs { flex-wrap: wrap; }
 }
 </style>
-
 </head>
 
 <body>
 
 <div class="wrapper">
 
-    <!-- LEFT -->
-    <div class="left-panel">
+  <!-- ═══════════════════════════ LEFT PANEL ═══════════════════════════════ -->
+  <div class="left-panel">
 
-        <header>
-            <h1>📱 QR Code</h1>
-            <p class="subtitle">Gerador rápido e responsivo</p>
-        </header>
+    <a href="../../index.html" class="back-link" aria-label="Voltar para a página inicial">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Voltar
+    </a>
 
-        <a href="../../index.html">← Voltar</a>
-
-        <label for="text">Conteúdo (link, texto, PIX...)</label>
-        <textarea id="text" placeholder="Digite ou cole um link ou texto" maxlength="1500"></textarea>
-        <div class="contador" id="contador">0 / 1500</div>
-        <div class="erro-texto" id="erroTexto"></div>
-
-        <label for="size">Tamanho</label>
-        <select id="size">
-            <option value="160">Pequeno</option>
-            <option value="240" selected>Médio</option>
-            <option value="360">Grande</option>
-        </select>
-
-        <label for="correcao">Correção de erro</label>
-        <select id="correcao">
-            <option value="L">Baixa (mais espaço para conteúdo)</option>
-            <option value="M" selected>Média (recomendado)</option>
-            <option value="Q">Alta</option>
-            <option value="H">Máxima (resiste a danos/sujeira)</option>
-        </select>
-
-        <div class="buttons">
-            <button type="button" id="btnGerar">Gerar</button>
-            <button type="button" id="btnBaixar" class="secundario" disabled>Baixar</button>
-            <button type="button" id="btnCopiar" class="secundario" disabled>Copiar texto</button>
-        </div>
-
-        <div class="qr-box" id="qrBox">
-            <div class="qr-placeholder" id="qrPlaceholder">Seu QR Code vai aparecer aqui</div>
-        </div>
-
-        <div class="toast" id="toast"></div>
-
+    <div class="page-header">
+      <div class="badge">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3z"/><path d="M17 17h4v4h-4z"/></svg>
+        UtiliWeb
+      </div>
+      <h1>Gerador de QR Code</h1>
+      <p class="subtitle">Crie QR Codes instantâneos para links, textos e PIX — sem instalação.</p>
     </div>
 
-    <!-- RIGHT -->
-    <div class="right-panel">
-
-        <h2>Como funciona</h2>
-        <p>
-            Gere QR Codes instantaneamente para links, textos e pagamentos.
-            Interface otimizada para celular e desktop.
-        </p>
-        <br>
-        <p>
-            <strong>Dica:</strong> para PIX, cole o código "copia e cola" gerado
-            pelo seu banco. Para links, use a URL completa, incluindo "https://".
-        </p>
-        <br>
-        <p>
-            O nível de correção de erro define quanto do QR Code pode ser
-            danificado ou sujo e ainda assim ser lido. Use "Máxima" se for
-            imprimir em adesivos ou superfícies que sofrem desgaste.
-        </p>
-
+    <!-- TABS -->
+    <div class="tabs" role="tablist" aria-label="Tipo de conteúdo">
+      <button class="tab-btn active" role="tab" aria-selected="true"  data-tab="link"  type="button">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+        Link
+      </button>
+      <button class="tab-btn" role="tab" aria-selected="false" data-tab="texto" type="button">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        Texto
+      </button>
+      <button class="tab-btn" role="tab" aria-selected="false" data-tab="pix"   type="button">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        PIX
+      </button>
     </div>
 
+    <!-- CONTENT INPUT -->
+    <div class="form-group">
+      <label for="inputContent">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        <span id="inputLabel">URL do link</span>
+      </label>
+      <textarea
+        id="inputContent"
+        placeholder="Cole ou digite a URL completa (ex: https://exemplo.com)"
+        maxlength="1500"
+        aria-describedby="charCounter fieldError"
+        spellcheck="false"
+        autocomplete="off"
+      ></textarea>
+      <div class="char-counter" id="charCounter" aria-live="polite">0 / 1500</div>
+      <div class="field-error" id="fieldError" role="alert" aria-live="assertive"></div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- OPTIONS -->
+    <div class="options-row">
+      <div class="form-group" style="margin-bottom:0">
+        <label for="selectSize">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+          Tamanho
+        </label>
+        <select id="selectSize" aria-label="Tamanho do QR Code">
+          <option value="160">Pequeno — 160 px</option>
+          <option value="240" selected>Médio — 240 px</option>
+          <option value="360">Grande — 360 px</option>
+          <option value="480">Extra grande — 480 px</option>
+        </select>
+      </div>
+
+      <div class="form-group" style="margin-bottom:0">
+        <label for="selectCorrecao">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Correção de erro
+        </label>
+        <select id="selectCorrecao" aria-label="Nível de correção de erro">
+          <option value="L">Baixa — mais dados</option>
+          <option value="M" selected>Média — recomendado</option>
+          <option value="Q">Alta</option>
+          <option value="H">Máxima — mais resistente</option>
+        </select>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- COLORS -->
+    <div class="form-group" style="margin-bottom:0">
+      <label>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>
+        Cores do QR Code
+      </label>
+      <div class="color-row" style="margin-top:7px">
+        <div class="color-picker-wrap" title="Cor dos módulos (foreground)">
+          <input type="color" id="colorFg" value="#000000" aria-label="Cor do QR Code (foreground)">
+          <span>Módulos</span>
+        </div>
+        <div class="color-picker-wrap" title="Cor do fundo (background)">
+          <input type="color" id="colorBg" value="#ffffff" aria-label="Cor do fundo (background)">
+          <span>Fundo</span>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- BUTTONS -->
+    <div class="btn-row">
+      <button type="button" id="btnGerar" class="btn btn-primary" aria-label="Gerar QR Code">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3z"/><path d="M17 17h4v4h-4z"/></svg>
+        Gerar QR Code
+      </button>
+      <button type="button" id="btnBaixar" class="btn btn-secondary" disabled aria-label="Baixar QR Code como PNG">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Baixar PNG
+      </button>
+      <button type="button" id="btnCopiar" class="btn btn-secondary" disabled aria-label="Copiar texto do conteúdo">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copiar
+      </button>
+    </div>
+
+    <!-- QR PREVIEW -->
+    <div class="qr-preview" id="qrPreview" aria-live="polite" aria-label="Prévia do QR Code">
+      <div class="qr-empty-state" id="qrEmptyState">
+        <div class="icon-wrap">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3z"/><path d="M17 17h4v4h-4z"/></svg>
+        </div>
+        <p>Preencha o conteúdo e clique em<br><strong>Gerar QR Code</strong></p>
+      </div>
+    </div>
+
+  </div><!-- /left-panel -->
+
+
+  <!-- ═══════════════════════════ RIGHT PANEL ══════════════════════════════ -->
+  <div class="right-panel">
+
+    <div>
+      <p class="panel-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Como funciona
+      </p>
+    </div>
+
+    <div class="info-card">
+      <div class="card-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+      </div>
+      <div class="card-body">
+        <h3>Links e URLs</h3>
+        <p>Use a URL completa, incluindo o protocolo <strong>https://</strong>. Isso garante que o QR Code redirecione corretamente ao ser escaneado.</p>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <div class="card-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      </div>
+      <div class="card-body">
+        <h3>Pagamentos PIX</h3>
+        <p>Cole o código <strong>"Pix copia e cola"</strong> gerado pelo seu banco ou aplicativo financeiro. O QR Code resultante pode ser escaneado por qualquer app de pagamento.</p>
+      </div>
+    </div>
+
+    <div>
+      <p class="panel-title" style="margin-bottom:12px">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Níveis de correção de erro
+      </p>
+      <table class="correction-table" aria-label="Tabela de níveis de correção de erro">
+        <thead>
+          <tr>
+            <th>Nível</th>
+            <th>Recuperação</th>
+            <th>Ideal para</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="level-badge">L</span></td>
+            <td>~7%</td>
+            <td>Telas digitais, URLs longas</td>
+          </tr>
+          <tr>
+            <td><span class="level-badge">M</span></td>
+            <td>~15%</td>
+            <td>Uso geral (recomendado)</td>
+          </tr>
+          <tr>
+            <td><span class="level-badge">Q</span></td>
+            <td>~25%</td>
+            <td>Impressão em papel</td>
+          </tr>
+          <tr>
+            <td><span class="level-badge">H</span></td>
+            <td>~30%</td>
+            <td>Adesivos, superfícies com desgaste</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div>
+      <p class="panel-title" style="margin-bottom:12px">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Dicas de uso
+      </p>
+      <ul class="tip-list">
+        <li>Sempre teste o QR Code escaneando antes de distribuir ou imprimir.</li>
+        <li>Para impressão, prefira tamanho <strong>Grande</strong> ou <strong>Extra grande</strong> e correção <strong>Q</strong> ou <strong>H</strong>.</li>
+        <li>Mantenha bom contraste entre as cores dos módulos e do fundo para garantir leitura.</li>
+        <li>QR Codes com cores personalizadas podem ser menos legíveis em câmeras antigas — prefira preto sobre branco em casos críticos.</li>
+        <li>O processamento é feito inteiramente no seu navegador — nenhum dado é enviado a servidores.</li>
+      </ul>
+    </div>
+
+  </div><!-- /right-panel -->
+
+</div><!-- /wrapper -->
+
+<!-- TOAST -->
+<div class="toast-wrap" aria-live="polite" aria-atomic="true">
+  <div class="toast" id="toast" role="status"></div>
 </div>
 
 <script>
-const elText = document.getElementById("text");
-const elSize = document.getElementById("size");
-const elCorrecao = document.getElementById("correcao");
-const elContador = document.getElementById("contador");
-const elErroTexto = document.getElementById("erroTexto");
-const elQrBox = document.getElementById("qrBox");
-const elQrPlaceholder = document.getElementById("qrPlaceholder");
-const elToast = document.getElementById("toast");
+/* ─── ELEMENTS ──────────────────────────────────────────────────────────── */
+const elInput      = document.getElementById("inputContent");
+const elInputLabel = document.getElementById("inputLabel");
+const elSize       = document.getElementById("selectSize");
+const elCorrecao   = document.getElementById("selectCorrecao");
+const elCounter    = document.getElementById("charCounter");
+const elFieldError = document.getElementById("fieldError");
+const elQrPreview  = document.getElementById("qrPreview");
+const elEmptyState = document.getElementById("qrEmptyState");
+const elToast      = document.getElementById("toast");
 
-const btnGerar = document.getElementById("btnGerar");
+const btnGerar  = document.getElementById("btnGerar");
 const btnBaixar = document.getElementById("btnBaixar");
 const btnCopiar = document.getElementById("btnCopiar");
 
-let canvasAtual = null;
-let textoAtual = "";
-let toastTimeout = null;
+const colorFg = document.getElementById("colorFg");
+const colorBg = document.getElementById("colorBg");
 
-// Limite de caracteres alfanuméricos aproximado por nível de correção
-// (capacidade real varia com o tipo de caractere; isso é só um aviso prévio)
+const tabBtns = document.querySelectorAll(".tab-btn");
+
+/* ─── STATE ─────────────────────────────────────────────────────────────── */
+let canvasAtual   = null;
+let textoAtual    = "";
+let toastTimeout  = null;
+let activeTab     = "link";
+
+/* Capacidade aproximada por nível de correção (alfanumérico) */
 const LIMITE_APROX = { L: 1852, M: 1452, Q: 1042, H: 786 };
 
-function mostrarToast(texto, tipo) {
-    elToast.textContent = texto;
-    elToast.classList.toggle("erro", tipo === "erro");
-    elToast.classList.add("visivel");
-    clearTimeout(toastTimeout);
-    toastTimeout = setTimeout(() => elToast.classList.remove("visivel"), 2500);
+const TAB_CONFIG = {
+  link:  { label: "URL do link",       placeholder: "Cole ou digite a URL completa (ex: https://exemplo.com)" },
+  texto: { label: "Texto livre",        placeholder: "Digite qualquer texto, mensagem ou informação" },
+  pix:   { label: "Código Pix copia e cola", placeholder: "Cole aqui o código Pix gerado pelo seu banco" },
+};
+
+/* ─── TABS ──────────────────────────────────────────────────────────────── */
+tabBtns.forEach(btn => {
+  btn.addEventListener("click", () => {
+    tabBtns.forEach(b => { b.classList.remove("active"); b.setAttribute("aria-selected","false"); });
+    btn.classList.add("active");
+    btn.setAttribute("aria-selected","true");
+    activeTab = btn.dataset.tab;
+    const cfg = TAB_CONFIG[activeTab];
+    elInputLabel.textContent = cfg.label;
+    elInput.placeholder = cfg.placeholder;
+    elInput.value = "";
+    clearResult();
+    updateCounter();
+  });
+});
+
+/* ─── COUNTER ───────────────────────────────────────────────────────────── */
+function updateCounter() {
+  const len = elInput.value.length;
+  const lim = LIMITE_APROX[elCorrecao.value] || 1452;
+  elCounter.textContent = `${len} / 1500`;
+  elCounter.classList.toggle("warn", len > lim);
 }
 
-function atualizarContador() {
-    const tamanho = elText.value.length;
-    const correcao = elCorrecao.value;
-    const limite = LIMITE_APROX[correcao] || 1452;
-    elContador.textContent = `${tamanho} / 1500`;
-    elContador.classList.toggle("aviso", tamanho > limite);
+/* ─── CLEAR ─────────────────────────────────────────────────────────────── */
+function clearResult() {
+  elQrPreview.innerHTML = "";
+  elQrPreview.appendChild(elEmptyState);
+  elQrPreview.classList.remove("has-qr");
+  canvasAtual = null;
+  textoAtual  = "";
+  btnBaixar.disabled = true;
+  btnCopiar.disabled = true;
 }
 
-function limparResultado() {
-    elQrBox.innerHTML = "";
-    elQrBox.appendChild(elQrPlaceholder);
-    canvasAtual = null;
-    textoAtual = "";
-    btnBaixar.disabled = true;
-    btnCopiar.disabled = true;
+/* ─── TOAST ─────────────────────────────────────────────────────────────── */
+function showToast(text, type = "success") {
+  elToast.textContent = text;
+  elToast.className = `toast ${type} visible`;
+  clearTimeout(toastTimeout);
+  toastTimeout = setTimeout(() => elToast.classList.remove("visible"), 2800);
 }
 
+/* ─── GENERATE ──────────────────────────────────────────────────────────── */
 function gerar() {
-    const texto = elText.value.trim();
-    const tamanho = parseInt(elSize.value, 10);
-    const correcao = elCorrecao.value;
+  const texto    = elInput.value.trim();
+  const tamanho  = parseInt(elSize.value, 10);
+  const correcao = elCorrecao.value;
+  const fgColor  = colorFg.value;
+  const bgColor  = colorBg.value;
 
-    elErroTexto.textContent = "";
-    elText.classList.remove("invalido");
+  elFieldError.textContent = "";
+  elInput.classList.remove("invalid");
 
-    if (!texto) {
-        elErroTexto.textContent = "Digite um link ou texto para gerar o QR Code.";
-        elText.classList.add("invalido");
-        limparResultado();
-        return;
-    }
+  if (!texto) {
+    elFieldError.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> Preencha o conteúdo antes de gerar.`;
+    elInput.classList.add("invalid");
+    elInput.focus();
+    clearResult();
+    return;
+  }
 
-    try {
-        const qr = qrcode(0, correcao);
-        qr.addData(texto);
-        qr.make();
+  try {
+    const qr = qrcode(0, correcao);
+    qr.addData(texto);
+    qr.make();
 
-        const contagemModulos = qr.getModuleCount();
-        const escala = Math.max(1, Math.floor(tamanho / contagemModulos));
-        const tamanhoFinal = contagemModulos * escala;
+    const mods   = qr.getModuleCount();
+    const scale  = Math.max(1, Math.floor(tamanho / mods));
+    const size   = mods * scale;
 
-        const canvas = document.createElement("canvas");
-        canvas.width = tamanhoFinal;
-        canvas.height = tamanhoFinal;
-        const ctx = canvas.getContext("2d");
+    const canvas = document.createElement("canvas");
+    canvas.width  = size;
+    canvas.height = size;
+    const ctx = canvas.getContext("2d");
 
-        ctx.fillStyle = "#ffffff";
-        ctx.fillRect(0, 0, tamanhoFinal, tamanhoFinal);
-        ctx.fillStyle = "#000000";
+    /* Background */
+    ctx.fillStyle = bgColor;
+    ctx.fillRect(0, 0, size, size);
 
-        for (let linha = 0; linha < contagemModulos; linha++) {
-            for (let coluna = 0; coluna < contagemModulos; coluna++) {
-                if (qr.isDark(linha, coluna)) {
-                    ctx.fillRect(coluna * escala, linha * escala, escala, escala);
-                }
-            }
+    /* Modules */
+    ctx.fillStyle = fgColor;
+    for (let r = 0; r < mods; r++) {
+      for (let c = 0; c < mods; c++) {
+        if (qr.isDark(r, c)) {
+          ctx.fillRect(c * scale, r * scale, scale, scale);
         }
-
-        elQrBox.innerHTML = "";
-        elQrBox.appendChild(canvas);
-
-        canvasAtual = canvas;
-        textoAtual = texto;
-        btnBaixar.disabled = false;
-        btnCopiar.disabled = false;
-        mostrarToast("QR Code gerado!");
-    } catch (e) {
-        // A biblioteca lança erro quando o texto excede a capacidade
-        // máxima para o nível de correção escolhido.
-        elErroTexto.textContent = "Texto muito longo para o nível de correção escolhido. Reduza o texto ou diminua a correção de erro.";
-        elText.classList.add("invalido");
-        limparResultado();
-        mostrarToast("Não foi possível gerar o QR Code.", "erro");
+      }
     }
+
+    /* Label */
+    const label = document.createElement("span");
+    label.className = "qr-label";
+    label.textContent = activeTab === "pix" ? "PIX" : activeTab === "link" ? "Link" : "Texto";
+
+    elQrPreview.innerHTML = "";
+    elQrPreview.appendChild(canvas);
+    elQrPreview.appendChild(label);
+    elQrPreview.classList.add("has-qr");
+
+    canvasAtual = canvas;
+    textoAtual  = texto;
+    btnBaixar.disabled = false;
+    btnCopiar.disabled = false;
+    showToast("QR Code gerado com sucesso!", "success");
+
+  } catch (e) {
+    elFieldError.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> Texto muito longo para o nível de correção escolhido. Reduza o conteúdo ou diminua a correção de erro.`;
+    elInput.classList.add("invalid");
+    clearResult();
+    showToast("Não foi possível gerar o QR Code.", "error");
+  }
 }
 
+/* ─── DOWNLOAD ──────────────────────────────────────────────────────────── */
 function baixar() {
-    if (!canvasAtual) return;
-    const link = document.createElement("a");
-    link.href = canvasAtual.toDataURL("image/png");
-    link.download = "qrcode.png";
-    link.click();
+  if (!canvasAtual) return;
+  const link = document.createElement("a");
+  link.href     = canvasAtual.toDataURL("image/png");
+  link.download = `qrcode-${activeTab}-${Date.now()}.png`;
+  link.click();
+  showToast("Download iniciado!", "success");
 }
 
+/* ─── COPY ──────────────────────────────────────────────────────────────── */
 async function copiarTexto() {
-    if (!textoAtual) return;
-    try {
-        if (navigator.clipboard && window.isSecureContext) {
-            await navigator.clipboard.writeText(textoAtual);
-        } else {
-            const temp = document.createElement("textarea");
-            temp.value = textoAtual;
-            temp.style.position = "fixed";
-            temp.style.opacity = "0";
-            document.body.appendChild(temp);
-            temp.select();
-            document.execCommand("copy");
-            document.body.removeChild(temp);
-        }
-        mostrarToast("Texto copiado!");
-    } catch (e) {
-        mostrarToast("Não foi possível copiar o texto.", "erro");
+  if (!textoAtual) return;
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(textoAtual);
+    } else {
+      const tmp = document.createElement("textarea");
+      tmp.value = textoAtual;
+      Object.assign(tmp.style, { position:"fixed", opacity:"0" });
+      document.body.appendChild(tmp);
+      tmp.select();
+      document.execCommand("copy");
+      document.body.removeChild(tmp);
     }
+    showToast("Conteúdo copiado para a área de transferência!", "success");
+  } catch {
+    showToast("Não foi possível copiar o conteúdo.", "error");
+  }
 }
 
+/* ─── EVENTS ────────────────────────────────────────────────────────────── */
 btnGerar.addEventListener("click", gerar);
 btnBaixar.addEventListener("click", baixar);
 btnCopiar.addEventListener("click", copiarTexto);
 
-elText.addEventListener("input", () => {
-    elErroTexto.textContent = "";
-    elText.classList.remove("invalido");
-    atualizarContador();
+elInput.addEventListener("input", () => {
+  elFieldError.textContent = "";
+  elInput.classList.remove("invalid");
+  updateCounter();
 });
 
-elCorrecao.addEventListener("change", atualizarContador);
+elCorrecao.addEventListener("change", updateCounter);
 
-elText.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-        e.preventDefault();
-        gerar();
-    }
+elInput.addEventListener("keydown", e => {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    gerar();
+  }
 });
 
-atualizarContador();
+/* Init */
+updateCounter();
 </script>
 
 </body>
