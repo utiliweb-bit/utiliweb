@@ -8,7 +8,7 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <style>
         :root {
@@ -17,7 +17,6 @@
             --accent: #ff006e;
             --accent-light: #ff4d94;
             --success: #00f5a0;
-            --warning: #ffa500;
             --bg-dark: #0a0e27;
             --bg-darker: #050812;
             --surface: rgba(255, 255, 255, 0.05);
@@ -25,7 +24,7 @@
             --text-primary: #ffffff;
             --text-secondary: #b0b9c3;
             --border-color: rgba(255, 255, 255, 0.1);
-            --transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * {
@@ -34,154 +33,63 @@
             box-sizing: border-box;
         }
 
-        html, body {
-            width: 100%;
-            height: 100%;
+        body {
             font-family: 'Outfit', sans-serif;
-            background: linear-gradient(135deg, var(--bg-darker) 0%, #1a1f3a 50%, var(--bg-dark) 100%);
+            background: radial-gradient(circle at top right, #1a1f3a, var(--bg-darker));
             color: var(--text-primary);
-            overflow: hidden;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
             background-attachment: fixed;
         }
 
-        /* Animated Background */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 20% 50%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 80%, rgba(255, 0, 110, 0.1) 0%, transparent 50%);
-            pointer-events: none;
-            z-index: 0;
-            animation: gradientShift 15s ease infinite;
-        }
-
-        @keyframes gradientShift {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
-        }
-
         .container {
-            position: relative;
-            z-index: 1;
             width: 100%;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .app-wrapper {
-            width: 100%;
-            max-width: 1400px;
-            height: 90vh;
+            max-width: 1200px;
             display: grid;
-            grid-template-columns: 1.3fr 0.7fr;
+            grid-template-columns: 1.2fr 0.8fr;
             gap: 24px;
-            perspective: 1000px;
+            align-items: start;
         }
 
         /* Glassmorphism Panel */
         .panel {
             background: var(--surface);
             backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--border-color);
             border-radius: 24px;
-            padding: 40px;
-            overflow-y: auto;
+            padding: 32px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            transition: var(--transition);
             position: relative;
-        }
-
-        .panel::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.05) 0%, rgba(255, 0, 110, 0.05) 100%);
-            border-radius: 24px;
-            pointer-events: none;
-        }
-
-        .panel:hover {
-            border-color: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 12px 48px rgba(0, 212, 255, 0.15);
-        }
-
-        .left-panel {
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-        }
-
-        .right-panel {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
         }
 
         /* Header */
         .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 8px;
+            margin-bottom: 32px;
         }
 
-        .header-content h1 {
+        .header h1 {
             font-size: 32px;
             font-weight: 900;
-            letter-spacing: -1px;
             background: linear-gradient(135deg, var(--primary) 0%, var(--accent-light) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
             margin-bottom: 4px;
         }
 
-        .header-content p {
-            font-size: 13px;
+        .header p {
+            font-size: 14px;
             color: var(--text-secondary);
-            font-weight: 500;
-        }
-
-        .theme-btn {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            background: var(--surface-light);
-            border: 1px solid var(--border-color);
-            color: var(--primary);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition);
-            font-size: 20px;
-        }
-
-        .theme-btn:hover {
-            background: var(--surface);
-            border-color: var(--primary);
-            transform: scale(1.05) rotate(20deg);
         }
 
         /* Controls */
         .controls-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
-        .select-field {
-            position: relative;
+            gap: 16px;
+            margin-bottom: 32px;
         }
 
         .select-field label {
@@ -196,7 +104,7 @@
 
         select {
             width: 100%;
-            padding: 12px 16px;
+            padding: 14px;
             background: var(--surface-light);
             border: 1px solid var(--border-color);
             border-radius: 12px;
@@ -205,29 +113,7 @@
             font-weight: 600;
             font-family: inherit;
             cursor: pointer;
-            appearance: none;
-            transition: var(--transition);
-        }
-
-        select:hover {
-            border-color: var(--primary);
-            background: rgba(0, 212, 255, 0.05);
-        }
-
-        select:focus {
             outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.2);
-        }
-
-        .select-field::after {
-            content: '⌄';
-            position: absolute;
-            right: 16px;
-            bottom: 12px;
-            pointer-events: none;
-            color: var(--primary);
-            font-size: 18px;
         }
 
         /* Months Grid */
@@ -237,68 +123,54 @@
             text-transform: uppercase;
             letter-spacing: 1.5px;
             color: var(--text-secondary);
-            margin-top: 12px;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .months-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border-color);
         }
 
         .months-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             gap: 12px;
         }
 
         .month-card {
             background: var(--surface-light);
             border: 1px solid var(--border-color);
-            border-radius: 14px;
-            padding: 14px;
+            border-radius: 16px;
+            padding: 16px;
             transition: var(--transition);
-            cursor: text;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .month-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, transparent 100%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
         }
 
         .month-card:hover {
             border-color: var(--primary);
-            background: rgba(0, 212, 255, 0.08);
-            box-shadow: 0 4px 16px rgba(0, 212, 255, 0.1);
-        }
-
-        .month-card:focus-within {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.15);
+            background: rgba(0, 212, 255, 0.05);
+            transform: translateY(-2px);
         }
 
         .month-label {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-            font-size: 11px;
+            margin-bottom: 10px;
         }
 
         .month-name {
+            font-size: 13px;
             font-weight: 700;
-            color: var(--text-primary);
         }
 
         .month-jp {
+            font-size: 11px;
             color: var(--primary);
-            font-size: 10px;
-            opacity: 0.7;
+            opacity: 0.8;
         }
 
         .input-wrapper {
@@ -309,402 +181,265 @@
 
         .currency-symbol {
             position: absolute;
-            left: 10px;
-            font-size: 13px;
+            left: 12px;
+            font-size: 14px;
             font-weight: 700;
             color: var(--primary);
         }
 
         .month-input {
             width: 100%;
-            padding: 10px 12px 10px 28px;
-            background: var(--surface);
-            border: 1px solid rgba(0, 212, 255, 0.2);
+            padding: 12px 12px 12px 34px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border-color);
             border-radius: 10px;
-            color: var(--text-primary);
-            font-size: 14px;
-            font-weight: 700;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
             font-family: 'Courier New', monospace;
+            outline: none;
             transition: var(--transition);
         }
 
         .month-input:focus {
-            outline: none;
             border-color: var(--primary);
-            background: rgba(0, 212, 255, 0.05);
-            box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.2);
+            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
         }
 
-        .month-input::placeholder {
-            color: rgba(255, 255, 255, 0.2);
-        }
-
-        /* Action Buttons */
-        .actions-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-top: 20px;
-        }
-
-        .btn {
-            padding: 14px 16px;
-            border: none;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            cursor: pointer;
-            transition: var(--transition);
+        /* Results Panel */
+        .results-panel {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            font-family: inherit;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-
-        .btn:active::before {
-            width: 300px;
-            height: 300px;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: var(--bg-dark);
-            grid-column: span 2;
-            font-size: 13px;
-            padding: 16px;
-            box-shadow: 0 4px 16px rgba(0, 212, 255, 0.3);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(0, 212, 255, 0.4);
-        }
-
-        .btn-secondary {
-            background: var(--surface-light);
-            border: 1px solid var(--border-color);
-            color: var(--primary);
-        }
-
-        .btn-secondary:hover {
-            border-color: var(--primary);
-            background: rgba(0, 212, 255, 0.1);
-            box-shadow: 0 4px 12px rgba(0, 212, 255, 0.2);
-        }
-
-        /* Right Panel - Results */
-        .result-title {
-            font-size: 11px;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: var(--text-secondary);
+            flex-direction: column;
+            gap: 20px;
+            position: sticky;
+            top: 40px;
         }
 
         .metric-card {
             background: var(--surface-light);
             border: 1px solid var(--border-color);
-            border-radius: 14px;
-            padding: 16px;
+            border-radius: 20px;
+            padding: 24px;
             transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .metric-card::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 100px;
-            height: 100px;
-            background: radial-gradient(circle, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .metric-card:hover::after {
-            opacity: 1;
         }
 
         .metric-card.featured {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.15) 0%, rgba(255, 0, 110, 0.1) 100%);
             border: 1px solid var(--primary);
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(255, 0, 110, 0.05) 100%);
-            box-shadow: 0 4px 16px rgba(0, 212, 255, 0.2);
+            box-shadow: 0 8px 24px rgba(0, 212, 255, 0.15);
         }
 
         .metric-label {
-            font-size: 10px;
-            font-weight: 700;
+            font-size: 11px;
+            font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
             color: var(--text-secondary);
-            margin-bottom: 6px;
+            margin-bottom: 8px;
         }
 
         .metric-value {
-            font-size: 24px;
+            font-size: 32px;
             font-weight: 900;
             color: var(--primary);
             font-family: 'Courier New', monospace;
-            letter-spacing: -0.5px;
         }
 
-        .metric-sub {
-            font-size: 10px;
+        .metric-footer {
+            font-size: 11px;
             color: var(--text-secondary);
-            margin-top: 4px;
+            margin-top: 6px;
+        }
+
+        /* Actions */
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .btn {
+            padding: 16px;
+            border-radius: 14px;
+            border: none;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--bg-darker);
+            grid-column: span 2;
+        }
+
+        .btn-secondary {
+            background: var(--surface-light);
+            color: white;
+            border: 1px solid var(--border-color);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
         }
 
         /* Chart */
         .chart-container {
-            background: var(--surface-light);
-            border: 1px solid var(--border-color);
-            border-radius: 14px;
-            padding: 16px;
-        }
-
-        .chart-bars {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 12px;
+            margin-top: 10px;
         }
 
         .chart-row {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            margin-bottom: 10px;
         }
 
         .chart-label {
-            width: 28px;
-            font-size: 9px;
+            width: 30px;
+            font-size: 10px;
             font-weight: 700;
             color: var(--text-secondary);
         }
 
         .chart-bar-bg {
             flex: 1;
-            height: 6px;
-            background: var(--surface);
-            border-radius: 3px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
             overflow: hidden;
-            position: relative;
         }
 
         .chart-bar-fill {
             height: 100%;
-            background: linear-gradient(90deg, var(--primary) 0%, var(--accent-light) 100%);
-            border-radius: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent-light));
             width: 0%;
-            transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: 0 0 12px rgba(0, 212, 255, 0.4);
-        }
-
-        .chart-value {
-            width: 70px;
-            text-align: right;
-            font-size: 9px;
-            font-weight: 700;
-            color: var(--text-secondary);
-        }
-
-        /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: rgba(0, 212, 255, 0.3);
-            border-radius: 3px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(0, 212, 255, 0.5);
+            transition: width 0.6s ease;
         }
 
         /* Responsive */
-        @media (max-width: 1024px) {
-            .app-wrapper {
+        @media (max-width: 900px) {
+            .container {
                 grid-template-columns: 1fr;
-                height: auto;
-                max-height: 90vh;
             }
-
-            .panel {
-                padding: 24px;
-            }
-
-            .months-grid {
-                grid-template-columns: repeat(2, 1fr);
+            .results-panel {
+                position: static;
             }
         }
 
         @media (max-width: 600px) {
-            body { padding: 12px; }
-            .panel { padding: 16px; }
-            .header-content h1 { font-size: 24px; }
-            .months-grid { grid-template-columns: 1fr; }
-            .actions-grid { grid-template-columns: 1fr; }
-            .btn-primary { grid-column: span 1; }
+            .months-grid {
+                grid-template-columns: 1fr;
+            }
+            body {
+                padding: 20px 10px;
+            }
         }
 
-        /* Status Message */
-        .status-msg {
+        /* Status Toast */
+        .toast {
             position: fixed;
             bottom: 20px;
-            right: 20px;
+            left: 50%;
+            transform: translateX(-50%);
             background: var(--success);
-            color: var(--bg-dark);
-            padding: 12px 20px;
-            border-radius: 12px;
+            color: var(--bg-darker);
+            padding: 12px 24px;
+            border-radius: 50px;
             font-weight: 700;
-            font-size: 12px;
-            animation: slideIn 0.3s ease forwards;
+            font-size: 14px;
+            box-shadow: 0 4px 20px rgba(0, 245, 160, 0.3);
             z-index: 1000;
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(400px);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
+            display: none;
         }
     </style>
 </head>
 <body>
 
+<div id="toast" class="toast">✓ Copiado!</div>
+
 <div class="container">
-    <div class="app-wrapper">
-        <!-- LEFT PANEL -->
-        <div class="panel left-panel">
-            <div class="header">
-                <div class="header-content">
-                    <h1>💰 Ganho Anual</h1>
-                    <p>Gerenciador Premium de Rendimentos</p>
-                </div>
-                <button class="theme-btn" id="theme-toggle" title="Alternar tema">🌙</button>
+    <!-- INPUTS -->
+    <div class="panel">
+        <div class="header">
+            <h1>💰 Ganho Anual</h1>
+            <p>Gestão Premium de Rendimentos</p>
+        </div>
+
+        <div class="controls-grid">
+            <div class="select-field">
+                <label>Ano Fiscal</label>
+                <select id="year-select"></select>
             </div>
-
-            <div class="controls-grid">
-                <div class="select-field">
-                    <label>Ano Fiscal</label>
-                    <select id="year-select"></select>
-                </div>
-                <div class="select-field">
-                    <label>Moeda</label>
-                    <select id="currency-select">
-                        <option value="BRL">R$ Real</option>
-                        <option value="JPY">¥ Iene</option>
-                        <option value="USD">$ Dólar</option>
-                        <option value="EUR">€ Euro</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="months-title">Rendimentos Mensais</div>
-            <div class="months-grid" id="months-grid"></div>
-
-            <div class="actions-grid">
-                <button class="btn btn-primary" onclick="calculateAll()">
-                    📊 Calcular
-                </button>
-                <button class="btn btn-secondary" onclick="copySummary()">
-                    📋 Copiar
-                </button>
-                <button class="btn btn-secondary" onclick="exportCSV()">
-                    ⬇️ Exportar
-                </button>
-                <button class="btn btn-secondary" onclick="clearData()">
-                    🗑️ Limpar
-                </button>
+            <div class="select-field">
+                <label>Moeda</label>
+                <select id="currency-select">
+                    <option value="BRL">R$ Real (BRL)</option>
+                    <option value="JPY">¥ Iene (JPY)</option>
+                    <option value="USD">$ Dólar (USD)</option>
+                    <option value="EUR">€ Euro (EUR)</option>
+                </select>
             </div>
         </div>
 
-        <!-- RIGHT PANEL -->
-        <div class="panel right-panel">
-            <div class="result-title">📈 Resumo Consolidado</div>
+        <div class="months-title">Rendimentos Mensais</div>
+        <div class="months-grid" id="months-grid"></div>
 
-            <div class="metric-card featured">
-                <div class="metric-label">Total Anual (a Declarar)</div>
-                <div class="metric-value" id="res-total">0,00</div>
-                <div class="metric-sub">
-                    <span id="res-year">Ano 2026</span> • <span id="res-count">0 meses</span>
-                </div>
+        <div class="actions-grid">
+            <button class="btn btn-primary" onclick="calculateAll()">Calcular Total Anual</button>
+            <button class="btn btn-secondary" onclick="copySummary()">Copiar Resumo</button>
+            <button class="btn btn-secondary" onclick="exportCSV()">Exportar CSV</button>
+            <button class="btn btn-secondary" onclick="clearData()" style="grid-column: span 2; margin-top: 8px; background: rgba(255,0,0,0.1); border-color: rgba(255,0,0,0.2); color: #ff4d4d;">Limpar Todos os Dados</button>
+        </div>
+    </div>
+
+    <!-- RESULTS -->
+    <div class="results-panel">
+        <div class="panel metric-card featured">
+            <div class="metric-label">Total Anual Bruto</div>
+            <div class="metric-value" id="res-total">0,00</div>
+            <div class="metric-footer" id="res-footer">Ano 2026 • 0 meses ativos</div>
+        </div>
+
+        <div class="panel metric-card">
+            <div class="metric-label">Média Mensal</div>
+            <div class="metric-value" id="res-avg">0,00</div>
+            <div class="metric-footer">Baseado nos meses preenchidos</div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="panel metric-card">
+                <div class="metric-label">Pico</div>
+                <div class="metric-value" style="font-size: 18px;" id="res-max">0,00</div>
+                <div class="metric-footer" id="res-max-month">-</div>
             </div>
-
-            <div class="metric-card">
-                <div class="metric-label">Média Mensal</div>
-                <div class="metric-value" id="res-avg">0,00</div>
-                <div class="metric-sub">Baseado em meses ativos</div>
+            <div class="panel metric-card">
+                <div class="metric-label">Mínimo</div>
+                <div class="metric-value" style="font-size: 18px;" id="res-min">0,00</div>
+                <div class="metric-footer" id="res-min-month">-</div>
             </div>
+        </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                <div class="metric-card">
-                    <div class="metric-label">Pico</div>
-                    <div class="metric-value" style="font-size: 18px;" id="res-max">0,00</div>
-                    <div class="metric-sub" id="res-max-month">-</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-label">Mínimo</div>
-                    <div class="metric-value" style="font-size: 18px;" id="res-min">0,00</div>
-                    <div class="metric-sub" id="res-min-month">-</div>
-                </div>
-            </div>
-
-            <div class="chart-container">
-                <div class="metric-label">Distribuição Mensal</div>
-                <div class="chart-bars" id="chart-bars"></div>
-            </div>
-
-            <p style="font-size: 9px; color: var(--text-secondary); line-height: 1.6; margin-top: 8px;">
-                ✓ Dados processados localmente • Sem envio a servidores • Privacidade garantida
-            </p>
+        <div class="panel">
+            <div class="metric-label">Distribuição por Mês</div>
+            <div class="chart-container" id="chart-bars"></div>
         </div>
     </div>
 </div>
 
 <script>
     const MONTHS = [
-        { n: 'Janeiro', s: 'Jan', jp: '1月' },
-        { n: 'Fevereiro', s: 'Fev', jp: '2月' },
-        { n: 'Março', s: 'Mar', jp: '3月' },
-        { n: 'Abril', s: 'Abr', jp: '4月' },
-        { n: 'Maio', s: 'Mai', jp: '5月' },
-        { n: 'Junho', s: 'Jun', jp: '6月' },
-        { n: 'Julho', s: 'Jul', jp: '7月' },
-        { n: 'Agosto', s: 'Ago', jp: '8月' },
-        { n: 'Setembro', s: 'Set', jp: '9月' },
-        { n: 'Outubro', s: 'Out', jp: '10月' },
-        { n: 'Novembro', s: 'Nov', jp: '11月' },
-        { n: 'Dezembro', s: 'Dez', jp: '12月' }
+        { n: 'Janeiro', s: 'Jan', jp: '1月' }, { n: 'Fevereiro', s: 'Fev', jp: '2月' },
+        { n: 'Março', s: 'Mar', jp: '3月' }, { n: 'Abril', s: 'Abr', jp: '4月' },
+        { n: 'Maio', s: 'Mai', jp: '5月' }, { n: 'Junho', s: 'Jun', jp: '6月' },
+        { n: 'Julho', s: 'Jul', jp: '7月' }, { n: 'Agosto', s: 'Ago', jp: '8月' },
+        { n: 'Setembro', s: 'Set', jp: '9月' }, { n: 'Outubro', s: 'Out', jp: '10月' },
+        { n: 'Novembro', s: 'Nov', jp: '11月' }, { n: 'Dezembro', s: 'Dez', jp: '12月' }
     ];
 
     const CURRENCIES = {
@@ -717,8 +452,7 @@
     let state = {
         year: new Date().getFullYear(),
         currency: 'BRL',
-        values: Array(12).fill(0),
-        theme: 'dark'
+        values: Array(12).fill(0)
     };
 
     function init() {
@@ -728,20 +462,18 @@
         renderChart();
         updateDisplay();
 
-        document.getElementById('year-select').addEventListener('change', (e) => {
+        document.getElementById('year-select').addEventListener('change', e => {
             state.year = e.target.value;
             saveState();
             updateDisplay();
         });
 
-        document.getElementById('currency-select').addEventListener('change', (e) => {
+        document.getElementById('currency-select').addEventListener('change', e => {
             state.currency = e.target.value;
             saveState();
             updateDisplay();
             renderGrid();
         });
-
-        document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
     }
 
     function setupYearSelect() {
@@ -749,8 +481,7 @@
         const currentYear = new Date().getFullYear();
         for (let i = currentYear + 1; i >= currentYear - 5; i--) {
             const opt = document.createElement('option');
-            opt.value = i;
-            opt.textContent = i;
+            opt.value = i; opt.textContent = i;
             if (i === parseInt(state.year)) opt.selected = true;
             select.appendChild(opt);
         }
@@ -771,12 +502,9 @@
                 </div>
                 <div class="input-wrapper">
                     <span class="currency-symbol">${symbol}</span>
-                    <input type="text" 
-                           class="month-input" 
-                           placeholder="0,00" 
-                           value="${state.values[i] > 0 ? formatValue(state.values[i]) : ''}"
-                           oninput="handleInput(this, ${i})"
-                    >
+                    <input type="text" class="month-input" placeholder="0,00" 
+                           value="${state.values[i] > 0 ? formatInput(state.values[i]) : ''}"
+                           oninput="handleInput(this, ${i})">
                 </div>
             `;
             grid.appendChild(card);
@@ -791,10 +519,7 @@
             row.className = 'chart-row';
             row.innerHTML = `
                 <div class="chart-label">${m.s}</div>
-                <div class="chart-bar-bg">
-                    <div class="chart-bar-fill" id="bar-${i}"></div>
-                </div>
-                <div class="chart-value" id="val-${i}">-</div>
+                <div class="chart-bar-bg"><div class="chart-bar-fill" id="bar-${i}"></div></div>
             `;
             container.appendChild(row);
         });
@@ -804,59 +529,43 @@
         let val = el.value.replace(/\D/g, '');
         let numericVal = parseFloat(val) / 100;
         if (isNaN(numericVal)) numericVal = 0;
-        
         state.values[index] = numericVal;
-        el.value = formatValue(numericVal);
-        
+        el.value = formatInput(numericVal);
         saveState();
         calculateAll();
     }
 
-    function formatValue(val) {
+    function formatInput(val) {
         if (val === 0) return '';
         return val.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
     function formatCurrency(val) {
         const config = CURRENCIES[state.currency];
-        return new Intl.NumberFormat(config.locale, {
-            style: 'currency',
-            currency: state.currency,
-        }).format(val);
+        return new Intl.NumberFormat(config.locale, { style: 'currency', currency: state.currency }).format(val);
     }
 
     function calculateAll() {
-        const activeValues = state.values.filter(v => v > 0);
+        const active = state.values.filter(v => v > 0);
         const total = state.values.reduce((a, b) => a + b, 0);
-        const count = activeValues.length;
-        const average = count > 0 ? total / count : 0;
-        const max = count > 0 ? Math.max(...activeValues) : 0;
-        const min = count > 0 ? Math.min(...activeValues) : 0;
+        const avg = active.length > 0 ? total / active.length : 0;
+        const max = active.length > 0 ? Math.max(...active) : 0;
+        const min = active.length > 0 ? Math.min(...active) : 0;
 
         document.getElementById('res-total').textContent = formatCurrency(total);
-        document.getElementById('res-avg').textContent = formatCurrency(average);
+        document.getElementById('res-avg').textContent = formatCurrency(avg);
         document.getElementById('res-max').textContent = formatCurrency(max);
         document.getElementById('res-min').textContent = formatCurrency(min);
-        document.getElementById('res-year').textContent = `Ano ${state.year}`;
-        document.getElementById('res-count').textContent = `${count} meses`;
+        document.getElementById('res-footer').textContent = `Ano ${state.year} • ${active.length} meses ativos`;
 
-        if (count > 0) {
-            const maxIdx = state.values.indexOf(max);
-            const minIdx = state.values.lastIndexOf(min);
-            document.getElementById('res-max-month').textContent = MONTHS[maxIdx].n;
-            document.getElementById('res-min-month').textContent = MONTHS[minIdx].n;
-        } else {
-            document.getElementById('res-max-month').textContent = '-';
-            document.getElementById('res-min-month').textContent = '-';
+        if (active.length > 0) {
+            document.getElementById('res-max-month').textContent = MONTHS[state.values.indexOf(max)].n;
+            document.getElementById('res-min-month').textContent = MONTHS[state.values.lastIndexOf(min)].n;
         }
 
         const limit = max || 1;
         state.values.forEach((v, i) => {
-            const pct = (v / limit) * 100;
-            const bar = document.getElementById(`bar-${i}`);
-            const valLabel = document.getElementById(`val-${i}`);
-            bar.style.width = `${v > 0 ? pct : 0}%`;
-            valLabel.textContent = v > 0 ? formatCurrency(v) : '-';
+            document.getElementById(`bar-${i}`).style.width = v > 0 ? `${(v / limit) * 100}%` : '0%';
         });
     }
 
@@ -866,85 +575,47 @@
         calculateAll();
     }
 
-    function saveState() {
-        localStorage.setItem('ganho_premium_state', JSON.stringify(state));
-    }
-
+    function saveState() { localStorage.setItem('ganho_premium_v2', JSON.stringify(state)); }
     function loadState() {
-        const saved = localStorage.getItem('ganho_premium_state');
-        if (saved) {
-            const parsed = JSON.parse(saved);
-            state = { ...state, ...parsed };
-        }
+        const saved = localStorage.getItem('ganho_premium_v2');
+        if (saved) state = JSON.parse(saved);
     }
 
     function clearData() {
-        if (confirm('Limpar todos os dados?')) {
+        if (confirm('Deseja apagar todos os valores inseridos?')) {
             state.values = Array(12).fill(0);
             saveState();
             renderGrid();
             calculateAll();
-            showStatus('✓ Dados limpos');
         }
     }
 
     function copySummary() {
         const total = state.values.reduce((a, b) => a + b, 0);
-        if (total === 0) {
-            showStatus('⚠ Insira valores');
-            return;
-        }
+        if (total === 0) return;
+        let text = `💰 GANHO ANUAL ${state.year}\n\n`;
+        MONTHS.forEach((m, i) => { if (state.values[i] > 0) text += `${m.n}: ${formatCurrency(state.values[i])}\n`; });
+        text += `\nTOTAL: ${formatCurrency(total)}`;
+        navigator.clipboard.writeText(text).then(() => showToast());
+    }
 
-        let text = `📊 GANHO ANUAL - ${state.year}\n`;
-        text += `Moeda: ${state.currency}\n\n`;
-        
-        MONTHS.forEach((m, i) => {
-            if (state.values[i] > 0) {
-                text += `${m.n}: ${formatCurrency(state.values[i])}\n`;
-            }
-        });
-
-        text += `\n━━━━━━━━━━━━━━━━━━━━━━━\n`;
-        text += `TOTAL: ${formatCurrency(total)}\n`;
-        text += `MÉDIA: ${formatCurrency(total / state.values.filter(v => v > 0).length)}`;
-
-        navigator.clipboard.writeText(text).then(() => {
-            showStatus('✓ Copiado!');
-        });
+    function showToast() {
+        const t = document.getElementById('toast');
+        t.style.display = 'block';
+        setTimeout(() => t.style.display = 'none', 2000);
     }
 
     function exportCSV() {
-        const total = state.values.reduce((a, b) => a + b, 0);
-        let csv = `Mês,Valor,Moeda\n`;
-        MONTHS.forEach((m, i) => {
-            csv += `${m.n},${state.values[i]},${state.currency}\n`;
-        });
-        csv += `\nTOTAL ANUAL,${total},${state.currency}`;
-
-        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = `ganho-anual-${state.year}.csv`;
-        link.click();
-        showStatus('✓ Exportado!');
-    }
-
-    function toggleTheme() {
-        state.theme = state.theme === 'dark' ? 'light' : 'dark';
-        saveState();
-        // Aqui você pode implementar mudança de tema se desejar
-    }
-
-    function showStatus(msg) {
-        const el = document.createElement('div');
-        el.className = 'status-msg';
-        el.textContent = msg;
-        document.body.appendChild(el);
-        setTimeout(() => el.remove(), 2000);
+        let csv = `Mes,Valor\n`;
+        MONTHS.forEach((m, i) => csv += `${m.n},${state.values[i]}\n`);
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `ganho-${state.year}.csv`;
+        a.click();
     }
 
     window.onload = init;
 </script>
-
 </body>
 </html>
