@@ -1,371 +1,406 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>ThermoFlow | Conversor de Temperatura Inteligente</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --hot: #FF4D4D;
+            --cold: #4D94FF;
+            --neutral: #6366f1;
+            --bg: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --text: #f8fafc;
+            --radius: 24px;
+        }
 
-<title>Conversor de Temperatura | UtiliWeb</title>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-<meta name="description" content="Converta Celsius e Fahrenheit de forma rápida e precisa online. Ferramenta gratuita para estudos, viagens, culinária e uso diário.">
-<meta name="keywords" content="temperatura, celsius, fahrenheit, conversor, utiliweb">
-<meta name="robots" content="index,follow">
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+            transition: background 0.5s ease;
+        }
 
-<style>
-:root{
-    --pad: clamp(10px, 2vw, 20px);
-    --radius: 18px;
-}
+        /* Fundo Dinâmico */
+        .bg-glow {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            filter: blur(100px);
+            opacity: 0.4;
+            transition: all 1s ease;
+        }
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
 
-html, body{
-    width:100%;
-    min-height:100dvh;
-    font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-    background:linear-gradient(135deg,#2ecc71,#27ae60);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:var(--pad);
-}
+        /* LADO ESQUERDO */
+        .main-panel {
+            padding: 48px;
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
 
-.wrapper{
-    width:100%;
-    max-width:1000px;
-    background:#fff;
-    border-radius:var(--radius);
-    box-shadow:0 20px 60px rgba(0,0,0,.3);
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    overflow:hidden;
-}
+        header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 36px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: linear-gradient(to right, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-.left-panel,
-.right-panel{
-    padding:clamp(16px, 3vw, 30px);
-}
+        .subtitle {
+            color: #94a3b8;
+            font-size: 16px;
+            margin-top: 4px;
+        }
 
-.left-panel{
-    border-right:1px solid #eee;
-}
+        .input-section {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
 
-header h1{
-    font-size:clamp(20px, 2.2vw, 26px);
-}
+        .input-wrapper {
+            position: relative;
+        }
 
-.subtitle{
-    font-size:clamp(12px, 1.4vw, 14px);
-    color:#777;
-    margin-top:5px;
-}
+        input {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px;
+            font-size: 32px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            color: white;
+            transition: all 0.3s;
+            text-align: center;
+        }
 
-.back-link{
-    display:inline-block;
-    margin-top:20px;
-    color:#27ae60;
-    text-decoration:none;
-    font-weight:600;
-}
+        input:focus {
+            outline: none;
+            border-color: var(--neutral);
+            background: rgba(15, 23, 42, 0.9);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+        }
 
-.back-link:hover{
-    text-decoration:underline;
-}
+        .scale-selector {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            background: rgba(15, 23, 42, 0.6);
+            padding: 6px;
+            border-radius: 14px;
+        }
 
-label{
-    display:block;
-    margin-top:25px;
-    font-weight:600;
-}
+        .scale-btn {
+            background: transparent;
+            border: none;
+            padding: 10px;
+            color: #94a3b8;
+            font-weight: 700;
+            font-size: 13px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
 
-input{
-    width:100%;
-    padding:12px;
-    margin-top:8px;
-    border-radius:10px;
-    border:2px solid #ddd;
-    font-size:14px;
-    outline:none;
-}
+        .scale-btn.active {
+            background: white;
+            color: var(--bg);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
 
-input:focus{
-    border-color:#27ae60;
-}
+        .result-display {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            min-height: 200px;
+            justify-content: center;
+            border: 1px dashed rgba(255, 255, 255, 0.1);
+        }
 
-.buttons{
-    display:flex;
-    gap:10px;
-    margin-top:15px;
-}
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 300px;
+            font-size: 18px;
+            opacity: 0.8;
+        }
 
-button{
-    flex:1;
-    padding:12px;
-    border-radius:10px;
-    border:none;
-    cursor:pointer;
-    font-weight:700;
-    min-height:44px;
-    touch-action:manipulation;
-    transition:.2s;
-}
+        .result-item.main {
+            font-size: 42px;
+            font-weight: 800;
+            font-family: 'Outfit', sans-serif;
+            opacity: 1;
+            color: var(--neutral);
+            text-align: center;
+            justify-content: center;
+        }
 
-button:hover{
-    opacity:.95;
-}
+        /* LADO DIREITO */
+        .side-panel {
+            background: rgba(15, 23, 42, 0.4);
+            padding: 40px;
+            border-left: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
 
-button:active{
-    transform:scale(.98);
-}
+        .side-panel h2 {
+            font-size: 18px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #94a3b8;
+        }
 
-.btn-primary{
-    background:#27ae60;
-    color:#fff;
-}
+        .ref-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
 
-.btn-secondary{
-    background:#fff;
-    border:2px solid #27ae60;
-    color:#27ae60;
-}
+        .ref-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 16px;
+            border-radius: 16px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: transform 0.2s;
+        }
 
-.result{
-    margin-top:20px;
-    padding:16px;
-    border-radius:12px;
-    background:#f8fff9;
-    border:1px solid #d7f5df;
-    font-size:clamp(18px, 2vw, 22px);
-    font-weight:700;
-    color:#27ae60;
-    text-align:center;
-    transition:.15s ease;
-    word-break:break-word;
-}
+        .ref-item:hover {
+            transform: translateX(5px);
+            background: rgba(255, 255, 255, 0.08);
+        }
 
-.right-panel{
-    background:#eafaf1;
-}
+        .ref-icon {
+            font-size: 24px;
+        }
 
-.right-panel h2{
-    margin-bottom:10px;
-}
+        .formula-card {
+            background: var(--neutral);
+            padding: 20px;
+            border-radius: 16px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: white;
+            box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.4);
+        }
 
-.right-panel h3{
-    margin-top:20px;
-    margin-bottom:10px;
-}
+        .formula-card strong {
+            display: block;
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
 
-.info-box{
-    line-height:1.9;
-}
+        @media (max-width: 850px) {
+            .container { grid-template-columns: 1fr; }
+            .side-panel { border-left: none; border-top: 1px solid rgba(255, 255, 255, 0.05); }
+        }
 
-.formula-box{
-    line-height:1.8;
-}
-
-.footer-note{
-    margin-top:25px;
-    font-size:13px;
-    color:#666;
-}
-
-@media (max-width:900px){
-
-    .wrapper{
-        grid-template-columns:1fr;
-    }
-
-    .left-panel{
-        border-right:none;
-        border-bottom:1px solid #eee;
-    }
-
-    .buttons{
-        flex-direction:column;
-    }
-}
-
-@media (max-width:480px){
-
-    html, body{
-        padding:10px;
-    }
-
-    input{
-        font-size:13px;
-        padding:10px;
-    }
-
-    button{
-        font-size:13px;
-        padding:11px;
-    }
-}
-</style>
+        @media (max-width: 480px) {
+            .main-panel { padding: 24px; }
+            header h1 { font-size: 28px; }
+            input { font-size: 24px; padding: 16px; }
+            .result-item.main { font-size: 32px; }
+        }
+    </style>
 </head>
-
 <body>
 
-<div class="wrapper">
+<div class="bg-glow" id="glow"></div>
 
-    <!-- ESQUERDA -->
-    <div class="left-panel">
-
+<div class="container">
+    <div class="main-panel">
         <header>
-            <h1>🌡️ Conversor de Temperatura</h1>
-            <p class="subtitle">Celsius ↔ Fahrenheit</p>
+            <h1>ThermoFlow</h1>
+            <p class="subtitle">Conversão de temperatura ultra-precisa</p>
         </header>
 
-        <a href="../../index.html" class="back-link">
-            ← Voltar
-        </a>
-
-        <label for="temp">
-            Temperatura
-        </label>
-
-        <input
-            id="temp"
-            type="number"
-            step="any"
-            placeholder="Digite o valor">
-
-        <div class="buttons">
-            <button class="btn-primary" onclick="toF()">
-                C → F
-            </button>
-
-            <button class="btn-secondary" onclick="toC()">
-                F → C
-            </button>
+        <div class="input-section">
+            <div class="scale-selector">
+                <button class="scale-btn active" onclick="setScale('C', this)">CELSIUS</button>
+                <button class="scale-btn" onclick="setScale('F', this)">FAHRENHEIT</button>
+                <button class="scale-btn" onclick="setScale('K', this)">KELVIN</button>
+                <button class="scale-btn" onclick="setScale('R', this)">RANKINE</button>
+            </div>
+            
+            <div class="input-wrapper">
+                <input type="number" id="tempInput" placeholder="0" oninput="convert()">
+            </div>
         </div>
 
-        <div class="result" id="result">
-            Resultado aparecerá aqui
+        <div class="result-display" id="resultBox">
+            <div class="result-item main" id="mainResult">0°C</div>
+            <div id="otherResults" style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                <!-- Outras escalas aparecerão aqui -->
+            </div>
         </div>
-
     </div>
 
-    <!-- DIREITA -->
-    <div class="right-panel">
+    <div class="side-panel">
+        <section>
+            <h2>Referências</h2>
+            <div class="ref-list">
+                <div class="ref-item">
+                    <span class="ref-icon">🧊</span>
+                    <div>
+                        <strong>Congelamento</strong>
+                        <div style="color: #94a3b8; font-size: 12px;">0°C | 32°F | 273.15K</div>
+                    </div>
+                </div>
+                <div class="ref-item">
+                    <span class="ref-icon">🏠</span>
+                    <div>
+                        <strong>Ambiente</strong>
+                        <div style="color: #94a3b8; font-size: 12px;">25°C | 77°F | 298.15K</div>
+                    </div>
+                </div>
+                <div class="ref-item">
+                    <span class="ref-icon">🔥</span>
+                    <div>
+                        <strong>Ebulição</strong>
+                        <div style="color: #94a3b8; font-size: 12px;">100°C | 212°F | 373.15K</div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-        <h2>Como funciona</h2>
-
-        <p>
-            Converta temperaturas entre Celsius e Fahrenheit de forma rápida e precisa.
-            Ideal para estudos, viagens, culinária e uso diário.
-        </p>
-
-        <h3>Referências rápidas</h3>
-
-        <div class="info-box">
-            ❄️ 0°C = 32°F (Congelamento da água)<br>
-            🌤️ 25°C = 77°F (Temperatura ambiente)<br>
-            🌡️ 37°C = 98.6°F (Temperatura corporal média)<br>
-            🔥 100°C = 212°F (Ebulição da água)
-        </div>
-
-        <h3>Fórmulas utilizadas</h3>
-
-        <div class="formula-box">
-            Celsius → Fahrenheit<br>
-            <strong>(°C × 9 ÷ 5) + 32</strong>
-
-            <br><br>
-
-            Fahrenheit → Celsius<br>
-            <strong>(°F − 32) × 5 ÷ 9</strong>
-        </div>
-
-        <div class="footer-note">
-            Dica: pressione Enter após digitar um valor para converter rapidamente.
-        </div>
-
+        <section>
+            <h2>Fórmulas</h2>
+            <div class="formula-card" id="formulaBox">
+                <strong>Celsius para Fahrenheit</strong>
+                (°C × 9/5) + 32
+            </div>
+        </section>
     </div>
-
 </div>
 
 <script>
-const tempInput = document.getElementById("temp");
-const result = document.getElementById("result");
+    let currentScale = 'C';
+    const input = document.getElementById('tempInput');
+    const glow = document.getElementById('glow');
+    const formulaBox = document.getElementById('formulaBox');
 
-function animateResult() {
+    const formulas = {
+        C: "<strong>Celsius</strong> Escala padrão baseada no ponto de congelamento da água.",
+        F: "<strong>Fahrenheit</strong> Escala comum em países de língua inglesa.",
+        K: "<strong>Kelvin</strong> Escala absoluta usada na ciência (0K = Zero Absoluto).",
+        R: "<strong>Rankine</strong> Escala termodinâmica absoluta baseada em Fahrenheit."
+    };
 
-    result.style.transform = "scale(1.03)";
-
-    setTimeout(() => {
-        result.style.transform = "scale(1)";
-    }, 150);
-}
-
-function showError() {
-    result.textContent = "Digite uma temperatura válida";
-}
-
-function toF() {
-
-    const c = parseFloat(tempInput.value);
-
-    if (isNaN(c)) {
-        showError();
-        return;
+    function setScale(scale, btn) {
+        currentScale = scale;
+        document.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        formulaBox.innerHTML = formulas[scale];
+        convert();
     }
 
-    const f = (c * 9 / 5) + 32;
+    function convert() {
+        const val = parseFloat(input.value);
+        if (isNaN(val)) {
+            document.getElementById('mainResult').textContent = '--';
+            document.getElementById('otherResults').innerHTML = '';
+            updateTheme(0);
+            return;
+        }
 
-    result.textContent =
-        `${c}°C = ${f.toFixed(2)}°F`;
+        let c, f, k, r;
 
-    animateResult();
-}
+        // Converter tudo para Celsius primeiro
+        if (currentScale === 'C') c = val;
+        else if (currentScale === 'F') c = (val - 32) * 5/9;
+        else if (currentScale === 'K') c = val - 273.15;
+        else if (currentScale === 'R') c = (val - 491.67) * 5/9;
 
-function toC() {
+        // Converter de Celsius para outros
+        f = (c * 9/5) + 32;
+        k = c + 273.15;
+        r = (c + 273.15) * 9/5;
 
-    const f = parseFloat(tempInput.value);
-
-    if (isNaN(f)) {
-        showError();
-        return;
+        displayResults(c, f, k, r);
+        updateTheme(c);
     }
 
-    const c = (f - 32) * 5 / 9;
+    function displayResults(c, f, k, r) {
+        const main = document.getElementById('mainResult');
+        const others = document.getElementById('otherResults');
+        
+        const format = (v, s) => `<div class="result-item"><span>${s}</span> <strong>${v.toFixed(2)}°</strong></div>`;
 
-    result.textContent =
-        `${f}°F = ${c.toFixed(2)}°C`;
-
-    animateResult();
-}
-
-tempInput.addEventListener("keydown", function(e){
-
-    if(e.key === "Enter"){
-        toF();
+        if (currentScale === 'C') {
+            main.textContent = `${c.toFixed(1)}°C`;
+            others.innerHTML = format(f, 'Fahrenheit') + format(k, 'Kelvin') + format(r, 'Rankine');
+        } else if (currentScale === 'F') {
+            main.textContent = `${f.toFixed(1)}°F`;
+            others.innerHTML = format(c, 'Celsius') + format(k, 'Kelvin') + format(r, 'Rankine');
+        } else if (currentScale === 'K') {
+            main.textContent = `${k.toFixed(1)}K`;
+            others.innerHTML = format(c, 'Celsius') + format(f, 'Fahrenheit') + format(r, 'Rankine');
+        } else {
+            main.textContent = `${r.toFixed(1)}°R`;
+            others.innerHTML = format(c, 'Celsius') + format(f, 'Fahrenheit') + format(k, 'Kelvin');
+        }
     }
 
-});
+    function updateTheme(c) {
+        let color;
+        if (c <= 0) color = 'rgba(77, 148, 255, 0.8)'; // Frio
+        else if (c >= 35) color = 'rgba(255, 77, 77, 0.8)'; // Quente
+        else color = 'rgba(99, 102, 241, 0.8)'; // Neutro
 
-tempInput.addEventListener("input", function(){
-
-    if(this.value === ""){
-        result.textContent = "Resultado aparecerá aqui";
+        glow.style.background = color;
+        document.documentElement.style.setProperty('--neutral', color);
     }
 
-});
-</script>
-
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"WebApplication",
-  "name":"Conversor de Temperatura",
-  "applicationCategory":"UtilityApplication",
-  "operatingSystem":"Any",
-  "description":"Conversor online de Celsius para Fahrenheit e Fahrenheit para Celsius."
-}
+    // Inicializar
+    updateTheme(25);
 </script>
 
 </body>
