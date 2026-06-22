@@ -444,7 +444,129 @@
             .input-row, .input-row-3 { grid-template-columns: 1fr; gap: 8px; }
             .metrics-grid { grid-template-columns: 1fr; }
         }
-    </style>
+    
+        /* ===== NOVO DESIGN PROFISSIONAL ===== */
+        html, body {
+            background: radial-gradient(circle at top, #1b3a5d, #08121f);
+            padding: 0;
+        }
+
+        .wrapper {
+            max-width: 1280px;
+            min-height: 92vh;
+            border-radius: 22px;
+            box-shadow: 0 30px 80px rgba(0,0,0,.45);
+            background: #ffffff;
+        }
+
+        .left-panel {
+            background: linear-gradient(180deg,#ffffff,#f7fafc);
+            padding: 38px;
+        }
+
+        .right-panel {
+            background: linear-gradient(145deg,#0f2742,#163b63);
+            padding: 38px;
+        }
+
+        h1 {
+            font-size: 30px;
+            color:#102a43;
+            letter-spacing:-.5px;
+        }
+
+        .subtitle {
+            color:#627d98;
+        }
+
+        .info-box {
+            background:#edf6ff;
+            border-left:5px solid #1473e6;
+            color:#334e68;
+        }
+
+        .modo-btn {
+            background:#f1f5f9;
+            border:1px solid #d9e2ec;
+            color:#486581;
+        }
+
+        .modo-btn.ativo {
+            background:linear-gradient(135deg,#1473e6,#0b5ed7);
+            box-shadow:0 8px 20px rgba(20,115,230,.3);
+        }
+
+        .section-title {
+            color:#102a43;
+            border-color:#1473e6;
+        }
+
+        input[type="number"], select {
+            border:1px solid #bcccdc;
+            background:#fff;
+            border-radius:10px;
+            padding:13px;
+        }
+
+        input[type="number"]:focus, select:focus {
+            border-color:#1473e6;
+            box-shadow:0 0 0 3px rgba(20,115,230,.12);
+        }
+
+        .btn-calcular {
+            background:linear-gradient(135deg,#1473e6,#0b5ed7);
+            box-shadow:0 10px 25px rgba(20,115,230,.35);
+        }
+
+        .resultado-header,
+        .faixas-titulo {
+            color:#90cdf4;
+            border-color:#90cdf4;
+        }
+
+        .metric-card {
+            border-radius:14px;
+            box-shadow:0 8px 20px rgba(0,0,0,.08);
+        }
+
+        .metric-value {
+            color:#1473e6;
+        }
+
+        .metric-card.destaque {
+            border-color:#1473e6;
+        }
+
+        .breakdown-item {
+            border-radius:12px;
+        }
+
+        .btn-copiar {
+            color:#1473e6;
+            border-color:#1473e6;
+        }
+
+        @media(max-width:480px){
+            html,body{
+                padding:0;
+            }
+
+            .wrapper{
+                width:100%;
+                min-height:100vh;
+                border-radius:0;
+            }
+
+            .left-panel,.right-panel{
+                padding:18px;
+            }
+
+            h1{
+                font-size:22px;
+            }
+        }
+
+</style>
 </head>
 <body>
 <div class="wrapper">
