@@ -4,197 +4,442 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Inverter Texto | UtiliWeb</title>
-<meta name="description" content="Inverta textos, palavras e frases online gratuitamente.">
-<meta name="robots" content="index, follow">
+<meta name="description" content="Inverta letras, palavras e linhas de textos online. Ferramenta profissional com suporte a emojis e estatísticas.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
+/* ─── RESET & BASE ─────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  margin: 0; padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
+
+:root {
+  --brand:        #6366f1;
+  --brand-dark:   #4f46e5;
+  --brand-light:  #e0e7ff;
+  --brand-xlight: #f5f3ff;
+  --success:      #10b981;
+  --text-primary: #0f172a;
+  --text-secondary:#475569;
+  --text-muted:   #94a3b8;
+  --border:       #e2e8f0;
+  --surface:      #ffffff;
+  --surface-alt:  #f8fafc;
+  --shadow-sm:    0 1px 3px rgba(0,0,0,.08);
+  --shadow-md:    0 4px 16px rgba(0,0,0,.08);
+  --shadow-lg:    0 20px 60px rgba(0,0,0,.14);
+  --radius-sm:    8px;
+  --radius-md:    12px;
+  --radius-lg:    20px;
+  --transition:   .18s ease;
+}
+
 html, body {
-    width: 100%;
-    min-height: 100vh;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 16px;
-    background: linear-gradient(135deg, #2ecc71, #27ae60);
+  width: 100%; min-height: 100vh;
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: linear-gradient(135deg, #312e81 0%, #4338ca 40%, #6366f1 100%);
+  display: flex; justify-content: center; align-items: flex-start;
+  padding: 24px 16px;
+  color: var(--text-primary);
+  line-height: 1.5;
 }
-/* CONTAINER */
+
+/* ─── WRAPPER ──────────────────────────────────────────────────────────────── */
 .wrapper {
-    width: 100%;
-    max-width: 1000px;
-    background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    overflow: hidden;
+  width: 100%; max-width: 1100px;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  display: flex; flex-direction: column;
+  overflow: hidden;
 }
-/* PAINÉIS */
-.left, .right {
-    padding: 28px;
+
+/* ─── HEADER ───────────────────────────────────────────────────────────────── */
+.header-bar {
+  padding: 24px 32px;
+  border-bottom: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center;
 }
-/* TÍTULO */
-h1 {
-    font-size: 22px;
-    margin-bottom: 6px;
+
+.back-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 13px; font-weight: 600;
+  color: var(--brand); text-decoration: none;
+  transition: color var(--transition);
 }
-p {
-    font-size: 12px;
-    color: #777;
+.back-link:hover { color: var(--brand-dark); }
+
+.brand-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--brand-light); color: var(--brand-dark);
+  font-size: 11px; font-weight: 700; letter-spacing: .06em;
+  text-transform: uppercase; padding: 4px 10px;
+  border-radius: 100px;
 }
-/* TEXTAREA */
+
+/* ─── MAIN CONTENT ─────────────────────────────────────────────────────────── */
+.main-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  min-height: 500px;
+}
+
+.panel { padding: 32px; }
+.panel-left { border-right: 1px solid var(--border); }
+.panel-right { background: var(--surface-alt); }
+
+.panel-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 16px;
+}
+
+.panel-title {
+  font-size: 14px; font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase; letter-spacing: .05em;
+  display: flex; align-items: center; gap: 8px;
+}
+.panel-title svg { color: var(--brand); }
+
+/* ─── CONTROLS ─────────────────────────────────────────────────────────────── */
+.toolbar {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-bottom: 20px;
+  padding: 8px;
+  background: var(--surface-alt);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+}
+
+.tool-btn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  font-size: 12px; font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.tool-btn:hover { border-color: var(--brand); color: var(--brand); }
+.tool-btn.active { background: var(--brand); color: #fff; border-color: var(--brand); }
+
+/* ─── TEXTAREAS ────────────────────────────────────────────────────────────── */
+.editor-wrap { position: relative; height: 320px; }
+
 textarea {
-    width: 100%;
-    min-height: 140px;
-    padding: 12px;
-    border-radius: 10px;
-    border: 1px solid #ddd;
-    font-size: 14px;
-    margin-top: 10px;
-    resize: vertical;
+  width: 100%; height: 100%;
+  padding: 16px;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--border);
+  font-size: 15px; font-family: inherit;
+  color: var(--text-primary);
+  resize: none;
+  transition: all var(--transition);
+  background: var(--surface);
+  line-height: 1.6;
 }
+
 textarea:focus {
-    outline: none;
-    border-color: #27ae60;
+  outline: none; border-color: var(--brand);
+  box-shadow: 0 0 0 4px var(--brand-light);
 }
-/* BOTÕES */
-.btns {
-    display: flex;
-    gap: 10px;
-    margin-top: 14px;
-    flex-wrap: wrap;
+
+.output-box {
+  width: 100%; height: 100%;
+  padding: 16px;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--border);
+  background: var(--surface);
+  font-size: 15px; color: var(--text-primary);
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: 1.6;
 }
-button {
-    flex: 1;
-    padding: 12px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: 700;
-    font-size: 12px;
+
+/* ─── STATS ────────────────────────────────────────────────────────────────── */
+.stats-bar {
+  display: flex; gap: 16px;
+  margin-top: 12px;
 }
-.primary {
-    background: #27ae60;
-    color: #fff;
+
+.stat-item {
+  font-size: 11px; font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: .02em;
 }
-.secondary {
-    background: #f4f4f4;
-    color: #333;
+.stat-item span { color: var(--text-secondary); }
+
+/* ─── ACTIONS ──────────────────────────────────────────────────────────────── */
+.action-row {
+  display: flex; gap: 10px;
+  margin-top: 24px;
 }
-.copy-msg {
-    margin-top: 10px;
-    color: #27ae60;
-    font-size: 14px;
-    font-weight: 600;
-    display: none;
+
+.btn {
+  flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 12px 20px;
+  border-radius: var(--radius-md);
+  border: none; cursor: pointer;
+  font-size: 14px; font-weight: 700;
+  transition: all var(--transition);
 }
-/* RESULTADO */
-.result-box {
-    background: #f4f4f4;
-    padding: 14px;
-    border-radius: 10px;
-    min-height: 140px;
-    font-size: 14px;
-    word-break: break-word;
-    white-space: pre-wrap;
+
+.btn-primary {
+  background: var(--brand); color: #fff;
+  box-shadow: 0 4px 12px rgba(99,102,241,.25);
 }
-/* RESPONSIVO */
-@media (max-width: 768px) {
-    .wrapper {
-        grid-template-columns: 1fr;
-    }
-    html, body {
-        padding: 12px;
-    }
-    .left, .right {
-        padding: 18px;
-    }
+.btn-primary:hover { background: var(--brand-dark); transform: translateY(-1px); }
+
+.btn-secondary {
+  background: var(--surface); color: var(--text-secondary);
+  border: 1.5px solid var(--border);
+}
+.btn-secondary:hover { background: var(--surface-alt); border-color: var(--brand); color: var(--brand); }
+
+/* ─── TOAST ────────────────────────────────────────────────────────────────── */
+.toast-wrap {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+  z-index: 999; pointer-events: none;
+}
+.toast {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 18px; border-radius: 100px;
+  font-size: 13px; font-weight: 600;
+  background: var(--text-primary); color: #fff;
+  box-shadow: 0 8px 24px rgba(0,0,0,.2);
+  opacity: 0; transform: translateY(10px);
+  transition: all .22s ease;
+}
+.toast.visible { opacity: 1; transform: translateY(0); }
+.toast.success { background: var(--success); }
+
+/* ─── RESPONSIVE ───────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .main-grid { grid-template-columns: 1fr; }
+  .panel-left { border-right: none; border-bottom: 1px solid var(--border); }
+  .wrapper { border-radius: var(--radius-md); }
+}
+
+@media (max-width: 520px) {
+  .header-bar { padding: 16px 20px; flex-direction: column; gap: 12px; align-items: flex-start; }
+  .panel { padding: 20px 16px; }
+  .action-row { flex-direction: column; }
+  .editor-wrap { height: 240px; }
 }
 </style>
 </head>
+
 <body>
+
 <div class="wrapper">
-    <!-- INPUT -->
-    <div class="left">
-        <h1>🔁 Inverter Texto</h1>
-        <p>Inverta letras, palavras ou frases em tempo real</p>
-        <textarea id="text" placeholder="Digite seu texto aqui..."></textarea>
-        <div class="btns">
-            <button class="primary" onclick="inverter()">Inverter</button>
-            <button class="secondary" onclick="copiar()">Copiar</button>
-            <button class="secondary" onclick="limpar()">Limpar</button>
+  
+  <!-- HEADER -->
+  <header class="header-bar">
+    <a href="../../index.html" class="back-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Voltar
+    </a>
+    <div style="text-align: center">
+      <h1 style="font-size: 20px; font-weight: 800; letter-spacing: -0.5px">Inverter Texto</h1>
+    </div>
+    <div class="brand-badge">UtiliWeb</div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="main-grid">
+    
+    <!-- LEFT: INPUT -->
+    <div class="panel panel-left">
+      <div class="panel-header">
+        <div class="panel-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Texto de Entrada
         </div>
-        <div class="copy-msg" id="copyMsg">✓ Texto copiado com sucesso</div>
+      </div>
+
+      <div class="toolbar" role="group" aria-label="Modos de inversão">
+        <button class="tool-btn active" data-mode="chars" title="Inverter cada letra individualmente">Inverter Letras</button>
+        <button class="tool-btn" data-mode="words" title="Inverter a ordem das palavras">Palavras</button>
+        <button class="tool-btn" data-mode="lines" title="Inverter a ordem das linhas">Linhas</button>
+      </div>
+
+      <div class="editor-wrap">
+        <textarea id="inputArea" placeholder="Digite ou cole seu texto aqui..." spellcheck="false"></textarea>
+      </div>
+
+      <div class="stats-bar">
+        <div class="stat-item">Caracteres: <span id="statChars">0</span></div>
+        <div class="stat-item">Palavras: <span id="statWords">0</span></div>
+        <div class="stat-item">Linhas: <span id="statLines">0</span></div>
+      </div>
+
+      <div class="action-row">
+        <button class="btn btn-secondary" id="btnClear">Limpar</button>
+        <button class="btn btn-secondary" id="btnExample">Exemplo</button>
+      </div>
     </div>
-    <!-- RESULTADO -->
-    <div class="right">
-        <h2>Resultado</h2>
-        <div id="resultado" class="result-box" aria-live="polite">---</div>
+
+    <!-- RIGHT: OUTPUT -->
+    <div class="panel panel-right">
+      <div class="panel-header">
+        <div class="panel-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/><polyline points="16 16 12 12 8 16"/></svg>
+          Resultado Invertido
+        </div>
+      </div>
+
+      <div class="toolbar" role="group" aria-label="Transformações extras">
+        <button class="tool-btn" id="btnUpper">MAIÚSCULAS</button>
+        <button class="tool-btn" id="btnLower">minúsculas</button>
+        <button class="tool-btn" id="btnCapital">Capitalizar</button>
+      </div>
+
+      <div class="editor-wrap">
+        <div class="output-box" id="outputArea">O resultado aparecerá aqui...</div>
+      </div>
+
+      <div class="action-row">
+        <button class="btn btn-primary" id="btnCopy">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Copiar Resultado
+        </button>
+      </div>
+
     </div>
+
+  </main>
+
 </div>
+
+<!-- TOAST -->
+<div class="toast-wrap">
+  <div class="toast" id="toast"></div>
+</div>
+
 <script>
+/* ─── STATE ─────────────────────────────────────────────────────────────── */
+let currentMode = "chars";
+const inputArea = document.getElementById("inputArea");
+const outputArea = document.getElementById("outputArea");
+const toast = document.getElementById("toast");
 
-const text = document.getElementById("text");
-const resultado = document.getElementById("resultado");
-const copyMsg = document.getElementById("copyMsg");
+/* ─── HELPERS ───────────────────────────────────────────────────────────── */
+const segmenter = (typeof Intl !== "undefined" && Intl.Segmenter)
+  ? new Intl.Segmenter("pt-BR", { granularity: "grapheme" })
+  : null;
 
-// Reversor com suporte a grapheme clusters (Unicode), pra não quebrar
-// emojis e outros caracteres formados por mais de uma unidade UTF-16
-const segmentador = (typeof Intl !== "undefined" && Intl.Segmenter)
-    ? new Intl.Segmenter("pt-BR", { granularity: "grapheme" })
-    : null;
-
-function reverseTexto(str) {
-
-    if (segmentador) {
-        return Array.from(segmentador.segment(str), s => s.segment)
-            .reverse()
-            .join("");
-    }
-
-    // fallback: pelo menos respeita pares substitutos (emojis), via spread
-    return Array.from(str).reverse().join("");
+function reverseString(str) {
+  if (segmenter) {
+    return Array.from(segmenter.segment(str), s => s.segment).reverse().join("");
+  }
+  return Array.from(str).reverse().join("");
 }
 
-function inverter() {
-    const value = text.value || "";
-    resultado.textContent = reverseTexto(value) || "---";
+function showToast(text, type = "success") {
+  toast.textContent = text;
+  toast.className = `toast ${type} visible`;
+  setTimeout(() => toast.classList.remove("visible"), 2500);
 }
 
-async function copiar() {
+/* ─── CORE LOGIC ────────────────────────────────────────────────────────── */
+function processText() {
+  const text = inputArea.value;
+  if (!text) {
+    outputArea.textContent = "O resultado aparecerá aqui...";
+    updateStats(0, 0, 0);
+    return;
+  }
 
-    const texto = resultado.textContent.trim();
+  let result = "";
 
-    if (!texto || texto === "---") return;
+  if (currentMode === "chars") {
+    result = reverseString(text);
+  } else if (currentMode === "words") {
+    // Inverte a ordem das palavras em cada linha mantendo a estrutura de linhas
+    result = text.split("\n").map(line => {
+      return line.split(/\s+/).reverse().join(" ");
+    }).join("\n");
+  } else if (currentMode === "lines") {
+    result = text.split("\n").reverse().join("\n");
+  }
 
-    try {
-
-        await navigator.clipboard.writeText(texto);
-
-        copyMsg.style.display = "block";
-
-        setTimeout(() => {
-            copyMsg.style.display = "none";
-        }, 2000);
-
-    } catch (error) {
-
-        alert("Não foi possível copiar o texto.");
-    }
+  outputArea.textContent = result;
+  
+  // Update stats
+  const chars = text.length;
+  const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+  const lines = text ? text.split("\n").length : 0;
+  updateStats(chars, words, lines);
 }
 
-function limpar() {
-    text.value = "";
-    resultado.textContent = "---";
+function updateStats(c, w, l) {
+  document.getElementById("statChars").textContent = c;
+  document.getElementById("statWords").textContent = w;
+  document.getElementById("statLines").textContent = l;
 }
 
-/* UX extra: auto preview */
-text.addEventListener("input", inverter);
+/* ─── EVENTS ────────────────────────────────────────────────────────────── */
+inputArea.addEventListener("input", processText);
+
+// Mode switching
+document.querySelectorAll('.tool-btn[data-mode]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tool-btn[data-mode]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentMode = btn.dataset.mode;
+    processText();
+  });
+});
+
+// Extra Transforms
+document.getElementById("btnUpper").addEventListener("click", () => {
+  inputArea.value = inputArea.value.toUpperCase();
+  processText();
+});
+
+document.getElementById("btnLower").addEventListener("click", () => {
+  inputArea.value = inputArea.value.toLowerCase();
+  processText();
+});
+
+document.getElementById("btnCapital").addEventListener("click", () => {
+  inputArea.value = inputArea.value.split(/\s+/).map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(" ");
+  processText();
+});
+
+// Actions
+document.getElementById("btnClear").addEventListener("click", () => {
+  inputArea.value = "";
+  processText();
+  showToast("Texto limpo!");
+});
+
+document.getElementById("btnExample").addEventListener("click", () => {
+  inputArea.value = "UtiliWeb: Ferramentas úteis para o seu dia a dia! 🚀\nInverta este texto e veja a mágica.";
+  processText();
+});
+
+document.getElementById("btnCopy").addEventListener("click", async () => {
+  const text = outputArea.textContent;
+  if (text === "O resultado aparecerá aqui...") return;
+  
+  try {
+    await navigator.clipboard.writeText(text);
+    showToast("Copiado com sucesso!");
+  } catch (err) {
+    showToast("Erro ao copiar", "error");
+  }
+});
+
+// Init
+processText();
 </script>
+
 </body>
 </html>
