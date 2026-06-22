@@ -12,6 +12,7 @@
     
     <style>
         :root {
+            --header-height: 70px;
             --primary: #1f7a4d;
             --primary-light: #27ae60;
             --primary-dark: #145a3a;
@@ -48,11 +49,94 @@
             background: linear-gradient(135deg, var(--bg-dark) 0%, #1a2332 100%);
             background-attachment: fixed;
             display: flex;
+            flex-direction: column;
+            min-height: 100dvh;
+            color: var(--text-primary);
+        }
+
+        /* Navbar Premium */
+        .navbar {
+            height: var(--header-height);
+            background: rgba(15, 20, 25, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: white;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 20px;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-logo .logo-box {
+            background: var(--primary-light);
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-link:hover {
+            color: var(--primary-light);
+        }
+
+        .nav-link.active {
+            color: white;
+        }
+
+        .nav-btn {
+            background: var(--primary-light);
+            color: white;
+            padding: 8px 18px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .nav-btn:hover {
+            background: var(--primary);
+            transform: translateY(-1px);
+        }
+
+        main {
+            flex: 1;
+            display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100dvh;
-            padding: 20px;
-            color: var(--text-primary);
+            padding: calc(var(--header-height) + 40px) 20px 40px 20px;
         }
 
         .container {
@@ -480,6 +564,15 @@
         }
 
         @media (max-width: 768px) {
+            .navbar {
+                padding: 0 20px;
+            }
+            .nav-links {
+                display: none;
+            }
+            main {
+                padding-top: calc(var(--header-height) + 20px);
+            }
             .panel-header h1 {
                 font-size: 22px;
             }
@@ -571,6 +664,20 @@
 </head>
 <body>
 
+<nav class="navbar">
+    <a href="#" class="nav-logo">
+        <div class="logo-box">💴</div>
+        <span>Zangyō<span style="color: var(--primary-light)">PRO</span></span>
+    </a>
+    <div class="nav-links">
+        <a href="#" class="nav-link active">Simulador</a>
+        <a href="#" class="nav-link">Histórico</a>
+        <a href="#" class="nav-link">Suporte</a>
+        <a href="#" class="nav-btn">Upgrade para Premium</a>
+    </div>
+</nav>
+
+<main>
 <div class="container">
     <!-- Painel de Input -->
     <div class="panel">
@@ -824,6 +931,7 @@
         </div>
     </div>
 </div>
+</main>
 
 <script>
     const inputs = {
