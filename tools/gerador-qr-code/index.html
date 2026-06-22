@@ -464,18 +464,21 @@ select {
 .tip-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
 
 .tip-list li {
-  display: flex; align-items: flex-start; gap: 8px;
+  display: block;
+  position: relative;
+  padding-left: 16px;
   font-size: 13px; color: var(--text-secondary);
-  line-height: 1.5;
+  line-height: 1.6;
+  margin-bottom: 8px;
 }
 
 .tip-list li::before {
   content: "";
-  display: block; flex-shrink: 0;
+  position: absolute;
+  left: 0; top: 8px;
   width: 6px; height: 6px;
   background: var(--brand);
   border-radius: 50%;
-  margin-top: 7px;
 }
 
 /* ─── RESPONSIVE ───────────────────────────────────────────────────────────── */
@@ -719,8 +722,8 @@ select {
         <li>Sempre teste o QR Code escaneando antes de distribuir ou imprimir.</li>
         <li>Para impressão, prefira tamanho <strong>Grande</strong> ou <strong>Extra grande</strong> e correção <strong>Q</strong> ou <strong>H</strong>.</li>
         <li>Mantenha bom contraste entre as cores dos módulos e do fundo para garantir leitura.</li>
-        <li>QR Codes com cores personalizadas podem ser menos legíveis em câmeras antigas — prefira preto sobre branco em casos críticos.</li>
-        <li>O processamento é feito inteiramente no seu navegador — nenhum dado é enviado a servidores.</li>
+        <li>Cores personalizadas podem ser menos legíveis em câmeras antigas — prefira preto sobre branco em casos críticos.</li>
+        <li>O processamento é feito no seu navegador — nenhum dado é enviado a servidores.</li>
       </ul>
     </div>
 
