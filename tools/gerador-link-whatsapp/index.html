@@ -3,499 +3,411 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Link Zap Pro | Gerador de Link Profissional</title>
 
-<title>Gerador de Link WhatsApp | UtiliWeb</title>
-
-<meta name="description" content="Crie links de WhatsApp com mensagem automática de forma rápida e gratuita.">
-<meta name="keywords" content="whatsapp link, wa.me, gerador whatsapp, utiliweb">
+<!-- Google Fonts: Inter -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
-:root{
-    --pad: clamp(10px, 2vw, 20px);
-    --radius: 18px;
+:root {
+    --primary: #0f172a;
+    --whatsapp: #25d366;
+    --whatsapp-dark: #128c7e;
+    --bg: #f8fafc;
+    --card-bg: #ffffff;
+    --border: #e2e8f0;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --radius: 16px;
+    --shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
 }
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
 }
 
-html, body{
-    width:100%;
-    min-height:100dvh;
-    font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial;
-    background:linear-gradient(135deg,#2ecc71,#27ae60);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:var(--pad);
+body {
+    background-color: var(--bg);
+    color: var(--text-main);
+    min-height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
 }
 
-/* WRAPPER */
-.wrapper{
-    width:100%;
-    max-width:1000px;
-    background:#fff;
-    border-radius:var(--radius);
-    box-shadow:0 20px 60px rgba(0,0,0,.3);
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    overflow:hidden;
+.container {
+    width: 100%;
+    max-width: 1000px;
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    overflow: hidden;
 }
 
-/* PAINÉIS */
-.left-panel,
-.right-panel{
-    padding:clamp(16px, 3vw, 30px);
+/* Painel de Configuração */
+.main-panel {
+    padding: 40px;
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    border-right: 1px solid var(--border);
 }
 
-/* ESQUERDA */
-.left-panel{
-    border-right:1px solid #eee;
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
-/* HEADER */
-header h1{
-    font-size:clamp(20px, 2.2vw, 26px);
+.brand-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--whatsapp);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
 }
 
-.subtitle{
-    font-size:clamp(12px, 1.4vw, 14px);
-    color:#777;
+h1 {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
 }
 
-a{
-    color: #27ae60;
-    text-decoration: none;
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+label {
     font-size: 13px;
     font-weight: 600;
+    color: var(--text-main);
 }
 
-a:hover{
-    text-decoration: underline;
+.input-field {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 14px;
+    color: var(--text-main);
+    background: #fff;
+    transition: all 0.2s;
 }
 
-/* INPUTS */
-label{
+.input-field:focus {
+    outline: none;
+    border-color: var(--whatsapp);
+    box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.1);
+}
+
+textarea.input-field {
+    height: 100px;
+    resize: none;
+}
+
+.btn-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.btn {
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-primary { background: var(--whatsapp); color: white; }
+.btn-primary:hover { background: var(--whatsapp-dark); }
+.btn-outline { background: white; color: var(--text-muted); border: 1px solid var(--border); }
+.btn-outline:hover { background: #f8fafc; color: var(--text-main); }
+
+/* Resultado */
+.result-section {
+    background: #f1f5f9;
+    padding: 24px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.result-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.result-link {
+    font-family: monospace;
+    font-size: 13px;
+    background: white;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    color: var(--text-main);
+    word-break: break-all;
+    min-height: 42px;
+}
+
+/* Painel Lateral (Preview) */
+.side-panel {
+    background: #fcfcfd;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.section-title {
     font-size: 12px;
     font-weight: 700;
-    display: block;
-    margin-top: 14px;
-    color: #444;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-input, textarea{
-    width:100%;
-    padding:12px;
-    margin-top:6px;
-    border-radius:10px;
-    border:2px solid #ddd;
-    font-size:14px;
-    outline:none;
-    font-family: inherit;
-    color: #1a1a1a;
+.section-title::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--border);
 }
 
-textarea{
-    height:120px;
-    resize:none;
+/* Mockup de Chat */
+.chat-mockup {
+    background: #e5ddd5; /* Cor de fundo clássica do WhatsApp */
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    height: 300px;
 }
 
-input:focus,
-textarea:focus{
-    border-color:#27ae60;
+.chat-header {
+    background: #075e54;
+    padding: 12px 16px;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-input.invalido{
-    border-color: #e74c3c;
+.avatar {
+    width: 32px;
+    height: 32px;
+    background: #ccc;
+    border-radius: 50%;
 }
 
-.dica{
-    font-size: 11px;
-    color: #999;
-    margin-top: 4px;
+.chat-body {
+    flex: 1;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
 }
 
-.erro-texto{
-    font-size: 12px;
-    color: #e74c3c;
-    margin-top: 4px;
-    min-height: 14px;
+.message-bubble {
+    background: #dcf8c6;
+    padding: 10px 14px;
+    border-radius: 10px 0 10px 10px;
+    font-size: 13px;
+    max-width: 85%;
+    align-self: flex-end;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+    position: relative;
+    word-break: break-word;
 }
 
-.contador{
-    font-size: 11px;
+.message-bubble.empty {
+    background: #fff;
+    color: var(--text-muted);
+    font-style: italic;
+    align-self: center;
+    border-radius: 10px;
+}
+
+.message-time {
+    font-size: 10px;
     color: #999;
     text-align: right;
     margin-top: 4px;
 }
 
-/* BOTÕES */
-.buttons{
-    display:flex;
-    gap:10px;
-    margin-top:15px;
-}
-
-button{
-    flex:1;
-    padding:12px;
-    border-radius:10px;
-    border:none;
-    cursor:pointer;
-    font-weight:700;
-    background:#27ae60;
-    color:#fff;
-    min-height:44px;
-    touch-action:manipulation;
-    font-family: inherit;
-    font-size: 14px;
-    transition: opacity .15s ease, transform .1s ease;
-}
-
-button:hover{
-    opacity:0.9;
-}
-
-button:active{
-    transform: scale(0.98);
-}
-
-button:disabled{
-    background: #b6e3c8;
-    cursor: not-allowed;
-}
-
-button.secundario{
-    background: #fff;
-    border: 2px solid #27ae60;
-    color: #27ae60;
-}
-
-button.secundario:disabled{
-    border-color: #ddd;
-    color: #aaa;
-    background: #fff;
-}
-
-/* RESULTADO */
-.result-box{
-    margin-top:20px;
-}
-
-.result-box input{
-    background:#f7f7f7;
-    font-size:13px;
-    color: #333;
-}
-
-.acoes-resultado{
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
-}
-
-.acoes-resultado button{
-    font-size: 13px;
-    padding: 10px;
-}
-
-.toast{
-    margin-top: 10px;
-    font-size: 12px;
-    color: #27ae60;
-    font-weight: 700;
-    opacity: 0;
-    transition: opacity .25s ease;
-    min-height: 16px;
-}
-
-.toast.visivel{
-    opacity: 1;
-}
-
-/* DIREITA */
-.right-panel{
-    background:#eafaf1;
-}
-
-.right-panel h2{
-    font-size: 18px;
-    margin-bottom: 10px;
-}
-
-.right-panel p{
-    font-size: 13px;
-    color: #555;
-    line-height: 1.6;
-}
-
-.preview-chat{
-    margin-top: 20px;
-    background: #fff;
+.info-box {
+    background: white;
+    padding: 16px;
     border-radius: 12px;
-    padding: 14px;
-    box-shadow: 0 4px 16px rgba(0,0,0,.08);
-}
-
-.preview-chat .balao{
-    background: #dcf8c6;
-    border-radius: 10px;
-    padding: 10px 12px;
+    border: 1px solid var(--border);
     font-size: 13px;
-    color: #1a1a1a;
-    white-space: pre-wrap;
-    word-break: break-word;
-    max-width: 90%;
-    margin-left: auto;
+    line-height: 1.6;
+    color: var(--text-muted);
 }
 
-.preview-chat .balao.vazio{
-    color: #999;
-    font-style: italic;
+/* Responsividade */
+@media (max-width: 900px) {
+    .container { grid-template-columns: 1fr; max-width: 500px; }
+    .main-panel { border-right: none; border-bottom: 1px solid var(--border); padding: 32px; }
+    .side-panel { padding: 32px; }
 }
 
-.preview-chat .legenda{
-    font-size: 11px;
-    color: #999;
-    margin-bottom: 8px;
-}
-
-/* RESPONSIVO */
-@media (max-width: 900px){
-    .wrapper{
-        grid-template-columns:1fr;
-    }
-
-    .left-panel{
-        border-right:none;
-        border-bottom:1px solid #eee;
-    }
-
-    .buttons{
-        flex-direction:column;
-    }
-}
-
-@media (max-width: 480px){
-    html, body{
-        padding:10px;
-    }
-
-    input, textarea{
-        font-size:13px;
-        padding:11px;
-    }
-
-    textarea{
-        height:110px;
-    }
-
-    button{
-        font-size:13px;
-        padding:11px;
-    }
+@media (max-width: 480px) {
+    body { padding: 10px; }
+    .main-panel, .side-panel { padding: 24px 16px; }
 }
 </style>
 </head>
-
 <body>
 
-<div class="wrapper">
-
-    <!-- ESQUERDA -->
-    <div class="left-panel">
-
-        <header>
-            <h1>💬 Gerador de Link WhatsApp</h1>
-            <p class="subtitle">Links com mensagem automática</p>
-        </header>
-
-        <br>
-
-        <a href="../../index.html">← Voltar</a>
-
-        <br><br>
-
-        <label for="number">Número do WhatsApp (com código do país)</label>
-        <input id="number" type="text" placeholder="Ex: 5511999999999" inputmode="numeric" maxlength="16" autocomplete="off">
-        <div class="dica">Inclua o código do país. Brasil: 55 + DDD + número (sem espaços, parênteses ou +).</div>
-        <div class="erro-texto" id="erroNumero"></div>
-
-        <label for="message">Mensagem</label>
-        <textarea id="message" placeholder="Olá, gostaria de mais informações." maxlength="1000"></textarea>
-        <div class="contador" id="contador">0 / 1000</div>
-
-        <div class="buttons">
-            <button type="button" id="btnGerar">Gerar link</button>
-            <button type="button" id="btnLimpar" class="secundario">Limpar</button>
+<div class="container">
+    <!-- Painel de Configuração -->
+    <div class="main-panel">
+        <div class="brand">
+            <div class="brand-icon">💬</div>
+            <h1>Link Zap Pro</h1>
         </div>
 
-        <div class="result-box">
-            <label for="resultado">Seu link</label>
-            <input id="resultado" readonly placeholder="Gerar link para aparecer aqui">
+        <div class="form-group">
+            <label>Número do WhatsApp</label>
+            <input id="number" type="text" class="input-field" placeholder="Ex: 5511999999999" maxlength="15">
+            <span style="font-size: 11px; color: var(--text-muted);">Inclua DDI (55) + DDD + Número</span>
+        </div>
 
-            <div class="acoes-resultado">
-                <button type="button" id="btnCopiar" class="secundario" disabled>Copiar</button>
-                <button type="button" id="btnAbrir" disabled>Abrir no WhatsApp</button>
+        <div class="form-group">
+            <label>Mensagem Automática (Opcional)</label>
+            <textarea id="message" class="input-field" placeholder="Olá! Gostaria de saber mais sobre seus serviços."></textarea>
+            <div id="charCount" style="font-size: 11px; color: var(--text-muted); text-align: right;">0 / 1000</div>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn btn-primary" onclick="gerarLink()">Gerar Link</button>
+            <button class="btn btn-outline" onclick="limparTudo()">Limpar</button>
+        </div>
+
+        <div id="resultArea" class="result-section" style="display: none;">
+            <div class="result-label">Link Pronto</div>
+            <div id="resultLink" class="result-link"></div>
+            <div class="btn-group">
+                <button class="btn btn-outline" onclick="copiarLink()" id="btnCopiar">📋 Copiar Link</button>
+                <button class="btn btn-primary" onclick="abrirZap()" style="background: var(--primary);">🚀 Testar Link</button>
             </div>
-
-            <div class="toast" id="toast"></div>
         </div>
-
     </div>
 
-    <!-- DIREITA -->
-    <div class="right-panel">
-
-        <h2>Como funciona</h2>
-        <p>
-            Gere links do WhatsApp com mensagem automática para usar em Instagram,
-            sites, anúncios e atendimento rápido. Ao abrir o link, a mensagem já
-            aparece digitada na conversa, pronta para o cliente enviar.
-        </p>
-
-        <div class="preview-chat">
-            <div class="legenda">Pré-visualização da mensagem</div>
-            <div class="balao vazio" id="previewBalao">Sua mensagem aparecerá aqui...</div>
+    <!-- Painel Lateral -->
+    <div class="side-panel">
+        <div class="section-title">Pré-visualização</div>
+        
+        <div class="chat-mockup">
+            <div class="chat-header">
+                <div class="avatar"></div>
+                <div style="font-size: 14px; font-weight: 600;">Seu Cliente</div>
+            </div>
+            <div class="chat-body">
+                <div id="previewBubble" class="message-bubble empty">
+                    Sua mensagem aparecerá aqui...
+                </div>
+            </div>
         </div>
 
+        <div class="info-box">
+            <strong>Dica de Uso:</strong> Use este link na sua Bio do Instagram ou em botões do seu site para facilitar o contato direto dos seus clientes.
+        </div>
     </div>
-
 </div>
 
 <script>
 const elNumber = document.getElementById("number");
 const elMessage = document.getElementById("message");
-const elResultado = document.getElementById("resultado");
-const elErroNumero = document.getElementById("erroNumero");
-const elContador = document.getElementById("contador");
-const elToast = document.getElementById("toast");
-const elPreviewBalao = document.getElementById("previewBalao");
-
-const btnGerar = document.getElementById("btnGerar");
-const btnLimpar = document.getElementById("btnLimpar");
-const btnCopiar = document.getElementById("btnCopiar");
-const btnAbrir = document.getElementById("btnAbrir");
-
-let toastTimeout = null;
-
-function mostrarToast(texto, cor) {
-    elToast.textContent = texto;
-    elToast.style.color = cor || "#27ae60";
-    elToast.classList.add("visivel");
-    clearTimeout(toastTimeout);
-    toastTimeout = setTimeout(() => elToast.classList.remove("visivel"), 2500);
-}
-
-function validarNumero(numero) {
-    // Validação básica: WhatsApp exige DDI + número, totalizando entre 8 e 15 dígitos
-    // (padrão E.164, sem o "+"). Evita links quebrados por número incompleto.
-    if (!numero) return "Digite um número.";
-    if (numero.length < 8) return "Número muito curto. Inclua o código do país e DDD.";
-    if (numero.length > 15) return "Número muito longo. Verifique se não há dígitos extras.";
-    if (numero.startsWith("0")) return "Remova o zero inicial, se houver.";
-    return "";
-}
+const elResultArea = document.getElementById("resultArea");
+const elResultLink = document.getElementById("resultLink");
+const elPreviewBubble = document.getElementById("previewBubble");
+const elCharCount = document.getElementById("charCount");
 
 function atualizarPreview() {
-    const texto = elMessage.value.trim();
-    if (texto) {
-        elPreviewBalao.textContent = texto;
-        elPreviewBalao.classList.remove("vazio");
+    const text = elMessage.value.trim();
+    elCharCount.innerText = `${elMessage.value.length} / 1000`;
+    
+    if (text) {
+        elPreviewBubble.innerText = text;
+        elPreviewBubble.classList.remove("empty");
+        const now = new Date();
+        const time = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+        elPreviewBubble.innerHTML += `<div class="message-time">${time}</div>`;
     } else {
-        elPreviewBalao.textContent = "Sua mensagem aparecerá aqui...";
-        elPreviewBalao.classList.add("vazio");
+        elPreviewBubble.innerText = "Sua mensagem aparecerá aqui...";
+        elPreviewBubble.classList.add("empty");
     }
-}
-
-function atualizarContador() {
-    elContador.textContent = `${elMessage.value.length} / 1000`;
-}
-
-function limparEstadoResultado() {
-    elResultado.value = "";
-    btnCopiar.disabled = true;
-    btnAbrir.disabled = true;
 }
 
 function gerarLink() {
-    const numero = elNumber.value.replace(/\D/g, "");
-    const mensagem = elMessage.value.trim();
+    const num = elNumber.value.replace(/\D/g, "");
+    const msg = elMessage.value.trim();
 
-    const erro = validarNumero(numero);
-    elErroNumero.textContent = erro;
-    elNumber.classList.toggle("invalido", !!erro);
-
-    if (erro) {
-        limparEstadoResultado();
+    if (!num || num.length < 10) {
+        alert("Por favor, insira um número válido com DDD.");
         return;
     }
 
-    const url = `https://wa.me/${numero}${mensagem ? "?text=" + encodeURIComponent(mensagem) : ""}`;
-    elResultado.value = url;
-    btnCopiar.disabled = false;
-    btnAbrir.disabled = false;
-    mostrarToast("Link gerado!");
+    const url = `https://wa.me/${num}${msg ? "?text=" + encodeURIComponent(msg) : ""}`;
+    elResultLink.innerText = url;
+    elResultArea.style.display = "flex";
 }
 
-async function copiarLink() {
-    const valor = elResultado.value;
-    if (!valor) return;
-
-    try {
-        if (navigator.clipboard && window.isSecureContext) {
-            await navigator.clipboard.writeText(valor);
-        } else {
-            // Fallback para contextos sem HTTPS ou navegadores antigos
-            elResultado.removeAttribute("readonly");
-            elResultado.select();
-            document.execCommand("copy");
-            elResultado.setAttribute("readonly", true);
-        }
-        mostrarToast("Link copiado para a área de transferência!");
-    } catch (e) {
-        mostrarToast("Não foi possível copiar. Selecione o link manualmente.", "#e74c3c");
-    }
+function copiarLink() {
+    const url = elResultLink.innerText;
+    navigator.clipboard.writeText(url);
+    const btn = document.getElementById("btnCopiar");
+    const original = btn.innerHTML;
+    btn.innerHTML = "✅ Copiado!";
+    setTimeout(() => btn.innerHTML = original, 2000);
 }
 
-function abrirLink() {
-    const valor = elResultado.value;
-    if (!valor) return;
-    window.open(valor, "_blank", "noopener");
+function abrirZap() {
+    window.open(elResultLink.innerText, "_blank");
 }
 
 function limparTudo() {
     elNumber.value = "";
     elMessage.value = "";
-    elErroNumero.textContent = "";
-    elNumber.classList.remove("invalido");
-    atualizarContador();
+    elResultArea.style.display = "none";
     atualizarPreview();
-    limparEstadoResultado();
 }
 
-btnGerar.addEventListener("click", gerarLink);
-btnLimpar.addEventListener("click", limparTudo);
-btnCopiar.addEventListener("click", copiarLink);
-btnAbrir.addEventListener("click", abrirLink);
-
-elMessage.addEventListener("input", () => {
-    atualizarContador();
-    atualizarPreview();
+elMessage.addEventListener("input", atualizarPreview);
+elNumber.addEventListener("input", (e) => {
+    e.target.value = e.target.value.replace(/\D/g, "");
 });
-
-elNumber.addEventListener("input", () => {
-    elErroNumero.textContent = "";
-    elNumber.classList.remove("invalido");
-});
-
-elNumber.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") gerarLink();
-});
-
-atualizarContador();
 </script>
 
 </body>
