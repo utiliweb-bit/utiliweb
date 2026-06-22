@@ -3,12 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Conversor de Hiragana e Katakana para Meia Largura (Half-Width)">
-    <meta name="keywords" content="hiragana, katakana, meia largura, half-width, japonês, converter">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Conversor Kana</title>
+    <meta name="description" content="Conversor de Hiragana e Katakana para Meia Largura (Half-Width) - Versão Premium">
+    <meta name="theme-color" content="#6366f1">
+    <title>KanaPro | Conversor Inteligente</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --accent: #10b981;
+            --danger: #ef4444;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --glass: backdrop-filter: blur(12px);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -16,457 +32,356 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        html, body {
-            width: 100%;
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-main);
             min-height: 100vh;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 16px;
-            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
         }
 
-        .wrapper {
+        .container {
             width: 100%;
-            max-width: 1200px;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 1000px;
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            overflow: hidden;
-            max-height: 90vh;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 24px;
+            perspective: 1000px;
         }
 
-        .left-panel {
-            padding: 32px;
-            overflow-y: auto;
-            border-right: 1px solid #e0e0e0;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .right-panel {
-            padding: 32px;
-            background: linear-gradient(135deg, #e8f8f5 0%, #d5f4e6 100%);
+        .main-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.5);
             display: flex;
             flex-direction: column;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
+            gap: 32px;
         }
 
         header {
-            margin-bottom: 24px;
-            text-align: center;
+            text-align: left;
         }
 
         h1 {
-            color: #333;
-            font-size: 28px;
-            margin-bottom: 6px;
-            font-weight: 700;
+            font-size: 32px;
+            font-weight: 800;
+            background: linear-gradient(to right, var(--primary), #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+            letter-spacing: -1px;
         }
 
         .subtitle {
-            color: #999;
-            font-size: 13px;
+            color: var(--text-muted);
+            font-size: 15px;
             font-weight: 500;
         }
 
-        .info-box {
-            background: linear-gradient(135deg, #e8f8f5 0%, #d5f4e6 100%);
-            border-left: 4px solid #27ae60;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 11px;
-            color: #27ae60;
-            margin-bottom: 24px;
-            line-height: 1.5;
+        .mode-selector {
+            display: flex;
+            background: #f1f5f9;
+            padding: 6px;
+            border-radius: var(--radius-md);
+            gap: 4px;
         }
 
-        .info-box strong {
-            color: #27ae60;
-            font-weight: 700;
-        }
-
-        .modos {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 8px;
-            margin-bottom: 24px;
-        }
-
-        .modo-btn {
-            padding: 10px 6px;
-            background: #e0e0e0;
-            color: #666;
+        .mode-btn {
+            flex: 1;
             border: none;
-            border-radius: 8px;
-            font-size: 11px;
+            padding: 12px 8px;
+            border-radius: 12px;
+            font-size: 13px;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s ease;
+            background: transparent;
+            color: var(--text-muted);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .mode-btn span {
+            font-size: 10px;
+            opacity: 0.7;
             text-transform: uppercase;
-            letter-spacing: 0.3px;
-            line-height: 1.4;
-            -webkit-appearance: none;
-            appearance: none;
         }
 
-        .modo-btn.ativo {
-            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
-            color: white;
+        .mode-btn.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
 
-        .modo-btn:active {
-            transform: scale(0.98);
+        .input-area {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
 
-        .section-title {
-            font-size: 12px;
+        .label-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .label-row label {
+            font-size: 13px;
             font-weight: 700;
-            color: #333;
+            color: var(--text-main);
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-bottom: 12px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #27ae60;
-        }
-
-        .input-group {
-            margin-bottom: 16px;
-        }
-
-        .input-label {
-            font-size: 11px;
-            font-weight: 700;
-            color: #666;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-            margin-bottom: 6px;
-            display: block;
         }
 
         textarea {
             width: 100%;
-            padding: 11px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 500;
-            background: white;
-            color: #333;
-            transition: all 0.2s ease;
-            -webkit-appearance: none;
-            appearance: none;
-            resize: vertical;
-            min-height: 90px;
+            min-height: 180px;
+            padding: 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: var(--radius-md);
+            font-size: 18px;
             font-family: inherit;
-            line-height: 1.5;
+            resize: none;
+            transition: all 0.2s;
+            background: #f8fafc;
         }
 
         textarea:focus {
             outline: none;
-            border-color: #27ae60;
-            background: #f0f9f7;
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
         }
 
-        textarea[readonly] {
-            background: #f9f9f9;
-            color: #444;
-            cursor: default;
-        }
-
-        .btn-calcular {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 13px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
-            margin-top: 4px;
-            -webkit-appearance: none;
-            appearance: none;
-        }
-
-        .btn-calcular:active {
-            transform: scale(0.98);
-        }
-
-        .resultado-section {
-            flex: 1;
+        .side-panel {
             display: flex;
             flex-direction: column;
-            min-height: 0;
+            gap: 24px;
         }
 
-        .resultado-header {
+        .result-card {
+            background: var(--primary);
+            color: white;
+            padding: 32px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            transition: transform 0.3s;
+        }
+
+        .result-label {
             font-size: 12px;
             font-weight: 700;
-            color: #27ae60;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 12px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #27ae60;
+            letter-spacing: 1px;
+            opacity: 0.8;
         }
 
-        .resultado-total {
-            display: flex;
-            flex-direction: column;
-            padding: 14px;
-            background: white;
-            border-radius: 10px;
-            border: 2px solid #27ae60;
-            margin-bottom: 12px;
-        }
-
-        .resultado-total-label {
-            font-size: 11px;
+        #output {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 24px;
             font-weight: 700;
-            color: #27ae60;
-            text-transform: uppercase;
-            margin-bottom: 8px;
-        }
-
-        .resultado-texto {
-            font-size: 20px;
-            font-weight: 700;
-            color: #27ae60;
-            font-family: 'Courier New', monospace;
             word-break: break-all;
-            line-height: 1.4;
+            min-height: 40px;
         }
 
-        .botoes {
+        .actions {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 8px;
-            margin-bottom: 12px;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
         }
 
-        button {
-            padding: 11px;
+        .btn {
             border: none;
-            border-radius: 8px;
-            font-size: 11px;
+            padding: 14px;
+            border-radius: 12px;
             font-weight: 700;
+            font-size: 14px;
             cursor: pointer;
-            transition: all 0.2s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-            -webkit-appearance: none;
-            appearance: none;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
-        .btn-copiar {
+        .btn-primary {
             background: white;
-            color: #27ae60;
-            border: 2px solid #27ae60;
+            color: var(--primary);
         }
 
-        .btn-copiar:active {
-            background: #27ae60;
+        .btn-primary:hover {
+            background: #f8fafc;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: rgba(255,255,255,0.1);
             color: white;
-            transform: scale(0.98);
+            border: 1px solid rgba(255,255,255,0.2);
         }
 
-        .btn-trocar {
+        .btn-outline:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .ref-card {
             background: white;
-            color: #27ae60;
-            border: 2px solid #27ae60;
-        }
-
-        .btn-trocar:active {
-            background: #27ae60;
-            color: white;
-            transform: scale(0.98);
-        }
-
-        .btn-limpar {
-            background: rgba(255, 255, 255, 0.5);
-            color: #27ae60;
-            border: 2px solid rgba(39, 174, 96, 0.3);
-        }
-
-        .btn-limpar:active {
-            background: rgba(255, 255, 255, 0.8);
-            transform: scale(0.98);
-        }
-
-        .tabela-ref {
-            margin-top: 12px;
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow);
             flex: 1;
             display: flex;
             flex-direction: column;
-            min-height: 0;
+            gap: 16px;
+            max-height: 400px;
         }
 
-        .tabela-titulo {
-            font-size: 11px;
+        .ref-title {
+            font-size: 14px;
             font-weight: 700;
-            color: #27ae60;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-            margin-bottom: 8px;
-            padding-bottom: 6px;
-            border-bottom: 2px solid rgba(39, 174, 96, 0.3);
-        }
-
-        .tabela-grid {
             display: flex;
-            flex-wrap: wrap;
-            gap: 4px;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .grid-container {
             overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
+            padding-right: 8px;
         }
 
-        .tabela-item {
-            background: rgba(255, 255, 255, 0.6);
-            border: 1px solid rgba(39, 174, 96, 0.2);
-            border-radius: 6px;
-            padding: 4px 8px;
+        .grid-container::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .grid-container::-webkit-scrollbar-thumb {
+            background: #e2e8f0;
+            border-radius: 10px;
+        }
+
+        .ref-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            gap: 8px;
+        }
+
+        .ref-item {
+            background: #f1f5f9;
+            padding: 6px;
+            border-radius: 8px;
             font-size: 11px;
-            color: #27ae60;
-            white-space: nowrap;
-            font-family: 'Courier New', monospace;
-            font-weight: 600;
-        }
-
-        .status {
             text-align: center;
-            font-size: 11px;
-            color: #27ae60;
-            margin-top: 8px;
-            min-height: 16px;
-            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            color: var(--text-muted);
         }
 
-        /* RESPONSIVO */
-        @media (max-width: 1024px) {
-            .wrapper {
+        .status-toast {
+            position: fixed;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--text-main);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .status-toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        @media (max-width: 900px) {
+            .container {
                 grid-template-columns: 1fr;
-                max-height: none;
-                border-radius: 12px;
             }
-            .left-panel {
-                border-right: none;
-                border-bottom: 1px solid #e0e0e0;
+            .main-card {
                 padding: 24px;
             }
-            .right-panel {
-                padding: 24px;
-            }
-            h1 { font-size: 24px; }
-        }
-
-        @media (max-width: 768px) {
-            html, body { padding: 12px; }
-            .wrapper { grid-template-columns: 1fr; max-height: none; border-radius: 12px; }
-            .left-panel { border-right: none; border-bottom: 1px solid #e0e0e0; padding: 16px; }
-            .right-panel { padding: 16px; }
-            h1 { font-size: 22px; }
-            .subtitle { font-size: 12px; }
-            .info-box { font-size: 10px; padding: 10px; margin-bottom: 16px; }
-            .modos { gap: 6px; margin-bottom: 16px; }
-            .modo-btn { padding: 9px 4px; font-size: 10px; }
-            .section-title { font-size: 11px; margin-bottom: 10px; padding-bottom: 6px; }
-            .input-label { font-size: 10px; }
-            textarea { font-size: 15px; min-height: 80px; padding: 10px; }
-            .btn-calcular { padding: 12px; font-size: 12px; }
-            .resultado-header { font-size: 11px; margin-bottom: 10px; }
-            .resultado-total { padding: 12px; margin-bottom: 10px; }
-            .resultado-total-label { font-size: 10px; }
-            .resultado-texto { font-size: 17px; }
-            .botoes { gap: 6px; margin-bottom: 10px; }
-            button { padding: 10px; font-size: 10px; }
-            .tabela-titulo { font-size: 10px; }
-            .tabela-item { font-size: 10px; padding: 3px 6px; }
-            .status { font-size: 10px; min-height: 14px; }
         }
 
         @media (max-width: 480px) {
-            html, body { padding: 8px; }
-            .wrapper { border-radius: 10px; }
-            .left-panel, .right-panel { padding: 12px; }
-            h1 { font-size: 20px; margin-bottom: 4px; }
-            .subtitle { font-size: 11px; }
-            .info-box { font-size: 9px; padding: 8px; margin-bottom: 12px; }
-            .modos { gap: 5px; margin-bottom: 12px; }
-            .modo-btn { padding: 8px 3px; font-size: 9px; }
-            .section-title { font-size: 10px; margin-bottom: 8px; padding-bottom: 4px; }
-            .input-label { font-size: 9px; margin-bottom: 4px; }
-            textarea { font-size: 14px; min-height: 70px; padding: 9px; }
-            .btn-calcular { padding: 11px; font-size: 11px; }
-            .resultado-total { padding: 10px; margin-bottom: 8px; }
-            .resultado-texto { font-size: 15px; }
-            .botoes { gap: 5px; margin-bottom: 8px; }
-            button { padding: 9px; font-size: 9px; }
-            .tabela-item { font-size: 9px; padding: 3px 5px; }
-            .status { font-size: 9px; min-height: 12px; }
+            body { padding: 12px; }
+            h1 { font-size: 26px; }
+            textarea { min-height: 140px; font-size: 16px; }
+            .result-card { padding: 24px; }
         }
     </style>
 </head>
 <body>
-    <div class="wrapper">
-        <div class="left-panel">
+    <div class="container">
+        <div class="main-card">
             <header>
-                <h1>🔤 Conversor Kana</h1>
-                <p class="subtitle">Hiragana e Katakana para meia largura</p>
+                <h1>KanaPro</h1>
+                <p class="subtitle">Conversor profissional de caracteres japoneses</p>
             </header>
 
-            <div class="info-box">
-                <strong>Dica:</strong> Dakuten (が→ｶﾞ) e handakuten (ぱ→ﾊﾟ) são convertidos automaticamente. Use "Trocar" para inverter entrada e resultado.
+            <div class="mode-selector">
+                <button class="mode-btn active" id="btn-hira" onclick="setModo('hira')">
+                    <span>Hiragana</span>
+                    あ → ｱ
+                </button>
+                <button class="mode-btn" id="btn-kata" onclick="setModo('kata')">
+                    <span>Katakana</span>
+                    ア → ｱ
+                </button>
+                <button class="mode-btn" id="btn-half" onclick="setModo('half')">
+                    <span>Half-width</span>
+                    ｱ → ア
+                </button>
             </div>
 
-            <div class="modos">
-                <button class="modo-btn ativo" id="btn-hira" onclick="setModo('hira')">ひ Hiragana<br>→ Half</button>
-                <button class="modo-btn" id="btn-kata" onclick="setModo('kata')">ア Katakana<br>→ Half</button>
-                <button class="modo-btn" id="btn-half" onclick="setModo('half')">ｱ Half<br>→ Katakana</button>
+            <div class="input-area">
+                <div class="label-row">
+                    <label id="label-entrada">Entrada (Hiragana)</label>
+                    <button class="btn" style="padding: 4px 8px; font-size: 11px; background: #f1f5f9; color: var(--text-muted);" onclick="limpar()">Limpar</button>
+                </div>
+                <textarea id="input" placeholder="Digite ou cole o texto aqui..." oninput="converter()"></textarea>
             </div>
-
-            <div class="section-title" id="titulo-secao">Hiragana → Meia Largura</div>
-
-            <div class="input-group">
-                <label class="input-label" id="label-entrada">Entrada (Hiragana)</label>
-                <textarea id="input" placeholder="Digite ou cole aqui..." oninput="converter()"></textarea>
-            </div>
-
-            <button class="btn-calcular" onclick="converter()">Converter</button>
         </div>
 
-        <div class="right-panel">
-            <div class="resultado-section">
-                <div class="resultado-header">Resultado</div>
-
-                <div class="resultado-total" id="resultado-box" style="display:none;">
-                    <span class="resultado-total-label" id="label-saida">Meia largura (Half-Width)</span>
-                    <span class="resultado-texto" id="output">-</span>
+        <div class="side-panel">
+            <div class="result-card" id="result-container" style="opacity: 0.5; transform: scale(0.98);">
+                <div class="result-label" id="label-saida">Resultado</div>
+                <div id="output">Aguardando entrada...</div>
+                
+                <div class="actions">
+                    <button class="btn btn-primary" onclick="copiar(event)">
+                        <span>📋</span> Copiar
+                    </button>
+                    <button class="btn btn-outline" onclick="trocar()">
+                        <span>🔄</span> Trocar
+                    </button>
                 </div>
+            </div>
 
-                <div class="botoes">
-                    <button class="btn-copiar" onclick="copiar(event)">📋 Copiar</button>
-                    <button class="btn-trocar" onclick="trocar()">🔄 Trocar</button>
-                    <button class="btn-limpar" onclick="limpar()">🗑️ Limpar</button>
+            <div class="ref-card">
+                <div class="ref-title">
+                    <span>📖</span> Guia de Conversão
                 </div>
-
-                <div class="tabela-ref">
-                    <div class="tabela-titulo">📖 Tabela de referência</div>
-                    <div class="tabela-grid" id="tabela"></div>
+                <div class="grid-container">
+                    <div class="ref-grid" id="tabela"></div>
                 </div>
-
-                <div class="status" id="status"></div>
             </div>
         </div>
     </div>
+
+    <div id="toast" class="status-toast">Copiado com sucesso!</div>
 
     <script>
         const KATA_TO_HALF = {
@@ -509,36 +424,37 @@
 
         const configs = {
             hira: {
-                titulo: 'Hiragana → Meia Largura',
                 labelEntrada: 'Entrada (Hiragana)',
                 labelSaida: 'Meia largura (Half-Width)',
                 placeholder: 'Ex: あいうえお、がぎぐげご...'
             },
             kata: {
-                titulo: 'Katakana → Meia Largura',
                 labelEntrada: 'Entrada (Katakana)',
                 labelSaida: 'Meia largura (Half-Width)',
                 placeholder: 'Ex: アイウエオ、ガギグゲゴ...'
             },
             half: {
-                titulo: 'Meia Largura → Katakana',
                 labelEntrada: 'Entrada (Half-Width)',
-                labelSaida: 'Katakana (largura normal)',
+                labelSaida: 'Katakana (Normal)',
                 placeholder: 'Ex: ｱｲｳｴｵ、ｶﾞｷﾞｸﾞ...'
             }
         };
 
         function setModo(m) {
             modo = m;
-            document.querySelectorAll('.modo-btn').forEach(b => b.classList.remove('ativo'));
-            document.getElementById('btn-' + m).classList.add('ativo');
+            document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('btn-' + m).classList.add('active');
             const c = configs[m];
-            document.getElementById('titulo-secao').textContent = c.titulo;
             document.getElementById('label-entrada').textContent = c.labelEntrada;
             document.getElementById('label-saida').textContent = c.labelSaida;
             document.getElementById('input').placeholder = c.placeholder;
             document.getElementById('input').value = '';
-            document.getElementById('resultado-box').style.display = 'none';
+            
+            const resultContainer = document.getElementById('result-container');
+            resultContainer.style.opacity = '0.5';
+            resultContainer.style.transform = 'scale(0.98)';
+            document.getElementById('output').textContent = 'Aguardando entrada...';
+            
             renderTabela();
         }
 
@@ -571,46 +487,52 @@
 
         function converter() {
             const val = document.getElementById('input').value;
+            const resultContainer = document.getElementById('result-container');
+            
             if (!val.trim()) {
-                document.getElementById('resultado-box').style.display = 'none';
+                resultContainer.style.opacity = '0.5';
+                resultContainer.style.transform = 'scale(0.98)';
+                document.getElementById('output').textContent = 'Aguardando entrada...';
                 return;
             }
+
+            resultContainer.style.opacity = '1';
+            resultContainer.style.transform = 'scale(1)';
+            
             let res = '';
             if (modo === 'hira') res = hiraToHalf(val);
             else if (modo === 'kata') res = kataToHalf(val);
             else res = halfToKata(val);
+            
             document.getElementById('output').textContent = res;
-            document.getElementById('resultado-box').style.display = 'flex';
         }
 
         function copiar(evt) {
             const val = document.getElementById('output').textContent;
-            if (!val || val === '-') return;
+            if (!val || val === 'Aguardando entrada...') return;
             navigator.clipboard.writeText(val).then(() => {
-                const btn = evt.target;
-                const orig = btn.textContent;
-                btn.textContent = '✓ Copiado!';
-                setTimeout(() => btn.textContent = orig, 1500);
+                mostrarToast('✓ Copiado com sucesso!');
             });
         }
 
         function trocar() {
             const resultado = document.getElementById('output').textContent;
-            if (!resultado || resultado === '-') return;
+            if (!resultado || resultado === 'Aguardando entrada...') return;
             document.getElementById('input').value = resultado;
             converter();
-            mostrarStatus('✓ Campos trocados');
+            mostrarToast('🔄 Campos trocados');
         }
 
         function limpar() {
             document.getElementById('input').value = '';
-            document.getElementById('resultado-box').style.display = 'none';
+            converter();
         }
 
-        function mostrarStatus(msg) {
-            const s = document.getElementById('status');
-            s.textContent = msg;
-            setTimeout(() => s.textContent = '', 2000);
+        function mostrarToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
         }
 
         function renderTabela() {
@@ -633,7 +555,7 @@
             }
 
             tabela.innerHTML = pares.map(([a, b]) =>
-                `<span class="tabela-item">${a} → ${b}</span>`
+                `<div class="ref-item">${a} → ${b}</div>`
             ).join('');
         }
 
