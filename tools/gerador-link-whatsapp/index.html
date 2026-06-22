@@ -359,11 +359,19 @@ function atualizarPreview() {
     elCharCount.innerText = `${elMessage.value.length} / 1000`;
     
     if (text) {
-        elPreviewBubble.innerText = text;
-        elPreviewBubble.classList.remove("empty");
+        // Criar o conteúdo com o texto e o tempo
         const now = new Date();
         const time = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
-        elPreviewBubble.innerHTML += `<div class="message-time">${time}</div>`;
+        
+        // Usar textContent para o texto do usuário por segurança e adicionar a div de tempo separadamente
+        elPreviewBubble.innerText = text;
+        
+        const timeDiv = document.createElement('div');
+        timeDiv.className = 'message-time';
+        timeDiv.innerText = time;
+        elPreviewBubble.appendChild(timeDiv);
+        
+        elPreviewBubble.classList.remove("empty");
     } else {
         elPreviewBubble.innerText = "Sua mensagem aparecerá aqui...";
         elPreviewBubble.classList.add("empty");
@@ -404,10 +412,17 @@ function limparTudo() {
     atualizarPreview();
 }
 
+// Eventos para atualização em tempo real
 elMessage.addEventListener("input", atualizarPreview);
+elMessage.addEventListener("keyup", atualizarPreview);
+elMessage.addEventListener("change", atualizarPreview);
+
 elNumber.addEventListener("input", (e) => {
     e.target.value = e.target.value.replace(/\D/g, "");
 });
+
+// Inicializar preview
+atualizarPreview();
 </script>
 
 </body>
