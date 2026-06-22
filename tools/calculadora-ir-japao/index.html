@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Calculadora de Imposto de Renda no Japão (所得税) — Estimativa para empregados e autônomos">
+    <meta name="description" content="Calculadora de Imposto de Renda no Japão (所得税) — Estimativa 2026 (令和8年) para empregados e autônomos">
     <meta name="keywords" content="imposto renda japão, 所得税, shotokuzei, ir japão, calcular imposto japão,住民税, juminzei">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Calculadora de IR Japão (所得税)</title>
+    <title>Calculadora de IR Japão (所得税) 2026</title>
     <style>
         * {
             margin: 0;
@@ -639,7 +639,7 @@
     <div class="left-panel">
         <header>
             <h1>💴 Calculadora de IR Japão</h1>
-            <p class="subtitle">所得税・住民税 — Estimativa 2024 (令和6年度)</p>
+            <p class="subtitle">所得税・住民税 — Estimativa 2026 (令和8年度)</p>
         </header>
 
         <div class="info-box">
@@ -689,8 +689,8 @@
             </div>
             <div class="input-group">
                 <label class="input-label">Nenkin pago (¥) <span class="tag">年金</span></label>
-                <input type="number" id="nenkin" value="180000" min="0" step="1000" oninput="calcular()">
-                <p class="input-hint" id="hint-nenkin">Calculado automaticamente (Kosei ~9,15%)</p>
+                <input type="number" id="nenkin" value="215040" min="0" step="1000" oninput="calcular()">
+                <p class="input-hint" id="hint-nenkin">Calculado automaticamente (Kokumin: ¥17.920 × 12 meses)</p>
             </div>
         </div>
 
@@ -772,7 +772,7 @@
                     <div class="metric-card destaque">
                         <div class="metric-label">住民税 — Imposto municipal</div>
                         <div class="metric-value" id="r-juminzei">—</div>
-                        <div class="metric-sub">10% da base + ¥5.000</div>
+                        <div class="metric-sub">10% da base + ¥5.000 (+ ¥1.000 taxa florestal)</div>
                     </div>
                 </div>
 
@@ -793,7 +793,7 @@
                 <div id="tabela-texto" style="font-size:11px;color:#555;line-height:1.6;"></div>
             </div>
 
-            <p class="disclaimer">Estimativa baseada nas tabelas oficiais de 2024 (令和6年). O imposto municipal (住民税) é cobrado no ano seguinte. Furusato Nozei é deduzido diretamente do juminzei. Consulte um 税理士 para declaração oficial (確定申告).</p>
+            <p class="disclaimer">Estimativa baseada nas tabelas oficiais de 2026 (令和8年). O imposto municipal (住民税) é cobrado no ano seguinte. Furusato Nozei é deduzido diretamente do juminzei. Consulte um 税理士 para declaração oficial (確定申告).</p>
 
             <div class="status" id="status"></div>
         </div>
@@ -810,18 +810,19 @@
 
         if (modo === 'clt') {
             const saude = Math.min(Math.round(renda * 0.10), 1390000);
-            const nenkin = Math.min(Math.round(renda * 0.0915), 696000);
+            // Kosei Nenkin 2026: taxa 18,3% (9,15% empregado), teto de remuneração padrão ~¥650.000/mês
+            const nenkin = Math.min(Math.round(renda * 0.0915), 713700);
             document.getElementById('saude').value = saude;
             document.getElementById('nenkin').value = nenkin;
             document.getElementById('hint-saude').textContent = 'Calculado automaticamente (~10% da renda)';
-            document.getElementById('hint-nenkin').textContent = 'Calculado automaticamente (Kosei ~9,15%, parte do empregado)';
+            document.getElementById('hint-nenkin').textContent = 'Calculado automaticamente (Kosei 9,15%, parte do empregado — 2026)';
         } else {
             const saude = Math.min(Math.round(renda * 0.10), 1390000);
-            const nenkin = Math.round(16980 * 12 * periodo);
+            const nenkin = Math.round(17920 * 12 * periodo);
             document.getElementById('saude').value = saude;
             document.getElementById('nenkin').value = nenkin;
             document.getElementById('hint-saude').textContent = 'Calculado automaticamente (~10% da renda)';
-            document.getElementById('hint-nenkin').textContent = 'Calculado automaticamente (Kokumin: ¥16.980 × meses)';
+            document.getElementById('hint-nenkin').textContent = 'Calculado automaticamente (Kokumin: ¥17.920 × meses)';
         }
     }
 
@@ -841,10 +842,11 @@
     }
 
     function kyuyoDeduction(renda) {
-        if (renda <= 1625000) return 550000;
-        if (renda <= 1800000) return Math.round(renda * 0.4) - 100000;
-        if (renda <= 3600000) return Math.round(renda * 0.3) + 80000;
-        if (renda <= 6600000) return Math.round(renda * 0.2) + 440000;
+        // Tabela 2026 (令和8年): mínimo garantido sobe de ¥550.000 para ¥650.000
+        if (renda <= 1625000) return 650000;
+        if (renda <= 1800000) return Math.round(renda * 0.4);
+        if (renda <= 3600000) return Math.round(renda * 0.3) + 180000;
+        if (renda <= 6600000) return Math.round(renda * 0.2) + 540000;
         if (renda <= 8500000) return Math.round(renda * 0.1) + 1100000;
         return 1950000;
     }
@@ -897,7 +899,17 @@
         const medicoDeducao = Math.max(0, medicoTotal - 100000);
         const vidaDeducao = vidaTotal > 0 ? Math.min(Math.round(vidaTotal * 0.25 + 20000) * 3, 120000) : 0;
         const furusatoDeducao = Math.max(0, furusato - 2000);
-        const basicaDeducao = 480000;
+        // Dedução básica 2026: sistema em faixas conforme renda ajustada
+        let basicaDeducao;
+        if (rendaAjustada <= 1320000)       basicaDeducao = 950000;
+        else if (rendaAjustada <= 3360000)  basicaDeducao = 880000;
+        else if (rendaAjustada <= 4890000)  basicaDeducao = 680000;
+        else if (rendaAjustada <= 6550000)  basicaDeducao = 630000;
+        else if (rendaAjustada <= 23500000) basicaDeducao = 580000;
+        else if (rendaAjustada <= 24000000) basicaDeducao = 480000;
+        else if (rendaAjustada <= 24500000) basicaDeducao = 320000;
+        else if (rendaAjustada <= 25000000) basicaDeducao = 160000;
+        else basicaDeducao = 0;
 
         const totalDeducoesPersonais = saude + nenkin + depDeducao + conjuge + viuvo + medicoDeducao + vidaDeducao + furusatoDeducao + basicaDeducao;
         let base = Math.max(0, Math.round((rendaAjustada - totalDeducoesPersonais) / 1000) * 1000);
@@ -905,7 +917,8 @@
         const { tax: ir, rate } = calcIR(base);
         const fukko = Math.round(ir * 0.021);
         const irTotal = Math.round(ir + fukko);
-        const juminzei = Math.max(0, Math.round(base * 0.1 + 5000 - furusatoDeducao));
+        // Juminzei 2026: 10% da base + ¥5.000 (per capita) + ¥1.000 (taxa florestal nacional, desde 2024)
+        const juminzei = Math.max(0, Math.round(base * 0.1 + 6000 - furusatoDeducao));
         const totalImpostos = irTotal + juminzei;
         const pctEfetivo = renda > 0 ? ((totalImpostos / renda) * 100).toFixed(1) : 0;
         const pctIR = renda > 0 ? ((irTotal / renda) * 100).toFixed(1) : 0;
@@ -920,7 +933,7 @@
         let rows = [];
         rows.push({ label: 'Renda bruta', valor: fmt(renda), cls: '' });
         if (modo === 'clt') {
-            rows.push({ label: '(-) Dedução de empregado (給与所得控除)', valor: '-' + fmt(kyuyo), cls: 'deducao' });
+            rows.push({ label: '(-) Dedução de empregado (給与所得控除) 2026', valor: '-' + fmt(kyuyo), cls: 'deducao' });
         } else if (despesas > 0) {
             rows.push({ label: '(-) Despesas de negócio', valor: '-' + fmt(despesas), cls: 'deducao' });
         }
@@ -932,11 +945,11 @@
         if (medicoDeducao > 0) rows.push({ label: '(-) Gastos médicos (医療費控除)', valor: '-' + fmt(medicoDeducao), cls: 'deducao' });
         if (vidaDeducao > 0)  rows.push({ label: '(-) Seguro de vida (生命保険控除)', valor: '-' + fmt(vidaDeducao), cls: 'deducao' });
         if (furusatoDeducao > 0) rows.push({ label: '(-) Furusato Nozei (ふるさと納税)', valor: '-' + fmt(furusatoDeducao), cls: 'deducao' });
-        rows.push({ label: '(-) Dedução básica pessoal (基礎控除)', valor: '-' + fmt(basicaDeducao), cls: 'deducao' });
+        rows.push({ label: '(-) Dedução básica pessoal (基礎控除) 2026', valor: '-' + fmt(basicaDeducao), cls: 'deducao' });
         rows.push({ label: 'Base tributável (課税所得)', valor: fmt(base), cls: 'total' });
         rows.push({ label: '(+) Imposto de renda (所得税)', valor: '+' + fmt(ir), cls: 'imposto' });
         rows.push({ label: '(+) Taxa reconstrução (復興特別税 2.1%)', valor: '+' + fmt(fukko), cls: 'imposto' });
-        rows.push({ label: '(+) Imposto municipal (住民税)', valor: '+' + fmt(juminzei), cls: 'imposto' });
+        rows.push({ label: '(+) Imposto municipal (住民税) + taxa florestal (森林環境税)', valor: '+' + fmt(juminzei), cls: 'imposto' });
         rows.push({ label: 'Total de impostos (' + pctEfetivo + '% da renda)', valor: fmt(totalImpostos), cls: 'total' });
 
         document.getElementById('breakdown').innerHTML = rows.map(r =>
@@ -979,8 +992,9 @@
         document.getElementById('tabela-texto').innerHTML = `
             <p style="margin-bottom:6px"><strong style="color:#27ae60">Fórmula geral:</strong> (Renda bruta - Deduções) = Base tributável → Alíquota progressiva</p>
             <p style="margin-bottom:6px">O Japão usa 7 faixas progressivas de 5% a 45%. Sobre o IR calculado ainda incide a taxa de reconstrução pós-Fukushima (復興特別税) de 2,1%.</p>
-            <p style="margin-bottom:6px">Empregados (会社員) têm dedução automática de empregado (給与所得控除) que varia de ¥550.000 a ¥1.950.000 conforme a renda.</p>
-            <p style="margin-bottom:6px">O imposto municipal (住民税) é de 10% flat da base tributável + ¥5.000, cobrado no ano seguinte.</p>
+            <p style="margin-bottom:6px"><strong style="color:#27ae60">Novidade 2026:</strong> Empregados (会社員) têm dedução mínima de empregado (給与所得控除) elevada de ¥550.000 para <strong>¥650.000</strong>.</p>
+            <p style="margin-bottom:6px"><strong style="color:#27ae60">Novidade 2026:</strong> Dedução básica (基礎控除) agora é em faixas: até ¥950.000 para rendas baixas e ¥580.000 para rendas entre ¥6,55M e ¥23,5M.</p>
+            <p style="margin-bottom:6px">O imposto municipal (住民税) é de 10% flat da base tributável + ¥5.000 (per capita) + ¥1.000 (taxa florestal nacional 森林環境税), cobrado no ano seguinte.</p>
             <p>O Furusato Nozei (ふるさと納税) é deduzido diretamente do juminzei a pagar — não do IR.</p>
         `;
     }
@@ -990,7 +1004,7 @@
         const juni = document.getElementById('r-juminzei').textContent;
         const base = document.getElementById('r-base').textContent;
         if (!ir || ir === '—') return;
-        const texto = `IR Japão 2024\nBase tributável: ${base}\nImposto de renda (所得税): ${ir}\nImposto municipal (住民税): ${juni}`;
+        const texto = `IR Japão 2026\nBase tributável: ${base}\nImposto de renda (所得税): ${ir}\nImposto municipal (住民税): ${juni}`;
         navigator.clipboard.writeText(texto).then(() => {
             const btn = evt.target;
             const orig = btn.textContent;
