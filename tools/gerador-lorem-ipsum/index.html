@@ -3,260 +3,341 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>LoremGen Pro | Gerador de Placeholder Profissional</title>
 
-<title>Gerador de Lorem Ipsum | UtiliWeb</title>
-
-<meta name="description" content="Gere textos Lorem Ipsum para layouts e projetos de forma rápida e gratuita.">
-<meta name="keywords" content="lorem ipsum, gerador de texto, utiliweb, placeholder text">
+<!-- Google Fonts: Inter -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
-:root{
-    --pad: clamp(10px, 2vw, 20px);
-    --radius: 18px;
+:root {
+    --primary: #0f172a;
+    --accent: #3b82f6; /* Blue 500 */
+    --accent-hover: #2563eb;
+    --bg: #f8fafc;
+    --card-bg: #ffffff;
+    --border: #e2e8f0;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --radius: 16px;
+    --shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
 }
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
 }
 
-html, body{
-    width:100%;
-    min-height:100dvh;
-    font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial;
-    background:linear-gradient(135deg,#2ecc71,#27ae60);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:var(--pad);
+body {
+    background-color: var(--bg);
+    color: var(--text-main);
+    min-height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
 }
 
-/* WRAPPER */
-.wrapper{
-    width:100%;
-    max-width:1000px;
-    background:#fff;
-    border-radius:var(--radius);
-    box-shadow:0 20px 60px rgba(0,0,0,.3);
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    overflow:hidden;
+.container {
+    width: 100%;
+    max-width: 1000px;
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    overflow: hidden;
 }
 
-/* PAINÉIS */
-.left-panel,
-.right-panel{
-    padding:clamp(16px, 3vw, 30px);
+/* Painel de Configuração */
+.config-panel {
+    padding: 40px;
+    background: #ffffff;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
 }
 
-/* ESQUERDA */
-.left-panel{
-    border-right:1px solid #eee;
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
-/* TIPOGRAFIA */
-header h1{
-    font-size:clamp(20px, 2.2vw, 26px);
+.brand-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--primary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 800;
 }
 
-.subtitle{
-    font-size:clamp(12px, 1.4vw, 14px);
-    color:#777;
+h1 {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
 }
 
-/* INPUT */
-input{
-    width:100%;
-    padding:12px;
-    margin-top:10px;
-    border-radius:10px;
-    border:2px solid #ddd;
-    font-size:14px;
-    outline:none;
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
-input:focus{
-    border-color:#27ae60;
+label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-main);
 }
 
-/* BOTÕES */
-.buttons{
-    display:flex;
-    gap:10px;
-    margin-top:15px;
+.input-field {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 14px;
+    color: var(--text-main);
+    background: #fff;
+    transition: all 0.2s;
 }
 
-button{
-    flex:1;
-    padding:12px;
-    border-radius:10px;
-    border:none;
-    cursor:pointer;
-    font-weight:700;
-    background:#27ae60;
-    color:#fff;
-    min-height:44px;
-    touch-action:manipulation;
+.input-field:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
-button:hover{
-    opacity:0.9;
+.btn-group {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
 }
 
-.copy-msg{
-    margin-top:10px;
-    color:#27ae60;
-    font-size:14px;
-    font-weight:600;
-    display:none;
+.btn {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
 
-/* TEXTAREA */
-textarea{
-    width:100%;
-    height:260px;
-    margin-top:20px;
-    padding:12px;
-    border-radius:10px;
-    border:2px solid #ddd;
-    resize:none;
-    font-size:13px;
-    outline:none;
+.btn-primary { background: var(--accent); color: white; }
+.btn-primary:hover { background: var(--accent-hover); }
+
+.btn-outline { background: white; color: var(--text-main); border: 1px solid var(--border); }
+.btn-outline:hover { background: #f8fafc; }
+
+/* Painel de Resultado */
+.result-panel {
+    padding: 40px;
+    background: #fcfcfd;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
 }
 
-textarea:focus{
-    border-color:#27ae60;
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
-/* DIREITA */
-.right-panel{
-    background:#eafaf1;
+.section-header::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--border);
 }
 
-/* RESPONSIVO */
-@media (max-width: 900px){
-    .wrapper{
-        grid-template-columns:1fr;
-    }
-
-    .left-panel{
-        border-right:none;
-        border-bottom:1px solid #eee;
-    }
-
-    .buttons{
-        flex-direction:column;
-    }
+textarea.result-area {
+    width: 100%;
+    flex: 1;
+    min-height: 400px;
+    padding: 24px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: white;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text-main);
+    resize: none;
+    outline: none;
+    transition: border-color 0.2s;
 }
 
-@media (max-width: 480px){
-    html, body{
-        padding:10px;
-    }
+textarea.result-area:focus {
+    border-color: var(--accent);
+}
 
-    textarea{
-        height:220px;
-        font-size:12px;
-    }
+.stats-bar {
+    display: flex;
+    gap: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+}
 
-    input, button{
-        font-size:13px;
-        padding:11px;
-    }
+/* Responsividade */
+@media (max-width: 850px) {
+    .container { grid-template-columns: 1fr; max-width: 550px; }
+    .config-panel { border-right: none; border-bottom: 1px solid var(--border); padding: 32px; }
+    .result-panel { padding: 32px; }
+}
+
+@media (max-width: 480px) {
+    body { padding: 10px; }
+    .config-panel, .result-panel { padding: 24px 16px; }
 }
 </style>
 </head>
-
 <body>
 
-<div class="wrapper">
-
-    <!-- ESQUERDA -->
-    <div class="left-panel">
-
-        <header>
-            <h1>📄 Gerador de Lorem Ipsum</h1>
-            <p class="subtitle">Textos para testes de layout</p>
-        </header>
-
-        <br>
-
-        <a href="../../index.html">← Voltar</a>
-
-        <br><br>
-
-        <label>Quantidade de parágrafos</label>
-        <input type="number" id="quantidade" min="1" max="20" value="3">
-
-        <div class="buttons">
-            <button onclick="gerarLorem()">Gerar</button>
-            <button onclick="copiarResultado()">Copiar</button>
+<div class="container">
+    <!-- Painel de Configuração -->
+    <div class="config-panel">
+        <div class="brand">
+            <div class="brand-icon">L</div>
+            <h1>LoremGen Pro</h1>
+        </div>
+        
+        <div class="form-group">
+            <label>Tipo de Geração</label>
+            <select id="type" class="input-field">
+                <option value="paragraphs">Parágrafos</option>
+                <option value="sentences">Frases</option>
+                <option value="words">Palavras</option>
+            </select>
         </div>
 
-        <div class="copy-msg" id="copyMsg">✓ Texto copiado com sucesso</div>
+        <div class="form-group">
+            <label>Quantidade</label>
+            <input id="amount" type="number" class="input-field" value="3" min="1" max="50">
+        </div>
 
-        <textarea id="resultado" placeholder="O texto aparecerá aqui..." readonly></textarea>
+        <div class="btn-group">
+            <button class="btn btn-primary" onclick="generate()">Gerar Texto</button>
+            <button class="btn btn-outline" onclick="copyText()" id="btnCopy">📋 Copiar Tudo</button>
+        </div>
 
+        <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid var(--border);">
+            <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">
+                <strong>Uso Profissional:</strong> Ideal para preencher layouts de UI/UX, testar tipografia e espaçamento em designs web e mobile.
+            </p>
+        </div>
     </div>
 
-    <!-- DIREITA -->
-    <div class="right-panel">
-
-        <h2>Como funciona</h2>
-        <p>
-            Gere textos fictícios para testar layouts, sites, aplicativos e designs.
-            Ideal para desenvolvimento e prototipagem.
-        </p>
-
+    <!-- Painel de Resultado -->
+    <div class="result-panel">
+        <div class="section-header">Texto Gerado</div>
+        
+        <textarea id="output" class="result-area" placeholder="Configure e clique em gerar..."></textarea>
+        
+        <div class="stats-bar">
+            <span id="statWords">0 palavras</span>
+            <span id="statChars">0 caracteres</span>
+        </div>
     </div>
-
 </div>
 
 <script>
-const resultado = document.getElementById("resultado");
-const copyMsg = document.getElementById("copyMsg");
+const loremSource = [
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+    "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+    "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+    "Curabitur pretium tincidunt lacus. Nulla gravida orci a odio.",
+    "Nullam varius, turpis et commodo pharetra, est eros bibendum elit, nec luctus magna felis sollicitudin mauris.",
+    "Integer in mauris eu nibh euismod gravida.",
+    "Duis ac tellus et risus vulputate vehicula.",
+    "Donec lobortis risus a elit. Etiam tempor.",
+    "Ut ullamcorper, ligula eu tempor congue, eros est euismod turpis, id tincidunt sapien risus a quam.",
+    "Maecenas fermentum consequat mi. Donec fermentum. Pellentesque malesuada nulla a mi.",
+    "Duis sapien nunc, commodo et, interdum suscipit, sollicitudin et, dolor.",
+    "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas."
+];
 
-const lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
-
-function gerarLorem() {
-
-    const valorInput = document.getElementById("quantidade").value;
-    let quantidade = parseInt(valorInput, 10);
-
-    // campo vazio ou não numérico vira NaN, que escapa dos clamps abaixo
-    // (comparações com NaN são sempre false), então tratamos isso explicitamente
-    if (Number.isNaN(quantidade) || quantidade < 1) quantidade = 1;
-    if (quantidade > 20) quantidade = 20;
-
-    let texto = [];
-
-    for (let i = 0; i < quantidade; i++) {
-        texto.push(lorem);
+function generate() {
+    const type = document.getElementById('type').value;
+    const amount = parseInt(document.getElementById('amount').value) || 1;
+    const output = document.getElementById('output');
+    
+    let result = "";
+    
+    if (type === 'paragraphs') {
+        for (let i = 0; i < amount; i++) {
+            // Embaralhar frases para criar parágrafos variados
+            let p = [...loremSource].sort(() => Math.random() - 0.5).slice(0, 5).join(" ");
+            result += p + (i < amount - 1 ? "\n\n" : "");
+        }
+    } else if (type === 'sentences') {
+        for (let i = 0; i < amount; i++) {
+            result += loremSource[Math.floor(Math.random() * loremSource.length)] + " ";
+        }
+    } else {
+        // Palavras
+        let words = loremSource.join(" ").split(" ");
+        for (let i = 0; i < amount; i++) {
+            result += words[Math.floor(Math.random() * words.length)] + (i < amount - 1 ? " " : "");
+        }
     }
-
-    resultado.value = texto.join("\n\n");
+    
+    output.value = result;
+    updateStats(result);
 }
 
-async function copiarResultado() {
+function updateStats(text) {
+    const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+    const chars = text.length;
+    document.getElementById('statWords').innerText = `${words} palavras`;
+    document.getElementById('statChars').innerText = `${chars} caracteres`;
+}
 
-    if (!resultado.value) return;
-
+async function copyText() {
+    const output = document.getElementById('output');
+    if (!output.value) return;
+    
     try {
-
-        await navigator.clipboard.writeText(resultado.value);
-
-        copyMsg.style.display = "block";
-
+        await navigator.clipboard.writeText(output.value);
+        const btn = document.getElementById('btnCopy');
+        const original = btn.innerHTML;
+        btn.innerHTML = "✅ Copiado!";
+        btn.style.borderColor = "#10b981";
+        btn.style.color = "#10b981";
+        
         setTimeout(() => {
-            copyMsg.style.display = "none";
+            btn.innerHTML = original;
+            btn.style.borderColor = "var(--border)";
+            btn.style.color = "var(--text-main)";
         }, 2000);
-
-    } catch (error) {
-
-        alert("Não foi possível copiar o texto.");
+    } catch (err) {
+        alert("Erro ao copiar.");
     }
 }
+
+// Inicializar com 3 parágrafos
+window.onload = generate;
 </script>
 
 </body>
