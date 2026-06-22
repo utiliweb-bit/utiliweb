@@ -8,7 +8,30 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Calculadora Financeira</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --paper: #F4EFE1;
+            --paper-soft: #ECE5CF;
+            --paper-line: #DCD0AE;
+            --ink: #221D15;
+            --ink-soft: #6E6552;
+            --pine: #123A29;
+            --pine-light: #1E5A40;
+            --pine-deep: #081F16;
+            --brass: #C9A04D;
+            --brass-light: #E3C27C;
+            --brass-dark: #93702C;
+            --lcd-bg: #0D0805;
+            --led: #FF4433;
+            --led-dim: rgba(255, 68, 51, 0.4);
+            --font-display: 'Space Mono', 'Courier New', monospace;
+            --font-body: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -19,226 +42,261 @@
         html, body {
             width: 100%;
             min-height: 100vh;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            font-family: var(--font-body);
+            background: radial-gradient(circle at 20% 0%, var(--pine-light) 0%, var(--pine) 45%, var(--pine-deep) 100%);
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 16px;
+            padding: 20px;
             margin: 0;
         }
 
         .wrapper {
             width: 100%;
-            max-width: 1200px;
-            background: white;
+            max-width: 1180px;
+            background: var(--paper);
             border-radius: 16px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--brass-dark);
+            box-shadow: 0 24px 60px rgba(4, 14, 10, 0.55), 0 0 0 6px rgba(8, 31, 22, 0.25);
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1.05fr 0.95fr;
             overflow: hidden;
-            max-height: 90vh;
+            max-height: 92vh;
         }
 
         .left-panel {
-            padding: 32px;
+            padding: 34px 34px 28px;
             overflow-y: auto;
-            border-right: 1px solid #e0e0e0;
+            background: var(--paper);
+            background-image: repeating-linear-gradient(
+                to bottom,
+                transparent 0px,
+                transparent 27px,
+                rgba(110, 101, 82, 0.08) 28px
+            );
+            border-right: 2px solid var(--brass-dark);
             -webkit-overflow-scrolling: touch;
         }
 
         .right-panel {
-            padding: 32px;
-            background: linear-gradient(135deg, #e8f8f5 0%, #d5f4e6 100%);
+            padding: 30px 30px 24px;
+            background: linear-gradient(165deg, var(--pine-light) 0%, var(--pine) 55%, var(--pine-deep) 100%);
             display: flex;
             flex-direction: column;
             overflow-y: auto;
+            color: var(--paper-soft);
             -webkit-overflow-scrolling: touch;
         }
 
+        /* ---------- HEADER / NAMEPLATE ---------- */
         header {
-            margin-bottom: 24px;
-            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .nameplate {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--pine);
+            color: var(--paper-soft);
+            border: 2px solid var(--brass);
+            border-radius: 6px;
+            padding: 9px 16px;
+            box-shadow: 0 3px 0 var(--pine-deep);
+        }
+
+        .nameplate-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--led);
+            box-shadow: 0 0 5px var(--led), 0 0 10px var(--led-dim);
+            flex-shrink: 0;
         }
 
         h1 {
-            color: #333;
-            font-size: 28px;
-            margin-bottom: 6px;
+            font-family: var(--font-display);
+            font-size: 16px;
             font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
         }
 
         .subtitle {
-            color: #999;
-            font-size: 13px;
+            color: var(--ink-soft);
+            font-size: 12px;
             font-weight: 500;
+            font-style: italic;
+            margin-top: 8px;
+            padding-left: 2px;
         }
 
         .info-box {
-            background: linear-gradient(135deg, #e8f8f5 0%, #d5f4e6 100%);
-            border-left: 4px solid #27ae60;
-            padding: 12px;
-            border-radius: 8px;
+            background: rgba(201, 160, 77, 0.12);
+            border-left: 3px solid var(--brass);
+            padding: 11px 13px;
+            border-radius: 0 8px 8px 0;
             font-size: 11px;
-            color: #27ae60;
-            margin-bottom: 24px;
-            line-height: 1.5;
+            color: var(--ink-soft);
+            margin-bottom: 22px;
+            line-height: 1.55;
         }
 
         .info-box strong {
-            color: #27ae60;
+            color: var(--pine);
             font-weight: 700;
         }
 
+        /* ---------- MODE KEYS ---------- */
         .modos {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 8px;
-            margin-bottom: 24px;
+            margin-bottom: 22px;
         }
 
-        .modo-btn {
-            padding: 10px 6px;
-            background: #e0e0e0;
-            color: #666;
-            border: none;
+        .modo-btn, .toggle-btn {
+            font-family: var(--font-body);
+            padding: 11px 6px;
+            background: var(--paper);
+            color: var(--ink-soft);
+            border: 2px solid var(--paper-line);
             border-radius: 8px;
             font-size: 11px;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s ease, color 0.15s ease;
             text-transform: uppercase;
             letter-spacing: 0.3px;
             line-height: 1.4;
             -webkit-appearance: none;
             appearance: none;
+            box-shadow: 0 2px 0 var(--paper-line);
         }
 
-        .modo-btn.ativo {
-            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
-            color: white;
+        .modo-btn.ativo, .toggle-btn.ativo {
+            background: var(--pine);
+            color: var(--paper-soft);
+            border-color: var(--pine-deep);
+            box-shadow: 0 2px 0 var(--pine-deep), inset 0 1px 4px rgba(0,0,0,0.35);
         }
 
-        .modo-btn:active {
-            transform: scale(0.98);
+        .modo-btn:active, .toggle-btn:active, .btn-calcular:active {
+            transform: translateY(2px);
         }
+
+        .modo-btn:active { box-shadow: 0 0 0 var(--paper-line); }
+        .modo-btn.ativo:active { box-shadow: 0 0 0 var(--pine-deep); }
 
         .section-title {
-            font-size: 12px;
+            font-family: var(--font-display);
+            font-size: 11px;
             font-weight: 700;
-            color: #333;
+            color: var(--pine);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 12px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #27ae60;
+            letter-spacing: 1px;
+            margin-bottom: 14px;
+            padding-bottom: 9px;
+            border-bottom: 2px solid var(--brass);
         }
 
+        /* ---------- INPUTS (LEDGER LINES) ---------- */
         .input-group {
-            margin-bottom: 16px;
+            margin-bottom: 18px;
         }
 
         .input-label {
-            font-size: 11px;
+            font-size: 10.5px;
             font-weight: 700;
-            color: #666;
+            color: var(--ink-soft);
             text-transform: uppercase;
-            letter-spacing: 0.3px;
-            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+            margin-bottom: 7px;
             display: block;
         }
 
         .input-hint {
             font-size: 10px;
-            color: #999;
-            margin-top: 4px;
+            color: var(--ink-soft);
+            opacity: 0.85;
+            margin-top: 6px;
             font-weight: 500;
+            line-height: 1.5;
         }
 
         input[type="number"], input[type="text"], select {
             width: 100%;
-            padding: 11px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
+            padding: 9px 4px 10px;
+            border: none;
+            border-bottom: 2px solid var(--paper-line);
+            border-radius: 0;
+            font-family: var(--font-mono);
             font-size: 16px;
-            font-weight: 500;
-            background: white;
-            color: #333;
-            transition: all 0.2s ease;
+            font-weight: 600;
+            background: transparent;
+            color: var(--ink);
+            transition: border-color 0.2s ease, background 0.2s ease;
             -webkit-appearance: none;
             appearance: none;
-            font-family: inherit;
         }
 
         select {
             cursor: pointer;
+            background-image: linear-gradient(45deg, transparent 50%, var(--ink-soft) 50%), linear-gradient(135deg, var(--ink-soft) 50%, transparent 50%);
+            background-position: calc(100% - 14px) center, calc(100% - 9px) center;
+            background-size: 5px 5px, 5px 5px;
+            background-repeat: no-repeat;
         }
 
         input[type="number"]:focus, input[type="text"]:focus, select:focus {
             outline: none;
-            border-color: #27ae60;
-            background: #f0f9f7;
+            border-bottom-color: var(--brass);
+            background: rgba(201, 160, 77, 0.08);
+        }
+
+        input:focus-visible, select:focus-visible, button:focus-visible {
+            outline: 2px solid var(--brass);
+            outline-offset: 2px;
         }
 
         .input-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
-        .input-row-3 {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 12px;
+            gap: 14px;
         }
 
         .toggle-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 8px;
-            margin-bottom: 16px;
-        }
-
-        .toggle-btn {
-            padding: 10px;
-            background: #e0e0e0;
-            color: #666;
-            border: none;
-            border-radius: 8px;
-            font-size: 11px;
-            font-weight: 700;
-            cursor: pointer;
-            text-transform: uppercase;
-        }
-
-        .toggle-btn.ativo {
-            background: #27ae60;
-            color: white;
+            margin-bottom: 18px;
         }
 
         .btn-calcular {
             width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
-            color: white;
+            padding: 15px;
+            background: linear-gradient(160deg, var(--brass-light) 0%, var(--brass) 60%, var(--brass-dark) 100%);
+            color: var(--pine-deep);
             border: none;
             border-radius: 10px;
+            font-family: var(--font-body);
             font-size: 13px;
-            font-weight: 700;
+            font-weight: 800;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
-            margin-top: 4px;
+            letter-spacing: 0.8px;
+            box-shadow: 0 4px 0 var(--brass-dark), 0 10px 18px rgba(20, 14, 4, 0.3);
+            margin-top: 6px;
             -webkit-appearance: none;
             appearance: none;
         }
 
         .btn-calcular:active {
-            transform: scale(0.98);
+            box-shadow: 0 1px 0 var(--brass-dark);
         }
 
+        /* ---------- RIGHT PANEL / REGISTER ---------- */
         .resultado-section {
             flex: 1;
             display: flex;
@@ -246,85 +304,132 @@
             min-height: 0;
         }
 
-        .resultado-header {
-            font-size: 12px;
-            font-weight: 700;
-            color: #27ae60;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 12px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #27ae60;
+        .register-header {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin-bottom: 14px;
         }
 
+        .status-light {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: var(--led);
+            box-shadow: 0 0 6px var(--led), 0 0 13px var(--led-dim);
+            flex-shrink: 0;
+        }
+
+        .resultado-header {
+            font-family: var(--font-display);
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--brass-light);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        /* LED display */
         .resultado-total {
             display: flex;
             flex-direction: column;
-            padding: 14px;
-            background: white;
+            padding: 20px 18px;
+            background: var(--lcd-bg);
             border-radius: 10px;
-            border: 2px solid #27ae60;
-            margin-bottom: 12px;
+            border: 3px solid var(--brass-dark);
+            margin-bottom: 0;
+            box-shadow: inset 0 3px 10px rgba(0,0,0,0.65), inset 0 -2px 5px rgba(255,255,255,0.03);
         }
 
         .resultado-total-label {
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 700;
-            color: #27ae60;
+            color: var(--brass-light);
             text-transform: uppercase;
+            letter-spacing: 1px;
             margin-bottom: 8px;
+            font-family: var(--font-body);
         }
 
         .resultado-texto {
-            font-size: 26px;
+            font-size: 28px;
             font-weight: 700;
-            color: #27ae60;
-            font-family: 'Courier New', monospace;
+            color: var(--led);
+            font-family: var(--font-display);
             word-break: break-all;
-            line-height: 1.4;
+            line-height: 1.3;
+            letter-spacing: 0.5px;
+            font-variant-numeric: tabular-nums;
+            text-shadow: 0 0 7px var(--led), 0 0 16px var(--led-dim);
+            animation: ledPulse 2.6s ease-in-out infinite;
+        }
+
+        @keyframes ledPulse {
+            0%, 100% { text-shadow: 0 0 6px var(--led), 0 0 13px var(--led-dim); }
+            50% { text-shadow: 0 0 9px var(--led), 0 0 20px var(--led-dim); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .resultado-texto { animation: none; }
+            * { transition-duration: 0.01ms !important; }
         }
 
         .resultado-sub {
             font-size: 11px;
-            color: #888;
-            margin-top: 6px;
-            font-weight: 600;
+            color: rgba(255, 68, 51, 0.6);
+            margin-top: 8px;
+            font-weight: 500;
+            font-family: var(--font-mono);
+        }
+
+        /* Receipt tape */
+        .tape-wrap {
+            background: var(--paper);
+            border-radius: 0 0 2px 2px;
         }
 
         .breakdown {
             display: flex;
             flex-direction: column;
-            gap: 6px;
-            margin-bottom: 12px;
+            gap: 9px;
+            padding: 16px 16px 14px;
         }
 
         .breakdown-item {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            padding: 8px 12px;
-            background: rgba(255, 255, 255, 0.6);
-            border: 1px solid rgba(39, 174, 96, 0.2);
-            border-radius: 8px;
+            align-items: baseline;
+            gap: 10px;
+            padding-bottom: 7px;
+            border-bottom: 1px dotted var(--ink-soft);
             font-size: 12px;
+            font-family: var(--font-mono);
         }
 
         .breakdown-label {
-            color: #555;
-            font-weight: 600;
+            color: var(--ink-soft);
+            font-weight: 500;
         }
 
         .breakdown-valor {
-            color: #27ae60;
+            color: var(--pine);
             font-weight: 700;
-            font-family: 'Courier New', monospace;
+            white-space: nowrap;
+        }
+
+        .tape-tear {
+            height: 13px;
+            background-image: radial-gradient(circle at 7px 0px, var(--pine) 6.5px, var(--paper) 7px);
+            background-size: 14px 13px;
+            background-repeat: repeat-x;
+            margin-bottom: 16px;
         }
 
         .botoes {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 8px;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
         }
 
         button {
@@ -334,64 +439,71 @@
             font-size: 11px;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.15s ease;
             text-transform: uppercase;
-            letter-spacing: 0.3px;
+            letter-spacing: 0.4px;
+            font-family: var(--font-body);
             -webkit-appearance: none;
             appearance: none;
         }
 
         .btn-copiar {
-            background: white;
-            color: #27ae60;
-            border: 2px solid #27ae60;
+            background: transparent;
+            color: var(--brass-light);
+            border: 2px solid var(--brass);
         }
 
         .btn-copiar:active {
-            background: #27ae60;
-            color: white;
+            background: var(--brass);
+            color: var(--pine-deep);
             transform: scale(0.98);
         }
 
         .btn-limpar {
-            background: rgba(255, 255, 255, 0.5);
-            color: #27ae60;
-            border: 2px solid rgba(39, 174, 96, 0.3);
+            background: rgba(236, 229, 207, 0.06);
+            color: var(--paper-soft);
+            border: 2px solid rgba(236, 229, 207, 0.25);
         }
 
         .btn-limpar:active {
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(236, 229, 207, 0.16);
             transform: scale(0.98);
         }
 
+        /* Manual note (how it works) */
         .tabela-ref {
-            margin-top: 12px;
             flex: 1;
             display: flex;
             flex-direction: column;
             min-height: 0;
+            background: rgba(236, 229, 207, 0.06);
+            border: 1px dashed var(--brass-dark);
+            border-radius: 8px;
+            padding: 14px;
         }
 
         .tabela-titulo {
-            font-size: 11px;
+            font-family: var(--font-display);
+            font-size: 10.5px;
             font-weight: 700;
-            color: #27ae60;
+            color: var(--brass-light);
             text-transform: uppercase;
-            letter-spacing: 0.3px;
-            margin-bottom: 8px;
-            padding-bottom: 6px;
-            border-bottom: 2px solid rgba(39, 174, 96, 0.3);
+            letter-spacing: 0.6px;
+            margin-bottom: 9px;
+            padding-bottom: 7px;
+            border-bottom: 1px solid rgba(201, 160, 77, 0.3);
         }
 
         .tabela-grid {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 8px;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
-            font-size: 11px;
-            color: #555;
-            line-height: 1.5;
+            font-size: 11.5px;
+            color: var(--paper-soft);
+            opacity: 0.88;
+            line-height: 1.6;
         }
 
         .tabela-grid p {
@@ -399,63 +511,62 @@
         }
 
         .tabela-grid strong {
-            color: #27ae60;
+            color: var(--brass-light);
+            opacity: 1;
         }
 
         .status {
             text-align: center;
             font-size: 11px;
-            color: #27ae60;
-            margin-top: 8px;
+            color: var(--brass-light);
+            margin-top: 10px;
             min-height: 16px;
             font-weight: 700;
+            font-family: var(--font-body);
         }
 
         .disclaimer {
             font-size: 10px;
-            color: #999;
-            margin-top: 10px;
+            color: var(--paper-soft);
+            opacity: 0.55;
+            margin-top: 12px;
             line-height: 1.5;
             font-style: italic;
         }
 
-        /* RESPONSIVO */
+        /* ---------- RESPONSIVE ---------- */
         @media (max-width: 1024px) {
             .wrapper {
                 grid-template-columns: 1fr;
                 max-height: none;
-                border-radius: 12px;
+                border-radius: 14px;
             }
             .left-panel {
                 border-right: none;
-                border-bottom: 1px solid #e0e0e0;
-                padding: 24px;
+                border-bottom: 2px solid var(--brass-dark);
+                padding: 26px;
             }
             .right-panel {
-                padding: 24px;
+                padding: 26px;
             }
-            h1 { font-size: 24px; }
         }
 
         @media (max-width: 768px) {
             html, body { padding: 12px; }
-            .wrapper { grid-template-columns: 1fr; max-height: none; border-radius: 12px; }
-            .left-panel { border-right: none; border-bottom: 1px solid #e0e0e0; padding: 16px; }
-            .right-panel { padding: 16px; }
-            h1 { font-size: 22px; }
-            .subtitle { font-size: 12px; }
-            .info-box { font-size: 10px; padding: 10px; margin-bottom: 16px; }
-            .modos { gap: 6px; margin-bottom: 16px; }
-            .modo-btn { padding: 9px 4px; font-size: 10px; }
-            .section-title { font-size: 11px; margin-bottom: 10px; padding-bottom: 6px; }
+            .wrapper { border-radius: 12px; }
+            .left-panel { padding: 18px; }
+            .right-panel { padding: 18px; }
+            .subtitle { font-size: 11px; }
+            .info-box { font-size: 10px; padding: 10px; margin-bottom: 18px; }
+            .modos { gap: 6px; margin-bottom: 18px; }
+            .modo-btn { padding: 10px 4px; font-size: 10px; }
+            .section-title { font-size: 10.5px; margin-bottom: 12px; padding-bottom: 7px; }
             .input-label { font-size: 10px; }
-            input[type="number"], input[type="text"], select { font-size: 15px; padding: 10px; }
-            .btn-calcular { padding: 12px; font-size: 12px; }
-            .resultado-header { font-size: 11px; margin-bottom: 10px; }
-            .resultado-total { padding: 12px; margin-bottom: 10px; }
-            .resultado-total-label { font-size: 10px; }
-            .resultado-texto { font-size: 20px; }
-            .botoes { gap: 6px; margin-bottom: 10px; }
+            input[type="number"], input[type="text"], select { font-size: 15px; padding: 8px 4px 9px; }
+            .btn-calcular { padding: 13px; font-size: 12px; }
+            .resultado-total { padding: 16px 14px; }
+            .resultado-texto { font-size: 22px; }
+            .botoes { gap: 6px; margin-bottom: 12px; }
             button { padding: 10px; font-size: 10px; }
             .tabela-titulo { font-size: 10px; }
             .status { font-size: 10px; min-height: 14px; }
@@ -464,22 +575,24 @@
         @media (max-width: 480px) {
             html, body { padding: 8px; }
             .wrapper { border-radius: 10px; }
-            .left-panel, .right-panel { padding: 12px; }
-            h1 { font-size: 20px; margin-bottom: 4px; }
-            .subtitle { font-size: 11px; }
-            .info-box { font-size: 9px; padding: 8px; margin-bottom: 12px; }
-            .modos { gap: 5px; margin-bottom: 12px; }
-            .modo-btn { padding: 8px 3px; font-size: 9px; }
-            .section-title { font-size: 10px; margin-bottom: 8px; padding-bottom: 4px; }
-            .input-label { font-size: 9px; margin-bottom: 4px; }
-            input[type="number"], input[type="text"], select { font-size: 14px; padding: 9px; }
-            .input-row, .input-row-3 { grid-template-columns: 1fr; gap: 8px; }
-            .btn-calcular { padding: 11px; font-size: 11px; }
-            .resultado-total { padding: 10px; margin-bottom: 8px; }
-            .resultado-texto { font-size: 18px; }
-            .botoes { grid-template-columns: 1fr 1fr; gap: 5px; margin-bottom: 8px; }
+            .left-panel, .right-panel { padding: 14px; }
+            h1 { font-size: 13px; }
+            .nameplate { padding: 8px 12px; }
+            .subtitle { font-size: 10.5px; }
+            .info-box { font-size: 9.5px; padding: 9px; margin-bottom: 14px; }
+            .modos { gap: 5px; margin-bottom: 14px; }
+            .modo-btn { padding: 9px 3px; font-size: 9px; }
+            .section-title { font-size: 10px; margin-bottom: 10px; padding-bottom: 6px; }
+            .input-label { font-size: 9px; margin-bottom: 5px; }
+            input[type="number"], input[type="text"], select { font-size: 14px; padding: 8px 2px 8px; }
+            .input-row { grid-template-columns: 1fr; gap: 10px; }
+            .btn-calcular { padding: 12px; font-size: 11px; }
+            .resultado-total { padding: 14px 12px; }
+            .resultado-texto { font-size: 19px; }
+            .breakdown { padding: 13px 13px 12px; }
+            .botoes { grid-template-columns: 1fr 1fr; gap: 5px; margin-bottom: 10px; }
             button { padding: 9px; font-size: 9px; }
-            .breakdown-item { font-size: 11px; padding: 7px 10px; }
+            .breakdown-item { font-size: 11px; }
             .status { font-size: 9px; min-height: 12px; }
         }
     </style>
@@ -488,19 +601,22 @@
     <div class="wrapper">
         <div class="left-panel">
             <header>
-                <h1>💰 Calculadora Financeira</h1>
-                <p class="subtitle">Juros, parcelamento, moeda e porcentagem</p>
+                <div class="nameplate">
+                    <span class="nameplate-dot" aria-hidden="true"></span>
+                    <h1>Calculadora Financeira</h1>
+                </div>
+                <p class="subtitle">Juros, parcelamento, moeda e porcentagem — tudo na mesma régua.</p>
             </header>
 
             <div class="info-box">
-                <strong>Dica:</strong> Escolha o tipo de cálculo abaixo. Cada modo ajusta os campos automaticamente para o que você precisa calcular.
+                <strong>Dica:</strong> escolha o tipo de cálculo abaixo. Cada modo ajusta os campos automaticamente para o que você precisa calcular.
             </div>
 
-            <div class="modos">
-                <button class="modo-btn ativo" id="btn-juros" onclick="setModo('juros')">📈 Juros</button>
-                <button class="modo-btn" id="btn-parcela" onclick="setModo('parcela')">🧾 Parcelamento</button>
-                <button class="modo-btn" id="btn-moeda" onclick="setModo('moeda')">💱 Conversor de Moeda</button>
-                <button class="modo-btn" id="btn-porcento" onclick="setModo('porcento')">％ Porcentagem</button>
+            <div class="modos" role="tablist" aria-label="Modo de cálculo">
+                <button class="modo-btn ativo" id="btn-juros" onclick="setModo('juros')" aria-pressed="true">📈 Juros</button>
+                <button class="modo-btn" id="btn-parcela" onclick="setModo('parcela')" aria-pressed="false">🧾 Parcelamento</button>
+                <button class="modo-btn" id="btn-moeda" onclick="setModo('moeda')" aria-pressed="false">💱 Conversor de Moeda</button>
+                <button class="modo-btn" id="btn-porcento" onclick="setModo('porcento')" aria-pressed="false">％ Porcentagem</button>
             </div>
 
             <div class="section-title" id="titulo-secao">Juros Compostos / Simples</div>
@@ -508,20 +624,20 @@
             <!-- JUROS -->
             <div id="campos-juros">
                 <div class="toggle-row">
-                    <button class="toggle-btn ativo" id="toggle-composto" onclick="setTipoJuros('composto')">Composto</button>
-                    <button class="toggle-btn" id="toggle-simples" onclick="setTipoJuros('simples')">Simples</button>
+                    <button class="toggle-btn ativo" id="toggle-composto" onclick="setTipoJuros('composto')" aria-pressed="true">Composto</button>
+                    <button class="toggle-btn" id="toggle-simples" onclick="setTipoJuros('simples')" aria-pressed="false">Simples</button>
                 </div>
                 <div class="input-group">
-                    <label class="input-label">Valor inicial (capital)</label>
+                    <label class="input-label" for="juros-capital">Valor inicial (capital)</label>
                     <input type="number" id="juros-capital" value="1000" min="0" step="0.01" oninput="calcular()">
                 </div>
                 <div class="input-row">
                     <div class="input-group">
-                        <label class="input-label">Taxa de juros (% por período)</label>
+                        <label class="input-label" for="juros-taxa">Taxa de juros (% por período)</label>
                         <input type="number" id="juros-taxa" value="2" min="0" step="0.01" oninput="calcular()">
                     </div>
                     <div class="input-group">
-                        <label class="input-label">Número de períodos</label>
+                        <label class="input-label" for="juros-periodos">Número de períodos</label>
                         <input type="number" id="juros-periodos" value="12" min="0" step="1" oninput="calcular()">
                     </div>
                 </div>
@@ -531,16 +647,16 @@
             <!-- PARCELAMENTO -->
             <div id="campos-parcela" style="display:none;">
                 <div class="input-group">
-                    <label class="input-label">Valor total da compra</label>
+                    <label class="input-label" for="parcela-valor">Valor total da compra</label>
                     <input type="number" id="parcela-valor" value="1200" min="0" step="0.01" oninput="calcular()">
                 </div>
                 <div class="input-row">
                     <div class="input-group">
-                        <label class="input-label">Número de parcelas</label>
+                        <label class="input-label" for="parcela-numero">Número de parcelas</label>
                         <input type="number" id="parcela-numero" value="12" min="1" step="1" oninput="calcular()">
                     </div>
                     <div class="input-group">
-                        <label class="input-label">Juros ao mês (%)</label>
+                        <label class="input-label" for="parcela-juros">Juros ao mês (%)</label>
                         <input type="number" id="parcela-juros" value="0" min="0" step="0.01" oninput="calcular()">
                     </div>
                 </div>
@@ -550,12 +666,12 @@
             <!-- CONVERSOR DE MOEDA -->
             <div id="campos-moeda" style="display:none;">
                 <div class="input-group">
-                    <label class="input-label">Valor</label>
+                    <label class="input-label" for="moeda-valor">Valor</label>
                     <input type="number" id="moeda-valor" value="100" min="0" step="0.01" oninput="calcular()">
                 </div>
                 <div class="input-row">
                     <div class="input-group">
-                        <label class="input-label">De</label>
+                        <label class="input-label" for="moeda-de">De</label>
                         <select id="moeda-de" onchange="calcular()">
                             <option value="BRL">BRL — Real</option>
                             <option value="USD">USD — Dólar</option>
@@ -564,7 +680,7 @@
                         </select>
                     </div>
                     <div class="input-group">
-                        <label class="input-label">Para</label>
+                        <label class="input-label" for="moeda-para">Para</label>
                         <select id="moeda-para" onchange="calcular()">
                             <option value="BRL" selected>BRL — Real</option>
                             <option value="USD">USD — Dólar</option>
@@ -574,7 +690,7 @@
                     </div>
                 </div>
                 <div class="input-group">
-                    <label class="input-label">Taxa de câmbio manual (opcional)</label>
+                    <label class="input-label" for="moeda-taxa-manual">Taxa de câmbio manual (opcional)</label>
                     <input type="number" id="moeda-taxa-manual" placeholder="Deixe vazio para usar taxa de referência" min="0" step="0.0001" oninput="calcular()">
                     <p class="input-hint">Cotações mudam o tempo todo — os valores pré-carregados são apenas referência aproximada. Para um valor exato, confira o câmbio do dia e cole a taxa aqui.</p>
                 </div>
@@ -583,17 +699,17 @@
             <!-- PORCENTAGEM -->
             <div id="campos-porcento" style="display:none;">
                 <div class="toggle-row">
-                    <button class="toggle-btn ativo" id="toggle-pct-de" onclick="setTipoPct('de')">X% de um valor</button>
-                    <button class="toggle-btn" id="toggle-pct-desconto" onclick="setTipoPct('desconto')">Desconto / Acréscimo</button>
+                    <button class="toggle-btn ativo" id="toggle-pct-de" onclick="setTipoPct('de')" aria-pressed="true">X% de um valor</button>
+                    <button class="toggle-btn" id="toggle-pct-desconto" onclick="setTipoPct('desconto')" aria-pressed="false">Desconto / Acréscimo</button>
                 </div>
                 <div id="pct-campos-de">
                     <div class="input-row">
                         <div class="input-group">
-                            <label class="input-label">Porcentagem (%)</label>
+                            <label class="input-label" for="pct-porcentagem">Porcentagem (%)</label>
                             <input type="number" id="pct-porcentagem" value="15" step="0.01" oninput="calcular()">
                         </div>
                         <div class="input-group">
-                            <label class="input-label">Valor</label>
+                            <label class="input-label" for="pct-valor">Valor</label>
                             <input type="number" id="pct-valor" value="200" step="0.01" oninput="calcular()">
                         </div>
                     </div>
@@ -601,17 +717,17 @@
                 <div id="pct-campos-desconto" style="display:none;">
                     <div class="input-row">
                         <div class="input-group">
-                            <label class="input-label">Valor original</label>
+                            <label class="input-label" for="pct-valor-original">Valor original</label>
                             <input type="number" id="pct-valor-original" value="200" step="0.01" oninput="calcular()">
                         </div>
                         <div class="input-group">
-                            <label class="input-label">Porcentagem (%)</label>
+                            <label class="input-label" for="pct-porcentagem-2">Porcentagem (%)</label>
                             <input type="number" id="pct-porcentagem-2" value="15" step="0.01" oninput="calcular()">
                         </div>
                     </div>
                     <div class="toggle-row">
-                        <button class="toggle-btn ativo" id="toggle-desconto" onclick="setSinalPct('desconto')">Desconto (−)</button>
-                        <button class="toggle-btn" id="toggle-acrescimo" onclick="setSinalPct('acrescimo')">Acréscimo (+)</button>
+                        <button class="toggle-btn ativo" id="toggle-desconto" onclick="setSinalPct('desconto')" aria-pressed="true">Desconto (−)</button>
+                        <button class="toggle-btn" id="toggle-acrescimo" onclick="setSinalPct('acrescimo')" aria-pressed="false">Acréscimo (+)</button>
                     </div>
                 </div>
             </div>
@@ -621,15 +737,21 @@
 
         <div class="right-panel">
             <div class="resultado-section">
-                <div class="resultado-header">Resultado</div>
+                <div class="register-header">
+                    <span class="status-light" aria-hidden="true"></span>
+                    <span class="resultado-header">Resultado</span>
+                </div>
 
                 <div class="resultado-total" id="resultado-box" style="display:none;">
                     <span class="resultado-total-label" id="label-saida">Resultado</span>
-                    <span class="resultado-texto" id="output">-</span>
+                    <span class="resultado-texto" id="output" aria-live="polite">-</span>
                     <span class="resultado-sub" id="output-sub"></span>
                 </div>
 
-                <div class="breakdown" id="breakdown"></div>
+                <div class="tape-wrap">
+                    <div class="breakdown" id="breakdown"></div>
+                    <div class="tape-tear" aria-hidden="true"></div>
+                </div>
 
                 <div class="botoes">
                     <button class="btn-copiar" onclick="copiar(event)">📋 Copiar</button>
@@ -643,7 +765,7 @@
 
                 <p class="disclaimer" id="disclaimer-moeda" style="display:none;">As taxas de câmbio pré-carregadas são aproximadas e servem apenas como referência rápida. Para decisões financeiras reais, sempre confira a cotação atualizada do dia em uma fonte confiável (banco, corretora ou conversor oficial).</p>
 
-                <div class="status" id="status"></div>
+                <div class="status" id="status" aria-live="polite"></div>
             </div>
         </div>
     </div>
@@ -679,8 +801,14 @@
 
         function setModo(m) {
             modo = m;
-            document.querySelectorAll('.modo-btn').forEach(b => b.classList.remove('ativo'));
-            document.getElementById('btn-' + m).classList.add('ativo');
+            document.querySelectorAll('.modo-btn').forEach(b => {
+                b.classList.remove('ativo');
+                b.setAttribute('aria-pressed', 'false');
+            });
+            const btnAtivo = document.getElementById('btn-' + m);
+            btnAtivo.classList.add('ativo');
+            btnAtivo.setAttribute('aria-pressed', 'true');
+
             const c = configs[m];
             document.getElementById('titulo-secao').textContent = c.titulo;
             document.getElementById('label-saida').textContent = c.labelSaida;
@@ -699,7 +827,9 @@
         function setTipoJuros(t) {
             tipoJuros = t;
             document.getElementById('toggle-composto').classList.toggle('ativo', t === 'composto');
+            document.getElementById('toggle-composto').setAttribute('aria-pressed', t === 'composto');
             document.getElementById('toggle-simples').classList.toggle('ativo', t === 'simples');
+            document.getElementById('toggle-simples').setAttribute('aria-pressed', t === 'simples');
             calcular();
             renderTabela();
         }
@@ -707,7 +837,9 @@
         function setTipoPct(t) {
             tipoPct = t;
             document.getElementById('toggle-pct-de').classList.toggle('ativo', t === 'de');
+            document.getElementById('toggle-pct-de').setAttribute('aria-pressed', t === 'de');
             document.getElementById('toggle-pct-desconto').classList.toggle('ativo', t === 'desconto');
+            document.getElementById('toggle-pct-desconto').setAttribute('aria-pressed', t === 'desconto');
             document.getElementById('pct-campos-de').style.display = (t === 'de') ? 'block' : 'none';
             document.getElementById('pct-campos-desconto').style.display = (t === 'desconto') ? 'block' : 'none';
             calcular();
@@ -717,7 +849,9 @@
         function setSinalPct(s) {
             sinalPct = s;
             document.getElementById('toggle-desconto').classList.toggle('ativo', s === 'desconto');
+            document.getElementById('toggle-desconto').setAttribute('aria-pressed', s === 'desconto');
             document.getElementById('toggle-acrescimo').classList.toggle('ativo', s === 'acrescimo');
+            document.getElementById('toggle-acrescimo').setAttribute('aria-pressed', s === 'acrescimo');
             calcular();
         }
 
@@ -735,9 +869,9 @@
             let mostrarResultado = false;
 
             if (modo === 'juros') {
-                const capital = parseFloat(document.getElementById('juros-capital').value) || 0;
-                const taxa = (parseFloat(document.getElementById('juros-taxa').value) || 0) / 100;
-                const n = parseFloat(document.getElementById('juros-periodos').value) || 0;
+                const capital = Math.max(0, parseFloat(document.getElementById('juros-capital').value) || 0);
+                const taxa = Math.max(0, parseFloat(document.getElementById('juros-taxa').value) || 0) / 100;
+                const n = Math.max(0, parseFloat(document.getElementById('juros-periodos').value) || 0);
 
                 let montante, jurosTotais;
                 if (tipoJuros === 'composto') {
@@ -757,9 +891,9 @@
                 mostrarResultado = capital > 0;
 
             } else if (modo === 'parcela') {
-                const valor = parseFloat(document.getElementById('parcela-valor').value) || 0;
-                const numero = parseFloat(document.getElementById('parcela-numero').value) || 1;
-                const jurosMes = (parseFloat(document.getElementById('parcela-juros').value) || 0) / 100;
+                const valor = Math.max(0, parseFloat(document.getElementById('parcela-valor').value) || 0);
+                const numero = Math.max(1, parseFloat(document.getElementById('parcela-numero').value) || 1);
+                const jurosMes = Math.max(0, parseFloat(document.getElementById('parcela-juros').value) || 0) / 100;
 
                 let parcela, totalPago;
                 if (jurosMes === 0) {
@@ -782,7 +916,7 @@
                 mostrarResultado = valor > 0 && numero > 0;
 
             } else if (modo === 'moeda') {
-                const valor = parseFloat(document.getElementById('moeda-valor').value) || 0;
+                const valor = Math.max(0, parseFloat(document.getElementById('moeda-valor').value) || 0);
                 const de = document.getElementById('moeda-de').value;
                 const para = document.getElementById('moeda-para').value;
                 const taxaManual = parseFloat(document.getElementById('moeda-taxa-manual').value);
@@ -818,7 +952,7 @@
                         <div class="breakdown-item"><span class="breakdown-label">Valor base</span><span class="breakdown-valor">${formatMoeda(valor)}</span></div>
                         <div class="breakdown-item"><span class="breakdown-label">Porcentagem</span><span class="breakdown-valor">${pct}%</span></div>
                     `;
-                    mostrarResultado = valor > 0;
+                    mostrarResultado = valor !== 0;
                 } else {
                     const valorOriginal = parseFloat(document.getElementById('pct-valor-original').value) || 0;
                     const pct = parseFloat(document.getElementById('pct-porcentagem-2').value) || 0;
@@ -832,7 +966,7 @@
                         <div class="breakdown-item"><span class="breakdown-label">Valor original</span><span class="breakdown-valor">${formatMoeda(valorOriginal)}</span></div>
                         <div class="breakdown-item"><span class="breakdown-label">${sinalPct === 'desconto' ? 'Valor descontado' : 'Valor acrescido'}</span><span class="breakdown-valor">${formatMoeda(Math.abs(diferenca))}</span></div>
                     `;
-                    mostrarResultado = valorOriginal > 0;
+                    mostrarResultado = valorOriginal !== 0;
                 }
             }
 
@@ -867,7 +1001,13 @@
             document.getElementById('pct-valor').value = 200;
             document.getElementById('pct-valor-original').value = 200;
             document.getElementById('pct-porcentagem-2').value = 15;
+
+            // Limpa também a saída para não deixar o resultado anterior "preso" na tela
+            document.getElementById('breakdown').innerHTML = '';
+            document.getElementById('output').textContent = '-';
+            document.getElementById('output-sub').textContent = '';
             document.getElementById('resultado-box').style.display = 'none';
+
             mostrarStatus('✓ Campos limpos');
         }
 
