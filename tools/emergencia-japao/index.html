@@ -12,7 +12,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
-
 :root{
     --forest:#0f3326;
     --mint:#5fe3a8;
@@ -32,6 +31,10 @@
     --emerg-teal-soft:#e1f2f0;
     --stamp-amber:#b5792a;
     --stamp-amber-soft:#faf0de;
+    --stamp-green:#2e7d32;
+    --stamp-green-soft:#e8f5e9;
+    --warn-orange:#e65100;
+    --warn-orange-soft:#fff3e0;
 
     --font-display:'Fraunces',serif;
     --font-body:'Space Grotesk',-apple-system,BlinkMacSystemFont,sans-serif;
@@ -58,22 +61,9 @@ header{
     padding:28px 20px 26px;
     text-align:center;
 }
-
 .header-icon{font-size:34px;line-height:1;margin-bottom:8px;}
-
-header h1{
-    font-family:var(--font-display);
-    font-weight:600;
-    font-size:25px;
-    letter-spacing:-.01em;
-    margin-bottom:6px;
-}
-
-header p{
-    font-size:13px;
-    color:rgba(255,255,255,.8);
-    font-weight:500;
-}
+header h1{font-family:var(--font-display);font-weight:600;font-size:25px;letter-spacing:-.01em;margin-bottom:6px;}
+header p{font-size:13px;color:rgba(255,255,255,.8);font-weight:500;}
 
 .box{
     background:var(--paper);
@@ -83,7 +73,6 @@ header p{
     box-shadow:0 8px 24px rgba(28,27,31,.08);
     border:1px solid var(--line);
 }
-
 .box-title{
     font-family:var(--font-mono);
     font-size:11px;
@@ -97,328 +86,242 @@ header p{
     gap:6px;
 }
 
+/* ---- CHAMADAS ---- */
 .call-box{background:var(--emerg-red-deep);border:none;}
 .call-box .box-title{color:rgba(255,255,255,.7);}
-
 .call{display:flex;gap:10px;}
-
 .call a{
-    flex:1;
-    padding:16px 8px;
-    color:#fff;
-    text-align:center;
-    border-radius:13px;
-    text-decoration:none;
-    font-family:var(--font-body);
-    font-weight:700;
-    transition:transform .1s ease;
+    flex:1;padding:16px 8px;color:#fff;text-align:center;
+    border-radius:13px;text-decoration:none;font-family:var(--font-body);
+    font-weight:700;transition:transform .1s ease;
 }
-
 .call a:active{transform:scale(.96);}
-
 .call-icon{font-size:22px;display:block;margin-bottom:4px;}
 .call-num{font-family:var(--font-mono);font-size:20px;display:block;}
 .call-label{font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;opacity:.9;display:block;margin-top:2px;}
-
 .police{background:var(--stamp-blue)}
 .help{background:var(--emerg-red)}
 .sea{background:var(--emerg-teal)}
 
+/* ---- BOTÕES ---- */
 .btn{
-    width:100%;
-    padding:14px;
-    border:none;
-    border-radius:12px;
-    font-family:var(--font-body);
-    font-weight:700;
-    font-size:14px;
-    cursor:pointer;
-    transition:transform .1s ease, opacity .1s ease;
+    width:100%;padding:14px;border:none;border-radius:12px;
+    font-family:var(--font-body);font-weight:700;font-size:14px;
+    cursor:pointer;transition:transform .1s ease, opacity .1s ease;
 }
-
 .btn:active{transform:scale(.98);}
 .btn-blue{background:var(--stamp-blue);color:#fff;}
 .btn-outline{background:transparent;border:1.5px solid var(--line);color:var(--ink-soft);}
+.btn-green{background:var(--stamp-green);color:#fff;}
 
-.loc-result{
-    margin-top:12px;
-    padding-top:12px;
-    border-top:1px dashed var(--line);
+/* ---- LOCALIZAÇÃO ---- */
+.loc-result{margin-top:14px;display:none;}
+
+/* Bloco de precisão — muda cor conforme o nível */
+.precision-badge{
+    display:inline-flex;align-items:center;gap:5px;
+    padding:4px 10px;border-radius:99px;
+    font-family:var(--font-mono);font-size:10px;font-weight:600;
+    letter-spacing:.04em;text-transform:uppercase;
+    margin-bottom:10px;
+}
+.precision-badge.high{background:var(--stamp-green-soft);color:var(--stamp-green);}
+.precision-badge.mid{background:var(--warn-orange-soft);color:var(--warn-orange);}
+.precision-badge.low{background:var(--emerg-red-soft);color:var(--emerg-red-deep);}
+
+/* Endereço estruturado */
+.addr-block{
+    background:var(--paper-dim);
+    border-radius:12px;
+    padding:14px;
+    margin-bottom:12px;
+    border:1px solid var(--line);
+}
+
+.addr-row{
+    display:flex;align-items:baseline;gap:8px;
+    padding:5px 0;
+    border-bottom:1px dashed var(--line);
+}
+.addr-row:last-child{border-bottom:none;padding-bottom:0;}
+
+.addr-label{
+    font-family:var(--font-mono);font-size:9.5px;font-weight:600;
+    text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);
+    flex:none;width:70px;
+}
+.addr-value{
+    font-family:var(--font-display);font-size:16px;font-weight:600;color:var(--ink);
+    line-height:1.3;
+}
+.addr-value.unconfirmed{color:var(--warn-orange);}
+.addr-value.missing{color:rgba(74,72,84,.4);font-style:italic;font-size:13px;font-family:var(--font-body);}
+
+/* Campo para completar 番地 manualmente */
+.banchi-wrap{
+    margin-top:4px;
     display:none;
 }
+.banchi-wrap.visible{display:block;}
 
-.loc-coords{
-    font-family:var(--font-mono);
-    font-size:12.5px;
-    color:var(--ink);
-    margin-bottom:4px;
+.banchi-hint{
+    font-size:11.5px;color:var(--warn-orange);font-weight:600;
+    margin-bottom:8px;line-height:1.4;
+    padding:8px 10px;background:var(--warn-orange-soft);border-radius:8px;
+}
+.banchi-input-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:start;}
+.banchi-field{
+    width:100%;padding:11px 12px;border-radius:10px;
+    border:1.5px solid var(--warn-orange);background:var(--paper);
+    color:var(--ink);font-family:var(--font-mono);font-size:15px;font-weight:600;
+}
+.banchi-field:focus-visible{outline:2px solid var(--stamp-blue);outline-offset:1px;}
+.btn-save-banchi{
+    padding:11px 14px;border:none;border-radius:10px;
+    background:var(--stamp-blue);color:#fff;font-family:var(--font-body);
+    font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap;
 }
 
-.loc-address{
-    font-size:12.5px;
-    color:var(--ink-soft);
-    margin-bottom:12px;
-    line-height:1.5;
+.coords-row{
+    font-family:var(--font-mono);font-size:11.5px;color:var(--ink-soft);
+    margin-bottom:12px;letter-spacing:.01em;
+}
+.coords-row .acc{
+    display:inline-block;margin-left:6px;
+    padding:1px 6px;border-radius:4px;
+    font-size:10px;background:var(--stamp-blue-soft);color:var(--stamp-blue);
 }
 
-.loc-actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;}
-.loc-actions .btn-mini{padding:10px 6px;font-size:11px;}
-
-.loc-hint{
-    font-size:11px;
-    color:rgba(74,72,84,.55);
-    margin-top:10px;
-    line-height:1.5;
+.loc-actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-top:10px;}
+.btn-mini{
+    padding:10px 4px;border:1.5px solid var(--line);background:var(--paper-dim);
+    border-radius:10px;font-family:var(--font-body);font-size:11.5px;font-weight:700;
+    color:var(--ink);cursor:pointer;text-align:center;
 }
+.btn-mini:active{background:var(--line);}
+.btn-mini.destaque{background:var(--stamp-blue);border-color:var(--stamp-blue);color:#fff;}
 
+.loc-notice{
+    font-size:11px;color:rgba(74,72,84,.55);
+    margin-top:10px;line-height:1.6;
+    padding-top:10px;border-top:1px dashed var(--line);
+}
+.loc-notice strong{color:var(--ink-soft);}
+
+/* Status de loading */
+.loc-loading{
+    display:flex;align-items:center;gap:10px;
+    padding:14px 0;color:var(--ink-soft);font-size:13px;
+    display:none;
+}
+.loc-loading.visible{display:flex;}
+.spinner{
+    width:18px;height:18px;border:2px solid var(--line);
+    border-top-color:var(--stamp-blue);border-radius:50%;
+    animation:spin .7s linear infinite;flex:none;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ---- ENDEREÇO SALVO ---- */
 .endereco-field{
-    width:100%;
-    padding:13px 14px;
-    border-radius:11px;
-    border:1.5px solid var(--line);
-    background:var(--paper-dim);
-    color:var(--ink);
-    font-family:var(--font-body);
-    font-size:14px;
-    font-weight:500;
-    margin-bottom:10px;
-    resize:vertical;
-    min-height:52px;
+    width:100%;padding:13px 14px;border-radius:11px;
+    border:1.5px solid var(--line);background:var(--paper-dim);
+    color:var(--ink);font-family:var(--font-body);font-size:14px;font-weight:500;
+    margin-bottom:10px;resize:vertical;min-height:52px;
 }
-
 .endereco-field:focus-visible{outline:2px solid var(--stamp-blue);outline-offset:1px;}
 .row-2{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.endereco-status{font-family:var(--font-mono);font-size:10.5px;color:var(--ink-soft);margin-top:8px;min-height:14px;}
 
-.endereco-status{
-    font-family:var(--font-mono);
-    font-size:10.5px;
-    color:var(--ink-soft);
-    margin-top:8px;
-    min-height:14px;
-}
-
+/* ---- FRASES ---- */
 .search-wrap{position:relative;}
-
 .search{
-    width:100%;
-    padding:14px 16px;
-    border-radius:12px;
-    border:1.5px solid var(--line);
-    background:var(--paper-dim);
-    font-family:var(--font-body);
-    font-size:14.5px;
-    font-weight:500;
-    color:var(--ink);
+    width:100%;padding:14px 16px;border-radius:12px;
+    border:1.5px solid var(--line);background:var(--paper-dim);
+    font-family:var(--font-body);font-size:14.5px;font-weight:500;color:var(--ink);
 }
-
 .search:focus-visible{outline:2px solid var(--stamp-blue);outline-offset:1px;}
 .search::placeholder{color:rgba(74,72,84,.45);}
 
 .section-label{
-    font-family:var(--font-mono);
-    font-size:10.5px;
-    font-weight:600;
-    text-transform:uppercase;
-    letter-spacing:.08em;
-    color:var(--ink-soft);
-    margin:22px 4px 10px;
-    display:flex;
-    align-items:center;
-    gap:8px;
+    font-family:var(--font-mono);font-size:10.5px;font-weight:600;
+    text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);
+    margin:22px 4px 10px;display:flex;align-items:center;gap:8px;
 }
-
 .section-label .count{
-    background:var(--paper);
-    border:1px solid var(--line);
-    border-radius:99px;
-    padding:1px 8px;
-    font-size:10px;
+    background:var(--paper);border:1px solid var(--line);
+    border-radius:99px;padding:1px 8px;font-size:10px;
 }
 
 .frase{
-    background:var(--paper);
-    border-radius:14px;
-    padding:16px;
-    margin-bottom:10px;
-    border:1px solid var(--line);
-    position:relative;
+    background:var(--paper);border-radius:14px;padding:16px;
+    margin-bottom:10px;border:1px solid var(--line);position:relative;
 }
-
 .frase.is-fav{border-color:var(--stamp-amber);background:var(--stamp-amber-soft);}
-
-.frase-top{
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-start;
-    gap:10px;
-    margin-bottom:8px;
-}
-
-.pt{
-    color:var(--ink-soft);
-    font-size:12.5px;
-    font-weight:600;
-    text-transform:uppercase;
-    letter-spacing:.03em;
-}
-
-.star{
-    font-size:22px;
-    line-height:1;
-    cursor:pointer;
-    color:rgba(28,27,31,.25);
-    flex:none;
-    padding:2px;
-}
-
+.frase-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:8px;}
+.pt{color:var(--ink-soft);font-size:12.5px;font-weight:600;text-transform:uppercase;letter-spacing:.03em;}
+.star{font-size:22px;line-height:1;cursor:pointer;color:rgba(28,27,31,.25);flex:none;padding:2px;}
 .star.favorite{color:var(--stamp-amber);}
-
-.jp{
-    font-family:var(--font-display);
-    font-size:21px;
-    font-weight:600;
-    color:var(--ink);
-    margin-bottom:4px;
-    line-height:1.3;
-}
-
-.romaji{
-    font-family:var(--font-mono);
-    color:var(--stamp-blue);
-    font-weight:500;
-    font-size:13px;
-    margin-bottom:12px;
-}
-
+.jp{font-family:var(--font-display);font-size:21px;font-weight:600;color:var(--ink);margin-bottom:4px;line-height:1.3;}
+.romaji{font-family:var(--font-mono);color:var(--stamp-blue);font-weight:500;font-size:13px;margin-bottom:12px;}
 .frase-actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;}
-
-.btn-mini{
-    padding:10px 4px;
-    border:1.5px solid var(--line);
-    background:var(--paper-dim);
-    border-radius:10px;
-    font-family:var(--font-body);
-    font-size:11.5px;
-    font-weight:700;
-    color:var(--ink);
-    cursor:pointer;
-    text-align:center;
-}
-
-.btn-mini:active{background:var(--line);}
-.btn-mini.destaque{background:var(--stamp-blue);border-color:var(--stamp-blue);color:#fff;}
 
 .empty-state{text-align:center;padding:36px 20px;color:var(--ink-soft);font-size:13.5px;}
 .empty-state .ic{font-size:26px;display:block;margin-bottom:8px;}
 
+/* ---- TOAST ---- */
 .toast{
-    position:fixed;
-    bottom:22px;
-    left:50%;
+    position:fixed;bottom:22px;left:50%;
     transform:translateX(-50%) translateY(10px);
-    background:var(--ink);
-    color:#fff;
-    padding:11px 20px;
-    border-radius:999px;
-    font-size:13px;
-    font-weight:600;
-    font-family:var(--font-body);
-    opacity:0;
-    pointer-events:none;
-    transition:opacity .2s ease, transform .2s ease;
-    z-index:200;
-    white-space:nowrap;
-    box-shadow:0 10px 30px rgba(0,0,0,.3);
+    background:var(--ink);color:#fff;padding:11px 20px;border-radius:999px;
+    font-size:13px;font-weight:600;font-family:var(--font-body);
+    opacity:0;pointer-events:none;transition:opacity .2s ease, transform .2s ease;
+    z-index:200;white-space:nowrap;box-shadow:0 10px 30px rgba(0,0,0,.3);
 }
-
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
-/* ---------- MODO "MOSTRAR TELA" ---------- */
+/* ---- MODO TELA ---- */
 .fullscreen-phrase{
-    position:fixed;
-    inset:0;
-    background:#fff;
-    z-index:500;
-    display:none;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    padding:32px 24px;
-    text-align:center;
+    position:fixed;inset:0;background:#fff;z-index:500;
+    display:none;flex-direction:column;align-items:center;justify-content:center;
+    padding:32px 24px;text-align:center;
 }
-
 .fullscreen-phrase.show{display:flex;}
-
 .fs-close{
-    position:absolute;
-    top:18px;
-    right:18px;
-    width:42px;
-    height:42px;
-    border-radius:50%;
-    border:1.5px solid var(--line);
-    background:var(--paper-dim);
-    font-size:18px;
-    color:var(--ink);
-    cursor:pointer;
+    position:absolute;top:18px;right:18px;width:42px;height:42px;
+    border-radius:50%;border:1.5px solid var(--line);background:var(--paper-dim);
+    font-size:18px;color:var(--ink);cursor:pointer;
 }
-
-.fs-pt{
-    font-size:14px;
-    font-weight:700;
-    text-transform:uppercase;
-    letter-spacing:.06em;
-    color:var(--ink-soft);
-    margin-bottom:18px;
-}
-
+.fs-pt{font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);margin-bottom:18px;}
 .fs-jp{
-    font-family:var(--font-display);
-    font-weight:700;
-    font-size:clamp(32px, 10vw, 56px);
-    line-height:1.25;
-    color:var(--ink);
-    margin-bottom:16px;
+    font-family:var(--font-display);font-weight:700;
+    font-size:clamp(32px, 10vw, 56px);line-height:1.25;color:var(--ink);margin-bottom:16px;
 }
-
-.fs-romaji{
-    font-family:var(--font-mono);
-    font-size:16px;
-    color:var(--stamp-blue);
-    font-weight:600;
-}
-
-.fs-hint{
-    position:absolute;
-    bottom:26px;
-    left:24px;
-    right:24px;
-    font-size:11.5px;
-    color:rgba(74,72,84,.5);
-}
+.fs-romaji{font-family:var(--font-mono);font-size:16px;color:var(--stamp-blue);font-weight:600;}
+.fs-hint{position:absolute;bottom:26px;left:24px;right:24px;font-size:11.5px;color:rgba(74,72,84,.5);}
 
 footer{
-    text-align:center;
-    font-family:var(--font-mono);
-    font-size:10.5px;
-    color:rgba(28,27,31,.35);
-    margin-top:30px;
-    padding:0 20px;
-    line-height:1.6;
+    text-align:center;font-family:var(--font-mono);font-size:10.5px;
+    color:rgba(28,27,31,.35);margin-top:30px;padding:0 20px;line-height:1.6;
 }
+
+/* ---- HINT BOX ---- */
+.hint-box{
+    font-size:11px;color:rgba(74,72,84,.6);margin-top:10px;line-height:1.6;
+}
+.hint-box strong{color:var(--ink-soft);}
 
 @media(max-width:380px){
     .jp{font-size:19px;}
     .call-num{font-size:18px;}
     .frase-actions{grid-template-columns:1fr 1fr;}
     .frase-actions .btn-mini:last-child{grid-column:span 2;}
+    .addr-label{width:60px;}
 }
-
 </style>
 </head>
 
 <body>
-
 <header>
     <div class="header-icon">🚨</div>
     <h1>Emergência Japão</h1>
@@ -427,6 +330,7 @@ footer{
 
 <div class="container">
 
+    <!-- CHAMADAS -->
     <div class="box call-box">
         <div class="box-title">📞 Ligações de emergência</div>
         <div class="call">
@@ -448,23 +352,77 @@ footer{
         </div>
     </div>
 
+    <!-- LOCALIZAÇÃO -->
     <div class="box">
         <div class="box-title">📍 Localização</div>
-        <button class="btn btn-blue" onclick="localizacao()" type="button" id="btnLocalizacao">Mostrar minha localização</button>
+
+        <button class="btn btn-blue" onclick="iniciarLocalizacao()" id="btnLocalizacao" type="button">
+            Mostrar minha localização
+        </button>
+
+        <div class="loc-loading" id="locLoading">
+            <div class="spinner"></div>
+            <span id="locLoadingMsg">Obtendo GPS…</span>
+        </div>
 
         <div class="loc-result" id="locResult">
-            <div class="loc-coords" id="locCoords">—</div>
-            <div class="loc-address" id="locAddress">Buscando endereço aproximado…</div>
+
+            <div class="precision-badge" id="precBadge">—</div>
+
+            <!-- Endereço estruturado -->
+            <div class="addr-block" id="addrBlock">
+                <div class="addr-row">
+                    <span class="addr-label">都道府県</span>
+                    <span class="addr-value" id="addrPref">—</span>
+                </div>
+                <div class="addr-row">
+                    <span class="addr-label">市区町村</span>
+                    <span class="addr-value" id="addrCity">—</span>
+                </div>
+                <div class="addr-row">
+                    <span class="addr-label">町丁目</span>
+                    <span class="addr-value" id="addrTown">—</span>
+                </div>
+                <div class="addr-row">
+                    <span class="addr-label">番地・号</span>
+                    <span class="addr-value" id="addrBanchi">
+                        <span class="missing" id="addrBanchiText">— não disponível via GPS</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Completar 番地 manualmente -->
+            <div class="banchi-wrap" id="banchiWrap">
+                <div class="banchi-hint">
+                    ⚠️ O GPS não consegue detectar o número exato do bloco (番地・号). Se você estiver num endereço que conhece, complete abaixo — é importante para emergências.
+                </div>
+                <div class="banchi-input-row">
+                    <input class="banchi-field" id="banchiInput" type="text"
+                        placeholder="Ex: 2-3-4 ou 丁目-番-号"
+                        inputmode="text" autocomplete="off">
+                    <button class="btn-save-banchi" onclick="confirmarBanchi()" type="button">OK</button>
+                </div>
+            </div>
+
+            <!-- Coordenadas brutas -->
+            <div class="coords-row" id="locCoords">—</div>
+
             <div class="loc-actions">
                 <button class="btn-mini destaque" onclick="abrirMapa()" type="button">🗺️ Maps</button>
                 <button class="btn-mini" onclick="compartilharLocalizacao()" type="button">📤 Enviar</button>
                 <button class="btn-mini" onclick="copiarLocalizacao()" type="button">📋 Copiar</button>
             </div>
+
+            <div class="loc-notice">
+                <strong>Como passar o endereço por telefone:</strong><br>
+                Leia a 都道府県 + 市区町村 + 町丁目 + 番地. Se não souber a 番地, cite um ponto próximo visível — estação (駅), convenience store, nome do prédio.
+            </div>
         </div>
 
-        <div class="loc-hint">Em ligação, leia o bairro (区) ou cite um ponto de referência (estação, loja, prédio) — é mais rápido do que soletrar o endereço.</div>
+        <div class="hint-box">Em ligação, o bairro (区/町) e um ponto de referência visível são mais rápidos do que soletrar o endereço completo.</div>
     </div>
 
+    <!-- ENDEREÇO FIXO -->
     <div class="box">
         <div class="box-title">🏠 Meu endereço (em japonês)</div>
         <textarea class="endereco-field" id="enderecoInput" placeholder="Ex: 東京都渋谷区..." rows="2"></textarea>
@@ -474,9 +432,10 @@ footer{
         </div>
         <button class="btn btn-outline" onclick="ouvirEndereco()" type="button" style="margin-top:8px;">🔊 Ouvir meu endereço em japonês</button>
         <div class="endereco-status" id="enderecoStatus"></div>
-        <div class="loc-hint">O celular pronuncia o kanji corretamente — mais confiável do que tentar ler romaji, já que um mesmo kanji pode ter mais de uma leitura.</div>
+        <div class="hint-box">O celular pronuncia kanji corretamente — mais confiável do que ler romaji, pois um mesmo kanji pode ter mais de uma leitura.</div>
     </div>
 
+    <!-- BUSCA DE FRASES -->
     <div class="box">
         <div class="box-title">🔎 Buscar frase</div>
         <div class="search-wrap">
@@ -504,7 +463,9 @@ footer{
 </div>
 
 <script>
-
+/* ============================================================
+   FRASES
+   ============================================================ */
 const frases = [
     ["警察を呼んでください", "Keisatsu o yonde kudasai", "Chame a polícia"],
     ["救急車を呼んでください", "Kyūkyūsha o yonde kudasai", "Chame uma ambulância"],
@@ -525,182 +486,294 @@ const frases = [
 let favoritos = [];
 try { favoritos = JSON.parse(localStorage.getItem("fav") || "[]"); } catch(e) { favoritos = []; }
 
-let ultimaLocalizacao = null; // { lat, lon, address }
+/* ============================================================
+   GEOCODING — estado global
+   ============================================================ */
+let geoState = {
+    lat: null,
+    lon: null,
+    accuracy: null,   // metros
+    pref: null,       // 都道府県
+    city: null,       // 市区町村
+    town: null,       // 町丁目
+    banchi: null,     // preenchido pelo usuário
+    source: null,     // 'gsi' | 'nominatim' | 'coords-only'
+};
 
+/* ============================================================
+   Mapa muniCd (primeiros 2 dígitos) → prefeitura
+   Fonte: JISX0401 / 総務省
+   ============================================================ */
+const PREF_MAP = {
+    "01":"北海道","02":"青森県","03":"岩手県","04":"宮城県","05":"秋田県",
+    "06":"山形県","07":"福島県","08":"茨城県","09":"栃木県","10":"群馬県",
+    "11":"埼玉県","12":"千葉県","13":"東京都","14":"神奈川県","15":"新潟県",
+    "16":"富山県","17":"石川県","18":"福井県","19":"山梨県","20":"長野県",
+    "21":"岐阜県","22":"静岡県","23":"愛知県","24":"三重県","25":"滋賀県",
+    "26":"京都府","27":"大阪府","28":"兵庫県","29":"奈良県","30":"和歌山県",
+    "31":"鳥取県","32":"島根県","33":"岡山県","34":"広島県","35":"山口県",
+    "36":"徳島県","37":"香川県","38":"愛媛県","39":"高知県","40":"福岡県",
+    "41":"佐賀県","42":"長崎県","43":"熊本県","44":"大分県","45":"宮崎県",
+    "46":"鹿児島県","47":"沖縄県",
+};
+
+/* ============================================================
+   TOAST / VIBRAR
+   ============================================================ */
 let toastTimer = null;
 function showToast(msg){
     const t = document.getElementById("toast");
     t.textContent = msg;
     t.classList.add("show");
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => t.classList.remove("show"), 1800);
+    toastTimer = setTimeout(() => t.classList.remove("show"), 1900);
 }
+function vibrar(ms){ try{ if(navigator.vibrate) navigator.vibrate(ms); }catch(e){} }
 
-function vibrar(ms){
-    try { if(navigator.vibrate) navigator.vibrate(ms); } catch(e){}
-}
+/* ============================================================
+   LOCALIZAÇÃO — entrada principal
+   ============================================================ */
+function iniciarLocalizacao(){
+    const btn = document.getElementById("btnLocalizacao");
+    btn.disabled = true;
+    btn.textContent = "Buscando…";
 
-function normalizar(s){
-    return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-}
+    setLoadingMsg("Obtendo GPS…");
+    document.getElementById("locLoading").classList.add("visible");
+    document.getElementById("locResult").style.display = "none";
 
-function casaComBusca(f, termo){
-    if(!termo) return true;
-    const alvo = normalizar(f[0] + " " + f[1] + " " + f[2]);
-    return alvo.includes(normalizar(termo));
-}
-
-function cardFrase(f, i, destacado){
-    const ativo = favoritos.includes(i);
-    return `
-        <div class="frase${destacado ? ' is-fav' : ''}" data-idx="${i}">
-            <div class="frase-top">
-                <span class="pt">${f[2]}</span>
-                <span class="star ${ativo ? 'favorite' : ''}" onclick="favoritar(${i})" role="button" aria-label="Favoritar frase">★</span>
-            </div>
-            <div class="jp">${f[0]}</div>
-            <div class="romaji">${f[1]}</div>
-            <div class="frase-actions">
-                <button class="btn-mini destaque" onclick="mostrarTela(${i})" type="button">🖥️ Mostrar</button>
-                <button class="btn-mini" onclick="ouvir('${f[0]}')" type="button">🔊 Ouvir</button>
-                <button class="btn-mini" onclick="copiarFrase('${f[1].replace(/'/g,"\\'")}')" type="button">📋 Copiar</button>
-            </div>
-        </div>
-    `;
-}
-
-function renderizar(){
-    const termo = document.getElementById("busca").value;
-
-    const resultados = frases
-        .map((f, i) => ({ f, i }))
-        .filter(({f}) => casaComBusca(f, termo));
-
-    const favWrap = document.getElementById("favoritosWrap");
-    const favResultados = resultados.filter(({i}) => favoritos.includes(i));
-
-    favWrap.innerHTML = favResultados.length ? `
-        <div class="section-label">⭐ Favoritas <span class="count">${favResultados.length}</span></div>
-        ${favResultados.map(({f, i}) => cardFrase(f, i, true)).join('')}
-    ` : '';
-
-    const lista = document.getElementById("lista");
-    document.getElementById("contagem").textContent = resultados.length;
-
-    if(!resultados.length){
-        lista.innerHTML = `
-            <div class="empty-state">
-                <span class="ic">🔍</span>
-                Nenhuma frase encontrada para "${termo}".
-            </div>
-        `;
+    if(!navigator.geolocation){
+        finalizarErro("Geolocalização não suportada neste aparelho.");
         return;
     }
 
-    lista.innerHTML = resultados.map(({f, i}) => cardFrase(f, i, false)).join('');
-}
-
-/* ---------- MOSTRAR TELA (para quem não fala japonês) ---------- */
-function mostrarTela(i){
-    const f = frases[i];
-    document.getElementById("fsPt").textContent = f[2];
-    document.getElementById("fsJp").textContent = f[0];
-    document.getElementById("fsRomaji").textContent = f[1];
-    document.getElementById("fsPhrase").classList.add("show");
-    vibrar(40);
-}
-
-function fecharTela(){
-    document.getElementById("fsPhrase").classList.remove("show");
-}
-
-document.addEventListener("keydown", e => {
-    if(e.key === "Escape") fecharTela();
-});
-
-/* ---------- ÁUDIO ---------- */
-function ouvir(txt){
-    try {
-        const fala = new SpeechSynthesisUtterance(txt);
-        fala.lang = "ja-JP";
-        fala.rate = 0.85; // mais devagar — ajuda quem está ouvindo a pronunciar de volta
-        speechSynthesis.speak(fala);
-    } catch(e){
-        showToast("Áudio não disponível neste aparelho");
-    }
-}
-
-function copiarFrase(txt){
-    navigator.clipboard.writeText(txt).then(() => showToast("Frase copiada!"))
-        .catch(() => showToast("Não foi possível copiar"));
-}
-
-function favoritar(i){
-    if(favoritos.includes(i)){
-        favoritos = favoritos.filter(x => x !== i);
-    } else {
-        favoritos.push(i);
-        vibrar(30);
-    }
-    localStorage.setItem("fav", JSON.stringify(favoritos));
-    renderizar();
-}
-
-/* ---------- LOCALIZAÇÃO ---------- */
-function localizacao(){
-    const btn = document.getElementById("btnLocalizacao");
-    btn.textContent = "Buscando localização…";
-
     navigator.geolocation.getCurrentPosition(
-        async p => {
-            const lat = p.coords.latitude;
-            const lon = p.coords.longitude;
-            ultimaLocalizacao = { lat, lon, address: null };
-
-            btn.textContent = "Atualizar localização";
-            document.getElementById("locResult").style.display = "block";
-            document.getElementById("locCoords").textContent = `${lat.toFixed(5)}, ${lon.toFixed(5)}`;
-            document.getElementById("locAddress").textContent = "Buscando endereço aproximado…";
-
-            buscarEnderecoAproximado(lat, lon);
+        pos => {
+            geoState.lat = pos.coords.latitude;
+            geoState.lon = pos.coords.longitude;
+            geoState.accuracy = pos.coords.accuracy; // metros
+            setLoadingMsg("Identificando endereço…");
+            buscarEnderecoGSI(geoState.lat, geoState.lon);
         },
-        () => {
-            btn.textContent = "Mostrar minha localização";
-            showToast("Não foi possível obter sua localização");
+        err => {
+            finalizarErro("Não foi possível obter a localização. Verifique as permissões do navegador.");
         },
-        { enableHighAccuracy: true, timeout: 10000 }
+        { enableHighAccuracy: true, timeout: 12000, maximumAge: 0 }
     );
 }
 
-async function buscarEnderecoAproximado(lat, lon){
-    const elAddress = document.getElementById("locAddress");
+function setLoadingMsg(msg){
+    document.getElementById("locLoadingMsg").textContent = msg;
+}
+
+function finalizarErro(msg){
+    document.getElementById("locLoading").classList.remove("visible");
+    const btn = document.getElementById("btnLocalizacao");
+    btn.disabled = false;
+    btn.textContent = "Tentar novamente";
+    showToast(msg);
+}
+
+/* ============================================================
+   CAMADA 1: API da 国土地理院 (GSI) — governo japonês
+   Retorna: muniCd (5 dígitos) + lv01Nm (町丁目)
+   Precisão: prefeitura + cidade + bairro confirmados
+   ============================================================ */
+async function buscarEnderecoGSI(lat, lon){
     try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 6000);
+        const ctrl = new AbortController();
+        const tid = setTimeout(() => ctrl.abort(), 7000);
 
         const resp = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&accept-language=pt,ja`,
-            { signal: controller.signal }
+            `https://mreversegeocoder.gsi.go.jp/reverse-geocoder/LonLatToAddress?lat=${lat}&lon=${lon}`,
+            { signal: ctrl.signal }
         );
-        clearTimeout(timeoutId);
-
+        clearTimeout(tid);
         const data = await resp.json();
-        const endereco = data && data.display_name ? data.display_name : null;
 
-        if(endereco){
-            elAddress.textContent = endereco;
-            if(ultimaLocalizacao) ultimaLocalizacao.address = endereco;
-        } else {
-            elAddress.textContent = "Endereço aproximado indisponível — use as coordenadas acima.";
+        if(data && data.results && data.results.muniCd && data.results.lv01Nm){
+            const muniCd = String(data.results.muniCd).padStart(5, '0');
+            const prefCode = muniCd.slice(0, 2);
+            const pref = PREF_MAP[prefCode] || null;
+            const town = data.results.lv01Nm || null;
+
+            // A GSI não devolve o nome da cidade diretamente — busca pelo Nominatim em japonês
+            // para preencher 市区町村, mas já sabemos a prefeitura e o bairro com certeza.
+            geoState.pref = pref;
+            geoState.town = town;
+            geoState.source = 'gsi';
+
+            // Busca cidade via Nominatim (em japonês) para complementar
+            await buscarCidadeNominatim(lat, lon, 'gsi');
+            return;
+        }
+    } catch(e){ /* fallback */ }
+
+    // Se GSI falhar: tenta Nominatim completo
+    await buscarEnderecoNominatim(lat, lon);
+}
+
+/* ============================================================
+   Complemento: pega 市区町村 do Nominatim para completar GSI
+   ============================================================ */
+async function buscarCidadeNominatim(lat, lon, origem){
+    try {
+        const ctrl = new AbortController();
+        const tid = setTimeout(() => ctrl.abort(), 6000);
+
+        const resp = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&accept-language=ja&addressdetails=1`,
+            {
+                signal: ctrl.signal,
+                headers: { 'Accept-Language': 'ja' }
+            }
+        );
+        clearTimeout(tid);
+        const data = await resp.json();
+        const a = data && data.address ? data.address : {};
+
+        if(origem === 'gsi'){
+            // Prefeitura e bairro já vêm da GSI (mais confiável)
+            // Pega só a cidade/ward do Nominatim
+            const city = a.city || a.county || a.town || a.village
+                || a.city_district || a.suburb || null;
+            geoState.city = city;
+            renderizarLocalizacao();
         }
     } catch(e){
-        elAddress.textContent = "Endereço aproximado indisponível — use as coordenadas acima.";
+        // sem cidade — renderiza mesmo assim
+        renderizarLocalizacao();
     }
 }
 
+/* ============================================================
+   CAMADA 2: Nominatim completo (fallback)
+   ============================================================ */
+async function buscarEnderecoNominatim(lat, lon){
+    try {
+        const ctrl = new AbortController();
+        const tid = setTimeout(() => ctrl.abort(), 7000);
+
+        const resp = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&accept-language=ja&addressdetails=1`,
+            {
+                signal: ctrl.signal,
+                headers: { 'Accept-Language': 'ja' }
+            }
+        );
+        clearTimeout(tid);
+        const data = await resp.json();
+        const a = data && data.address ? data.address : {};
+
+        geoState.pref  = a.state || a.province || null;
+        geoState.city  = a.city || a.county || a.town || a.village || a.city_district || null;
+        geoState.town  = a.suburb || a.neighbourhood || a.quarter || a.road || null;
+        geoState.source = 'nominatim';
+
+    } catch(e){
+        geoState.source = 'coords-only';
+    }
+
+    renderizarLocalizacao();
+}
+
+/* ============================================================
+   RENDERIZAR resultado de localização
+   ============================================================ */
+function renderizarLocalizacao(){
+    document.getElementById("locLoading").classList.remove("visible");
+
+    const btn = document.getElementById("btnLocalizacao");
+    btn.disabled = false;
+    btn.textContent = "Atualizar localização";
+
+    // Coordenadas
+    const acc = geoState.accuracy;
+    const accLabel = acc != null
+        ? `±${acc < 1000 ? Math.round(acc)+'m' : (acc/1000).toFixed(1)+'km'}`
+        : '';
+    document.getElementById("locCoords").innerHTML =
+        `${geoState.lat.toFixed(6)}, ${geoState.lon.toFixed(6)}`
+        + (accLabel ? `<span class="acc">${accLabel}</span>` : '');
+
+    // Prefeitura
+    setAddrField("addrPref", geoState.pref, geoState.source === 'gsi');
+    // Cidade
+    setAddrField("addrCity", geoState.city, geoState.source !== 'coords-only');
+    // Bairro
+    setAddrField("addrTown", geoState.town, geoState.source === 'gsi');
+    // Banchi
+    atualizarBanchi();
+
+    // Badge de precisão
+    let precLevel, precText;
+    if(geoState.source === 'gsi'){
+        precLevel = 'high';
+        precText  = '✓ Endereço confirmado (API oficial JP)';
+    } else if(geoState.source === 'nominatim'){
+        precLevel = 'mid';
+        precText  = '~ Endereço aproximado (OpenStreetMap)';
+    } else {
+        precLevel = 'low';
+        precText  = '⚠ Apenas coordenadas GPS';
+    }
+    const badge = document.getElementById("precBadge");
+    badge.className = `precision-badge ${precLevel}`;
+    badge.textContent = precText;
+
+    // Mostrar campo de 番地 se não preenchido
+    if(!geoState.banchi){
+        document.getElementById("banchiWrap").classList.add("visible");
+    }
+
+    document.getElementById("locResult").style.display = "block";
+    vibrar(40);
+}
+
+function setAddrField(id, value, confirmed){
+    const el = document.getElementById(id);
+    if(value){
+        el.textContent = value;
+        el.className = 'addr-value' + (confirmed ? '' : ' unconfirmed');
+    } else {
+        el.innerHTML = '<span class="missing">não identificado</span>';
+    }
+}
+
+/* ============================================================
+   BANCHI — completar manualmente
+   ============================================================ */
+function atualizarBanchi(){
+    const el = document.getElementById("addrBanchiText");
+    const wrap = document.getElementById("banchiWrap");
+
+    if(geoState.banchi){
+        document.getElementById("addrBanchi").textContent = geoState.banchi;
+        document.getElementById("addrBanchi").className = 'addr-value';
+        wrap.classList.remove("visible");
+    } else {
+        document.getElementById("addrBanchi").innerHTML =
+            '<span class="missing" id="addrBanchiText">— não disponível via GPS</span>';
+        document.getElementById("addrBanchi").className = 'addr-value';
+    }
+}
+
+function confirmarBanchi(){
+    const val = document.getElementById("banchiInput").value.trim();
+    if(!val){ showToast("Digite o número do bloco"); return; }
+    geoState.banchi = val;
+    document.getElementById("banchiInput").value = '';
+    atualizarBanchi();
+    showToast("Número salvo ✓");
+    vibrar(30);
+}
+
+/* ============================================================
+   AÇÕES DE LOCALIZAÇÃO
+   ============================================================ */
 function mapsUrl(){
-    if(!ultimaLocalizacao) return null;
-    return `https://maps.google.com/?q=${ultimaLocalizacao.lat},${ultimaLocalizacao.lon}`;
+    if(!geoState.lat) return null;
+    return `https://maps.google.com/?q=${geoState.lat},${geoState.lon}`;
 }
 
 function abrirMapa(){
@@ -709,31 +782,44 @@ function abrirMapa(){
     window.open(url, '_blank');
 }
 
+function textoEnderecoCompleto(){
+    const partes = [geoState.pref, geoState.city, geoState.town, geoState.banchi]
+        .filter(Boolean);
+    return partes.length ? partes.join('') : null;
+}
+
 function textoLocalizacaoCompleto(){
     const url = mapsUrl();
-    const endereco = ultimaLocalizacao && ultimaLocalizacao.address ? `${ultimaLocalizacao.address}\n` : '';
-    return `Minha localização:\n${endereco}${url}`;
+    const addr = textoEnderecoCompleto();
+    const coords = `${geoState.lat.toFixed(6)}, ${geoState.lon.toFixed(6)}`;
+    let txt = 'Minha localização:\n';
+    if(addr) txt += addr + '\n';
+    txt += coords + '\n' + url;
+    return txt;
 }
 
 function compartilharLocalizacao(){
-    if(!ultimaLocalizacao){ showToast("Busque sua localização primeiro"); return; }
+    if(!geoState.lat){ showToast("Busque sua localização primeiro"); return; }
     const texto = textoLocalizacaoCompleto();
-
     if(navigator.share){
         navigator.share({ title: 'Minha localização', text: texto }).catch(() => {});
     } else {
-        navigator.clipboard.writeText(texto).then(() => showToast("Localização copiada — cole na conversa"))
+        navigator.clipboard.writeText(texto)
+            .then(() => showToast("Localização copiada — cole na conversa"))
             .catch(() => showToast("Não foi possível compartilhar"));
     }
 }
 
 function copiarLocalizacao(){
-    if(!ultimaLocalizacao){ showToast("Busque sua localização primeiro"); return; }
-    navigator.clipboard.writeText(textoLocalizacaoCompleto()).then(() => showToast("Localização copiada!"))
+    if(!geoState.lat){ showToast("Busque sua localização primeiro"); return; }
+    navigator.clipboard.writeText(textoLocalizacaoCompleto())
+        .then(() => showToast("Localização copiada!"))
         .catch(() => showToast("Não foi possível copiar"));
 }
 
-/* ---------- ENDEREÇO SALVO ---------- */
+/* ============================================================
+   ENDEREÇO SALVO
+   ============================================================ */
 function salvarEndereco(){
     const val = document.getElementById("enderecoInput").value.trim();
     if(!val){ showToast("Digite um endereço antes de salvar"); return; }
@@ -751,10 +837,109 @@ function ouvirEndereco(){
 function copiarEndereco(){
     const val = document.getElementById("enderecoInput").value.trim();
     if(!val){ showToast("Nenhum endereço para copiar"); return; }
-    navigator.clipboard.writeText(val).then(() => showToast("Endereço copiado!"))
+    navigator.clipboard.writeText(val)
+        .then(() => showToast("Endereço copiado!"))
         .catch(() => showToast("Não foi possível copiar"));
 }
 
+/* ============================================================
+   ÁUDIO
+   ============================================================ */
+function ouvir(txt){
+    try {
+        const fala = new SpeechSynthesisUtterance(txt);
+        fala.lang = "ja-JP";
+        fala.rate = 0.85;
+        speechSynthesis.speak(fala);
+    } catch(e){
+        showToast("Áudio não disponível neste aparelho");
+    }
+}
+
+function copiarFrase(txt){
+    navigator.clipboard.writeText(txt)
+        .then(() => showToast("Frase copiada!"))
+        .catch(() => showToast("Não foi possível copiar"));
+}
+
+/* ============================================================
+   FRASES
+   ============================================================ */
+function normalizar(s){
+    return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+
+function casaComBusca(f, termo){
+    if(!termo) return true;
+    return normalizar(f[0]+' '+f[1]+' '+f[2]).includes(normalizar(termo));
+}
+
+function cardFrase(f, i, destacado){
+    const ativo = favoritos.includes(i);
+    return `
+        <div class="frase${destacado ? ' is-fav' : ''}" data-idx="${i}">
+            <div class="frase-top">
+                <span class="pt">${f[2]}</span>
+                <span class="star ${ativo ? 'favorite' : ''}" onclick="favoritar(${i})" role="button" aria-label="Favoritar">★</span>
+            </div>
+            <div class="jp">${f[0]}</div>
+            <div class="romaji">${f[1]}</div>
+            <div class="frase-actions">
+                <button class="btn-mini destaque" onclick="mostrarTela(${i})" type="button">🖥️ Mostrar</button>
+                <button class="btn-mini" onclick="ouvir('${f[0].replace(/'/g,"\\'")}');" type="button">🔊 Ouvir</button>
+                <button class="btn-mini" onclick="copiarFrase('${f[1].replace(/'/g,"\\'")}');" type="button">📋 Copiar</button>
+            </div>
+        </div>`;
+}
+
+function renderizar(){
+    const termo = document.getElementById("busca").value;
+    const resultados = frases.map((f,i) => ({f,i})).filter(({f}) => casaComBusca(f, termo));
+
+    const favWrap = document.getElementById("favoritosWrap");
+    const favRes  = resultados.filter(({i}) => favoritos.includes(i));
+    favWrap.innerHTML = favRes.length
+        ? `<div class="section-label">⭐ Favoritas <span class="count">${favRes.length}</span></div>${favRes.map(({f,i}) => cardFrase(f,i,true)).join('')}`
+        : '';
+
+    const lista = document.getElementById("lista");
+    document.getElementById("contagem").textContent = resultados.length;
+
+    lista.innerHTML = resultados.length
+        ? resultados.map(({f,i}) => cardFrase(f,i,false)).join('')
+        : `<div class="empty-state"><span class="ic">🔍</span>Nenhuma frase encontrada para "${termo}".</div>`;
+}
+
+function favoritar(i){
+    if(favoritos.includes(i)){
+        favoritos = favoritos.filter(x => x !== i);
+    } else {
+        favoritos.push(i);
+        vibrar(30);
+    }
+    localStorage.setItem("fav", JSON.stringify(favoritos));
+    renderizar();
+}
+
+/* ============================================================
+   FULLSCREEN
+   ============================================================ */
+function mostrarTela(i){
+    const f = frases[i];
+    document.getElementById("fsPt").textContent = f[2];
+    document.getElementById("fsJp").textContent = f[0];
+    document.getElementById("fsRomaji").textContent = f[1];
+    document.getElementById("fsPhrase").classList.add("show");
+    vibrar(40);
+}
+function fecharTela(){
+    document.getElementById("fsPhrase").classList.remove("show");
+}
+document.addEventListener("keydown", e => { if(e.key === "Escape") fecharTela(); });
+
+/* ============================================================
+   INIT
+   ============================================================ */
 (function init(){
     const salvo = localStorage.getItem("endereco");
     if(salvo){
@@ -763,8 +948,6 @@ function copiarEndereco(){
     }
     renderizar();
 })();
-
 </script>
-
 </body>
 </html>
