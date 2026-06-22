@@ -1,369 +1,753 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Conversor de Texto Profissional | UtiliWeb</title>
+    <meta name="description" content="Ferramenta profissional para converter texto com múltiplas opções de formatação, estatísticas e modo escuro.">
+    <meta name="keywords" content="conversor, maiúsculas, minúsculas, texto, formatação">
+    <meta name="robots" content="index, follow">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-<title>Texto em Maiúsculas e Minúsculas Online | UtiliWeb</title>
+        html, body {
+            width: 100%;
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            transition: background 0.3s ease;
+        }
 
-<meta name="description" content="Converta texto para maiúsculas, minúsculas ou capitalize frases online gratuitamente.">
-<meta name="keywords" content="utiliweb, maiúsculas, minúsculas, texto, converter texto">
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
 
-<link rel="stylesheet" href="../../assets/style.css">
+        /* CONTAINER PRINCIPAL */
+        .container {
+            width: 100%;
+            max-width: 1300px;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15), 0 0 1px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+        }
 
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
+        body.dark-mode .container {
+            background: #2d2d2d;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4), 0 0 1px rgba(0, 0, 0, 0.2);
+        }
 
-html{
-    -webkit-text-size-adjust:100%;
-}
+        /* HEADER */
+        .header {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            padding: 40px;
+            text-align: center;
+        }
 
-body{
-    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
-    background:linear-gradient(135deg,#2ecc71,#27ae60);
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:
-        max(16px,env(safe-area-inset-top))
-        max(16px,env(safe-area-inset-right))
-        max(16px,env(safe-area-inset-bottom))
-        max(16px,env(safe-area-inset-left));
-}
+        .header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
 
-.wrapper{
-    width:100%;
-    max-width:1100px;
-    background:#fff;
-    border-radius:18px;
-    overflow:hidden;
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    box-shadow:0 20px 60px rgba(0,0,0,.25);
-}
+        .header p {
+            font-size: 15px;
+            opacity: 0.95;
+            font-weight: 300;
+        }
 
-.left,
-.right{
-    padding:24px;
-    min-width:0;
-}
+        /* PAINÉIS */
+        .panel {
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+        }
 
-.left{
-    border-right:1px solid #eee;
-}
+        .panel.left {
+            border-right: 1px solid #f0f0f0;
+        }
 
-h1{
-    font-size:clamp(22px,3vw,30px);
-    line-height:1.2;
-    margin-bottom:6px;
-}
+        .panel.right {
+            background: #fafafa;
+        }
 
-h2{
-    font-size:clamp(20px,2.5vw,26px);
-    margin-bottom:12px;
-}
+        body.dark-mode .panel.left {
+            border-right-color: #444;
+        }
 
-.subtitle{
-    color:#666;
-    font-size:14px;
-    margin-bottom:16px;
-}
+        body.dark-mode .panel.right {
+            background: #252525;
+        }
 
-a{
-    display:inline-block;
-    margin-bottom:12px;
-    text-decoration:none;
-    color:#27ae60;
-    font-weight:600;
-}
+        /* SEÇÃO */
+        .section-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #667eea;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-textarea{
-    width:100%;
-    min-height:220px;
-    padding:14px;
-    border-radius:12px;
-    border:2px solid #ddd;
-    resize:vertical;
-    margin-top:10px;
-    font-size:16px;
-    line-height:1.5;
-    transition:.2s;
-}
+        body.dark-mode .section-title {
+            color: #8194f2;
+        }
 
-textarea:focus{
-    outline:none;
-    border-color:#27ae60;
-}
+        .section-title i {
+            font-size: 16px;
+        }
 
-.buttons{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:10px;
-    margin-top:12px;
-}
+        /* TEXTAREA */
+        .textarea-wrapper {
+            margin-bottom: 24px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
 
-button{
-    width:100%;
-    min-height:48px;
-    padding:12px;
-    border:none;
-    border-radius:12px;
-    cursor:pointer;
-    font-weight:700;
-    font-size:15px;
-    transition:.2s;
-    -webkit-tap-highlight-color:transparent;
-}
+        textarea {
+            width: 100%;
+            flex: 1;
+            min-height: 200px;
+            padding: 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            resize: none;
+            transition: all 0.3s ease;
+            background: #fff;
+            color: #333;
+            line-height: 1.6;
+        }
 
-button:hover{
-    transform:translateY(-1px);
-}
+        body.dark-mode textarea {
+            background: #333;
+            border-color: #444;
+            color: #eee;
+        }
 
-button:active{
-    transform:scale(.98);
-}
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
 
-.primary{
-    background:#27ae60;
-    color:#fff;
-}
+        textarea::placeholder {
+            color: #999;
+        }
 
-.secondary{
-    background:#fff;
-    border:2px solid #27ae60;
-    color:#27ae60;
-}
+        /* OPÇÕES DE CONVERSÃO */
+        .conversion-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 24px;
+            padding: 16px;
+            background: #f5f5f5;
+            border-radius: 12px;
+        }
 
-.result-box{
-    white-space:pre-wrap;
-    word-break:break-word;
-    overflow-wrap:anywhere;
-    font-size:16px;
-    line-height:1.6;
-    background:#f6fff8;
-    border:1px solid #d7f5e3;
-    padding:16px;
-    border-radius:12px;
-    min-height:220px;
-}
+        body.dark-mode .conversion-options {
+            background: #3d3d3d;
+        }
 
-.copy-msg{
-    margin-top:10px;
-    color:#27ae60;
-    font-size:14px;
-    font-weight:600;
-    display:none;
-}
+        .conversion-btn {
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            background: #fff;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #333;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
 
-/* TABLETS */
-@media (max-width:900px){
+        body.dark-mode .conversion-btn {
+            background: #444;
+            border-color: #555;
+            color: #eee;
+        }
 
-    .wrapper{
-        grid-template-columns:1fr;
-        max-width:700px;
-    }
+        .conversion-btn:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
 
-    .left{
-        border-right:none;
-        border-bottom:1px solid #eee;
-    }
-}
+        .conversion-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            border-color: transparent;
+        }
 
-/* CELULARES */
-@media (max-width:600px){
+        /* RESULTADO */
+        .result-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
 
-    body{
-        padding:10px;
-        align-items:flex-start;
-    }
+        .result-box {
+            flex: 1;
+            background: #fff;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 14px;
+            line-height: 1.6;
+            word-break: break-word;
+            white-space: pre-wrap;
+            overflow-y: auto;
+            color: #333;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            min-height: 200px;
+            transition: all 0.3s ease;
+        }
 
-    .wrapper{
-        border-radius:14px;
-    }
+        body.dark-mode .result-box {
+            background: #333;
+            border-color: #444;
+            color: #eee;
+        }
 
-    .left,
-    .right{
-        padding:18px;
-    }
+        .result-box.empty {
+            color: #999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-style: italic;
+        }
 
-    textarea{
-        min-height:180px;
-        font-size:16px;
-    }
+        /* BOTÕES */
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
 
-    .buttons{
-        grid-template-columns:1fr;
-    }
+        button {
+            flex: 1;
+            min-width: 120px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
 
-    button{
-        min-height:52px;
-        font-size:16px;
-    }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
 
-    .result-box{
-        min-height:180px;
-    }
-}
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
 
-/* CELULARES PEQUENOS */
-@media (max-width:380px){
+        .btn-primary:active {
+            transform: translateY(0);
+        }
 
-    .left,
-    .right{
-        padding:14px;
-    }
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+            border: 2px solid #e0e0e0;
+        }
 
-    h1{
-        font-size:22px;
-    }
+        body.dark-mode .btn-secondary {
+            background: #3d3d3d;
+            border-color: #555;
+            color: #eee;
+        }
 
-    h2{
-        font-size:20px;
-    }
+        .btn-secondary:hover {
+            background: #e8e8e8;
+            border-color: #d0d0d0;
+        }
 
-    textarea{
-        min-height:160px;
-    }
-}
-</style>
+        body.dark-mode .btn-secondary:hover {
+            background: #4d4d4d;
+            border-color: #666;
+        }
+
+        /* MENSAGENS */
+        .feedback-message {
+            margin-top: 12px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            display: none;
+            align-items: center;
+            gap: 8px;
+            animation: slideIn 0.3s ease;
+        }
+
+        .feedback-message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        body.dark-mode .feedback-message.success {
+            background: rgba(76, 175, 80, 0.2);
+            color: #81c784;
+            border-color: rgba(76, 175, 80, 0.3);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ESTATÍSTICAS */
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        body.dark-mode .stats {
+            border-top-color: #444;
+        }
+
+        .stat-item {
+            background: #f5f5f5;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        body.dark-mode .stat-item {
+            background: #3d3d3d;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        body.dark-mode .stat-value {
+            color: #8194f2;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #999;
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        /* BOTÃO MODO ESCURO */
+        .dark-mode-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .dark-mode-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        /* RESPONSIVO */
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .panel.left {
+                border-right: none;
+                border-bottom: 1px solid #f0f0f0;
+            }
+
+            .panel.right {
+                background: #ffffff;
+            }
+
+            body.dark-mode .panel.right {
+                background: #2d2d2d;
+            }
+
+            .conversion-options {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            html, body {
+                padding: 12px;
+            }
+
+            .header {
+                padding: 30px 20px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .panel {
+                padding: 24px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+
+            .conversion-options {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .stats {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            textarea, .result-box {
+                min-height: 150px;
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 20px;
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .section-title {
+                font-size: 12px;
+            }
+
+            .conversion-options {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .dark-mode-toggle {
+                width: 45px;
+                height: 45px;
+                font-size: 18px;
+                bottom: 15px;
+                right: 15px;
+            }
+        }
+
+        /* SCROLLBAR CUSTOMIZADA */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        body.dark-mode ::-webkit-scrollbar-track {
+            background: #3d3d3d;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #764ba2;
+        }
+    </style>
 </head>
-
 <body>
+    <button class="dark-mode-toggle" id="darkModeBtn" title="Alternar modo escuro">
+        <i class="fas fa-moon"></i>
+    </button>
 
-<div class="wrapper">
-
-    <!-- ESQUERDA -->
-    <div class="left">
-
-        <h1>🔤 Conversor de Texto</h1>
-        <p class="subtitle">Maiúsculas, minúsculas e capitalização</p>
-
-        <a href="../../index.html">← Voltar</a>
-
-        <textarea
-            id="text"
-            placeholder="Digite ou cole seu texto aqui..."
-            autocomplete="off"
-            autocorrect="off"
-            autocapitalize="off"
-            spellcheck="false"></textarea>
-
-        <div class="buttons">
-
-            <button class="primary" onclick="maiusculas()">
-                MAIÚSCULAS
-            </button>
-
-            <button class="secondary" onclick="minusculas()">
-                minúsculas
-            </button>
-
-            <button class="secondary" onclick="capitalizar()">
-                Capitalizar
-            </button>
-
-            <button class="secondary" onclick="copiar()">
-                Copiar
-            </button>
-
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <h1>
+                <i class="fas fa-font"></i>
+                Conversor de Texto Profissional
+            </h1>
+            <p>Converta e formate seu texto com múltiplas opções de transformação</p>
         </div>
 
+        <!-- PAINEL ESQUERDO - INPUT -->
+        <div class="panel left">
+            <div class="section-title">
+                <i class="fas fa-keyboard"></i>
+                Texto de Entrada
+            </div>
+            <div class="textarea-wrapper">
+                <textarea id="text" placeholder="Cole ou digite seu texto aqui..."></textarea>
+            </div>
+
+            <div class="section-title">
+                <i class="fas fa-magic"></i>
+                Opções de Conversão
+            </div>
+            <div class="conversion-options">
+                <button class="conversion-btn" onclick="aplicarConversao('maiusculas')">
+                    <i class="fas fa-arrow-up"></i> MAIÚSCULAS
+                </button>
+                <button class="conversion-btn" onclick="aplicarConversao('minusculas')">
+                    <i class="fas fa-arrow-down"></i> minúsculas
+                </button>
+                <button class="conversion-btn" onclick="aplicarConversao('capitalizar')">
+                    <i class="fas fa-pen"></i> Capitalizar
+                </button>
+                <button class="conversion-btn" onclick="aplicarConversao('inverter')">
+                    <i class="fas fa-exchange-alt"></i> Inverter
+                </button>
+                <button class="conversion-btn" onclick="aplicarConversao('alternado')">
+                    <i class="fas fa-random"></i> Alternado
+                </button>
+                <button class="conversion-btn" onclick="aplicarConversao('remover-espacos')">
+                    <i class="fas fa-compress"></i> S/ Espaços
+                </button>
+                <button class="conversion-btn" onclick="aplicarConversao('limpar-extras')">
+                    <i class="fas fa-broom"></i> Limpar Extras
+                </button>
+                <button class="conversion-btn" onclick="aplicarConversao('slugify')">
+                    <i class="fas fa-link"></i> Slugify
+                </button>
+            </div>
+
+            <div class="button-group">
+                <button class="btn-secondary" onclick="limpar()">
+                    <i class="fas fa-trash"></i>
+                    Limpar
+                </button>
+            </div>
+
+            <div class="feedback-message success" id="feedbackMsg"></div>
+
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="charCount">0</div>
+                    <div class="stat-label">Caracteres</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="wordCount">0</div>
+                    <div class="stat-label">Palavras</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="lineCount">0</div>
+                    <div class="stat-label">Linhas</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAINEL DIREITO - RESULTADO -->
+        <div class="panel right">
+            <div class="section-title">
+                <i class="fas fa-eye"></i>
+                Resultado
+            </div>
+            <div class="result-wrapper">
+                <div id="result" class="result-box empty" aria-live="polite">
+                    Seu resultado aparecerá aqui
+                </div>
+            </div>
+            <div class="button-group" style="margin-top: 24px;">
+                <button class="btn-secondary" onclick="copiarResultado()">
+                    <i class="fas fa-copy"></i>
+                    Copiar
+                </button>
+                <button class="btn-secondary" onclick="baixarResultado()">
+                    <i class="fas fa-download"></i>
+                    Baixar
+                </button>
+            </div>
+        </div>
     </div>
 
-    <!-- DIREITA -->
-    <div class="right">
+    <script>
+        const input = document.getElementById("text");
+        const result = document.getElementById("result");
+        const feedbackMsg = document.getElementById("feedbackMsg");
+        const darkModeBtn = document.getElementById("darkModeBtn");
+        const charCount = document.getElementById("charCount");
+        const wordCount = document.getElementById("wordCount");
+        const lineCount = document.getElementById("lineCount");
 
-        <h2>Resultado</h2>
+        const PLACEHOLDER_TEXT = "Seu resultado aparecerá aqui";
 
-        <div class="result-box" id="resultado" aria-live="polite">
-O resultado aparecerá aqui...
-        </div>
+        // MODO ESCURO
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            darkModeBtn.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+            localStorage.setItem('darkMode', isDark);
+        }
 
-        <div class="copy-msg" id="copyMsg">
-            ✓ Texto copiado com sucesso
-        </div>
+        darkModeBtn.addEventListener('click', toggleDarkMode);
 
-    </div>
+        if (localStorage.getItem('darkMode') === 'true') {
+            toggleDarkMode();
+        }
 
-</div>
+        // FUNÇÕES DE CONVERSÃO
+        const conversoes = {
+            maiusculas: (texto) => texto.toUpperCase(),
+            minusculas: (texto) => texto.toLowerCase(),
+            capitalizar: (texto) => texto.toLowerCase().replace(/(^|[^\p{L}\p{N}_])([\p{L}\p{N}_])/gu, (m, a, b) => a + b.toUpperCase()),
+            inverter: (texto) => texto.split('').reverse().join(''),
+            alternado: (texto) => texto.split('').map((c, i) => i % 2 === 0 ? c.toUpperCase() : c.toLowerCase()).join(''),
+            'remover-espacos': (texto) => texto.replace(/\s+/g, ''),
+            'limpar-extras': (texto) => texto.replace(/\s+/g, ' ').trim(),
+            slugify: (texto) => texto.toLowerCase().trim().replace(/[^\w\s-]/g, '').replace(/[\s_-]+/g, '-').replace(/^-+|-+$/g, '')
+        };
 
-<script>
+        function baixarResultado() {
+            const texto = result.textContent;
+            if (!texto || texto === PLACEHOLDER_TEXT) return;
+            
+            const blob = new Blob([texto], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'texto-convertido.txt';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
 
-const input = document.getElementById("text");
-const output = document.getElementById("resultado");
-const copyMsg = document.getElementById("copyMsg");
+        function aplicarConversao(tipo) {
+            const texto = input.value;
 
-const PLACEHOLDER_INICIAL = "O resultado aparecerá aqui...";
-const PLACEHOLDER_VAZIO = "Digite algo para converter.";
+            if (!texto.trim()) {
+                result.textContent = "Digite algo para converter";
+                result.classList.add("empty");
+                return;
+            }
 
-// Aplica a transformação só quando há texto real; caso contrário mostra um aviso
-function converter(transformar) {
+            const convertido = conversoes[tipo](texto);
+            result.textContent = convertido;
+            result.classList.remove("empty");
 
-    const valor = input.value;
+            // Atualizar botões ativos
+            document.querySelectorAll('.conversion-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.closest('.conversion-btn').classList.add('active');
+        }
 
-    if (!valor.trim()) {
-        output.textContent = PLACEHOLDER_VAZIO;
-        return;
-    }
+        function updateStats() {
+            const texto = input.value;
+            charCount.textContent = texto.length;
+            wordCount.textContent = texto.trim().split(/\s+/).filter(w => w.length > 0).length;
+            lineCount.textContent = texto.split('\n').length;
+        }
 
-    output.textContent = transformar(valor);
-}
+        async function copiarResultado() {
+            const texto = result.textContent.trim();
 
-function maiusculas() {
-    converter(valor => valor.toUpperCase());
-}
+            if (!texto || texto === PLACEHOLDER_TEXT) {
+                showFeedback("Nada para copiar", false);
+                return;
+            }
 
-function minusculas() {
-    converter(valor => valor.toLowerCase());
-}
+            try {
+                await navigator.clipboard.writeText(texto);
+                showFeedback("Copiado com sucesso!", true);
+            } catch (error) {
+                showFeedback("Erro ao copiar", false);
+            }
+        }
 
-function capitalizar() {
+        function showFeedback(message, success) {
+            feedbackMsg.textContent = (success ? '✓ ' : '✗ ') + message;
+            feedbackMsg.style.display = "flex";
 
-    converter(valor => valor
-        .toLowerCase()
-        // Unicode-aware: \w nativo do JS não reconhece letras acentuadas (á, é, ã, ç...),
-        // então usamos \p{L} (qualquer letra) e \p{N} (qualquer número) com a flag /u
-        .replace(
-            /(^|[^\p{L}\p{N}_])([\p{L}\p{N}_])/gu,
-            (match, antes, letra) => antes + letra.toUpperCase()
-        )
-    );
-}
+            setTimeout(() => {
+                feedbackMsg.style.display = "none";
+            }, 2500);
+        }
 
-async function copiar() {
+        function limpar() {
+            input.value = "";
+            result.textContent = PLACEHOLDER_TEXT;
+            result.classList.add("empty");
+            document.querySelectorAll('.conversion-btn').forEach(btn => btn.classList.remove('active'));
+            updateStats();
+        }
 
-    const texto = output.textContent.trim();
+        // Event listeners
+        input.addEventListener("input", updateStats);
 
-    if (
-        !texto ||
-        texto === PLACEHOLDER_INICIAL ||
-        texto === PLACEHOLDER_VAZIO
-    ) {
-        return;
-    }
-
-    try {
-
-        await navigator.clipboard.writeText(texto);
-
-        copyMsg.style.display = "block";
-
-        setTimeout(() => {
-            copyMsg.style.display = "none";
-        }, 2000);
-
-    } catch (error) {
-
-        alert("Não foi possível copiar o texto.");
-    }
-}
-
-</script>
-
+        // Inicializar
+        updateStats();
+    </script>
 </body>
 </html>
