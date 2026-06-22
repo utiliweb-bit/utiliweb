@@ -1,181 +1,834 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Separador de Texto por Vírgulas Online | UtiliWeb</title>
-<meta name="description" content="Converta listas em texto separado por vírgulas de forma rápida e gratuita com o UtiliWeb.">
-<meta name="keywords" content="utiliweb, separador de texto, vírgulas, lista, conversor">
-<link rel="stylesheet" href="../../assets/style.css">
-<style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-    background: linear-gradient(135deg, #2ecc71, #27ae60);
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-}
-.wrapper {
-    width: 100%;
-    max-width: 1100px;
-    background: #fff;
-    border-radius: 18px;
-    overflow: hidden;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
-}
-.left, .right {
-    padding: 25px;
-}
-.left {
-    border-right: 1px solid #eee;
-}
-h1 {
-    font-size: 26px;
-    margin-bottom: 5px;
-}
-.subtitle {
-    color: #666;
-    font-size: 14px;
-    margin-bottom: 15px;
-}
-textarea {
-    width: 100%;
-    height: 220px;
-    padding: 12px;
-    border-radius: 10px;
-    border: 2px solid #ddd;
-    resize: none;
-}
-textarea:focus {
-    outline: none;
-    border-color: #27ae60;
-}
-button {
-    margin-top: 12px;
-    padding: 12px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: bold;
-}
-.primary {
-    background: #27ae60;
-    color: #fff;
-}
-.secondary {
-    background: #fff;
-    border: 2px solid #27ae60;
-    color: #27ae60;
-}
-.copy-msg {
-    margin-top: 10px;
-    color: #27ae60;
-    font-size: 14px;
-    font-weight: 600;
-    display: none;
-}
-.result-box {
-    background: #f6fff8;
-    border: 1px solid #d7f5e3;
-    padding: 15px;
-    border-radius: 10px;
-    min-height: 200px;
-    white-space: pre-wrap;
-}
-a {
-    display: inline-block;
-    margin-bottom: 10px;
-    text-decoration: none;
-    color: #27ae60;
-    font-weight: bold;
-}
-@media(max-width: 900px) {
-    .wrapper {
-        grid-template-columns: 1fr;
-    }
-    .left {
-        border-right: none;
-        border-bottom: 1px solid #eee;
-    }
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Separador de Texto Profissional | UtiliWeb</title>
+    <meta name="description" content="Ferramenta profissional para separar, formatar e converter listas de texto com múltiplas opções de separadores.">
+    <meta name="keywords" content="separador, vírgulas, texto, conversor, formatador">
+    <meta name="robots" content="index, follow">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            width: 100%;
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            transition: background 0.3s ease;
+        }
+
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+
+        /* CONTAINER PRINCIPAL */
+        .container {
+            width: 100%;
+            max-width: 1300px;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15), 0 0 1px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+        }
+
+        body.dark-mode .container {
+            background: #2d2d2d;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4), 0 0 1px rgba(0, 0, 0, 0.2);
+        }
+
+        /* HEADER */
+        .header {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .header p {
+            font-size: 15px;
+            opacity: 0.95;
+            font-weight: 300;
+        }
+
+        /* PAINÉIS */
+        .panel {
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .panel.left {
+            border-right: 1px solid #f0f0f0;
+        }
+
+        .panel.right {
+            background: #fafafa;
+        }
+
+        body.dark-mode .panel.left {
+            border-right-color: #444;
+        }
+
+        body.dark-mode .panel.right {
+            background: #252525;
+        }
+
+        /* SEÇÃO */
+        .section-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #667eea;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        body.dark-mode .section-title {
+            color: #8194f2;
+        }
+
+        .section-title i {
+            font-size: 16px;
+        }
+
+        /* OPÇÕES DE SEPARADOR */
+        .separator-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 24px;
+            padding: 16px;
+            background: #f5f5f5;
+            border-radius: 12px;
+        }
+
+        body.dark-mode .separator-options {
+            background: #3d3d3d;
+        }
+
+        .separator-btn {
+            padding: 10px 12px;
+            border: 2px solid #e0e0e0;
+            background: #fff;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #333;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        body.dark-mode .separator-btn {
+            background: #444;
+            border-color: #555;
+            color: #eee;
+        }
+
+        .separator-btn:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
+
+        .separator-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            border-color: transparent;
+        }
+
+        /* TEXTAREA */
+        .textarea-wrapper {
+            margin-bottom: 24px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .textarea-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #999;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        textarea {
+            width: 100%;
+            flex: 1;
+            min-height: 200px;
+            padding: 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            resize: none;
+            transition: all 0.3s ease;
+            background: #fff;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        body.dark-mode textarea {
+            background: #333;
+            border-color: #444;
+            color: #eee;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        textarea::placeholder {
+            color: #999;
+        }
+
+        /* DRAG & DROP */
+        .drag-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(102, 126, 234, 0.1);
+            border: 2px dashed #667eea;
+            border-radius: 12px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: #667eea;
+            font-weight: 600;
+            pointer-events: none;
+        }
+
+        .textarea-wrapper.drag-over .drag-overlay {
+            display: flex;
+        }
+
+        /* RESULTADO */
+        .result-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .result-box {
+            flex: 1;
+            background: #fff;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 14px;
+            line-height: 1.6;
+            word-break: break-word;
+            white-space: pre-wrap;
+            overflow-y: auto;
+            color: #333;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            min-height: 200px;
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode .result-box {
+            background: #333;
+            border-color: #444;
+            color: #eee;
+        }
+
+        .result-box.empty {
+            color: #999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-style: italic;
+        }
+
+        /* BOTÕES */
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            flex: 1;
+            min-width: 120px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+            border: 2px solid #e0e0e0;
+        }
+
+        body.dark-mode .btn-secondary {
+            background: #3d3d3d;
+            border-color: #555;
+            color: #eee;
+        }
+
+        .btn-secondary:hover {
+            background: #e8e8e8;
+            border-color: #d0d0d0;
+        }
+
+        body.dark-mode .btn-secondary:hover {
+            background: #4d4d4d;
+            border-color: #666;
+        }
+
+        .btn-secondary:active {
+            background: #e0e0e0;
+        }
+
+        /* MENSAGENS */
+        .feedback-message {
+            margin-top: 12px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            display: none;
+            align-items: center;
+            gap: 8px;
+            animation: slideIn 0.3s ease;
+        }
+
+        .feedback-message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .feedback-message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        body.dark-mode .feedback-message.success {
+            background: rgba(76, 175, 80, 0.2);
+            color: #81c784;
+            border-color: rgba(76, 175, 80, 0.3);
+        }
+
+        body.dark-mode .feedback-message.error {
+            background: rgba(244, 67, 54, 0.2);
+            color: #ef5350;
+            border-color: rgba(244, 67, 54, 0.3);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ESTATÍSTICAS */
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        body.dark-mode .stats {
+            border-top-color: #444;
+        }
+
+        .stat-item {
+            background: #f5f5f5;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        body.dark-mode .stat-item {
+            background: #3d3d3d;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        body.dark-mode .stat-value {
+            color: #8194f2;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #999;
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        /* BOTÃO MODO ESCURO */
+        .dark-mode-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .dark-mode-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        /* RESPONSIVO */
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .panel.left {
+                border-right: none;
+                border-bottom: 1px solid #f0f0f0;
+            }
+
+            .panel.right {
+                background: #ffffff;
+            }
+
+            body.dark-mode .panel.right {
+                background: #2d2d2d;
+            }
+
+            .separator-options {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            html, body {
+                padding: 12px;
+            }
+
+            .header {
+                padding: 30px 20px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .panel {
+                padding: 24px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+
+            .separator-options {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .stats {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            textarea, .result-box {
+                min-height: 150px;
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 20px;
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .section-title {
+                font-size: 12px;
+            }
+
+            .separator-options {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .dark-mode-toggle {
+                width: 45px;
+                height: 45px;
+                font-size: 18px;
+                bottom: 15px;
+                right: 15px;
+            }
+        }
+
+        /* SCROLLBAR CUSTOMIZADA */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        body.dark-mode ::-webkit-scrollbar-track {
+            background: #3d3d3d;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #764ba2;
+        }
+    </style>
 </head>
 <body>
-<div class="wrapper">
-    <!-- ESQUERDA -->
-    <div class="left">
-        <h1>🔗 Separador por Vírgulas</h1>
-        <p class="subtitle">Transforme listas em texto separado por vírgulas</p>
-        <a href="../../index.html">← Voltar</a>
-        <textarea id="text" placeholder="Digite ou cole sua lista (1 item por linha)..."></textarea>
-        <button class="primary" onclick="converter()">Converter</button>
-        <button class="secondary" onclick="copiar()">Copiar</button>
-        <div class="copy-msg" id="copyMsg">✓ Texto copiado com sucesso</div>
+    <button class="dark-mode-toggle" id="darkModeBtn" title="Alternar modo escuro">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <h1>
+                <i class="fas fa-link"></i>
+                Separador de Texto Profissional
+            </h1>
+            <p>Converta listas em texto formatado com múltiplas opções de separadores</p>
+        </div>
+
+        <!-- PAINEL ESQUERDO - INPUT -->
+        <div class="panel left">
+            <div class="section-title">
+                <i class="fas fa-cog"></i>
+                Opções de Separador
+            </div>
+            <div class="separator-options">
+                <button class="separator-btn active" data-separator=", " title="Vírgula com espaço">
+                    <i class="fas fa-comma"></i> Vírgula
+                </button>
+                <button class="separator-btn" data-separator=";" title="Ponto e vírgula">
+                    <i class="fas fa-semicolon"></i> Ponto Vírgula
+                </button>
+                <button class="separator-btn" data-separator=" | " title="Barra vertical">
+                    <i class="fas fa-bars"></i> Barra
+                </button>
+                <button class="separator-btn" data-separator=" " title="Espaço">
+                    <i class="fas fa-space-shuttle"></i> Espaço
+                </button>
+                <button class="separator-btn" data-separator="\n" title="Nova linha">
+                    <i class="fas fa-arrow-down"></i> Linha
+                </button>
+                <button class="separator-btn" data-separator="custom" title="Personalizado">
+                    <i class="fas fa-edit"></i> Custom
+                </button>
+            </div>
+            <div id="customSeparatorGroup" style="display: none; margin-bottom: 16px;">
+                <input type="text" id="customSeparator" placeholder="Digite seu separador customizado..." 
+                    style="width: 100%; padding: 10px; border-radius: 8px; border: 2px solid #e0e0e0; font-size: 14px;">
+            </div>
+
+            <div class="section-title">
+                <i class="fas fa-keyboard"></i>
+                Texto de Entrada
+            </div>
+            <div class="textarea-wrapper" id="dragZone">
+                <div class="drag-overlay">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    Solte o arquivo aqui
+                </div>
+                <textarea id="text" placeholder="Cole ou digite sua lista (1 item por linha)... Você também pode arrastar um arquivo .txt aqui"></textarea>
+            </div>
+            <div class="button-group">
+                <button class="btn-primary" onclick="converter()">
+                    <i class="fas fa-magic"></i>
+                    Converter
+                </button>
+                <button class="btn-secondary" onclick="resetAll()">
+                    <i class="fas fa-trash"></i>
+                    Limpar
+                </button>
+            </div>
+            <div class="feedback-message" id="feedbackMsg"></div>
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="itemCount">0</div>
+                    <div class="stat-label">Itens</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="charCount">0</div>
+                    <div class="stat-label">Caracteres</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="lineCount">0</div>
+                    <div class="stat-label">Linhas</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAINEL DIREITO - RESULTADO -->
+        <div class="panel right">
+            <div class="section-title">
+                <i class="fas fa-eye"></i>
+                Resultado
+            </div>
+            <div class="result-wrapper">
+                <div id="result" class="result-box empty" aria-live="polite">
+                    Seu resultado aparecerá aqui
+                </div>
+            </div>
+            <button class="btn-secondary" onclick="copyText()" style="margin-top: 24px;">
+                <i class="fas fa-copy"></i>
+                Copiar Resultado
+            </button>
+        </div>
     </div>
-    <!-- DIREITA -->
-    <div class="right">
-        <h2>Resultado</h2>
-        <div class="result-box" id="resultado" aria-live="polite">O resultado aparecerá aqui...</div>
-    </div>
-</div>
-<script>
 
-const inputEl = document.getElementById("text");
-const resultadoEl = document.getElementById("resultado");
-const copyMsgEl = document.getElementById("copyMsg");
+    <script>
+        const input = document.getElementById("text");
+        const result = document.getElementById("result");
+        const feedbackMsg = document.getElementById("feedbackMsg");
+        const darkModeBtn = document.getElementById("darkModeBtn");
+        const dragZone = document.getElementById("dragZone");
+        const itemCount = document.getElementById("itemCount");
+        const charCount = document.getElementById("charCount");
+        const lineCount = document.getElementById("lineCount");
+        const customSeparatorGroup = document.getElementById("customSeparatorGroup");
+        const customSeparatorInput = document.getElementById("customSeparator");
 
-const PLACEHOLDER_INICIAL = "O resultado aparecerá aqui...";
-const MENSAGEM_VAZIA = "Nenhum item encontrado.";
+        let currentSeparator = ", ";
 
-function converter() {
+        const PLACEHOLDER_TEXT = "Seu resultado aparecerá aqui";
+        const EMPTY_MESSAGE = "Nada para processar";
 
-    const itens = inputEl.value
-        .split("\n")
-        .map(i => i.trim())
-        .filter(i => i);
+        // MODO ESCURO
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            darkModeBtn.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+            localStorage.setItem('darkMode', isDark);
+        }
 
-    resultadoEl.textContent = itens.length
-        ? itens.join(", ")
-        : MENSAGEM_VAZIA;
-}
+        darkModeBtn.addEventListener('click', toggleDarkMode);
 
-async function copiar() {
+        if (localStorage.getItem('darkMode') === 'true') {
+            toggleDarkMode();
+        }
 
-    const texto = resultadoEl.textContent.trim();
+        // SELETOR DE SEPARADOR
+        document.querySelectorAll('.separator-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.separator-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                if (this.dataset.separator === 'custom') {
+                    customSeparatorGroup.style.display = 'block';
+                    currentSeparator = customSeparatorInput.value;
+                } else {
+                    customSeparatorGroup.style.display = 'none';
+                    currentSeparator = this.dataset.separator;
+                }
+                converter();
+            });
+        });
 
-    if (
-        !texto ||
-        texto === PLACEHOLDER_INICIAL ||
-        texto === MENSAGEM_VAZIA
-    ) {
-        return;
-    }
+        customSeparatorInput.addEventListener('input', function() {
+            currentSeparator = this.value;
+            converter();
+        });
 
-    try {
+        // DRAG & DROP
+        dragZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dragZone.classList.add('drag-over');
+        });
 
-        await navigator.clipboard.writeText(texto);
+        dragZone.addEventListener('dragleave', () => {
+            dragZone.classList.remove('drag-over');
+        });
 
-        copyMsgEl.style.display = "block";
+        dragZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dragZone.classList.remove('drag-over');
 
-        setTimeout(() => {
-            copyMsgEl.style.display = "none";
-        }, 2000);
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                const file = files[0];
+                if (file.type === 'text/plain' || file.name.endsWith('.txt')) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        input.value = event.target.result;
+                        converter();
+                        updateStats();
+                        showFeedback('Arquivo carregado com sucesso!', 'success');
+                    };
+                    reader.readAsText(file);
+                } else {
+                    showFeedback('Por favor, selecione um arquivo .txt', 'error');
+                }
+            }
+        });
 
-    } catch (error) {
+        function updateStats() {
+            const text = input.value;
+            const items = text.split('\n').map(i => i.trim()).filter(i => i);
+            itemCount.textContent = items.length;
+            charCount.textContent = text.length;
+            lineCount.textContent = text.split('\n').length;
+        }
 
-        alert("Não foi possível copiar o texto.");
-    }
-}
+        function converter() {
+            const text = input.value;
 
-</script>
+            if (!text.trim()) {
+                result.textContent = EMPTY_MESSAGE;
+                result.classList.add("empty");
+                return;
+            }
+
+            const itens = text
+                .split("\n")
+                .map(i => i.trim())
+                .filter(i => i);
+
+            const resultado = itens.length ? itens.join(currentSeparator) : EMPTY_MESSAGE;
+            result.textContent = resultado;
+            result.classList.remove("empty");
+        }
+
+        async function copyText() {
+            const texto = result.textContent.trim();
+
+            if (!texto || texto === PLACEHOLDER_TEXT || texto === EMPTY_MESSAGE) {
+                showFeedback("Nada para copiar", "error");
+                return;
+            }
+
+            try {
+                await navigator.clipboard.writeText(texto);
+                showFeedback("Copiado com sucesso!", "success");
+            } catch (error) {
+                showFeedback("Erro ao copiar. Tente novamente.", "error");
+            }
+        }
+
+        function showFeedback(message, type) {
+            feedbackMsg.textContent = message;
+            feedbackMsg.className = `feedback-message ${type}`;
+            feedbackMsg.style.display = "flex";
+
+            setTimeout(() => {
+                feedbackMsg.style.display = "none";
+            }, 2500);
+        }
+
+        function resetAll() {
+            input.value = "";
+            result.textContent = PLACEHOLDER_TEXT;
+            result.classList.add("empty");
+            updateStats();
+        }
+
+        // Event listeners
+        input.addEventListener("input", () => {
+            converter();
+            updateStats();
+        });
+
+        // Inicializar
+        updateStats();
+    </script>
 </body>
 </html>
