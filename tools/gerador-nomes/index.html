@@ -3,893 +3,475 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>BabyName Pro | Encontre o Nome Perfeito</title>
 
-<title>Gerador de Nomes para Bebê | UtiliWeb</title>
-
-<meta name="description" content="Encontre o nome perfeito para o seu bebê. Filtre por sexo, idioma, estilo e inicial.">
-<meta name="keywords" content="gerador nomes bebê, nomes menino, nomes menina, nomes neutros, utiliweb">
+<!-- Google Fonts: Inter e Playfair Display para um toque elegante -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
 
 <style>
-:root{
-    --pad: clamp(10px, 2vw, 20px);
-    --radius: 18px;
+:root {
+    --primary: #0f172a;
+    --accent: #ec4899; /* Rosa vibrante moderno */
+    --accent-blue: #3b82f6; /* Azul vibrante moderno */
+    --bg: #fdfcfd;
+    --card-bg: #ffffff;
+    --border: #f1f5f9;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --radius: 20px;
+    --shadow: 0 10px 15px -3px rgb(0 0 0 / 0.05);
 }
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
 }
 
-html, body{
-    width:100%;
-    min-height:100dvh;
-    font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial;
-    background:linear-gradient(135deg,#2ecc71,#27ae60);
-    display:flex;
-    justify-content:center;
-    align-items:flex-start;
-    padding:var(--pad);
+body {
+    background-color: var(--bg);
+    color: var(--text-main);
+    min-height: 100dvh;
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
 }
 
-.wrapper{
-    width:100%;
-    max-width:1000px;
-    background:#fff;
-    border-radius:var(--radius);
-    box-shadow:0 20px 60px rgba(0,0,0,.3);
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    overflow:hidden;
-    margin:auto;
+.container {
+    width: 100%;
+    max-width: 1100px;
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 40px;
 }
 
-.left-panel,
-.right-panel{
-    padding:clamp(16px, 3vw, 28px);
+/* Painel de Filtros */
+.filter-card {
+    background: white;
+    padding: 32px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    height: fit-content;
+    position: sticky;
+    top: 40px;
 }
 
-.left-panel{
-    border-right:1px solid #eee;
+h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    color: var(--primary);
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
 }
 
-header h1{
-    font-size:clamp(20px, 2.2vw, 24px);
+.subtitle {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 32px;
+    line-height: 1.5;
 }
 
-.subtitle{
-    font-size:clamp(12px, 1.4vw, 14px);
-    color:#777;
-    margin-bottom:10px;
+.form-group {
+    margin-bottom: 24px;
 }
 
-a.back{
-    color:#27ae60;
-    text-decoration:none;
-    font-size:13px;
-    font-weight:600;
-    display:inline-block;
-    margin-bottom:16px;
+label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    margin-bottom: 12px;
 }
 
-a.back:hover{
-    text-decoration:underline;
+/* Toggle Buttons */
+.toggle-group {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    background: #f8fafc;
+    padding: 4px;
+    border-radius: 12px;
 }
 
-.sec-label{
-    font-size:11px;
-    font-weight:700;
-    text-transform:uppercase;
-    letter-spacing:.5px;
-    color:#444;
-    margin-bottom:8px;
-    margin-top:16px;
-    padding-bottom:4px;
-    border-bottom:2px solid #27ae60;
+.toggle-btn {
+    padding: 10px;
+    border: none;
+    background: transparent;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
 }
 
-.tog-row{
-    display:grid;
-    gap:6px;
-    margin-bottom:4px;
+.toggle-btn.active {
+    background: white;
+    color: var(--primary);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-.tg2{ grid-template-columns:1fr 1fr; }
-.tg3{ grid-template-columns:1fr 1fr 1fr; }
-.tg4{ grid-template-columns:1fr 1fr 1fr 1fr; }
+.toggle-btn.active.pink { color: var(--accent); }
+.toggle-btn.active.blue { color: var(--accent-blue); }
 
-.tog{
-    padding:9px 6px;
-    font-size:12px;
-    background:#fff;
-    border:2px solid #ddd;
-    border-radius:8px;
-    cursor:pointer;
-    color:#555;
-    font-weight:700;
-    text-transform:uppercase;
-    letter-spacing:.3px;
-    transition:all .15s;
-    font-family:inherit;
+.select-field {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: #f8fafc;
+    font-size: 14px;
+    color: var(--text-main);
+    cursor: pointer;
+    outline: none;
 }
 
-.tog:hover{
-    border-color:#27ae60;
-    color:#27ae60;
+.btn-generate {
+    width: 100%;
+    padding: 16px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s, opacity 0.2s;
+    margin-top: 12px;
 }
 
-.tog.active{
-    background:#27ae60;
-    color:#fff;
-    border-color:#27ae60;
+.btn-generate:hover { opacity: 0.9; transform: translateY(-1px); }
+
+/* Painel de Resultados */
+.results-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
 }
 
-label{
-    font-size:12px;
-    font-weight:700;
-    display:block;
-    margin-top:14px;
-    margin-bottom:6px;
-    color:#444;
+.results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-select, input[type=text]{
-    width:100%;
-    padding:11px 12px;
-    border-radius:10px;
-    border:2px solid #ddd;
-    font-size:14px;
-    outline:none;
-    font-family:inherit;
-    color:#1a1a1a;
-    background:#fff;
+.results-count {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
 }
 
-select:focus, input[type=text]:focus{
-    border-color:#27ae60;
+.names-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
 }
 
-.qty-row{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    margin-top:14px;
-    margin-bottom:4px;
+.name-card {
+    background: white;
+    padding: 24px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    transition: transform 0.2s;
+    position: relative;
+    overflow: hidden;
 }
 
-.qty-row label{
-    margin:0;
-    white-space:nowrap;
-    font-size:12px;
+.name-card:hover { transform: translateY(-4px); }
+
+.name-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
 }
 
-input[type=range]{
-    flex:1;
-    accent-color:#27ae60;
+.name-card.m::before { background: var(--accent-blue); }
+.name-card.f::before { background: var(--accent); }
+.name-card.u::before { background: #94a3b8; }
+
+.name-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    color: var(--primary);
+    margin-bottom: 8px;
 }
 
-.qty-val{
-    font-size:14px;
-    font-weight:700;
-    min-width:24px;
-    color:#27ae60;
+.name-meaning {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-muted);
 }
 
-.info-box{
-    background:#f0faf4;
-    border-left:4px solid #27ae60;
-    border-radius:0 8px 8px 0;
-    padding:10px 12px;
-    font-size:12px;
-    color:#2d6a4f;
-    margin-top:16px;
-    line-height:1.5;
+.name-footer {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-button.gen-btn{
-    width:100%;
-    margin-top:16px;
-    padding:13px;
-    border:none;
-    border-radius:10px;
-    background:#27ae60;
-    color:#fff;
-    font-size:14px;
-    font-weight:700;
-    cursor:pointer;
-    font-family:inherit;
-    transition:opacity .15s, transform .1s;
-    min-height:44px;
-    touch-action:manipulation;
+.name-tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    background: #f8fafc;
+    border-radius: 6px;
+    color: var(--text-muted);
 }
 
-button.gen-btn:hover{ opacity:.92; }
-button.gen-btn:active{ transform:scale(.98); }
-
-/* DIREITA */
-.right-panel{
-    background:#eafaf1;
+.fav-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #e2e8f0;
+    transition: color 0.2s;
 }
 
-.right-panel h2{
-    font-size:18px;
-    margin-bottom:6px;
+.fav-btn.active { color: var(--accent); }
+
+/* Favoritos Section */
+.favorites-bar {
+    background: white;
+    padding: 20px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    margin-bottom: 32px;
+    display: none;
 }
 
-.btn-row{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:8px;
-    margin-bottom:14px;
-    margin-top:14px;
+.favorites-bar.active { display: block; }
+
+.fav-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    text-transform: uppercase;
 }
 
-.sec-btn{
-    padding:9px;
-    font-size:12px;
-    background:#fff;
-    border:2px solid #27ae60;
-    border-radius:8px;
-    cursor:pointer;
-    color:#27ae60;
-    font-weight:700;
-    text-transform:uppercase;
-    letter-spacing:.3px;
-    transition:all .15s;
-    font-family:inherit;
-    min-height:40px;
-    touch-action:manipulation;
+.fav-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
 }
 
-.sec-btn:active{ background:#eafaf1; }
-
-.names-list{
-    display:flex;
-    flex-direction:column;
-    gap:6px;
+.fav-tag {
+    background: #fff1f2;
+    color: #be123c;
+    padding: 6px 12px;
+    border-radius: 99px;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
-.name-card{
-    display:flex;
-    align-items:flex-start;
-    justify-content:space-between;
-    gap:10px;
-    padding:12px 14px;
-    background:#fff;
-    border:1px solid #c8e6c9;
-    border-radius:8px;
-    transition:border-color .15s;
-}
-
-.name-card:hover{ border-color:#27ae60; }
-
-.name-text{
-    font-size:16px;
-    font-weight:700;
-    color:#1b5e20;
-}
-
-.name-origin{
-    font-size:12px;
-    color:#388e3c;
-    margin-top:3px;
-    line-height:1.4;
-}
-
-.name-actions{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    flex-shrink:0;
-    padding-top:2px;
-}
-
-.copy-btn{
-    background:transparent;
-    border:1px solid #c8e6c9;
-    border-radius:6px;
-    padding:4px 9px;
-    font-size:11px;
-    color:#2d6a4f;
-    cursor:pointer;
-    font-weight:700;
-    transition:all .15s;
-    font-family:inherit;
-}
-
-.copy-btn:hover{ background:#eafaf1; }
-
-.fav-btn{
-    background:transparent;
-    border:none;
-    cursor:pointer;
-    font-size:18px;
-    padding:4px;
-    color:#c8e6c9;
-    line-height:1;
-    transition:color .15s;
-}
-
-.fav-btn.faved{ color:#27ae60; }
-
-.empty-state{
-    text-align:center;
-    padding:2rem 1rem;
-    color:#388e3c;
-    font-size:13px;
-    background:#fff;
-    border-radius:8px;
-    border:1px dashed #c8e6c9;
-}
-
-.favs-section{
-    margin-top:16px;
-    padding-top:14px;
-    border-top:1px solid #c8e6c9;
-}
-
-.favs-title{
-    font-size:11px;
-    font-weight:700;
-    text-transform:uppercase;
-    letter-spacing:.5px;
-    color:#27ae60;
-    margin-bottom:8px;
-}
-
-.count-badge{
-    display:inline-block;
-    background:#27ae60;
-    color:#fff;
-    font-size:10px;
-    font-weight:700;
-    border-radius:20px;
-    padding:1px 7px;
-    margin-left:6px;
-    vertical-align:middle;
-}
-
-.fav-pills{
-    display:flex;
-    flex-wrap:wrap;
-    gap:6px;
-}
-
-.fav-pill{
-    padding:5px 12px;
-    background:#fff;
-    border:1.5px solid #27ae60;
-    border-radius:20px;
-    font-size:13px;
-    color:#1b5e20;
-    cursor:pointer;
-    font-weight:500;
-    transition:all .15s;
-}
-
-.fav-pill:hover{ background:#eafaf1; }
-
-.disclaimer{
-    font-size:10px;
-    color:#388e3c;
-    margin-top:16px;
-    line-height:1.5;
-    font-style:italic;
-}
-
-@media(max-width:900px){
-    .wrapper{ grid-template-columns:1fr; }
-    .left-panel{ border-right:none; border-bottom:1px solid #eee; }
-    .tg4{ grid-template-columns:1fr 1fr; }
-}
-
-@media(max-width:480px){
-    .tg3{ grid-template-columns:1fr 1fr; }
+/* Responsividade */
+@media (max-width: 900px) {
+    .container { grid-template-columns: 1fr; }
+    .filter-card { position: relative; top: 0; }
 }
 </style>
 </head>
-
 <body>
 
-<div class="wrapper">
+<div class="container">
+    <!-- Filtros -->
+    <div class="filter-card">
+        <h1>BabyName Pro</h1>
+        <p class="subtitle">Descubra nomes com significados profundos e origens autênticas para o seu bebê.</p>
 
-    <!-- ESQUERDA -->
-    <div class="left-panel">
-
-        <header>
-            <h1>🍼 Gerador de Nomes para Bebê</h1>
-            <p class="subtitle">Encontre o nome perfeito</p>
-        </header>
-
-        <a class="back" href="../../index.html">← Voltar</a>
-
-        <div class="info-box">
-            <strong>Dica:</strong> Escolha o sexo, o idioma (Português, Inglês ou Japonês) e o estilo para filtrar os nomes. Cada nome traz seu significado e origem. Salve seus favoritos clicando no coração ♡.
+        <div class="form-group">
+            <label>Gênero</label>
+            <div class="toggle-group">
+                <button class="toggle-btn active blue" onclick="setGender('M', this)">Menino</button>
+                <button class="toggle-btn" onclick="setGender('F', this)">Menina</button>
+                <button class="toggle-btn" onclick="setGender('U', this)">Neutro</button>
+            </div>
         </div>
 
-        <div class="sec-label">Sexo</div>
-        <div class="tog-row tg3">
-            <button class="tog active" id="sx-m" onclick="setSexo('M')">♂ Menino</button>
-            <button class="tog" id="sx-f" onclick="setSexo('F')">♀ Menina</button>
-            <button class="tog" id="sx-u" onclick="setSexo('U')">⚧ Neutro</button>
+        <div class="form-group">
+            <label>Estilo do Nome</label>
+            <select id="style" class="select-field" onchange="generate()">
+                <option value="all">Todos os Estilos</option>
+                <option value="class">Clássicos & Atemporais</option>
+                <option value="mod">Modernos & Tendência</option>
+                <option value="rare">Raros & Únicos</option>
+            </select>
         </div>
 
-        <div class="sec-label">Idioma / origem</div>
-        <select id="lang" onchange="render()">
-            <option value="all">Todos os idiomas</option>
-            <option value="pt">Português</option>
-            <option value="en">Inglês</option>
-            <option value="ja">Japonês</option>
-        </select>
-
-        <div class="sec-label">Estilo</div>
-        <div class="tog-row tg4">
-            <button class="tog active" id="st-all" onclick="setEstilo('all')">Todos</button>
-            <button class="tog" id="st-class" onclick="setEstilo('class')">Clássico</button>
-            <button class="tog" id="st-mod" onclick="setEstilo('mod')">Moderno</button>
-            <button class="tog" id="st-rare" onclick="setEstilo('rare')">Raro</button>
+        <div class="form-group">
+            <label>Origem / Idioma</label>
+            <select id="origin" class="select-field" onchange="generate()">
+                <option value="pt">Português (Brasil/Portugal)</option>
+                <option value="en">Inglês / Internacional</option>
+                <option value="it">Italiano</option>
+                <option value="gr">Grego / Mitológico</option>
+            </select>
         </div>
 
-        <label for="inicial">Inicial (opcional)</label>
-        <input type="text" id="inicial" maxlength="1" placeholder="Ex: A, B, C…" oninput="this.value=this.value.toUpperCase();render()">
-
-        <div class="qty-row">
-            <label for="qty">Quantidade</label>
-            <input type="range" id="qty" min="5" max="20" value="10" step="1" oninput="document.getElementById('qty-val').textContent=this.value;render()">
-            <span class="qty-val" id="qty-val">10</span>
-        </div>
-
-        <button class="gen-btn" onclick="gerar()">✨ Gerar nomes</button>
-
+        <button class="btn-generate" onclick="generate()">Encontrar Nomes</button>
     </div>
 
-    <!-- DIREITA -->
-    <div class="right-panel">
-
-        <h2>Resultados</h2>
-
-        <div class="btn-row">
-            <button class="sec-btn" onclick="gerar()">↺ Novos nomes</button>
-            <button class="sec-btn" id="copy-all-btn" onclick="copiarTodos()">⎘ Copiar lista</button>
+    <!-- Resultados -->
+    <div class="results-panel">
+        <div id="favBar" class="favorites-bar">
+            <div class="fav-title">❤️ Seus Favoritos</div>
+            <div id="favList" class="fav-list"></div>
         </div>
 
-        <div class="names-list" id="names-list">
-            <div class="empty-state">Configure os filtros e clique em <strong>Gerar nomes</strong></div>
+        <div class="results-header">
+            <div class="results-count" id="countText">Sugestões para você</div>
         </div>
 
-        <div class="favs-section" id="favs-section" style="display:none">
-            <div class="favs-title">♥ Favoritos <span class="count-badge" id="fav-count">0</span></div>
-            <div class="fav-pills" id="fav-pills"></div>
+        <div class="names-grid" id="namesGrid">
+            <!-- Cards de nomes aqui -->
         </div>
-
-        <p class="disclaimer">Esta ferramenta oferece sugestões de nomes para inspirar os pais. A escolha final é sempre uma decisão pessoal e afetiva.</p>
-
     </div>
-
 </div>
 
 <script>
-const DB={
-  M:{
-    pt:[
-      {n:"Miguel",s:"class",m:"Hebraico — \"quem é como Deus\""},
-      {n:"Arthur",s:"class",m:"Celta — \"urso\", simboliza força e coragem"},
-      {n:"Davi",s:"mod",m:"Hebraico — \"amado\""},
-      {n:"Gabriel",s:"class",m:"Hebraico — \"força de Deus\" ou \"homem de Deus\""},
-      {n:"Bernardo",s:"rare",m:"Germânico — \"forte como um urso\""},
-      {n:"Lucas",s:"mod",m:"Latino — \"aquele que vem da Lucânia\" / associado a \"luz\""},
-      {n:"Mateus",s:"class",m:"Hebraico — \"dom de Deus\""},
-      {n:"Pedro",s:"mod",m:"Grego — \"pedra\""},
-      {n:"Henrique",s:"rare",m:"Germânico — \"senhor do lar\""},
-      {n:"Vinícius",s:"class",m:"Latino — \"da vinha\""},
-      {n:"Enzo",s:"class",m:"Italiano — forma curta de Lorenzo, \"laureado\""},
-      {n:"Caio",s:"mod",m:"Latino — \"alegrar-se\""},
-      {n:"Heitor",s:"rare",m:"Grego — \"aquele que se mantém firme\""},
-      {n:"João",s:"class",m:"Hebraico — \"Deus é gracioso\""},
-      {n:"José",s:"class",m:"Hebraico — \"Deus aumentará\""},
-      {n:"Antônio",s:"mod",m:"Latino — origem incerta, associado a \"florescer\""},
-      {n:"Francisco",s:"mod",m:"Italiano — \"homem livre\", de Francesco de Assis"},
-      {n:"Carlos",s:"class",m:"Germânico — \"homem livre\""},
-      {n:"Paulo",s:"rare",m:"Latino — \"pequeno, humilde\""},
-      {n:"Rafael",s:"mod",m:"Hebraico — \"Deus curou\""},
-      {n:"Daniel",s:"class",m:"Hebraico — \"Deus é meu juiz\""},
-      {n:"Marcos",s:"mod",m:"Latino — \"dedicado a Marte\", deus da guerra"},
-      {n:"Felipe",s:"rare",m:"Grego — \"amigo dos cavalos\""},
-      {n:"Eduardo",s:"class",m:"Germânico — \"guardião das riquezas\""},
-      {n:"André",s:"mod",m:"Grego — \"homem, viril\""},
-      {n:"Thiago",s:"class",m:"Hebraico — variante de Tiago/Jacó, \"aquele que segue\""},
-      {n:"Fernando",s:"mod",m:"Germânico — \"viagem audaciosa\" ou \"pronto para viajar\""},
-      {n:"Gustavo",s:"class",m:"Sueco — \"cajado dos godos\", bastão real"},
-      {n:"Leonardo",s:"mod",m:"Germânico — \"leão corajoso\""},
-      {n:"Vitor",s:"rare",m:"Latino — \"vencedor\""},
-      {n:"Ricardo",s:"mod",m:"Germânico — \"governante poderoso\""},
-      {n:"Alexandre",s:"class",m:"Grego — \"protetor dos homens\""},
-      {n:"César",s:"mod",m:"Latino — \"cabeludo\" ou relativo à dinastia de Júlio César"},
-      {n:"Júlio",s:"class",m:"Latino — \"descendente de Júpiter\""},
-      {n:"Bruno",s:"mod",m:"Germânico — \"marrom, moreno\""},
-      {n:"Igor",s:"class",m:"Eslavo — \"guerreiro\", forma russa de Ingvar"},
-      {n:"Levi",s:"class",m:"Hebraico — \"unido\""},
-      {n:"Oscar",s:"class",m:"Gaélico — \"lança de Deus\" ou \"amigo dos cervos\""},
-      {n:"Vicente",s:"class",m:"Latino — \"vencedor, conquistador\""},
-      {n:"Benício",s:"rare",m:"Latino — \"abençoado\""},
-      {n:"Theo",s:"mod",m:"Grego — forma curta de Theodoro, \"dom de Deus\""}
-    ],
-    en:[
-      {n:"Liam",s:"class",m:"Irlandês — forma curta de William, \"protetor decidido\""},
-      {n:"Noah",s:"class",m:"Hebraico — \"descanso, conforto\""},
-      {n:"Oliver",s:"mod",m:"Latino — \"oliveira\", símbolo de paz"},
-      {n:"James",s:"class",m:"Hebraico — variante de Jacó, \"aquele que segue\""},
-      {n:"Henry",s:"mod",m:"Germânico — \"senhor do lar\""},
-      {n:"William",s:"class",m:"Germânico — \"protetor decidido\""},
-      {n:"Benjamin",s:"class",m:"Hebraico — \"filho da direita\" ou \"filho querido\""},
-      {n:"Lucas",s:"mod",m:"Latino — associado a \"luz\""},
-      {n:"Theodore",s:"rare",m:"Grego — \"dom de Deus\""},
-      {n:"Ethan",s:"class",m:"Hebraico — \"forte, firme\""},
-      {n:"Alexander",s:"class",m:"Grego — \"protetor dos homens\""},
-      {n:"Sebastian",s:"mod",m:"Grego — \"venerável, reverenciado\""},
-      {n:"Jack",s:"class",m:"Inglês — variante de John, \"Deus é gracioso\""},
-      {n:"Owen",s:"mod",m:"Galês — \"jovem guerreiro\" ou \"bem nascido\""},
-      {n:"Samuel",s:"class",m:"Hebraico — \"Deus ouviu\""},
-      {n:"Daniel",s:"class",m:"Hebraico — \"Deus é meu juiz\""},
-      {n:"Matthew",s:"mod",m:"Hebraico — \"dom de Deus\""},
-      {n:"Joseph",s:"class",m:"Hebraico — \"Deus aumentará\""},
-      {n:"Levi",s:"rare",m:"Hebraico — \"unido\""},
-      {n:"David",s:"class",m:"Hebraico — \"amado\""},
-      {n:"Leo",s:"mod",m:"Latino — \"leão\""},
-      {n:"Wyatt",s:"rare",m:"Inglês antigo — \"corajoso na guerra\""},
-      {n:"Julian",s:"mod",m:"Latino — \"jovem, com cabelo encaracolado\" / da família Júlia"},
-      {n:"Gabriel",s:"class",m:"Hebraico — \"força de Deus\""},
-      {n:"Caleb",s:"mod",m:"Hebraico — \"fiel, devotado\" ou \"cão de caça\""},
-      {n:"Isaac",s:"class",m:"Hebraico — \"ele vai rir\""},
-      {n:"Ryan",s:"mod",m:"Irlandês — \"pequeno rei\""},
-      {n:"Nathan",s:"class",m:"Hebraico — \"ele deu\""},
-      {n:"Adrian",s:"mod",m:"Latino — \"da cidade de Adria\""},
-      {n:"Hudson",s:"rare",m:"Inglês — \"filho de Hudd\", originalmente sobrenome"},
-      {n:"Christopher",s:"class",m:"Grego — \"portador de Cristo\""},
-      {n:"Dominic",s:"mod",m:"Latino — \"pertencente ao Senhor\""},
-      {n:"Felix",s:"rare",m:"Latino — \"feliz, sortudo\""},
-      {n:"Oscar",s:"class",m:"Gaélico — \"amigo dos cervos\""},
-      {n:"Asher",s:"mod",m:"Hebraico — \"feliz, bem-aventurado\""},
-      {n:"Maverick",s:"rare",m:"Inglês — \"independente, que não segue o rebanho\""},
-      {n:"Atlas",s:"rare",m:"Grego — titã que sustentava o céu; \"o que suporta\""},
-      {n:"Elliot",s:"mod",m:"Hebraico — variante de Elias, \"meu Deus é Jeová\""},
-      {n:"Miles",s:"mod",m:"Latino — \"soldado\" ou germânico \"misericordioso\""},
-      {n:"Theo",s:"mod",m:"Grego — forma curta de Theodore, \"dom de Deus\""}
-    ],
-    ja:[
-      {n:"Haruto",s:"class",m:"Japonês — 陽翔, \"sol\" + \"voar\""},
-      {n:"Yuto",s:"class",m:"Japonês — 悠人, \"gentil\" + \"pessoa\""},
-      {n:"Sota",s:"mod",m:"Japonês — 颯太, \"vento forte e refrescante\""},
-      {n:"Ren",s:"mod",m:"Japonês — 蓮, \"lótus\""},
-      {n:"Kaito",s:"class",m:"Japonês — 海翔, \"mar\" + \"voar\""},
-      {n:"Riku",s:"rare",m:"Japonês — 陸, \"terra, continente\""},
-      {n:"Sora",s:"mod",m:"Japonês — 空, \"céu\""},
-      {n:"Hayato",s:"class",m:"Japonês — 隼人, \"pessoa veloz como o falcão\""},
-      {n:"Takumi",s:"mod",m:"Japonês — 匠, \"artesão habilidoso\""},
-      {n:"Kenji",s:"rare",m:"Japonês — 健二, \"saudável, forte\" + \"segundo filho\""},
-      {n:"Daiki",s:"class",m:"Japonês — 大輝, \"grande brilho\""},
-      {n:"Yuki",s:"class",m:"Japonês — 雪 ou 幸, \"neve\" ou \"felicidade\""},
-      {n:"Kazuki",s:"mod",m:"Japonês — 和樹, \"harmonia\" + \"árvore\""},
-      {n:"Hiroto",s:"class",m:"Japonês — 大翔, \"grande voo\""},
-      {n:"Kenta",s:"mod",m:"Japonês — 健太, \"saudável e forte\""},
-      {n:"Ryusei",s:"mod",m:"Japonês — 流星, \"estrela cadente\""},
-      {n:"Hinata",s:"rare",m:"Japonês — 陽向, \"voltado para o sol\""},
-      {n:"Daichi",s:"class",m:"Japonês — 大地, \"grande terra\""},
-      {n:"Itsuki",s:"class",m:"Japonês — 樹, \"árvore\""},
-      {n:"Asahi",s:"mod",m:"Japonês — 朝日, \"sol da manhã\""},
-      {n:"Minato",s:"class",m:"Japonês — 湊, \"porto, refúgio seguro\""},
-      {n:"Akira",s:"rare",m:"Japonês — 明, \"brilhante, claro\""},
-      {n:"Hayate",s:"mod",m:"Japonês — 疾風, \"vento forte e repentino\""},
-      {n:"Ichiro",s:"rare",m:"Japonês — 一郎, \"primeiro filho\""},
-      {n:"Naoki",s:"class",m:"Japonês — 直樹, \"árvore honesta e ereta\""},
-      {n:"Ryo",s:"mod",m:"Japonês — 涼, \"refrescante\" ou \"claro\""},
-      {n:"Shin",s:"class",m:"Japonês — 真, \"verdade, sinceridade\""},
-      {n:"Taro",s:"mod",m:"Japonês — 太郎, \"filho grande/forte\", tradicional para primeiro filho"},
-      {n:"Yamato",s:"class",m:"Japonês — 大和, antigo nome do Japão, \"grande harmonia\""},
-      {n:"Hideki",s:"mod",m:"Japonês — 秀樹, \"árvore esplêndida\""},
-      {n:"Satoshi",s:"class",m:"Japonês — 聡, \"sábio, inteligente\""},
-      {n:"Tsubasa",s:"rare",m:"Japonês — 翼, \"asas\""},
-      {n:"Mamoru",s:"class",m:"Japonês — 守, \"protetor\""},
-      {n:"Jun",s:"mod",m:"Japonês — 純, \"puro, genuíno\""},
-      {n:"Fumio",s:"class",m:"Japonês — 文雄, \"homem de letras\", erudito"},
-      {n:"Isamu",s:"class",m:"Japonês — 勇, \"valente, corajoso\""},
-      {n:"Tadashi",s:"class",m:"Japonês — 正, \"correto, justo\""},
-      {n:"Susumu",s:"rare",m:"Japonês — 進, \"avançar, progredir\""},
-      {n:"Akito",s:"mod",m:"Japonês — 明人, \"pessoa brilhante\""},
-      {n:"Goro",s:"rare",m:"Japonês — 五郎, \"quinto filho\""}
-    ]
-  },
-  F:{
-    pt:[
-      {n:"Sofia",s:"class",m:"Grego — \"sabedoria\""},
-      {n:"Helena",s:"class",m:"Grego — \"luz radiante\" ou \"a que ilumina\""},
-      {n:"Alice",s:"mod",m:"Germânico — \"nobre, de linhagem nobre\""},
-      {n:"Laura",s:"mod",m:"Latino — \"loureiro\", planta símbolo de vitória"},
-      {n:"Valentina",s:"class",m:"Latino — \"forte e saudável\""},
-      {n:"Isabela",s:"rare",m:"Hebraico — \"Deus é minha promessa\""},
-      {n:"Manuela",s:"mod",m:"Hebraico — \"Deus está conosco\""},
-      {n:"Beatriz",s:"class",m:"Latino — \"a que traz felicidade\" ou \"viajante abençoada\""},
-      {n:"Cecília",s:"mod",m:"Latino — \"cega\", ligado à santa padroeira da música"},
-      {n:"Luísa",s:"rare",m:"Germânico — \"guerreira famosa\""},
-      {n:"Lívia",s:"class",m:"Latino — \"azulada\" ou da gens Lívia romana"},
-      {n:"Bianca",s:"class",m:"Italiano — \"branca, pura\""},
-      {n:"Marina",s:"rare",m:"Latino — \"do mar\""},
-      {n:"Clara",s:"mod",m:"Latino — \"clara, brilhante\""},
-      {n:"Maria",s:"rare",m:"Hebraico — possivelmente \"a desejada\" ou \"senhora\""},
-      {n:"Joana",s:"class",m:"Hebraico — \"Deus é gracioso\", forma feminina de João"},
-      {n:"Camila",s:"class",m:"Latino — \"serva do templo\" ou \"jovem cerimonial\""},
-      {n:"Larissa",s:"mod",m:"Grego — \"a alegre, a doce\", de uma cidade da Tessália"},
-      {n:"Carolina",s:"mod",m:"Germânico — \"pequena guerreira\", feminino de Carlos"},
-      {n:"Juliana",s:"class",m:"Latino — \"jovem\" ou descendente de Júlio"},
-      {n:"Patrícia",s:"rare",m:"Latino — \"nobre, de origem patrícia\""},
-      {n:"Vanessa",s:"class",m:"Nome criado pelo escritor Jonathan Swift no século XVIII"},
-      {n:"Fernanda",s:"mod",m:"Germânico — \"viagem audaciosa\", feminino de Fernando"},
-      {n:"Bruna",s:"class",m:"Germânico — \"morena\""},
-      {n:"Gabriela",s:"class",m:"Hebraico — \"força de Deus\", feminino de Gabriel"},
-      {n:"Letícia",s:"mod",m:"Latino — \"alegria, felicidade\""},
-      {n:"Natália",s:"class",m:"Latino — \"nascimento\", ligado ao nascimento de Cristo"},
-      {n:"Raquel",s:"class",m:"Hebraico — \"ovelha\""},
-      {n:"Tatiana",s:"mod",m:"Russo/Grego — possivelmente \"organizadora\""},
-      {n:"Vitória",s:"mod",m:"Latino — \"vitória, triunfo\""},
-      {n:"Yasmin",s:"class",m:"Persa — \"jasmim\", flor símbolo de graça"},
-      {n:"Bárbara",s:"class",m:"Grego — \"estrangeira\""},
-      {n:"Catarina",s:"rare",m:"Grego — \"pura\""},
-      {n:"Heloísa",s:"class",m:"Germânico — \"saudável e larga\""},
-      {n:"Inês",s:"class",m:"Grego — \"pura, casta\""},
-      {n:"Júlia",s:"mod",m:"Latino — feminino de Júlio, \"descendente de Júpiter\""},
-      {n:"Olívia",s:"class",m:"Latino — \"oliveira\", símbolo de paz"},
-      {n:"Esther",s:"class",m:"Persa — \"estrela\""},
-      {n:"Diana",s:"rare",m:"Latino — deusa romana da caça e da lua, \"divina\""},
-      {n:"Amélia",s:"mod",m:"Germânico — \"trabalho, esforço\""},
-      {n:"Antonella",s:"mod",m:"Italiano — diminutivo de Antonia, \"florescente\""}
-    ],
-    en:[
-      {n:"Emma",s:"class",m:"Germânico — \"universal, completa\""},
-      {n:"Olivia",s:"class",m:"Latino — \"oliveira\", símbolo de paz"},
-      {n:"Charlotte",s:"mod",m:"Francês — feminino de Charles, \"pequena guerreira\""},
-      {n:"Amelia",s:"class",m:"Germânico — \"trabalho, esforço\""},
-      {n:"Sophia",s:"mod",m:"Grego — \"sabedoria\""},
-      {n:"Isabella",s:"class",m:"Hebraico — \"Deus é minha promessa\""},
-      {n:"Ava",s:"mod",m:"Latino — possivelmente de \"avis\", \"pássaro\", ou variante de Eva"},
-      {n:"Mia",s:"rare",m:"Escandinavo/Italiano — \"minha\" ou forma curta de Maria"},
-      {n:"Luna",s:"mod",m:"Latino — \"lua\""},
-      {n:"Harper",s:"rare",m:"Inglês — \"tocador de harpa\", originalmente sobrenome"},
-      {n:"Evelyn",s:"mod",m:"Inglês antigo — possivelmente \"vida\" ou \"desejada\""},
-      {n:"Abigail",s:"rare",m:"Hebraico — \"alegria do pai\""},
-      {n:"Emily",s:"class",m:"Latino — feminino de Emil, \"rival, esforçada\""},
-      {n:"Elizabeth",s:"class",m:"Hebraico — \"Deus é minha promessa\""},
-      {n:"Ella",s:"mod",m:"Germânico — \"toda, completa\" ou forma curta de Eleanor"},
-      {n:"Scarlett",s:"mod",m:"Inglês — \"vermelho vivo\", originalmente nome de tecido"},
-      {n:"Victoria",s:"class",m:"Latino — \"vitória\""},
-      {n:"Madison",s:"mod",m:"Inglês — \"filho de Maud\", originalmente sobrenome"},
-      {n:"Penelope",s:"class",m:"Grego — \"a que tece\", esposa de Ulisses na mitologia"},
-      {n:"Riley",s:"class",m:"Irlandês — \"corajoso, valente\""},
-      {n:"Hazel",s:"mod",m:"Inglês — \"aveleira\", árvore símbolo de sabedoria"},
-      {n:"Eleanor",s:"mod",m:"Provençal — \"a outra Aenor\", variante de Helena"},
-      {n:"Stella",s:"class",m:"Latino — \"estrela\""},
-      {n:"Hannah",s:"mod",m:"Hebraico — \"graça, favor\""},
-      {n:"Aria",s:"rare",m:"Italiano — \"melodia, ária musical\""},
-      {n:"Lucy",s:"class",m:"Latino — \"luz\", feminino de Lúcio"},
-      {n:"Naomi",s:"mod",m:"Hebraico — \"minha alegria, agradável\""},
-      {n:"Maya",s:"mod",m:"Sânscrito — \"ilusão\" ou hebraico \"água\""},
-      {n:"Ruby",s:"class",m:"Inglês — \"rubi\", pedra preciosa vermelha"},
-      {n:"Ivy",s:"mod",m:"Inglês — \"hera\", planta símbolo de fidelidade"},
-      {n:"Claire",s:"mod",m:"Francês — \"clara, brilhante\""},
-      {n:"Audrey",s:"class",m:"Inglês antigo — \"força nobre\""},
-      {n:"Iris",s:"class",m:"Grego — deusa do arco-íris; \"arco-íris\""},
-      {n:"Margaret",s:"class",m:"Grego — \"pérola\""},
-      {n:"Adeline",s:"mod",m:"Germânico — \"nobre\", diminutivo de Adelaide"},
-      {n:"Beatrix",s:"class",m:"Latino — \"a que traz felicidade\""},
-      {n:"Daphne",s:"mod",m:"Grego — \"loureiro\", ninfa da mitologia grega"},
-      {n:"Faye",s:"mod",m:"Inglês antigo — \"fada\""},
-      {n:"Nova",s:"mod",m:"Latino — \"nova\"; também termo astronômico para estrela brilhante"},
-      {n:"Phoebe",s:"mod",m:"Grego — \"brilhante, radiante\""},
-      {n:"Vera",s:"mod",m:"Latino/Russo — \"verdadeira\" ou \"fé\""}
-    ],
-    ja:[
-      {n:"Yui",s:"class",m:"Japonês — 結, \"laço, vínculo\""},
-      {n:"Hana",s:"class",m:"Japonês — 花, \"flor\""},
-      {n:"Sakura",s:"mod",m:"Japonês — 桜, \"flor de cerejeira\""},
-      {n:"Aoi",s:"mod",m:"Japonês — 葵, \"malva\" (flor) ou \"azul/verde\""},
-      {n:"Rin",s:"class",m:"Japonês — 凛, \"digna, austera\""},
-      {n:"Yuna",s:"rare",m:"Japonês — 優奈, \"gentil e elegante\""},
-      {n:"Koharu",s:"mod",m:"Japonês — 小春, \"pequena primavera\", referência ao veranico de outono"},
-      {n:"Miyu",s:"mod",m:"Japonês — 美優, \"bela e gentil\""},
-      {n:"Akari",s:"rare",m:"Japonês — 明里, \"luz\""},
-      {n:"Himari",s:"class",m:"Japonês — 陽葵, \"girassol\" ou \"sol e malva\""},
-      {n:"Mei",s:"mod",m:"Japonês — 芽依, \"broto, germinar\""},
-      {n:"Hinata",s:"class",m:"Japonês — 陽向, \"voltada para o sol\""},
-      {n:"Saki",s:"mod",m:"Japonês — 咲, \"florescer\""},
-      {n:"Kokoro",s:"class",m:"Japonês — 心, \"coração\""},
-      {n:"Yume",s:"class",m:"Japonês — 夢, \"sonho\""},
-      {n:"Misaki",s:"mod",m:"Japonês — 美咲, \"belo florescer\""},
-      {n:"Nozomi",s:"class",m:"Japonês — 希, \"esperança, desejo\""},
-      {n:"Sayuri",s:"rare",m:"Japonês — 小百合, \"pequeno lírio\""},
-      {n:"Umi",s:"class",m:"Japonês — 海, \"mar\""},
-      {n:"Asuka",s:"class",m:"Japonês — 飛鳥, \"voo de pássaro\" / nome histórico do período Asuka"},
-      {n:"Haruka",s:"rare",m:"Japonês — 遥, \"distante, vasta\""},
-      {n:"Izumi",s:"class",m:"Japonês — 泉, \"fonte de água, nascente\""},
-      {n:"Kana",s:"mod",m:"Japonês — 香奈, \"fragrância\""},
-      {n:"Mariko",s:"class",m:"Japonês — 真理子, \"filha da verdade\""},
-      {n:"Natsumi",s:"rare",m:"Japonês — 夏美, \"beleza do verão\""},
-      {n:"Shiori",s:"mod",m:"Japonês — 詩織, \"poema tecido\""},
-      {n:"Akemi",s:"class",m:"Japonês — 明美, \"beleza brilhante\""},
-      {n:"Fumiko",s:"class",m:"Japonês — 文子, \"filha das letras\""},
-      {n:"Hikari",s:"rare",m:"Japonês — 光, \"luz\""},
-      {n:"Kiyomi",s:"mod",m:"Japonês — 清美, \"pura beleza\""},
-      {n:"Tamaki",s:"class",m:"Japonês — 環, \"anel, círculo\""},
-      {n:"Yumeko",s:"mod",m:"Japonês — 夢子, \"filha do sonho\""},
-      {n:"Kaede",s:"class",m:"Japonês — 楓, \"bordo\" (árvore)"},
-      {n:"Sumire",s:"mod",m:"Japonês — 菫, \"violeta\" (flor)"},
-      {n:"Akiko",s:"mod",m:"Japonês — 秋子, \"filha do outono\""},
-      {n:"Chiharu",s:"class",m:"Japonês — 千春, \"mil primaveras\""},
-      {n:"Mitsuko",s:"mod",m:"Japonês — 光子, \"filha da luz\""},
-      {n:"Yuriko",s:"class",m:"Japonês — 百合子, \"filha do lírio\""},
-      {n:"Botan",s:"class",m:"Japonês — 牡丹, \"peônia\" (flor)"},
-      {n:"Wakana",s:"mod",m:"Japonês — 若菜, \"vegetais jovens\", primavera"}
-    ]
-  },
-  U:{
-    pt:[
-      {n:"Ariel",s:"class",m:"Hebraico — \"leão de Deus\""},
-      {n:"Eden",s:"class",m:"Hebraico — \"paraíso, delícia\""},
-      {n:"Kai",s:"mod",m:"Havaiano — \"mar\""},
-      {n:"Noel",s:"mod",m:"Francês/Latino — \"natal, nascimento\""},
-      {n:"Sasha",s:"class",m:"Russo — diminutivo de Alexandre/Alexandra, \"protetor(a)\""},
-      {n:"Cauê",s:"mod",m:"Tupi — \"o sol\""},
-      {n:"Yago",s:"class",m:"Galego — variante de Jacó, \"aquele que segue\""},
-      {n:"Nara",s:"mod",m:"Tupi — possivelmente \"minha mãe\" ou ligado à natureza"},
-      {n:"Maitê",s:"class",m:"Basco — \"amada\""},
-      {n:"Brisa",s:"mod",m:"Português — \"vento leve e suave\""},
-      {n:"Estrela",s:"mod",m:"Português — \"estrela\", corpo celeste luminoso"},
-      {n:"Flor",s:"class",m:"Português — \"flor\""},
-      {n:"Luz",s:"rare",m:"Português — \"luz\""},
-      {n:"Mar",s:"mod",m:"Português — \"mar\""},
-      {n:"Sol",s:"class",m:"Português — \"sol\""},
-      {n:"Iris",s:"rare",m:"Grego — deusa do arco-íris; \"arco-íris\""}
-    ],
-    en:[
-      {n:"Avery",s:"class",m:"Inglês antigo — \"governante dos elfos\", originalmente sobrenome"},
-      {n:"River",s:"class",m:"Inglês — \"rio\""},
-      {n:"Sage",s:"mod",m:"Latino — \"sábio(a)\"; também o nome da planta sálvia"},
-      {n:"Quinn",s:"mod",m:"Irlandês — \"conselheiro, sábio\""},
-      {n:"Rowan",s:"class",m:"Gaélico — \"pequeno ruivo\"; também a árvore tília-brava"},
-      {n:"Finley",s:"rare",m:"Gaélico — \"herói justo\""},
-      {n:"Elliot",s:"mod",m:"Hebraico — variante de Elias, \"meu Deus é Jeová\""},
-      {n:"Riley",s:"class",m:"Irlandês — \"corajoso, valente\""},
-      {n:"Phoenix",s:"rare",m:"Grego — ave mítica que renasce das cinzas; \"renascimento\""},
-      {n:"Charlie",s:"class",m:"Germânico — diminutivo de Charles, \"homem livre\""},
-      {n:"Jordan",s:"class",m:"Hebraico — \"fluir, descer\", referência ao rio Jordão"},
-      {n:"Reese",s:"rare",m:"Galês — \"entusiasmo, ardor\""},
-      {n:"Eden",s:"mod",m:"Hebraico — \"paraíso, delícia\""},
-      {n:"Skyler",s:"mod",m:"Holandês — \"abrigo, refúgio\""},
-      {n:"Wren",s:"class",m:"Inglês — \"carriça\" (pequeno pássaro)"}
-    ],
-    ja:[
-      {n:"Haru",s:"class",m:"Japonês — 陽 ou 春, \"sol\" ou \"primavera\""},
-      {n:"Sora",s:"mod",m:"Japonês — 空, \"céu\""},
-      {n:"Yuki",s:"mod",m:"Japonês — 雪 ou 幸, \"neve\" ou \"felicidade\""},
-      {n:"Rei",s:"class",m:"Japonês — 玲, \"som claro de joia\" ou \"belo, gracioso\""},
-      {n:"Asa",s:"rare",m:"Japonês — 朝, \"manhã\""},
-      {n:"Sui",s:"mod",m:"Japonês — 翠, \"verde-jade\""},
-      {n:"Kanata",s:"class",m:"Japonês — 彼方, \"horizonte distante\""},
-      {n:"Hikari",s:"mod",m:"Japonês — 光, \"luz\""},
-      {n:"Madoka",s:"rare",m:"Japonês — 円, \"círculo, redondo\", simboliza harmonia"}
-    ]
-  }
+const DB = {
+    M: {
+        pt: [
+            {n: "Miguel", s: "class", m: "Hebraico: 'Quem é como Deus?'. O nome mais popular no Brasil há uma década, simboliza proteção divina."},
+            {n: "Arthur", s: "class", m: "Celta: 'Urso forte' ou 'Rei Urso'. Remete à lenda do Rei Arthur, simbolizando nobreza e coragem."},
+            {n: "Gael", s: "mod", m: "Bretão: 'Belo e generoso'. Um nome que cresceu rapidamente em popularidade, trazendo um ar moderno e leve."},
+            {n: "Heitor", s: "class", m: "Grego: 'Aquele que retém' ou 'O que possui'. Na mitologia, foi o maior guerreiro de Troia, símbolo de honra."},
+            {n: "Theo", s: "mod", m: "Grego: 'Deus'. Curto, forte e moderno, reflete uma espiritualidade contemporânea."},
+            {n: "Bernardo", s: "class", m: "Germânico: 'Forte como um urso'. Transmite uma sensação de robustez e determinação."},
+            {n: "Davi", s: "class", m: "Hebraico: 'Amado' ou 'Querido'. Nome bíblico clássico que nunca sai de moda."},
+            {n: "Noah", s: "mod", m: "Hebraico: 'Descanso' ou 'Consolo'. Versão internacional de Noé, muito apreciada pelo som suave."},
+            {n: "Lorenzo", s: "mod", m: "Latim: 'Natural de Laurento' ou 'Coroado com louros'. Simboliza vitória e prestígio."},
+            {n: "Benício", s: "mod", m: "Latim: 'Abençoado' ou 'Homem bom'. Um nome carinhoso e cheio de positividade."}
+        ],
+        en: [
+            {n: "Oliver", s: "class", m: "Latin: 'Olive tree'. Symbol of peace and dignity."},
+            {n: "Liam", s: "mod", m: "Irish: 'Strong-willed warrior'. Currently one of the most popular names globally."},
+            {n: "Sebastian", s: "class", m: "Greek: 'Venerable' or 'Revered'. A timeless name with a sophisticated touch."}
+        ]
+    },
+    F: {
+        pt: [
+            {n: "Helena", s: "class", m: "Grego: 'A reluzente' ou 'Tocha de luz'. Nome clássico que evoca beleza e luminosidade."},
+            {n: "Alice", s: "class", m: "Germânico: 'De linhagem nobre'. Transmite elegância, sinceridade e integridade."},
+            {n: "Laura", s: "class", m: "Latim: 'Loureiro' ou 'Vitoriosa'. Remete à coroa de louros dada aos vencedores na antiguidade."},
+            {n: "Maria Alice", s: "class", m: "Composto: União da pureza de Maria com a nobreza de Alice. Muito popular atualmente."},
+            {n: "Valentina", s: "mod", m: "Latim: 'Valente', 'Forte' e 'Saudável'. Um nome cheio de energia e vigor."},
+            {n: "Maitê", s: "mod", m: "Basco: 'Amada' ou 'Adorada'. Nome curto, doce e que ganhou muito destaque recentemente."},
+            {n: "Antonella", s: "mod", m: "Latim: 'Valiosa' ou 'Inestimável'. Variante italiana de Antônia, traz um toque de sofisticação."},
+            {n: "Isadora", s: "class", m: "Grego: 'Dádiva de Ísis'. Nome clássico com uma sonoridade forte e elegante."},
+            {n: "Cecília", s: "class", m: "Latim: 'Sábia' ou 'Guardiã da música'. Nome doce que remete à padroeira dos músicos."},
+            {n: "Aurora", s: "rare", m: "Latim: 'O nascer do sol'. Simboliza esperança, novos começos e a luz da manhã."}
+        ],
+        en: [
+            {n: "Emma", s: "class", m: "German: 'Whole' or 'Universal'. A simple and powerful classic."},
+            {n: "Luna", s: "mod", m: "Latin: 'Moon'. Represents the glow of the night and feminine mystery."},
+            {n: "Maya", s: "mod", m: "Sanskrit: 'Illusion' or 'Magic'. Also means 'Water' in Hebrew."}
+        ]
+    },
+    U: {
+        pt: [
+            {n: "Alex", s: "class", m: "Grego: 'Protetor da humanidade'. Um clássico versátil usado em diversas culturas."},
+            {n: "Cris", s: "class", m: "Latim: 'Cristão' ou 'Ungido'. Forma curta e prática de diversos nomes."},
+            {n: "Duda", s: "mod", m: "Germânico: 'Guardião(ã) do povo'. Apelido carinhoso que se tornou nome próprio."},
+            {n: "Ariel", s: "rare", m: "Hebraico: 'Leão de Deus'. Nome místico e forte presente em várias tradições."}
+        ]
+    }
 };
 
-let sexo='M', estilo='all', favs=[], shown=[];
+let currentGender = 'M';
+let favorites = new Set();
 
-function setSexo(s){
-    sexo=s;
-    document.getElementById('sx-m').className='tog'+(s==='M'?' active':'');
-    document.getElementById('sx-f').className='tog'+(s==='F'?' active':'');
-    document.getElementById('sx-u').className='tog'+(s==='U'?' active':'');
-    render();
+function setGender(g, btn) {
+    currentGender = g;
+    document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active', 'pink', 'blue'));
+    btn.classList.add('active');
+    if (g === 'F') btn.classList.add('pink');
+    else if (g === 'M') btn.classList.add('blue');
+    generate();
 }
 
-function setEstilo(e){
-    estilo=e;
-    ['all','class','mod','rare'].forEach(x=>document.getElementById('st-'+x).classList.toggle('active',x===e));
-    render();
+function generate() {
+    const style = document.getElementById('style').value;
+    const origin = document.getElementById('origin').value;
+    const grid = document.getElementById('namesGrid');
+    
+    grid.innerHTML = '';
+    
+    // Fallback para origens não preenchidas no demo
+    const names = (DB[currentGender][origin] || DB[currentGender]['pt']) || [];
+    
+    const filtered = names.filter(item => style === 'all' || item.s === style);
+    
+    document.getElementById('countText').innerText = `${filtered.length} nomes encontrados para você`;
+
+    filtered.forEach(item => {
+        const card = document.createElement('div');
+        card.className = `name-card ${currentGender.toLowerCase()}`;
+        const isFav = favorites.has(item.n);
+        
+        card.innerHTML = `
+            <div class="name-title">${item.n}</div>
+            <div class="name-meaning">${item.m}</div>
+            <div class="name-footer">
+                <span class="name-tag">${item.s === 'class' ? 'Clássico' : item.s === 'mod' ? 'Moderno' : 'Raro'}</span>
+                <button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFav('${item.n}', this)">
+                    ${isFav ? '❤️' : '♡'}
+                </button>
+            </div>
+        `;
+        grid.appendChild(card);
+    });
 }
 
-function getPool(){
-    const lang=document.getElementById('lang').value;
-    const src=DB[sexo];
-    let pool=[];
-    if(lang==='all'){
-        if(sexo==='U'&&src.all) pool=[...src.all];
-        else Object.values(src).forEach(arr=>pool.push(...arr));
+function toggleFav(name, btn) {
+    if (favorites.has(name)) {
+        favorites.delete(name);
+        btn.innerHTML = '♡';
+        btn.classList.remove('active');
     } else {
-        pool=[...(src[lang]||(sexo==='U'?src.all:[]))];
+        favorites.add(name);
+        btn.innerHTML = '❤️';
+        btn.classList.add('active');
     }
-    if(estilo!=='all') pool=pool.filter(x=>x.s===estilo);
-    const ini=document.getElementById('inicial').value.trim().toUpperCase();
-    if(ini) pool=pool.filter(x=>x.n.toUpperCase().startsWith(ini));
-    return pool;
+    updateFavBar();
 }
 
-function render(){
-    const qty=parseInt(document.getElementById('qty').value)||10;
-    const pool=getPool();
-    if(!pool.length){shown=[];renderNames([]);return;}
-    shown=[...pool].sort(()=>Math.random()-.5).slice(0,Math.min(qty,pool.length));
-    renderNames(shown);
-}
-
-function gerar(){ render(); }
-
-function renderNames(list){
-    const grid=document.getElementById('names-list');
-    if(!list.length){
-        grid.innerHTML='<div class="empty-state">Nenhum nome encontrado.<br>Tente ampliar os filtros.</div>';
-        return;
+function updateFavBar() {
+    const bar = document.getElementById('favBar');
+    const list = document.getElementById('favList');
+    
+    if (favorites.size > 0) {
+        bar.classList.add('active');
+        list.innerHTML = '';
+        favorites.forEach(name => {
+            const tag = document.createElement('span');
+            tag.className = 'fav-tag';
+            tag.innerHTML = `${name} <span style="cursor:pointer;opacity:0.5" onclick="toggleFav('${name}')">×</span>`;
+            list.appendChild(tag);
+        });
+    } else {
+        bar.classList.remove('active');
     }
-    grid.innerHTML=list.map((item,i)=>{
-        const isFav=favs.some(f=>f.n===item.n);
-        return `<div class="name-card">
-            <div>
-                <div class="name-text">${item.n}</div>
-                <div class="name-origin">${item.m}</div>
-            </div>
-            <div class="name-actions">
-                <button class="copy-btn" onclick="copiarNome('${item.n}',this)">copiar</button>
-                <button class="fav-btn${isFav?' faved':''}" onclick="toggleFav(${i},this)" aria-label="${isFav?'Remover favorito':'Adicionar favorito'}">♡</button>
-            </div>
-        </div>`;
-    }).join('');
-    renderFavs();
 }
 
-function toggleFav(i,btn){
-    const item=shown[i]; if(!item) return;
-    const idx=favs.findIndex(f=>f.n===item.n);
-    if(idx>-1){favs.splice(idx,1);btn.classList.remove('faved');btn.textContent='♡';}
-    else{favs.push({...item});btn.classList.add('faved');btn.textContent='♥';}
-    renderFavs();
-}
-
-function renderFavs(){
-    const sec=document.getElementById('favs-section');
-    const pills=document.getElementById('fav-pills');
-    const badge=document.getElementById('fav-count');
-    badge.textContent=favs.length;
-    if(!favs.length){sec.style.display='none';return;}
-    sec.style.display='block';
-    pills.innerHTML=favs.map((f,i)=>`<span class="fav-pill" title="${f.m}" onclick="removeFav(${i})">${f.n} ×</span>`).join('');
-}
-
-function removeFav(i){
-    favs.splice(i,1);
-    renderFavs();
-    document.querySelectorAll('.fav-btn').forEach((btn,j)=>{
-        if(shown[j]){
-            const faved=favs.some(f=>f.n===shown[j].n);
-            btn.classList.toggle('faved',faved);
-            btn.textContent=faved?'♥':'♡';
-        }
-    });
-}
-
-function copiarNome(nome,btn){
-    navigator.clipboard.writeText(nome).then(()=>{
-        const orig=btn.textContent; btn.textContent='copiado!';
-        setTimeout(()=>btn.textContent=orig,1400);
-    });
-}
-
-function copiarTodos(){
-    if(!shown.length) return;
-    navigator.clipboard.writeText(shown.map(x=>x.n).join(', ')).then(()=>{
-        const btn=document.getElementById('copy-all-btn');
-        const orig=btn.textContent; btn.textContent='✓ Copiado!';
-        setTimeout(()=>btn.textContent=orig,1400);
-    });
-}
-
-render();
+// Inicializar
+window.onload = generate;
 </script>
 
 </body>
