@@ -298,50 +298,51 @@ textarea.input-field {
         </div>
 
         <div class="form-group">
-            <label>Número do WhatsApp</label>
+            <label>Seu Número de WhatsApp</label>
             <input id="number" type="text" class="input-field" placeholder="Ex: 5511999999999" maxlength="15">
-            <span style="font-size: 11px; color: var(--text-muted);">Inclua DDI (55) + DDD + Número</span>
+            <span style="font-size: 11px; color: var(--text-muted);">Insira o número onde você receberá os contatos (DDI + DDD + Número).</span>
         </div>
 
         <div class="form-group">
-            <label>Mensagem Automática (Opcional)</label>
-            <textarea id="message" class="input-field" placeholder="Olá! Gostaria de saber mais sobre seus serviços."></textarea>
+            <label>Mensagem que o seu Cliente enviará</label>
+            <textarea id="message" class="input-field" placeholder="Ex: Olá! Gostaria de saber mais sobre seus produtos."></textarea>
             <div id="charCount" style="font-size: 11px; color: var(--text-muted); text-align: right;">0 / 1000</div>
+            <span style="font-size: 11px; color: var(--text-muted);">Esta é a mensagem que já aparecerá escrita para o cliente quando ele clicar no seu link.</span>
         </div>
 
         <div class="btn-group">
-            <button class="btn btn-primary" onclick="gerarLink()">Gerar Link</button>
-            <button class="btn btn-outline" onclick="limparTudo()">Limpar</button>
+            <button class="btn btn-primary" onclick="gerarLink()">Gerar Link de Contato</button>
+            <button class="btn btn-outline" onclick="limparTudo()">Limpar Campos</button>
         </div>
 
         <div id="resultArea" class="result-section" style="display: none;">
-            <div class="result-label">Link Pronto</div>
+            <div class="result-label">Link de Vendas Gerado</div>
             <div id="resultLink" class="result-link"></div>
             <div class="btn-group">
                 <button class="btn btn-outline" onclick="copiarLink()" id="btnCopiar">📋 Copiar Link</button>
-                <button class="btn btn-primary" onclick="abrirZap()" style="background: var(--primary);">🚀 Testar Link</button>
+                <button class="btn btn-primary" onclick="abrirZap()" style="background: var(--primary);">🚀 Testar no WhatsApp</button>
             </div>
         </div>
     </div>
 
     <!-- Painel Lateral -->
     <div class="side-panel">
-        <div class="section-title">Pré-visualização</div>
+        <div class="section-title">Pré-visualização do Chat</div>
         
         <div class="chat-mockup">
             <div class="chat-header">
                 <div class="avatar"></div>
-                <div style="font-size: 14px; font-weight: 600;">Seu Cliente</div>
+                <div style="font-size: 14px; font-weight: 600;">Sua Empresa</div>
             </div>
             <div class="chat-body">
                 <div id="previewBubble" class="message-bubble empty">
-                    Sua mensagem aparecerá aqui...
+                    A mensagem do cliente aparecerá aqui...
                 </div>
             </div>
         </div>
 
         <div class="info-box">
-            <strong>Dica de Uso:</strong> Use este link na sua Bio do Instagram ou em botões do seu site para facilitar o contato direto dos seus clientes.
+            <strong>Como funciona:</strong> Ao clicar no link que você gerar, o WhatsApp do seu cliente abrirá automaticamente com a mensagem acima já digitada para ele.
         </div>
     </div>
 </div>
@@ -359,11 +360,9 @@ function atualizarPreview() {
     elCharCount.innerText = `${elMessage.value.length} / 1000`;
     
     if (text) {
-        // Criar o conteúdo com o texto e o tempo
         const now = new Date();
         const time = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
         
-        // Usar textContent para o texto do usuário por segurança e adicionar a div de tempo separadamente
         elPreviewBubble.innerText = text;
         
         const timeDiv = document.createElement('div');
@@ -373,7 +372,7 @@ function atualizarPreview() {
         
         elPreviewBubble.classList.remove("empty");
     } else {
-        elPreviewBubble.innerText = "Sua mensagem aparecerá aqui...";
+        elPreviewBubble.innerText = "A mensagem do cliente aparecerá aqui...";
         elPreviewBubble.classList.add("empty");
     }
 }
@@ -383,7 +382,7 @@ function gerarLink() {
     const msg = elMessage.value.trim();
 
     if (!num || num.length < 10) {
-        alert("Por favor, insira um número válido com DDD.");
+        alert("Por favor, insira o seu número completo com DDD.");
         return;
     }
 
@@ -397,7 +396,7 @@ function copiarLink() {
     navigator.clipboard.writeText(url);
     const btn = document.getElementById("btnCopiar");
     const original = btn.innerHTML;
-    btn.innerHTML = "✅ Copiado!";
+    btn.innerHTML = "✅ Link Copiado!";
     setTimeout(() => btn.innerHTML = original, 2000);
 }
 
@@ -412,7 +411,6 @@ function limparTudo() {
     atualizarPreview();
 }
 
-// Eventos para atualização em tempo real
 elMessage.addEventListener("input", atualizarPreview);
 elMessage.addEventListener("keyup", atualizarPreview);
 elMessage.addEventListener("change", atualizarPreview);
@@ -421,7 +419,6 @@ elNumber.addEventListener("input", (e) => {
     e.target.value = e.target.value.replace(/\D/g, "");
 });
 
-// Inicializar preview
 atualizarPreview();
 </script>
 
