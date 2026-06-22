@@ -146,6 +146,7 @@
             grid-template-columns: 1.1fr 1fr;
             gap: 28px;
             animation: fadeInUp 0.6s ease-out;
+            margin: 0 auto;
         }
 
         @keyframes fadeInUp {
@@ -559,38 +560,74 @@
         @media (max-width: 1024px) {
             .container {
                 grid-template-columns: 1fr;
-                gap: 20px;
+                gap: 24px;
+                max-width: 800px;
             }
-        }
-
-        @media (max-width: 768px) {
             .navbar {
                 padding: 0 20px;
             }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 0;
+            }
+            
+            main {
+                padding: calc(var(--header-height) + 15px) 12px 30px 12px;
+            }
+
+            .container {
+                gap: 16px;
+            }
+
+            .panel-header {
+                padding: 20px 16px;
+            }
+
+            .panel-content {
+                padding: 20px 16px;
+            }
+
             .nav-links {
                 display: none;
             }
-            main {
-                padding-top: calc(var(--header-height) + 20px);
-            }
+
             .panel-header h1 {
-                font-size: 22px;
+                font-size: 20px;
             }
 
             .result-value {
-                font-size: 28px;
+                font-size: 32px;
             }
 
             .btn-group {
                 grid-template-columns: 1fr;
             }
 
-            .form-section {
-                margin-bottom: 18px;
+            .stats-row {
+                grid-template-columns: 1fr;
             }
 
-            body {
+            .input-group label {
+                font-size: 12px;
+            }
+
+            input[type="number"], select {
+                padding: 12px 12px 12px 40px;
+                font-size: 14px;
+            }
+            
+            .breakdown-item {
                 padding: 12px;
+            }
+            
+            .breakdown-label {
+                font-size: 13px;
+            }
+            
+            .breakdown-value {
+                font-size: 14px;
             }
         }
 
