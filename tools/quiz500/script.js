@@ -64,19 +64,22 @@ function checkAnswer(index,button){
 }
 
 function nextQuestion(){
-
     current++;
-
-    if(current>=questions.length){
-
-        document.querySelector(".question-box").innerHTML=`
-        <h2>Quiz concluído!</h2>
-        <h3>Você acertou ${points} de ${questions.length}</h3>
-        `;
-
+    if(current >= questions.length){
+        showResult();
         return;
     }
-
     showQuestion();
+}
 
+function showResult(){
+    const box = document.querySelector(".question-box");
+    box.innerHTML = `
+        <div style="text-align: center; padding: 20px;">
+            <h2>Quiz concluído!</h2>
+            <p style="font-size: 1.2em;">Você acertou <strong>${points}</strong> de <strong>${questions.length}</strong> perguntas.</p>
+            <p style="font-size: 1.1em;">Desempenho: ${Math.round((points/questions.length)*100)}%</p>
+            <button onclick="location.reload()" class="answer" style="margin-top: 20px; cursor: pointer;">Reiniciar Quiz</button>
+        </div>
+    `;
 }
