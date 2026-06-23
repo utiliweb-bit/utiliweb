@@ -145,7 +145,9 @@
   .price-btn{
     background:none;border:none;color:var(--hanko);font-weight:700;font-size:13px;cursor:pointer;
     font-variant-numeric:tabular-nums;flex-shrink:0;padding:2px 4px;border-bottom:1px dotted var(--hanko);
+    display:flex;flex-direction:column;align-items:center;line-height:1.15;
   }
+  .price-hint{font-size:9px;font-weight:600;color:var(--ink-soft);letter-spacing:.02em;}
   .qty-stepper{
     display:flex;align-items:center;gap:6px;flex-shrink:0;background:var(--surface-2);
     border-radius:999px;padding:3px;
@@ -663,7 +665,7 @@ function renderProductRow(p){
       '<div class="prod-name">' + p.j + ' <span class="romaji">(' + p.r + ')</span></div>' +
       '<div class="prod-pt">' + p.p + '</div>' +
     '</div>' +
-    '<button class="price-btn" data-action="price" data-id="' + p.id + '">' + fmtYen(price) + '</button>' +
+    '<button class="price-btn" data-action="price" data-id="' + p.id + '" title="Toque para ajustar este preço">' + fmtYen(price) + '<span class="price-hint">✎ ajustar</span></button>' +
     '<div class="qty-stepper">' +
       '<button data-action="dec" data-id="' + p.id + '" aria-label="Diminuir">\u2013</button>' +
       '<span class="qty-val">' + qty + '</span>' +
