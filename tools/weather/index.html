@@ -4,43 +4,47 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>UtiliWeb Weather</title>
+
   <link rel="stylesheet" href="style.css"/>
+  <link rel="manifest" href="manifest.json"/>
+  <meta name="theme-color" content="#0b1d2a"/>
 </head>
 
 <body>
 
-  <div id="bg"></div>
+<div id="bg"></div>
+<canvas id="fx"></canvas>
 
-  <div class="app">
+<div class="app">
 
-    <div class="search">
-      <input id="cityInput" placeholder="Buscar cidade..." />
-      <button onclick="searchCity()">Buscar</button>
-    </div>
-
-    <div class="location" id="location">Carregando...</div>
-
-    <div class="current">
-      <div class="temp" id="temp">--°</div>
-      <div class="icon" id="icon">⛅</div>
-    </div>
-
-    <div class="desc" id="desc">Inicializando clima...</div>
-
-    <div class="meta">
-      <div>💨 <span id="wind">--</span> km/h</div>
-      <div>💧 <span id="humidity">--</span>%</div>
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="forecast" id="forecast"></div>
-
-    <div class="hourly-title">Próximas 48 horas</div>
-    <div class="hourly" id="hourly"></div>
-
+  <div class="search">
+    <input id="cityInput" placeholder="Buscar cidade..." />
+    <button onclick="searchCity()">Buscar</button>
   </div>
 
-  <script src="app.js"></script>
+  <div class="location" id="location">Carregando...</div>
+
+  <div class="current">
+    <div class="temp" id="temp">--°</div>
+    <div class="icon" id="icon">⛅</div>
+  </div>
+
+  <div class="desc" id="desc">Inicializando...</div>
+
+  <div class="meta">
+    <div>💨 <span id="wind">--</span> km/h</div>
+    <div>💧 <span id="humidity">--</span>%</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="forecast" id="forecast"></div>
+
+  <div class="hourly-title">Próximas 48 horas</div>
+  <div class="hourly" id="hourly"></div>
+
+</div>
+
+<script src="app.js"></script>
 </body>
 </html>
