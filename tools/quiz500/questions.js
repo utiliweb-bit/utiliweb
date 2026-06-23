@@ -158,7 +158,6 @@ e:"A escrita cuneiforme surgiu na Mesopotâmia."
 },
 
 {
-{
 q:"Quem foi o líder sul-africano que lutou contra o apartheid?",
 o:[
 "Martin Luther King",
@@ -1209,7 +1208,7 @@ o:[
 a:3,
 d:"Difícil",
 e:"Nicolau II foi deposto durante a Revolução Russa."
-}
+},
 
 {
 q:"Qual planeta é conhecido como Planeta Vermelho?",
@@ -1469,7 +1468,7 @@ o:[
 a:1,
 d:"Médio",
 e:"Einstein apresentou a teoria da relatividade no início do século XX."
-}
+},
 
 {
 q:"Qual é o nome do processo de divisão celular responsável pela formação dos gametas?",
@@ -1729,7 +1728,7 @@ o:[
 a:2,
 d:"Fácil",
 e:"O Sistema Solar faz parte da galáxia Via Láctea."
-}
+},
 
 {
 q:"Qual é o nome do processo pelo qual os organismos produzem descendentes?",
@@ -2509,7 +2508,7 @@ o:[
 a:2,
 d:"Difícil",
 e:"A energia é medida em joules no Sistema Internacional."
-}
+},
 
 {
 q:"Qual é o maior país do mundo em área territorial?",
