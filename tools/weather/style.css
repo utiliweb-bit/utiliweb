@@ -2,10 +2,8 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
   color: white;
-  background: #000;
 }
 
-/* fundo dinâmico */
 #bg {
   position: fixed;
   inset: 0;
@@ -14,14 +12,12 @@ body {
   background: linear-gradient(180deg,#0b1d2a,#1b3a57,#2c5f8a);
 }
 
-/* app */
 .app {
   max-width: 420px;
   margin: auto;
   padding: 20px;
 }
 
-/* search */
 .search {
   display: flex;
   gap: 8px;
@@ -45,13 +41,11 @@ button {
   color: white;
 }
 
-/* localização */
 .location {
   margin-top: 12px;
   opacity: 0.7;
 }
 
-/* clima atual */
 .current {
   display: flex;
   justify-content: space-between;
@@ -60,21 +54,19 @@ button {
 }
 
 .temp {
-  font-size: 84px;
+  font-size: 80px;
   font-weight: 200;
 }
 
 .icon {
-  font-size: 52px;
+  font-size: 50px;
 }
 
-/* descrição */
 .desc {
   opacity: 0.7;
   margin-top: 4px;
 }
 
-/* meta */
 .meta {
   display: flex;
   justify-content: space-between;
@@ -83,14 +75,12 @@ button {
   margin-top: 10px;
 }
 
-/* divisor */
 .divider {
   height: 1px;
   background: #ffffff22;
   margin: 16px 0;
 }
 
-/* forecast */
 .forecast {
   display: flex;
   gap: 10px;
@@ -103,10 +93,4 @@ button {
   border-radius: 16px;
   background: #ffffff10;
   text-align: center;
-  backdrop-filter: blur(10px);
-  transition: 0.3s;
-}
-
-.day:hover {
-  transform: scale(1.05);
 }
