@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0f3326">
+<title>Leitor de Códigos | UtiliWeb</title>
+<meta name="description" content="Leia QR codes e códigos de barras direto pelo navegador, sem instalar nada.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<!-- ZXing — fallback para iOS/Safari que não tem BarcodeDetector nativo -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/zxing-js/0.20.0/zxing.min.js" defer></script>
+
+<style>
+:root{
+    --forest:#0f3326;
+    --forest-mid:#1a4d38;
+    --mint:#5fe3a8;
+    --mint-dim:#3db87f;
+    --paper:#fbfaf6;
+    --paper-dim:#f1efe6;
+    --ink:#1c1b1f;
+    --ink-soft:#4a4854;
+    --line:rgba(28,27,31,.12);
+
+    --stamp-blue:#185fa5;
+    --stamp-blue-soft:#e6f1fb;
+    --stamp-amber:#b5792a;
+    --stamp-amber-soft:#faf0de;
+    --stamp-green:#2e7d32;
+    --stamp-green-soft:#e8f5e9;
+    --warn-red:#c84b31;
+    --warn-red-soft:#fbe9e4;
+
+    --font-display:'Fraunces',serif;
+    --font-body:'Space Grotesk',-apple-system,BlinkMacSystemFont,sans-serif;
+    --font-mono:'JetBrains Mono',monospace;
+
+    --scan-size: min(72vw, 320px);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{-webkit-text-size-adjust:100%;}
+
+body{
+    font-family:var(--font-body);
+    background:var(--paper-dim);
+    color:var(--ink);
+    min-height:100dvh;
+    padding-bottom:48px;
+}
+
+.container{max-width:560px;margin:0 auto;padding:0 16px;}
+
+/* ---- HEADER ---- */
+header{
+    background:var(--forest);
+    background-image:
+        radial-gradient(ellipse at 80% 100%, rgba(95,227,168,.18), transparent 60%),
+        radial-gradient(ellipse at 10% 0%, rgba(95,227,168,.08), transparent 50%);
+    color:#fff;
+    padding:28px 20px 26px;
+    text-align:center;
+}
+.header-icon{font-size:36px;line-height:1;margin-bottom:8px;}
+header h1{
+    font-family:var(--font-display);font-weight:600;font-size:25px;
+    letter-spacing:-.01em;margin-bottom:5px;
+}
+header p{font-size:13px;color:rgba(255,255,255,.7);font-weight:500;}
+
+/* ---- TABS ---- */
+.tabs{
+    display:grid;grid-template-columns:1fr 1fr;
+    background:var(--paper);
+    border-radius:14px;margin:14px 0 0;
+    padding:5px;gap:4px;
+    border:1px solid var(--line);
+    box-shadow:0 4px 16px rgba(28,27,31,.06);
+}
+.tab{
+    padding:11px 8px;border:none;border-radius:10px;
+    font-family:var(--font-body);font-size:13.5px;font-weight:600;
+    cursor:pointer;color:var(--ink-soft);background:transparent;
+    transition:all .15s ease;
+}
+.tab.active{background:var(--forest);color:#fff;}
+
+/* ---- BOX ---- */
+.box{
+    background:var(--paper);border-radius:16px;
+    padding:18px;margin:12px 0;
+    box-shadow:0 8px 24px rgba(28,27,31,.07);
+    border:1px solid var(--line);
+}
+.box-title{
+    font-family:var(--font-mono);font-size:11px;font-weight:600;
+    letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);
+    margin-bottom:14px;display:flex;align-items:center;gap:6px;
+}
+
+/* ---- VIEWFINDER ---- */
+.scanner-wrap{
+    position:relative;
+    width:var(--scan-size);
+    height:var(--scan-size);
+    margin:0 auto 16px;
+    border-radius:20px;
+    overflow:hidden;
+    background:#000;
+}
+
+#videoEl{
+    width:100%;height:100%;
+    object-fit:cover;
+    display:block;
+}
+
+/* Mira de scan */
+.viewfinder{
+    position:absolute;inset:0;
+    pointer-events:none;
+}
+.vf-corner{
+    position:absolute;
+    width:28px;height:28px;
+    border-color:var(--mint);
+    border-style:solid;
+    border-width:0;
+}
+.vf-corner.tl{top:16px;left:16px;border-top-width:3px;border-left-width:3px;border-radius:4px 0 0 0;}
+.vf-corner.tr{top:16px;right:16px;border-top-width:3px;border-right-width:3px;border-radius:0 4px 0 0;}
+.vf-corner.bl{bottom:16px;left:16px;border-bottom-width:3px;border-left-width:3px;border-radius:0 0 0 4px;}
+.vf-corner.br{bottom:16px;right:16px;border-bottom-width:3px;border-right-width:3px;border-radius:0 0 4px 0;}
+
+/* Linha de scan animada */
+.scan-line{
+    position:absolute;
+    left:16px;right:16px;
+    height:2px;
+    background:linear-gradient(90deg, transparent, var(--mint), transparent);
+    border-radius:1px;
+    top:16px;
+    animation:scanMove 2s ease-in-out infinite;
+    opacity:0;
+}
+.scan-line.active{ opacity:1; }
+@keyframes scanMove{
+    0%  { top:16px; }
+    50% { top:calc(100% - 18px); }
+    100%{ top:16px; }
+}
+
+/* Flash de sucesso */
+.vf-flash{
+    position:absolute;inset:0;
+    background:rgba(95,227,168,.35);
+    opacity:0;pointer-events:none;
+    border-radius:20px;
+    transition:opacity .08s ease;
+}
+.vf-flash.show{ opacity:1; }
+
+/* Estado idle / erro */
+.scanner-idle{
+    position:absolute;inset:0;
+    display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    gap:10px;color:rgba(255,255,255,.6);
+    font-size:13px;text-align:center;padding:20px;
+    background:#0f0f0f;
+}
+.scanner-idle .ic{font-size:40px;opacity:.5;}
+
+/* ---- STATUS ---- */
+.status-bar{
+    display:flex;align-items:center;gap:8px;
+    font-family:var(--font-mono);font-size:11px;font-weight:600;
+    color:var(--ink-soft);margin-bottom:12px;
+    text-transform:uppercase;letter-spacing:.06em;
+}
+.status-dot{
+    width:8px;height:8px;border-radius:50%;
+    background:var(--line);flex:none;
+    transition:background .2s;
+}
+.status-dot.on{ background:var(--mint-dim); box-shadow:0 0 0 3px rgba(95,227,168,.2); }
+.status-dot.err{ background:var(--warn-red); }
+
+/* ---- RESULTADO ---- */
+.result-box{
+    background:var(--forest);
+    color:#fff;
+    border-radius:14px;
+    padding:16px;
+    margin-top:12px;
+    display:none;
+    border:1px solid rgba(95,227,168,.2);
+}
+.result-box.show{ display:block; }
+
+.result-type{
+    font-family:var(--font-mono);font-size:10px;font-weight:600;
+    letter-spacing:.08em;text-transform:uppercase;
+    color:var(--mint);margin-bottom:8px;
+    display:flex;align-items:center;justify-content:space-between;
+}
+.result-value{
+    font-family:var(--font-display);font-size:20px;font-weight:600;
+    line-height:1.3;word-break:break-all;
+    margin-bottom:14px;
+    color:#fff;
+}
+.result-value.is-long{font-size:14px;font-family:var(--font-mono);font-weight:400;}
+
+.result-actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;}
+.btn-result{
+    padding:10px 4px;border-radius:10px;
+    border:1.5px solid rgba(255,255,255,.2);
+    background:rgba(255,255,255,.08);
+    font-family:var(--font-body);font-size:11.5px;font-weight:700;
+    color:#fff;cursor:pointer;text-align:center;
+    transition:background .1s;
+}
+.btn-result:active{ background:rgba(255,255,255,.18); }
+.btn-result.primary{ background:var(--mint);color:var(--forest);border-color:var(--mint); }
+
+/* ---- CÂMERAS ---- */
+.cam-select{
+    width:100%;padding:10px 12px;border-radius:10px;
+    border:1.5px solid var(--line);background:var(--paper-dim);
+    font-family:var(--font-body);font-size:13px;font-weight:500;color:var(--ink);
+    cursor:pointer;margin-bottom:10px;
+    appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%234a4854' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;
+    display:none;
+}
+.cam-select.visible{ display:block; }
+
+/* ---- BTN PRINCIPAL ---- */
+.btn{
+    width:100%;padding:14px;border:none;border-radius:12px;
+    font-family:var(--font-body);font-weight:700;font-size:14px;
+    cursor:pointer;transition:transform .1s ease, opacity .1s;
+}
+.btn:active{ transform:scale(.98); }
+.btn-forest{ background:var(--forest);color:#fff; }
+.btn-outline{ background:transparent;border:1.5px solid var(--line);color:var(--ink-soft); }
+.btn-danger{ background:var(--warn-red);color:#fff; }
+.row-2{ display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px; }
+
+/* ---- IMAGEM ---- */
+.upload-area{
+    border:2px dashed var(--line);border-radius:14px;
+    padding:32px 16px;text-align:center;cursor:pointer;
+    transition:border-color .15s, background .15s;
+    position:relative;
+}
+.upload-area:hover{ border-color:var(--stamp-blue);background:var(--stamp-blue-soft); }
+.upload-area input{ position:absolute;inset:0;opacity:0;cursor:pointer; }
+.upload-ic{ font-size:32px;margin-bottom:8px; }
+.upload-label{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px;}
+.upload-sub{font-size:12px;color:var(--ink-soft);}
+
+.preview-wrap{
+    position:relative;
+    border-radius:12px;overflow:hidden;
+    background:#000;margin-bottom:12px;
+    display:none;
+    max-height:300px;
+}
+.preview-wrap.show{ display:block; }
+#imgPreview{width:100%;max-height:300px;object-fit:contain;display:block;}
+canvas#imgCanvas{ display:none; }
+
+/* ---- HISTÓRICO ---- */
+.hist-empty{
+    text-align:center;padding:28px 16px;
+    color:var(--ink-soft);font-size:13px;
+}
+.hist-empty .ic{font-size:28px;display:block;margin-bottom:8px;opacity:.5;}
+
+.hist-item{
+    display:flex;align-items:flex-start;gap:12px;
+    padding:12px 0;border-bottom:1px dashed var(--line);
+}
+.hist-item:last-child{ border-bottom:none;padding-bottom:0; }
+.hist-icon{
+    font-size:20px;flex:none;
+    width:36px;height:36px;border-radius:10px;
+    background:var(--paper-dim);display:flex;align-items:center;justify-content:center;
+}
+.hist-body{ flex:1;min-width:0; }
+.hist-type{
+    font-family:var(--font-mono);font-size:10px;font-weight:600;
+    letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);
+    margin-bottom:2px;
+}
+.hist-val{
+    font-size:13.5px;font-weight:600;color:var(--ink);
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.hist-copy{
+    padding:6px 10px;border-radius:8px;border:1.5px solid var(--line);
+    background:transparent;font-family:var(--font-body);font-size:11px;
+    font-weight:700;cursor:pointer;color:var(--ink-soft);flex:none;
+    align-self:center;
+}
+
+/* ---- TOAST ---- */
+.toast{
+    position:fixed;bottom:22px;left:50%;
+    transform:translateX(-50%) translateY(10px);
+    background:var(--ink);color:#fff;
+    padding:11px 20px;border-radius:999px;
+    font-size:13px;font-weight:600;font-family:var(--font-body);
+    opacity:0;pointer-events:none;transition:opacity .2s, transform .2s;
+    z-index:300;white-space:nowrap;box-shadow:0 10px 30px rgba(0,0,0,.3);
+}
+.toast.show{ opacity:1;transform:translateX(-50%) translateY(0); }
+
+/* ---- SUPORTE ---- */
+.support-badge{
+    display:inline-flex;align-items:center;gap:5px;
+    padding:3px 10px;border-radius:99px;
+    font-family:var(--font-mono);font-size:10px;font-weight:600;
+    margin-bottom:10px;
+}
+.support-badge.native{ background:var(--stamp-green-soft);color:var(--stamp-green); }
+.support-badge.polyfill{ background:var(--stamp-amber-soft);color:var(--stamp-amber); }
+
+.hint{font-size:11px;color:rgba(74,72,84,.6);margin-top:10px;line-height:1.6;}
+
+footer{
+    text-align:center;font-family:var(--font-mono);font-size:10.5px;
+    color:rgba(28,27,31,.35);margin-top:28px;padding:0 20px;line-height:1.6;
+}
+
+@media(max-width:380px){
+    :root{ --scan-size: 80vw; }
+    .result-actions{ grid-template-columns:1fr 1fr; }
+    .result-actions .btn-result:last-child{ grid-column:span 2; }
+}
+</style>
+</head>
+<body>
+
+<header>
+    <div class="header-icon">📷</div>
+    <h1>Leitor de Códigos</h1>
+    <p>QR Code · Código de barras · sem instalação</p>
+</header>
+
+<div class="container">
+
+    <div class="tabs">
+        <button class="tab active" onclick="trocarAba('camera')" id="tabCamera">📷 Câmera</button>
+        <button class="tab" onclick="trocarAba('imagem')" id="tabImagem">🖼️ Imagem</button>
+    </div>
+
+    <!-- ============ ABA CÂMERA ============ -->
+    <div id="abaCamera">
+        <div class="box">
+            <div class="box-title">📡 Leitura em tempo real</div>
+
+            <div class="status-bar">
+                <div class="status-dot" id="statusDot"></div>
+                <span id="statusMsg">Câmera desligada</span>
+            </div>
+
+            <div class="scanner-wrap" id="scannerWrap">
+                <div class="scanner-idle" id="scannerIdle">
+                    <span class="ic">📷</span>
+                    <span>Toque em "Ligar câmera"<br>para começar</span>
+                </div>
+                <video id="videoEl" playsinline autoplay muted></video>
+                <canvas id="camCanvas" style="display:none"></canvas>
+                <div class="viewfinder">
+                    <div class="vf-corner tl"></div>
+                    <div class="vf-corner tr"></div>
+                    <div class="vf-corner bl"></div>
+                    <div class="vf-corner br"></div>
+                    <div class="scan-line" id="scanLine"></div>
+                </div>
+                <div class="vf-flash" id="vfFlash"></div>
+            </div>
+
+            <select class="cam-select" id="camSelect" onchange="trocarCamera()"></select>
+
+            <div class="row-2">
+                <button class="btn btn-forest" onclick="ligarCamera()" id="btnLigar" type="button">Ligar câmera</button>
+                <button class="btn btn-outline" onclick="desligarCamera()" id="btnDesligar" type="button" disabled>Desligar</button>
+            </div>
+
+            <div class="result-box" id="resultCam">
+                <div class="result-type">
+                    <span id="resultCamType">—</span>
+                    <span id="resultCamTime" style="opacity:.6;font-size:9.5px;"></span>
+                </div>
+                <div class="result-value" id="resultCamVal">—</div>
+                <div class="result-actions" id="resultCamActions"></div>
+            </div>
+
+            <div class="hint" id="engineHint"></div>
+        </div>
+    </div>
+
+    <!-- ============ ABA IMAGEM ============ -->
+    <div id="abaImagem" style="display:none">
+        <div class="box">
+            <div class="box-title">🖼️ Ler de imagem</div>
+
+            <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+                <input type="file" id="fileInput" accept="image/*" onchange="lerImagem(event)">
+                <div class="upload-ic">📁</div>
+                <div class="upload-label">Selecionar imagem</div>
+                <div class="upload-sub">PNG, JPG, WEBP, GIF · da galeria ou câmera</div>
+            </div>
+
+            <div class="preview-wrap" id="previewWrap">
+                <img id="imgPreview" alt="Imagem para leitura">
+            </div>
+            <canvas id="imgCanvas"></canvas>
+
+            <div class="result-box" id="resultImg">
+                <div class="result-type">
+                    <span id="resultImgType">—</span>
+                </div>
+                <div class="result-value" id="resultImgVal">—</div>
+                <div class="result-actions" id="resultImgActions"></div>
+            </div>
+
+            <button class="btn btn-outline" onclick="limparImagem()" id="btnLimparImg" type="button" style="margin-top:10px;display:none;">
+                Limpar
+            </button>
+        </div>
+    </div>
+
+    <!-- ============ HISTÓRICO ============ -->
+    <div class="box">
+        <div class="box-title">📋 Histórico da sessão <span style="margin-left:auto;cursor:pointer;font-size:10px;" onclick="limparHistorico()">Limpar</span></div>
+        <div id="historico"><div class="hist-empty"><span class="ic">📭</span>Nenhum código lido ainda.</div></div>
+    </div>
+
+</div>
+
+<footer>Leitura feita no dispositivo · nenhum dado é enviado a servidores</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   ESTADO GLOBAL
+   ============================================================ */
+let stream = null;
+let scanning = false;
+let scanInterval = null;
+let cameras = [];
+let camAtual = null;
+let historico = [];
+let engineNativa = false;
+let zxingReader = null;
+let zxingAtivo = false;
+
+const TIPOS_ICON = {
+    'qr_code':'⬛', 'QR_CODE':'⬛',
+    'ean_13':'🛒', 'EAN_13':'🛒',
+    'ean_8':'🛒', 'EAN_8':'🛒',
+    'upc_a':'🛒', 'UPC_A':'🛒',
+    'upc_e':'🛒', 'UPC_E':'🛒',
+    'code_128':'📦', 'CODE_128':'📦',
+    'code_39':'📦', 'CODE_39':'📦',
+    'itf':'📦', 'ITF':'📦',
+    'data_matrix':'⚙️', 'DATA_MATRIX':'⚙️',
+    'pdf417':'🪪', 'PDF_417':'🪪',
+    'aztec':'⚙️', 'AZTEC':'⚙️',
+};
+
+const TIPOS_LABEL = {
+    'qr_code':'QR Code','QR_CODE':'QR Code',
+    'ean_13':'EAN-13','EAN_13':'EAN-13',
+    'ean_8':'EAN-8','EAN_8':'EAN-8',
+    'upc_a':'UPC-A','UPC_A':'UPC-A',
+    'upc_e':'UPC-E','UPC_E':'UPC-E',
+    'code_128':'Code 128','CODE_128':'Code 128',
+    'code_39':'Code 39','CODE_39':'Code 39',
+    'itf':'ITF','ITF':'ITF',
+    'data_matrix':'Data Matrix','DATA_MATRIX':'Data Matrix',
+    'pdf417':'PDF 417','PDF_417':'PDF 417',
+    'aztec':'Aztec','AZTEC':'Aztec',
+};
+
+/* ============================================================
+   TOAST / VIBRAR
+   ============================================================ */
+let toastTimer;
+function showToast(msg){
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2000);
+}
+function vibrar(ms){ try{ if(navigator.vibrate) navigator.vibrate(ms); }catch(e){} }
+
+/* ============================================================
+   TABS
+   ============================================================ */
+function trocarAba(aba){
+    document.getElementById('abaCamera').style.display = aba === 'camera' ? '' : 'none';
+    document.getElementById('abaImagem').style.display = aba === 'imagem' ? '' : 'none';
+    document.getElementById('tabCamera').className = 'tab' + (aba === 'camera' ? ' active' : '');
+    document.getElementById('tabImagem').className  = 'tab' + (aba === 'imagem' ? ' active' : '');
+    if(aba === 'imagem') desligarCamera();
+}
+
+/* ============================================================
+   DETECTAR ENGINE
+   ============================================================ */
+function detectarEngine(){
+    engineNativa = typeof BarcodeDetector !== 'undefined';
+    const hint = document.getElementById('engineHint');
+    if(engineNativa){
+        hint.innerHTML = '✓ <strong>Detecção nativa ativa</strong> — Chrome/Android com suporte total.';
+    } else {
+        hint.innerHTML = '~ Usando <strong>ZXing</strong> (compatibilidade ampla) — pode ser mais lento em dispositivos antigos.';
+    }
+}
+
+/* ============================================================
+   CÂMERA — ligar / desligar
+   ============================================================ */
+async function ligarCamera(){
+    setStatus('Solicitando permissão…', false, false);
+    try {
+        // Lista câmeras disponíveis
+        await navigator.mediaDevices.getUserMedia({ video: true }); // pede permissão
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        cameras = devices.filter(d => d.kind === 'videoinput');
+
+        // Popula select
+        const sel = document.getElementById('camSelect');
+        sel.innerHTML = cameras.map((c, i) =>
+            `<option value="${c.deviceId}">${c.label || `Câmera ${i+1}`}</option>`
+        ).join('');
+
+        // Tenta câmera traseira por padrão
+        const traseira = cameras.find(c =>
+            /back|rear|environment|traseira/i.test(c.label)
+        );
+        if(traseira) sel.value = traseira.deviceId;
+
+        if(cameras.length > 1) sel.classList.add('visible');
+
+        await iniciarStream(sel.value || undefined);
+    } catch(e){
+        const msg = e.name === 'NotAllowedError'
+            ? 'Permissão de câmera negada. Verifique as configurações do navegador.'
+            : 'Não foi possível acessar a câmera.';
+        setStatus(msg, false, true);
+        showToast(msg);
+    }
+}
+
+async function iniciarStream(deviceId){
+    if(stream) pararStream();
+
+    const constraints = {
+        video: deviceId
+            ? { deviceId: { exact: deviceId }, facingMode: 'environment' }
+            : { facingMode: 'environment' },
+        audio: false
+    };
+
+    try {
+        stream = await navigator.mediaDevices.getUserMedia(constraints);
+    } catch(e) {
+        // Fallback sem facingMode se der erro
+        stream = await navigator.mediaDevices.getUserMedia({ video: { deviceId: { exact: deviceId } }, audio: false });
+    }
+
+    const video = document.getElementById('videoEl');
+    video.srcObject = stream;
+    await video.play();
+
+    document.getElementById('scannerIdle').style.display = 'none';
+    document.getElementById('btnLigar').disabled = true;
+    document.getElementById('btnDesligar').disabled = false;
+    document.getElementById('scanLine').classList.add('active');
+
+    setStatus('Câmera ativa — aponte para o código', true, false);
+    iniciarScan();
+}
+
+function pararStream(){
+    if(stream){ stream.getTracks().forEach(t => t.stop()); stream = null; }
+    const video = document.getElementById('videoEl');
+    video.srcObject = null;
+}
+
+function desligarCamera(){
+    pararScan();
+    pararStream();
+    document.getElementById('scannerIdle').style.display = 'flex';
+    document.getElementById('btnLigar').disabled = false;
+    document.getElementById('btnDesligar').disabled = true;
+    document.getElementById('camSelect').classList.remove('visible');
+    document.getElementById('scanLine').classList.remove('active');
+    setStatus('Câmera desligada', false, false);
+}
+
+async function trocarCamera(){
+    const id = document.getElementById('camSelect').value;
+    pararScan();
+    await iniciarStream(id);
+}
+
+function setStatus(msg, on, err){
+    document.getElementById('statusMsg').textContent = msg;
+    const dot = document.getElementById('statusDot');
+    dot.className = 'status-dot' + (on ? ' on' : err ? ' err' : '');
+}
+
+/* ============================================================
+   SCAN — câmera
+   ============================================================ */
+function iniciarScan(){
+    scanning = true;
+    if(engineNativa){
+        scanComNativa();
+    } else {
+        scanComZXing();
+    }
+}
+
+function pararScan(){
+    scanning = false;
+    clearInterval(scanInterval);
+    if(zxingAtivo && zxingReader){
+        try{ zxingReader.reset(); } catch(e){}
+        zxingAtivo = false;
+    }
+}
+
+/* --- Engine nativa (BarcodeDetector) --- */
+let detector = null;
+async function scanComNativa(){
+    if(!detector){
+        try{
+            const formatos = await BarcodeDetector.getSupportedFormats();
+            detector = new BarcodeDetector({ formats: formatos });
+        } catch(e){
+            detector = new BarcodeDetector({
+                formats: ['qr_code','ean_13','ean_8','code_128','code_39','upc_a','upc_e','itf','data_matrix','pdf417','aztec']
+            });
+        }
+    }
+
+    const video = document.getElementById('videoEl');
+    scanInterval = setInterval(async () => {
+        if(!scanning || video.readyState < 2) return;
+        try {
+            const resultados = await detector.detect(video);
+            if(resultados.length > 0){
+                aoDetectar(resultados[0].rawValue, resultados[0].format, 'camera');
+            }
+        } catch(e){}
+    }, 250);
+}
+
+/* --- Engine ZXing (fallback iOS/Safari) --- */
+async function scanComZXing(){
+    // Aguarda ZXing carregar (script defer)
+    let tentativas = 0;
+    while(typeof ZXing === 'undefined' && tentativas < 40){
+        await new Promise(r => setTimeout(r, 150));
+        tentativas++;
+    }
+    if(typeof ZXing === 'undefined'){
+        setStatus('Biblioteca de leitura não carregou. Tente recarregar a página.', false, true);
+        return;
+    }
+
+    const hints = new Map();
+    hints.set(ZXing.DecodeHintType.TRY_HARDER, true);
+
+    zxingReader = new ZXing.BrowserMultiFormatReader(hints, 300);
+    zxingAtivo = true;
+
+    const video = document.getElementById('videoEl');
+    const canvas = document.getElementById('camCanvas');
+    const ctx = canvas.getContext('2d');
+
+    scanInterval = setInterval(() => {
+        if(!scanning || video.readyState < 2) return;
+        try{
+            canvas.width  = video.videoWidth;
+            canvas.height = video.videoHeight;
+            ctx.drawImage(video, 0, 0);
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const luminance = new ZXing.HTMLCanvasElementLuminanceSource(canvas);
+            const binarizer = new ZXing.HybridBinarizer(luminance);
+            const bitmap = new ZXing.BinaryBitmap(binarizer);
+            const reader = new ZXing.MultiFormatReader();
+            reader.setHints(hints);
+            const result = reader.decode(bitmap);
+            if(result) aoDetectar(result.getText(), result.getBarcodeFormat().toString(), 'camera');
+        } catch(e){
+            // Sem resultado neste frame — normal
+        }
+    }, 350);
+}
+
+/* ============================================================
+   RESULTADO
+   ============================================================ */
+let ultimoValor = null;
+let flashTimer = null;
+
+function aoDetectar(valor, formato, origem){
+    // Evita repetir o mesmo resultado imediatamente
+    if(valor === ultimoValor) return;
+    ultimoValor = valor;
+    setTimeout(() => { ultimoValor = null; }, 2500);
+
+    vibrar([40, 30, 40]);
+    flashVerde();
+
+    const tipoLabel = TIPOS_LABEL[formato] || formato || 'Código';
+    const tipoIcon  = TIPOS_ICON[formato] || '📄';
+    const isUrl     = /^https?:\/\//i.test(valor);
+    const hora      = new Date().toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+
+    if(origem === 'camera'){
+        mostrarResultado('resultCam', 'resultCamType', 'resultCamVal', 'resultCamActions', 'resultCamTime',
+            tipoLabel, tipoIcon, valor, isUrl, hora);
+    } else {
+        mostrarResultado('resultImg', 'resultImgType', 'resultImgVal', 'resultImgActions', null,
+            tipoLabel, tipoIcon, valor, isUrl, null);
+    }
+
+    adicionarHistorico(valor, tipoLabel, tipoIcon);
+}
+
+function mostrarResultado(boxId, typeId, valId, actionsId, timeId, tipo, icon, valor, isUrl, hora){
+    const box = document.getElementById(boxId);
+    box.classList.add('show');
+    document.getElementById(typeId).textContent = `${icon} ${tipo}`;
+    if(timeId && hora) document.getElementById(timeId).textContent = hora;
+
+    const valEl = document.getElementById(valId);
+    valEl.textContent = valor;
+    valEl.className = 'result-value' + (valor.length > 60 ? ' is-long' : '');
+
+    const actionsEl = document.getElementById(actionsId);
+    actionsEl.innerHTML = `
+        <button class="btn-result" onclick="copiarTexto('${esc(valor)}')">📋 Copiar</button>
+        ${isUrl ? `<button class="btn-result primary" onclick="abrirLink('${esc(valor)}')">🔗 Abrir</button>` : ''}
+        <button class="btn-result" onclick="compartilhar('${esc(valor)}')">📤 Enviar</button>
+    `;
+    if(!isUrl){
+        // Preenche 3 colunas uniformes
+        actionsEl.style.gridTemplateColumns = '1fr 1fr';
+    } else {
+        actionsEl.style.gridTemplateColumns = '1fr 1fr 1fr';
+    }
+}
+
+function esc(s){ return s.replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
+
+function flashVerde(){
+    const el = document.getElementById('vfFlash');
+    if(!el) return;
+    el.classList.add('show');
+    clearTimeout(flashTimer);
+    flashTimer = setTimeout(() => el.classList.remove('show'), 300);
+}
+
+function copiarTexto(txt){
+    navigator.clipboard.writeText(txt)
+        .then(() => showToast('Copiado!'))
+        .catch(() => showToast('Não foi possível copiar'));
+}
+
+function abrirLink(url){
+    window.open(url, '_blank', 'noopener');
+}
+
+function compartilhar(txt){
+    if(navigator.share){
+        navigator.share({ text: txt }).catch(() => {});
+    } else {
+        copiarTexto(txt);
+    }
+}
+
+/* ============================================================
+   HISTÓRICO
+   ============================================================ */
+function adicionarHistorico(valor, tipo, icon){
+    // Sem duplicatas consecutivas
+    if(historico.length > 0 && historico[0].valor === valor) return;
+    historico.unshift({ valor, tipo, icon });
+    if(historico.length > 30) historico.pop();
+    renderHistorico();
+}
+
+function renderHistorico(){
+    const el = document.getElementById('historico');
+    if(historico.length === 0){
+        el.innerHTML = '<div class="hist-empty"><span class="ic">📭</span>Nenhum código lido ainda.</div>';
+        return;
+    }
+    el.innerHTML = historico.map((h, i) => `
+        <div class="hist-item">
+            <div class="hist-icon">${h.icon}</div>
+            <div class="hist-body">
+                <div class="hist-type">${h.tipo}</div>
+                <div class="hist-val">${h.valor}</div>
+            </div>
+            <button class="hist-copy" onclick="copiarTexto('${esc(h.valor)}')">Copiar</button>
+        </div>
+    `).join('');
+}
+
+function limparHistorico(){
+    historico = [];
+    renderHistorico();
+    showToast('Histórico apagado');
+}
+
+/* ============================================================
+   LEITURA DE IMAGEM
+   ============================================================ */
+async function lerImagem(event){
+    const file = event.target.files[0];
+    if(!file) return;
+
+    // Preview
+    const preview = document.getElementById('imgPreview');
+    const previewWrap = document.getElementById('previewWrap');
+    const url = URL.createObjectURL(file);
+    preview.src = url;
+    previewWrap.classList.add('show');
+    document.getElementById('btnLimparImg').style.display = 'block';
+
+    const img = new Image();
+    img.onload = async () => {
+        const canvas = document.getElementById('imgCanvas');
+        canvas.width  = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        canvas.getContext('2d').drawImage(img, 0, 0);
+
+        let lido = false;
+
+        // Tenta BarcodeDetector nativo primeiro
+        if(engineNativa){
+            try{
+                if(!detector){
+                    const formatos = await BarcodeDetector.getSupportedFormats().catch(() => ['qr_code','ean_13','ean_8','code_128','upc_a','code_39','itf','data_matrix','pdf417','aztec']);
+                    detector = new BarcodeDetector({ formats: formatos });
+                }
+                const resultados = await detector.detect(img);
+                if(resultados.length > 0){
+                    aoDetectar(resultados[0].rawValue, resultados[0].format, 'imagem');
+                    lido = true;
+                }
+            } catch(e){}
+        }
+
+        // Fallback ZXing
+        if(!lido){
+            await lerImagemZXing(canvas, img);
+        }
+    };
+    img.src = url;
+}
+
+async function lerImagemZXing(canvas){
+    let tentativas = 0;
+    while(typeof ZXing === 'undefined' && tentativas < 40){
+        await new Promise(r => setTimeout(r, 150));
+        tentativas++;
+    }
+    if(typeof ZXing === 'undefined'){
+        mostrarErroImagem('Biblioteca de leitura não carregou.');
+        return;
+    }
+
+    try{
+        const hints = new Map([[ZXing.DecodeHintType.TRY_HARDER, true]]);
+        const luminance = new ZXing.HTMLCanvasElementLuminanceSource(canvas);
+        const binarizer = new ZXing.HybridBinarizer(luminance);
+        const bitmap = new ZXing.BinaryBitmap(binarizer);
+        const reader = new ZXing.MultiFormatReader();
+        reader.setHints(hints);
+        const result = reader.decode(bitmap);
+        aoDetectar(result.getText(), result.getBarcodeFormat().toString(), 'imagem');
+    } catch(e){
+        mostrarErroImagem('Nenhum código encontrado na imagem. Tente uma foto mais nítida e bem iluminada.');
+    }
+}
+
+function mostrarErroImagem(msg){
+    const box = document.getElementById('resultImg');
+    box.classList.add('show');
+    document.getElementById('resultImgType').textContent = '⚠ Não encontrado';
+    const valEl = document.getElementById('resultImgVal');
+    valEl.textContent = msg;
+    valEl.className = 'result-value is-long';
+    valEl.style.color = 'rgba(255,255,255,.6)';
+    document.getElementById('resultImgActions').innerHTML = '';
+}
+
+function limparImagem(){
+    document.getElementById('fileInput').value = '';
+    document.getElementById('previewWrap').classList.remove('show');
+    document.getElementById('resultImg').classList.remove('show');
+    document.getElementById('btnLimparImg').style.display = 'none';
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+detectarEngine();
+renderHistorico();
+
+// Desliga câmera se sair da página
+document.addEventListener('visibilitychange', () => {
+    if(document.hidden) desligarCamera();
+});
+</script>
+</body>
+</html>
