@@ -6403,5 +6403,5 @@ o:[
 a:2,
 d:"Fácil",
 e:"O judô foi criado no Japão por Jigoro Kano em 1882."
-},
-
+}
+];
