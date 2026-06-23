@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>UtiliWeb Weather Pro</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="card">
+
+      <h1>🌍 UtiliWeb Weather</h1>
+
+      <div class="search">
+        <input id="cityInput" placeholder="Digite uma cidade..." />
+        <button onclick="searchCity()">Buscar</button>
+      </div>
+
+      <div class="main-weather">
+        <div id="icon">⛅</div>
+        <div id="temp">--°C</div>
+        <div id="desc">Carregando...</div>
+      </div>
+
+      <div class="info">
+        <div>💨 Vento: <span id="wind">--</span></div>
+        <div>💧 Umidade: <span id="humidity">--</span></div>
+      </div>
+
+      <h2>📅 7 dias</h2>
+      <div id="forecast" class="forecast"></div>
+
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
