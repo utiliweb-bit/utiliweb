@@ -1,11 +1,13 @@
 const questions = [
-];
-
-historia: [
 
 {
 q:"Quem chegou ao Brasil em 1500 liderando a expedição portuguesa?",
-o:["Pedro Álvares Cabral","Vasco da Gama","Cristóvão Colombo","Martim Afonso de Sousa"],
+o:[
+"Pedro Álvares Cabral",
+"Vasco da Gama",
+"Cristóvão Colombo",
+"Martim Afonso de Sousa"
+],
 a:0,
 d:"Fácil",
 e:"Pedro Álvares Cabral chegou ao território brasileiro em 1500."
