@@ -12,14 +12,7 @@ const icons = {
   95: "⛈️"
 };
 
-const backgrounds = {
-  clear: "linear-gradient(180deg,#0f2027,#203a43,#2c5364)",
-  cloudy: "linear-gradient(180deg,#3a3a3a,#5c5c5c)",
-  rain: "linear-gradient(180deg,#232526,#414345)",
-  storm: "linear-gradient(180deg,#0f0c29,#302b63,#24243e)"
-};
-
-// 🌍 clima
+// 🌍 clima principal
 async function loadWeather(lat, lon) {
 
   const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,wind_speed_10m,relative_humidity_2m,weather_code&daily=temperature_2m_max,temperature_2m_min,weather_code&timezone=auto`;
@@ -29,33 +22,46 @@ async function loadWeather(lat, lon) {
 
   const c = data.current;
 
-  document.getElementById("temp").innerText = Math.round(c.temperature_2m) + "°";
+  animateValue("temp", Math.round(c.temperature_2m) + "°");
+
   document.getElementById("wind").innerText = c.wind_speed_10m;
   document.getElementById("humidity").innerText = c.relative_humidity_2m;
 
-  document.getElementById("icon").innerText = icons[c.weather_code] || "🌡️";
+  document.getElementById("icon").innerText =
+    icons[c.weather_code] || "🌡️";
 
   setBackground(c.weather_code);
 
   renderForecast(data.daily);
 }
 
-// 🎨 background dinâmico estilo iOS
+// ✨ animação estilo iOS (fade + swap)
+function animateValue(id, value) {
+  const el = document.getElementById(id);
+  el.style.opacity = 0;
+
+  setTimeout(() => {
+    el.innerText = value;
+    el.style.opacity = 1;
+  }, 200);
+}
+
+// 🎨 fundo dinâmico Apple-like
 function setBackground(code) {
   const bg = document.getElementById("bg");
 
   if (code === 0 || code === 1) {
-    bg.style.background = backgrounds.clear;
+    bg.style.background = "linear-gradient(180deg,#0b3d91,#1e6091,#52b69a)";
   } else if (code === 2 || code === 3) {
-    bg.style.background = backgrounds.cloudy;
+    bg.style.background = "linear-gradient(180deg,#2b2d42,#5c677d,#7d8597)";
   } else if (code >= 51 && code <= 82) {
-    bg.style.background = backgrounds.rain;
+    bg.style.background = "linear-gradient(180deg,#1b263b,#415a77,#778da9)";
   } else if (code >= 95) {
-    bg.style.background = backgrounds.storm;
+    bg.style.background = "linear-gradient(180deg,#0d1b2a,#1b263b,#415a77)";
   }
 }
 
-// 📅 previsão 7 dias
+// 📅 forecast Apple style
 function renderForecast(daily) {
   const box = document.getElementById("forecast");
   box.innerHTML = "";
@@ -88,7 +94,7 @@ async function searchCity() {
   loadWeather(data.results[0].latitude, data.results[0].longitude);
 }
 
-// 📍 auto localização (iPhone style)
+// 📍 auto localização
 navigator.geolocation.getCurrentPosition((pos) => {
   loadWeather(pos.coords.latitude, pos.coords.longitude);
 });
