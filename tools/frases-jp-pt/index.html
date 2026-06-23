@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>和ポ会話帖 — Frases JP↔PT por situação</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ai:#1B3A5C;
+    --ai-soft:#28507c;
+    --kachi:#10243B;
+    --washi:#F3EEE2;
+    --washi-soft:#EAE2D0;
+    --washi-card:#F8F4E9;
+    --sumi:#2B2620;
+    --sumi-muted:#6b6356;
+    --shu:#BD3B28;
+    --shu-deep:#9c2f20;
+    --kin:#B8923F;
+    --line: rgba(43,38,32,0.14);
+    --font-jp: 'Shippori Mincho', 'Noto Serif JP', serif;
+    --font-display: 'Fraunces', Georgia, serif;
+    --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+  }
+
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background:var(--washi);
+    color:var(--sumi);
+    font-family:var(--font-body);
+    background-image:
+      repeating-linear-gradient(0deg, rgba(43,38,32,0.025) 0px, rgba(43,38,32,0.025) 1px, transparent 1px, transparent 3px);
+    min-height:100vh;
+  }
+
+  .app{ min-height:100vh; display:flex; flex-direction:column; }
+
+  /* ---------- Topbar ---------- */
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between; gap:24px;
+    padding:18px 28px;
+    background:var(--washi);
+    border-bottom:1px solid var(--line);
+    flex-wrap:wrap;
+  }
+  .brand{ display:flex; align-items:center; gap:14px; }
+  .brand-mark{
+    width:52px; height:52px; border-radius:50%;
+    background:var(--ai); color:var(--washi-card);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-jp); font-size:19px; letter-spacing:-1px;
+    flex-shrink:0;
+    border:1px solid rgba(0,0,0,0.15);
+  }
+  .brand-text h1{
+    margin:0; font-family:var(--font-jp); font-size:24px; font-weight:600;
+    color:var(--kachi); display:flex; align-items:baseline; gap:8px;
+  }
+  .brand-text h1 .pro-tag{
+    font-family:var(--font-display); font-style:italic; font-size:13px;
+    color:var(--shu); font-weight:600; letter-spacing:0.5px;
+  }
+  .brand-text p{
+    margin:2px 0 0; font-size:12.5px; color:var(--sumi-muted);
+  }
+  .search-wrap{ flex:1; min-width:220px; max-width:380px; }
+  #searchInput{
+    width:100%; padding:11px 14px; font-size:14px; font-family:var(--font-body);
+    border:1px solid var(--line); border-radius:8px; background:var(--washi-card);
+    color:var(--sumi); outline-offset:2px;
+  }
+  #searchInput:focus-visible{ outline:2px solid var(--kin); }
+  #searchInput::placeholder{ color:var(--sumi-muted); }
+
+  /* ---------- Layout ---------- */
+  .body-layout{ display:flex; flex:1; min-height:0; }
+
+  .sidebar{
+    width:280px; flex-shrink:0; background:var(--ai);
+    padding:18px 12px; overflow-y:auto;
+    display:flex; flex-direction:column; gap:3px;
+  }
+  .cat-btn{
+    display:flex; align-items:center; gap:10px;
+    width:100%; text-align:left; border:none; background:transparent;
+    padding:9px 10px; border-radius:8px; cursor:pointer;
+    color:#dfe6ee; font-family:var(--font-body);
+    border-left:3px solid transparent;
+    transition:background .15s ease;
+  }
+  .cat-btn:hover{ background:rgba(255,255,255,0.07); }
+  .cat-btn.active{ background:rgba(255,255,255,0.12); border-left-color:var(--kin); }
+  .cat-btn:focus-visible{ outline:2px solid var(--kin); outline-offset:1px; }
+  .cat-kanji{
+    width:32px; height:32px; border-radius:50%; flex-shrink:0;
+    background:var(--washi-card); color:var(--ai);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-jp); font-size:14px;
+  }
+  .cat-btn.active .cat-kanji{ background:var(--kin); color:var(--kachi); }
+  .cat-label{ flex:1; min-width:0; line-height:1.25; }
+  .cat-jp{ display:block; font-family:var(--font-jp); font-size:13.5px; color:#fff; }
+  .cat-pt{ display:block; font-size:11px; color:#b9c6d6; margin-top:1px; }
+  .cat-count{
+    font-family:var(--font-mono); font-size:10.5px; color:#aebccc;
+    background:rgba(255,255,255,0.08); border-radius:10px; padding:2px 7px;
+    flex-shrink:0;
+  }
+  .sidebar-divider{ height:1px; background:rgba(255,255,255,0.14); margin:10px 4px; }
+
+  .content{
+    flex:1; min-width:0; overflow-y:auto; padding:24px 32px 60px;
+  }
+  .content-inner{ max-width:720px; margin:0 auto; }
+
+  /* ---------- Panel header ---------- */
+  .panel-header{
+    display:flex; align-items:flex-end; justify-content:space-between; gap:18px;
+    flex-wrap:wrap; margin-bottom:18px; padding-bottom:16px; border-bottom:1px solid var(--line);
+  }
+  .panel-title{ display:flex; align-items:center; gap:12px; }
+  .panel-kanji{
+    width:46px; height:46px; border-radius:50%; flex-shrink:0;
+    background:var(--ai); color:var(--washi-card);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-jp); font-size:19px;
+  }
+  .panel-title h2{ margin:0; font-family:var(--font-jp); font-size:22px; color:var(--kachi); }
+  .panel-title p{ margin:2px 0 0; font-size:12.5px; color:var(--sumi-muted); }
+
+  .controls{ display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+  .ctrl-group{ display:flex; align-items:center; gap:6px; font-size:12px; color:var(--sumi-muted); }
+
+  .switch{ position:relative; width:38px; height:21px; flex-shrink:0; }
+  .switch input{ opacity:0; width:0; height:0; }
+  .switch .track{
+    position:absolute; inset:0; background:#cfc6ad; border-radius:20px; cursor:pointer; transition:background .15s;
+  }
+  .switch .track::after{
+    content:''; position:absolute; top:2px; left:2px; width:17px; height:17px; border-radius:50%;
+    background:#fff; transition:transform .15s;
+  }
+  .switch input:checked + .track{ background:var(--ai); }
+  .switch input:checked + .track::after{ transform:translateX(17px); }
+  .switch input:focus-visible + .track{ outline:2px solid var(--kin); outline-offset:2px; }
+
+  input[type="range"]{ width:90px; accent-color:var(--ai); }
+
+  .play-all-btn{
+    font-family:var(--font-body); font-size:12.5px; font-weight:600; color:var(--ai);
+    background:var(--washi-card); border:1px solid var(--line); border-radius:7px;
+    padding:7px 12px; cursor:pointer; display:flex; align-items:center; gap:6px;
+  }
+  .play-all-btn:hover{ background:#fff; }
+  .play-all-btn:focus-visible{ outline:2px solid var(--kin); outline-offset:2px; }
+  .play-all-btn.is-playing{ color:var(--shu); border-color:var(--shu); }
+
+  /* ---------- Cards / rows ---------- */
+  .card{
+    display:flex; align-items:flex-start; gap:16px;
+    padding:18px 4px; border-bottom:1px solid var(--line);
+  }
+  .card:last-child{ border-bottom:none; }
+  .card:hover{ background:rgba(27,58,92,0.025); }
+
+  .stamp-btn{
+    position:relative; width:54px; height:54px; border-radius:50%; flex-shrink:0;
+    background:var(--shu); color:var(--washi-card); border:3px double rgba(255,255,255,0.55);
+    box-shadow:inset 0 0 0 1px rgba(0,0,0,0.15);
+    font-family:var(--font-jp); font-size:18px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition:transform .15s ease, background .15s ease;
+  }
+  .stamp-btn:hover{ background:var(--shu-deep); }
+  .stamp-btn:active, .stamp-btn.stamp-active{ transform:scale(0.86); }
+  .stamp-btn:focus-visible{ outline:2px solid var(--kin); outline-offset:3px; }
+  .stamp-btn::after{
+    content:''; position:absolute; inset:-7px; border-radius:50%;
+    border:2px solid var(--shu); opacity:0;
+  }
+  .stamp-btn.stamp-active::after{ animation:inkring .55s ease-out; }
+  @keyframes inkring{ from{ opacity:.55; transform:scale(1); } to{ opacity:0; transform:scale(1.45); } }
+
+  .card-text{ flex:1; min-width:0; }
+  .cat-tag{
+    display:inline-block; font-family:var(--font-mono); font-size:10px; text-transform:uppercase;
+    letter-spacing:0.06em; color:var(--ai); background:rgba(27,58,92,0.08);
+    padding:2px 7px; border-radius:5px; margin-bottom:6px;
+  }
+  .jp{ margin:0; font-family:var(--font-jp); font-size:21px; color:var(--sumi); line-height:1.45; }
+  .romaji{ margin:4px 0 0; font-family:var(--font-mono); font-size:12.5px; color:var(--ai-soft); }
+  body.hide-romaji .romaji{ display:none; }
+  .pt{ margin:5px 0 0; font-size:14.5px; color:var(--sumi-muted); }
+
+  .star-btn{
+    flex-shrink:0; background:none; border:none; cursor:pointer; font-size:20px;
+    color:#c9bfa0; line-height:1; padding:6px; margin-top:2px;
+  }
+  .star-btn.is-fav{ color:var(--kin); }
+  .star-btn:focus-visible{ outline:2px solid var(--kin); outline-offset:2px; border-radius:4px; }
+
+  .empty-state{
+    text-align:center; padding:60px 20px; color:var(--sumi-muted);
+  }
+  .empty-state .empty-kanji{
+    font-family:var(--font-jp); font-size:40px; color:var(--ai); opacity:0.35; display:block; margin-bottom:10px;
+  }
+  .empty-state p{ font-size:14px; max-width:380px; margin:0 auto; }
+  .clear-fav-btn{
+    margin-top:14px; font-size:12.5px; color:var(--shu); background:none; border:1px solid var(--shu);
+    border-radius:6px; padding:6px 12px; cursor:pointer;
+  }
+
+  .audio-hint{
+    margin-top:18px; font-size:11.5px; color:var(--sumi-muted); text-align:center;
+  }
+
+  /* ---------- Mobile ---------- */
+  @media (max-width: 800px){
+    .body-layout{ flex-direction:column; }
+    .sidebar{
+      width:100%; flex-direction:row; overflow-x:auto; overflow-y:visible; gap:6px;
+      padding:12px; -webkit-overflow-scrolling:touch;
+    }
+    .cat-btn{ flex-direction:column; width:auto; min-width:84px; text-align:center; gap:5px; padding:8px 10px; border-left:none; border-bottom:3px solid transparent; }
+    .cat-btn.active{ border-bottom-color:var(--kin); }
+    .cat-label{ display:flex; flex-direction:column; align-items:center; }
+    .cat-pt{ display:none; }
+    .cat-count{ display:none; }
+    .content{ padding:18px 16px 50px; }
+    .topbar{ padding:14px 16px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .stamp-btn, .stamp-btn::after{ animation:none !important; transition:none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">和ポ</div>
+      <div class="brand-text">
+        <h1>会話帖 <span class="pro-tag">Pro</span></h1>
+        <p id="brandSub">Frases japonês ↔ português por situação</p>
+      </div>
+    </div>
+    <div class="search-wrap">
+      <input type="search" id="searchInput" placeholder="Buscar frase, romaji ou tradução..." aria-label="Buscar frases">
+    </div>
+  </header>
+
+  <div class="body-layout">
+    <nav class="sidebar" id="sidebar" aria-label="Situações"></nav>
+    <main class="content"><div class="content-inner" id="content"></div></main>
+  </div>
+</div>
+
+<script>
+const CATS = [
+ {id:"greet",kanji:"礼",jp:"挨拶とマナー",pt:"Saudações e Cortesias",items:[
+   ["おはようございます","Ohayō gozaimasu","Bom dia"],
+   ["こんにちは","Konnichiwa","Boa tarde / Olá"],
+   ["こんばんは","Konbanwa","Boa noite (saudação)"],
+   ["おやすみなさい","Oyasumi nasai","Boa noite (ao dormir)"],
+   ["さようなら","Sayōnara","Adeus"],
+   ["またね","Mata ne","Até mais"],
+   ["お元気ですか?","Ogenki desu ka?","Como você está?"],
+   ["元気です、ありがとう","Genki desu, arigatō","Estou bem, obrigado(a)"],
+   ["はじめまして","Hajimemashite","Muito prazer (primeiro encontro)"],
+   ["よろしくお願いします","Yoroshiku onegaishimasu","Prazer em conhecê-lo(a) / Conto com você"],
+   ["ありがとうございます","Arigatō gozaimasu","Muito obrigado(a)"],
+   ["どういたしまして","Dō itashimashite","De nada"],
+   ["すみません","Sumimasen","Desculpe / Com licença"],
+   ["ごめんなさい","Gomen nasai","Sinto muito / Desculpe"],
+   ["お先に失礼します","Osaki ni shitsurei shimasu","Com licença, vou saindo primeiro"]
+ ]},
+ {id:"airport",kanji:"空",jp:"空港と入国",pt:"Aeroporto e Imigração",items:[
+   ["パスポートをお願いします","Pasupōto o onegaishimasu","O passaporte, por favor"],
+   ["観光で来ました","Kankō de kimashita","Vim a turismo"],
+   ["仕事で来ました","Shigoto de kimashita","Vim a trabalho"],
+   ["一週間滞在します","Isshūkan taizai shimasu","Vou ficar uma semana"],
+   ["荷物はこれだけです","Nimotsu wa kore dake desu","Esta é toda a minha bagagem"],
+   ["両替できますか?","Ryōgae dekimasu ka?","Posso trocar dinheiro?"],
+   ["免税店はどこですか?","Menzeiten wa doko desu ka?","Onde fica a loja duty-free?"],
+   ["乗り換えはどこですか?","Norikae wa doko desu ka?","Onde faço a conexão?"],
+   ["このゲートは何番ですか?","Kono gēto wa nanban desu ka?","Qual é o número deste portão?"],
+   ["荷物が出てきません","Nimotsu ga dete kimasen","Minha bagagem não apareceu"],
+   ["スーツケースが壊れています","Sūtsukēsu ga kowarete imasu","Minha mala está danificada"],
+   ["Wi-Fiはどこで借りられますか?","Wifai wa doko de karirare masu ka?","Onde posso alugar Wi-Fi?"]
+ ]},
+ {id:"hotel",kanji:"宿",jp:"ホテル",pt:"Check-in no Hotel",items:[
+   ["チェックインをお願いします","Chekkuin o onegaishimasu","Gostaria de fazer check-in"],
+   ["予約しています","Yoyaku shite imasu","Tenho uma reserva"],
+   ["名前は田中です","Namae wa Tanaka desu","Meu nome é Tanaka (substitua pelo seu)"],
+   ["何時にチェックアウトですか?","Nanji ni chekkuauto desu ka?","A que horas é o check-out?"],
+   ["部屋を変えてもらえますか?","Heya o kaete moraemasu ka?","Posso trocar de quarto?"],
+   ["Wi-Fiのパスワードは何ですか?","Wifai no pasuwādo wa nan desu ka?","Qual é a senha do Wi-Fi?"],
+   ["朝食は何時からですか?","Chōshoku wa nanji kara desu ka?","A partir de que horas é o café da manhã?"],
+   ["タオルをもう一枚ください","Taoru o mō ichimai kudasai","Mais uma toalha, por favor"],
+   ["荷物を預けられますか?","Nimotsu o azukeraremasu ka?","Posso deixar minha bagagem aqui?"],
+   ["エアコンの使い方を教えてください","Eakon no tsukaikata o oshiete kudasai","Pode me explicar como usar o ar-condicionado?"],
+   ["鍵をなくしました","Kagi o nakushimashita","Perdi a chave do quarto"],
+   ["もう一泊できますか?","Mō ippaku dekimasu ka?","Posso ficar mais uma noite?"]
+ ]},
+ {id:"directions",kanji:"道",jp:"道案内",pt:"Pedindo Direções",items:[
+   ["すみません、駅はどこですか?","Sumimasen, eki wa doko desu ka?","Com licença, onde fica a estação?"],
+   ["ここはどこですか?","Koko wa doko desu ka?","Onde estamos agora?"],
+   ["近くにコンビニはありますか?","Chikaku ni konbini wa arimasu ka?","Tem uma loja de conveniência perto daqui?"],
+   ["まっすぐ行ってください","Massugu itte kudasai","Siga em frente, por favor"],
+   ["右に曲がってください","Migi ni magatte kudasai","Vire à direita, por favor"],
+   ["左に曲がってください","Hidari ni magatte kudasai","Vire à esquerda, por favor"],
+   ["どのくらいかかりますか?","Dono kurai kakarimasu ka?","Quanto tempo leva?"],
+   ["歩いて行けますか?","Aruite ikemasu ka?","Posso ir caminhando?"],
+   ["地図を描いてもらえますか?","Chizu o kaite moraemasu ka?","Pode desenhar um mapa para mim?"],
+   ["ここに案内してもらえますか?","Koko ni annai shite moraemasu ka?","Pode me levar até aqui?"],
+   ["道に迷いました","Michi ni mayoimashita","Estou perdido(a)"],
+   ["トイレはどこですか?","Toire wa doko desu ka?","Onde fica o banheiro?"]
+ ]},
+ {id:"transport",kanji:"鉄",jp:"交通",pt:"Transporte",items:[
+   ["一番近い駅はどこですか?","Ichiban chikai eki wa doko desu ka?","Qual é a estação mais próxima?"],
+   ["この電車は新宿に行きますか?","Kono densha wa Shinjuku ni ikimasu ka?","Este trem vai para Shinjuku?"],
+   ["次の電車は何時ですか?","Tsugi no densha wa nanji desu ka?","A que horas é o próximo trem?"],
+   ["切符はどこで買えますか?","Kippu wa doko de kaemasu ka?","Onde posso comprar a passagem?"],
+   ["何番線ですか?","Nanbansen desu ka?","Qual é a plataforma?"],
+   ["この席は空いていますか?","Kono seki wa aite imasu ka?","Este assento está livre?"],
+   ["タクシーを呼んでください","Takushī o yonde kudasai","Chame um táxi, por favor"],
+   ["ここまでお願いします","Koko made onegaishimasu","Até aqui, por favor (mostrando endereço)"],
+   ["駅まで歩いてどのくらいですか?","Eki made aruite dono kurai desu ka?","Quanto tempo até a estação a pé?"],
+   ["バス停はどこですか?","Basutei wa doko desu ka?","Onde fica o ponto de ônibus?"],
+   ["これは急行ですか?","Kore wa kyūkō desu ka?","Este é um trem expresso?"],
+   ["乗り過ごしてしまいました","Norisugoshite shimaimashita","Passei do meu destino"]
+ ]},
+ {id:"restaurant",kanji:"食",jp:"レストラン",pt:"Restaurante e Comida",items:[
+   ["メニューをお願いします","Menyū o onegaishimasu","O cardápio, por favor"],
+   ["おすすめは何ですか?","Osusume wa nan desu ka?","Qual é a recomendação?"],
+   ["これをお願いします","Kore o onegaishimasu","Isto, por favor"],
+   ["辛くしないでください","Karaku shinaide kudasai","Por favor, não deixe picante"],
+   ["アレルギーがあります","Arerugī ga arimasu","Tenho alergia"],
+   ["お水をください","Omizu o kudasai","Água, por favor"],
+   ["お会計お願いします","Okaikei onegaishimasu","A conta, por favor"],
+   ["とても美味しかったです","Totemo oishikatta desu","Estava muito gostoso"],
+   ["すみません、もう一杯お願いします","Sumimasen, mō ippai onegaishimasu","Com licença, mais um, por favor"],
+   ["持ち帰りできますか?","Mochikaeri dekimasu ka?","Posso levar para viagem?"],
+   ["ベジタリアン料理はありますか?","Bejitarian ryōri wa arimasu ka?","Tem comida vegetariana?"],
+   ["量を少なくしてもらえますか?","Ryō o sukunaku shite moraemasu ka?","Pode servir uma porção menor?"],
+   ["いただきます","Itadakimasu","Bom apetite (antes de comer)"],
+   ["ごちそうさまでした","Gochisōsama deshita","Estava uma delícia, obrigado(a) (ao terminar)"]
+ ]},
+ {id:"shopping",kanji:"買",jp:"買い物",pt:"Compras",items:[
+   ["これはいくらですか?","Kore wa ikura desu ka?","Quanto custa isto?"],
+   ["試着できますか?","Shichaku dekimasu ka?","Posso experimentar?"],
+   ["他の色はありますか?","Hoka no iro wa arimasu ka?","Tem outra cor?"],
+   ["少し大きいサイズはありますか?","Sukoshi ōkii saizu wa arimasu ka?","Tem um tamanho um pouco maior?"],
+   ["もう少し安くなりますか?","Mō sukoshi yasuku narimasu ka?","Pode fazer um preço melhor?"],
+   ["これをください","Kore o kudasai","Vou levar este"],
+   ["カードは使えますか?","Kādo wa tsukaemasu ka?","Aceita cartão?"],
+   ["免税できますか?","Menzei dekimasu ka?","É possível isenção de imposto?"],
+   ["袋をください","Fukuro o kudasai","Uma sacola, por favor"],
+   ["袋は要りません","Fukuro wa irimasen","Não preciso de sacola"],
+   ["プレゼント用に包んでもらえますか?","Purezento yō ni tsutsunde moraemasu ka?","Pode embrulhar para presente?"],
+   ["領収書をもらえますか?","Ryōshūsho o moraemasu ka?","Posso ter o recibo?"]
+ ]},
+ {id:"emergency",kanji:"急",jp:"緊急・健康",pt:"Emergências e Saúde",items:[
+   ["助けてください!","Tasukete kudasai!","Ajuda, por favor!"],
+   ["救急車を呼んでください","Kyūkyūsha o yonde kudasai","Chame uma ambulância"],
+   ["警察を呼んでください","Keisatsu o yonde kudasai","Chame a polícia"],
+   ["具合が悪いです","Guai ga warui desu","Não estou me sentindo bem"],
+   ["頭が痛いです","Atama ga itai desu","Estou com dor de cabeça"],
+   ["お腹が痛いです","Onaka ga itai desu","Estou com dor de barriga"],
+   ["熱があります","Netsu ga arimasu","Estou com febre"],
+   ["病院はどこですか?","Byōin wa doko desu ka?","Onde fica o hospital?"],
+   ["薬局はどこですか?","Yakkyoku wa doko desu ka?","Onde fica a farmácia?"],
+   ["パスポートをなくしました","Pasupōto o nakushimashita","Perdi meu passaporte"],
+   ["盗まれました","Nusumaremashita","Fui roubado(a)"],
+   ["日本語が話せません","Nihongo ga hanasemasen","Não falo japonês"],
+   ["英語を話せる人はいますか?","Eigo o hanaseru hito wa imasu ka?","Tem alguém que fale inglês?"]
+ ]},
+ {id:"smalltalk",kanji:"話",jp:"雑談",pt:"Pequena Conversa",items:[
+   ["どこから来ましたか?","Doko kara kimashita ka?","De onde você é?"],
+   ["ブラジルから来ました","Burajiru kara kimashita","Vim do Brasil"],
+   ["日本は初めてです","Nihon wa hajimete desu","É minha primeira vez no Japão"],
+   ["日本が大好きです","Nihon ga daisuki desu","Eu amo o Japão"],
+   ["お仕事は何をしていますか?","Oshigoto wa nani o shite imasu ka?","O que você faz / Em que trabalha?"],
+   ["何歳ですか?","Nansai desu ka?","Quantos anos você tem?"],
+   ["趣味は何ですか?","Shumi wa nan desu ka?","Qual é seu hobby?"],
+   ["日本語を勉強しています","Nihongo o benkyō shite imasu","Estou estudando japonês"],
+   ["またお会いできて嬉しいです","Mata oai dekite ureshii desu","Que bom te ver de novo"],
+   ["連絡先を交換しましょう","Renrakusaki o kōkan shimashō","Vamos trocar contato"],
+   ["写真を撮ってもらえますか?","Shashin o totte moraemasu ka?","Pode tirar uma foto para mim?"],
+   ["一緒に写真を撮ってもいいですか?","Issho ni shashin o totte mo ii desu ka?","Posso tirar uma foto com você?"]
+ ]},
+ {id:"business",kanji:"業",jp:"仕事",pt:"Trabalho e Negócios",items:[
+   ["名刺交換させてください","Meishi kōkan sasete kudasai","Vamos trocar cartões de visita"],
+   ["お世話になっております","Osewa ni natte orimasu","Agradeço pela parceria (saudação formal)"],
+   ["会議は何時からですか?","Kaigi wa nanji kara desu ka?","A que horas começa a reunião?"],
+   ["資料を送っていただけますか?","Shiryō o okutte itadakemasu ka?","Pode me enviar os materiais?"],
+   ["確認させていただきます","Kakunin sasete itadakimasu","Vou confirmar isso"],
+   ["少々お待ちください","Shōshō omachi kudasai","Aguarde um momento, por favor"],
+   ["申し訳ございません","Mōshiwake gozaimasen","Sinto muito (formal)"],
+   ["ご検討よろしくお願いします","Gokentō yoroshiku onegaishimasu","Por favor, considere com atenção"],
+   ["締め切りはいつですか?","Shimekiri wa itsu desu ka?","Qual é o prazo final?"],
+   ["後ほどご連絡します","Nochihodo gorenraku shimasu","Entrarei em contato mais tarde"],
+   ["お疲れ様でした","Otsukaresama deshita","Bom trabalho hoje (ao terminar)"],
+   ["出張で来ました","Shucchō de kimashita","Vim em viagem de negócios"]
+ ]},
+ {id:"phone",kanji:"信",jp:"電話・通信",pt:"Telefone e Internet",items:[
+   ["電話番号を教えてもらえますか?","Denwa bangō o oshiete moraemasu ka?","Pode me dar seu número de telefone?"],
+   ["もう一度言ってもらえますか?","Mō ichido itte moraemasu ka?","Pode repetir, por favor?"],
+   ["ゆっくり話してもらえますか?","Yukkuri hanashite moraemasu ka?","Pode falar mais devagar?"],
+   ["メールアドレスを教えてください","Mēru adoresu o oshiete kudasai","Me diga seu e-mail, por favor"],
+   ["SIMカードはどこで買えますか?","SIM kādo wa doko de kaemasu ka?","Onde posso comprar um chip SIM?"],
+   ["充電器を借りられますか?","Jūdenki o karirare masu ka?","Posso pegar um carregador?"],
+   ["電波がありません","Denpa ga arimasen","Não tenho sinal"],
+   ["後でかけ直します","Atode kakenaoshimasu","Vou ligar de volta mais tarde"]
+ ]},
+ {id:"numbers",kanji:"数",jp:"数・時間・別れ",pt:"Números e Despedidas",items:[
+   ["今何時ですか?","Ima nanji desu ka?","Que horas são agora?"],
+   ["一つください","Hitotsu kudasai","Um, por favor"],
+   ["二つお願いします","Futatsu onegaishimasu","Dois, por favor"],
+   ["全部でいくらですか?","Zenbu de ikura desu ka?","Quanto é tudo junto?"],
+   ["今日は何日ですか?","Kyō wa nan nichi desu ka?","Que dia é hoje?"],
+   ["明日また来ます","Ashita mata kimasu","Vou voltar amanhã"],
+   ["楽しかったです","Tanoshikatta desu","Foi muito divertido"],
+   ["お大事に","Odaiji ni","Cuide-se / Melhore"],
+   ["気をつけて","Ki o tsukete","Tome cuidado"],
+   ["いってきます","Ittekimasu","Já vou! (saindo de casa)"],
+   ["いってらっしゃい","Itterasshai","Vá com cuidado (resposta)"],
+   ["ただいま","Tadaima","Estou de volta (chegando em casa)"],
+   ["お帰りなさい","Okaerinasai","Bem-vindo(a) de volta (resposta)"]
+ ]}
+];
+
+const TOTAL_PHRASES = CATS.reduce((n,c)=>n+c.items.length,0);
+
+const state = { view: CATS[0].id, query: "", rate: 0.9, playing:false };
+let favorites = new Set();
+let jaVoices = [];
+
+const sidebarEl = document.getElementById('sidebar');
+const contentEl = document.getElementById('content');
+const brandSub = document.getElementById('brandSub');
+brandSub.textContent = `Frases japonês ↔ português · ${CATS.length} situações · ${TOTAL_PHRASES} frases`;
+
+function escapeHtml(str){
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function norm(str){
+  return String(str).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+}
+
+/* ---------- Speech ---------- */
+function refreshVoices(){
+  if(!('speechSynthesis' in window)) return;
+  jaVoices = speechSynthesis.getVoices().filter(v => v.lang && v.lang.toLowerCase().startsWith('ja'));
+}
+if('speechSynthesis' in window){
+  refreshVoices();
+  speechSynthesis.onvoiceschanged = refreshVoices;
+}
+function speak(text){
+  if(!('speechSynthesis' in window)){
+    alert('Seu navegador não suporta áudio neste momento.');
+    return;
+  }
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'ja-JP';
+  if(jaVoices.length) u.voice = jaVoices[0];
+  u.rate = state.rate;
+  speechSynthesis.speak(u);
+}
+function playAllVisible(){
+  const cards = contentEl.querySelectorAll('.card');
+  if(!cards.length) return;
+  speechSynthesis.cancel();
+  state.playing = true;
+  updatePlayAllButton();
+  cards.forEach(card => {
+    const u = new SpeechSynthesisUtterance(card.dataset.jp);
+    u.lang = 'ja-JP';
+    if(jaVoices.length) u.voice = jaVoices[0];
+    u.rate = state.rate;
+    speechSynthesis.speak(u);
+  });
+  const last = cards[cards.length-1];
+  const checkDone = setInterval(()=>{
+    if(!speechSynthesis.speaking){
+      state.playing = false;
+      updatePlayAllButton();
+      clearInterval(checkDone);
+    }
+  }, 300);
+}
+function stopAll(){
+  speechSynthesis.cancel();
+  state.playing = false;
+  updatePlayAllButton();
+}
+function updatePlayAllButton(){
+  const btn = document.getElementById('playAllBtn');
+  if(!btn) return;
+  btn.classList.toggle('is-playing', state.playing);
+  btn.innerHTML = state.playing ? '■ Parar' : '▶ Tocar tudo';
+}
+
+/* ---------- Favorites (persisted) ---------- */
+async function loadFavorites(){
+  try{
+    const r = await window.storage.get('jp_pt_favorites_v1');
+    if(r && r.value) favorites = new Set(JSON.parse(r.value));
+  }catch(e){
+    favorites = new Set();
+  }
+  render();
+}
+async function saveFavorites(){
+  try{
+    await window.storage.set('jp_pt_favorites_v1', JSON.stringify([...favorites]));
+  }catch(e){
+    console.error('Não foi possível salvar favoritos:', e);
+  }
+}
+function toggleFavorite(key){
+  if(favorites.has(key)) favorites.delete(key); else favorites.add(key);
+  saveFavorites();
+  if(state.view === 'fav' || state.query.trim() !== ''){
+    render();
+  } else {
+    const btn = contentEl.querySelector(`.card[data-key="${key}"] .star-btn`);
+    if(btn){
+      const isFav = favorites.has(key);
+      btn.classList.toggle('is-fav', isFav);
+      btn.textContent = isFav ? '★' : '☆';
+    }
+  }
+}
+async function clearFavorites(){
+  favorites = new Set();
+  await saveFavorites();
+  render();
+}
+
+/* ---------- Render ---------- */
+function renderSidebar(){
+  const searching = state.query.trim() !== "";
+  let html = "";
+  CATS.forEach(cat=>{
+    const active = !searching && state.view === cat.id;
+    html += `<button class="cat-btn ${active?'active':''}" data-cat="${cat.id}">
+      <span class="cat-kanji">${cat.kanji}</span>
+      <span class="cat-label">
+        <span class="cat-jp">${cat.jp}</span>
+        <span class="cat-pt">${escapeHtml(cat.pt)}</span>
+      </span>
+      <span class="cat-count">${cat.items.length}</span>
+    </button>`;
+  });
+  html += `<div class="sidebar-divider"></div>`;
+  const favActive = !searching && state.view === 'fav';
+  html += `<button class="cat-btn ${favActive?'active':''}" data-cat="fav">
+    <span class="cat-kanji">推</span>
+    <span class="cat-label">
+      <span class="cat-jp">推し</span>
+      <span class="cat-pt">Favoritos</span>
+    </span>
+    <span class="cat-count">${favorites.size}</span>
+  </button>`;
+  sidebarEl.innerHTML = html;
+}
+
+function cardHtml(key, jp, romaji, pt, tag){
+  const isFav = favorites.has(key);
+  return `<div class="card" data-key="${key}" data-jp="${escapeHtml(jp)}">
+    <button class="stamp-btn" aria-label="Ouvir em japonês" title="Ouvir">音</button>
+    <div class="card-text">
+      ${tag ? `<span class="cat-tag">${escapeHtml(tag)}</span>` : ""}
+      <p class="jp" lang="ja">${escapeHtml(jp)}</p>
+      <p class="romaji">${escapeHtml(romaji)}</p>
+      <p class="pt">${escapeHtml(pt)}</p>
+    </div>
+    <button class="star-btn ${isFav?'is-fav':''}" aria-label="Marcar como favorita" title="Favoritar">${isFav?'★':'☆'}</button>
+  </div>`;
+}
+
+function panelHeaderHtml(kanji, title, subtitle, showPlayAll){
+  return `<div class="panel-header">
+    <div class="panel-title">
+      <span class="panel-kanji">${kanji}</span>
+      <div>
+        <h2>${title}</h2>
+        <p>${subtitle}</p>
+      </div>
+    </div>
+    <div class="controls">
+      <div class="ctrl-group">
+        <span>Romaji</span>
+        <label class="switch">
+          <input type="checkbox" id="romajiToggle" checked>
+          <span class="track"></span>
+        </label>
+      </div>
+      <div class="ctrl-group">
+        <span>Velocidade</span>
+        <input type="range" id="rateSlider" min="0.5" max="1.3" step="0.1" value="${state.rate}">
+      </div>
+      ${showPlayAll ? `<button class="play-all-btn" id="playAllBtn">▶ Tocar tudo</button>` : ""}
+    </div>
+  </div>`;
+}
+
+function render(){
+  renderSidebar();
+  const query = state.query.trim();
+
+  if(query !== ""){
+    const q = norm(query);
+    const results = [];
+    CATS.forEach(cat=>{
+      cat.items.forEach(([jp, romaji, pt], idx)=>{
+        if(norm(jp).includes(q) || norm(romaji).includes(q) || norm(pt).includes(q)){
+          results.push({key:`${cat.id}-${idx}`, jp, romaji, pt, tag:cat.pt});
+        }
+      });
+    });
+    let html = panelHeaderHtml('検', `Resultados para “${escapeHtml(query)}”`, `${results.length} frase(s) encontrada(s)`, results.length>0);
+    if(results.length === 0){
+      html += `<div class="empty-state">
+        <span class="empty-kanji">無</span>
+        <p>Nenhuma frase encontrada para “${escapeHtml(query)}”. Tente outro termo, em japonês, romaji ou português.</p>
+      </div>`;
+    } else {
+      results.forEach(r => html += cardHtml(r.key, r.jp, r.romaji, r.pt, r.tag));
+    }
+    contentEl.innerHTML = html;
+    bindRowEvents();
+    return;
+  }
+
+  if(state.view === 'fav'){
+    const favList = [];
+    CATS.forEach(cat=>{
+      cat.items.forEach(([jp, romaji, pt], idx)=>{
+        const key = `${cat.id}-${idx}`;
+        if(favorites.has(key)) favList.push({key, jp, romaji, pt, tag:cat.pt});
+      });
+    });
+    let html = panelHeaderHtml('推', '推し · Favoritos', `${favList.length} frase(s) guardada(s)`, favList.length>0);
+    if(favList.length === 0){
+      html += `<div class="empty-state">
+        <span class="empty-kanji">推</span>
+        <p>Você ainda não marcou frases como favoritas. Toque na estrela ☆ de qualquer frase para guardá-la aqui.</p>
+      </div>`;
+    } else {
+      favList.forEach(r => html += cardHtml(r.key, r.jp, r.romaji, r.pt, r.tag));
+      html += `<div style="text-align:center;"><button class="clear-fav-btn" id="clearFavBtn">Limpar favoritos</button></div>`;
+    }
+    contentEl.innerHTML = html;
+    bindRowEvents();
+    const clearBtn = document.getElementById('clearFavBtn');
+    if(clearBtn) clearBtn.addEventListener('click', clearFavorites);
+    return;
+  }
+
+  const cat = CATS.find(c=>c.id===state.view) || CATS[0];
+  let html = panelHeaderHtml(cat.kanji, cat.jp, cat.pt, cat.items.length>0);
+  cat.items.forEach(([jp, romaji, pt], idx)=>{
+    html += cardHtml(`${cat.id}-${idx}`, jp, romaji, pt, null);
+  });
+  html += `<p class="audio-hint">O áudio usa a voz japonesa do seu navegador (funciona melhor em Chrome, Edge ou Safari atualizados).</p>`;
+  contentEl.innerHTML = html;
+  bindRowEvents();
+}
+
+function bindRowEvents(){
+  const romajiToggle = document.getElementById('romajiToggle');
+  if(romajiToggle){
+    romajiToggle.addEventListener('change', ()=>{
+      document.body.classList.toggle('hide-romaji', !romajiToggle.checked);
+    });
+  }
+  const rateSlider = document.getElementById('rateSlider');
+  if(rateSlider){
+    rateSlider.addEventListener('input', ()=>{ state.rate = parseFloat(rateSlider.value); });
+  }
+  const playAllBtn = document.getElementById('playAllBtn');
+  if(playAllBtn){
+    playAllBtn.addEventListener('click', ()=>{
+      if(state.playing) stopAll(); else playAllVisible();
+    });
+  }
+}
+
+/* ---------- Event delegation ---------- */
+sidebarEl.addEventListener('click', (e)=>{
+  const btn = e.target.closest('.cat-btn');
+  if(!btn) return;
+  stopAll();
+  state.view = btn.dataset.cat;
+  state.query = "";
+  document.getElementById('searchInput').value = "";
+  render();
+});
+
+contentEl.addEventListener('click', (e)=>{
+  const stampBtn = e.target.closest('.stamp-btn');
+  if(stampBtn){
+    const card = stampBtn.closest('.card');
+    speak(card.dataset.jp);
+    stampBtn.classList.add('stamp-active');
+    setTimeout(()=>stampBtn.classList.remove('stamp-active'), 260);
+    return;
+  }
+  const starBtn = e.target.closest('.star-btn');
+  if(starBtn){
+    const card = starBtn.closest('.card');
+    toggleFavorite(card.dataset.key);
+    return;
+  }
+});
+
+document.getElementById('searchInput').addEventListener('input', (e)=>{
+  stopAll();
+  state.query = e.target.value;
+  render();
+});
+
+/* ---------- Init ---------- */
+render();
+loadFavorites();
+</script>
+</body>
+</html>
