@@ -12,31 +12,26 @@ const icons = {
   95: "⛈️"
 };
 
-window.addEventListener("load", () => {
-  startApp();
-});
+let particles = [];
+
+window.addEventListener("load", () => startApp());
 
 // 🚀 START SEGURO
 function startApp() {
-  if (!navigator.geolocation) {
-    fallback();
-    return;
-  }
+  if (!navigator.geolocation) return fallback();
 
   navigator.geolocation.getCurrentPosition(
-    (pos) => {
-      loadWeather(pos.coords.latitude, pos.coords.longitude, "Sua localização");
-    },
+    (pos) => loadWeather(pos.coords.latitude, pos.coords.longitude, "Sua localização"),
     () => fallback(),
     { timeout: 8000 }
   );
 }
 
 function fallback() {
-  loadWeather(35.6762, 139.6503, "Tóquio (padrão)");
+  loadWeather(35.6762, 139.6503, "Tóquio");
 }
 
-// 🌦️ clima principal
+// 🌦️ CLIMA
 async function loadWeather(lat, lon, label) {
   try {
 
@@ -62,83 +57,121 @@ async function loadWeather(lat, lon, label) {
     setBackground(c.weather_code);
     renderForecast(data.daily);
     renderHourly(data.hourly);
+    setFX(c.weather_code);
 
-  } catch (err) {
-    console.error(err);
-    document.getElementById("desc").innerText = "Erro ao carregar clima";
+  } catch (e) {
+    console.error(e);
   }
 }
 
-// 🎨 fundo dinâmico estilo Apple
+// 🎨 BACKGROUND ULTRA
 function setBackground(code) {
   const bg = document.getElementById("bg");
 
-  if (code === 0 || code === 1) {
-    bg.style.background = "linear-gradient(180deg,#0f3d57,#1e6091,#52b69a)";
-  } else if (code === 2 || code === 3) {
-    bg.style.background = "linear-gradient(180deg,#2b2d42,#5c677d,#7d8597)";
-  } else if (code >= 51 && code <= 82) {
-    bg.style.background = "linear-gradient(180deg,#1b263b,#415a77,#778da9)";
-  } else {
-    bg.style.background = "linear-gradient(180deg,#0d1b2a,#1b263b,#415a77)";
-  }
+  const map = {
+    clear: "linear-gradient(180deg,#0b3d91,#1e6091,#52b69a)",
+    cloud: "linear-gradient(180deg,#2b2d42,#5c677d,#7d8597)",
+    rain: "linear-gradient(180deg,#0f172a,#1e293b,#334155)",
+    storm: "linear-gradient(180deg,#020617,#0f172a,#1e293b)"
+  };
+
+  if (code === 0 || code === 1) bg.style.background = map.clear;
+  else if (code === 2 || code === 3) bg.style.background = map.cloud;
+  else if (code >= 51 && code <= 82) bg.style.background = map.rain;
+  else bg.style.background = map.storm;
 }
 
-// 📅 previsão 7 dias
+// 📅 DAILY
 function renderForecast(daily) {
   const box = document.getElementById("forecast");
   box.innerHTML = "";
 
-  for (let i = 0; i < daily.time.length; i++) {
+  daily.time.forEach((t, i) => {
     box.innerHTML += `
       <div class="day">
-        <div>${new Date(daily.time[i]).getDate()}</div>
+        <div>${new Date(t).getDate()}</div>
         <div>${icons[daily.weather_code[i]] || "⛅"}</div>
         <div>${Math.round(daily.temperature_2m_max[i])}°</div>
       </div>
     `;
-  }
+  });
 }
 
-// ⏱️ PREVISÃO POR HORA (48H)
+// ⏱️ HOURLY 48H
 function renderHourly(hourly) {
   const box = document.getElementById("hourly");
   box.innerHTML = "";
 
   for (let i = 0; i < 48; i++) {
-    const time = new Date(hourly.time[i]);
-    const hour = time.getHours();
+    const h = new Date(hourly.time[i]).getHours();
 
     box.innerHTML += `
       <div class="hour">
-        <div class="t">${hour}:00</div>
+        <div>${h}:00</div>
         <div>${icons[hourly.weather_code[i]] || "⛅"}</div>
-        <div class="temp">${Math.round(hourly.temperature_2m[i])}°</div>
+        <div>${Math.round(hourly.temperature_2m[i])}°</div>
       </div>
     `;
   }
 }
 
-// 🔍 busca cidade
+// 🔍 SEARCH
 async function searchCity() {
   const city = document.getElementById("cityInput").value;
 
-  try {
-    const geo = await fetch(
-      `https://geocoding-api.open-meteo.com/v1/search?name=${city}`
-    );
+  const geo = await fetch(
+    `https://geocoding-api.open-meteo.com/v1/search?name=${city}`
+  );
 
-    const data = await geo.json();
+  const data = await geo.json();
+  if (!data.results) return alert("Cidade não encontrada");
 
-    if (!data.results || data.results.length === 0) {
-      alert("Cidade não encontrada");
-      return;
+  const r = data.results[0];
+  loadWeather(r.latitude, r.longitude, r.name);
+}
+
+// 🌧️ FX (chuva leve estilo iOS)
+function setFX(code) {
+  const canvas = document.getElementById("fx");
+  const ctx = canvas.getContext("2d");
+
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+
+  particles = [];
+
+  if (code >= 51 && code <= 82) {
+    for (let i = 0; i < 60; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        v: 4 + Math.random() * 4
+      });
     }
 
-    const r = data.results[0];
-    loadWeather(r.latitude, r.longitude, r.name);
-
-  } catch (e) {
-    alert("Erro na busca");
+    animateRain(ctx, canvas);
   }
+}
+
+function animateRain(ctx, canvas) {
+  function loop() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    ctx.strokeStyle = "rgba(255,255,255,0.3)";
+    ctx.lineWidth = 1;
+
+    particles.forEach(p => {
+      ctx.beginPath();
+      ctx.moveTo(p.x, p.y);
+      ctx.lineTo(p.x, p.y + 10);
+      ctx.stroke();
+
+      p.y += p.v;
+      if (p.y > canvas.height) p.y = 0;
+    });
+
+    requestAnimationFrame(loop);
+  }
+
+  loop();
 }
