@@ -4,97 +4,424 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Jogo da Memória</title>
-
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&family=DM+Mono&display=swap" rel="stylesheet">
 <style>
-body {
-  margin: 0;
-  background: #0f0f0f;
-  color: white;
-  font-family: Arial, sans-serif;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+  :root {
+    --bg:       #0d0d12;
+    --surface:  #16161f;
+    --card-back:#1e1e2e;
+    --card-front:#252538;
+    --accent:   #7c6af7;
+    --accent2:  #a78bfa;
+    --match:    #34d399;
+    --mismatch: #f87171;
+    --text:     #e2e2f0;
+    --muted:    #6b6b85;
+    --border:   rgba(124,106,247,0.18);
+  }
 
-h1 {
-  margin: 20px 0;
-  font-size: 24px;
-}
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-.board {
-  display: grid;
-  grid-template-columns: repeat(4, 70px);
-  gap: 10px;
-}
+  body {
+    min-height: 100dvh;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 16px 48px;
+    background-image:
+      radial-gradient(ellipse 60% 50% at 50% -10%, rgba(124,106,247,0.12) 0%, transparent 70%);
+  }
 
-.card {
-  width: 70px;
-  height: 70px;
-  background: #333;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 28px;
-  border-radius: 10px;
-  cursor: pointer;
-  user-select: none;
-}
+  /* ── Header ── */
+  header {
+    text-align: center;
+    margin-bottom: 36px;
+  }
 
-.card.flipped {
-  background: #00c853;
-}
+  .eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 10px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    background: linear-gradient(135deg, #e2e2f0 0%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ── Stats bar ── */
+  .stats {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 32px;
+    padding: 14px 28px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .stat-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--text);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .stat-divider {
+    width: 1px;
+    background: var(--border);
+    align-self: stretch;
+  }
+
+  /* ── Board ── */
+  .board {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    width: min(380px, 100%);
+  }
+
+  /* ── Card 3D flip ── */
+  .card-wrap {
+    perspective: 600px;
+    width: 100%;
+    aspect-ratio: 1;
+  }
+
+  .card {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.42s cubic-bezier(0.4,0,0.2,1);
+    cursor: pointer;
+    border-radius: 14px;
+  }
+
+  .card.flipped  { transform: rotateY(180deg); }
+  .card.matched  { cursor: default; }
+  .card.shake    { animation: shake 0.35s ease; }
+
+  @keyframes shake {
+    0%,100% { transform: rotateY(180deg) translateX(0); }
+    25%      { transform: rotateY(180deg) translateX(-5px); }
+    75%      { transform: rotateY(180deg) translateX(5px); }
+  }
+
+  .card-face {
+    position: absolute;
+    inset: 0;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    font-size: clamp(22px, 6vw, 32px);
+    border: 1px solid var(--border);
+    transition: border-color 0.3s;
+  }
+
+  .card-back {
+    background: var(--card-back);
+    background-image:
+      repeating-linear-gradient(
+        45deg,
+        rgba(124,106,247,0.05) 0px, rgba(124,106,247,0.05) 1px,
+        transparent 1px, transparent 12px
+      );
+  }
+
+  .card-back::after {
+    content: "✦";
+    font-size: 18px;
+    color: rgba(124,106,247,0.35);
+  }
+
+  .card-front {
+    background: var(--card-front);
+    transform: rotateY(180deg);
+  }
+
+  .card.matched .card-front {
+    background: rgba(52,211,153,0.12);
+    border-color: rgba(52,211,153,0.4);
+  }
+
+  /* ── Button ── */
+  .btn-wrap {
+    margin-top: 32px;
+  }
+
+  button {
+    padding: 12px 32px;
+    background: transparent;
+    color: var(--accent2);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+  }
+
+  button:hover {
+    background: rgba(124,106,247,0.12);
+    border-color: var(--accent);
+    color: var(--text);
+  }
+
+  /* ── Win overlay ── */
+  .win-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(13,13,18,0.85);
+    backdrop-filter: blur(8px);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+    padding: 24px;
+  }
+
+  .win-overlay.visible { display: flex; }
+
+  .win-emoji { font-size: 56px; }
+
+  .win-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 36px;
+    font-weight: 400;
+    background: linear-gradient(135deg, #e2e2f0 0%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .win-sub {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.6;
+    max-width: 280px;
+  }
+
+  .win-sub strong { color: var(--text); }
+
+  .win-overlay button {
+    margin-top: 8px;
+    padding: 13px 40px;
+    background: var(--accent);
+    color: #fff;
+    border-color: transparent;
+    font-size: 15px;
+  }
+
+  .win-overlay button:hover {
+    background: var(--accent2);
+    border-color: transparent;
+    color: #fff;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card { transition: none; }
+    .card.shake { animation: none; }
+  }
 </style>
 </head>
-
 <body>
 
-<h1>🧠 Jogo da Memória</h1>
+<header>
+  <p class="eyebrow">Desafio cognitivo</p>
+  <h1>Jogo da Memória</h1>
+</header>
+
+<div class="stats">
+  <div class="stat">
+    <span class="stat-value" id="moves">0</span>
+    <span class="stat-label">Jogadas</span>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat">
+    <span class="stat-value" id="matches">0</span>
+    <span class="stat-label">Pares</span>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat">
+    <span class="stat-value" id="timer">0:00</span>
+    <span class="stat-label">Tempo</span>
+  </div>
+</div>
+
 <div class="board" id="board"></div>
 
+<div class="btn-wrap">
+  <button onclick="initGame()">↺ Reiniciar</button>
+</div>
+
+<div class="win-overlay" id="winOverlay">
+  <div class="win-emoji">🏆</div>
+  <p class="win-title">Parabéns!</p>
+  <p class="win-sub" id="winMsg"></p>
+  <button onclick="initGame(); closeWin()">Jogar novamente</button>
+</div>
+
 <script>
-const emojis = ["🍎","🍌","🍇","🍒","🍉","🍍","🥝","🍓"];
-let cards = [...emojis, ...emojis].sort(() => Math.random() - 0.5);
+  const emojis = ["🍎","🍌","🍇","🍒","🍉","🍍","🥝","🍓"];
 
-const board = document.getElementById("board");
+  let firstCard = null, lock = false;
+  let moves = 0, matched = 0;
+  let timerInterval = null, elapsed = 0;
 
-let firstCard = null;
-let lock = false;
+  const $moves   = document.getElementById("moves");
+  const $matches = document.getElementById("matches");
+  const $timer   = document.getElementById("timer");
+  const $board   = document.getElementById("board");
+  const $overlay = document.getElementById("winOverlay");
+  const $winMsg  = document.getElementById("winMsg");
 
-cards.forEach(emoji => {
-  const card = document.createElement("div");
-  card.className = "card";
-  card.dataset.value = emoji;
+  function fmt(s) {
+    return `${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`;
+  }
 
-  card.addEventListener("click", () => {
-    if (lock || card.classList.contains("flipped")) return;
+  function startTimer() {
+    clearInterval(timerInterval);
+    elapsed = 0;
+    $timer.textContent = "0:00";
+    timerInterval = setInterval(() => {
+      elapsed++;
+      $timer.textContent = fmt(elapsed);
+    }, 1000);
+  }
 
-    card.classList.add("flipped");
-    card.textContent = emoji;
+  function stopTimer() { clearInterval(timerInterval); }
+
+  function initGame() {
+    stopTimer();
+    firstCard = null;
+    lock      = false;
+    moves     = 0;
+    matched   = 0;
+    $moves.textContent   = "0";
+    $matches.textContent = "0";
+    $timer.textContent   = "0:00";
+
+    const deck = [...emojis, ...emojis].sort(() => Math.random() - 0.5);
+    $board.innerHTML = "";
+
+    deck.forEach(emoji => {
+      const wrap = document.createElement("div");
+      wrap.className = "card-wrap";
+
+      const card = document.createElement("div");
+      card.className = "card";
+      card.dataset.value = emoji;
+
+      const back  = document.createElement("div");
+      back.className = "card-face card-back";
+
+      const front = document.createElement("div");
+      front.className = "card-face card-front";
+      front.textContent = emoji;
+
+      card.append(back, front);
+      wrap.append(card);
+      $board.append(wrap);
+
+      card.addEventListener("click", onCardClick);
+    });
+  }
+
+  function onCardClick() {
+    if (lock || this.classList.contains("flipped") || this.classList.contains("matched")) return;
+
+    // Start timer on first interaction
+    if (moves === 0 && !firstCard) startTimer();
+
+    this.classList.add("flipped");
 
     if (!firstCard) {
-      firstCard = card;
+      firstCard = this;
+      return;
+    }
+
+    moves++;
+    $moves.textContent = moves;
+
+    if (firstCard.dataset.value === this.dataset.value) {
+      // Match
+      firstCard.classList.add("matched");
+      this.classList.add("matched");
+      matched++;
+      $matches.textContent = matched;
+      firstCard = null;
+
+      if (matched === emojis.length) {
+        stopTimer();
+        setTimeout(showWin, 500);
+      }
     } else {
-      if (firstCard.dataset.value === card.dataset.value) {
-        firstCard = null;
-      } else {
-        lock = true;
+      // Mismatch
+      const second = this;
+      lock = true;
+      setTimeout(() => {
+        firstCard.classList.add("shake");
+        second.classList.add("shake");
         setTimeout(() => {
-          card.classList.remove("flipped");
-          card.textContent = "";
-
-          firstCard.classList.remove("flipped");
-          firstCard.textContent = "";
-
+          firstCard.classList.remove("flipped","shake");
+          second.classList.remove("flipped","shake");
           firstCard = null;
           lock = false;
-        }, 700);
-      }
+        }, 350);
+      }, 600);
     }
-  });
+  }
 
-  board.appendChild(card);
-});
+  function showWin() {
+    $winMsg.innerHTML =
+      `Completado em <strong>${fmt(elapsed)}</strong> com <strong>${moves} jogadas</strong>.`;
+    $overlay.classList.add("visible");
+  }
+
+  function closeWin() {
+    $overlay.classList.remove("visible");
+  }
+
+  initGame();
 </script>
-
 </body>
 </html>
