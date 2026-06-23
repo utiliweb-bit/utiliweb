@@ -96,16 +96,15 @@
   .cat-btn:hover{ background:rgba(255,255,255,0.07); }
   .cat-btn.active{ background:rgba(255,255,255,0.12); border-left-color:var(--kin); }
   .cat-btn:focus-visible{ outline:2px solid var(--kin); outline-offset:1px; }
-  .cat-kanji{
+  .cat-icon{
     width:32px; height:32px; border-radius:50%; flex-shrink:0;
     background:var(--washi-card); color:var(--ai);
     display:flex; align-items:center; justify-content:center;
-    font-family:var(--font-jp); font-size:14px;
+    font-size:16px; line-height:1;
   }
-  .cat-btn.active .cat-kanji{ background:var(--kin); color:var(--kachi); }
+  .cat-btn.active .cat-icon{ background:var(--kin); }
   .cat-label{ flex:1; min-width:0; line-height:1.25; }
-  .cat-jp{ display:block; font-family:var(--font-jp); font-size:13.5px; color:#fff; }
-  .cat-pt{ display:block; font-size:11px; color:#b9c6d6; margin-top:1px; }
+  .cat-name{ display:block; font-size:13.5px; font-weight:500; color:#fff; }
   .cat-count{
     font-family:var(--font-mono); font-size:10.5px; color:#aebccc;
     background:rgba(255,255,255,0.08); border-radius:10px; padding:2px 7px;
@@ -124,13 +123,13 @@
     flex-wrap:wrap; margin-bottom:18px; padding-bottom:16px; border-bottom:1px solid var(--line);
   }
   .panel-title{ display:flex; align-items:center; gap:12px; }
-  .panel-kanji{
+  .panel-icon{
     width:46px; height:46px; border-radius:50%; flex-shrink:0;
     background:var(--ai); color:var(--washi-card);
     display:flex; align-items:center; justify-content:center;
-    font-family:var(--font-jp); font-size:19px;
+    font-size:21px; line-height:1;
   }
-  .panel-title h2{ margin:0; font-family:var(--font-jp); font-size:22px; color:var(--kachi); }
+  .panel-title h2{ margin:0; font-family:var(--font-display); font-weight:600; font-size:22px; color:var(--kachi); }
   .panel-title p{ margin:2px 0 0; font-size:12.5px; color:var(--sumi-muted); }
 
   .controls{ display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
@@ -172,7 +171,7 @@
     position:relative; width:54px; height:54px; border-radius:50%; flex-shrink:0;
     background:var(--shu); color:var(--washi-card); border:3px double rgba(255,255,255,0.55);
     box-shadow:inset 0 0 0 1px rgba(0,0,0,0.15);
-    font-family:var(--font-jp); font-size:18px; cursor:pointer;
+    font-size:22px; cursor:pointer; line-height:1;
     display:flex; align-items:center; justify-content:center;
     transition:transform .15s ease, background .15s ease;
   }
@@ -207,8 +206,8 @@
   .empty-state{
     text-align:center; padding:60px 20px; color:var(--sumi-muted);
   }
-  .empty-state .empty-kanji{
-    font-family:var(--font-jp); font-size:40px; color:var(--ai); opacity:0.35; display:block; margin-bottom:10px;
+  .empty-state .empty-icon{
+    font-size:42px; opacity:0.6; display:block; margin-bottom:10px;
   }
   .empty-state p{ font-size:14px; max-width:380px; margin:0 auto; }
   .clear-fav-btn{
@@ -230,7 +229,6 @@
     .cat-btn{ flex-direction:column; width:auto; min-width:84px; text-align:center; gap:5px; padding:8px 10px; border-left:none; border-bottom:3px solid transparent; }
     .cat-btn.active{ border-bottom-color:var(--kin); }
     .cat-label{ display:flex; flex-direction:column; align-items:center; }
-    .cat-pt{ display:none; }
     .cat-count{ display:none; }
     .content{ padding:18px 16px 50px; }
     .topbar{ padding:14px 16px; }
@@ -264,7 +262,7 @@
 
 <script>
 const CATS = [
- {id:"greet",kanji:"礼",jp:"挨拶とマナー",pt:"Saudações e Cortesias",items:[
+ {id:"greet",icon:"👋",pt:"Saudações e Cortesias",desc:"Saudações, agradecimentos e despedidas do dia a dia.",items:[
    ["おはようございます","Ohayō gozaimasu","Bom dia"],
    ["こんにちは","Konnichiwa","Boa tarde / Olá"],
    ["こんばんは","Konbanwa","Boa noite (saudação)"],
@@ -281,7 +279,7 @@ const CATS = [
    ["ごめんなさい","Gomen nasai","Sinto muito / Desculpe"],
    ["お先に失礼します","Osaki ni shitsurei shimasu","Com licença, vou saindo primeiro"]
  ]},
- {id:"airport",kanji:"空",jp:"空港と入国",pt:"Aeroporto e Imigração",items:[
+ {id:"airport",icon:"✈️",pt:"Aeroporto e Imigração",desc:"Imigração, bagagem e conexões no aeroporto.",items:[
    ["パスポートをお願いします","Pasupōto o onegaishimasu","O passaporte, por favor"],
    ["観光で来ました","Kankō de kimashita","Vim a turismo"],
    ["仕事で来ました","Shigoto de kimashita","Vim a trabalho"],
@@ -295,7 +293,7 @@ const CATS = [
    ["スーツケースが壊れています","Sūtsukēsu ga kowarete imasu","Minha mala está danificada"],
    ["Wi-Fiはどこで借りられますか?","Wifai wa doko de karirare masu ka?","Onde posso alugar Wi-Fi?"]
  ]},
- {id:"hotel",kanji:"宿",jp:"ホテル",pt:"Check-in no Hotel",items:[
+ {id:"hotel",icon:"🛏️",pt:"Check-in no Hotel",desc:"Check-in, check-out e pedidos no quarto do hotel.",items:[
    ["チェックインをお願いします","Chekkuin o onegaishimasu","Gostaria de fazer check-in"],
    ["予約しています","Yoyaku shite imasu","Tenho uma reserva"],
    ["名前は田中です","Namae wa Tanaka desu","Meu nome é Tanaka (substitua pelo seu)"],
@@ -309,7 +307,7 @@ const CATS = [
    ["鍵をなくしました","Kagi o nakushimashita","Perdi a chave do quarto"],
    ["もう一泊できますか?","Mō ippaku dekimasu ka?","Posso ficar mais uma noite?"]
  ]},
- {id:"directions",kanji:"道",jp:"道案内",pt:"Pedindo Direções",items:[
+ {id:"directions",icon:"🧭",pt:"Pedindo Direções",desc:"Como pedir e entender direções na rua.",items:[
    ["すみません、駅はどこですか?","Sumimasen, eki wa doko desu ka?","Com licença, onde fica a estação?"],
    ["ここはどこですか?","Koko wa doko desu ka?","Onde estamos agora?"],
    ["近くにコンビニはありますか?","Chikaku ni konbini wa arimasu ka?","Tem uma loja de conveniência perto daqui?"],
@@ -323,7 +321,7 @@ const CATS = [
    ["道に迷いました","Michi ni mayoimashita","Estou perdido(a)"],
    ["トイレはどこですか?","Toire wa doko desu ka?","Onde fica o banheiro?"]
  ]},
- {id:"transport",kanji:"鉄",jp:"交通",pt:"Transporte",items:[
+ {id:"transport",icon:"🚆",pt:"Transporte",desc:"Trem, metrô, ônibus e táxi.",items:[
    ["一番近い駅はどこですか?","Ichiban chikai eki wa doko desu ka?","Qual é a estação mais próxima?"],
    ["この電車は新宿に行きますか?","Kono densha wa Shinjuku ni ikimasu ka?","Este trem vai para Shinjuku?"],
    ["次の電車は何時ですか?","Tsugi no densha wa nanji desu ka?","A que horas é o próximo trem?"],
@@ -337,7 +335,7 @@ const CATS = [
    ["これは急行ですか?","Kore wa kyūkō desu ka?","Este é um trem expresso?"],
    ["乗り過ごしてしまいました","Norisugoshite shimaimashita","Passei do meu destino"]
  ]},
- {id:"restaurant",kanji:"食",jp:"レストラン",pt:"Restaurante e Comida",items:[
+ {id:"restaurant",icon:"🍽️",pt:"Restaurante e Comida",desc:"Pedir comida, bebida e pagar a conta.",items:[
    ["メニューをお願いします","Menyū o onegaishimasu","O cardápio, por favor"],
    ["おすすめは何ですか?","Osusume wa nan desu ka?","Qual é a recomendação?"],
    ["これをお願いします","Kore o onegaishimasu","Isto, por favor"],
@@ -353,7 +351,7 @@ const CATS = [
    ["いただきます","Itadakimasu","Bom apetite (antes de comer)"],
    ["ごちそうさまでした","Gochisōsama deshita","Estava uma delícia, obrigado(a) (ao terminar)"]
  ]},
- {id:"shopping",kanji:"買",jp:"買い物",pt:"Compras",items:[
+ {id:"shopping",icon:"🛍️",pt:"Compras",desc:"Preços, tamanhos, cores e formas de pagamento.",items:[
    ["これはいくらですか?","Kore wa ikura desu ka?","Quanto custa isto?"],
    ["試着できますか?","Shichaku dekimasu ka?","Posso experimentar?"],
    ["他の色はありますか?","Hoka no iro wa arimasu ka?","Tem outra cor?"],
@@ -367,7 +365,7 @@ const CATS = [
    ["プレゼント用に包んでもらえますか?","Purezento yō ni tsutsunde moraemasu ka?","Pode embrulhar para presente?"],
    ["領収書をもらえますか?","Ryōshūsho o moraemasu ka?","Posso ter o recibo?"]
  ]},
- {id:"emergency",kanji:"急",jp:"緊急・健康",pt:"Emergências e Saúde",items:[
+ {id:"emergency",icon:"🚑",pt:"Emergências e Saúde",desc:"Pedir ajuda, ir ao médico ou à farmácia.",items:[
    ["助けてください!","Tasukete kudasai!","Ajuda, por favor!"],
    ["救急車を呼んでください","Kyūkyūsha o yonde kudasai","Chame uma ambulância"],
    ["警察を呼んでください","Keisatsu o yonde kudasai","Chame a polícia"],
@@ -382,7 +380,7 @@ const CATS = [
    ["日本語が話せません","Nihongo ga hanasemasen","Não falo japonês"],
    ["英語を話せる人はいますか?","Eigo o hanaseru hito wa imasu ka?","Tem alguém que fale inglês?"]
  ]},
- {id:"smalltalk",kanji:"話",jp:"雑談",pt:"Pequena Conversa",items:[
+ {id:"smalltalk",icon:"💬",pt:"Pequena Conversa",desc:"Falar sobre você, o Japão e fazer amizades.",items:[
    ["どこから来ましたか?","Doko kara kimashita ka?","De onde você é?"],
    ["ブラジルから来ました","Burajiru kara kimashita","Vim do Brasil"],
    ["日本は初めてです","Nihon wa hajimete desu","É minha primeira vez no Japão"],
@@ -396,7 +394,7 @@ const CATS = [
    ["写真を撮ってもらえますか?","Shashin o totte moraemasu ka?","Pode tirar uma foto para mim?"],
    ["一緒に写真を撮ってもいいですか?","Issho ni shashin o totte mo ii desu ka?","Posso tirar uma foto com você?"]
  ]},
- {id:"business",kanji:"業",jp:"仕事",pt:"Trabalho e Negócios",items:[
+ {id:"business",icon:"💼",pt:"Trabalho e Negócios",desc:"Reuniões, e-mails e visitas de trabalho.",items:[
    ["名刺交換させてください","Meishi kōkan sasete kudasai","Vamos trocar cartões de visita"],
    ["お世話になっております","Osewa ni natte orimasu","Agradeço pela parceria (saudação formal)"],
    ["会議は何時からですか?","Kaigi wa nanji kara desu ka?","A que horas começa a reunião?"],
@@ -410,7 +408,7 @@ const CATS = [
    ["お疲れ様でした","Otsukaresama deshita","Bom trabalho hoje (ao terminar)"],
    ["出張で来ました","Shucchō de kimashita","Vim em viagem de negócios"]
  ]},
- {id:"phone",kanji:"信",jp:"電話・通信",pt:"Telefone e Internet",items:[
+ {id:"phone",icon:"📱",pt:"Telefone e Internet",desc:"Telefone, internet, chip e carregador.",items:[
    ["電話番号を教えてもらえますか?","Denwa bangō o oshiete moraemasu ka?","Pode me dar seu número de telefone?"],
    ["もう一度言ってもらえますか?","Mō ichido itte moraemasu ka?","Pode repetir, por favor?"],
    ["ゆっくり話してもらえますか?","Yukkuri hanashite moraemasu ka?","Pode falar mais devagar?"],
@@ -420,7 +418,7 @@ const CATS = [
    ["電波がありません","Denpa ga arimasen","Não tenho sinal"],
    ["後でかけ直します","Atode kakenaoshimasu","Vou ligar de volta mais tarde"]
  ]},
- {id:"numbers",kanji:"数",jp:"数・時間・別れ",pt:"Números e Despedidas",items:[
+ {id:"numbers",icon:"🕒",pt:"Números e Despedidas",desc:"Horas, quantidades e despedidas do dia a dia.",items:[
    ["今何時ですか?","Ima nanji desu ka?","Que horas são agora?"],
    ["一つください","Hitotsu kudasai","Um, por favor"],
    ["二つお願いします","Futatsu onegaishimasu","Dois, por favor"],
@@ -553,10 +551,9 @@ function renderSidebar(){
   CATS.forEach(cat=>{
     const active = !searching && state.view === cat.id;
     html += `<button class="cat-btn ${active?'active':''}" data-cat="${cat.id}">
-      <span class="cat-kanji">${cat.kanji}</span>
+      <span class="cat-icon">${cat.icon}</span>
       <span class="cat-label">
-        <span class="cat-jp">${cat.jp}</span>
-        <span class="cat-pt">${escapeHtml(cat.pt)}</span>
+        <span class="cat-name">${escapeHtml(cat.pt)}</span>
       </span>
       <span class="cat-count">${cat.items.length}</span>
     </button>`;
@@ -564,10 +561,9 @@ function renderSidebar(){
   html += `<div class="sidebar-divider"></div>`;
   const favActive = !searching && state.view === 'fav';
   html += `<button class="cat-btn ${favActive?'active':''}" data-cat="fav">
-    <span class="cat-kanji">推</span>
+    <span class="cat-icon">⭐</span>
     <span class="cat-label">
-      <span class="cat-jp">推し</span>
-      <span class="cat-pt">Favoritos</span>
+      <span class="cat-name">Favoritos</span>
     </span>
     <span class="cat-count">${favorites.size}</span>
   </button>`;
@@ -577,7 +573,7 @@ function renderSidebar(){
 function cardHtml(key, jp, romaji, pt, tag){
   const isFav = favorites.has(key);
   return `<div class="card" data-key="${key}" data-jp="${escapeHtml(jp)}">
-    <button class="stamp-btn" aria-label="Ouvir em japonês" title="Ouvir">音</button>
+    <button class="stamp-btn" aria-label="Ouvir em japonês" title="Ouvir">🔊</button>
     <div class="card-text">
       ${tag ? `<span class="cat-tag">${escapeHtml(tag)}</span>` : ""}
       <p class="jp" lang="ja">${escapeHtml(jp)}</p>
@@ -588,10 +584,10 @@ function cardHtml(key, jp, romaji, pt, tag){
   </div>`;
 }
 
-function panelHeaderHtml(kanji, title, subtitle, showPlayAll){
+function panelHeaderHtml(icon, title, subtitle, showPlayAll){
   return `<div class="panel-header">
     <div class="panel-title">
-      <span class="panel-kanji">${kanji}</span>
+      <span class="panel-icon">${icon}</span>
       <div>
         <h2>${title}</h2>
         <p>${subtitle}</p>
@@ -628,10 +624,10 @@ function render(){
         }
       });
     });
-    let html = panelHeaderHtml('検', `Resultados para “${escapeHtml(query)}”`, `${results.length} frase(s) encontrada(s)`, results.length>0);
+    let html = panelHeaderHtml('🔍', `Resultados para “${escapeHtml(query)}”`, `${results.length} frase(s) encontrada(s)`, results.length>0);
     if(results.length === 0){
       html += `<div class="empty-state">
-        <span class="empty-kanji">無</span>
+        <span class="empty-icon">🤔</span>
         <p>Nenhuma frase encontrada para “${escapeHtml(query)}”. Tente outro termo, em japonês, romaji ou português.</p>
       </div>`;
     } else {
@@ -650,10 +646,10 @@ function render(){
         if(favorites.has(key)) favList.push({key, jp, romaji, pt, tag:cat.pt});
       });
     });
-    let html = panelHeaderHtml('推', '推し · Favoritos', `${favList.length} frase(s) guardada(s)`, favList.length>0);
+    let html = panelHeaderHtml('⭐', 'Favoritos', `${favList.length} frase(s) guardada(s)`, favList.length>0);
     if(favList.length === 0){
       html += `<div class="empty-state">
-        <span class="empty-kanji">推</span>
+        <span class="empty-icon">⭐</span>
         <p>Você ainda não marcou frases como favoritas. Toque na estrela ☆ de qualquer frase para guardá-la aqui.</p>
       </div>`;
     } else {
@@ -668,7 +664,7 @@ function render(){
   }
 
   const cat = CATS.find(c=>c.id===state.view) || CATS[0];
-  let html = panelHeaderHtml(cat.kanji, cat.jp, cat.pt, cat.items.length>0);
+  let html = panelHeaderHtml(cat.icon, cat.pt, cat.desc, cat.items.length>0);
   cat.items.forEach(([jp, romaji, pt], idx)=>{
     html += cardHtml(`${cat.id}-${idx}`, jp, romaji, pt, null);
   });
