@@ -10,30 +10,30 @@
 <body>
 
   <div class="bg" id="bg"></div>
+  <div class="overlay"></div>
 
   <div class="app">
 
-    <div class="top">
-      <input id="city" placeholder="Buscar cidade..." />
-      <button onclick="searchCity()">Buscar</button>
+    <div class="topbar">
+      <input id="city" placeholder="Buscar cidade" />
+      <button onclick="searchCity()">+</button>
     </div>
 
-    <div class="main-card">
+    <div class="location" id="location">Minha Localização</div>
 
-      <div id="location" class="location">—</div>
-
-      <div id="icon" class="icon">⛅</div>
-
-      <div id="temp" class="temp">--°</div>
-
-      <div id="desc" class="desc">Carregando clima...</div>
-
-      <div class="extra">
-        <div>💨 <span id="wind">--</span> km/h</div>
-        <div>💧 <span id="humidity">--</span>%</div>
-      </div>
-
+    <div class="main">
+      <div class="temp" id="temp">--°</div>
+      <div class="icon" id="icon">⛅</div>
     </div>
+
+    <div class="desc" id="desc">Carregando clima...</div>
+
+    <div class="meta">
+      <div>Vento <span id="wind">--</span> km/h</div>
+      <div>Umidade <span id="humidity">--</span>%</div>
+    </div>
+
+    <div class="divider"></div>
 
     <div class="forecast" id="forecast"></div>
 
