@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blackjack 21</title>
+
+<style>
+body {
+  margin: 0;
+  background: #0b0f14;
+  color: white;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+h1 {
+  margin: 15px;
+}
+
+.box {
+  width: 90%;
+  max-width: 400px;
+  background: #111827;
+  padding: 15px;
+  border-radius: 12px;
+  margin-top: 10px;
+}
+
+.cards {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.card {
+  width: 50px;
+  height: 70px;
+  background: white;
+  color: black;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.buttons {
+  margin-top: 15px;
+  display: flex;
+  gap: 10px;
+}
+
+button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.hit { background: #22c55e; }
+.stand { background: #ef4444; color: white; }
+.reset { background: #3b82f6; color: white; }
+
+.result {
+  margin-top: 10px;
+  font-size: 18px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🃏 Blackjack 21</h1>
+
+<div class="box">
+  <h3>🎮 Jogador (<span id="playerScore">0</span>)</h3>
+  <div class="cards" id="playerCards"></div>
+</div>
+
+<div class="box">
+  <h3>🤖 Dealer (<span id="dealerScore">0</span>)</h3>
+  <div class="cards" id="dealerCards"></div>
+</div>
+
+<div class="buttons">
+  <button class="hit" onclick="hit()">Pedir Carta</button>
+  <button class="stand" onclick="stand()">Parar</button>
+  <button class="reset" onclick="reset()">Reiniciar</button>
+</div>
+
+<div class="result" id="result"></div>
+
+<script>
+let deck = [];
+let player = [];
+let dealer = [];
+let gameOver = false;
+
+function createDeck() {
+  const values = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
+  deck = [];
+
+  for (let v of values) {
+    for (let i = 0; i < 4; i++) deck.push(v);
+  }
+
+  deck.sort(() => Math.random() - 0.5);
+}
+
+function getValue(card) {
+  if (card === "A") return 11;
+  if (["J","Q","K"].includes(card)) return 10;
+  return parseInt(card);
+}
+
+function calcScore(hand) {
+  let score = 0;
+  let aces = 0;
+
+  for (let c of hand) {
+    score += getValue(c);
+    if (c === "A") aces++;
+  }
+
+  while (score > 21 && aces > 0) {
+    score -= 10;
+    aces--;
+  }
+
+  return score;
+}
+
+function render() {
+  const pc = document.getElementById("playerCards");
+  const dc = document.getElementById("dealerCards");
+
+  pc.innerHTML = "";
+  dc.innerHTML = "";
+
+  player.forEach(c => pc.appendChild(makeCard(c)));
+  dealer.forEach(c => dc.appendChild(makeCard(c)));
+
+  document.getElementById("playerScore").textContent = calcScore(player);
+  document.getElementById("dealerScore").textContent = calcScore(dealer);
+}
+
+function makeCard(text) {
+  const div = document.createElement("div");
+  div.className = "card";
+  div.textContent = text;
+  return div;
+}
+
+function hit() {
+  if (gameOver) return;
+  player.push(deck.pop());
+  render();
+
+  if (calcScore(player) > 21) {
+    endGame("💥 Você perdeu! Estourou 21");
+  }
+}
+
+function stand() {
+  if (gameOver) return;
+
+  while (calcScore(dealer) < 17) {
+    dealer.push(deck.pop());
+  }
+
+  let p = calcScore(player);
+  let d = calcScore(dealer);
+
+  if (d > 21 || p > d) endGame("🎉 Você venceu!");
+  else if (p < d) endGame("😢 Dealer venceu!");
+  else endGame("🤝 Empate!");
+}
+
+function endGame(msg) {
+  gameOver = true;
+  document.getElementById("result").textContent = msg;
+}
+
+function reset() {
+  createDeck();
+  player = [deck.pop(), deck.pop()];
+  dealer = [deck.pop(), deck.pop()];
+  gameOver = false;
+  document.getElementById("result").textContent = "";
+  render();
+}
+
+reset();
+</script>
+
+</body>
+</html>
