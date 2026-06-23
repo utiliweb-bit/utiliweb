@@ -3,38 +3,39 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>UtiliWeb Weather Pro</title>
+  <title>UtiliWeb Weather</title>
   <link rel="stylesheet" href="style.css"/>
 </head>
 
 <body>
 
-  <div class="container">
+  <div class="bg" id="bg"></div>
 
-    <div class="card">
+  <div class="app">
 
-      <h1>🌍 UtiliWeb Weather</h1>
+    <div class="top">
+      <input id="city" placeholder="Buscar cidade..." />
+      <button onclick="searchCity()">Buscar</button>
+    </div>
 
-      <div class="search">
-        <input id="cityInput" placeholder="Digite uma cidade..." />
-        <button onclick="searchCity()">Buscar</button>
+    <div class="main-card">
+
+      <div id="location" class="location">—</div>
+
+      <div id="icon" class="icon">⛅</div>
+
+      <div id="temp" class="temp">--°</div>
+
+      <div id="desc" class="desc">Carregando clima...</div>
+
+      <div class="extra">
+        <div>💨 <span id="wind">--</span> km/h</div>
+        <div>💧 <span id="humidity">--</span>%</div>
       </div>
-
-      <div class="main-weather">
-        <div id="icon">⛅</div>
-        <div id="temp">--°C</div>
-        <div id="desc">Carregando...</div>
-      </div>
-
-      <div class="info">
-        <div>💨 Vento: <span id="wind">--</span></div>
-        <div>💧 Umidade: <span id="humidity">--</span></div>
-      </div>
-
-      <h2>📅 7 dias</h2>
-      <div id="forecast" class="forecast"></div>
 
     </div>
+
+    <div class="forecast" id="forecast"></div>
 
   </div>
 
