@@ -18,41 +18,17 @@
     }
 
     .gw { max-width: 380px; width: 100%; }
+    .gt { text-align: center; font-size: 20px; font-weight: 500; margin-bottom: 4px; }
+    .gs { text-align: center; font-size: 12px; color: #666; margin-bottom: 1rem; }
 
-    .gt {
-      text-align: center;
-      font-size: 20px;
-      font-weight: 500;
-      margin-bottom: 4px;
-    }
-
-    .gs {
-      text-align: center;
-      font-size: 12px;
-      color: #666;
-      margin-bottom: 1rem;
-    }
-
-    .board {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      align-items: center;
-      margin-bottom: 1rem;
-    }
-
+    .board { display: flex; flex-direction: column; gap: 5px; align-items: center; margin-bottom: 1rem; }
     .row { display: flex; gap: 5px; }
 
     .cell {
-      width: 52px;
-      height: 52px;
-      border: 2px solid #ccc;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      font-weight: 500;
+      width: 52px; height: 52px;
+      border: 2px solid #ccc; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; font-weight: 500;
       background: #fff;
       transition: background .2s, border-color .2s, color .2s;
       user-select: none;
@@ -60,86 +36,49 @@
 
     .cell.filled  { border-color: #888; }
     .cell.correct { background: #27500A !important; border-color: #27500A !important; color: #EAF3DE !important; }
-    .cell.present { background: #BA7517 !important; border-color: #BA7517 !important; color: #FAEEDA !important; }
+    .cell.present { background: #EF9F27 !important; border-color: #EF9F27 !important; color: #412402 !important; }
     .cell.absent  { background: #888780 !important; border-color: #888780 !important; color: #F1EFE8 !important; }
 
-    .keyboard {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      align-items: center;
-    }
-
+    .keyboard { display: flex; flex-direction: column; gap: 4px; align-items: center; }
     .kb-row { display: flex; gap: 3px; }
 
     .key {
-      width: 28px;
-      height: 42px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      background: #e8e8e6;
-      color: #1a1a18;
-      font-size: 11px;
-      font-weight: 500;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: inherit;
-      transition: background .1s;
-      flex-shrink: 0;
+      width: 28px; height: 42px; padding: 0 2px;
+      border: 1px solid #ccc; border-radius: 6px;
+      background: #e8e8e6; color: #1a1a18;
+      font-size: 11px; font-weight: 500;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      font-family: inherit; transition: background .1s; flex-shrink: 0;
     }
 
     .key:hover   { background: #d8d8d6; }
     .key.correct { background: #27500A; border-color: #27500A; color: #EAF3DE; }
-    .key.present { background: #BA7517; border-color: #BA7517; color: #FAEEDA; }
+    .key.present { background: #EF9F27; border-color: #EF9F27; color: #412402; }
     .key.absent  { background: #888780; border-color: #888780; color: #F1EFE8; }
     .key.wide    { width: 44px; font-size: 10px; }
 
-    .msg {
-      text-align: center;
-      font-size: 13px;
-      font-weight: 500;
-      min-height: 20px;
-      margin-bottom: 6px;
-    }
+    .msg { text-align: center; font-size: 13px; font-weight: 500; min-height: 20px; margin-bottom: 6px; }
 
-    .legend {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      font-size: 11px;
-      color: #666;
-      margin-bottom: 10px;
-    }
-
+    .legend { display: flex; justify-content: center; gap: 12px; font-size: 11px; color: #666; margin-bottom: 10px; }
     .leg { display: flex; align-items: center; gap: 4px; }
-
     .dot { width: 11px; height: 11px; border-radius: 3px; }
 
     .btn-row { display: flex; justify-content: center; margin-top: 10px; }
-
     .btn-new {
-      width: 130px;
-      height: 40px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      background: #fff;
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      font-family: inherit;
+      width: 130px; height: 40px;
+      border: 1px solid #ccc; border-radius: 8px;
+      background: #fff; font-size: 13px; font-weight: 500;
+      cursor: pointer; font-family: inherit;
     }
-
     .btn-new:hover { background: #f0f0ee; }
 
     @media (prefers-color-scheme: dark) {
-      body       { background: #1a1a18; color: #f0f0ee; }
-      .cell      { background: #2a2a28; border-color: #555; color: #f0f0ee; }
+      body        { background: #1a1a18; color: #f0f0ee; }
+      .cell       { background: #2a2a28; border-color: #555; color: #f0f0ee; }
       .cell.filled { border-color: #aaa; }
-      .key       { background: #3a3a38; border-color: #555; color: #f0f0ee; }
-      .key:hover { background: #4a4a48; }
-      .btn-new   { background: #2a2a28; border-color: #555; color: #f0f0ee; }
+      .key        { background: #3a3a38; border-color: #555; color: #f0f0ee; }
+      .key:hover  { background: #4a4a48; }
+      .btn-new    { background: #2a2a28; border-color: #555; color: #f0f0ee; }
       .btn-new:hover { background: #3a3a38; }
       .gs, .legend { color: #aaa; }
     }
@@ -152,7 +91,7 @@
   <div class="msg" id="msg"></div>
   <div class="legend">
     <span class="leg"><span class="dot" style="background:#27500A"></span>certa</span>
-    <span class="leg"><span class="dot" style="background:#BA7517"></span>errada</span>
+    <span class="leg"><span class="dot" style="background:#EF9F27"></span>errada</span>
     <span class="leg"><span class="dot" style="background:#888780"></span>ausente</span>
   </div>
   <div class="board" id="board"></div>
@@ -162,17 +101,44 @@
 
 <script>
 const WORDS = [
-  "ABRIR","BANCO","BAIXO","BEBER","CALOR","CAMPO","CAPAZ","CARGO","CARNE","CARRO",
-  "CARTA","CHUVA","CINCO","COLAR","DANCE","DIGNO","DORSO","DUPLO","ERRAR","FALAR",
-  "FARDO","FERRO","FINCA","FIRMA","FLOCO","FORTE","GEADA","GENTE","GRUPO","IDEAL",
-  "JUNTO","LARGO","LEVAR","LIGAR","LIMPO","LINDA","LIVRE","LUGAR","LUTAR","MANGA",
-  "MARCA","MILHO","MOEDA","MUNDO","NOBRE","NOITE","NUVEM","OLHAR","ORDEM","OUTRO",
-  "PAGAR","PAPEL","PEDIR","PEDRA","PERTO","PILHA","PODER","PORTA","POUCO","PRAZO",
-  "PRESO","PROVA","PULAR","QUEDA","REGAR","REZAR","RINDO","RISOS","ROLAR","ROMBO",
-  "ROUPA","RUIDO","SABOR","SALVO","SAUDE","SINAL","SOBRE","SOLAR","SORTE","SUAVE",
-  "SUMIR","TARDE","TERRA","TIRAR","TOCAR","TOMAR","TOURO","TROCA","USUAL","VALOR",
-  "VERDE","VIRAR","VIRIL","VISTA","VOTAR"
-];
+  "ABRIR","ABRIL","ACASO","ACENO","ACESO","ADEUS","ADIAR","AGORA","AGUDO","AINDA",
+  "AJUDA","ALADO","ALTAR","AMADO","AMENO","AMIGA","AMIGO","AMORA","AMPLO","ANDAR",
+  "ANIMO","ANTES","ANZOL","APITO","ARAME","ARDOR","ARENA","ARMAR","ARROZ","ARTES",
+  "ASSAR","ASTRO","ATADO","ATIVO","ATROZ","ATUAR","AUDAZ","AVARO","AVEIA","AVISO",
+  "AZEDO","BANCO","BAIXO","BALAR","BANDO","BANHA","BANHO","BARBA","BARCA","BARRO",
+  "BATER","BEBER","BEIJO","BISPO","BLOCO","BOCAL","BOLSA","BOMBA","BORDO","BRASA",
+  "BRAVO","BREVE","BRISA","BROTO","BURRO","BUSTO","CABRA","CACAU","CALMA","CALOR",
+  "CAMPO","CANAL","CAPAZ","CARGO","CARNE","CARRO","CARTA","CASCA","CAULE","CAUSA",
+  "CAVAR","CEDER","CERTO","CHAMA","CHAVE","CHEIA","CHEIO","CHORO","CHUVA","CINCO",
+  "CINZA","CIRCO","CISNE","CITAR","CLARO","COBRA","COLAR","COMBO","COMUM","CONDE",
+  "CONTO","CORAL","CORPO","CORTE","CORVO","COSTA","COURO","COUVE","COZER","CRISE",
+  "CRUEL","CUNHA","CURTO","CURVA","DANCE","DARDO","DENSO","DIGNO","DISCO","DITAR",
+  "DOBRA","DOGMA","DORSO","DUETO","DUPLO","DURAR","EBANO","ERETO","ERGUE","ERRAR",
+  "ETAPA","ETNIA","EXTRA","FACIL","FALAR","FALHA","FALSO","FARDO","FARSA","FAVOR",
+  "FEBRE","FEITO","FELIZ","FEROZ","FERRO","FESTA","FICAR","FINCA","FIRMA","FIXAR",
+  "FLOCO","FLUIR","FONTE","FORTE","FOSCO","FOSSO","FRACO","FRADE","FREVO","FRUTO",
+  "FUGIR","FUMAR","FUNDO","FUNIL","FURTO","FUZIL","GARFO","GEADA","GEMER","GENTE",
+  "GESSO","GINGA","GLOBO","GOLPE","GORDO","GRAMA","GRILO","GRUPO","HUMOR","IDEAL",
+  "IGUAL","IMPAR","INATO","IRADO","ISOLA","JUNTO","JURAR","LADRO","LAICO","LAMPO",
+  "LANCA","LAPSO","LARGO","LARVA","LASER","LAVAR","LAZER","LEBRE","LEIGO","LENCO",
+  "LEQUE","LEVAR","LIGAR","LIMBO","LIMPA","LIMPO","LINDA","LIRIO","LIVRE","LOUCO",
+  "LUGAR","LUNAR","LUTAR","MACRO","MAGIA","MAGRO","MALHA","MANGA","MANSO","MANTO",
+  "MARCA","MARCO","MASSA","MELRO","MEXER","MILHO","MISTO","MIUDO","MOEDA","MOLDE",
+  "MOLHO","MONGE","MONTE","MORAL","MOSCA","MUNDO","MURRO","MUSGO","NADAR","NARIZ",
+  "NAVIO","NOBRE","NOITE","NORMA","NUVEM","OLHAR","ORDEM","OUTRO","PAGAR","PAPEL",
+  "PARAR","PARDO","PARVO","PASTA","PAUSA","PEDIR","PEDRA","PEGAR","PERTO","PICAR",
+  "PILHA","PINGO","PISTA","PLANO","PLENO","PODER","POEMA","POLVO","POMAR","POMBO",
+  "PORTA","POUCO","PRAZO","PREGO","PRESO","PRIMA","PROVA","PUDOR","PULAR","PULGA",
+  "PULSO","PURGA","QUASE","QUEDA","QUOTA","RAIVA","RAMAL","RAMPA","RAPAZ","RASGO",
+  "RASPA","RAZAO","REDOR","REGAR","REINO","REMAR","REZAR","RINDO","RISOS","RIVAL",
+  "ROLAR","ROMBO","ROUPA","RUIDO","RUMOR","SABOR","SACAR","SALMO","SALTO","SALVA",
+  "SALVO","SAQUE","SARAR","SAUDE","SINAL","SOBRE","SOFRE","SOLAR","SONHO","SOPRO",
+  "SORTE","SUBIR","SUAVE","SUMIR","SURDO","TALCO","TALHA","TANGO","TARDE","TARSO",
+  "TELHA","TENAZ","TENDA","TENSO","TERRA","TIRAR","TOCAR","TOLDO","TOMAR","TOMBO",
+  "TOURO","TRAPO","TREVO","TROCA","TROMP","TUMBA","TUNEL","TURBO","TURNO","USUAL",
+  "VALOR","VALSA","VAPOR","VEADO","VERDE","VERSO","VIGOR","VIRAR","VIRIL","VISTA",
+  "VITAL","VOLTA","VOTAR","VULTO","XEQUE","ZEBRA","ZINCO"
+].filter(w => w.length === 5);
 
 let target, guesses, current, done;
 
@@ -250,17 +216,17 @@ function handleKey(k) {
     guesses.push({ word: current, colors });
     const won = colors.every(c => c === "correct");
     current = ""; renderBoard(); renderKeyboard();
-    if (won)                 { msg.textContent = "Parabéns! Você acertou!"; done = true; }
+    if (won)                      { msg.textContent = "Parabéns! Você acertou!"; done = true; }
     else if (guesses.length === 6) { msg.textContent = "Era: " + target; done = true; }
-    else                     { msg.textContent = ""; }
+    else                           { msg.textContent = ""; }
   } else if (/^[a-zA-Z]$/.test(k)) {
     if (current.length < 5) { current += k.toUpperCase(); renderBoard(); }
   }
 }
 
 document.addEventListener("keydown", e => {
-  if (e.key === "Backspace")  handleKey("Backspace");
-  else if (e.key === "Enter") handleKey("Enter");
+  if (e.key === "Backspace")   handleKey("Backspace");
+  else if (e.key === "Enter")  handleKey("Enter");
   else if (e.key.length === 1) handleKey(e.key);
 });
 
