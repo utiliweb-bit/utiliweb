@@ -769,27 +769,78 @@ function aoDetectar(valor, formato, origem){
 
 
 function mostrarResultado(boxId, typeId, valId, actionsId, timeId, tipo, icon, valor, isUrl, hora){
+
     const box = document.getElementById(boxId);
+
     box.classList.add('show');
-    document.getElementById(typeId).textContent = `${icon} ${tipo}`;
-    if(timeId && hora) document.getElementById(timeId).textContent = hora;
+
+    document.getElementById(typeId).textContent =
+        `${icon} ${tipo}`;
+
+    if(timeId && hora){
+        document.getElementById(timeId).textContent = hora;
+    }
 
     const valEl = document.getElementById(valId);
-    valEl.textContent = valor;
-    valEl.className = 'result-value' + (valor.length > 60 ? ' is-long' : '');
 
-    const actionsEl = document.getElementById(actionsId);
-    actionsEl.innerHTML = `
-        <button class="btn-result" onclick="copiarTexto('${esc(valor)}')">📋 Copiar</button>
-        ${isUrl ? `<button class="btn-result primary" onclick="abrirLink('${esc(valor)}')">🔗 Abrir</button>` : ''}
-        <button class="btn-result" onclick="compartilhar('${esc(valor)}')">📤 Enviar</button>
-    `;
-    if(!isUrl){
-        // Preenche 3 colunas uniformes
-        actionsEl.style.gridTemplateColumns = '1fr 1fr';
-    } else {
-        actionsEl.style.gridTemplateColumns = '1fr 1fr 1fr';
+    valEl.textContent = valor;
+
+    valEl.className =
+        'result-value' +
+        (valor.length > 60 ? ' is-long' : '');
+
+    const actionsEl =
+        document.getElementById(actionsId);
+
+    actionsEl.innerHTML = '';
+
+    // Copiar
+    const btnCopiar =
+        document.createElement('button');
+
+    btnCopiar.className =
+        'btn-result';
+
+    btnCopiar.textContent =
+        '📋 Copiar';
+
+    btnCopiar.onclick =
+        () => copiarTexto(valor);
+
+    actionsEl.appendChild(btnCopiar);
+
+    // Abrir
+    if(isUrl){
+
+        const btnAbrir =
+            document.createElement('button');
+
+        btnAbrir.className =
+            'btn-result primary';
+
+        btnAbrir.textContent =
+            '🔗 Abrir';
+
+        btnAbrir.onclick =
+            () => abrirLink(valor);
+
+        actionsEl.appendChild(btnAbrir);
     }
+
+    // Compartilhar
+    const btnEnviar =
+        document.createElement('button');
+
+    btnEnviar.className =
+        'btn-result';
+
+    btnEnviar.textContent =
+        '📤 Enviar';
+
+    btnEnviar.onclick =
+        () => compartilhar(valor);
+
+    actionsEl.appendChild(btnEnviar);
 }
 
 function esc(s){ return s.replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
