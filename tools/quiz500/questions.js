@@ -158,14 +158,18 @@ e:"A escrita cuneiforme surgiu na Mesopotâmia."
 },
 
 {
+{
 q:"Quem foi o líder sul-africano que lutou contra o apartheid?",
-o:["Martin Luther King","Mahatma Gandhi","Desmond Tutu","Nelson Mandela"],
+o:[
+"Martin Luther King",
+"Mahatma Gandhi",
+"Desmond Tutu",
+"Nelson Mandela"
+],
 a:3,
 d:"Fácil",
 e:"Nelson Mandela se tornou presidente da África do Sul em 1994."
-}
-
-]
+},
 
 {
 q:"Qual evento marcou o início da Primeira Guerra Mundial?",
