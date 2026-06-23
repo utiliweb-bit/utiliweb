@@ -5,6 +5,7 @@ body {
   overflow-x: hidden;
 }
 
+/* BACKGROUND */
 #bg {
   position: fixed;
   inset: 0;
@@ -12,6 +13,7 @@ body {
   transition: 1.2s ease;
 }
 
+/* FX CANVAS */
 #fx {
   position: fixed;
   inset: 0;
@@ -19,16 +21,18 @@ body {
   pointer-events: none;
 }
 
+/* APP CONTAINER */
 .app {
   max-width: 420px;
   margin: auto;
-  padding: 20px;
+  padding: 22px;
 }
 
-/* INPUT */
+/* SEARCH BAR */
 .top {
   display: flex;
   gap: 8px;
+  margin-bottom: 10px;
 }
 
 input {
@@ -38,6 +42,8 @@ input {
   border: none;
   background: rgba(255,255,255,0.15);
   color: white;
+  outline: none;
+  backdrop-filter: blur(10px);
 }
 
 button {
@@ -46,34 +52,46 @@ button {
   border: none;
   background: rgba(255,255,255,0.15);
   color: white;
+  cursor: pointer;
 }
 
-/* TEXT */
+/* LOCATION */
 .location {
-  margin-top: 12px;
   opacity: 0.7;
+  margin-bottom: 14px;
+  transition: 0.3s ease;
 }
 
+/* MAIN WEATHER ROW */
 .main {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-end; /* 🔥 fix alinhamento Apple */
+  margin-bottom: 8px;
 }
 
+/* TEMPERATURE */
 .temp {
-  font-size: 84px;
+  font-size: 86px;
   font-weight: 200;
+  line-height: 1;
+  transform: translateY(4px); /* 🔥 evita “subida” visual */
+  transition: 0.3s ease;
 }
 
+/* ICON */
 .icon {
-  font-size: 54px;
+  font-size: 56px;
+  margin-bottom: 6px;
 }
 
+/* DESCRIPTION */
 .desc {
   opacity: 0.7;
+  margin-bottom: 10px;
 }
 
-/* META */
+/* META INFO */
 .meta {
   display: flex;
   justify-content: space-between;
@@ -81,51 +99,53 @@ button {
   opacity: 0.8;
 }
 
+/* DIVIDER */
 .divider {
   height: 1px;
   background: rgba(255,255,255,0.2);
   margin: 16px 0;
 }
 
-/* SECTIONS */
+/* SECTION TITLES */
 .section-title {
   font-size: 13px;
   opacity: 0.7;
-  margin: 12px 0;
+  margin: 10px 0;
 }
 
-/* HOURLY */
-.hourly, .forecast {
+/* FORECAST + HOURLY */
+.forecast, .hourly {
   display: flex;
   gap: 10px;
   overflow-x: auto;
+  padding-bottom: 8px;
 }
 
-.hour, .day {
+/* CARDS */
+.day, .hour {
   min-width: 70px;
   padding: 10px;
   border-radius: 16px;
   background: rgba(255,255,255,0.12);
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(14px);
   text-align: center;
 }
 
-/* SHIMMER LOADING */
+/* SHIMMER (AGORA CONTROLADO) */
 .shimmer {
-  background: linear-gradient(90deg,#ffffff22,#ffffff44,#ffffff22);
+  background: linear-gradient(90deg, rgba(255,255,255,0.08), rgba(255,255,255,0.18), rgba(255,255,255,0.08));
   background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-  border-radius: 10px;
+  animation: shimmer 1.4s infinite;
 }
 
 @keyframes shimmer {
-  0% {background-position: -200% 0;}
-  100% {background-position: 200% 0;}
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
-/* CHART */
-canvas {
-  width: 100%;
-  height: 100px;
-  margin-bottom: 10px;
+/* MOBILE FIX */
+@media (max-width: 420px) {
+  .temp {
+    font-size: 72px;
+  }
 }
