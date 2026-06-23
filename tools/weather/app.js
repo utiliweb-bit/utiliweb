@@ -12,115 +12,179 @@ const icons = {
   95: "⛈️"
 };
 
-window.addEventListener("load", start);
+window.addEventListener("load", () => {
+  startApp();
+});
 
-function start() {
-  navigator.geolocation?.getCurrentPosition(
-    p => loadWeather(p.coords.latitude, p.coords.longitude, "Sua localização"),
-    () => loadWeather(35.6762,139.6503,"Tóquio")
+// 🚀 START ROBUSTO (NUNCA TRAVA)
+function startApp() {
+  const timeout = setTimeout(() => {
+    fallback();
+  }, 6000);
+
+  if (!navigator.geolocation) {
+    clearTimeout(timeout);
+    fallback();
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      clearTimeout(timeout);
+      loadWeather(pos.coords.latitude, pos.coords.longitude, "Sua localização");
+    },
+    () => {
+      clearTimeout(timeout);
+      fallback();
+    },
+    { timeout: 5000 }
   );
 }
 
-// 🌦️ WEATHER CORE
+// 🔁 fallback garantido
+function fallback() {
+  loadWeather(35.6762, 139.6503, "Tóquio (padrão)");
+}
+
+// 🌦️ WEATHER CORE (BLINDADO)
 async function loadWeather(lat, lon, label) {
-  const url =
-    `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
-    `&current=temperature_2m,wind_speed_10m,relative_humidity_2m,weather_code` +
-    `&hourly=temperature_2m,weather_code` +
-    `&daily=temperature_2m_max,temperature_2m_min,weather_code` +
-    `&timezone=auto`;
+  const locationEl = document.getElementById("location");
+  const descEl = document.getElementById("desc");
 
-  const res = await fetch(url);
-  const d = await res.json();
+  locationEl.innerText = "Carregando...";
+  descEl.innerText = "Atualizando clima...";
 
-  const c = d.current;
+  try {
+    const url =
+      `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
+      `&current=temperature_2m,wind_speed_10m,relative_humidity_2m,weather_code` +
+      `&hourly=temperature_2m,weather_code` +
+      `&daily=temperature_2m_max,temperature_2m_min,weather_code` +
+      `&timezone=auto`;
 
-  document.getElementById("location").innerText = label;
-  document.getElementById("temp").innerText = Math.round(c.temperature_2m)+"°";
-  document.getElementById("wind").innerText = c.wind_speed_10m;
-  document.getElementById("humidity").innerText = c.relative_humidity_2m;
-  document.getElementById("icon").innerText = icons[c.weather_code]||"🌡️";
+    const res = await fetch(url);
 
-  setBackground(c.weather_code);
-  renderChart(d.hourly);
-  renderHourly(d.hourly);
-  renderForecast(d.daily);
-}
+    if (!res.ok) throw new Error("API error");
 
-// 🎨 BACKGROUND PRO
-function setBackground(code){
-  const bg=document.getElementById("bg");
+    const data = await res.json();
+    if (!data.current) throw new Error("Invalid data");
 
-  if(code<=1) bg.style.background="linear-gradient(180deg,#0f3d91,#1e6091,#52b69a)";
-  else if(code<=3) bg.style.background="linear-gradient(180deg,#2b2d42,#5c677d)";
-  else bg.style.background="linear-gradient(180deg,#0b1320,#1b263b,#415a77)";
-}
+    const c = data.current;
 
-// 📊 GRAPH (Apple style line)
-function renderChart(hourly){
-  const c=document.getElementById("chart");
-  const ctx=c.getContext("2d");
+    locationEl.innerText = label;
 
-  c.width=400;
-  c.height=100;
+    document.getElementById("temp").innerText =
+      Math.round(c.temperature_2m) + "°";
 
-  ctx.clearRect(0,0,c.width,c.height);
+    document.getElementById("wind").innerText =
+      c.wind_speed_10m ?? "--";
 
-  ctx.strokeStyle="white";
-  ctx.beginPath();
+    document.getElementById("humidity").innerText =
+      c.relative_humidity_2m ?? "--";
 
-  for(let i=0;i<24;i++){
-    let x=i*16;
-    let y=100-hourly.temperature_2m[i]*2;
+    document.getElementById("icon").innerText =
+      icons[c.weather_code] || "🌡️";
 
-    if(i===0) ctx.moveTo(x,y);
-    else ctx.lineTo(x,y);
-  }
+    descEl.innerText = "Atualizado agora";
 
-  ctx.stroke();
-}
+    setBackground(c.weather_code);
 
-// ⏱️ HOURLY
-function renderHourly(h){
-  const box=document.getElementById("hourly");
-  box.innerHTML="";
+    renderForecast(data.daily);
+    renderHourly(data.hourly);
 
-  for(let i=0;i<48;i++){
-    let hr=new Date(h.time[i]).getHours();
+  } catch (err) {
+    console.error("Weather error:", err);
 
-    box.innerHTML+=`
-      <div class="hour">
-        <div>${hr}:00</div>
-        <div>${icons[h.weather_code[i]]||"⛅"}</div>
-        <div>${Math.round(h.temperature_2m[i])}°</div>
-      </div>`;
+    locationEl.innerText = label;
+    descEl.innerText = "Falha ao carregar clima";
+
+    document.getElementById("temp").innerText = "--°";
+    document.getElementById("wind").innerText = "--";
+    document.getElementById("humidity").innerText = "--";
+    document.getElementById("icon").innerText = "⚠️";
+
+    // tenta recuperar sozinho
+    setTimeout(() => {
+      fallback();
+    }, 4000);
   }
 }
 
-// 📅 DAILY
-function renderForecast(d){
-  const box=document.getElementById("forecast");
-  box.innerHTML="";
+// 🎨 BACKGROUND DINÂMICO
+function setBackground(code) {
+  const bg = document.getElementById("bg");
 
-  d.time.forEach((t,i)=>{
-    box.innerHTML+=`
+  if (code === 0 || code === 1) {
+    bg.style.background = "linear-gradient(180deg,#0f3d91,#1e6091,#52b69a)";
+  } else if (code === 2 || code === 3) {
+    bg.style.background = "linear-gradient(180deg,#2b2d42,#5c677d,#7d8597)";
+  } else if (code >= 51 && code <= 82) {
+    bg.style.background = "linear-gradient(180deg,#0f172a,#1e293b,#334155)";
+  } else {
+    bg.style.background = "linear-gradient(180deg,#020617,#0f172a,#1e293b)";
+  }
+}
+
+// 📅 FORECAST (7 dias)
+function renderForecast(daily) {
+  const box = document.getElementById("forecast");
+  box.innerHTML = "";
+
+  if (!daily) return;
+
+  for (let i = 0; i < daily.time.length; i++) {
+    box.innerHTML += `
       <div class="day">
-        <div>${new Date(t).getDate()}</div>
-        <div>${icons[d.weather_code[i]]||"⛅"}</div>
-        <div>${Math.round(d.temperature_2m_max[i])}°</div>
-      </div>`;
-  });
+        <div>${new Date(daily.time[i]).getDate()}</div>
+        <div>${icons[daily.weather_code[i]] || "⛅"}</div>
+        <div>${Math.round(daily.temperature_2m_max[i])}°</div>
+      </div>
+    `;
+  }
 }
 
-// 🔍 SEARCH
-async function searchCity(){
-  const city=document.getElementById("cityInput").value;
+// ⏱️ HOURLY (48h)
+function renderHourly(hourly) {
+  const box = document.getElementById("hourly");
+  box.innerHTML = "";
 
-  const r=await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${city}`);
-  const d=await r.json();
+  if (!hourly) return;
 
-  if(!d.results) return alert("Cidade não encontrada");
+  for (let i = 0; i < 48; i++) {
+    const time = new Date(hourly.time[i]);
+    const hour = time.getHours();
 
-  const p=d.results[0];
-  loadWeather(p.latitude,p.longitude,p.name);
+    box.innerHTML += `
+      <div class="hour">
+        <div>${hour}:00</div>
+        <div>${icons[hourly.weather_code[i]] || "⛅"}</div>
+        <div>${Math.round(hourly.temperature_2m[i])}°</div>
+      </div>
+    `;
+  }
+}
+
+// 🔍 BUSCA CIDADE
+async function searchCity() {
+  const city = document.getElementById("cityInput").value;
+
+  try {
+    const res = await fetch(
+      `https://geocoding-api.open-meteo.com/v1/search?name=${city}`
+    );
+
+    const data = await res.json();
+
+    if (!data.results || data.results.length === 0) {
+      alert("Cidade não encontrada");
+      return;
+    }
+
+    const r = data.results[0];
+
+    loadWeather(r.latitude, r.longitude, r.name);
+
+  } catch (err) {
+    alert("Erro na busca");
+  }
 }
