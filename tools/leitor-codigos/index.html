@@ -746,7 +746,9 @@ function aoDetectar(valor, formato, origem){
 
     const tipoLabel = TIPOS_LABEL[formato] || formato || 'Código';
     const tipoIcon  = TIPOS_ICON[formato] || '📄';
-    const isUrl     = /^https?:\/\//i.test(valor);
+    const isUrl =
+        /^(https?:\/\/|www\.)/i.test(valor) ||
+        /^[a-z0-9.-]+\.[a-z]{2,}$/i.test(valor);
 
     const hora = new Date().toLocaleTimeString('pt-BR', {
         hour:'2-digit',
@@ -807,7 +809,18 @@ function copiarTexto(txt){
 }
 
 function abrirLink(url){
-    window.open(url, '_blank', 'noopener');
+
+    let link = url.trim();
+
+    if(!/^https?:\/\//i.test(link)){
+        link = 'https://' + link;
+    }
+
+    window.open(
+        link,
+        '_blank',
+        'noopener,noreferrer'
+    );
 }
 
 function compartilhar(txt){
