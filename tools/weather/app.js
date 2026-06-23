@@ -12,11 +12,11 @@ const icons = {
   95: "⛈️"
 };
 
-// 🌍 START SEGURO
 window.addEventListener("load", () => {
   startApp();
 });
 
+// 🚀 START SEGURO
 function startApp() {
   if (!navigator.geolocation) {
     fallback();
@@ -27,30 +27,29 @@ function startApp() {
     (pos) => {
       loadWeather(pos.coords.latitude, pos.coords.longitude, "Sua localização");
     },
-    () => {
-      fallback();
-    },
+    () => fallback(),
     { timeout: 8000 }
   );
 }
 
-// 🧠 fallback garantido
 function fallback() {
   loadWeather(35.6762, 139.6503, "Tóquio (padrão)");
 }
 
-// 🌦️ clima principal (PROTEGIDO)
+// 🌦️ clima principal
 async function loadWeather(lat, lon, label) {
   try {
+
     const url =
       `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
       `&current=temperature_2m,wind_speed_10m,relative_humidity_2m,weather_code` +
-      `&daily=temperature_2m_max,temperature_2m_min,weather_code&timezone=auto`;
+      `&hourly=temperature_2m,weather_code` +
+      `&daily=temperature_2m_max,temperature_2m_min,weather_code` +
+      `&timezone=auto`;
 
     const res = await fetch(url);
-    if (!res.ok) throw new Error("API error");
-
     const data = await res.json();
+
     const c = data.current;
 
     document.getElementById("location").innerText = label;
@@ -62,6 +61,7 @@ async function loadWeather(lat, lon, label) {
 
     setBackground(c.weather_code);
     renderForecast(data.daily);
+    renderHourly(data.hourly);
 
   } catch (err) {
     console.error(err);
@@ -69,7 +69,7 @@ async function loadWeather(lat, lon, label) {
   }
 }
 
-// 🎨 fundo dinâmico
+// 🎨 fundo dinâmico estilo Apple
 function setBackground(code) {
   const bg = document.getElementById("bg");
 
@@ -84,7 +84,7 @@ function setBackground(code) {
   }
 }
 
-// 📅 forecast
+// 📅 previsão 7 dias
 function renderForecast(daily) {
   const box = document.getElementById("forecast");
   box.innerHTML = "";
@@ -95,6 +95,25 @@ function renderForecast(daily) {
         <div>${new Date(daily.time[i]).getDate()}</div>
         <div>${icons[daily.weather_code[i]] || "⛅"}</div>
         <div>${Math.round(daily.temperature_2m_max[i])}°</div>
+      </div>
+    `;
+  }
+}
+
+// ⏱️ PREVISÃO POR HORA (48H)
+function renderHourly(hourly) {
+  const box = document.getElementById("hourly");
+  box.innerHTML = "";
+
+  for (let i = 0; i < 48; i++) {
+    const time = new Date(hourly.time[i]);
+    const hour = time.getHours();
+
+    box.innerHTML += `
+      <div class="hour">
+        <div class="t">${hour}:00</div>
+        <div>${icons[hourly.weather_code[i]] || "⛅"}</div>
+        <div class="temp">${Math.round(hourly.temperature_2m[i])}°</div>
       </div>
     `;
   }
