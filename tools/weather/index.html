@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>UtiliWeb Weather</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>UtiliWeb Weather</title>
 
-  <link rel="stylesheet" href="style.css"/>
-  <link rel="manifest" href="manifest.json"/>
-  <meta name="theme-color" content="#0b1d2a"/>
+<link rel="stylesheet" href="style.css"/>
+<meta name="theme-color" content="#0b1d2a"/>
 </head>
 
 <body>
@@ -17,19 +16,19 @@
 
 <div class="app">
 
-  <div class="search">
+  <div class="top">
     <input id="cityInput" placeholder="Buscar cidade..." />
     <button onclick="searchCity()">Buscar</button>
   </div>
 
-  <div class="location" id="location">Carregando...</div>
+  <div class="location shimmer" id="location">Carregando...</div>
 
-  <div class="current">
-    <div class="temp" id="temp">--°</div>
+  <div class="main">
+    <div class="temp shimmer" id="temp">--°</div>
     <div class="icon" id="icon">⛅</div>
   </div>
 
-  <div class="desc" id="desc">Inicializando...</div>
+  <div class="desc" id="desc">Atualizando clima...</div>
 
   <div class="meta">
     <div>💨 <span id="wind">--</span> km/h</div>
@@ -38,10 +37,13 @@
 
   <div class="divider"></div>
 
-  <div class="forecast" id="forecast"></div>
+  <canvas id="chart"></canvas>
 
-  <div class="hourly-title">Próximas 48 horas</div>
+  <div class="section-title">Próximas 48h</div>
   <div class="hourly" id="hourly"></div>
+
+  <div class="section-title">Próximos dias</div>
+  <div class="forecast" id="forecast"></div>
 
 </div>
 
