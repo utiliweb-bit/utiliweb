@@ -3,6 +3,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
   color: white;
   overflow-x: hidden;
+  overflow-y: auto;
 }
 
 /* BACKGROUND */
@@ -13,7 +14,7 @@ body {
   transition: 1.2s ease;
 }
 
-/* FX CANVAS */
+/* FX */
 #fx {
   position: fixed;
   inset: 0;
@@ -21,18 +22,18 @@ body {
   pointer-events: none;
 }
 
-/* APP CONTAINER */
+/* APP WRAPPER */
 .app {
   max-width: 420px;
   margin: auto;
-  padding: 22px;
+  padding: 18px 18px 50px 18px; /* 🔥 reduz espaço vazio */
 }
 
-/* SEARCH BAR */
+/* SEARCH */
 .top {
   display: flex;
   gap: 8px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 input {
@@ -52,46 +53,43 @@ button {
   border: none;
   background: rgba(255,255,255,0.15);
   color: white;
-  cursor: pointer;
 }
 
 /* LOCATION */
 .location {
   opacity: 0.7;
-  margin-bottom: 14px;
-  transition: 0.3s ease;
+  margin-bottom: 10px;
 }
 
-/* MAIN WEATHER ROW */
+/* MAIN ROW */
 .main {
   display: flex;
   justify-content: space-between;
-  align-items: flex-end; /* 🔥 fix alinhamento Apple */
-  margin-bottom: 8px;
+  align-items: flex-end;
+  margin-bottom: 6px;
 }
 
-/* TEMPERATURE */
+/* TEMP */
 .temp {
-  font-size: 86px;
+  font-size: 78px;
   font-weight: 200;
   line-height: 1;
-  transform: translateY(4px); /* 🔥 evita “subida” visual */
-  transition: 0.3s ease;
+  transform: translateY(3px);
 }
 
 /* ICON */
 .icon {
-  font-size: 56px;
+  font-size: 52px;
   margin-bottom: 6px;
 }
 
-/* DESCRIPTION */
+/* DESC */
 .desc {
   opacity: 0.7;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
-/* META INFO */
+/* META */
 .meta {
   display: flex;
   justify-content: space-between;
@@ -99,30 +97,33 @@ button {
   opacity: 0.8;
 }
 
-/* DIVIDER */
+/* DIVIDER (REDUZIDO) */
 .divider {
   height: 1px;
   background: rgba(255,255,255,0.2);
-  margin: 16px 0;
-}
-
-/* SECTION TITLES */
-.section-title {
-  font-size: 13px;
-  opacity: 0.7;
   margin: 10px 0;
 }
 
-/* FORECAST + HOURLY */
-.forecast, .hourly {
+/* TITLES (MENOR ESPAÇO) */
+.section-title {
+  font-size: 13px;
+  opacity: 0.7;
+  margin: 6px 0;
+}
+
+/* LISTS */
+.forecast,
+.hourly {
   display: flex;
   gap: 10px;
   overflow-x: auto;
-  padding-bottom: 8px;
+  padding-bottom: 4px;
+  margin-top: 0;
 }
 
 /* CARDS */
-.day, .hour {
+.day,
+.hour {
   min-width: 70px;
   padding: 10px;
   border-radius: 16px;
@@ -131,11 +132,16 @@ button {
   text-align: center;
 }
 
-/* SHIMMER (AGORA CONTROLADO) */
+/* SHIMMER FIX (NÃO FICA PRESO) */
 .shimmer {
-  background: linear-gradient(90deg, rgba(255,255,255,0.08), rgba(255,255,255,0.18), rgba(255,255,255,0.08));
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.08),
+    rgba(255,255,255,0.18),
+    rgba(255,255,255,0.08)
+  );
   background-size: 200% 100%;
-  animation: shimmer 1.4s infinite;
+  animation: shimmer 1.3s infinite;
 }
 
 @keyframes shimmer {
@@ -143,9 +149,13 @@ button {
   100% { background-position: 200% 0; }
 }
 
-/* MOBILE FIX */
+/* MOBILE TIGHT MODE */
 @media (max-width: 420px) {
   .temp {
-    font-size: 72px;
+    font-size: 68px;
+  }
+
+  .app {
+    padding-bottom: 40px;
   }
 }
