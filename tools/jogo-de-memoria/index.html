@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jogo da Memória</title>
+
+<style>
+body {
+  margin: 0;
+  background: #0f0f0f;
+  color: white;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+h1 {
+  margin: 20px 0;
+  font-size: 24px;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(4, 70px);
+  gap: 10px;
+}
+
+.card {
+  width: 70px;
+  height: 70px;
+  background: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 28px;
+  border-radius: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.card.flipped {
+  background: #00c853;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🧠 Jogo da Memória</h1>
+<div class="board" id="board"></div>
+
+<script>
+const emojis = ["🍎","🍌","🍇","🍒","🍉","🍍","🥝","🍓"];
+let cards = [...emojis, ...emojis].sort(() => Math.random() - 0.5);
+
+const board = document.getElementById("board");
+
+let firstCard = null;
+let lock = false;
+
+cards.forEach(emoji => {
+  const card = document.createElement("div");
+  card.className = "card";
+  card.dataset.value = emoji;
+
+  card.addEventListener("click", () => {
+    if (lock || card.classList.contains("flipped")) return;
+
+    card.classList.add("flipped");
+    card.textContent = emoji;
+
+    if (!firstCard) {
+      firstCard = card;
+    } else {
+      if (firstCard.dataset.value === card.dataset.value) {
+        firstCard = null;
+      } else {
+        lock = true;
+        setTimeout(() => {
+          card.classList.remove("flipped");
+          card.textContent = "";
+
+          firstCard.classList.remove("flipped");
+          firstCard.textContent = "";
+
+          firstCard = null;
+          lock = false;
+        }, 700);
+      }
+    }
+  });
+
+  board.appendChild(card);
+});
+</script>
+
+</body>
+</html>
