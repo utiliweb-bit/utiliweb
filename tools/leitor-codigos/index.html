@@ -687,6 +687,9 @@ async function scanComZXing(){
     const hints = new Map();
     hints.set(ZXing.DecodeHintType.TRY_HARDER, true);
 
+    zxingReader = new ZXing.MultiFormatReader();
+    zxingReader.setHints(hints);
+
     zxingReader = new ZXing.BrowserMultiFormatReader(hints, 300);
     zxingAtivo = true;
 
@@ -700,13 +703,10 @@ async function scanComZXing(){
             canvas.width  = video.videoWidth;
             canvas.height = video.videoHeight;
             ctx.drawImage(video, 0, 0);
-            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
             const luminance = new ZXing.HTMLCanvasElementLuminanceSource(canvas);
             const binarizer = new ZXing.HybridBinarizer(luminance);
             const bitmap = new ZXing.BinaryBitmap(binarizer);
-            const reader = new ZXing.MultiFormatReader();
-            reader.setHints(hints);
-            const result = reader.decode(bitmap);
+            const result = zxingReader.decode(bitmap);
             if(result) aoDetectar(result.getText(), result.getBarcodeFormat().toString(), 'camera');
         } catch(e){
             // Sem resultado neste frame — normal
@@ -717,22 +717,42 @@ async function scanComZXing(){
 /* ============================================================
    RESULTADO
    ============================================================ */
+
 let ultimoValor = null;
 let flashTimer = null;
 
 function aoDetectar(valor, formato, origem){
-    // Evita repetir o mesmo resultado imediatamente
-    if(valor === ultimoValor) return;
-    ultimoValor = valor;
-    setTimeout(() => { ultimoValor = null; }, 2500);
 
-    vibrar([40, 30, 40]);
+    if(valor === ultimoValor) return;
+
+    ultimoValor = valor;
+
+    setTimeout(() => {
+        ultimoValor = null;
+    }, 3000);
+
+    vibrar([40,30,40]);
     flashVerde();
+
+    if(origem === 'camera'){
+        pararScan();
+        document.getElementById('scanLine').classList.remove('active');
+        setStatus('Código capturado com sucesso', true, false);
+
+        setTimeout(() => {
+            desligarCamera();
+        }, 500);
+    }
 
     const tipoLabel = TIPOS_LABEL[formato] || formato || 'Código';
     const tipoIcon  = TIPOS_ICON[formato] || '📄';
     const isUrl     = /^https?:\/\//i.test(valor);
-    const hora      = new Date().toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+
+    const hora = new Date().toLocaleTimeString('pt-BR', {
+        hour:'2-digit',
+        minute:'2-digit',
+        second:'2-digit'
+    });
 
     if(origem === 'camera'){
         mostrarResultado('resultCam', 'resultCamType', 'resultCamVal', 'resultCamActions', 'resultCamTime',
@@ -744,6 +764,7 @@ function aoDetectar(valor, formato, origem){
 
     adicionarHistorico(valor, tipoLabel, tipoIcon);
 }
+
 
 function mostrarResultado(boxId, typeId, valId, actionsId, timeId, tipo, icon, valor, isUrl, hora){
     const box = document.getElementById(boxId);
