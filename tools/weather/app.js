@@ -12,8 +12,14 @@ const icons = {
   95: "⛈️"
 };
 
-// 🌍 clima principal
-async function loadWeather(lat, lon) {
+let lastLat = 35.6762;
+let lastLon = 139.6503;
+
+// 🌍 carregar clima
+async function loadWeather(lat, lon, label = "Minha localização") {
+
+  lastLat = lat;
+  lastLon = lon;
 
   const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,wind_speed_10m,relative_humidity_2m,weather_code&daily=temperature_2m_max,temperature_2m_min,weather_code&timezone=auto`;
 
@@ -22,36 +28,22 @@ async function loadWeather(lat, lon) {
 
   const c = data.current;
 
-  animateValue("temp", Math.round(c.temperature_2m) + "°");
-
+  document.getElementById("location").innerText = label;
+  document.getElementById("temp").innerText = Math.round(c.temperature_2m) + "°";
   document.getElementById("wind").innerText = c.wind_speed_10m;
   document.getElementById("humidity").innerText = c.relative_humidity_2m;
-
-  document.getElementById("icon").innerText =
-    icons[c.weather_code] || "🌡️";
+  document.getElementById("icon").innerText = icons[c.weather_code] || "🌡️";
 
   setBackground(c.weather_code);
-
   renderForecast(data.daily);
 }
 
-// ✨ animação estilo iOS (fade + swap)
-function animateValue(id, value) {
-  const el = document.getElementById(id);
-  el.style.opacity = 0;
-
-  setTimeout(() => {
-    el.innerText = value;
-    el.style.opacity = 1;
-  }, 200);
-}
-
-// 🎨 fundo dinâmico Apple-like
+// 🎨 fundo dinâmico inteligente
 function setBackground(code) {
   const bg = document.getElementById("bg");
 
   if (code === 0 || code === 1) {
-    bg.style.background = "linear-gradient(180deg,#0b3d91,#1e6091,#52b69a)";
+    bg.style.background = "linear-gradient(180deg,#0f3d57,#1e6091,#52b69a)";
   } else if (code === 2 || code === 3) {
     bg.style.background = "linear-gradient(180deg,#2b2d42,#5c677d,#7d8597)";
   } else if (code >= 51 && code <= 82) {
@@ -61,25 +53,25 @@ function setBackground(code) {
   }
 }
 
-// 📅 forecast Apple style
+// 📅 forecast sólido
 function renderForecast(daily) {
   const box = document.getElementById("forecast");
   box.innerHTML = "";
 
-  daily.time.forEach((t, i) => {
+  for (let i = 0; i < daily.time.length; i++) {
     box.innerHTML += `
       <div class="day">
-        <div>${new Date(t).getDate()}</div>
+        <div>${new Date(daily.time[i]).getDate()}</div>
         <div>${icons[daily.weather_code[i]] || "⛅"}</div>
         <div>${Math.round(daily.temperature_2m_max[i])}°</div>
       </div>
     `;
-  });
+  }
 }
 
-// 🔍 busca cidade
+// 🔍 buscar cidade
 async function searchCity() {
-  const city = document.getElementById("city").value;
+  const city = document.getElementById("cityInput").value;
 
   const geo = await fetch(
     `https://geocoding-api.open-meteo.com/v1/search?name=${city}`
@@ -89,12 +81,21 @@ async function searchCity() {
 
   if (!data.results) return alert("Cidade não encontrada");
 
-  document.getElementById("location").innerText = data.results[0].name;
+  const r = data.results[0];
 
-  loadWeather(data.results[0].latitude, data.results[0].longitude);
+  loadWeather(r.latitude, r.longitude, r.name);
 }
 
-// 📍 auto localização
-navigator.geolocation.getCurrentPosition((pos) => {
-  loadWeather(pos.coords.latitude, pos.coords.longitude);
-});
+// 📍 geolocalização segura (fallback)
+if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      loadWeather(pos.coords.latitude, pos.coords.longitude, "Sua localização");
+    },
+    () => {
+      loadWeather(lastLat, lastLon, "Tóquio (padrão)");
+    }
+  );
+} else {
+  loadWeather(lastLat, lastLon, "Tóquio (padrão)");
+}
