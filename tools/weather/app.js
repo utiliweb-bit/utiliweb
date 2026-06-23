@@ -175,3 +175,5 @@ function animateRain(ctx, canvas) {
 
   loop();
 }
+
+navigator.serviceWorker?.register("/service-worker.js");
