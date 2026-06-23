@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Palavra do Intervalo</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, sans-serif;
+      background: #f9f9f7;
+      color: #1a1a18;
+      display: flex;
+      justify-content: center;
+      padding: 2rem 1rem;
+      min-height: 100vh;
+    }
+
+    .game-wrap { max-width: 500px; width: 100%; }
+
+    .title {
+      text-align: center;
+      font-size: 22px;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 1.5rem;
+    }
+
+    .board {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .row { display: flex; gap: 6px; }
+
+    .cell {
+      width: 52px;
+      height: 52px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 500;
+      background: #fff;
+      transition: background 0.2s, border-color 0.2s;
+      user-select: none;
+    }
+
+    .cell.correct { background: #3B6D11; border-color: #3B6D11; color: #EAF3DE; }
+    .cell.present { background: #BA7517; border-color: #BA7517; color: #FAEEDA; }
+    .cell.absent  { background: #444441; border-color: #444441; color: #D3D1C7; }
+    .cell.active-border { border-color: #888; }
+
+    .keyboard {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .kb-row { display: flex; gap: 5px; }
+
+    .key {
+      min-width: 34px;
+      height: 50px;
+      padding: 0 6px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background: #eee;
+      color: #1a1a18;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: inherit;
+      transition: background 0.15s;
+    }
+
+    .key:hover { background: #ddd; }
+    .key.correct { background: #3B6D11; border-color: #3B6D11; color: #EAF3DE; }
+    .key.present { background: #BA7517; border-color: #BA7517; color: #FAEEDA; }
+    .key.absent  { background: #444441; border-color: #444441; color: #D3D1C7; }
+    .key.wide { min-width: 56px; font-size: 12px; }
+
+    .msg {
+      text-align: center;
+      font-size: 14px;
+      font-weight: 500;
+      min-height: 22px;
+      margin-bottom: 10px;
+    }
+
+    .hint {
+      text-align: center;
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 8px;
+    }
+
+    .btn-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .btn-new {
+      min-width: 140px;
+      height: 44px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background: #fff;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .btn-new:hover { background: #f0f0ee; }
+  </style>
+</head>
+<body>
+<div class="game-wrap">
+  <h1 class="title">Palavra do Intervalo</h1>
+  <p class="subtitle">Descubra a palavra de 5 letras em 6 tentativas</p>
+  <div class="msg" id="msg"></div>
+  <div class="hint" id="hint"></div>
+  <div class="board" id="board"></div>
+  <div class="keyboard" id="keyboard"></div>
+  <div class="btn-row">
+    <button class="btn-new" onclick="newGame()">↺ Nova palavra</button>
+  </div>
+</div>
+
+<script>
+// ─── Lista de palavras ────────────────────────────────────────────────────────
+const ALL_WORDS = [
+  "ABRIR","CARTA","CHUVA","CINCO","COLAR","DANCE","DIGNO","DORSO","DUPLO","ERRAR",
+  "FALAR","FARDO","FERRO","FINCA","FIRMA","FLOCO","FORTE","GENTE","GEADA","GRUPO",
+  "IDEAL","IGUAL","IMPAR","IRADO","JUNTO","LARGO","LEVAR","LIGAR","LIMPO","LINDA",
+  "LIVRE","LUGAR","LUTAR","MANGA","MARCA","MILHO","MOEDA","MUNDO","NOBRE","NOITE",
+  "NUVEM","OLHAR","ORDEM","OUTRO","PAGAR","PAPEL","PEDIR","PEDRA","PERTO","PICAR",
+  "PILHA","PINGO","PODER","PORTA","POUCO","PRAZO","PRESO","PROVA","PULAR","QUEDA",
+  "REGAR","REZAR","RINDO","RISOS","ROLAR","ROUPA","SABOR","SALVO","SAÚDE","SINAL",
+  "SOBRE","SOLAR","SORTE","SUAVE","SUMIR","TARDE","TERRA","TIRAR","TOCAR","TOMAR",
+  "TOURO","TROCA","VALOR","VERDE","VIRAR","VISTA","VOTAR","CARNE","CALOR","BEBER",
+  "BANCO","BAIXO","CAMPO","CAPAZ","CARGO","CARRO","BRAÇO"
+];
+
+// ─── Estado do jogo ───────────────────────────────────────────────────────────
+let target, guesses, current, done;
+
+function pick() {
+  return ALL_WORDS[Math.floor(Math.random() * ALL_WORDS.length)];
+}
+
+function newGame() {
+  target  = pick();
+  guesses = [];
+  current = "";
+  done    = false;
+  document.getElementById("msg").textContent  = "";
+  document.getElementById("hint").textContent = "🟩 posição certa  🟨 letra errada  ⬛ não tem";
+  renderBoard();
+  renderKeyboard();
+}
+
+// ─── Renderização ─────────────────────────────────────────────────────────────
+function renderBoard() {
+  const board = document.getElementById("board");
+  board.innerHTML = "";
+
+  for (let r = 0; r < 6; r++) {
+    const row  = document.createElement("div");
+    row.className = "row";
+
+    const word   = r < guesses.length ? guesses[r].word   : (r === guesses.length ? current : "");
+    const colors = r < guesses.length ? guesses[r].colors : null;
+
+    for (let c = 0; c < 5; c++) {
+      const cell = document.createElement("div");
+      cell.className = "cell";
+      cell.textContent = word[c] || "";
+      if (colors) {
+        cell.classList.add(colors[c]);
+      } else if (r === guesses.length && word[c]) {
+        cell.classList.add("active-border");
+      }
+      row.appendChild(cell);
+    }
+    board.appendChild(row);
+  }
+}
+
+function renderKeyboard() {
+  const kb = document.getElementById("keyboard");
+  kb.innerHTML = "";
+
+  const rows = [
+    ["Q","W","E","R","T","Y","U","I","O","P"],
+    ["A","S","D","F","G","H","J","K","L"],
+    ["ENTER","Z","X","C","V","B","N","M","⌫"]
+  ];
+
+  // estado de cada tecla (melhor resultado obtido até agora)
+  const keyState = {};
+  guesses.forEach(g => {
+    g.colors.forEach((col, i) => {
+      const l = g.word[i];
+      if (!keyState[l] || col === "correct" ||
+          (col === "present" && keyState[l] === "absent")) {
+        keyState[l] = col;
+      }
+    });
+  });
+
+  rows.forEach(r => {
+    const row = document.createElement("div");
+    row.className = "kb-row";
+    r.forEach(k => {
+      const btn = document.createElement("button");
+      btn.className = "key" + (k.length > 1 ? " wide" : "");
+      btn.textContent = k;
+      if (keyState[k]) btn.classList.add(keyState[k]);
+      btn.onclick = () => handleKey(k);
+      row.appendChild(btn);
+    });
+    kb.appendChild(row);
+  });
+}
+
+// ─── Lógica de pontuação ──────────────────────────────────────────────────────
+function score(guess, tgt) {
+  const res    = Array(5).fill("absent");
+  const tCount = {};
+
+  // 1ª passagem: acertos exatos
+  for (let i = 0; i < 5; i++) {
+    if (guess[i] === tgt[i]) {
+      res[i] = "correct";
+    } else {
+      tCount[tgt[i]] = (tCount[tgt[i]] || 0) + 1;
+    }
+  }
+
+  // 2ª passagem: letras presentes em posição errada
+  for (let i = 0; i < 5; i++) {
+    if (res[i] !== "correct" && tCount[guess[i]]) {
+      res[i] = "present";
+      tCount[guess[i]]--;
+    }
+  }
+
+  return res;
+}
+
+// ─── Input ────────────────────────────────────────────────────────────────────
+function handleKey(k) {
+  if (done) return;
+  const msg = document.getElementById("msg");
+
+  if (k === "⌫" || k === "Backspace") {
+    current = current.slice(0, -1);
+    renderBoard();
+
+  } else if (k === "ENTER" || k === "Enter") {
+    if (current.length < 5) { msg.textContent = "Digite 5 letras!"; return; }
+
+    const colors = score(current, target);
+    guesses.push({ word: current, colors });
+    current = "";
+    renderBoard();
+    renderKeyboard();
+
+    if (guesses[guesses.length - 1].colors.every(c => c === "correct")) {
+      msg.textContent = "🎉 Parabéns! Você acertou!";
+      document.getElementById("hint").textContent = "";
+      done = true;
+    } else if (guesses.length === 6) {
+      msg.textContent = "A palavra era: " + target;
+      document.getElementById("hint").textContent = "";
+      done = true;
+    } else {
+      msg.textContent = "";
+    }
+
+  } else if (/^[A-ZÇÃÕÂÊÔÁÉÍÓÚÀÜa-zçãõâêôáéíóúàü]$/.test(k) && k.length === 1) {
+    if (current.length < 5) {
+      current += k.toUpperCase();
+      renderBoard();
+    }
+  }
+}
+
+// teclado físico
+document.addEventListener("keydown", e => {
+  if (e.key === "Backspace")       handleKey("Backspace");
+  else if (e.key === "Enter")      handleKey("Enter");
+  else if (e.key.length === 1)     handleKey(e.key.toUpperCase());
+});
+
+// ─── Início ───────────────────────────────────────────────────────────────────
+newGame();
+</script>
+</body>
+</html>
