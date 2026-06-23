@@ -17,36 +17,36 @@
       min-height: 100vh;
     }
 
-    .game-wrap { max-width: 500px; width: 100%; }
+    .gw { max-width: 380px; width: 100%; }
 
-    .title {
+    .gt {
       text-align: center;
-      font-size: 22px;
+      font-size: 20px;
       font-weight: 500;
       margin-bottom: 4px;
     }
 
-    .subtitle {
+    .gs {
       text-align: center;
-      font-size: 13px;
+      font-size: 12px;
       color: #666;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
     }
 
     .board {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 5px;
       align-items: center;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
     }
 
-    .row { display: flex; gap: 6px; }
+    .row { display: flex; gap: 5px; }
 
     .cell {
       width: 52px;
       height: 52px;
-      border: 1px solid #ccc;
+      border: 2px solid #ccc;
       border-radius: 8px;
       display: flex;
       align-items: center;
@@ -54,188 +54,171 @@
       font-size: 22px;
       font-weight: 500;
       background: #fff;
-      transition: background 0.2s, border-color 0.2s;
+      transition: background .2s, border-color .2s, color .2s;
       user-select: none;
     }
 
-    .cell.correct { background: #3B6D11; border-color: #3B6D11; color: #EAF3DE; }
-    .cell.present { background: #BA7517; border-color: #BA7517; color: #FAEEDA; }
-    .cell.absent  { background: #444441; border-color: #444441; color: #D3D1C7; }
-    .cell.active-border { border-color: #888; }
+    .cell.filled  { border-color: #888; }
+    .cell.correct { background: #27500A !important; border-color: #27500A !important; color: #EAF3DE !important; }
+    .cell.present { background: #BA7517 !important; border-color: #BA7517 !important; color: #FAEEDA !important; }
+    .cell.absent  { background: #888780 !important; border-color: #888780 !important; color: #F1EFE8 !important; }
 
     .keyboard {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 4px;
       align-items: center;
     }
 
-    .kb-row { display: flex; gap: 5px; }
+    .kb-row { display: flex; gap: 3px; }
 
     .key {
-      min-width: 34px;
-      height: 50px;
-      padding: 0 6px;
+      width: 28px;
+      height: 42px;
       border: 1px solid #ccc;
-      border-radius: 8px;
-      background: #eee;
+      border-radius: 6px;
+      background: #e8e8e6;
       color: #1a1a18;
-      font-size: 13px;
+      font-size: 11px;
       font-weight: 500;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       font-family: inherit;
-      transition: background 0.15s;
+      transition: background .1s;
+      flex-shrink: 0;
     }
 
-    .key:hover { background: #ddd; }
-    .key.correct { background: #3B6D11; border-color: #3B6D11; color: #EAF3DE; }
+    .key:hover   { background: #d8d8d6; }
+    .key.correct { background: #27500A; border-color: #27500A; color: #EAF3DE; }
     .key.present { background: #BA7517; border-color: #BA7517; color: #FAEEDA; }
-    .key.absent  { background: #444441; border-color: #444441; color: #D3D1C7; }
-    .key.wide { min-width: 56px; font-size: 12px; }
+    .key.absent  { background: #888780; border-color: #888780; color: #F1EFE8; }
+    .key.wide    { width: 44px; font-size: 10px; }
 
     .msg {
       text-align: center;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 500;
-      min-height: 22px;
+      min-height: 20px;
+      margin-bottom: 6px;
+    }
+
+    .legend {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      font-size: 11px;
+      color: #666;
       margin-bottom: 10px;
     }
 
-    .hint {
-      text-align: center;
-      font-size: 12px;
-      color: #666;
-      margin-bottom: 8px;
-    }
+    .leg { display: flex; align-items: center; gap: 4px; }
 
-    .btn-row {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 12px;
-    }
+    .dot { width: 11px; height: 11px; border-radius: 3px; }
+
+    .btn-row { display: flex; justify-content: center; margin-top: 10px; }
 
     .btn-new {
-      min-width: 140px;
-      height: 44px;
+      width: 130px;
+      height: 40px;
       border: 1px solid #ccc;
       border-radius: 8px;
       background: #fff;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 500;
       cursor: pointer;
       font-family: inherit;
     }
 
     .btn-new:hover { background: #f0f0ee; }
+
+    @media (prefers-color-scheme: dark) {
+      body       { background: #1a1a18; color: #f0f0ee; }
+      .cell      { background: #2a2a28; border-color: #555; color: #f0f0ee; }
+      .cell.filled { border-color: #aaa; }
+      .key       { background: #3a3a38; border-color: #555; color: #f0f0ee; }
+      .key:hover { background: #4a4a48; }
+      .btn-new   { background: #2a2a28; border-color: #555; color: #f0f0ee; }
+      .btn-new:hover { background: #3a3a38; }
+      .gs, .legend { color: #aaa; }
+    }
   </style>
 </head>
 <body>
-<div class="game-wrap">
-  <h1 class="title">Palavra Secreta</h1>
-  <p class="subtitle">Descubra a palavra de 5 letras em 6 tentativas</p>
+<div class="gw">
+  <h1 class="gt">Palavra Secreta</h1>
+  <p class="gs">6 tentativas para descobrir a palavra</p>
   <div class="msg" id="msg"></div>
-  <div class="hint" id="hint"></div>
+  <div class="legend">
+    <span class="leg"><span class="dot" style="background:#27500A"></span>certa</span>
+    <span class="leg"><span class="dot" style="background:#BA7517"></span>errada</span>
+    <span class="leg"><span class="dot" style="background:#888780"></span>ausente</span>
+  </div>
   <div class="board" id="board"></div>
   <div class="keyboard" id="keyboard"></div>
-  <div class="btn-row">
-    <button class="btn-new" onclick="newGame()">↺ Nova palavra</button>
-  </div>
+  <div class="btn-row"><button class="btn-new" onclick="newGame()">↺ nova palavra</button></div>
 </div>
 
 <script>
-// ─── Lista de palavras ────────────────────────────────────────────────────────
-const ALL_WORDS = [
-  "ABRIR","CARTA","CHUVA","CINCO","COLAR","DANCE","DIGNO","DORSO","DUPLO","ERRAR",
-  "FALAR","FARDO","FERRO","FINCA","FIRMA","FLOCO","FORTE","GENTE","GEADA","GRUPO",
-  "IDEAL","IGUAL","IMPAR","IRADO","JUNTO","LARGO","LEVAR","LIGAR","LIMPO","LINDA",
-  "LIVRE","LUGAR","LUTAR","MANGA","MARCA","MILHO","MOEDA","MUNDO","NOBRE","NOITE",
-  "NUVEM","OLHAR","ORDEM","OUTRO","PAGAR","PAPEL","PEDIR","PEDRA","PERTO","PICAR",
-  "PILHA","PINGO","PODER","PORTA","POUCO","PRAZO","PRESO","PROVA","PULAR","QUEDA",
-  "REGAR","REZAR","RINDO","RISOS","ROLAR","ROUPA","SABOR","SALVO","SAÚDE","SINAL",
-  "SOBRE","SOLAR","SORTE","SUAVE","SUMIR","TARDE","TERRA","TIRAR","TOCAR","TOMAR",
-  "TOURO","TROCA","VALOR","VERDE","VIRAR","VISTA","VOTAR","CARNE","CALOR","BEBER",
-  "BANCO","BAIXO","CAMPO","CAPAZ","CARGO","CARRO","BRAÇO"
+const WORDS = [
+  "ABRIR","BANCO","BAIXO","BEBER","CALOR","CAMPO","CAPAZ","CARGO","CARNE","CARRO",
+  "CARTA","CHUVA","CINCO","COLAR","DANCE","DIGNO","DORSO","DUPLO","ERRAR","FALAR",
+  "FARDO","FERRO","FINCA","FIRMA","FLOCO","FORTE","GEADA","GENTE","GRUPO","IDEAL",
+  "JUNTO","LARGO","LEVAR","LIGAR","LIMPO","LINDA","LIVRE","LUGAR","LUTAR","MANGA",
+  "MARCA","MILHO","MOEDA","MUNDO","NOBRE","NOITE","NUVEM","OLHAR","ORDEM","OUTRO",
+  "PAGAR","PAPEL","PEDIR","PEDRA","PERTO","PILHA","PODER","PORTA","POUCO","PRAZO",
+  "PRESO","PROVA","PULAR","QUEDA","REGAR","REZAR","RINDO","RISOS","ROLAR","ROMBO",
+  "ROUPA","RUIDO","SABOR","SALVO","SAUDE","SINAL","SOBRE","SOLAR","SORTE","SUAVE",
+  "SUMIR","TARDE","TERRA","TIRAR","TOCAR","TOMAR","TOURO","TROCA","USUAL","VALOR",
+  "VERDE","VIRAR","VIRIL","VISTA","VOTAR"
 ];
 
-// ─── Estado do jogo ───────────────────────────────────────────────────────────
 let target, guesses, current, done;
 
-function pick() {
-  return ALL_WORDS[Math.floor(Math.random() * ALL_WORDS.length)];
-}
-
 function newGame() {
-  target  = pick();
-  guesses = [];
-  current = "";
-  done    = false;
-  document.getElementById("msg").textContent  = "";
-  document.getElementById("hint").textContent = "🟩 posição certa  🟨 letra errada  ⬛ não tem";
-  renderBoard();
-  renderKeyboard();
+  target  = WORDS[Math.floor(Math.random() * WORDS.length)];
+  guesses = []; current = ""; done = false;
+  document.getElementById("msg").textContent = "";
+  renderBoard(); renderKeyboard();
 }
 
-// ─── Renderização ─────────────────────────────────────────────────────────────
 function renderBoard() {
-  const board = document.getElementById("board");
-  board.innerHTML = "";
-
+  const b = document.getElementById("board"); b.innerHTML = "";
   for (let r = 0; r < 6; r++) {
-    const row  = document.createElement("div");
-    row.className = "row";
-
-    const word   = r < guesses.length ? guesses[r].word   : (r === guesses.length ? current : "");
-    const colors = r < guesses.length ? guesses[r].colors : null;
-
+    const row = document.createElement("div"); row.className = "row";
+    const g    = guesses[r];
+    const word = g ? g.word : (r === guesses.length ? current : "");
     for (let c = 0; c < 5; c++) {
-      const cell = document.createElement("div");
-      cell.className = "cell";
-      cell.textContent = word[c] || "";
-      if (colors) {
-        cell.classList.add(colors[c]);
-      } else if (r === guesses.length && word[c]) {
-        cell.classList.add("active-border");
-      }
+      const cell = document.createElement("div"); cell.className = "cell";
+      const ch = word[c] || ""; cell.textContent = ch;
+      if (g) cell.classList.add(g.colors[c]);
+      else if (r === guesses.length && ch) cell.classList.add("filled");
       row.appendChild(cell);
     }
-    board.appendChild(row);
+    b.appendChild(row);
   }
 }
 
 function renderKeyboard() {
-  const kb = document.getElementById("keyboard");
-  kb.innerHTML = "";
-
+  const kb = document.getElementById("keyboard"); kb.innerHTML = "";
   const rows = [
     ["Q","W","E","R","T","Y","U","I","O","P"],
     ["A","S","D","F","G","H","J","K","L"],
     ["ENTER","Z","X","C","V","B","N","M","⌫"]
   ];
-
-  // estado de cada tecla (melhor resultado obtido até agora)
-  const keyState = {};
-  guesses.forEach(g => {
-    g.colors.forEach((col, i) => {
-      const l = g.word[i];
-      if (!keyState[l] || col === "correct" ||
-          (col === "present" && keyState[l] === "absent")) {
-        keyState[l] = col;
-      }
-    });
-  });
-
+  const st = {};
+  guesses.forEach(g => g.colors.forEach((col, i) => {
+    const l = g.word[i];
+    if (!st[l] || col === "correct" || (col === "present" && st[l] === "absent")) st[l] = col;
+  }));
   rows.forEach(r => {
-    const row = document.createElement("div");
-    row.className = "kb-row";
+    const row = document.createElement("div"); row.className = "kb-row";
     r.forEach(k => {
       const btn = document.createElement("button");
       btn.className = "key" + (k.length > 1 ? " wide" : "");
       btn.textContent = k;
-      if (keyState[k]) btn.classList.add(keyState[k]);
+      if (st[k]) btn.classList.add(st[k]);
       btn.onclick = () => handleKey(k);
       row.appendChild(btn);
     });
@@ -243,77 +226,44 @@ function renderKeyboard() {
   });
 }
 
-// ─── Lógica de pontuação ──────────────────────────────────────────────────────
-function score(guess, tgt) {
-  const res    = Array(5).fill("absent");
-  const tCount = {};
-
-  // 1ª passagem: acertos exatos
+function scoreWord(guess, tgt) {
+  const res = Array(5).fill("absent");
+  const pool = {};
   for (let i = 0; i < 5; i++) {
-    if (guess[i] === tgt[i]) {
-      res[i] = "correct";
-    } else {
-      tCount[tgt[i]] = (tCount[tgt[i]] || 0) + 1;
-    }
+    if (guess[i] === tgt[i]) res[i] = "correct";
+    else pool[tgt[i]] = (pool[tgt[i]] || 0) + 1;
   }
-
-  // 2ª passagem: letras presentes em posição errada
   for (let i = 0; i < 5; i++) {
-    if (res[i] !== "correct" && tCount[guess[i]]) {
-      res[i] = "present";
-      tCount[guess[i]]--;
-    }
+    if (res[i] !== "correct" && pool[guess[i]]) { res[i] = "present"; pool[guess[i]]--; }
   }
-
   return res;
 }
 
-// ─── Input ────────────────────────────────────────────────────────────────────
 function handleKey(k) {
   if (done) return;
   const msg = document.getElementById("msg");
-
   if (k === "⌫" || k === "Backspace") {
-    current = current.slice(0, -1);
-    renderBoard();
-
+    current = current.slice(0, -1); renderBoard();
   } else if (k === "ENTER" || k === "Enter") {
     if (current.length < 5) { msg.textContent = "Digite 5 letras!"; return; }
-
-    const colors = score(current, target);
+    const colors = scoreWord(current, target);
     guesses.push({ word: current, colors });
-    current = "";
-    renderBoard();
-    renderKeyboard();
-
-    if (guesses[guesses.length - 1].colors.every(c => c === "correct")) {
-      msg.textContent = "🎉 Parabéns! Você acertou!";
-      document.getElementById("hint").textContent = "";
-      done = true;
-    } else if (guesses.length === 6) {
-      msg.textContent = "A palavra era: " + target;
-      document.getElementById("hint").textContent = "";
-      done = true;
-    } else {
-      msg.textContent = "";
-    }
-
-  } else if (/^[A-ZÇÃÕÂÊÔÁÉÍÓÚÀÜa-zçãõâêôáéíóúàü]$/.test(k) && k.length === 1) {
-    if (current.length < 5) {
-      current += k.toUpperCase();
-      renderBoard();
-    }
+    const won = colors.every(c => c === "correct");
+    current = ""; renderBoard(); renderKeyboard();
+    if (won)                 { msg.textContent = "Parabéns! Você acertou!"; done = true; }
+    else if (guesses.length === 6) { msg.textContent = "Era: " + target; done = true; }
+    else                     { msg.textContent = ""; }
+  } else if (/^[a-zA-Z]$/.test(k)) {
+    if (current.length < 5) { current += k.toUpperCase(); renderBoard(); }
   }
 }
 
-// teclado físico
 document.addEventListener("keydown", e => {
-  if (e.key === "Backspace")       handleKey("Backspace");
-  else if (e.key === "Enter")      handleKey("Enter");
-  else if (e.key.length === 1)     handleKey(e.key.toUpperCase());
+  if (e.key === "Backspace")  handleKey("Backspace");
+  else if (e.key === "Enter") handleKey("Enter");
+  else if (e.key.length === 1) handleKey(e.key);
 });
 
-// ─── Início ───────────────────────────────────────────────────────────────────
 newGame();
 </script>
 </body>
