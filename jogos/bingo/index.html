@@ -14,267 +14,190 @@
   --border:  #1e3248;
   --gold:    #f5b800;
   --gold-lt: #ffd452;
-  --gold-dim:#7a5c00;
   --text:    #e8edf3;
   --muted:   #6b8099;
   --red:     #ef4444;
-  --B: #3b82f6; --I: #a855f7; --N: #f5b800; --G: #22c55e; --O: #f97316;
+  --B:#3b82f6; --I:#a855f7; --N:#f5b800; --G:#22c55e; --O:#f97316;
 }
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
 body {
-  min-height: 100dvh;
-  background: var(--navy);
-  color: var(--text);
-  font-family: 'Inter', sans-serif;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0 16px 60px;
+  min-height:100dvh;
+  background:var(--navy);
+  color:var(--text);
+  font-family:'Inter',sans-serif;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:0 16px 60px;
 }
 
-/* ── HEADER ── */
+/* HEADER */
 header {
-  width: 100%;
-  max-width: 680px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px 0 14px;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 32px;
+  width:100%;max-width:700px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 0 14px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:28px;
 }
-.logo {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 38px;
-  letter-spacing: 0.12em;
-  color: var(--gold);
-  line-height: 1;
-  text-shadow: 0 0 24px rgba(245,184,0,0.35);
-}
-.logo span {
-  display: block;
-  font-family: 'Inter', sans-serif;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  color: var(--muted);
-  margin-top: 1px;
-}
-.nav-back { font-size: 12px; color: var(--muted); text-decoration: none; }
-.nav-back:hover { color: var(--text); }
+.logo{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:.12em;color:var(--gold);line-height:1;text-shadow:0 0 24px rgba(245,184,0,.35)}
+.logo span{display:block;font-family:'Inter',sans-serif;font-size:11px;font-weight:500;color:var(--muted);margin-top:1px;letter-spacing:.04em}
+.nav-back{font-size:12px;color:var(--muted);text-decoration:none}
+.nav-back:hover{color:var(--text)}
 
-/* ── BALL ── */
-.ball-wrap {
-  width: 100%;
-  max-width: 680px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 28px;
+/* CONFIG PANEL */
+.config-panel {
+  width:100%;max-width:700px;
+  background:var(--navy-2);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:16px 20px;
+  margin-bottom:20px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  align-items:flex-end;
 }
+.config-group { display:flex;flex-direction:column;gap:6px;flex:1;min-width:120px; }
+.config-label { font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted); }
 
+/* Preset pills */
+.presets { display:flex;flex-wrap:wrap;gap:6px; }
+.preset-btn {
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;font-weight:700;
+  padding:6px 12px;
+  border-radius:8px;
+  border:1.5px solid var(--border);
+  background:var(--navy-3);
+  color:var(--muted);
+  cursor:pointer;
+  transition:border-color .15s,color .15s,background .15s;
+  white-space:nowrap;
+}
+.preset-btn:hover{border-color:var(--gold);color:var(--gold)}
+.preset-btn.active{border-color:var(--gold);background:rgba(245,184,0,.12);color:var(--gold)}
+
+/* Custom range inputs */
+.range-row { display:flex;gap:8px;align-items:center; }
+.range-input {
+  width:72px;
+  padding:7px 10px;
+  background:var(--navy-3);
+  border:1.5px solid var(--border);
+  border-radius:8px;
+  color:var(--text);
+  font-family:'JetBrains Mono',monospace;
+  font-size:14px;
+  font-weight:700;
+  text-align:center;
+  outline:none;
+  transition:border-color .15s;
+}
+.range-input:focus{border-color:var(--gold)}
+.range-sep{color:var(--muted);font-size:13px}
+
+.btn-apply {
+  padding:8px 18px;
+  background:var(--gold);
+  color:#000;
+  border:none;
+  border-radius:8px;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:16px;letter-spacing:.08em;
+  cursor:pointer;
+  transition:background .15s;
+  white-space:nowrap;
+  align-self:flex-end;
+}
+.btn-apply:hover{background:var(--gold-lt)}
+
+.config-info {
+  width:100%;
+  font-size:12px;
+  color:var(--muted);
+  padding-top:4px;
+}
+.config-info strong { color:var(--text); font-family:'JetBrains Mono',monospace; }
+
+/* BALL */
+.ball-wrap{width:100%;max-width:700px;display:flex;flex-direction:column;align-items:center;margin-bottom:20px}
 .ball {
-  width: 180px;
-  height: 180px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 32%, #fff5 0%, transparent 55%),
-              radial-gradient(circle at 60% 65%, #0003 0%, transparent 50%),
-              var(--gold);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 60px rgba(245,184,0,0.45), 0 12px 40px rgba(0,0,0,0.6);
-  transition: background 0.3s, box-shadow 0.3s;
-  position: relative;
+  width:170px;height:170px;border-radius:50%;
+  background:radial-gradient(circle at 35% 32%,#fff5 0%,transparent 55%),radial-gradient(circle at 60% 65%,#0003 0%,transparent 50%),var(--gold);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  box-shadow:0 0 60px rgba(245,184,0,.45),0 12px 40px rgba(0,0,0,.6);
+  transition:background .3s,box-shadow .3s;
 }
-.ball.idle {
-  background: radial-gradient(circle at 35% 32%, #fff2 0%, transparent 55%),
-              var(--navy-3);
-  box-shadow: 0 0 0px rgba(0,0,0,0), 0 8px 24px rgba(0,0,0,0.5);
-}
-.ball.B { background: radial-gradient(circle at 35% 32%, #fff5 0%, transparent 55%), radial-gradient(circle at 60% 65%, #0003 0%, transparent 50%), var(--B); box-shadow: 0 0 60px rgba(59,130,246,0.5), 0 12px 40px rgba(0,0,0,0.6); }
-.ball.I { background: radial-gradient(circle at 35% 32%, #fff5 0%, transparent 55%), radial-gradient(circle at 60% 65%, #0003 0%, transparent 50%), var(--I); box-shadow: 0 0 60px rgba(168,85,247,0.5), 0 12px 40px rgba(0,0,0,0.6); }
-.ball.N { background: radial-gradient(circle at 35% 32%, #fff5 0%, transparent 55%), radial-gradient(circle at 60% 65%, #0003 0%, transparent 50%), var(--N); box-shadow: 0 0 60px rgba(245,184,0,0.5), 0 12px 40px rgba(0,0,0,0.6); }
-.ball.G { background: radial-gradient(circle at 35% 32%, #fff5 0%, transparent 55%), radial-gradient(circle at 60% 65%, #0003 0%, transparent 50%), var(--G); box-shadow: 0 0 60px rgba(34,197,94,0.5), 0 12px 40px rgba(0,0,0,0.6); }
-.ball.O { background: radial-gradient(circle at 35% 32%, #fff5 0%, transparent 55%), radial-gradient(circle at 60% 65%, #0003 0%, transparent 50%), var(--O); box-shadow: 0 0 60px rgba(249,115,22,0.5), 0 12px 40px rgba(0,0,0,0.6); }
+.ball.idle{background:radial-gradient(circle at 35% 32%,#fff2 0%,transparent 55%),var(--navy-3);box-shadow:0 0 0 rgba(0,0,0,0),0 8px 24px rgba(0,0,0,.5)}
+.ball.B{background:radial-gradient(circle at 35% 32%,#fff5 0%,transparent 55%),radial-gradient(circle at 60% 65%,#0003 0%,transparent 50%),var(--B);box-shadow:0 0 60px rgba(59,130,246,.5),0 12px 40px rgba(0,0,0,.6)}
+.ball.I{background:radial-gradient(circle at 35% 32%,#fff5 0%,transparent 55%),radial-gradient(circle at 60% 65%,#0003 0%,transparent 50%),var(--I);box-shadow:0 0 60px rgba(168,85,247,.5),0 12px 40px rgba(0,0,0,.6)}
+.ball.N{background:radial-gradient(circle at 35% 32%,#fff5 0%,transparent 55%),radial-gradient(circle at 60% 65%,#0003 0%,transparent 50%),var(--N);box-shadow:0 0 60px rgba(245,184,0,.5),0 12px 40px rgba(0,0,0,.6)}
+.ball.G{background:radial-gradient(circle at 35% 32%,#fff5 0%,transparent 55%),radial-gradient(circle at 60% 65%,#0003 0%,transparent 50%),var(--G);box-shadow:0 0 60px rgba(34,197,94,.5),0 12px 40px rgba(0,0,0,.6)}
+.ball.O{background:radial-gradient(circle at 35% 32%,#fff5 0%,transparent 55%),radial-gradient(circle at 60% 65%,#0003 0%,transparent 50%),var(--O);box-shadow:0 0 60px rgba(249,115,22,.5),0 12px 40px rgba(0,0,0,.6)}
+.ball.plain{background:radial-gradient(circle at 35% 32%,#fff5 0%,transparent 55%),radial-gradient(circle at 60% 65%,#0003 0%,transparent 50%),#475569;box-shadow:0 0 40px rgba(100,116,139,.4),0 12px 40px rgba(0,0,0,.6)}
+.ball.pop{animation:pop .45s cubic-bezier(.34,1.56,.64,1)}
+@keyframes pop{0%{transform:scale(.55);opacity:.3}70%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
 
-.ball.pop { animation: pop 0.45s cubic-bezier(0.34,1.56,0.64,1); }
-@keyframes pop {
-  0%   { transform: scale(0.55); opacity: 0.3; }
-  70%  { transform: scale(1.08); }
-  100% { transform: scale(1); opacity: 1; }
-}
+.ball-letter{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:.12em;color:rgba(255,255,255,.75);line-height:1}
+.ball-number{font-family:'JetBrains Mono',monospace;font-size:68px;font-weight:700;color:#fff;line-height:1;text-shadow:0 2px 12px rgba(0,0,0,.35)}
+.ball.idle .ball-letter{display:none}
+.ball.idle .ball-number{font-size:26px;color:var(--muted);font-weight:500}
+.ball-sub{margin-top:12px;font-size:13px;color:var(--muted);font-family:'JetBrains Mono',monospace}
+.ball-sub strong{color:var(--gold)}
 
-.ball-letter {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 28px;
-  letter-spacing: 0.12em;
-  color: rgba(255,255,255,0.75);
-  line-height: 1;
-}
-.ball-number {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 72px;
-  font-weight: 700;
-  color: #fff;
-  line-height: 1;
-  text-shadow: 0 2px 12px rgba(0,0,0,0.35);
-}
-.ball.idle .ball-letter { display: none; }
-.ball.idle .ball-number {
-  font-size: 28px;
-  color: var(--muted);
-  font-weight: 500;
-}
-
-.ball-sub {
-  margin-top: 14px;
-  font-size: 13px;
-  color: var(--muted);
-  font-family: 'JetBrains Mono', monospace;
-}
-.ball-sub strong { color: var(--gold); }
-
-/* ── BUTTON ── */
+/* DRAW BUTTON */
 .btn-draw {
-  width: 100%;
-  max-width: 680px;
-  padding: 18px;
-  background: var(--gold);
-  color: #000;
-  border: none;
-  border-radius: 14px;
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 22px;
-  letter-spacing: 0.12em;
-  cursor: pointer;
-  box-shadow: 0 4px 24px rgba(245,184,0,0.35);
-  transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
-  margin-bottom: 24px;
+  width:100%;max-width:700px;
+  padding:17px;
+  background:var(--gold);color:#000;
+  border:none;border-radius:14px;
+  font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.12em;
+  cursor:pointer;
+  box-shadow:0 4px 24px rgba(245,184,0,.35);
+  transition:background .15s,transform .1s,box-shadow .15s;
+  margin-bottom:20px;
 }
-.btn-draw:hover:not(:disabled) { background: var(--gold-lt); box-shadow: 0 6px 32px rgba(245,184,0,0.55); }
-.btn-draw:active:not(:disabled) { transform: scale(0.98); }
-.btn-draw:disabled { background: #1e3248; color: var(--muted); cursor: default; box-shadow: none; }
+.btn-draw:hover:not(:disabled){background:var(--gold-lt);box-shadow:0 6px 32px rgba(245,184,0,.55)}
+.btn-draw:active:not(:disabled){transform:scale(.98)}
+.btn-draw:disabled{background:#1e3248;color:var(--muted);cursor:default;box-shadow:none}
 
-/* ── BINGO GRID (all 75) ── */
-.grid-panel {
-  width: 100%;
-  max-width: 680px;
-  background: var(--navy-2);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 20px 16px 16px;
-  margin-bottom: 16px;
-}
-.col-headers {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 4px;
-  margin-bottom: 6px;
-}
-.col-hd {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 22px;
-  letter-spacing: 0.12em;
-  text-align: center;
-}
-.col-hd.B { color: var(--B); }
-.col-hd.I { color: var(--I); }
-.col-hd.N { color: var(--N); }
-.col-hd.G { color: var(--G); }
-.col-hd.O { color: var(--O); }
+/* GRID */
+.grid-panel{width:100%;max-width:700px;background:var(--navy-2);border:1px solid var(--border);border-radius:20px;padding:20px 16px 16px;margin-bottom:16px}
+.col-headers{display:grid;gap:4px;margin-bottom:6px}
+.col-hd{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.1em;text-align:center}
+.col-hd.B{color:var(--B)}.col-hd.I{color:var(--I)}.col-hd.N{color:var(--N)}.col-hd.G{color:var(--G)}.col-hd.O{color:var(--O)}.col-hd.plain{color:var(--muted)}
 
-.num-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 4px;
+.num-grid{display:grid;gap:4px}
+.num-col{display:flex;flex-direction:column;gap:4px}
+.num-cell{
+  height:36px;border-radius:7px;
+  background:var(--navy-3);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500;
+  color:var(--muted);
+  transition:background .25s,color .25s,border-color .25s,transform .15s;
 }
-.num-col { display: flex; flex-direction: column; gap: 4px; }
+.num-cell.hit{color:#fff;border-color:transparent}
+.num-cell.hit.B{background:var(--B)}.num-cell.hit.I{background:var(--I)}
+.num-cell.hit.N{background:var(--N);color:#000}.num-cell.hit.G{background:var(--G);color:#000}
+.num-cell.hit.O{background:var(--O)}.num-cell.hit.plain{background:#475569}
+.num-cell.latest{box-shadow:0 0 0 2px #fff;transform:scale(1.07)}
 
-.num-cell {
-  height: 38px;
-  border-radius: 8px;
-  background: var(--navy-3);
-  border: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--muted);
-  transition: background 0.25s, color 0.25s, border-color 0.25s, transform 0.15s;
-}
-.num-cell.hit { color: #fff; border-color: transparent; }
-.num-cell.hit.B { background: var(--B); }
-.num-cell.hit.I { background: var(--I); }
-.num-cell.hit.N { background: var(--N); color: #000; }
-.num-cell.hit.G { background: var(--G); color: #000; }
-.num-cell.hit.O { background: var(--O); }
-.num-cell.latest { box-shadow: 0 0 0 2px #fff; transform: scale(1.07); }
+/* HISTORY */
+.history-panel{width:100%;max-width:700px;background:var(--navy-2);border:1px solid var(--border);border-radius:20px;padding:20px 16px 16px;margin-bottom:16px}
+.panel-label{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;padding:5px 10px;border-radius:8px;color:#fff;line-height:1}
+.chip.B{background:var(--B)}.chip.I{background:var(--I)}.chip.N{background:var(--N);color:#000}.chip.G{background:var(--G);color:#000}.chip.O{background:var(--O)}.chip.plain{background:#475569}
+.chip.latest-chip{box-shadow:0 0 0 2px #fff}
+.chips-empty{font-size:13px;color:var(--muted)}
 
-/* ── HISTORY ── */
-.history-panel {
-  width: 100%;
-  max-width: 680px;
-  background: var(--navy-2);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 20px 16px 16px;
-  margin-bottom: 16px;
-}
-.panel-label {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 12px;
-}
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-.chip {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 13px;
-  font-weight: 700;
-  padding: 5px 10px;
-  border-radius: 8px;
-  color: #fff;
-  line-height: 1;
-}
-.chip.B { background: var(--B); }
-.chip.I { background: var(--I); }
-.chip.N { background: var(--N); color: #000; }
-.chip.G { background: var(--G); color: #000; }
-.chip.O { background: var(--O); }
-.chip.latest-chip { box-shadow: 0 0 0 2px #fff; }
-.chips-empty { font-size: 13px; color: var(--muted); }
+/* RESET */
+.btn-reset{width:100%;max-width:700px;padding:12px;background:transparent;border:1.5px solid #3a1a1a;border-radius:12px;color:#6b3333;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:border-color .15s,color .15s}
+.btn-reset:hover{border-color:var(--red);color:var(--red)}
 
-/* ── RESET ── */
-.btn-reset {
-  width: 100%;
-  max-width: 680px;
-  padding: 12px;
-  background: transparent;
-  border: 1.5px solid #3a1a1a;
-  border-radius: 12px;
-  color: #6b3333;
-  font-family: 'Inter', sans-serif;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: border-color 0.15s, color 0.15s;
-}
-.btn-reset:hover { border-color: var(--red); color: var(--red); }
-
-@media (prefers-reduced-motion: reduce) {
-  .ball.pop { animation: none; }
-}
+@media(prefers-reduced-motion:reduce){.ball.pop{animation:none}}
 </style>
 </head>
 <body>
@@ -284,31 +207,53 @@ header {
   <a class="nav-back" href="/">← UtiliWeb</a>
 </header>
 
-<!-- Bola -->
+<!-- CONFIG -->
+<div class="config-panel">
+  <div class="config-group" style="flex:100%">
+    <div class="config-label">Tipo de cartela</div>
+    <div class="presets" id="presets">
+      <button class="preset-btn active" data-min="1"  data-max="75"  data-cols="BINGO" onclick="applyPreset(this)">Tradicional 1–75</button>
+      <button class="preset-btn"        data-min="1"  data-max="90"  data-cols=""      onclick="applyPreset(this)">Europeu 1–90</button>
+      <button class="preset-btn"        data-min="1"  data-max="60"  data-cols=""      onclick="applyPreset(this)">Speed 1–60</button>
+      <button class="preset-btn"        data-min="1"  data-max="30"  data-cols=""      onclick="applyPreset(this)">Mini 1–30</button>
+      <button class="preset-btn"        data-min="1"  data-max="100" data-cols=""      onclick="applyPreset(this)">Centenário 1–100</button>
+      <button class="preset-btn"        data-min="1"  data-max="50"  data-cols=""      onclick="applyPreset(this)">Custom 1–50</button>
+    </div>
+  </div>
+
+  <div class="config-group">
+    <div class="config-label">Intervalo personalizado</div>
+    <div class="range-row">
+      <input class="range-input" id="inMin" type="number" min="1" value="1" placeholder="1">
+      <span class="range-sep">até</span>
+      <input class="range-input" id="inMax" type="number" min="2" value="75" placeholder="75">
+      <button class="btn-apply" onclick="applyCustom()">Aplicar</button>
+    </div>
+  </div>
+
+  <div class="config-info" id="configInfo">
+    Sorteando de <strong>1</strong> a <strong>75</strong> — <strong>75</strong> números no total, colunas <strong>B I N G O</strong>
+  </div>
+</div>
+
+<!-- BALL -->
 <div class="ball-wrap">
   <div class="ball idle" id="ball">
     <div class="ball-letter" id="ballLetter"></div>
     <div class="ball-number" id="ballNumber">Sortear</div>
   </div>
-  <div class="ball-sub"><strong id="drawnCount">0</strong> de 75 sorteados</div>
+  <div class="ball-sub"><strong id="drawnCount">0</strong> de <strong id="totalCount">75</strong> sorteados</div>
 </div>
 
-<!-- Botão -->
 <button class="btn-draw" id="btnDraw" onclick="draw()">🎱 Sortear número</button>
 
-<!-- Grade 75 números -->
+<!-- GRID -->
 <div class="grid-panel">
-  <div class="col-headers">
-    <div class="col-hd B">B</div>
-    <div class="col-hd I">I</div>
-    <div class="col-hd N">N</div>
-    <div class="col-hd G">G</div>
-    <div class="col-hd O">O</div>
-  </div>
-  <div class="num-grid" id="numGrid"></div>
+  <div class="col-headers" id="colHeaders"></div>
+  <div class="num-grid"    id="numGrid"></div>
 </div>
 
-<!-- Histórico -->
+<!-- HISTORY -->
 <div class="history-panel">
   <div class="panel-label">Ordem de sorteio — mais recente primeiro</div>
   <div class="chips" id="chips"><span class="chips-empty">Nenhum número sorteado ainda.</span></div>
@@ -317,58 +262,138 @@ header {
 <button class="btn-reset" onclick="resetGame()">↺ Reiniciar jogo</button>
 
 <script>
-const COLS   = ['B','I','N','G','O'];
-const RANGES = { B:[1,15], I:[16,30], N:[31,45], G:[46,60], O:[61,75] };
-
-let pool = [], drawn = [];
-
-function numToCol(n) {
-  if (n <= 15) return 'B';
-  if (n <= 30) return 'I';
-  if (n <= 45) return 'N';
-  if (n <= 60) return 'G';
-  return 'O';
+// ── CONFIG ──────────────────────────────────────────────────────
+const BINGO_COLS  = ['B','I','N','G','O'];
+// Maps total range to BINGO col count — only used for multiples of 5
+function getColDef(min, max, colsHint) {
+  const total = max - min + 1;
+  if (colsHint === 'BINGO' || (total % 5 === 0 && total <= 100)) {
+    // split into 5 equal cols
+    const perCol = Math.ceil(total / 5);
+    return BINGO_COLS.slice(0, 5).map((c, i) => ({
+      label: c,
+      lo: min + i * perCol,
+      hi: Math.min(min + (i + 1) * perCol - 1, max),
+      cls: c
+    }));
+  }
+  // No column split — single "plain" column display
+  return null;
 }
 
-// Build grid
+let cfgMin = 1, cfgMax = 75, colDef = null;
+let pool = [], drawn = [];
+
+// ── PRESETS ─────────────────────────────────────────────────────
+function applyPreset(btn) {
+  document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const min = parseInt(btn.dataset.min);
+  const max = parseInt(btn.dataset.max);
+  document.getElementById('inMin').value = min;
+  document.getElementById('inMax').value = max;
+  configure(min, max, btn.dataset.cols);
+}
+
+function applyCustom() {
+  const min = parseInt(document.getElementById('inMin').value);
+  const max = parseInt(document.getElementById('inMax').value);
+  if (isNaN(min) || isNaN(max) || min < 1 || max <= min) {
+    alert('Intervalo inválido. O mínimo deve ser ≥ 1 e o máximo maior que o mínimo.');
+    return;
+  }
+  document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+  configure(min, max, '');
+}
+
+function configure(min, max, colsHint) {
+  cfgMin = min; cfgMax = max;
+  colDef = getColDef(min, max, colsHint);
+  buildGrid();
+  resetGame(false); // rebuild without clearing config
+  updateConfigInfo();
+}
+
+function updateConfigInfo() {
+  const total = cfgMax - cfgMin + 1;
+  const colsStr = colDef ? colDef.map(c => c.label).join(' ') : '—';
+  document.getElementById('configInfo').innerHTML =
+    `Sorteando de <strong>${cfgMin}</strong> a <strong>${cfgMax}</strong> — <strong>${total}</strong> números no total` +
+    (colDef ? `, colunas <strong>${colsStr}</strong>` : ', sem colunas');
+}
+
+// ── GRID BUILD ──────────────────────────────────────────────────
 function buildGrid() {
-  const grid = document.getElementById('numGrid');
-  grid.innerHTML = '';
-  COLS.forEach(col => {
-    const [lo, hi] = RANGES[col];
-    const colDiv = document.createElement('div');
-    colDiv.className = 'num-col';
-    for (let n = lo; n <= hi; n++) {
+  const headerEl = document.getElementById('colHeaders');
+  const gridEl   = document.getElementById('numGrid');
+  headerEl.innerHTML = '';
+  gridEl.innerHTML   = '';
+
+  if (colDef) {
+    // BINGO column layout
+    const ncols = colDef.length;
+    headerEl.style.gridTemplateColumns = `repeat(${ncols},1fr)`;
+    gridEl.style.gridTemplateColumns   = `repeat(${ncols},1fr)`;
+    colDef.forEach(col => {
+      const hd = document.createElement('div');
+      hd.className = `col-hd ${col.cls}`;
+      hd.textContent = col.label;
+      headerEl.appendChild(hd);
+
+      const colDiv = document.createElement('div');
+      colDiv.className = 'num-col';
+      for (let n = col.lo; n <= col.hi; n++) {
+        const cell = document.createElement('div');
+        cell.className = 'num-cell';
+        cell.id = `n${n}`;
+        cell.textContent = n;
+        colDiv.appendChild(cell);
+      }
+      gridEl.appendChild(colDiv);
+    });
+  } else {
+    // No-column layout — dynamic grid
+    const total = cfgMax - cfgMin + 1;
+    const cols  = total <= 20 ? 4 : total <= 40 ? 5 : total <= 60 ? 6 : total <= 75 ? 5 : total <= 90 ? 6 : 7;
+    headerEl.style.gridTemplateColumns = '';
+    headerEl.innerHTML = ''; // no headers
+    gridEl.style.gridTemplateColumns = `repeat(${cols},1fr)`;
+    for (let n = cfgMin; n <= cfgMax; n++) {
       const cell = document.createElement('div');
       cell.className = 'num-cell';
       cell.id = `n${n}`;
       cell.textContent = n;
-      colDiv.appendChild(cell);
+      gridEl.appendChild(cell);
     }
-    grid.appendChild(colDiv);
-  });
+  }
 }
 
-function resetGame() {
-  pool  = Array.from({length:75}, (_,i) => i+1);
+// ── GAME ────────────────────────────────────────────────────────
+function resetGame(rebuild = false) {
+  pool  = Array.from({length: cfgMax - cfgMin + 1}, (_, i) => cfgMin + i);
   drawn = [];
   document.getElementById('drawnCount').textContent = '0';
-  document.getElementById('btnDraw').disabled = false;
+  document.getElementById('totalCount').textContent  = pool.length;
+  document.getElementById('btnDraw').disabled   = false;
   document.getElementById('btnDraw').textContent = '🎱 Sortear número';
-  // Reset ball
   const ball = document.getElementById('ball');
   ball.className = 'ball idle';
   document.getElementById('ballLetter').textContent = '';
-  document.getElementById('ballNumber').textContent = 'Sortear';
-  // Reset grid
+  document.getElementById('ballNumber').textContent  = 'Sortear';
   document.querySelectorAll('.num-cell').forEach(el => el.className = 'num-cell');
-  // Reset history
   document.getElementById('chips').innerHTML = '<span class="chips-empty">Nenhum número sorteado ainda.</span>';
+}
+
+function numToCol(n) {
+  if (!colDef) return 'plain';
+  for (const col of colDef) {
+    if (n >= col.lo && n <= col.hi) return col.cls;
+  }
+  return 'plain';
 }
 
 function draw() {
   if (pool.length === 0) return;
-
   const idx = Math.floor(Math.random() * pool.length);
   const num = pool.splice(idx, 1)[0];
   drawn.push(num);
@@ -377,38 +402,34 @@ function draw() {
   // Ball
   const ball = document.getElementById('ball');
   ball.className = `ball ${col} pop`;
-  document.getElementById('ballLetter').textContent = col;
-  document.getElementById('ballNumber').textContent = num;
-  ball.addEventListener('animationend', () => ball.classList.remove('pop'), { once: true });
+  document.getElementById('ballLetter').textContent = colDef ? col : '';
+  document.getElementById('ballNumber').textContent  = num;
+  ball.addEventListener('animationend', () => ball.classList.remove('pop'), { once:true });
 
-  // Counter
   document.getElementById('drawnCount').textContent = drawn.length;
   if (pool.length === 0) {
-    document.getElementById('btnDraw').disabled = true;
-    document.getElementById('btnDraw').textContent = 'Todos os 75 números sorteados!';
+    document.getElementById('btnDraw').disabled   = true;
+    document.getElementById('btnDraw').textContent = 'Todos os números sorteados!';
   }
 
-  // Grid — remove previous "latest", mark new
+  // Grid
   document.querySelectorAll('.num-cell.latest').forEach(el => el.classList.remove('latest'));
   const cell = document.getElementById(`n${num}`);
   if (cell) cell.className = `num-cell hit ${col} latest`;
 
   // History
   const chipsEl = document.getElementById('chips');
-  // Remove "latest-chip" from previous
   chipsEl.querySelectorAll('.latest-chip').forEach(el => el.classList.remove('latest-chip'));
-  // Remove empty placeholder
   const empty = chipsEl.querySelector('.chips-empty');
   if (empty) empty.remove();
-  // Prepend new chip
   const chip = document.createElement('span');
   chip.className = `chip ${col} latest-chip`;
-  chip.textContent = `${col}${num}`;
+  chip.textContent = colDef ? `${col}${num}` : num;
   chipsEl.prepend(chip);
 }
 
-buildGrid();
-resetGame();
+// ── INIT ────────────────────────────────────────────────────────
+configure(1, 75, 'BINGO');
 </script>
 </body>
 </html>
