@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sequência</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, sans-serif;
+      background: #f9f9f7;
+      color: #1a1a18;
+      display: flex;
+      justify-content: center;
+      padding: 2rem 1rem;
+      min-height: 100vh;
+    }
+
+    .gw { max-width: 380px; width: 100%; text-align: center; }
+
+    .gt { font-size: 20px; font-weight: 500; margin-bottom: 4px; }
+    .gs { font-size: 12px; color: #666; margin-bottom: 1.2rem; }
+
+    .stats { display: flex; justify-content: center; gap: 24px; margin-bottom: 1rem; }
+    .stat  { font-size: 12px; color: #666; }
+    .stat span { display: block; font-size: 20px; font-weight: 500; color: #1a1a18; }
+
+    .progress { display: flex; justify-content: center; gap: 5px; margin-bottom: 1rem; min-height: 12px; }
+    .pip      { width: 8px; height: 8px; border-radius: 50%; background: #ccc; }
+    .pip.done { background: #27500A; }
+    .pip.cur  { background: #EF9F27; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 0 auto 1.2rem;
+      max-width: 270px;
+    }
+
+    .btn {
+      width: 78px;
+      height: 78px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      outline: none;
+      opacity: 0.25;
+      transition: opacity 0.08s, transform 0.08s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn.lit     { opacity: 1; transform: scale(1.08); }
+    .btn:active  { opacity: 1; transform: scale(0.95); }
+
+    .btn[data-c="0"] { background: #27500A; }
+    .btn[data-c="1"] { background: #EF9F27; }
+    .btn[data-c="2"] { background: #185FA5; }
+    .btn[data-c="3"] { background: #A32D2D; }
+    .btn[data-c="4"] { background: #7F77DD; }
+    .btn[data-c="5"] { background: #1D9E75; }
+
+    .msg { font-size: 13px; font-weight: 500; min-height: 20px; margin-bottom: 12px; }
+
+    .start-btn {
+      height: 40px;
+      padding: 0 24px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background: #fff;
+      color: #1a1a18;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .start-btn:hover { background: #f0f0ee; }
+
+    @media (prefers-color-scheme: dark) {
+      body           { background: #1a1a18; color: #f0f0ee; }
+      .gs, .stat     { color: #aaa; }
+      .stat span     { color: #f0f0ee; }
+      .pip           { background: #555; }
+      .start-btn     { background: #2a2a28; border-color: #555; color: #f0f0ee; }
+      .start-btn:hover { background: #3a3a38; }
+    }
+  </style>
+</head>
+<body>
+<div class="gw">
+  <h1 class="gt">Sequência</h1>
+  <p class="gs">Observe e repita a ordem das cores</p>
+
+  <div class="stats">
+    <div class="stat">Nível<span id="lvl">—</span></div>
+    <div class="stat">Recorde<span id="best">0</span></div>
+  </div>
+
+  <div class="progress" id="progress"></div>
+  <div class="grid" id="grid"></div>
+  <div class="msg" id="msg">Pronto para começar?</div>
+  <div id="action"><button class="start-btn" onclick="startGame()">▶ Iniciar</button></div>
+</div>
+
+<script>
+const N = 6;
+let seq = [], playerSeq = [], best = 0, accepting = false;
+
+function buildGrid() {
+  const g = document.getElementById("grid");
+  g.innerHTML = "";
+  for (let i = 0; i < N; i++) {
+    const b = document.createElement("button");
+    b.className = "btn";
+    b.dataset.c = i;
+    b.addEventListener("click", () => playerPress(i));
+    g.appendChild(b);
+  }
+}
+
+function btn(i) { return document.querySelector(`.btn[data-c="${i}"]`); }
+
+function flashBtn(i, onMs, offMs) {
+  return new Promise(res => {
+    const b = btn(i);
+    b.classList.add("lit");
+    setTimeout(() => {
+      b.classList.remove("lit");
+      setTimeout(res, offMs);
+    }, onMs);
+  });
+}
+
+async function showSequence() {
+  accepting = false;
+  hideStart();
+  renderProgress(-1);
+  setMsg("Observe…");
+  await sleep(700);
+  for (const c of seq) {
+    await flashBtn(c, 520, 180);
+  }
+  playerSeq = [];
+  accepting = true;
+  setMsg("Sua vez!");
+  renderProgress(0);
+}
+
+function renderProgress(done) {
+  const p = document.getElementById("progress");
+  p.innerHTML = "";
+  if (seq.length === 0) return;
+  for (let i = 0; i < seq.length; i++) {
+    const d = document.createElement("div");
+    if (done === -1)     d.className = "pip";
+    else if (i < done)   d.className = "pip done";
+    else if (i === done) d.className = "pip cur";
+    else                 d.className = "pip";
+    p.appendChild(d);
+  }
+}
+
+async function playerPress(i) {
+  if (!accepting) return;
+  accepting = false;
+  await flashBtn(i, 200, 80);
+  playerSeq.push(i);
+  const pos = playerSeq.length - 1;
+
+  if (playerSeq[pos] !== seq[pos]) {
+    setMsg("Errou na posição " + (pos + 1) + "!");
+    if (seq.length - 1 > best) {
+      best = seq.length - 1;
+      document.getElementById("best").textContent = best;
+    }
+    await sleep(900);
+    setMsg("Tente de novo?");
+    showStart("↺ Reiniciar");
+    document.getElementById("lvl").textContent = "—";
+    renderProgress(-1);
+    seq = []; playerSeq = [];
+    return;
+  }
+
+  renderProgress(playerSeq.length);
+
+  if (playerSeq.length === seq.length) {
+    setMsg("Perfeito! ✓");
+    await sleep(700);
+    nextLevel();
+  } else {
+    accepting = true;
+  }
+}
+
+function nextLevel() {
+  seq.push(Math.floor(Math.random() * N));
+  document.getElementById("lvl").textContent = seq.length;
+  if (seq.length - 1 > best) {
+    best = seq.length - 1;
+    document.getElementById("best").textContent = best;
+  }
+  showSequence();
+}
+
+function startGame() { seq = []; playerSeq = []; renderProgress(-1); nextLevel(); }
+function setMsg(t)    { document.getElementById("msg").textContent = t; }
+function hideStart()  { document.getElementById("action").innerHTML = ""; }
+function showStart(label = "▶ Iniciar") {
+  document.getElementById("action").innerHTML = `<button class="start-btn" onclick="startGame()">${label}</button>`;
+}
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+buildGrid();
+</script>
+</body>
+</html>
