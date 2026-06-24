@@ -143,43 +143,6 @@ html, body {
 .valor-input.filled + .valor-sym,
 .valor-wrap:focus-within .valor-sym { color: #1a3a5c; }
 
-/* ── BTN BUSCAR ── */
-.btn-buscar {
-  width: 100%;
-  padding: 13px;
-  border: none;
-  border-radius: var(--radius);
-  background: linear-gradient(135deg, #c9a84c, #a8883a);
-  color: white;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-  font-family: inherit;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  transition: opacity 0.2s, transform 0.1s;
-  box-shadow: 0 4px 14px rgba(201,168,76,0.35);
-}
-.btn-buscar:hover:not(:disabled) { opacity: 0.92; }
-.btn-buscar:active:not(:disabled) { transform: scale(0.98); }
-.btn-buscar:disabled { opacity: 0.55; cursor: default; }
-.busca-hint { font-size: 11px; color: var(--text-3); text-align: center; margin-top: 7px; line-height: 1.4; }
-
-/* ── SPINNER ── */
-.spinner {
-  width: 14px; height: 14px;
-  border: 2px solid rgba(255,255,255,0.4);
-  border-top-color: white;
-  border-radius: 50%;
-  animation: spin 0.7s linear infinite;
-  display: none;
-}
-.btn-buscar.loading .spinner { display: block; }
-.btn-buscar.loading .btn-icon { display: none; }
-@keyframes spin { to { transform: rotate(360deg); } }
-
 /* ── PRESET GRID ── */
 .presets-grid {
   display: grid;
@@ -417,20 +380,10 @@ html, body {
       </div>
     </div>
 
-    <!-- BUSCAR -->
-    <div class="panel-section">
-      <button class="btn-buscar" id="btn-buscar" onclick="buscarDados()">
-        <span class="btn-icon">🔍</span>
-        <div class="spinner"></div>
-        Buscar câmbio e taxas atuais via IA
-      </button>
-      <p class="busca-hint">Pesquisa na web em tempo real. Confirme sempre no site do serviço antes de enviar.</p>
-    </div>
-
     <!-- PRESETS -->
     <div class="panel-section">
       <div class="sec-label">Serviços — clique para preencher</div>
-      <p class="preset-hint" id="preset-hint">Valores estimados. Use "Buscar" acima para cotações em tempo real.</p>
+      <p class="preset-hint" id="preset-hint">Valores estimados. Confirme sempre no site do serviço antes de enviar.</p>
       <div class="presets-grid" id="presets-grid"></div>
     </div>
 
@@ -530,7 +483,7 @@ html, body {
     </div>
 
     <div class="disclaimer">
-      Valores estimados — confirme sempre no site do serviço. A busca automática funciona apenas dentro do Claude. Não é aconselhamento financeiro.
+      Valores estimados — confirme sempre no site do serviço antes de enviar. Não é aconselhamento financeiro.
     </div>
 
   </div><!-- /panel direito -->
@@ -573,7 +526,6 @@ const CFG = {
 
 let moedaAtual   = 'JPY';
 let presetAtivo  = null;
-let dadosBusca   = null;
 
 // ── UTILS ─────────────────────────────────────────────────────────────────────
 
@@ -639,39 +591,32 @@ function setMoeda(m) {
 
 function buildPresets() {
   const { presets, cambioBase } = cfg();
-  const comercial  = dadosBusca?.cambio_comercial || 0;
-  const baseRate   = comercial > 0 ? comercial : cambioBase;
-  const iofBuscado = dadosBusca?.iof_pct;
+  const baseRate   = cambioBase;
 
   const grid = document.getElementById('presets-grid');
   grid.innerHTML = '';
 
-  let hintText = 'Valores estimados. Use "Buscar" para cotações em tempo real.';
-  if (dadosBusca?.cambio_comercial) hintText = '✓ Câmbio atualizado via IA. Confirme no site do serviço.';
-  document.getElementById('preset-hint').textContent = hintText;
+  document.getElementById('preset-hint').textContent = 'Valores estimados. Confirme no site do serviço antes de enviar.';
 
   presets.forEach(p => {
-    const fetched = (dadosBusca?.servicos || []).find(s =>
-      s.nome?.toLowerCase().includes(p.nome.split(/\s/)[0].toLowerCase())
-    );
+    const fetched = null;
     const cambio  = fetched?.cambio   != null ? +fetched.cambio   : +(baseRate * p.cambioRel).toFixed(4);
     const taxaPct = fetched?.taxa_pct != null ? +fetched.taxa_pct : p.taxaPct;
     const fixo    = fetched?.taxa_fixa!= null ? +fetched.taxa_fixa: p.fixo;
-    const fonte   = fetched ? '🔴' : '';
 
     const btn = document.createElement('button');
     btn.className = 'preset-btn' + (presetAtivo === p.id ? ' active' : '');
     btn.id = 'preset-' + p.id;
     btn.innerHTML = `
-      <div class="p-name">${p.emoji} ${p.nome} <span style="color:var(--green-dark);font-size:9px">${fonte}</span></div>
+      <div class="p-name">${p.emoji} ${p.nome}</div>
       <div class="p-cambio">R$${cambio.toLocaleString('pt-BR',{minimumFractionDigits:4,maximumFractionDigits:4})}</div>
       <div class="p-taxa">${fmtTaxa(taxaPct, fixo)}</div>`;
-    btn.onclick = () => selecionarPreset(p.id, cambio, taxaPct, fixo, p.nome, iofBuscado);
+    btn.onclick = () => selecionarPreset(p.id, cambio, taxaPct, fixo, p.nome);
     grid.appendChild(btn);
   });
 }
 
-function selecionarPreset(id, cambio, taxaPct, fixo, nome, iofForcado) {
+function selecionarPreset(id, cambio, taxaPct, fixo, nome) {
   if (presetAtivo === id) {
     // toggle off — mantém campos, só remove destaque
     presetAtivo = null;
@@ -685,10 +630,8 @@ function selecionarPreset(id, cambio, taxaPct, fixo, nome, iofForcado) {
   set('cotacao', cambio);
   set('taxa-pct', taxaPct || 0);
   set('taxa-fixa', fixo || 0);
-  // IOF: usa valor buscado > valor já preenchido > padrão 0.38
-  const iofAtual = num('iof');
-  if (iofForcado != null) set('iof', iofForcado);
-  else if (!iofAtual) set('iof', 0.38);
+  // IOF: usa valor já preenchido ou padrão 0.38
+  if (!num('iof')) set('iof', 0.38);
 
   calcular();
   toast(`✓ ${nome} selecionado`);
@@ -740,15 +683,12 @@ function renderComparativo(V, rAtual) {
   }
 
   const { presets, cambioBase } = cfg();
-  const comercial = dadosBusca?.cambio_comercial || 0;
-  const baseRate  = comercial > 0 ? comercial : cambioBase;
+  const baseRate  = cambioBase;
   const iofPct    = num('iof') || 0.38;
 
   // Calcula todos os presets
   const resultados = presets.map(p => {
-    const fetched = (dadosBusca?.servicos || []).find(s =>
-      s.nome?.toLowerCase().includes(p.nome.split(/\s/)[0].toLowerCase())
-    );
+    const fetched = null;
     const cambio  = fetched?.cambio   != null ? +fetched.cambio   : +(baseRate * p.cambioRel).toFixed(4);
     const taxaPct = fetched?.taxa_pct != null ? +fetched.taxa_pct : p.taxaPct;
     const fixo    = fetched?.taxa_fixa!= null ? +fetched.taxa_fixa: p.fixo;
@@ -813,49 +753,6 @@ function renderDetalhes(r, V, cambio, pct, fixo, iofPct) {
   `;
 }
 
-// ── BUSCA ─────────────────────────────────────────────────────────────────────
-
-async function buscarDados() {
-  const btn = document.getElementById('btn-buscar');
-  btn.disabled = true;
-  btn.classList.add('loading');
-
-  const nomes = { JPY:'Iene japonês (JPY)', USD:'Dólar americano (USD)', EUR:'Euro (EUR)' };
-  const m = moedaAtual;
-  const prompt = `Pesquise agora na web e retorne SOMENTE um objeto JSON válido (sem markdown, sem texto extra) com: (1) cotação comercial atual de ${nomes[m]} para BRL; (2) IOF % para remessa internacional recebida por pessoa física no Brasil; (3) câmbio e taxas de Wise, ${m==='JPY'?'SBI Remit, ':''}Remitly, Western Union${m==='EUR'?' e Revolut':m==='USD'?' e PayPal':''} para enviar ${nomes[m]} ao Brasil hoje. Formato exato: {"cambio_comercial":0.0,"iof_pct":0.0,"servicos":[{"nome":"","cambio":0.0,"taxa_pct":0.0,"taxa_fixa":0.0}]}`;
-
-  try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        model:'claude-sonnet-4-6', max_tokens:1000,
-        messages:[{role:'user', content:prompt}],
-        tools:[{type:'web_search_20250305', name:'web_search'}]
-      })
-    });
-    if (!resp.ok) throw new Error('HTTP ' + resp.status);
-    const data = await resp.json();
-    const txt  = (data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('\n');
-    const match = txt.match(/\{[\s\S]*\}/);
-    if (!match) throw new Error('JSON não encontrado na resposta');
-    const parsed = JSON.parse(match[0]);
-    if (!parsed.cambio_comercial) throw new Error('câmbio_comercial ausente');
-
-    dadosBusca = parsed;
-    if (parsed.cambio_comercial > 0) set('cotacao', parsed.cambio_comercial);
-    if (parsed.iof_pct)              set('iof',     parsed.iof_pct);
-
-    buildPresets();
-    calcular();
-    toast('✓ Cotações atualizadas — confirme no site antes de enviar', 3500);
-  } catch (err) {
-    console.error('Busca falhou:', err.message);
-    toast('⚠ Não foi possível buscar. Preencha manualmente ou use um preset.', 4000);
-  } finally {
-    btn.disabled = false;
-    btn.classList.remove('loading');
-  }
 }
 
 // ── LIMPAR / COPIAR / EXPORTAR ────────────────────────────────────────────────
@@ -863,7 +760,6 @@ async function buscarDados() {
 function limpar() {
   ['valor-enviar','cotacao','iof','taxa-pct','taxa-fixa'].forEach(id => set(id, ''));
   document.getElementById('valor-enviar').classList.remove('filled');
-  dadosBusca  = null;
   presetAtivo = null;
   buildPresets();
   calcular();
