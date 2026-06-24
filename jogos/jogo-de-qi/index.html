@@ -8,20 +8,22 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,300&family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg:       #f5f5f0;
-  --surface:  #ffffff;
-  --border:   #e2e2da;
-  --indigo:   #4338ca;
-  --indigo-lt:#6366f1;
-  --indigo-bg:#eef2ff;
-  --green:    #15803d;
-  --green-bg: #dcfce7;
-  --red:      #b91c1c;
-  --red-bg:   #fee2e2;
-  --text:     #1a1a18;
-  --muted:    #6b6b5e;
-  --shadow-sm:0 1px 3px rgba(0,0,0,0.08);
-  --shadow-md:0 4px 16px rgba(0,0,0,0.10);
+  --bg:        #f5f5f0;
+  --surface:   #ffffff;
+  --border:    #e2e2da;
+  --indigo:    #4338ca;
+  --indigo-lt: #6366f1;
+  --indigo-bg: #eef2ff;
+  --green:     #15803d;
+  --green-bg:  #dcfce7;
+  --red:       #b91c1c;
+  --red-bg:    #fee2e2;
+  --amber:     #92400e;
+  --amber-bg:  #fef3c7;
+  --text:      #1a1a18;
+  --muted:     #6b6b5e;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.07);
+  --shadow-md: 0 4px 20px rgba(0,0,0,0.09);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -34,12 +36,13 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 28px 16px 56px;
+  padding: 28px 16px 64px;
 }
 
+/* ── Nav ── */
 .nav {
   width: 100%;
-  max-width: 540px;
+  max-width: 560px;
   margin-bottom: 24px;
   font-size: 12px;
   color: var(--muted);
@@ -47,6 +50,7 @@ body {
 .nav a { color: var(--indigo); text-decoration: none; font-weight: 500; }
 .nav a:hover { text-decoration: underline; }
 
+/* ── Header ── */
 header { text-align: center; margin-bottom: 28px; }
 .tag {
   display: inline-block;
@@ -57,25 +61,112 @@ header { text-align: center; margin-bottom: 28px; }
   text-transform: uppercase;
   color: var(--indigo);
   background: var(--indigo-bg);
-  padding: 4px 10px;
+  padding: 4px 12px;
   border-radius: 20px;
   margin-bottom: 10px;
 }
 h1 {
   font-family: 'Fraunces', serif;
-  font-size: clamp(28px, 6vw, 42px);
+  font-size: clamp(30px, 6vw, 44px);
   font-weight: 300;
   letter-spacing: -0.02em;
   line-height: 1.05;
-  color: var(--text);
 }
 h1 em { font-style: italic; color: var(--indigo); }
+.subtitle {
+  margin-top: 8px;
+  font-size: 14px;
+  color: var(--muted);
+}
 
-/* ── Progress bar ── */
+/* ── Intro screen ── */
+#introScreen {
+  width: 100%;
+  max-width: 560px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 32px 28px;
+  box-shadow: var(--shadow-md);
+  text-align: center;
+}
+.intro-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  line-height: 1;
+}
+.intro-title {
+  font-family: 'Fraunces', serif;
+  font-size: 22px;
+  font-weight: 300;
+  margin-bottom: 10px;
+}
+.intro-desc {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+.cat-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 28px;
+}
+.cat-chip {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1.5px solid var(--border);
+  color: var(--muted);
+  background: var(--bg);
+}
+
+/* Mode selector */
+.mode-selector {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+.mode-card {
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 16px 12px;
+  cursor: pointer;
+  background: var(--bg);
+  transition: border-color 0.15s, background 0.15s;
+  text-align: center;
+}
+.mode-card:hover { border-color: var(--indigo-lt); background: var(--indigo-bg); }
+.mode-card.selected { border-color: var(--indigo); background: var(--indigo-bg); }
+.mode-card .mode-icon { font-size: 22px; margin-bottom: 6px; }
+.mode-card .mode-name { font-size: 13px; font-weight: 600; color: var(--text); }
+.mode-card .mode-info { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+.btn-start {
+  width: 100%;
+  padding: 15px;
+  background: var(--indigo);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+.btn-start:hover { background: #3730a3; }
+.btn-start:active { transform: scale(0.98); }
+
+/* ── Progress ── */
 .progress-wrap {
   width: 100%;
-  max-width: 540px;
-  margin-bottom: 20px;
+  max-width: 560px;
+  margin-bottom: 18px;
 }
 .progress-meta {
   display: flex;
@@ -114,8 +205,8 @@ h1 em { font-style: italic; color: var(--indigo); }
   display: flex;
   gap: 10px;
   width: 100%;
-  max-width: 540px;
-  margin-bottom: 20px;
+  max-width: 560px;
+  margin-bottom: 18px;
 }
 .score-box {
   flex: 1;
@@ -140,59 +231,72 @@ h1 em { font-style: italic; color: var(--indigo); }
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--muted);
-  margin-top: 3px;
+  margin-top: 4px;
 }
 
 /* ── Card ── */
 .card {
   width: 100%;
-  max-width: 540px;
+  max-width: 560px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 20px;
-  padding: 28px 24px 24px;
+  padding: 28px 24px 22px;
   box-shadow: var(--shadow-md);
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 
-/* Category badge */
+.card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
 .cat-badge {
   display: inline-block;
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  padding: 3px 10px;
+  padding: 4px 12px;
   border-radius: 20px;
-  margin-bottom: 16px;
   background: var(--indigo-bg);
   color: var(--indigo);
 }
 
-
+.diff-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--muted);
+}
+.diff-badge.easy   { color: var(--green); }
+.diff-badge.medium { color: var(--amber); }
+.diff-badge.hard   { color: var(--red); }
 
 .question-text {
   font-family: 'Fraunces', serif;
-  font-size: clamp(18px, 4vw, 24px);
+  font-size: clamp(17px, 4vw, 22px);
   font-weight: 300;
-  line-height: 1.4;
+  line-height: 1.45;
   color: var(--text);
-  margin-bottom: 24px;
-  min-height: 60px;
+  margin-bottom: 22px;
+  min-height: 52px;
 }
 
-/* ── Answer buttons ── */
-.answers { display: flex; flex-direction: column; gap: 10px; }
+/* ── Answers ── */
+.answers { display: flex; flex-direction: column; gap: 9px; }
 
 .ans-btn {
   width: 100%;
-  padding: 14px 18px;
+  padding: 13px 16px;
   background: var(--bg);
   border: 1.5px solid var(--border);
   border-radius: 12px;
   color: var(--text);
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   text-align: left;
@@ -200,6 +304,7 @@ h1 em { font-style: italic; color: var(--indigo); }
   align-items: center;
   gap: 12px;
   transition: border-color 0.15s, background 0.15s, transform 0.1s;
+  line-height: 1.4;
 }
 .ans-btn:not(:disabled):hover {
   border-color: var(--indigo-lt);
@@ -207,20 +312,13 @@ h1 em { font-style: italic; color: var(--indigo); }
   transform: translateX(3px);
 }
 .ans-btn:disabled { cursor: default; }
-.ans-btn.correct {
-  background: var(--green-bg);
-  border-color: var(--green);
-  color: var(--green);
-}
-.ans-btn.wrong {
-  background: var(--red-bg);
-  border-color: var(--red);
-  color: var(--red);
-}
+.ans-btn.correct { background: var(--green-bg); border-color: var(--green); color: var(--green); }
+.ans-btn.wrong   { background: var(--red-bg);   border-color: var(--red);   color: var(--red); }
 
 .ans-letter {
   width: 28px;
   height: 28px;
+  flex-shrink: 0;
   border-radius: 50%;
   background: var(--border);
   display: flex;
@@ -229,28 +327,32 @@ h1 em { font-style: italic; color: var(--indigo); }
   font-family: 'JetBrains Mono', monospace;
   font-size: 12px;
   font-weight: 500;
-  flex-shrink: 0;
-  transition: background 0.15s, color 0.15s;
   color: var(--muted);
+  transition: background 0.15s, color 0.15s;
 }
 .ans-btn.correct .ans-letter { background: var(--green); color: #fff; }
 .ans-btn.wrong   .ans-letter { background: var(--red);   color: #fff; }
 .ans-btn:not(:disabled):hover .ans-letter { background: var(--indigo); color: #fff; }
 
-/* Feedback label */
+/* Feedback */
 .feedback {
   margin-top: 14px;
+  padding: 10px 14px;
+  border-radius: 10px;
   font-size: 13px;
-  color: var(--muted);
-  font-style: italic;
-  min-height: 18px;
-  text-align: center;
+  line-height: 1.55;
+  min-height: 0;
+  display: none;
 }
+.feedback.show { display: block; }
+.feedback.ok   { background: var(--green-bg); color: var(--green); border: 1px solid #86efac; }
+.feedback.err  { background: var(--red-bg);   color: var(--red);   border: 1px solid #fca5a5; }
+.feedback strong { display: block; margin-bottom: 2px; font-size: 13px; }
 
 /* Next button */
 .btn-next {
   width: 100%;
-  max-width: 540px;
+  max-width: 560px;
   padding: 14px;
   background: var(--indigo);
   color: #fff;
@@ -271,61 +373,116 @@ h1 em { font-style: italic; color: var(--indigo); }
 /* ── Result screen ── */
 .result-screen {
   width: 100%;
-  max-width: 540px;
+  max-width: 560px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 20px;
-  padding: 36px 28px;
+  padding: 36px 28px 32px;
   box-shadow: var(--shadow-md);
   text-align: center;
   display: none;
   animation: fadeUp 0.35s ease;
 }
+.result-screen.show { display: block; }
+
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: none; }
 }
-.result-screen.show { display: block; }
 
 .result-qi {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 64px;
+  font-size: 72px;
   font-weight: 500;
   color: var(--indigo);
   line-height: 1;
   margin: 16px 0 4px;
+  letter-spacing: -2px;
 }
 .result-qi-label {
-  font-size: 12px;
-  letter-spacing: 0.14em;
+  font-size: 11px;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--muted);
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 .result-title {
   font-family: 'Fraunces', serif;
-  font-size: 28px;
+  font-size: 26px;
   font-weight: 300;
   color: var(--text);
   margin-bottom: 8px;
+  line-height: 1.2;
 }
 .result-title em { color: var(--indigo); font-style: italic; }
 .result-desc {
   font-size: 14px;
   color: var(--muted);
-  line-height: 1.6;
-  max-width: 360px;
+  line-height: 1.65;
+  max-width: 380px;
   margin: 0 auto 24px;
 }
+
+/* Category breakdown */
+.cat-breakdown {
+  background: var(--bg);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+.cat-breakdown-title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+.cat-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.cat-row:last-child { margin-bottom: 0; }
+.cat-row-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  width: 90px;
+  flex-shrink: 0;
+}
+.cat-bar-track {
+  flex: 1;
+  height: 6px;
+  background: var(--border);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.cat-bar-fill {
+  height: 100%;
+  border-radius: 99px;
+  background: var(--indigo);
+  transition: width 0.6s 0.3s ease;
+}
+.cat-row-score {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  width: 32px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
 .result-breakdown {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   justify-content: center;
   margin-bottom: 24px;
 }
 .rb-box {
   flex: 1;
-  max-width: 120px;
   background: var(--bg);
   border-radius: 12px;
   padding: 12px 8px;
@@ -334,19 +491,25 @@ h1 em { font-style: italic; color: var(--indigo); }
   font-family: 'JetBrains Mono', monospace;
   font-size: 22px;
   font-weight: 500;
+  line-height: 1;
 }
 .rb-val.c { color: var(--green); }
 .rb-val.w { color: var(--red); }
-.rb-val.t { color: var(--indigo); }
+.rb-val.p { color: var(--indigo); }
 .rb-lbl {
   font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: var(--muted);
-  margin-top: 3px;
+  margin-top: 4px;
+}
+
+.result-actions {
+  display: flex;
+  gap: 10px;
 }
 .btn-restart {
-  width: 100%;
+  flex: 1;
   padding: 14px;
   background: var(--indigo);
   color: #fff;
@@ -359,9 +522,26 @@ h1 em { font-style: italic; color: var(--indigo); }
   transition: background 0.15s;
 }
 .btn-restart:hover { background: #3730a3; }
+.btn-restart-outline {
+  flex: 1;
+  padding: 14px;
+  background: transparent;
+  color: var(--indigo);
+  border: 1.5px solid var(--indigo);
+  border-radius: 12px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-restart-outline:hover { background: var(--indigo-bg); }
+
+/* Hidden util */
+.hidden { display: none !important; }
 
 @media (prefers-reduced-motion: reduce) {
-  .btn-next, .ans-btn, .progress-fill, .timer-fill { transition: none; }
+  .btn-next, .ans-btn, .progress-fill { transition: none; }
   .result-screen { animation: none; }
 }
 </style>
@@ -375,131 +555,437 @@ h1 em { font-style: italic; color: var(--indigo); }
 <header>
   <div class="tag">Teste cognitivo</div>
   <h1>Jogo de <em>QI</em></h1>
+  <p class="subtitle">Lógica, raciocínio, padrões e matemática mental</p>
 </header>
 
-<!-- Progress -->
-<div class="progress-wrap">
-  <div class="progress-meta">
-    <span class="progress-label">Progresso</span>
-    <span class="progress-count" id="progressCount">0 / 15</span>
+<!-- ══ INTRO SCREEN ══ -->
+<div id="introScreen">
+  <div class="intro-icon">🧠</div>
+  <div class="intro-title">Teste suas habilidades cognitivas</div>
+  <div class="intro-desc">
+    Responda perguntas de 6 categorias diferentes: sequências numéricas, lógica dedutiva, analogias, padrões, cálculo mental e raciocínio espacial. Sem tempo — responda com calma e precisão.
   </div>
-  <div class="progress-track">
-    <div class="progress-fill" id="progressFill"></div>
+  <div class="cat-chips">
+    <span class="cat-chip">🔢 Sequência</span>
+    <span class="cat-chip">🔗 Lógica</span>
+    <span class="cat-chip">↔ Analogia</span>
+    <span class="cat-chip">🔄 Padrão</span>
+    <span class="cat-chip">➕ Cálculo</span>
+    <span class="cat-chip">🧩 Espacial</span>
   </div>
+
+  <div class="mode-selector">
+    <div class="mode-card selected" data-mode="20" onclick="selectMode(this)">
+      <div class="mode-icon">⚡</div>
+      <div class="mode-name">Rápido</div>
+      <div class="mode-info">20 perguntas</div>
+    </div>
+    <div class="mode-card" data-mode="35" onclick="selectMode(this)">
+      <div class="mode-icon">🎯</div>
+      <div class="mode-name">Completo</div>
+      <div class="mode-info">35 perguntas</div>
+    </div>
+  </div>
+
+  <button class="btn-start" onclick="startGame()">Começar o teste →</button>
 </div>
 
-<!-- Score strip -->
-<div class="score-strip">
-  <div class="score-box">
-    <div class="score-val correct" id="scoreCor">0</div>
-    <div class="score-lbl">Certas</div>
-  </div>
-  <div class="score-box">
-    <div class="score-val wrong" id="scoreWrg">0</div>
-    <div class="score-lbl">Erradas</div>
-  </div>
-  <div class="score-box">
-    <div class="score-val qi" id="scoreQI">—</div>
-    <div class="score-lbl">QI est.</div>
-  </div>
-</div>
+<!-- ══ QUIZ AREA ══ -->
+<div id="quizArea" class="hidden">
 
-<!-- Quiz card -->
-<div class="card" id="quizCard">
-  <div class="cat-badge" id="catBadge">Sequência</div>
-<div class="question-text" id="questionText">Carregando…</div>
-  <div class="answers" id="answersDiv"></div>
-  <div class="feedback" id="feedback"></div>
-</div>
+  <!-- Progress -->
+  <div class="progress-wrap">
+    <div class="progress-meta">
+      <span class="progress-label">Progresso</span>
+      <span class="progress-count" id="progressCount">1 / 20</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+  </div>
 
-<button class="btn-next" id="btnNext" onclick="nextQuestion()">Próxima pergunta →</button>
+  <!-- Score strip -->
+  <div class="score-strip">
+    <div class="score-box">
+      <div class="score-val correct" id="scoreCor">0</div>
+      <div class="score-lbl">Certas</div>
+    </div>
+    <div class="score-box">
+      <div class="score-val wrong" id="scoreWrg">0</div>
+      <div class="score-lbl">Erradas</div>
+    </div>
+    <div class="score-box">
+      <div class="score-val qi" id="scoreQI">—</div>
+      <div class="score-lbl">QI est.</div>
+    </div>
+  </div>
 
-<!-- Result screen -->
+  <!-- Card -->
+  <div class="card" id="quizCard">
+    <div class="card-top">
+      <div class="cat-badge" id="catBadge">Sequência</div>
+      <div class="diff-badge" id="diffBadge">●●○</div>
+    </div>
+    <div class="question-text" id="questionText">Carregando…</div>
+    <div class="answers" id="answersDiv"></div>
+    <div class="feedback" id="feedback"></div>
+  </div>
+
+  <button class="btn-next" id="btnNext" onclick="nextQuestion()">Próxima pergunta →</button>
+
+</div><!-- /quizArea -->
+
+<!-- ══ RESULT SCREEN ══ -->
 <div class="result-screen" id="resultScreen">
   <div class="tag">Resultado</div>
   <div class="result-qi" id="resQI">120</div>
   <div class="result-qi-label">QI estimado</div>
   <div class="result-title" id="resTitle">Raciocínio <em>acima da média</em></div>
   <p class="result-desc" id="resDesc"></p>
+
   <div class="result-breakdown">
-    <div class="rb-box"><div class="rb-val c" id="resCor">0</div><div class="rb-lbl">Certas</div></div>
-    <div class="rb-box"><div class="rb-val w" id="resWrg">0</div><div class="rb-lbl">Erradas</div></div>
-    <div class="rb-box"><div class="rb-val t" id="resTim">0s</div><div class="rb-lbl">Tempo médio</div></div>
+    <div class="rb-box">
+      <div class="rb-val c" id="resCor">0</div>
+      <div class="rb-lbl">Certas</div>
+    </div>
+    <div class="rb-box">
+      <div class="rb-val w" id="resWrg">0</div>
+      <div class="rb-lbl">Erradas</div>
+    </div>
+    <div class="rb-box">
+      <div class="rb-val p" id="resPct">0%</div>
+      <div class="rb-lbl">Aproveit.</div>
+    </div>
   </div>
-  <button class="btn-restart" onclick="restart()">↺ Jogar novamente</button>
+
+  <div class="cat-breakdown" id="catBreakdown"></div>
+
+  <div class="result-actions">
+    <button class="btn-restart-outline" onclick="backToIntro()">↩ Início</button>
+    <button class="btn-restart" onclick="restart()">↺ Jogar novamente</button>
+  </div>
 </div>
 
 <script>
-const QUESTIONS = [
-  // Sequências numéricas
-  { cat:"Sequência", q:"Qual número completa a série: 2, 4, 8, 16, __?", a:["18","24","32","20"], c:2,
-    exp:"Cada termo é o dobro do anterior: ×2." },
-  { cat:"Sequência", q:"Próximo número: 1, 1, 2, 3, 5, 8, __?", a:["11","12","13","10"], c:2,
-    exp:"Sequência de Fibonacci: cada número é a soma dos dois anteriores." },
-  { cat:"Sequência", q:"Qual é o próximo: 100, 50, 25, 12.5, __?", a:["6","6.25","7","5"], c:1,
-    exp:"Cada termo é dividido por 2." },
-  { cat:"Sequência", q:"Complete: 3, 6, 11, 18, 27, __?", a:["36","38","40","34"], c:1,
-    exp:"As diferenças são +3, +5, +7, +9, +11 — números ímpares consecutivos." },
-  // Lógica
-  { cat:"Lógica", q:"Se todos os gatos são animais e alguns animais são selvagens, então:", a:["Todos os gatos são selvagens","Alguns gatos podem ser selvagens","Nenhum gato é selvagem","Não é possível saber"], c:1,
-    exp:"A conclusão válida é que apenas 'alguns gatos podem ser selvagens'." },
-  { cat:"Lógica", q:"João é mais alto que Pedro. Pedro é mais alto que Ana. Quem é o mais baixo?", a:["João","Pedro","Ana","Impossível saber"], c:2,
+// ─── BANCO DE QUESTÕES (50 perguntas) ───────────────────────────────────────
+const ALL_QUESTIONS = [
+
+  // ── SEQUÊNCIA NUMÉRICA ──
+  { cat:"Sequência", diff:"easy",
+    q:"Qual número completa a série: 2, 4, 8, 16, __?",
+    a:["18","24","32","20"], c:2,
+    exp:"Cada termo é o dobro do anterior (×2). Logo: 16 × 2 = 32." },
+
+  { cat:"Sequência", diff:"easy",
+    q:"Próximo número: 1, 1, 2, 3, 5, 8, __?",
+    a:["11","12","13","10"], c:2,
+    exp:"Sequência de Fibonacci: cada número é a soma dos dois anteriores. 5 + 8 = 13." },
+
+  { cat:"Sequência", diff:"easy",
+    q:"Qual é o próximo: 100, 50, 25, 12.5, __?",
+    a:["6","6.25","7","5"], c:1,
+    exp:"Cada termo é dividido por 2. Logo: 12.5 ÷ 2 = 6.25." },
+
+  { cat:"Sequência", diff:"medium",
+    q:"Complete: 3, 6, 11, 18, 27, __?",
+    a:["36","38","40","34"], c:1,
+    exp:"As diferenças são +3, +5, +7, +9, +11 (ímpares consecutivos). 27 + 11 = 38." },
+
+  { cat:"Sequência", diff:"medium",
+    q:"Qual é o próximo número: 1, 4, 9, 16, 25, __?",
+    a:["30","36","32","35"], c:1,
+    exp:"São os quadrados perfeitos: 1², 2², 3², 4², 5², 6² = 36." },
+
+  { cat:"Sequência", diff:"medium",
+    q:"Complete a série: 5, 10, 20, 40, __?",
+    a:["60","70","80","100"], c:2,
+    exp:"Cada termo é multiplicado por 2. 40 × 2 = 80." },
+
+  { cat:"Sequência", diff:"hard",
+    q:"Qual o próximo: 2, 3, 5, 7, 11, 13, __?",
+    a:["14","15","16","17"], c:3,
+    exp:"São os números primos em ordem crescente. O próximo primo após 13 é 17." },
+
+  { cat:"Sequência", diff:"hard",
+    q:"Complete: 1, 2, 6, 24, 120, __?",
+    a:["240","600","720","840"], c:2,
+    exp:"São os fatoriais: 1!, 2!, 3!, 4!, 5!, 6! = 720." },
+
+  { cat:"Sequência", diff:"hard",
+    q:"Próximo número: 0, 1, 3, 6, 10, 15, __?",
+    a:["18","20","21","24"], c:2,
+    exp:"Números triangulares. As diferenças aumentam em +1: +1, +2, +3, +4, +5, +6. Logo: 15 + 6 = 21." },
+
+  { cat:"Sequência", diff:"medium",
+    q:"Complete: 7, 14, 28, 56, __?",
+    a:["84","100","112","120"], c:2,
+    exp:"Cada termo dobra. 56 × 2 = 112." },
+
+  // ── LÓGICA ──
+  { cat:"Lógica", diff:"easy",
+    q:"João é mais alto que Pedro. Pedro é mais alto que Ana. Quem é o mais baixo?",
+    a:["João","Pedro","Ana","Impossível saber"], c:2,
     exp:"A ordem é João > Pedro > Ana, então Ana é a mais baixa." },
-  { cat:"Lógica", q:"Se hoje é quarta-feira, que dia será daqui a 100 dias?", a:["Quinta","Sexta","Sábado","Segunda"], c:1,
-    exp:"100 ÷ 7 = 14 semanas + 2 dias. Quarta + 2 = Sexta." },
-  { cat:"Lógica", q:"Um trem parte a 60 km/h. Outro parte na direção oposta a 90 km/h. Em 2 horas, qual a distância entre eles?", a:["180 km","240 km","300 km","150 km"], c:2,
-    exp:"(60 + 90) × 2 = 300 km." },
-  // Padrões e analogias
-  { cat:"Analogia", q:"Livro está para biblioteca assim como quadro está para __?", a:["Escola","Museu","Loja","Galeria"], c:1,
-    exp:"Livros ficam em bibliotecas; quadros ficam em museus." },
-  { cat:"Analogia", q:"Médico está para hospital assim como professor está para __?", a:["Aluno","Escola","Caderno","Sala"], c:1,
-    exp:"O ambiente de trabalho do professor é a escola." },
-  { cat:"Analogia", q:"Luva está para mão assim como bota está para __?", a:["Perna","Joelho","Pé","Tornozelo"], c:2,
-    exp:"Luva cobre a mão; bota cobre o pé." },
-  // Letras e padrões
-  { cat:"Padrão", q:"Qual letra vem a seguir: A, C, E, G, __?", a:["H","I","J","K"], c:1,
-    exp:"As letras pulam uma a cada passo: A(+2)C(+2)E(+2)G(+2)I." },
-  { cat:"Padrão", q:"Complete: Z, X, V, T, __?", a:["Q","R","S","P"], c:1,
+
+  { cat:"Lógica", diff:"easy",
+    q:"Se hoje é quarta-feira, que dia será daqui a 100 dias?",
+    a:["Quinta","Sexta","Sábado","Segunda"], c:1,
+    exp:"100 ÷ 7 = 14 semanas + 2 dias sobram. Quarta + 2 = Sexta." },
+
+  { cat:"Lógica", diff:"medium",
+    q:"Um trem parte a 60 km/h. Outro parte em sentido oposto a 90 km/h. Em 2 horas, qual a distância entre eles?",
+    a:["180 km","240 km","300 km","150 km"], c:2,
+    exp:"As velocidades se somam: (60 + 90) × 2 = 300 km." },
+
+  { cat:"Lógica", diff:"medium",
+    q:"Se todos os gatos são animais e alguns animais são selvagens, o que podemos concluir?",
+    a:["Todos os gatos são selvagens","Alguns gatos podem ser selvagens","Nenhum gato é selvagem","Não é possível concluir nada"], c:1,
+    exp:"A conclusão válida é apenas que 'alguns gatos podem ser selvagens', pois não sabemos quais animais são selvagens." },
+
+  { cat:"Lógica", diff:"medium",
+    q:"Maria tem filhos. Todos os filhos de Maria têm irmãos. Quantos filhos no mínimo Maria tem?",
+    a:["1","2","3","4"], c:1,
+    exp:"Para que todo filho tenha pelo menos um irmão, são necessários no mínimo 2 filhos." },
+
+  { cat:"Lógica", diff:"hard",
+    q:"Em uma corrida, você ultrapassa o segundo colocado. Em que posição você fica?",
+    a:["Primeiro","Segundo","Terceiro","Depende da corrida"], c:1,
+    exp:"Ao ultrapassar o segundo, você ocupa a segunda posição — não a primeira." },
+
+  { cat:"Lógica", diff:"hard",
+    q:"Um homem entra em um bar e pede um copo d'água. O barman aponta uma arma para ele. O homem agradece e vai embora. Por quê?",
+    a:["O homem era ladrão","O homem tinha soluço","O barman era louco","O homem era sedento"], c:1,
+    exp:"O homem tinha soluço. O susto da arma curou o soluço, tornando a água desnecessária." },
+
+  { cat:"Lógica", diff:"medium",
+    q:"Uma mãe tem 4 filhas. Cada filha tem 1 irmão. Quantos filhos a mãe tem no total?",
+    a:["5","8","6","4"], c:0,
+    exp:"O irmão é o mesmo para todas as filhas — há apenas 1 irmão. 4 filhas + 1 filho = 5 filhos." },
+
+  { cat:"Lógica", diff:"hard",
+    q:"Tres caixas têm rótulos 'Laranjas', 'Maçãs' e 'Laranjas e Maçãs'. Todos os rótulos estão errados. Você retira uma laranja da caixa 'Laranjas e Maçãs'. O que ela contém?",
+    a:["Maçãs e Laranjas","Somente Maçãs","Somente Laranjas","Impossível saber"], c:2,
+    exp:"Como o rótulo está errado, 'Laranjas e Maçãs' só pode ser Laranjas ou Maçãs. Você retirou uma laranja, então é Somente Laranjas." },
+
+  { cat:"Lógica", diff:"easy",
+    q:"Se 5 máquinas produzem 5 peças em 5 minutos, quanto tempo 100 máquinas levam para produzir 100 peças?",
+    a:["100 min","50 min","5 min","10 min"], c:2,
+    exp:"Cada máquina faz 1 peça em 5 minutos. 100 máquinas fazem 100 peças também em 5 minutos." },
+
+  // ── ANALOGIA ──
+  { cat:"Analogia", diff:"easy",
+    q:"Livro está para biblioteca assim como quadro está para ___?",
+    a:["Escola","Museu","Loja","Galeria"], c:1,
+    exp:"Livros ficam em bibliotecas; quadros (obras de arte) ficam em museus." },
+
+  { cat:"Analogia", diff:"easy",
+    q:"Médico está para hospital assim como professor está para ___?",
+    a:["Aluno","Escola","Caderno","Sala"], c:1,
+    exp:"O ambiente de trabalho do professor é a escola, assim como o médico trabalha no hospital." },
+
+  { cat:"Analogia", diff:"easy",
+    q:"Luva está para mão assim como bota está para ___?",
+    a:["Perna","Joelho","Pé","Tornozelo"], c:2,
+    exp:"Luva cobre e protege a mão; bota cobre e protege o pé." },
+
+  { cat:"Analogia", diff:"medium",
+    q:"Quente está para frio assim como rápido está para ___?",
+    a:["Veloz","Lento","Devagar","Suave"], c:1,
+    exp:"Quente e frio são opostos; o oposto de rápido é lento." },
+
+  { cat:"Analogia", diff:"medium",
+    q:"Asas estão para pássaro assim como nadadeiras estão para ___?",
+    a:["Golfinho","Baleia","Peixe","Tubarão"], c:2,
+    exp:"Asas são os membros de locomoção do pássaro; nadadeiras são os membros de locomoção do peixe." },
+
+  { cat:"Analogia", diff:"hard",
+    q:"Compositor está para sinfonia assim como arquiteto está para ___?",
+    a:["Construção","Edifício","Planta","Tijolos"], c:1,
+    exp:"O compositor cria sinfonias; o arquiteto projeta e cria edifícios." },
+
+  { cat:"Analogia", diff:"medium",
+    q:"Teclado está para computador assim como _____ está para piano?",
+    a:["Teclas","Pedal","Partitura","Melodia"], c:0,
+    exp:"O teclado é a interface de entrada do computador; as teclas são a interface de execução do piano." },
+
+  { cat:"Analogia", diff:"hard",
+    q:"Mapa está para geógrafo assim como partitura está para ___?",
+    a:["Maestro","Músico","Compositor","Instrumento"], c:1,
+    exp:"Geógrafo usa mapa como ferramenta de trabalho; músico usa partitura para executar música." },
+
+  // ── PADRÃO ──
+  { cat:"Padrão", diff:"easy",
+    q:"Qual letra vem a seguir: A, C, E, G, __?",
+    a:["H","I","J","K"], c:1,
+    exp:"As letras pulam uma posição: A(+2)C(+2)E(+2)G(+2)I." },
+
+  { cat:"Padrão", diff:"easy",
+    q:"Complete: Z, X, V, T, __?",
+    a:["Q","R","S","P"], c:1,
     exp:"As letras recuam 2 posições: Z−2=X, X−2=V, V−2=T, T−2=R." },
-  // Matemática mental
-  { cat:"Cálculo", q:"Qual é 15% de 240?", a:["30","36","40","34"], c:1,
-    exp:"10% = 24, 5% = 12. Total: 24 + 12 = 36." },
-  { cat:"Cálculo", q:"Um produto custa R$80 e tem 25% de desconto. Qual o preço final?", a:["R$55","R$60","R$65","R$70"], c:1,
-    exp:"25% de 80 = 20. 80 − 20 = R$60." },
+
+  { cat:"Padrão", diff:"medium",
+    q:"Qual é o próximo par: AB, CD, EF, GH, __?",
+    a:["IJ","HI","JK","IK"], c:0,
+    exp:"Cada par avança 2 letras no alfabeto. Após GH vem IJ." },
+
+  { cat:"Padrão", diff:"medium",
+    q:"Complete a sequência: AZ, BY, CX, DW, __?",
+    a:["EU","EV","FV","EW"], c:1,
+    exp:"A primeira letra avança (+1) e a segunda recua (−1) no alfabeto. D+1=E, W−1=V → EV." },
+
+  { cat:"Padrão", diff:"hard",
+    q:"Qual é o próximo: 1A, 2B, 4D, 8H, __?",
+    a:["16P","16L","12L","16N"], c:0,
+    exp:"Os números dobram (1,2,4,8,16) e as letras saltam em dobro (A=1, B=2, D=4, H=8, P=16). Logo: 16P." },
+
+  { cat:"Padrão", diff:"medium",
+    q:"Complete: △○△△○△△△○__",
+    a:["△","○","△△","○△"], c:0,
+    exp:"O padrão repete grupos crescentes de △ separados por ○: △○ △△○ △△△○ — o próximo é △." },
+
+  { cat:"Padrão", diff:"hard",
+    q:"Qual letra completa: B, D, G, K, P, __?",
+    a:["T","U","V","W"], c:2,
+    exp:"As diferenças entre as posições no alfabeto são +2, +3, +4, +5, +6. P(16)+6=22=V." },
+
+  // ── CÁLCULO MENTAL ──
+  { cat:"Cálculo", diff:"easy",
+    q:"Qual é 15% de 240?",
+    a:["30","36","40","34"], c:1,
+    exp:"10% de 240 = 24; 5% = 12. Total: 24 + 12 = 36." },
+
+  { cat:"Cálculo", diff:"easy",
+    q:"Um produto custa R$80 com 25% de desconto. Qual o preço final?",
+    a:["R$55","R$60","R$65","R$70"], c:1,
+    exp:"25% de 80 = 20. Preço final: 80 − 20 = R$60." },
+
+  { cat:"Cálculo", diff:"easy",
+    q:"Qual é a metade de 3/4?",
+    a:["1/4","1/2","3/8","2/3"], c:2,
+    exp:"Metade de 3/4 = 3/4 ÷ 2 = 3/8." },
+
+  { cat:"Cálculo", diff:"medium",
+    q:"Se um produto passou de R$120 para R$150, qual foi o aumento percentual?",
+    a:["20%","25%","30%","15%"], c:1,
+    exp:"Aumento = 30. Percentual: (30 ÷ 120) × 100 = 25%." },
+
+  { cat:"Cálculo", diff:"medium",
+    q:"Quanto é √144 + √25?",
+    a:["15","17","16","18"], c:1,
+    exp:"√144 = 12; √25 = 5. Soma: 12 + 5 = 17." },
+
+  { cat:"Cálculo", diff:"medium",
+    q:"Uma torneira enche um tanque em 3 horas. Outra enche em 6 horas. Juntas, em quantas horas enchem o tanque?",
+    a:["2h","2h30","1h30","4h"], c:0,
+    exp:"Taxa combinada: 1/3 + 1/6 = 1/2 do tanque por hora. Logo: 1 ÷ (1/2) = 2 horas." },
+
+  { cat:"Cálculo", diff:"hard",
+    q:"Um carro percorre 360 km em 4 horas. Quantos km/h a menos deveria andar para fazer o mesmo percurso em 5 horas?",
+    a:["12 km/h","16 km/h","18 km/h","20 km/h"], c:2,
+    exp:"Velocidade original: 360÷4 = 90 km/h. Nova velocidade: 360÷5 = 72 km/h. Diferença: 90−72 = 18 km/h." },
+
+  { cat:"Cálculo", diff:"hard",
+    q:"Qual o dígito das unidades de 7⁴?",
+    a:["1","3","7","9"], c:0,
+    exp:"7¹=7, 7²=49, 7³=343, 7⁴=2401. O dígito das unidades é 1." },
+
+  { cat:"Cálculo", diff:"medium",
+    q:"Pedro tem o dobro da idade de Ana. Daqui a 10 anos, Pedro terá 40. Qual a idade atual de Ana?",
+    a:["10","12","15","20"], c:2,
+    exp:"Daqui a 10 anos Pedro terá 40, logo hoje tem 30. Ana tem metade: 30 ÷ 2 = 15 anos." },
+
+  // ── ESPACIAL ──
+  { cat:"Espacial", diff:"easy",
+    q:"Um cubo tem 6 faces. Quantas arestas ele tem?",
+    a:["8","10","12","16"], c:2,
+    exp:"Um cubo tem 12 arestas (4 na base, 4 no topo e 4 laterais)." },
+
+  { cat:"Espacial", diff:"easy",
+    q:"Se você dobra uma folha ao meio e depois ao meio novamente, quantas camadas você tem?",
+    a:["2","3","4","6"], c:2,
+    exp:"Primeira dobra: 2 camadas. Segunda dobra: 4 camadas." },
+
+  { cat:"Espacial", diff:"medium",
+    q:"Quantos cubos pequenos são necessários para montar um cubo 3×3×3?",
+    a:["9","18","24","27"], c:3,
+    exp:"Um cubo 3×3×3 tem 3 × 3 × 3 = 27 cubos pequenos." },
+
+  { cat:"Espacial", diff:"medium",
+    q:"Um espelho reflete sua imagem. Se você levanta a mão DIREITA, qual mão parece levantada no espelho?",
+    a:["Direita","Esquerda","Ambas","Nenhuma"], c:0,
+    exp:"O espelho inverte frente-trás, não esquerda-direita. Sua mão direita aparece à sua direita no espelho." },
+
+  { cat:"Espacial", diff:"hard",
+    q:"Quantas faces visíveis tem um cubo 3×3×3 no total (a partir de qualquer ângulo externo)?",
+    a:["24","26","27","54"], c:1,
+    exp:"O cubo 3×3×3 tem 27 cubinhos. Os interiores (1) não têm face visível; os de canto (8) têm 3; os de aresta (12) têm 2; os de face (6) têm 1. Total de cubinhos com pelo menos 1 face visível: 26." },
+
+  { cat:"Espacial", diff:"hard",
+    q:"Se girarmos a letra 'p' 180° no sentido horário, qual letra ela se torna?",
+    a:["b","d","q","u"], c:2,
+    exp:"Girando 'p' 180° no sentido horário, a haste vai para cima e a bolinha para a direita → 'q'." },
 ];
 
-const TOTAL = QUESTIONS.length;
-
-let index = 0, correct = 0, wrong = 0;
-let timers = [];
-let qStart = 0;
-let answered = false;
+// ─── ESTADO ────────────────────────────────────────────────────────────────
+let TOTAL = 20;
 let shuffled = [];
+let index = 0, correct = 0, wrong = 0;
+let answered = false;
+let catStats = {};
+let selectedMode = 20;
 
+// ─── HELPERS ────────────────────────────────────────────────────────────────
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
 
 function estimateQI(pct) {
-  // Rough mapping: 0%→70, 100%→145
-  return Math.round(70 + pct * 75);
+  // Mapeamento: 0%→70, 60%→100, 80%→120, 100%→145
+  if (pct >= 0.8) return Math.round(120 + (pct - 0.8) / 0.2 * 25);
+  if (pct >= 0.6) return Math.round(100 + (pct - 0.6) / 0.2 * 20);
+  return Math.round(70 + pct / 0.6 * 30);
 }
 
 function qiLabel(qi) {
-  if (qi >= 140) return { title: "Genialidade <em>extraordinária</em>", desc: "Você está entre os 0,25% mais rápidos do mundo. Raciocínio excepcional em todas as categorias." };
-  if (qi >= 130) return { title: "Inteligência <em>superior</em>",      desc: "Nível de superdotação. Você demonstra habilidade notável em lógica, padrões e cálculo mental." };
-  if (qi >= 120) return { title: "Acima da <em>média</em>",             desc: "Raciocínio sólido e acima da maioria. Você capta padrões e relações com facilidade." };
-  if (qi >= 110) return { title: "Levemente <em>acima da média</em>",   desc: "Boa capacidade lógica. Com prática, você pode atingir níveis ainda mais altos." };
-  if (qi >= 90)  return { title: "Na faixa <em>média</em>",             desc: "Raciocínio típico. Algumas categorias podem ter mais espaço para treino." };
-  return           { title: "Abaixo da <em>média</em>",                 desc: "Não desanime — o raciocínio lógico melhora muito com prática consistente." };
+  if (qi >= 140) return { title:"Genialidade <em>extraordinária</em>", desc:"Você está entre os 0,25% mais dotados. Raciocínio excepcional em lógica, padrões e cálculo — performance raramente vista." };
+  if (qi >= 130) return { title:"Inteligência <em>superior</em>",      desc:"Nível de superdotação. Você demonstra habilidade notável em todas as categorias testadas. Continue desafiando sua mente." };
+  if (qi >= 120) return { title:"Acima da <em>média</em>",             desc:"Raciocínio sólido e acima da maioria. Você capta padrões e relações com facilidade e agilidade." };
+  if (qi >= 110) return { title:"Levemente <em>acima da média</em>",   desc:"Boa capacidade lógica com pontos a desenvolver. Com prática regular, você pode atingir níveis ainda mais altos." };
+  if (qi >= 90)  return { title:"Na faixa <em>média</em>",             desc:"Raciocínio típico para a população geral. Algumas categorias podem ter mais espaço para treinamento." };
+  return           { title:"Em <em>desenvolvimento</em>",              desc:"Não desanime — o raciocínio lógico melhora muito com prática consistente. Tente novamente!" };
 }
 
+function diffLabel(diff) {
+  if (diff === "easy")   return { text:"● Fácil",   cls:"easy"   };
+  if (diff === "medium") return { text:"●● Médio",  cls:"medium" };
+  return                        { text:"●●● Difícil", cls:"hard" };
+}
 
+// ─── UI INTERACTIONS ────────────────────────────────────────────────────────
+function selectMode(el) {
+  document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedMode = parseInt(el.dataset.mode);
+}
+
+function startGame() {
+  TOTAL = selectedMode;
+  shuffled = shuffle(ALL_QUESTIONS).slice(0, TOTAL);
+  index = 0; correct = 0; wrong = 0; answered = false;
+  catStats = {};
+
+  document.getElementById('introScreen').classList.add('hidden');
+  document.getElementById('quizArea').classList.remove('hidden');
+  document.getElementById('resultScreen').classList.remove('show');
+
+  updateScoreStrip();
+  loadQuestion();
+}
 
 function updateScoreStrip() {
-  document.getElementById("scoreCor").textContent = correct;
-  document.getElementById("scoreWrg").textContent = wrong;
+  document.getElementById('scoreCor').textContent = correct;
+  document.getElementById('scoreWrg').textContent = wrong;
   const done = correct + wrong;
-  const qi = done > 0 ? estimateQI(correct / done) : "—";
-  document.getElementById("scoreQI").textContent = done > 0 ? qi : "—";
+  document.getElementById('scoreQI').textContent = done > 0 ? estimateQI(correct / done) : '—';
 }
 
 function loadQuestion() {
@@ -508,62 +994,71 @@ function loadQuestion() {
   answered = false;
   const q = shuffled[index];
 
-  // Progress
-  document.getElementById("progressCount").textContent = `${index + 1} / ${TOTAL}`;
-  document.getElementById("progressFill").style.width = ((index / TOTAL) * 100) + "%";
+  // Progresso
+  document.getElementById('progressCount').textContent = `${index + 1} / ${TOTAL}`;
+  document.getElementById('progressFill').style.width = ((index / TOTAL) * 100) + '%';
 
   // Card
-  document.getElementById("catBadge").textContent = q.cat;
-  document.getElementById("questionText").textContent = q.q;
-  document.getElementById("feedback").textContent = "";
+  document.getElementById('catBadge').textContent = q.cat;
+  const dl = diffLabel(q.diff);
+  const db = document.getElementById('diffBadge');
+  db.textContent = dl.text;
+  db.className = 'diff-badge ' + dl.cls;
+  document.getElementById('questionText').textContent = q.q;
 
-  // Answers
-  const div = document.getElementById("answersDiv");
-  div.innerHTML = "";
-  const letters = ["A","B","C","D"];
+  // Respostas
+  const div = document.getElementById('answersDiv');
+  div.innerHTML = '';
+  const letters = ['A','B','C','D'];
   q.a.forEach((ans, i) => {
-    const btn = document.createElement("button");
-    btn.className = "ans-btn";
-    btn.innerHTML = `<span class="ans-letter">${letters[i]}</span> ${ans}`;
+    const btn = document.createElement('button');
+    btn.className = 'ans-btn';
+    btn.innerHTML = `<span class="ans-letter">${letters[i]}</span>${ans}`;
     btn.onclick = () => answer(i);
     div.appendChild(btn);
   });
 
-  qStart = Date.now();
+  // Feedback
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback';
+  fb.innerHTML = '';
 
-  // Next button
-  const nb = document.getElementById("btnNext");
-  nb.classList.remove("visible");
-  nb.textContent = index === TOTAL - 1 ? "Ver resultado →" : "Próxima pergunta →";
+  // Botão próxima
+  const nb = document.getElementById('btnNext');
+  nb.classList.remove('visible');
+  nb.textContent = index === TOTAL - 1 ? 'Ver resultado →' : 'Próxima pergunta →';
 }
 
 function answer(i) {
   if (answered) return;
   answered = true;
-  const elapsed = (Date.now() - qStart) / 1000;
-  timers.push(elapsed);
 
   const q = shuffled[index];
-  const btns = document.querySelectorAll(".ans-btn");
+  const btns = document.querySelectorAll('.ans-btn');
   btns.forEach((b, j) => {
     b.disabled = true;
-    if (j === q.c) b.classList.add("correct");
-    else if (j === i && i !== q.c) b.classList.add("wrong");
+    if (j === q.c) b.classList.add('correct');
+    else if (j === i && i !== q.c) b.classList.add('wrong');
   });
 
+  // Estatísticas por categoria
+  if (!catStats[q.cat]) catStats[q.cat] = { c:0, t:0 };
+  catStats[q.cat].t++;
+
+  const fb = document.getElementById('feedback');
   if (i === q.c) {
     correct++;
-    document.getElementById("feedback").textContent = "✓ Correto! " + q.exp;
+    catStats[q.cat].c++;
+    fb.className = 'feedback ok show';
+    fb.innerHTML = `<strong>✓ Correto!</strong>${q.exp}`;
   } else {
     wrong++;
-    document.getElementById("feedback").textContent = "✗ Incorreto. " + q.exp;
+    fb.className = 'feedback err show';
+    fb.innerHTML = `<strong>✗ Incorreto.</strong>${q.exp}`;
   }
-  updateScoreStrip();
-  showNext();
-}
 
-function showNext() {
-  document.getElementById("btnNext").classList.add("visible");
+  updateScoreStrip();
+  document.getElementById('btnNext').classList.add('visible');
 }
 
 function nextQuestion() {
@@ -572,42 +1067,52 @@ function nextQuestion() {
 }
 
 function showResult() {
-  document.getElementById("quizCard").style.display = "none";
-  document.getElementById("btnNext").style.display = "none";
-  document.getElementById("progressFill").style.width = "100%";
-  document.getElementById("progressCount").textContent = `${TOTAL} / ${TOTAL}`;
+  document.getElementById('quizArea').classList.add('hidden');
+  document.getElementById('progressFill').style.width = '100%';
 
   const pct = correct / TOTAL;
   const qi  = estimateQI(pct);
   const { title, desc } = qiLabel(qi);
-  const avgTime = timers.length ? (timers.reduce((a,b) => a+b,0) / timers.length).toFixed(1) : "—";
 
-  document.getElementById("resQI").textContent   = qi;
-  document.getElementById("resTitle").innerHTML  = title;
-  document.getElementById("resDesc").textContent = desc;
-  document.getElementById("resCor").textContent  = correct;
-  document.getElementById("resWrg").textContent  = wrong;
-  document.getElementById("resTim").textContent  = avgTime + "s";
+  document.getElementById('resQI').textContent   = qi;
+  document.getElementById('resTitle').innerHTML  = title;
+  document.getElementById('resDesc').textContent = desc;
+  document.getElementById('resCor').textContent  = correct;
+  document.getElementById('resWrg').textContent  = wrong;
+  document.getElementById('resPct').textContent  = Math.round(pct * 100) + '%';
 
-  document.getElementById("scoreQI").textContent = qi;
-  document.getElementById("resultScreen").classList.add("show");
+  // Breakdown por categoria
+  const bd = document.getElementById('catBreakdown');
+  const cats = Object.entries(catStats);
+  if (cats.length > 0) {
+    bd.innerHTML = `<div class="cat-breakdown-title">Desempenho por categoria</div>` +
+      cats.map(([cat, s]) => {
+        const pctCat = s.t > 0 ? Math.round((s.c / s.t) * 100) : 0;
+        return `<div class="cat-row">
+          <div class="cat-row-name">${cat}</div>
+          <div class="cat-bar-track"><div class="cat-bar-fill" style="width:${pctCat}%"></div></div>
+          <div class="cat-row-score">${s.c}/${s.t}</div>
+        </div>`;
+      }).join('');
+    bd.style.display = '';
+  } else {
+    bd.style.display = 'none';
+  }
+
+  document.getElementById('resultScreen').classList.add('show');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function restart() {
-  index = 0; correct = 0; wrong = 0; timers = [];
-  document.getElementById("scoreCor").textContent = "0";
-  document.getElementById("scoreWrg").textContent = "0";
-  document.getElementById("scoreQI").textContent  = "—";
-  document.getElementById("quizCard").style.display = "";
-  document.getElementById("btnNext").style.display  = "";
-  document.getElementById("resultScreen").classList.remove("show");
-  shuffled = shuffle(QUESTIONS);
-  loadQuestion();
+  startGame();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// Init
-shuffled = shuffle(QUESTIONS);
-loadQuestion();
+function backToIntro() {
+  document.getElementById('resultScreen').classList.remove('show');
+  document.getElementById('introScreen').classList.remove('hidden');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 </script>
 </body>
 </html>
