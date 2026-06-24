@@ -282,11 +282,89 @@
     min-height: 18px;
   }
 
+  /* ── ESSENTIAL TOOLS STRIP ── */
+  .essentials-wrap {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    padding: 18px 20px 20px;
+    border-bottom: 3px solid var(--green-start);
+  }
+
+  .essentials-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .essentials-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--green-start);
+  }
+
+  .essentials-label::before,
+  .essentials-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(46,204,113,0.25);
+  }
+
+  .essentials-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  .ess-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 16px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    text-decoration: none;
+    color: #fff;
+    min-width: 100px;
+    flex: 1;
+    max-width: 160px;
+    transition: all 0.18s;
+    text-align: center;
+    backdrop-filter: blur(4px);
+  }
+
+  .ess-card:hover {
+    background: rgba(46,204,113,0.18);
+    border-color: var(--green-start);
+    transform: translateY(-2px);
+  }
+
+  .ess-card .ess-icon {
+    font-size: 26px;
+    line-height: 1;
+  }
+
+  .ess-card .ess-title {
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.3;
+    color: rgba(255,255,255,0.92);
+  }
+
   /* ── RESPONSIVE ── */
   @media (max-width: 600px) {
     header { padding: 36px 16px 32px; }
     header h1 { font-size: 1.6rem; }
     .grid { grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); }
+    .ess-card { min-width: 80px; padding: 10px 10px; }
+    .ess-card .ess-title { font-size: 11px; }
   }
 </style>
 </head>
@@ -301,6 +379,35 @@
 <div class="search-wrap">
   <span class="search-icon">🔍</span>
   <input type="search" id="search" placeholder="Buscar ferramentas..." autocomplete="off" aria-label="Buscar ferramentas">
+</div>
+
+<!-- ── FERRAMENTAS ESSENCIAIS ── -->
+<div class="essentials-wrap">
+  <div class="essentials-inner">
+    <div class="essentials-label">⚡ Ferramentas Essenciais</div>
+    <div class="essentials-grid">
+      <a class="ess-card" href="tools/emergencia-japao/index.html">
+        <span class="ess-icon">🚨</span>
+        <span class="ess-title">Emergências no Japão</span>
+      </a>
+      <a class="ess-card" href="tools/weather/index.html">
+        <span class="ess-icon">🌦️</span>
+        <span class="ess-title">Previsão do Tempo</span>
+      </a>
+      <a class="ess-card" href="tools/descobrir-ip/index.html">
+        <span class="ess-icon">🌍</span>
+        <span class="ess-title">Descobrir meu IP</span>
+      </a>
+      <a class="ess-card" href="tools/leitor-codigos/index.html">
+        <span class="ess-icon">📱</span>
+        <span class="ess-title">Leitor de QR Code</span>
+      </a>
+      <a class="ess-card" href="jogos/quiz500/index.html">
+        <span class="ess-icon">🧠</span>
+        <span class="ess-title">Quiz 500</span>
+      </a>
+    </div>
+  </div>
 </div>
 
 <div class="container">
