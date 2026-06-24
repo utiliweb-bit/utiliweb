@@ -4,30 +4,31 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Envio de Dinheiro ao Brasil — UtiliWeb</title>
+<meta name="description" content="Compare câmbio, taxas e IOF entre serviços de remessa e veja quanto realmente chega em reais.">
 <style>
 /* ── RESET & BASE ── */
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 
 :root {
-  --green: #1a3a5c;
-  --green-light: #1e4976;
-  --green-dark: #0f2540;
-  --green-bg: #eef3f9;
-  --green-border: #b8cfe4;
-  --teal: #c9a84c;
-  --teal-dark: #a8883a;
+  --navy: #1a3a5c;
+  --navy-light: #1e4976;
+  --navy-dark: #0f2540;
+  --navy-bg: #eef3f9;
+  --navy-border: #b8cfe4;
+  --gold: #c9a84c;
+  --gold-dark: #a8883a;
+  --gold-bg: #fdf6e3;
+  --gold-border: #e8d08a;
   --text: #0f1923;
   --text-2: #4a5568;
   --text-3: #8a95a3;
   --border: #dde4ed;
   --surface: #f4f7fb;
   --white: #fff;
+  --danger: #c0392b;
   --radius: 10px;
   --radius-lg: 14px;
-  --shadow: 0 2px 12px rgba(15,37,64,0.08);
   --shadow-lg: 0 8px 32px rgba(15,37,64,0.14);
-  --gold: #c9a84c;
-  --gold-bg: #fdf6e3;
 }
 
 html, body {
@@ -38,12 +39,27 @@ html, body {
   line-height: 1.5;
 }
 
+a { color: inherit; text-decoration: none; }
+
 /* ── HEADER ── */
 .page-header {
   text-align: center;
   padding: 28px 20px 20px;
   color: white;
+  position: relative;
 }
+.back-link {
+  position: absolute;
+  left: 16px;
+  top: 28px;
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 0.85;
+  padding: 6px 10px;
+  border-radius: 8px;
+  transition: opacity 0.15s, background 0.15s;
+}
+.back-link:hover { opacity: 1; background: rgba(255,255,255,0.08); }
 .page-header h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; }
 .page-header p  { font-size: 13px; opacity: 0.85; margin-top: 4px; }
 
@@ -103,11 +119,12 @@ html, body {
   transition: all 0.15s;
   font-family: inherit;
 }
-.moeda-tab:hover { border-color: var(--green-border); background: var(--green-bg); }
-.moeda-tab.active { border-color: var(--green); background: var(--green-bg); }
+.moeda-tab:hover { border-color: var(--navy-border); background: var(--navy-bg); }
+.moeda-tab.active { border-color: var(--navy); background: var(--navy-bg); }
+.moeda-tab:focus-visible { outline: 2px solid var(--navy); outline-offset: 2px; }
 .moeda-tab .sym { font-size: 18px; display: block; line-height: 1; }
 .moeda-tab .cod { font-size: 10px; font-weight: 700; color: var(--text-2); margin-top: 3px; display: block; }
-.moeda-tab.active .cod { color: #1a3a5c; font-weight: 800; }
+.moeda-tab.active .cod { color: var(--navy); font-weight: 800; }
 
 /* ── VALOR INPUT ── */
 .valor-wrap {
@@ -138,10 +155,11 @@ html, body {
   appearance: none;
   transition: border-color 0.2s;
 }
-.valor-input:focus { outline: none; border-color: #1a3a5c; }
-.valor-input.filled { border-color: #1a3a5c; background: var(--green-bg); }
+.valor-input:focus { outline: none; border-color: var(--navy); }
+.valor-input:focus-visible { outline: 2px solid var(--navy); outline-offset: 2px; }
+.valor-input.filled { border-color: var(--navy); background: var(--navy-bg); }
 .valor-input.filled + .valor-sym,
-.valor-wrap:focus-within .valor-sym { color: #1a3a5c; }
+.valor-wrap:focus-within .valor-sym { color: var(--navy); }
 
 /* ── PRESET GRID ── */
 .presets-grid {
@@ -160,17 +178,18 @@ html, body {
   text-align: left;
   position: relative;
 }
-.preset-btn:hover { border-color: var(--green-border); background: var(--green-bg); }
-.preset-btn.active { border-color: var(--green); background: var(--green-bg); }
+.preset-btn:hover { border-color: var(--navy-border); background: var(--navy-bg); }
+.preset-btn.active { border-color: var(--navy); background: var(--navy-bg); }
+.preset-btn:focus-visible { outline: 2px solid var(--navy); outline-offset: 2px; }
 .preset-btn .p-name { font-size: 12px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 5px; }
-.preset-btn .p-cambio { font-size: 11px; color: #1a3a5c; font-weight: 600; margin-top: 3px; }
+.preset-btn .p-cambio { font-size: 11px; color: var(--navy); font-weight: 600; margin-top: 3px; }
 .preset-btn .p-taxa { font-size: 10px; color: var(--text-3); margin-top: 1px; }
 .preset-btn.active::after {
   content: '✓';
   position: absolute;
   top: 6px; right: 8px;
   font-size: 11px;
-  color: #c9a84c;
+  color: var(--gold);
   font-weight: 700;
 }
 .preset-hint { font-size: 10px; color: var(--text-3); margin-bottom: 10px; line-height: 1.4; }
@@ -188,8 +207,8 @@ html, body {
   padding: 10px 12px;
   transition: border-color 0.2s;
 }
-.campo:focus-within { border-color: var(--green); background: var(--green-bg); }
-.campo-label { font-size: 10px; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 5px; }
+.campo:focus-within { border-color: var(--navy); background: var(--navy-bg); }
+.campo-label { font-size: 10px; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 5px; display: block; }
 .campo-inner { position: relative; }
 .campo-pre {
   position: absolute; left: 8px; top: 50%; transform: translateY(-50%);
@@ -208,7 +227,8 @@ html, body {
   appearance: none;
 }
 .campo input.has-pre { padding-left: 20px; }
-.campo input:focus { outline: none; border-color: var(--green); }
+.campo input:focus { outline: none; border-color: var(--navy); }
+.campo input:focus-visible { outline: 2px solid var(--navy); outline-offset: 1px; }
 .campo-hint { font-size: 9px; color: var(--text-3); margin-top: 3px; }
 
 /* ── ACTION BUTTONS ── */
@@ -218,7 +238,7 @@ html, body {
   padding: 14px;
   border: none;
   border-radius: var(--radius);
-  background: linear-gradient(135deg, #1e4976, #0f2540);
+  background: linear-gradient(135deg, var(--navy-light), var(--navy-dark));
   color: white;
   font-size: 14px;
   font-weight: 700;
@@ -229,6 +249,7 @@ html, body {
 }
 .btn-calcular:hover { opacity: 0.92; }
 .btn-calcular:active { transform: scale(0.98); }
+.btn-calcular:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
 .btn-sec {
   padding: 10px;
   border-radius: var(--radius);
@@ -239,10 +260,11 @@ html, body {
   transition: all 0.15s;
   text-align: center;
 }
-.btn-limpar  { background: var(--surface); color: #1a3a5c; border: 1.5px solid var(--border); }
-.btn-copiar  { background: var(--white); color: #1a3a5c; border: 1.5px solid var(--green-border); }
-.btn-exportar{ background: var(--green-bg); color: #1a3a5c; border: 1.5px solid var(--green-border); }
-.btn-sec:hover { border-color: var(--green); background: var(--green-bg); }
+.btn-sec:focus-visible { outline: 2px solid var(--navy); outline-offset: 2px; }
+.btn-limpar  { background: var(--surface); color: var(--navy); border: 1.5px solid var(--border); }
+.btn-copiar  { background: var(--white); color: var(--navy); border: 1.5px solid var(--navy-border); }
+.btn-exportar{ background: var(--navy-bg); color: var(--navy); border: 1.5px solid var(--navy-border); }
+.btn-sec:hover { border-color: var(--navy); background: var(--navy-bg); }
 
 /* ── STATUS ── */
 .status-bar {
@@ -250,17 +272,17 @@ html, body {
   font-size: 11px;
   font-weight: 700;
   text-align: center;
-  color: var(--green-dark);
+  color: var(--navy-dark);
   margin-top: 8px;
   transition: opacity 0.3s;
 }
 
 /* ── RESULT PANEL ── */
 .result-header {
-  background: linear-gradient(135deg, #1e4976, #0f2540);
+  background: linear-gradient(135deg, var(--navy-light), var(--navy-dark));
   padding: 16px 20px;
   color: white;
-  border-bottom: 3px solid #c9a84c;
+  border-bottom: 3px solid var(--gold);
 }
 .result-header .label { font-size: 10px; font-weight: 700; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.5px; }
 .result-header .valor-principal { font-size: 34px; font-weight: 800; letter-spacing: -1px; margin: 4px 0 2px; font-family: 'Courier New', monospace; }
@@ -281,35 +303,35 @@ html, body {
 }
 .metric-label { font-size: 9px; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 4px; }
 .metric-value { font-size: 15px; font-weight: 700; color: var(--text); font-family: 'Courier New', monospace; }
-.metric-value.positive { color: #1a3a5c; }
-.metric-value.negative { color: #c0392b; }
-.metric.gold { background: var(--gold-bg); border-color: #e8d08a; }
-.metric.gold .metric-value { color: #a8883a; }
+.metric-value.negative { color: var(--danger); }
+.metric.gold { background: var(--gold-bg); border-color: var(--gold-border); }
+.metric.gold .metric-value { color: var(--gold-dark); }
 
 /* ── COMPARATIVO ── */
 .comparativo { padding: 14px 16px; border-top: 1px solid var(--border); }
-.comp-title { font-size: 10px; font-weight: 700; color: #1a3a5c; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+.comp-title { font-size: 10px; font-weight: 700; color: var(--navy); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
 .comp-empty { font-size: 12px; color: var(--text-3); text-align: center; padding: 16px 0; }
 .bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
 .bar-row:last-child { margin-bottom: 0; }
 .bar-nome { font-size: 11px; font-weight: 600; color: var(--text-2); min-width: 72px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .bar-track { flex: 1; height: 20px; background: var(--surface); border-radius: 5px; overflow: hidden; position: relative; }
-.bar-fill { height: 100%; border-radius: 5px; transition: width 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); background: linear-gradient(90deg, #b8cfe4, #1a3a5c); }
-.bar-fill.best { background: linear-gradient(90deg, #f0d98a, #c9a84c); }
-.bar-fill.active { background: linear-gradient(90deg, #1e4976, #0f2540); }
+.bar-fill { height: 100%; border-radius: 5px; transition: width 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); background: linear-gradient(90deg, var(--navy-border), var(--navy)); }
+.bar-fill.best { background: linear-gradient(90deg, #f0d98a, var(--gold)); }
+.bar-fill.active { background: linear-gradient(90deg, var(--navy-light), var(--navy-dark)); }
 .bar-valor { font-size: 10px; font-weight: 700; color: var(--text-2); min-width: 72px; text-align: right; font-family: 'Courier New', monospace; }
-.bar-badge { font-size: 9px; font-weight: 700; background: #c9a84c; color: white; padding: 1px 5px; border-radius: 4px; margin-left: 4px; }
+.bar-badge { font-size: 9px; font-weight: 700; background: var(--gold); color: white; padding: 1px 5px; border-radius: 4px; margin-left: 4px; }
 
 /* ── DETALHES ── */
 .detalhes { padding: 14px 16px; border-top: 1px solid var(--border); }
-.det-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--surface); font-size: 12px; }
+.det-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--surface); font-size: 12px; gap: 8px; }
 .det-row:last-child { border-bottom: none; }
 .det-label { color: var(--text-2); }
-.det-val { font-weight: 700; color: var(--text); font-family: 'Courier New', monospace; }
-.det-row.total { background: var(--green-bg); margin: 4px -4px; padding: 8px 4px; border-radius: 7px; border: none; border-left: 3px solid #c9a84c; }
-.det-row.total .det-label { color: var(--green-dark); font-weight: 700; }
-.det-row.total .det-val { color: var(--green-dark); font-size: 14px; }
-.det-row.deduction .det-val { color: #e74c3c; }
+.det-val { font-weight: 700; color: var(--text); font-family: 'Courier New', monospace; text-align: right; }
+.det-val .det-sub { font-size: 10px; color: var(--text-3); font-weight: 600; font-family: inherit; }
+.det-row.total { background: var(--navy-bg); margin: 4px -4px; padding: 8px 4px; border-radius: 7px; border: none; border-left: 3px solid var(--gold); }
+.det-row.total .det-label { color: var(--navy-dark); font-weight: 700; }
+.det-row.total .det-val { color: var(--navy-dark); font-size: 14px; }
+.det-row.deduction .det-val { color: var(--danger); }
 
 /* ── DISCLAIMER ── */
 .disclaimer { padding: 12px 16px; font-size: 10px; color: var(--text-3); line-height: 1.5; border-top: 1px solid var(--border); font-style: italic; }
@@ -325,6 +347,11 @@ html, body {
 }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
+/* ── REDUCED MOTION ── */
+@media (prefers-reduced-motion: reduce) {
+  .bar-fill, .toast, .btn-calcular, .preset-btn, .moeda-tab { transition: none !important; }
+}
+
 /* ── MOBILE ── */
 @media (max-width: 800px) {
   .layout { grid-template-columns: 1fr; }
@@ -334,6 +361,7 @@ html, body {
 @media (max-width: 480px) {
   html, body { font-size: 15px; }
   .page-header { padding: 20px 16px 16px; }
+  .back-link { position: static; display: inline-block; margin-bottom: 10px; }
   .layout { padding: 0 10px 32px; gap: 12px; }
   .campos-grid { grid-template-columns: 1fr; }
   .valor-input { font-size: 20px; }
@@ -346,6 +374,7 @@ html, body {
 <body>
 
 <div class="page-header">
+  <a class="back-link" href="../../index.html">← UtiliWeb</a>
   <h1>💸 Envio de Dinheiro ao Brasil</h1>
   <p>Compare câmbio, taxas e IOF — veja quanto realmente chega</p>
 </div>
@@ -357,15 +386,15 @@ html, body {
 
     <!-- MOEDA -->
     <div class="panel-section">
-      <div class="sec-label">Moeda de origem</div>
-      <div class="moeda-tabs" id="moeda-tabs">
-        <button class="moeda-tab active" data-m="JPY" onclick="setMoeda('JPY')">
+      <div class="sec-label" id="lbl-moeda">Moeda de origem</div>
+      <div class="moeda-tabs" id="moeda-tabs" role="group" aria-labelledby="lbl-moeda">
+        <button type="button" class="moeda-tab active" data-m="JPY" aria-pressed="true" onclick="setMoeda('JPY')">
           <span class="sym">¥</span><span class="cod">JPY · Iene</span>
         </button>
-        <button class="moeda-tab" data-m="USD" onclick="setMoeda('USD')">
+        <button type="button" class="moeda-tab" data-m="USD" aria-pressed="false" onclick="setMoeda('USD')">
           <span class="sym">$</span><span class="cod">USD · Dólar</span>
         </button>
-        <button class="moeda-tab" data-m="EUR" onclick="setMoeda('EUR')">
+        <button type="button" class="moeda-tab" data-m="EUR" aria-pressed="false" onclick="setMoeda('EUR')">
           <span class="sym">€</span><span class="cod">EUR · Euro</span>
         </button>
       </div>
@@ -373,18 +402,18 @@ html, body {
 
     <!-- VALOR -->
     <div class="panel-section">
-      <div class="sec-label">Valor a enviar</div>
+      <label class="sec-label" for="valor-enviar">Valor a enviar</label>
       <div class="valor-wrap">
-        <span class="valor-sym" id="sym-valor">¥</span>
-        <input class="valor-input" type="number" id="valor-enviar" placeholder="0" min="0" step="100" oninput="onValorInput()">
+        <span class="valor-sym" id="sym-valor" aria-hidden="true">¥</span>
+        <input class="valor-input" type="number" id="valor-enviar" placeholder="0" min="0" step="100" inputmode="decimal" aria-label="Valor a enviar" oninput="onValorInput()">
       </div>
     </div>
 
     <!-- PRESETS -->
     <div class="panel-section">
-      <div class="sec-label">Serviços — clique para preencher</div>
-      <p class="preset-hint" id="preset-hint">Valores estimados. Confirme sempre no site do serviço antes de enviar.</p>
-      <div class="presets-grid" id="presets-grid"></div>
+      <div class="sec-label" id="lbl-presets">Serviços — clique para preencher</div>
+      <p class="preset-hint" id="preset-hint">Valores estimados manualmente. Confirme sempre no site do serviço antes de enviar.</p>
+      <div class="presets-grid" id="presets-grid" role="group" aria-labelledby="lbl-presets"></div>
     </div>
 
     <!-- CAMPOS MANUAIS -->
@@ -392,31 +421,31 @@ html, body {
       <div class="sec-label">Câmbio e taxas</div>
       <div class="campos-grid">
         <div class="campo">
-          <div class="campo-label">Câmbio (R$ / unidade)</div>
+          <label class="campo-label" for="cotacao">Câmbio (R$ / unidade)</label>
           <div class="campo-inner">
-            <input type="number" id="cotacao" placeholder="0.0000" min="0" step="0.0001" oninput="calcular()">
+            <input type="number" id="cotacao" placeholder="0.0000" min="0" step="0.0001" inputmode="decimal" oninput="calcular()">
           </div>
           <div class="campo-hint">Consulte no banco ou serviço</div>
         </div>
         <div class="campo">
-          <div class="campo-label">IOF (%)</div>
+          <label class="campo-label" for="iof">IOF (%)</label>
           <div class="campo-inner">
-            <input type="number" id="iof" placeholder="0.38" min="0" step="0.01" oninput="calcular()">
+            <input type="number" id="iof" placeholder="0.38" min="0" step="0.01" inputmode="decimal" oninput="calcular()">
           </div>
-          <div class="campo-hint">Padrão: 0.38% para remessa</div>
+          <div class="campo-hint">Padrão: 0,38% para remessa</div>
         </div>
         <div class="campo">
-          <div class="campo-label">Taxa do serviço (%)</div>
+          <label class="campo-label" for="taxa-pct">Taxa do serviço (%)</label>
           <div class="campo-inner">
-            <input type="number" id="taxa-pct" placeholder="0" min="0" step="0.01" oninput="calcular()">
+            <input type="number" id="taxa-pct" placeholder="0" min="0" step="0.01" inputmode="decimal" oninput="calcular()">
           </div>
           <div class="campo-hint">% sobre o valor enviado</div>
         </div>
         <div class="campo">
-          <div class="campo-label">Taxa fixa</div>
+          <label class="campo-label" for="taxa-fixa">Taxa fixa</label>
           <div class="campo-inner">
-            <span class="campo-pre" id="sym-fixa">¥</span>
-            <input type="number" id="taxa-fixa" placeholder="0" min="0" step="1" class="has-pre" oninput="calcular()">
+            <span class="campo-pre" id="sym-fixa" aria-hidden="true">¥</span>
+            <input type="number" id="taxa-fixa" placeholder="0" min="0" step="1" inputmode="decimal" class="has-pre" oninput="calcular()">
           </div>
           <div class="campo-hint">Valor fixo cobrado pelo serviço</div>
         </div>
@@ -426,12 +455,12 @@ html, body {
     <!-- AÇÕES -->
     <div class="panel-section">
       <div class="actions">
-        <button class="btn-calcular" onclick="calcular()">✓ Calcular</button>
-        <button class="btn-sec btn-limpar"   onclick="limpar()">🗑 Limpar</button>
-        <button class="btn-sec btn-copiar"   onclick="copiar()">📋 Copiar</button>
-        <button class="btn-sec btn-exportar" onclick="exportar()">📥 Exportar CSV</button>
+        <button type="button" class="btn-calcular" onclick="calcular()">✓ Calcular</button>
+        <button type="button" class="btn-sec btn-limpar"   onclick="limpar()">🗑 Limpar</button>
+        <button type="button" class="btn-sec btn-copiar"   onclick="copiar()">📋 Copiar</button>
+        <button type="button" class="btn-sec btn-exportar" onclick="exportar()">📥 Exportar CSV</button>
       </div>
-      <div class="status-bar" id="status"></div>
+      <div class="status-bar" id="status" role="status" aria-live="polite"></div>
     </div>
 
   </div><!-- /panel esquerdo -->
@@ -442,7 +471,7 @@ html, body {
     <!-- VALOR PRINCIPAL -->
     <div class="result-header">
       <div class="label">Valor recebido em reais</div>
-      <div class="valor-principal" id="r-principal">—</div>
+      <div class="valor-principal" id="r-principal" aria-live="polite">—</div>
       <div class="valor-sub" id="r-sub">Preencha o valor e o câmbio</div>
     </div>
 
@@ -456,7 +485,7 @@ html, body {
         <div class="metric-label">Total em taxas</div>
         <div class="metric-value negative" id="r-taxas">—</div>
       </div>
-      <div class="metric gold" id="metric-melhor-wrap">
+      <div class="metric gold">
         <div class="metric-label">Melhor opção</div>
         <div class="metric-value" id="r-melhor-nome">—</div>
       </div>
@@ -483,49 +512,54 @@ html, body {
     </div>
 
     <div class="disclaimer">
-      Valores estimados — confirme sempre no site do serviço antes de enviar. Não é aconselhamento financeiro.
+      Câmbio e taxas dos serviços são valores de referência inseridos manualmente — não são cotações em tempo real. Confirme sempre no site do serviço antes de enviar. Não é aconselhamento financeiro.
     </div>
 
   </div><!-- /panel direito -->
 
 </div><!-- /layout -->
 
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
+'use strict';
+
 // ── CONFIG ────────────────────────────────────────────────────────────────────
+// cambioBase = referência de mercado (atualizar periodicamente à mão).
+// cambioRel  = % do câmbio de mercado que cada serviço efetivamente repassa.
+// Todos os números abaixo são estimativas de referência, não cotações ao vivo.
 
 const CFG = {
   JPY: { sym:'¥', locale:'ja-JP', step:100, decimals:0, cambioBase:0.0345,
     presets:[
-      { id:'wise',    nome:'Wise',         emoji:'💙', cambioRel:0.990, taxaPct:0.45, fixo:0   },
-      { id:'sbi',     nome:'SBI Remit',    emoji:'🏦', cambioRel:0.985, taxaPct:0,    fixo:250 },
-      { id:'remitly', nome:'Remitly',      emoji:'🟢', cambioRel:0.980, taxaPct:0,    fixo:400 },
-      { id:'wu',      nome:'Western Union',emoji:'🟡', cambioRel:0.960, taxaPct:0,    fixo:0   },
+      { id:'wise',    nome:'Wise',          emoji:'💙', cambioRel:0.990, taxaPct:0.45, fixo:0   },
+      { id:'sbi',     nome:'SBI Remit',     emoji:'🏦', cambioRel:0.985, taxaPct:0,    fixo:250 },
+      { id:'remitly', nome:'Remitly',       emoji:'🟢', cambioRel:0.980, taxaPct:0,    fixo:400 },
+      { id:'wu',      nome:'Western Union', emoji:'🟡', cambioRel:0.960, taxaPct:0,    fixo:0   },
     ]
   },
   USD: { sym:'$', locale:'en-US', step:1, decimals:2, cambioBase:5.20,
     presets:[
-      { id:'wise',    nome:'Wise',         emoji:'💙', cambioRel:0.992, taxaPct:0.45, fixo:0    },
-      { id:'remitly', nome:'Remitly',      emoji:'🟢', cambioRel:0.985, taxaPct:0,    fixo:3.99 },
-      { id:'wu',      nome:'Western Union',emoji:'🟡', cambioRel:0.965, taxaPct:0,    fixo:0    },
-      { id:'paypal',  nome:'PayPal',       emoji:'🔵', cambioRel:0.950, taxaPct:3.5,  fixo:0    },
+      { id:'wise',    nome:'Wise',          emoji:'💙', cambioRel:0.992, taxaPct:0.45, fixo:0    },
+      { id:'remitly', nome:'Remitly',       emoji:'🟢', cambioRel:0.985, taxaPct:0,    fixo:3.99 },
+      { id:'wu',      nome:'Western Union', emoji:'🟡', cambioRel:0.965, taxaPct:0,    fixo:0    },
+      { id:'paypal',  nome:'PayPal',        emoji:'🔵', cambioRel:0.950, taxaPct:3.5,  fixo:0    },
     ]
   },
   EUR: { sym:'€', locale:'de-DE', step:1, decimals:2, cambioBase:5.70,
     presets:[
-      { id:'wise',    nome:'Wise',         emoji:'💙', cambioRel:0.992, taxaPct:0.45, fixo:0    },
-      { id:'remitly', nome:'Remitly',      emoji:'🟢', cambioRel:0.984, taxaPct:0,    fixo:2.99 },
-      { id:'wu',      nome:'Western Union',emoji:'🟡', cambioRel:0.963, taxaPct:0,    fixo:0    },
-      { id:'revolut', nome:'Revolut',      emoji:'⚫', cambioRel:0.975, taxaPct:1.0,  fixo:0    },
+      { id:'wise',    nome:'Wise',          emoji:'💙', cambioRel:0.992, taxaPct:0.45, fixo:0    },
+      { id:'remitly', nome:'Remitly',       emoji:'🟢', cambioRel:0.984, taxaPct:0,    fixo:2.99 },
+      { id:'wu',      nome:'Western Union', emoji:'🟡', cambioRel:0.963, taxaPct:0,    fixo:0    },
+      { id:'revolut', nome:'Revolut',       emoji:'⚫', cambioRel:0.975, taxaPct:1.0,  fixo:0    },
     ]
   },
 };
 
 // ── STATE ─────────────────────────────────────────────────────────────────────
 
-let moedaAtual   = 'JPY';
-let presetAtivo  = null;
+let moedaAtual  = 'JPY';
+let presetAtivo = null;
 
 // ── UTILS ─────────────────────────────────────────────────────────────────────
 
@@ -542,25 +576,42 @@ function fmtBRL(n) {
   return 'R$\u00a0' + n.toLocaleString('pt-BR', { minimumFractionDigits:2, maximumFractionDigits:2 });
 }
 
+function fmtCambio(n) {
+  if (n == null || isNaN(n)) return '—';
+  return 'R$\u00a0' + n.toLocaleString('pt-BR', { minimumFractionDigits:4, maximumFractionDigits:4 });
+}
+
 function fmtTaxa(taxaPct, fixo) {
-  if (taxaPct > 0 && fixo > 0) return `${taxaPct}% + ${cfg().sym}${fixo}`;
+  const c = cfg();
+  if (taxaPct > 0 && fixo > 0) return `${taxaPct}% + ${c.sym}${fixo}`;
   if (taxaPct > 0) return `${taxaPct}%`;
-  if (fixo > 0)    return `${cfg().sym}${fixo} fixo`;
+  if (fixo > 0)    return `${c.sym}${fixo} fixo`;
   return 'sem taxa';
 }
 
-function num(id) { return parseFloat(document.getElementById(id)?.value) || 0; }
+function num(id) {
+  const v = parseFloat(document.getElementById(id)?.value);
+  return isFinite(v) && v > 0 ? v : 0;
+}
 function set(id, v) { const el = document.getElementById(id); if (el) el.value = v; }
 
 function calcRemessa(V, cambio, pct, fixo, iofPct) {
   const taxaServico    = V * (pct / 100) + fixo;
   const liquidoEnviado = Math.max(V - taxaServico, 0);
-  const brutoBRL       = liquidoEnviado * cambio;
-  const iofBRL         = brutoBRL * (iofPct / 100);
-  const recebido       = Math.max(brutoBRL - iofBRL, 0);
-  const cambioEfetivo  = V > 0 ? recebido / V : 0;
-  const totalTaxasBRL  = taxaServico * cambio + iofBRL;
+  const brutoBRL        = liquidoEnviado * cambio;
+  const iofBRL          = brutoBRL * (iofPct / 100);
+  const recebido        = Math.max(brutoBRL - iofBRL, 0);
+  const cambioEfetivo   = V > 0 ? recebido / V : 0;
+  const totalTaxasBRL   = taxaServico * cambio + iofBRL;
   return { taxaServico, liquidoEnviado, brutoBRL, iofBRL, recebido, cambioEfetivo, totalTaxasBRL };
+}
+
+function presetValores(p, baseRate) {
+  return {
+    cambio:  +(baseRate * p.cambioRel).toFixed(4),
+    taxaPct: p.taxaPct,
+    fixo:    p.fixo,
+  };
 }
 
 // ── TOAST ─────────────────────────────────────────────────────────────────────
@@ -579,7 +630,11 @@ function toast(msg, dur = 2800) {
 function setMoeda(m) {
   moedaAtual  = m;
   presetAtivo = null;
-  document.querySelectorAll('.moeda-tab').forEach(t => t.classList.toggle('active', t.dataset.m === m));
+  document.querySelectorAll('.moeda-tab').forEach(t => {
+    const isActive = t.dataset.m === m;
+    t.classList.toggle('active', isActive);
+    t.setAttribute('aria-pressed', String(isActive));
+  });
   document.getElementById('sym-valor').textContent = cfg().sym;
   document.getElementById('sym-fixa').textContent  = cfg().sym;
   document.getElementById('valor-enviar').step      = cfg().step;
@@ -591,25 +646,20 @@ function setMoeda(m) {
 
 function buildPresets() {
   const { presets, cambioBase } = cfg();
-  const baseRate   = cambioBase;
-
   const grid = document.getElementById('presets-grid');
   grid.innerHTML = '';
 
-  document.getElementById('preset-hint').textContent = 'Valores estimados. Confirme no site do serviço antes de enviar.';
-
   presets.forEach(p => {
-    const fetched = null;
-    const cambio  = fetched?.cambio   != null ? +fetched.cambio   : +(baseRate * p.cambioRel).toFixed(4);
-    const taxaPct = fetched?.taxa_pct != null ? +fetched.taxa_pct : p.taxaPct;
-    const fixo    = fetched?.taxa_fixa!= null ? +fetched.taxa_fixa: p.fixo;
+    const { cambio, taxaPct, fixo } = presetValores(p, cambioBase);
 
     const btn = document.createElement('button');
+    btn.type = 'button';
     btn.className = 'preset-btn' + (presetAtivo === p.id ? ' active' : '');
     btn.id = 'preset-' + p.id;
+    btn.setAttribute('aria-pressed', String(presetAtivo === p.id));
     btn.innerHTML = `
       <div class="p-name">${p.emoji} ${p.nome}</div>
-      <div class="p-cambio">R$${cambio.toLocaleString('pt-BR',{minimumFractionDigits:4,maximumFractionDigits:4})}</div>
+      <div class="p-cambio">${fmtCambio(cambio)}</div>
       <div class="p-taxa">${fmtTaxa(taxaPct, fixo)}</div>`;
     btn.onclick = () => selecionarPreset(p.id, cambio, taxaPct, fixo, p.nome);
     grid.appendChild(btn);
@@ -618,20 +668,26 @@ function buildPresets() {
 
 function selecionarPreset(id, cambio, taxaPct, fixo, nome) {
   if (presetAtivo === id) {
-    // toggle off — mantém campos, só remove destaque
+    // toggle off — mantém campos preenchidos, só remove destaque visual
     presetAtivo = null;
-    document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.preset-btn').forEach(b => {
+      b.classList.remove('active');
+      b.setAttribute('aria-pressed', 'false');
+    });
     return;
   }
   presetAtivo = id;
-  document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('preset-' + id)?.classList.add('active');
+  document.querySelectorAll('.preset-btn').forEach(b => {
+    b.classList.remove('active');
+    b.setAttribute('aria-pressed', 'false');
+  });
+  const btn = document.getElementById('preset-' + id);
+  if (btn) { btn.classList.add('active'); btn.setAttribute('aria-pressed', 'true'); }
 
   set('cotacao', cambio);
   set('taxa-pct', taxaPct || 0);
   set('taxa-fixa', fixo || 0);
-  // IOF: usa valor já preenchido ou padrão 0.38
-  if (!num('iof')) set('iof', 0.38);
+  if (!num('iof')) set('iof', 0.38); // padrão de IOF para remessa, só aplica se o campo estiver vazio
 
   calcular();
   toast(`✓ ${nome} selecionado`);
@@ -646,7 +702,6 @@ function calcular() {
   const fixo   = num('taxa-fixa');
   const iofPct = num('iof');
 
-  // Input visual
   const inp = document.getElementById('valor-enviar');
   inp.classList.toggle('filled', V > 0);
 
@@ -655,7 +710,7 @@ function calcular() {
     document.getElementById('r-sub').textContent = V > 0 ? 'Preencha o câmbio' : 'Preencha o valor e o câmbio';
     document.getElementById('r-cambio-ef').textContent = '—';
     document.getElementById('r-taxas').textContent = '—';
-    renderComparativo(V);
+    renderComparativo(V, null);
     renderDetalhes(null, V, cambio, pct, fixo, iofPct);
     return;
   }
@@ -664,9 +719,8 @@ function calcular() {
 
   document.getElementById('r-principal').textContent = fmtBRL(r.recebido);
   document.getElementById('r-sub').textContent = `Enviando ${fmtOrig(V)}`;
-  document.getElementById('r-cambio-ef').textContent =
-    'R$\u00a0' + r.cambioEfetivo.toLocaleString('pt-BR', {minimumFractionDigits:4, maximumFractionDigits:4});
-  document.getElementById('r-taxas').textContent = r.totalTaxasBRL > 0 ? fmtBRL(r.totalTaxasBRL) : 'R$\u00a00,00';
+  document.getElementById('r-cambio-ef').textContent = fmtCambio(r.cambioEfetivo);
+  document.getElementById('r-taxas').textContent = fmtBRL(r.totalTaxasBRL);
 
   renderComparativo(V, r);
   renderDetalhes(r, V, cambio, pct, fixo, iofPct);
@@ -683,30 +737,23 @@ function renderComparativo(V, rAtual) {
   }
 
   const { presets, cambioBase } = cfg();
-  const baseRate  = cambioBase;
-  const iofPct    = num('iof') || 0.38;
+  const iofPct = num('iof') || 0.38;
 
-  // Calcula todos os presets
   const resultados = presets.map(p => {
-    const fetched = null;
-    const cambio  = fetched?.cambio   != null ? +fetched.cambio   : +(baseRate * p.cambioRel).toFixed(4);
-    const taxaPct = fetched?.taxa_pct != null ? +fetched.taxa_pct : p.taxaPct;
-    const fixo    = fetched?.taxa_fixa!= null ? +fetched.taxa_fixa: p.fixo;
-    const r       = calcRemessa(V, cambio, taxaPct, fixo, iofPct);
+    const { cambio, taxaPct, fixo } = presetValores(p, cambioBase);
+    const r = calcRemessa(V, cambio, taxaPct, fixo, iofPct);
     return { id: p.id, nome: p.nome, emoji: p.emoji, recebido: r.recebido };
   });
 
-  // Adiciona simulação atual se câmbio preenchido e diferente dos presets
   const cambioAtual = num('cotacao');
   if (cambioAtual && rAtual) {
-    resultados.push({ id:'__sim__', nome:'Minha sim.', emoji:'📌', recebido: rAtual.recebido, isCustom: true });
+    resultados.push({ id:'__sim__', nome:'Minha simulação', emoji:'📌', recebido: rAtual.recebido });
   }
 
   resultados.sort((a, b) => b.recebido - a.recebido);
   const maxVal = Math.max(...resultados.map(r => r.recebido), 1);
   const bestId = resultados[0]?.id;
 
-  // Atualiza métrica melhor
   const melhor = resultados[0];
   if (melhor) {
     document.getElementById('r-melhor-nome').textContent = `${melhor.emoji} ${melhor.nome}`;
@@ -743,16 +790,14 @@ function renderDetalhes(r, V, cambio, pct, fixo, iofPct) {
   }
   det.innerHTML = `
     <div class="det-row"><span class="det-label">Valor enviado</span><span class="det-val">${fmtOrig(V)}</span></div>
-    <div class="det-row deduction"><span class="det-label">− Taxa do serviço</span><span class="det-val">${fmtOrig(r.taxaServico)} <span style="font-size:10px;color:#999">(${fmtTaxa(pct,fixo)})</span></span></div>
+    <div class="det-row deduction"><span class="det-label">− Taxa do serviço</span><span class="det-val">${fmtOrig(r.taxaServico)}<br><span class="det-sub">${fmtTaxa(pct, fixo)}</span></span></div>
     <div class="det-row"><span class="det-label">Valor líquido enviado</span><span class="det-val">${fmtOrig(r.liquidoEnviado)}</span></div>
-    <div class="det-row"><span class="det-label">× Câmbio aplicado</span><span class="det-val">R$\u00a0${cambio.toLocaleString('pt-BR',{minimumFractionDigits:4,maximumFractionDigits:4})}</span></div>
+    <div class="det-row"><span class="det-label">× Câmbio aplicado</span><span class="det-val">${fmtCambio(cambio)}</span></div>
     <div class="det-row"><span class="det-label">Valor convertido (bruto)</span><span class="det-val">${fmtBRL(r.brutoBRL)}</span></div>
     <div class="det-row deduction"><span class="det-label">− IOF (${iofPct}%)</span><span class="det-val">${fmtBRL(r.iofBRL)}</span></div>
-    <div class="det-row"><span class="det-label">Câmbio efetivo (com taxas)</span><span class="det-val">R$\u00a0${r.cambioEfetivo.toLocaleString('pt-BR',{minimumFractionDigits:4,maximumFractionDigits:4})}</span></div>
+    <div class="det-row"><span class="det-label">Câmbio efetivo (com taxas)</span><span class="det-val">${fmtCambio(r.cambioEfetivo)}</span></div>
     <div class="det-row total"><span class="det-label">✓ Valor recebido em reais</span><span class="det-val">${fmtBRL(r.recebido)}</span></div>
   `;
-}
-
 }
 
 // ── LIMPAR / COPIAR / EXPORTAR ────────────────────────────────────────────────
@@ -774,7 +819,7 @@ function copiar() {
     'Envio de Dinheiro ao Brasil — UtiliWeb',
     `Moeda: ${moedaAtual}`,
     `Valor enviado: ${fmtOrig(V)}`,
-    `Câmbio: R$ ${cambio.toLocaleString('pt-BR',{minimumFractionDigits:4})}`,
+    `Câmbio: ${fmtCambio(cambio)}`,
     `Taxa do serviço: ${fmtOrig(r.taxaServico)}`,
     `IOF (${num('iof')}%): ${fmtBRL(r.iofBRL)}`,
     `VALOR RECEBIDO: ${fmtBRL(r.recebido)}`,
@@ -784,6 +829,7 @@ function copiar() {
 
 function exportar() {
   const V = num('valor-enviar'), cambio = num('cotacao');
+  if (!V || !cambio) { toast('⚠ Preencha o valor e o câmbio primeiro'); return; }
   const r = calcRemessa(V, cambio, num('taxa-pct'), num('taxa-fixa'), num('iof'));
   const csv = [
     'Campo,Valor',
@@ -793,16 +839,16 @@ function exportar() {
     `Taxa %,${num('taxa-pct')}`,
     `Taxa fixa,${num('taxa-fixa')}`,
     `IOF %,${num('iof')}`,
-    `Taxa do serviço (orig),${r.taxaServico}`,
-    `Líquido enviado,${r.liquidoEnviado}`,
+    `Taxa do serviço (orig),${r.taxaServico.toFixed(2)}`,
+    `Líquido enviado,${r.liquidoEnviado.toFixed(2)}`,
     `Convertido bruto (BRL),${r.brutoBRL.toFixed(2)}`,
     `IOF (BRL),${r.iofBRL.toFixed(2)}`,
     `Câmbio efetivo,${r.cambioEfetivo.toFixed(4)}`,
     `Recebido (BRL),${r.recebido.toFixed(2)}`,
   ].join('\n');
   const a = Object.assign(document.createElement('a'), {
-    href: URL.createObjectURL(new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8;'})),
-    download:'envio-brasil.csv'
+    href: URL.createObjectURL(new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' })),
+    download: 'envio-brasil.csv'
   });
   a.click();
   toast('✓ CSV exportado!');
@@ -812,7 +858,7 @@ function exportar() {
 
 function onValorInput() {
   const inp = document.getElementById('valor-enviar');
-  inp.classList.toggle('filled', (parseFloat(inp.value)||0) > 0);
+  inp.classList.toggle('filled', num('valor-enviar') > 0);
   calcular();
 }
 
