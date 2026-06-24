@@ -6,7 +6,7 @@
 
 <title>Planejador de Orçamento Mensal | UtiliWeb</title>
 
-<meta name="description" content="Organize sua renda mensal, defina limites por categoria de gasto e acompanhe quanto sobra todo mês.">
+<meta name="description" content="Organize sua renda mensal, registre os gastos do dia a dia e acompanhe quanto sobra todo mês.">
 <meta name="robots" content="index, follow">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -233,40 +233,6 @@ button {
 
 .btn-cancelar-edicao.visivel { display: block; }
 .btn-cancelar-edicao:hover { color: var(--wine); }
-
-/* CATEGORIAS COM LIMITE */
-.categorias-limite {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.categoria-linha {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 9px 11px;
-    border: 1.5px solid var(--hairline);
-    border-radius: var(--radius-sm);
-}
-
-.categoria-linha .emoji { font-size: 17px; flex-shrink: 0; }
-
-.categoria-linha .nome {
-    flex: 1;
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--ink);
-}
-
-.categoria-linha input {
-    width: 110px;
-    padding: 7px 9px;
-    font-size: 13px;
-    border-radius: var(--radius-xs);
-    text-align: right;
-    flex-shrink: 0;
-}
 
 /* CARDS DE RESUMO */
 .stats-row {
@@ -587,7 +553,7 @@ button {
         <form id="formGasto">
             <div class="linha-campos">
                 <div class="campo">
-                    <input id="inputDescricao" type="text" placeholder="Descrição (ex: Mercado)" required>
+                    <input id="inputDescricao" type="text" placeholder="Descrição (opcional)">
                 </div>
                 <div class="campo">
                     <select id="selectCategoria"></select>
@@ -605,9 +571,6 @@ button {
             <button type="submit" class="btn-primario" id="btnSubmitGasto">+ Adicionar gasto</button>
             <button type="button" class="btn-cancelar-edicao" id="btnCancelarEdicao">Cancelar edição</button>
         </form>
-
-        <label class="label-sep">Limite por categoria <span style="color:#aaa;font-weight:400;text-transform:none;">(opcional)</span></label>
-        <div class="categorias-limite" id="categoriasLimite"></div>
 
         <button type="button" class="btn-secundario" id="btnNovoMes">Encerrar mês e começar do zero</button>
 
@@ -715,7 +678,7 @@ function carregarEstado() {
 function salvarEstado() {
     if (!armazenamentoDisponivel) return;
     try {
-        const dados = { renda, moedaAtual, moedaTravada, limites, gastos, proximoId };
+        const dados = { renda, moedaAtual, moedaTravada, gastos, proximoId };
         localStorage.setItem(CHAVE_STORAGE, JSON.stringify(dados));
     } catch (e) {
         console.warn("Não foi possível salvar os dados:", e);
@@ -730,14 +693,9 @@ const dadosSalvos = carregarEstado();
 let renda = dadosSalvos?.renda ?? 0;
 let moedaAtual = dadosSalvos?.moedaAtual ?? "BRL";
 let moedaTravada = dadosSalvos?.moedaTravada ?? false;
-let limites = dadosSalvos?.limites ?? {};
 let gastos = dadosSalvos?.gastos ?? [];
 let proximoId = dadosSalvos?.proximoId ?? 1;
 let editandoId = null;
-
-Object.keys(CATEGORIAS).forEach(chave => {
-    if (!(chave in limites)) limites[chave] = null;
-});
 
 /* ====================== ELEMENTOS ====================== */
 const elInputRenda = document.getElementById("inputRenda");
@@ -752,7 +710,6 @@ const elInputData = document.getElementById("inputData");
 const elAvisoDataFutura = document.getElementById("avisoDataFutura");
 const elBtnSubmitGasto = document.getElementById("btnSubmitGasto");
 const elBtnCancelarEdicao = document.getElementById("btnCancelarEdicao");
-const elCategoriasLimite = document.getElementById("categoriasLimite");
 const elBtnNovoMes = document.getElementById("btnNovoMes");
 const elAvisoArmazenamento = document.getElementById("avisoArmazenamento");
 
@@ -819,25 +776,6 @@ function atualizarTravaMoeda() {
         : "";
 }
 
-function montarLimites() {
-    elCategoriasLimite.innerHTML = Object.entries(CATEGORIAS).map(([chave, c]) => `
-        <div class="categoria-linha">
-            <span class="emoji">${c.emoji}</span>
-            <span class="nome">${c.nome}</span>
-            <input type="number" min="0" step="any" placeholder="Sem limite" data-chave="${chave}" value="${limites[chave] ?? ""}">
-        </div>
-    `).join("");
-
-    elCategoriasLimite.querySelectorAll("input").forEach(input => {
-        input.addEventListener("input", () => {
-            const v = parseFloat(input.value);
-            limites[input.dataset.chave] = isNaN(v) || v <= 0 ? null : v;
-            salvarEstado();
-            renderizar();
-        });
-    });
-}
-
 /* ====================== EDIÇÃO / ENVIO DO FORMULÁRIO ====================== */
 function entrarModoEdicao(gasto) {
     editandoId = gasto.id;
@@ -876,7 +814,7 @@ elInputData.addEventListener("input", verificarDataFutura);
 elFormGasto.addEventListener("submit", (e) => {
     e.preventDefault();
     const valor = parseFloat(elInputValor.value);
-    if (!elInputDescricao.value.trim() || isNaN(valor) || valor <= 0) return;
+    if (isNaN(valor) || valor <= 0) return;
 
     if (editandoId !== null) {
         const gasto = gastos.find(g => g.id === editandoId);
@@ -930,7 +868,7 @@ elSelectMoeda.addEventListener("change", () => {
 });
 
 elBtnNovoMes.addEventListener("click", () => {
-    if (gastos.length === 0 || confirm("Isso vai apagar todos os gastos registrados (a renda e os limites continuam). Confirma?")) {
+    if (gastos.length === 0 || confirm("Isso vai apagar todos os gastos registrados (a renda continua). Confirma?")) {
         gastos = [];
         moedaTravada = false;
         sairModoEdicao();
@@ -1065,23 +1003,16 @@ function renderizarBreakdown(totalGasto) {
     elBreakdownConteudo.innerHTML = chaves.map(chave => {
         const c = CATEGORIAS[chave];
         const gastoCat = porCategoria[chave];
-        const limite = limites[chave];
-        const base = limite || totalGasto || 1;
-        const larguraPct = Math.min(100, (gastoCat / base) * 100);
-        const passouLimite = limite && gastoCat > limite;
-
-        const textoValores = limite
-            ? `${formatarMoeda(gastoCat)} de ${formatarMoeda(limite)}`
-            : formatarMoeda(gastoCat);
+        const larguraPct = Math.min(100, (gastoCat / (totalGasto || 1)) * 100);
 
         return `
             <div class="barra-linha">
                 <div class="barra-topo">
                     <span class="nome-cat">${c.emoji} ${c.nome}</span>
-                    <span class="valores-cat">${passouLimite ? `<strong>${textoValores}</strong>` : textoValores}</span>
+                    <span class="valores-cat">${formatarMoeda(gastoCat)}</span>
                 </div>
                 <div class="barra-trilho">
-                    <div class="barra-fill" style="width:${larguraPct}%; background:${passouLimite ? "#8B3A3A" : c.cor};"></div>
+                    <div class="barra-fill" style="width:${larguraPct}%; background:${c.cor};"></div>
                 </div>
             </div>
         `;
@@ -1101,7 +1032,7 @@ function renderizarLancamentos() {
             <div class="lancamento-item ${futuro ? "futuro" : ""}" data-id="${g.id}" data-acao="editar" title="Clique para editar">
                 <span class="emoji-cat">${c.emoji}</span>
                 <span class="info">
-                    <div class="descricao">${g.descricao}</div>
+                    <div class="descricao">${g.descricao || c.nome}</div>
                     <div class="meta">${c.nome} · ${formatarData(g.data)}${futuro ? ' · <span class="tag-futuro">data futura</span>' : ''}</div>
                 </span>
                 <span class="valor">-${formatarMoeda(g.valor)}</span>
@@ -1124,7 +1055,6 @@ function renderizarLancamentos() {
     });
 }
 
-montarLimites();
 renderizar();
 </script>
 
