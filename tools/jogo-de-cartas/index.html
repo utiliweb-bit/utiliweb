@@ -553,12 +553,14 @@ function addBet(amount) {
   if (currentBet + amount > balance) return;
   currentBet += amount;
   $betDisplay.textContent = currentBet;
+  setButtons("bet");
 }
 
 function clearBet() {
   if (inGame) return;
   currentBet = 0;
   $betDisplay.textContent = 0;
+  setButtons("bet");
 }
 
 // ── Game flow ──
