@@ -1,387 +1,472 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UtiliWeb - Ferramentas Online Gratuitas</title>
-<meta name="description" content="UtiliWeb é uma plataforma de ferramentas online gratuitas para produtividade, texto, SEO e utilitários.">
-<meta name="robots" content="index, follow">
-<meta property="og:title" content="UtiliWeb - Ferramentas Online Gratuitas">
-<meta property="og:description" content="Ferramentas rápidas, gratuitas e online para quem vive no Japão e além.">
-<meta property="og:type" content="website">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
-<link rel="stylesheet" href="assets/style.css">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5976195708363253" crossorigin="anonymous"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>UtiliWeb — Hub de Ferramentas Gratuitas</title>
+  <meta name="description" content="UtiliWeb é uma plataforma premium de ferramentas online gratuitas para produtividade, finanças, texto, saúde, jogos e utilitários no Japão.">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary: #10b981;
+      --primary-dark: #059669;
+      --primary-light: #ecfdf5;
+      --primary-surface: rgba(16, 185, 129, 0.08);
+      
+      --neutral-50: #f9fafb;
+      --neutral-100: #f3f4f6;
+      --neutral-200: #e5e7eb;
+      --neutral-300: #d1d5db;
+      --neutral-400: #9ca3af;
+      --neutral-500: #6b7280;
+      --neutral-600: #4b5563;
+      --neutral-700: #374151;
+      --neutral-800: #1f2937;
+      --neutral-900: #111827;
+      
+      --bg-body: #f8fafc;
+      --bg-card: #ffffff;
+      
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+      --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+      
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --radius-full: 9999px;
+      
+      --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
-<style>
-  :root {
-    --green-start: #2ecc71;
-    --green-end: #27ae60;
-    --green-dark: #1e8449;
-    --green-light: #eafaf1;
-    --green-border: #a9dfbf;
-    --text-primary: #111;
-    --text-secondary: #555;
-    --text-muted: #888;
-    --bg-page: #f5f6fa;
-    --bg-card: #fff;
-    --shadow-card: 0 2px 10px rgba(0,0,0,0.07);
-    --shadow-hover: 0 6px 20px rgba(0,0,0,0.12);
-    --radius-card: 12px;
-    --radius-badge: 6px;
-  }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+    }
 
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: var(--bg-page);
-    color: var(--text-primary);
-    line-height: 1.6;
-  }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg-body);
+      color: var(--neutral-800);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
 
-  /* ── HEADER ── */
-  header {
-    background: linear-gradient(135deg, var(--green-start) 0%, var(--green-end) 100%);
-    color: #fff;
-    padding: 48px 20px 40px;
-    text-align: center;
-  }
+    h1, h2, h3, .logo-text {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
 
-  .header-logo {
-    font-size: 42px;
-    margin-bottom: 6px;
-    display: block;
-  }
+    /* ── HEADER ── */
+    header {
+      background: var(--neutral-900);
+      background-image: radial-gradient(circle at top right, rgba(16, 185, 129, 0.15), transparent 400px);
+      color: #fff;
+      padding: 64px 24px 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
 
-  header h1 {
-    font-size: 2rem;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-  }
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    }
 
-  header p {
-    font-size: 1rem;
-    opacity: 0.88;
-    margin-top: 6px;
-  }
+    .header-logo {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 64px;
+      height: 64px;
+      background: var(--primary);
+      border-radius: var(--radius-lg);
+      margin-bottom: 20px;
+      box-shadow: 0 0 30px rgba(16, 185, 129, 0.3);
+      transform: rotate(-5deg);
+    }
 
-  /* ── SEARCH BAR ── */
-  .search-wrap {
-    max-width: 600px;
-    margin: -24px auto 0;
-    padding: 0 20px;
-    position: relative;
-    z-index: 10;
-  }
+    header h1 {
+      font-size: clamp(1.75rem, 5vw, 2.75rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      margin-bottom: 8px;
+    }
 
-  .search-wrap input {
-    width: 100%;
-    padding: 14px 18px 14px 46px;
-    border-radius: 10px;
-    border: 1.5px solid var(--green-border);
-    font-size: 15px;
-    background: #fff;
-    box-shadow: 0 4px 18px rgba(0,0,0,0.10);
-    outline: none;
-    transition: border-color 0.2s;
-    color: var(--text-primary);
-  }
+    header p {
+      font-size: clamp(0.9375rem, 2.5vw, 1.125rem);
+      color: var(--neutral-400);
+      max-width: 600px;
+      margin: 0 auto;
+    }
 
-  .search-wrap input:focus {
-    border-color: var(--green-start);
-  }
+    /* ── SEARCH BAR ── */
+    .search-wrap {
+      max-width: 640px;
+      margin: -32px auto 0;
+      padding: 0 24px;
+      position: relative;
+      z-index: 50;
+    }
 
-  .search-wrap .search-icon {
-    position: absolute;
-    left: 34px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 18px;
-    pointer-events: none;
-  }
+    .search-inner {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
 
-  /* ── MAIN LAYOUT ── */
-  .container {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 36px 20px 60px;
-  }
+    .search-inner input {
+      width: 100%;
+      padding: 18px 24px 18px 56px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--neutral-200);
+      font-size: 1rem;
+      font-weight: 500;
+      background: #fff;
+      box-shadow: var(--shadow-xl);
+      outline: none;
+      transition: var(--transition);
+      color: var(--neutral-900);
+    }
 
-  /* ── ABOUT ── */
-  .about {
-    background: #fff;
-    border-radius: var(--radius-card);
-    padding: 20px 24px;
-    margin-bottom: 32px;
-    border-left: 4px solid var(--green-start);
-    box-shadow: var(--shadow-card);
-    font-size: 14px;
-    color: var(--text-secondary);
-  }
+    .search-inner input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1), var(--shadow-xl);
+    }
 
-  .about strong {
-    color: var(--text-primary);
-    font-size: 15px;
-  }
+    .search-inner .search-icon {
+      position: absolute;
+      left: 20px;
+      color: var(--neutral-400);
+      display: flex;
+    }
 
-  /* ── CATEGORY FILTER PILLS ── */
-  .filter-bar {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 28px;
-  }
+    /* ── ESSENTIALS (RESTORED LAYOUT) ── */
+    .essentials-wrap {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      padding: 24px 20px 28px;
+      border-bottom: 3px solid var(--primary);
+    }
 
-  .pill {
-    padding: 6px 14px;
-    border-radius: 20px;
-    border: 1.5px solid var(--green-border);
-    background: #fff;
-    color: var(--text-secondary);
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.18s;
-    user-select: none;
-    white-space: nowrap;
-  }
+    .essentials-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
 
-  .pill:hover {
-    border-color: var(--green-start);
-    color: var(--green-dark);
-  }
+    .essentials-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--primary);
+    }
 
-  .pill.active {
-    background: linear-gradient(135deg, var(--green-start), var(--green-end));
-    border-color: transparent;
-    color: #fff;
-  }
+    .essentials-label::before,
+    .essentials-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(16, 185, 129, 0.25);
+    }
 
-  /* ── SECTION HEADERS ── */
-  .section-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin: 32px 0 14px;
-  }
+    .essentials-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+    }
 
-  .section-header h2 {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    letter-spacing: 0.01em;
-  }
+    .ess-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 12px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      color: #fff;
+      min-width: 100px;
+      flex: 1;
+      max-width: 170px;
+      transition: var(--transition);
+      text-align: center;
+      backdrop-filter: blur(8px);
+    }
 
-  .section-header .line {
-    flex: 1;
-    height: 1px;
-    background: #e0e0e0;
-  }
+    .ess-card:hover {
+      background: rgba(16, 185, 129, 0.18);
+      border-color: var(--primary);
+      transform: translateY(-4px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
 
-  .section-header .section-emoji {
-    font-size: 18px;
-  }
+    .ess-icon {
+      font-size: 28px;
+      line-height: 1;
+    }
 
-  /* ── GRID ── */
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 12px;
-  }
+    .ess-title {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      line-height: 1.3;
+      color: rgba(255,255,255,0.95);
+    }
 
-  /* ── CARD ── */
-  .card {
-    display: flex;
-    flex-direction: column;
-    padding: 14px 16px;
-    border-radius: var(--radius-card);
-    background: var(--bg-card);
-    box-shadow: var(--shadow-card);
-    text-decoration: none;
-    color: var(--text-primary);
-    transition: transform 0.18s, box-shadow 0.18s;
-    border: 1px solid transparent;
-    position: relative;
-    overflow: hidden;
-  }
+    /* ── MAIN CONTENT ── */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
 
-  .card:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-hover);
-    border-color: var(--green-border);
-  }
+    .about {
+      background: #fff;
+      border-radius: var(--radius-md);
+      padding: 24px;
+      margin-bottom: 40px;
+      border-left: 4px solid var(--primary);
+      box-shadow: var(--shadow-md);
+      font-size: 0.9375rem;
+      color: var(--neutral-600);
+    }
 
-  .card:hover::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--green-start), var(--green-end));
-  }
+    .about strong {
+      color: var(--neutral-900);
+      font-size: 1rem;
+      display: block;
+      margin-bottom: 4px;
+    }
 
-  .card-icon {
-    font-size: 22px;
-    margin-bottom: 6px;
-    line-height: 1;
-  }
+    /* ── FILTER PILLS ── */
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 40px;
+      justify-content: center;
+    }
 
-  .card-title {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--text-primary);
-    line-height: 1.3;
-  }
+    .pill {
+      padding: 10px 20px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--neutral-200);
+      background: #fff;
+      color: var(--neutral-600);
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
 
-  .badge {
-    font-size: 11px;
-    font-weight: 500;
-    color: var(--green-dark);
-    background: var(--green-light);
-    padding: 2px 7px;
-    border-radius: var(--radius-badge);
-    margin-top: 8px;
-    display: inline-block;
-    width: fit-content;
-  }
+    .pill:hover {
+      border-color: var(--primary);
+      color: var(--primary-dark);
+      background: var(--primary-light);
+    }
 
-  /* ── EMPTY STATE ── */
-  .empty {
-    display: none;
-    text-align: center;
-    padding: 48px 20px;
-    color: var(--text-muted);
-    font-size: 15px;
-  }
+    .pill.active {
+      background: var(--neutral-900);
+      border-color: var(--neutral-900);
+      color: #fff;
+      box-shadow: var(--shadow-md);
+    }
 
-  .empty span { font-size: 40px; display: block; margin-bottom: 12px; }
+    /* ── SECTION WRAP ── */
+    .section-wrap {
+      margin-bottom: 56px;
+    }
 
-  /* ── FOOTER ── */
-  footer {
-    text-align: center;
-    padding: 28px 20px;
-    border-top: 1px solid #e0e0e0;
-    font-size: 13px;
-    color: var(--text-muted);
-    background: #fff;
-  }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
 
-  footer a {
-    color: var(--green-dark);
-    text-decoration: none;
-    margin: 0 8px;
-  }
+    .section-header h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--neutral-900);
+      letter-spacing: -0.02em;
+    }
 
-  footer a:hover { text-decoration: underline; }
+    .section-header .line {
+      flex: 1;
+      height: 1px;
+      background: var(--neutral-200);
+    }
 
-  /* ── COUNT ── */
-  .results-count {
-    font-size: 13px;
-    color: var(--text-muted);
-    margin-bottom: 12px;
-    min-height: 18px;
-  }
+    /* ── GRID ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+    }
 
-  /* ── ESSENTIAL TOOLS STRIP ── */
-  .essentials-wrap {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-    padding: 18px 20px 20px;
-    border-bottom: 3px solid var(--green-start);
-  }
+    /* ── CARD ── */
+    .card {
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      border-radius: var(--radius-lg);
+      background: var(--bg-card);
+      border: 1px solid var(--neutral-200);
+      text-decoration: none;
+      color: var(--neutral-800);
+      transition: var(--transition);
+      position: relative;
+      box-shadow: var(--shadow-sm);
+    }
 
-  .essentials-inner {
-    max-width: 1000px;
-    margin: 0 auto;
-  }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--primary);
+    }
 
-  .essentials-label {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 14px;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--green-start);
-  }
+    .card-icon {
+      font-size: 24px;
+      margin-bottom: 12px;
+      line-height: 1;
+      display: block;
+    }
 
-  .essentials-label::before,
-  .essentials-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: rgba(46,204,113,0.25);
-  }
+    .card-title {
+      font-size: 0.9375rem;
+      font-weight: 700;
+      color: var(--neutral-900);
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
 
-  .essentials-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-  }
+    .badge {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--primary-dark);
+      background: var(--primary-light);
+      padding: 3px 8px;
+      border-radius: var(--radius-sm);
+      display: inline-block;
+      width: fit-content;
+      margin-top: auto;
+    }
 
-  .ess-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    padding: 12px 16px;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 12px;
-    text-decoration: none;
-    color: #fff;
-    min-width: 100px;
-    flex: 1;
-    max-width: 160px;
-    transition: all 0.18s;
-    text-align: center;
-    backdrop-filter: blur(4px);
-  }
+    /* ── EMPTY STATE ── */
+    .empty {
+      display: none;
+      text-align: center;
+      padding: 80px 24px;
+      background: #fff;
+      border-radius: var(--radius-xl);
+      border: 2px dashed var(--neutral-200);
+    }
 
-  .ess-card:hover {
-    background: rgba(46,204,113,0.18);
-    border-color: var(--green-start);
-    transform: translateY(-2px);
-  }
+    /* ── FOOTER ── */
+    footer {
+      background: #fff;
+      border-top: 1px solid var(--neutral-200);
+      padding: 64px 24px;
+      text-align: center;
+    }
 
-  .ess-card .ess-icon {
-    font-size: 26px;
-    line-height: 1;
-  }
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 24px;
+      margin-bottom: 32px;
+    }
 
-  .ess-card .ess-title {
-    font-size: 12px;
-    font-weight: 600;
-    line-height: 1.3;
-    color: rgba(255,255,255,0.92);
-  }
+    .footer-links a {
+      color: var(--neutral-600);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9375rem;
+      transition: var(--transition);
+    }
 
-  /* ── RESPONSIVE ── */
-  @media (max-width: 600px) {
-    header { padding: 36px 16px 32px; }
-    header h1 { font-size: 1.6rem; }
-    .grid { grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); }
-    .ess-card { min-width: 80px; padding: 10px 10px; }
-    .ess-card .ess-title { font-size: 11px; }
-  }
-</style>
+    .copyright {
+      font-size: 0.875rem;
+      color: var(--neutral-400);
+    }
+
+    /* ── RESPONSIVE OPTIMIZATIONS ── */
+    @media (max-width: 1024px) {
+      .grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+    }
+
+    @media (max-width: 768px) {
+      header { padding: 48px 20px 64px; }
+      .container { padding: 32px 20px 60px; }
+      .grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+      .ess-card { min-width: 90px; padding: 12px 8px; }
+      .ess-icon { font-size: 24px; }
+      .filter-bar { gap: 8px; }
+      .pill { padding: 8px 14px; font-size: 0.8125rem; }
+    }
+
+    @media (max-width: 480px) {
+      .grid { grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 12px; }
+      .card { padding: 16px; }
+      .essentials-grid { gap: 8px; }
+      .ess-card { min-width: 80px; max-width: 140px; }
+      .header-logo { width: 56px; height: 56px; margin-bottom: 16px; }
+      .search-inner input { padding: 16px 20px 16px 48px; font-size: 0.9375rem; }
+      .search-inner .search-icon { left: 16px; }
+    }
+    
+    /* Small screen adjustments */
+    @media (max-width: 360px) {
+      .grid { grid-template-columns: 1fr; }
+      .ess-card { flex: 1 1 100%; max-width: none; flex-direction: row; justify-content: center; gap: 12px; }
+    }
+  </style>
 </head>
 <body>
 
 <header>
-  <span class="header-logo">🚀</span>
+  <div class="header-logo">
+    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+    </svg>
+  </div>
   <h1>UtiliWeb</h1>
-  <p>Ferramentas rápidas, gratuitas e online</p>
+  <p>Ferramentas rápidas, gratuitas e online.</p>
 </header>
 
 <div class="search-wrap">
-  <span class="search-icon">🔍</span>
-  <input type="search" id="search" placeholder="Buscar ferramentas..." autocomplete="off" aria-label="Buscar ferramentas">
+  <div class="search-inner" role="search">
+    <div class="search-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+      </svg>
+    </div>
+    <input type="search" id="search" placeholder="Buscar ferramentas..." autocomplete="off" aria-label="Buscar ferramentas">
+  </div>
 </div>
 
-<!-- ── FERRAMENTAS ESSENCIAIS ── -->
+<!-- ── FERRAMENTAS ESSENCIAIS (RESTORED ORIGINAL TOOLS) ── -->
 <div class="essentials-wrap">
   <div class="essentials-inner">
     <div class="essentials-label">⚡ Ferramentas Essenciais</div>
@@ -413,11 +498,10 @@
 <div class="container">
 
   <div class="about">
-    <strong>O que é o UtiliWeb?</strong><br>
+    <strong>O que é o UtiliWeb?</strong>
     Plataforma gratuita com ferramentas para produtividade, finanças, cálculos, conversões e recursos para quem vive no Japão. Tudo funciona direto no navegador, sem cadastro.
   </div>
 
-  <!-- CATEGORY PILLS -->
   <div class="filter-bar" id="filter-bar">
     <button class="pill active" data-cat="todas">🌐 Todas</button>
     <button class="pill" data-cat="japao">🇯🇵 Japão</button>
@@ -429,17 +513,15 @@
     <button class="pill" data-cat="utilidade">⚙️ Utilidade</button>
   </div>
 
-  <div class="results-count" id="results-count"></div>
-
   <div class="empty" id="empty-state">
-    <span>🔎</span>
-    Nenhuma ferramenta encontrada para "<span id="empty-term"></span>"
+    <div class="empty-icon">🔎</div>
+    <h3>Nenhum resultado</h3>
+    <p>Não encontramos nada para "<span id="empty-term"></span>".</p>
   </div>
 
   <!-- ── JAPAN ── -->
   <div class="section-wrap" data-section="japao">
     <div class="section-header">
-      <span class="section-emoji">🇯🇵</span>
       <h2>Japão</h2>
       <div class="line"></div>
     </div>
@@ -515,7 +597,6 @@
   <!-- ── FINANÇAS ── -->
   <div class="section-wrap" data-section="financas">
     <div class="section-header">
-      <span class="section-emoji">💰</span>
       <h2>Finanças</h2>
       <div class="line"></div>
     </div>
@@ -541,7 +622,7 @@
         <span class="badge">Finanças</span>
       </a>
       <a class="card" href="tools/juros-compostos/index.html" data-key="juros compostos investimento rendimento calculadora" data-cat="financas">
-        <span class="card-icon">💰</span>
+        <span class="card-icon">📈</span>
         <span class="card-title">Juros Compostos</span>
         <span class="badge">Finanças</span>
       </a>
@@ -556,7 +637,6 @@
   <!-- ── TEXTO ── -->
   <div class="section-wrap" data-section="texto">
     <div class="section-header">
-      <span class="section-emoji">📝</span>
       <h2>Texto</h2>
       <div class="line"></div>
     </div>
@@ -612,7 +692,6 @@
   <!-- ── SAÚDE ── -->
   <div class="section-wrap" data-section="saude">
     <div class="section-header">
-      <span class="section-emoji">🏃</span>
       <h2>Saúde</h2>
       <div class="line"></div>
     </div>
@@ -633,7 +712,6 @@
   <!-- ── JOGOS ── -->
   <div class="section-wrap" data-section="jogos">
     <div class="section-header">
-      <span class="section-emoji">🎮</span>
       <h2>Jogos</h2>
       <div class="line"></div>
     </div>
@@ -654,12 +732,12 @@
         <span class="badge">Conhecimentos</span>
       </a>
       <a class="card" href="jogos/jogo-da-memoria/index.html" data-key="jogo da memória cartas pares matching game concentração emoji" data-cat="jogos">
-        <span class="card-icon">🧠</span>
+        <span class="card-icon">🃏</span>
         <span class="card-title">Jogo da Memória</span>
         <span class="badge">Treino Mental</span>
       </a>
       <a class="card" href="jogos/jogo-de-qi/index.html" data-key="jogo de qi teste inteligência raciocínio lógico sequência QI cognitivo" data-cat="jogos">
-        <span class="card-icon">🧠</span>
+        <span class="card-icon">💡</span>
         <span class="card-title">Jogo de QI</span>
         <span class="badge">Raciocínio</span>
       </a>
@@ -679,7 +757,6 @@
   <!-- ── SOCIAL ── -->
   <div class="section-wrap" data-section="social">
     <div class="section-header">
-      <span class="section-emoji">📱</span>
       <h2>Social & Marketing</h2>
       <div class="line"></div>
     </div>
@@ -705,7 +782,6 @@
   <!-- ── UTILIDADE ── -->
   <div class="section-wrap" data-section="utilidade">
     <div class="section-header">
-      <span class="section-emoji">⚙️</span>
       <h2>Utilidades</h2>
       <div class="line"></div>
     </div>
@@ -731,12 +807,12 @@
         <span class="badge">Calendário</span>
       </a>
       <a class="card" href="tools/calculadora-idade/index.html" data-key="idade calcular idade anos meses dias aniversário" data-cat="utilidade">
-        <span class="card-icon">📅</span>
+        <span class="card-icon">🎂</span>
         <span class="card-title">Calculadora de Idade</span>
         <span class="badge">Utilitário</span>
       </a>
       <a class="card" href="tools/contador-prazos/index.html" data-key="prazo contador dias data deadline tempo faltando" data-cat="utilidade">
-        <span class="card-icon">📅</span>
+        <span class="card-icon">⏱️</span>
         <span class="card-title">Contador de Prazos</span>
         <span class="badge">Utilitário</span>
       </a>
@@ -780,7 +856,7 @@
         <span class="card-title">Gerador de Senha Forte</span>
         <span class="badge">Segurança</span>
       </a>
-        <a class="card" href="tools/signo-chines/index.html" data-key="signo chines zodiaco chines calendario lunar ano novo animal" data-cat="utilidade">
+      <a class="card" href="tools/signo-chines/index.html" data-key="signo chines zodiaco chines calendario lunar ano novo animal" data-cat="utilidade">
         <span class="card-icon">🐉</span>
         <span class="card-title">Signo Chinês</span>
         <span class="badge">Astrologia</span>
@@ -798,14 +874,15 @@
     </div>
   </div>
 
-</div><!-- /container -->
+</div>
 
 <footer>
-  <a href="/about.html">Sobre</a>
-  <a href="/privacy.html">Política de Privacidade</a>
-  <a href="/contact.html">Contato</a>
-  <br><br>
-  <span style="font-size:12px;">© 2025 UtiliWeb · Todas as ferramentas são gratuitas</span>
+  <div class="footer-links">
+    <a href="/about.html">Sobre</a>
+    <a href="/privacy.html">Privacidade</a>
+    <a href="/contact.html">Contato</a>
+  </div>
+  <p class="copyright">© 2025 UtiliWeb · Inteligência e Praticidade</p>
 </footer>
 
 <script>
@@ -813,10 +890,8 @@
   const filterBar = document.getElementById('filter-bar');
   const pills = filterBar.querySelectorAll('.pill');
   const sections = document.querySelectorAll('.section-wrap');
-  const allCards = document.querySelectorAll('.card');
   const emptyState = document.getElementById('empty-state');
   const emptyTerm = document.getElementById('empty-term');
-  const resultsCount = document.getElementById('results-count');
 
   let activeCategory = 'todas';
   let searchTimer = null;
@@ -830,10 +905,9 @@
 
   function updateDisplay() {
     const term = normalize(searchInput.value);
-    let visible = 0;
+    let totalVisible = 0;
 
     sections.forEach(section => {
-      const sectionCat = section.dataset.section;
       const cards = section.querySelectorAll('.card');
       let sectionVisible = 0;
 
@@ -849,7 +923,7 @@
         if (matchesCat && matchesSearch) {
           card.style.display = 'flex';
           sectionVisible++;
-          visible++;
+          totalVisible++;
         } else {
           card.style.display = 'none';
         }
@@ -858,19 +932,10 @@
       section.style.display = sectionVisible > 0 ? 'block' : 'none';
     });
 
-    emptyState.style.display = visible === 0 ? 'block' : 'none';
+    emptyState.style.display = totalVisible === 0 ? 'block' : 'none';
     emptyTerm.textContent = searchInput.value;
-
-    if (term) {
-      resultsCount.textContent = visible === 1
-        ? '1 ferramenta encontrada'
-        : `${visible} ferramentas encontradas`;
-    } else {
-      resultsCount.textContent = '';
-    }
   }
 
-  // Category pills
   pills.forEach(pill => {
     pill.addEventListener('click', () => {
       pills.forEach(p => p.classList.remove('active'));
@@ -880,10 +945,9 @@
     });
   });
 
-  // Search with debounce
   searchInput.addEventListener('input', () => {
     clearTimeout(searchTimer);
-    searchTimer = setTimeout(updateDisplay, 120);
+    searchTimer = setTimeout(updateDisplay, 150);
   });
 </script>
 
