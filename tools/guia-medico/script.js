@@ -18,8 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       emptyState.style.display = 'none';
       filteredData.forEach(specialty => {
-        const card = document.createElement('a');
-        card.href = '#'; // No specific link for now, just informational cards
+        const card = document.createElement('div');
         card.classList.add('card');
         card.innerHTML = `
           <div class="card-header">
@@ -56,8 +55,8 @@ document.addEventListener('DOMContentLoaded', () => {
     renderSpecialties(filtered);
   }
 
-  // Load medical data
-  fetch('../../medical_data.json')
+  // Load medical data - FIXED PATH to load from the SAME folder
+  fetch('medical_data.json')
     .then(response => response.json())
     .then(data => {
       medicalData = data;
@@ -65,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     .catch(error => {
       console.error('Erro ao carregar dados médicos:', error);
-      specialtiesGrid.innerHTML = '<p style="text-align: center; color: var(--neutral-500);">Não foi possível carregar as especialidades médicas.</p>';
+      specialtiesGrid.innerHTML = '<p style="text-align: center; color: var(--neutral-500); grid-column: 1/-1;">Não foi possível carregar as informações médicas. Certifique-se de que o arquivo medical_data.json está na mesma pasta.</p>';
     });
 
   // Event listener for search input
