@@ -172,7 +172,7 @@
     /* ── GRID ── */
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       gap: 20px;
     }
 
@@ -344,7 +344,7 @@
 
 <div class="container">
   <div class="info-box">
-    <strong>Como usar:</strong> Digite um sintoma (ex: "dor de cabeça") ou o nome de uma especialidade (ex: "Clínica Geral") para encontrar a informação desejada.
+    <strong>Como usar:</strong> Digite um sintoma (ex: "pressão alta") ou o nome de uma especialidade para encontrar a informação desejada.
   </div>
 
   <div class="grid" id="specialties-grid">
@@ -373,78 +373,92 @@
       "portugues": "Clínica Geral",
       "japones": "内科",
       "romaji": "Naika",
-      "descricao": "Trata doenças comuns como gripes, resfriados, febre, dores de cabeça e problemas digestivos leves. É o primeiro contato para a maioria dos problemas de saúde.",
+      "descricao": "Trata doenças comuns como gripes, resfriados, febre, dores de cabeça e problemas digestivos leves. É o ponto de partida para a maioria dos sintomas.",
       "sintomas_chave": ["gripe", "resfriado", "febre", "dor de cabeça", "dor de garganta", "tosse", "cansaço", "mal-estar", "dor no corpo", "problemas digestivos leves"]
     },
     {
-      "portugues": "Pediatria",
-      "japones": "小児科",
-      "romaji": "Shōnika",
-      "descricao": "Especialidade dedicada à saúde de bebês, crianças e adolescentes. Cuida de doenças infantis, vacinação e desenvolvimento.",
-      "sintomas_chave": ["febre em criança", "tosse em criança", "erupções cutâneas em criança", "dor de barriga em criança", "vacinação", "desenvolvimento infantil"]
+      "portugues": "Cardiologia",
+      "japones": "循環器内科",
+      "romaji": "Junkanki Naika",
+      "descricao": "Especialidade focada no coração e sistema circulatório. Trata pressão alta, arritmias e doenças cardíacas.",
+      "sintomas_chave": ["problema no coração", "pressão alta", "hipertensão", "palpitação", "dor no peito", "falta de ar", "arritmia", "cansaço excessivo"]
+    },
+    {
+      "portugues": "Endocrinologia",
+      "japones": "内分泌内科",
+      "romaji": "Naibunpitsu Naika",
+      "descricao": "Trata glândulas e problemas metabólicos, como diabetes, colesterol e problemas de tireoide.",
+      "sintomas_chave": ["diabetes", "açúcar no sangue", "colesterol alto", "tireoide", "metabolismo", "obesidade", "perda de peso sem causa"]
+    },
+    {
+      "portugues": "Angiologia / Cirurgia Vascular",
+      "japones": "血管外科",
+      "romaji": "Kekkan Geka",
+      "descricao": "Cuida dos vasos sanguíneos (artérias e veias). Trata varizes, tromboses e problemas de circulação nas pernas.",
+      "sintomas_chave": ["inchaço nas pernas", "varizes", "má circulação", "pernas pesadas", "trombose", "dor nas pernas ao caminhar"]
+    },
+    {
+      "portugues": "Neurologia",
+      "japones": "脳神経内科",
+      "romaji": "Nōshinkei Naika",
+      "descricao": "Trata problemas no cérebro, nervos e músculos. Lida com tremores, dormência e câimbras frequentes.",
+      "sintomas_chave": ["caimbras", "dormência", "formigamento", "tontura", "tremores", "perda de força", "convulsão", "enxaqueca forte"]
     },
     {
       "portugues": "Dermatologia",
       "japones": "皮膚科",
       "romaji": "Hifuka",
-      "descricao": "Trata doenças da pele, cabelo e unhas, como alergias, acne, eczema, infecções e problemas de pigmentação.",
-      "sintomas_chave": ["erupção cutânea", "coceira", "manchas na pele", "acne", "eczema", "verrugas", "queda de cabelo", "unhas fracas"]
+      "descricao": "Trata doenças da pele, cabelo e unhas, como alergias, acne e infecções.",
+      "sintomas_chave": ["erupção cutânea", "coceira", "manchas na pele", "acne", "eczema", "verrugas", "queda de cabelo"]
     },
     {
       "portugues": "Ortopedia",
       "japones": "整形外科",
       "romaji": "Seikei Geka",
-      "descricao": "Lida com problemas nos ossos, músculos, ligamentos, tendões e articulações. Trata fraturas, luxações, dores nas costas e lesões esportivas.",
-      "sintomas_chave": ["dor nas costas", "dor no joelho", "dor no ombro", "fratura", "luxação", "lesão esportiva", "problemas de postura", "artrite"]
+      "descricao": "Lida com ossos, músculos e articulações. Trata fraturas e dores nas costas ou joelhos.",
+      "sintomas_chave": ["dor nas costas", "dor no joelho", "dor no ombro", "fratura", "luxação", "lesão muscular"]
     },
     {
       "portugues": "Oftalmologia",
       "japones": "眼科",
       "romaji": "Ganka",
-      "descricao": "Especialidade que cuida da saúde dos olhos e da visão. Trata problemas como miopia, astigmatismo, catarata, glaucoma e infecções oculares.",
-      "sintomas_chave": ["visão embaçada", "dor nos olhos", "olhos vermelhos", "coceira nos olhos", "dificuldade para enxergar", "catarata", "glaucoma"]
+      "descricao": "Cuida da saúde dos olhos e da visão.",
+      "sintomas_chave": ["visão embaçada", "dor nos olhos", "olhos vermelhos", "coceira nos olhos", "catarata"]
     },
     {
       "portugues": "Otorrinolaringologia",
       "japones": "耳鼻咽喉科",
       "romaji": "Jibiinkōka",
-      "descricao": "Trata doenças do ouvido, nariz e garganta, incluindo infecções, problemas de audição, rinite, sinusite e amigdalite.",
-      "sintomas_chave": ["dor de ouvido", "zumbido", "perda de audição", "dor de garganta", "nariz entupido", "rinite", "sinusite", "tontura"]
+      "descricao": "Trata doenças do ouvido, nariz e garganta.",
+      "sintomas_chave": ["dor de ouvido", "zumbido", "perda de audição", "nariz entupido", "sinusite", "tontura"]
     },
     {
-      "portugues": "Ginecologia e Obstetrícia",
+      "portugues": "Pediatria",
+      "japones": "小児科",
+      "romaji": "Shōnika",
+      "descricao": "Saúde de bebês, crianças e adolescentes.",
+      "sintomas_chave": ["febre em criança", "tosse infantil", "vacinação", "desenvolvimento infantil"]
+    },
+    {
+      "portugues": "Ginecologia",
       "japones": "産婦人科",
       "romaji": "Sanfujinka",
-      "descricao": "Cuida da saúde da mulher, incluindo gravidez, parto, doenças do sistema reprodutor feminino e menopausa.",
-      "sintomas_chave": ["gravidez", "menstruação irregular", "dor pélvica", "exames de rotina feminina", "menopausa"]
+      "descricao": "Saúde da mulher, gravidez e sistema reprodutor.",
+      "sintomas_chave": ["gravidez", "menstruação irregular", "dor pélvica", "menopausa"]
     },
     {
       "portugues": "Urologia",
       "japones": "泌尿器科",
       "romaji": "Hinyōkika",
-      "descricao": "Trata doenças do sistema urinário de homens e mulheres, e do sistema reprodutor masculino. Inclui problemas de bexiga, rins e próstata.",
-      "sintomas_chave": ["dor ao urinar", "sangue na urina", "infecção urinária", "problemas de próstata", "cálculos renais"]
-    },
-    {
-      "portugues": "Cirurgia Geral",
-      "japones": "外科",
-      "romaji": "Geka",
-      "descricao": "Realiza procedimentos cirúrgicos para tratar diversas condições, como apendicite, hérnias e remoção de tumores.",
-      "sintomas_chave": ["dor abdominal intensa", "apendicite", "hérnia", "necessidade de cirurgia"]
-    },
-    {
-      "portugues": "Psiquiatria",
-      "japones": "精神科",
-      "romaji": "Seishinka",
-      "descricao": "Especialidade médica que diagnostica e trata transtornos mentais e emocionais, como depressão, ansiedade e esquizofrenia.",
-      "sintomas_chave": ["ansiedade", "depressão", "insônia", "estresse", "mudanças de humor", "dificuldade de concentração"]
+      "descricao": "Sistema urinário e sistema reprodutor masculino.",
+      "sintomas_chave": ["dor ao urinar", "sangue na urina", "infecção urinária", "próstata"]
     },
     {
       "portugues": "Odontologia",
       "japones": "歯科",
       "romaji": "Shika",
-      "descricao": "Cuida da saúde bucal, incluindo dentes, gengivas e boca. Trata cáries, gengivite, faz limpezas e restaurações.",
-      "sintomas_chave": ["dor de dente", "sensibilidade nos dentes", "sangramento na gengiva", "cárie", "mau hálito"]
+      "descricao": "Saúde bucal e dos dentes.",
+      "sintomas_chave": ["dor de dente", "sangramento na gengiva", "cárie", "sensibilidade"]
     }
   ];
 
@@ -475,7 +489,7 @@
             </div>
           </div>
           <p class="card-description">${s.descricao}</p>
-          <p class="card-symptoms"><strong>Sintomas:</strong> ${s.sintomas_chave.join(', ')}</p>
+          <p class="card-symptoms"><strong>Sintomas comuns:</strong> ${s.sintomas_chave.join(', ')}</p>
         `;
         specialtiesGrid.appendChild(card);
       });
@@ -488,6 +502,7 @@
     const filtered = medicalData.filter(s => 
       normalizeText(s.portugues).includes(term) || 
       normalizeText(s.romaji).includes(term) || 
+      normalizeText(s.descricao).includes(term) ||
       s.sintomas_chave.some(sym => normalizeText(sym).includes(term))
     );
     render(filtered);
