@@ -61,7 +61,7 @@
       overflow-x: hidden;
     }
 
-    h1, h2, h3, .logo-text {
+    h1, h2, h3 {
       font-family: 'Plus Jakarta Sans', sans-serif;
     }
 
@@ -167,10 +167,6 @@
       margin-bottom: 40px;
       color: var(--primary-dark);
       font-size: 0.9375rem;
-    }
-
-    .info-box strong {
-      font-weight: 700;
     }
 
     /* ── GRID ── */
@@ -282,10 +278,6 @@
       margin-bottom: 8px;
     }
 
-    .empty p {
-      color: var(--neutral-500);
-    }
-
     /* ── FOOTER ── */
     footer {
       background: #fff;
@@ -315,26 +307,15 @@
       color: var(--neutral-400);
     }
 
-    /* ── RESPONSIVE OPTIMIZATIONS ── */
-    @media (max-width: 1024px) {
-      .grid { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
-    }
-
     @media (max-width: 768px) {
       header { padding: 40px 20px 56px; }
       .container { padding: 32px 20px 60px; }
       .grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
-      .search-inner input { padding: 16px 20px 16px 48px; font-size: 0.9375rem; }
-      .search-inner .search-icon { left: 16px; }
     }
 
     @media (max-width: 480px) {
       .grid { grid-template-columns: 1fr; gap: 16px; }
-      .card { padding: 20px; }
-      .header-logo { width: 50px; height: 50px; margin-bottom: 12px; }
       header h1 { font-size: 1.8rem; }
-      header p { font-size: 0.875rem; }
-      .info-box { padding: 12px 16px; font-size: 0.875rem; }
     }
   </style>
 </head>
@@ -362,21 +343,19 @@
 </div>
 
 <div class="container">
-
   <div class="info-box">
     <strong>Como usar:</strong> Digite um sintoma (ex: "dor de cabeça") ou o nome de uma especialidade (ex: "Clínica Geral") para encontrar a informação desejada.
   </div>
 
   <div class="grid" id="specialties-grid">
-    <!-- Cards de especialidades serão injetados aqui pelo JavaScript -->
+    <!-- Injetado pelo JS -->
   </div>
 
   <div class="empty" id="empty-state">
     <div class="empty-icon">🔎</div>
     <h3>Nenhum resultado</h3>
-    <p>Não encontramos nenhuma especialidade para "<span id="empty-term"></span>". Tente outro termo.</p>
+    <p>Não encontramos nenhuma especialidade para "<span id="empty-term"></span>".</p>
   </div>
-
 </div>
 
 <footer>
@@ -388,7 +367,133 @@
   <p class="copyright">© 2025 UtiliWeb · Inteligência e Praticidade</p>
 </footer>
 
-<script src="script.js"></script>
+<script>
+  const medicalData = [
+    {
+      "portugues": "Clínica Geral",
+      "japones": "内科",
+      "romaji": "Naika",
+      "descricao": "Trata doenças comuns como gripes, resfriados, febre, dores de cabeça e problemas digestivos leves. É o primeiro contato para a maioria dos problemas de saúde.",
+      "sintomas_chave": ["gripe", "resfriado", "febre", "dor de cabeça", "dor de garganta", "tosse", "cansaço", "mal-estar", "dor no corpo", "problemas digestivos leves"]
+    },
+    {
+      "portugues": "Pediatria",
+      "japones": "小児科",
+      "romaji": "Shōnika",
+      "descricao": "Especialidade dedicada à saúde de bebês, crianças e adolescentes. Cuida de doenças infantis, vacinação e desenvolvimento.",
+      "sintomas_chave": ["febre em criança", "tosse em criança", "erupções cutâneas em criança", "dor de barriga em criança", "vacinação", "desenvolvimento infantil"]
+    },
+    {
+      "portugues": "Dermatologia",
+      "japones": "皮膚科",
+      "romaji": "Hifuka",
+      "descricao": "Trata doenças da pele, cabelo e unhas, como alergias, acne, eczema, infecções e problemas de pigmentação.",
+      "sintomas_chave": ["erupção cutânea", "coceira", "manchas na pele", "acne", "eczema", "verrugas", "queda de cabelo", "unhas fracas"]
+    },
+    {
+      "portugues": "Ortopedia",
+      "japones": "整形外科",
+      "romaji": "Seikei Geka",
+      "descricao": "Lida com problemas nos ossos, músculos, ligamentos, tendões e articulações. Trata fraturas, luxações, dores nas costas e lesões esportivas.",
+      "sintomas_chave": ["dor nas costas", "dor no joelho", "dor no ombro", "fratura", "luxação", "lesão esportiva", "problemas de postura", "artrite"]
+    },
+    {
+      "portugues": "Oftalmologia",
+      "japones": "眼科",
+      "romaji": "Ganka",
+      "descricao": "Especialidade que cuida da saúde dos olhos e da visão. Trata problemas como miopia, astigmatismo, catarata, glaucoma e infecções oculares.",
+      "sintomas_chave": ["visão embaçada", "dor nos olhos", "olhos vermelhos", "coceira nos olhos", "dificuldade para enxergar", "catarata", "glaucoma"]
+    },
+    {
+      "portugues": "Otorrinolaringologia",
+      "japones": "耳鼻咽喉科",
+      "romaji": "Jibiinkōka",
+      "descricao": "Trata doenças do ouvido, nariz e garganta, incluindo infecções, problemas de audição, rinite, sinusite e amigdalite.",
+      "sintomas_chave": ["dor de ouvido", "zumbido", "perda de audição", "dor de garganta", "nariz entupido", "rinite", "sinusite", "tontura"]
+    },
+    {
+      "portugues": "Ginecologia e Obstetrícia",
+      "japones": "産婦人科",
+      "romaji": "Sanfujinka",
+      "descricao": "Cuida da saúde da mulher, incluindo gravidez, parto, doenças do sistema reprodutor feminino e menopausa.",
+      "sintomas_chave": ["gravidez", "menstruação irregular", "dor pélvica", "exames de rotina feminina", "menopausa"]
+    },
+    {
+      "portugues": "Urologia",
+      "japones": "泌尿器科",
+      "romaji": "Hinyōkika",
+      "descricao": "Trata doenças do sistema urinário de homens e mulheres, e do sistema reprodutor masculino. Inclui problemas de bexiga, rins e próstata.",
+      "sintomas_chave": ["dor ao urinar", "sangue na urina", "infecção urinária", "problemas de próstata", "cálculos renais"]
+    },
+    {
+      "portugues": "Cirurgia Geral",
+      "japones": "外科",
+      "romaji": "Geka",
+      "descricao": "Realiza procedimentos cirúrgicos para tratar diversas condições, como apendicite, hérnias e remoção de tumores.",
+      "sintomas_chave": ["dor abdominal intensa", "apendicite", "hérnia", "necessidade de cirurgia"]
+    },
+    {
+      "portugues": "Psiquiatria",
+      "japones": "精神科",
+      "romaji": "Seishinka",
+      "descricao": "Especialidade médica que diagnostica e trata transtornos mentais e emocionais, como depressão, ansiedade e esquizofrenia.",
+      "sintomas_chave": ["ansiedade", "depressão", "insônia", "estresse", "mudanças de humor", "dificuldade de concentração"]
+    },
+    {
+      "portugues": "Odontologia",
+      "japones": "歯科",
+      "romaji": "Shika",
+      "descricao": "Cuida da saúde bucal, incluindo dentes, gengivas e boca. Trata cáries, gengivite, faz limpezas e restaurações.",
+      "sintomas_chave": ["dor de dente", "sensibilidade nos dentes", "sangramento na gengiva", "cárie", "mau hálito"]
+    }
+  ];
 
+  const searchInput = document.getElementById('search');
+  const specialtiesGrid = document.getElementById('specialties-grid');
+  const emptyState = document.getElementById('empty-state');
+  const emptyTerm = document.getElementById('empty-term');
+
+  function normalizeText(text) {
+    return text.toLowerCase().normalize('NFD').replace(/\p{M}/gu, '');
+  }
+
+  function render(data) {
+    specialtiesGrid.innerHTML = '';
+    if (data.length === 0) {
+      emptyState.style.display = 'block';
+    } else {
+      emptyState.style.display = 'none';
+      data.forEach(s => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <div class="card-header">
+            <div class="card-icon-box">🏥</div>
+            <div class="card-title-group">
+              <span class="card-title">${s.portugues}</span>
+              <span class="card-romaji">${s.japones} (${s.romaji})</span>
+            </div>
+          </div>
+          <p class="card-description">${s.descricao}</p>
+          <p class="card-symptoms"><strong>Sintomas:</strong> ${s.sintomas_chave.join(', ')}</p>
+        `;
+        specialtiesGrid.appendChild(card);
+      });
+    }
+  }
+
+  searchInput.addEventListener('input', () => {
+    const term = normalizeText(searchInput.value);
+    emptyTerm.textContent = searchInput.value;
+    const filtered = medicalData.filter(s => 
+      normalizeText(s.portugues).includes(term) || 
+      normalizeText(s.romaji).includes(term) || 
+      s.sintomas_chave.some(sym => normalizeText(sym).includes(term))
+    );
+    render(filtered);
+  });
+
+  render(medicalData);
+</script>
 </body>
 </html>
