@@ -8,6 +8,16 @@ const icons = {
   95: "⛈️", 96: "⛈️", 99: "⛈️"
 };
 
+const nightIcons = {
+  0: "⭐", 1: "🌙", 2: "🌙", 3: "☁️",
+  45: "🌫️", 48: "🌫️",
+  51: "🌦️", 53: "🌦️", 55: "🌧️",
+  61: "🌧️", 63: "🌧️", 65: "🌧️",
+  71: "❄️", 73: "❄️", 75: "🌨️",
+  80: "🌦️", 81: "🌧️", 82: "⛈️",
+  95: "⛈️", 96: "⛈️", 99: "⛈️"
+};
+
 const descriptions = {
   0: "Céu limpo", 1: "Principalmente limpo", 2: "Parcialmente nublado", 3: "Nublado",
   45: "Neblina", 48: "Neblina com geada",
@@ -19,12 +29,14 @@ const descriptions = {
 };
 
 const bgGradients = {
-  clear:    "linear-gradient(160deg, #0b1d3a 0%, #1a4070 50%, #0e2a50 100%)",
-  cloudy:   "linear-gradient(160deg, #1a1d2e 0%, #2c3050 50%, #1f2540 100%)",
-  rain:     "linear-gradient(160deg, #0d1520 0%, #162035 50%, #0f1c30 100%)",
-  snow:     "linear-gradient(160deg, #1a2030 0%, #2a3550 50%, #1d2a45 100%)",
-  thunder:  "linear-gradient(160deg, #0a0d18 0%, #141828 50%, #0e1220 100%)",
-  default:  "linear-gradient(160deg, #0b1220 0%, #0f1f3d 50%, #0d2a1f 100%)"
+  clear:    "linear-gradient(135deg, #0f2f5f 0%, #1a5a9f 50%, #0d3a6f 100%)",
+  clearNight: "linear-gradient(135deg, #0a1a3a 0%, #1a2a5a 50%, #0d1f4a 100%)",
+  cloudy:   "linear-gradient(135deg, #1a2a3e 0%, #2d3f5a 50%, #1f2f4a 100%)",
+  cloudyNight: "linear-gradient(135deg, #0f1a2a 0%, #1a2a3a 50%, #0d1a2a 100%)",
+  rain:     "linear-gradient(135deg, #0d1a2a 0%, #1a2a3a 50%, #0f1f2a 100%)",
+  snow:     "linear-gradient(135deg, #1a2a3a 0%, #2a3a4a 50%, #1d2a3a 100%)",
+  thunder:  "linear-gradient(135deg, #0a0d1a 0%, #151a2a 50%, #0e1220 100%)",
+  default:  "linear-gradient(135deg, #0f1a2f 0%, #1a2a4f 50%, #0d1a3f 100%)"
 };
 
 window.addEventListener("load", () => startApp());
@@ -41,6 +53,17 @@ function startApp() {
 
 function fallback() {
   loadWeather(35.6762, 139.6503, "Tóquio");
+}
+
+function isNight(hour) {
+  return hour >= 20 || hour < 6;
+}
+
+function getWeatherIcon(code, hour) {
+  if (isNight(hour)) {
+    return nightIcons[code] || "🌙";
+  }
+  return icons[code] || "🌡️";
 }
 
 async function loadWeather(lat, lon, label) {
@@ -64,6 +87,7 @@ async function loadWeather(lat, lon, label) {
     const code = c.weather_code;
     const now = new Date();
     const timeStr = now.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+    const currentHour = now.getHours();
 
     // Remove shimmer
     document.getElementById("temp").classList.remove("shimmer");
@@ -73,11 +97,11 @@ async function loadWeather(lat, lon, label) {
     document.getElementById("temp").innerText = Math.round(c.temperature_2m) + "°";
     document.getElementById("wind").innerText = c.wind_speed_10m ?? "—";
     document.getElementById("humidity").innerText = (c.relative_humidity_2m ?? "—") + "%";
-    document.getElementById("icon").innerText = icons[code] || "🌡️";
+    document.getElementById("icon").innerText = getWeatherIcon(code, currentHour);
     document.getElementById("desc").innerText = descriptions[code] || "Atualizado";
     document.getElementById("updatedBadge").innerText = "Atualizado " + timeStr;
 
-    setBackground(code);
+    setBackground(code, currentHour);
     renderHourly(data.hourly);
     renderForecast(data.daily);
 
@@ -93,14 +117,23 @@ async function loadWeather(lat, lon, label) {
   }
 }
 
-function setBackground(code) {
+function setBackground(code, hour) {
   const bg = document.getElementById("bg");
   let gradient = bgGradients.default;
-  if (code === 0 || code === 1) gradient = bgGradients.clear;
-  else if (code === 2 || code === 3) gradient = bgGradients.cloudy;
-  else if (code >= 51 && code <= 82) gradient = bgGradients.rain;
-  else if (code >= 71 && code <= 77) gradient = bgGradients.snow;
-  else if (code >= 95) gradient = bgGradients.thunder;
+  
+  const isNightTime = isNight(hour);
+  
+  if (code === 0 || code === 1) {
+    gradient = isNightTime ? bgGradients.clearNight : bgGradients.clear;
+  } else if (code === 2 || code === 3) {
+    gradient = isNightTime ? bgGradients.cloudyNight : bgGradients.cloudy;
+  } else if (code >= 51 && code <= 82) {
+    gradient = bgGradients.rain;
+  } else if (code >= 71 && code <= 77) {
+    gradient = bgGradients.snow;
+  } else if (code >= 95) {
+    gradient = bgGradients.thunder;
+  }
   bg.style.background = gradient;
 }
 
@@ -108,16 +141,35 @@ function renderHourly(hourly) {
   const box = document.getElementById("hourly");
   box.innerHTML = "";
   if (!hourly) return;
-  const nowH = new Date().getHours();
-  for (let i = 0; i < 48; i++) {
+  
+  const now = new Date();
+  const currentHour = now.getHours();
+  const currentMinute = now.getMinutes();
+  
+  // Encontrar o índice da hora atual
+  let startIndex = 0;
+  for (let i = 0; i < hourly.time.length; i++) {
     const d = new Date(hourly.time[i]);
+    if (d.getHours() === currentHour) {
+      startIndex = i;
+      break;
+    }
+  }
+  
+  // Renderizar as próximas 48 horas a partir da hora atual
+  for (let i = 0; i < 48; i++) {
+    const idx = startIndex + i;
+    if (idx >= hourly.time.length) break;
+    
+    const d = new Date(hourly.time[idx]);
     const h = d.getHours();
-    const isNow = i === 0 || (i < 3 && h === nowH);
+    const isNow = i === 0;
+    
     box.innerHTML += `
       <div class="hour${isNow ? " now" : ""}">
         <div class="h-time">${isNow ? "Agora" : h + ":00"}</div>
-        <div class="h-icon">${icons[hourly.weather_code[i]] || "⛅"}</div>
-        <div class="h-temp">${Math.round(hourly.temperature_2m[i])}°</div>
+        <div class="h-icon">${getWeatherIcon(hourly.weather_code[idx], h)}</div>
+        <div class="h-temp">${Math.round(hourly.temperature_2m[idx])}°</div>
       </div>`;
   }
 }
