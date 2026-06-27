@@ -1,12 +1,20 @@
 {
-  "name": "UtiliWeb Weather",
-  "short_name": "Weather",
+  "name": "Previsão do Tempo",
+  "short_name": "Tempo",
+  "description": "Previsão do tempo em tempo real com interface moderna",
   "start_url": ".",
   "display": "standalone",
-  "background_color": "#0b1d2a",
-  "theme_color": "#0b1d2a",
+  "scope": "/",
+  "background_color": "#0a0f1f",
+  "theme_color": "#0a0f1f",
+  "orientation": "portrait-primary",
   "icons": [
-    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" }
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ],
+  "categories": ["weather", "utilities"],
+  "screenshots": [
+    { "src": "screenshot-540.png", "sizes": "540x720", "type": "image/png" },
+    { "src": "screenshot-1080.png", "sizes": "1080x1440", "type": "image/png" }
   ]
 }
