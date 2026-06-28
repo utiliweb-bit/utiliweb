@@ -58,19 +58,16 @@
 </header>
 
 <div class="container">
-  <!-- Adicionado autocomplete="off" para evitar preenchimento automático indesejado -->
   <form id="rirekisho-form" autocomplete="off">
     <div class="form-section">
       <h2>📋 Dados Pessoais</h2>
       <div class="form-row">
         <div class="form-group">
           <label for="full_name_pt">Nome Completo (Português)</label>
-          <!-- Mudado o ID e NAME para serem únicos e evitar confusão do navegador -->
           <input type="text" id="full_name_pt" name="full_name_pt" placeholder="Ex: João Silva" required autocomplete="new-password">
         </div>
         <div class="form-group">
           <label for="katakana_name_jp">Nome em Katakana (Japonês)</label>
-          <!-- Mudado o ID e NAME para serem únicos e evitar confusão do navegador -->
           <input type="text" id="katakana_name_jp" name="katakana_name_jp" placeholder="Ex: ジョアン・シルバ" autocomplete="new-password">
           <div class="hint">Escreva apenas em Katakana. Ex: ジョアン</div>
         </div>
@@ -79,7 +76,8 @@
       <div class="form-row">
         <div class="form-group">
           <label for="birth-date">Data de Nascimento (YYYY/MM/DD)</label>
-          <input type="text" id="birth-date" name="birth-date" placeholder="Ex: 1990/05/15" required>
+          <input type="text" id="birth-date" name="birth-date" class="date-mask" placeholder="Ex: 1990/05/15" maxlength="10" required>
+          <div class="hint">Digite apenas os números. As barras serão colocadas automaticamente.</div>
         </div>
         <div class="form-group">
           <label for="gender">Gênero</label>
@@ -144,18 +142,62 @@
 </div>
 
 <script>
+  // Função para aplicar máscara de data YYYY/MM/DD
+  function applyDateMask(input) {
+    input.addEventListener('input', (e) => {
+      let value = e.target.value.replace(/\D/g, ''); // Remove tudo que não é número
+      if (value.length > 8) value = value.slice(0, 8); // Limita a 8 dígitos
+      
+      let formattedValue = '';
+      if (value.length > 0) {
+        formattedValue = value.substring(0, 4);
+        if (value.length > 4) {
+          formattedValue += '/' + value.substring(4, 6);
+          if (value.length > 6) {
+            formattedValue += '/' + value.substring(6, 8);
+          }
+        }
+      }
+      e.target.value = formattedValue;
+    });
+  }
+
+  // Função para aplicar máscara de período YYYY/MM
+  function applyPeriodMask(input) {
+    input.addEventListener('input', (e) => {
+      let value = e.target.value.replace(/\D/g, '');
+      if (value.length > 6) value = value.slice(0, 6);
+      
+      let formattedValue = '';
+      if (value.length > 0) {
+        formattedValue = value.substring(0, 4);
+        if (value.length > 4) {
+          formattedValue += '/' + value.substring(4, 6);
+        }
+      }
+      e.target.value = formattedValue;
+    });
+  }
+
+  // Inicializa máscara no campo de nascimento
+  applyDateMask(document.getElementById('birth-date'));
+
   let eduCount = 0, expCount = 0;
   function addEducation() {
     const id = eduCount++;
     const html = `<div class="entry-box" id="edu-${id}">
       <button type="button" class="remove-button" onclick="document.getElementById('edu-${id}').remove()">✕ Remover</button>
       <div class="form-row">
-        <div class="form-group"><label>Início (YYYY/MM)</label><input type="text" class="edu-start" placeholder="2015/04"></div>
-        <div class="form-group"><label>Fim (YYYY/MM)</label><input type="text" class="edu-end" placeholder="2019/03"></div>
+        <div class="form-group"><label>Início (YYYY/MM)</label><input type="text" class="edu-start period-mask" maxlength="7" placeholder="2015/04"></div>
+        <div class="form-group"><label>Fim (YYYY/MM)</label><input type="text" class="edu-end period-mask" maxlength="7" placeholder="2019/03"></div>
       </div>
       <div class="form-group"><label>Escola / Curso</label><input type="text" class="edu-school" placeholder="Ex: Universidade de São Paulo - Engenharia"></div>
     </div>`;
     document.getElementById('education-entries').insertAdjacentHTML('beforeend', html);
+    
+    // Aplica máscara nos novos campos
+    const entry = document.getElementById(`edu-${id}`);
+    entry.querySelectorAll('.period-mask').forEach(input => applyPeriodMask(input));
   }
 
   function addExperience() {
@@ -163,12 +205,16 @@
     const html = `<div class="entry-box" id="exp-${id}">
       <button type="button" class="remove-button" onclick="document.getElementById('exp-${id}').remove()">✕ Remover</button>
       <div class="form-row">
-        <div class="form-group"><label>Início (YYYY/MM)</label><input type="text" class="exp-start" placeholder="2019/04"></div>
-        <div class="form-group"><label>Fim (YYYY/MM)</label><input type="text" class="exp-end" placeholder="Atualmente"></div>
+        <div class="form-group"><label>Início (YYYY/MM)</label><input type="text" class="exp-start period-mask" maxlength="7" placeholder="2019/04"></div>
+        <div class="form-group"><label>Fim (YYYY/MM)</label><input type="text" class="exp-end period-mask" maxlength="7" placeholder="Atualmente"></div>
       </div>
       <div class="form-group"><label>Empresa / Cargo</label><input type="text" class="exp-company" placeholder="Ex: Toyota - Operador de Produção"></div>
     </div>`;
     document.getElementById('experience-entries').insertAdjacentHTML('beforeend', html);
+    
+    // Aplica máscara nos novos campos
+    const entry = document.getElementById(`exp-${id}`);
+    entry.querySelectorAll('.period-mask').forEach(input => applyPeriodMask(input));
   }
 
   function generatePDF() {
