@@ -451,13 +451,37 @@ function snap() {
   setTimeout(() => {
     const f = FORMATS[cur];
     const vw = video.videoWidth || 640, vh = video.videoHeight || 480;
+
+    // Dimensões do elemento <video> na tela (object-fit:cover)
+    const dispW = vfWrap.offsetWidth, dispH = vfWrap.offsetHeight;
+
+    // Escala que object-fit:cover aplica: cobre o container sem distorção
+    const scaleX = vw / dispW, scaleY = vh / dispH;
+    const scale = Math.min(scaleX, scaleY); // cover usa o menor fator
+
+    // Offset do vídeo dentro do container (pode haver corte nas bordas)
+    const offX = (vw - dispW * scale) / 2;
+    const offY = (vh - dispH * scale) / 2;
+
+    // Posição do retângulo guia na tela (relativa ao vf-wrap)
+    const gStyle = guide.style;
+    const gl = parseFloat(gStyle.left);
+    const gt = parseFloat(gStyle.top);
+    const gw = parseFloat(gStyle.width);
+    const gh = parseFloat(gStyle.height);
+
+    // Converter coordenadas de tela → coordenadas do vídeo
+    const sx = gl * scale + offX;
+    const sy = gt * scale + offY;
+    const sw = gw * scale;
+    const sh = gh * scale;
+
+    // Saída em alta resolução mantendo proporção do formato
+    const BASE = 1200;
     const r = f.ratio;
-    let sx, sy, sw, sh;
-    if (vw / vh > r) { sh = vh; sw = sh * r; sy = 0; sx = (vw - sw) / 2; }
-    else              { sw = vw; sh = sw / r; sx = 0; sy = (vh - sh) / 2; }
-    const BASE = 900;
     const ow = r >= 1 ? BASE : Math.round(BASE * r);
     const oh = r >= 1 ? Math.round(BASE / r) : BASE;
+
     offsc.width = ow; offsc.height = oh;
     const ctx = offsc.getContext('2d');
     ctx.fillStyle = bgColor; ctx.fillRect(0, 0, ow, oh);
