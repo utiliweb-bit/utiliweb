@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Gerador de Currículo (Rirekisho) em PDF — UtiliWeb</title>
-  <meta name="description" content="Gerador profissional de currículo japonês (Rirekisho) em formato PDF JIS padrão para brasileiros no Japão.">
+  <title>Gerador de Currículo (Rirekisho) — UtiliWeb</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,360 +16,66 @@
       --primary: #10b981;
       --primary-dark: #059669;
       --primary-light: #ecfdf5;
-      --primary-surface: rgba(16, 185, 129, 0.08);
-      
       --neutral-50: #f9fafb;
       --neutral-100: #f3f4f6;
       --neutral-200: #e5e7eb;
-      --neutral-300: #d1d5db;
       --neutral-400: #9ca3af;
       --neutral-500: #6b7280;
-      --neutral-600: #4b5563;
       --neutral-700: #374151;
       --neutral-800: #1f2937;
       --neutral-900: #111827;
-      
-      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-      --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-      
-      --radius-sm: 8px;
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
       --radius-md: 12px;
       --radius-lg: 16px;
-      --radius-xl: 24px;
-      --radius-full: 9999px;
-      
-      --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition: all 0.25s ease;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
-
-    body {
-      font-family: 'Inter', -apple-system, sans-serif;
-      background: var(--neutral-50);
-      color: var(--neutral-800);
-      line-height: 1.5;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    h1, h2, h3 { font-family: 'Plus Jakarta Sans', sans-serif; }
-
-    /* ── HEADER ── */
-    header {
-      background: var(--neutral-900);
-      background-image: radial-gradient(circle at top right, rgba(16, 185, 129, 0.15), transparent 400px);
-      color: #fff;
-      padding: 48px 24px 64px;
-      text-align: center;
-    }
-
-    .header-logo {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 56px;
-      height: 56px;
-      background: var(--primary);
-      border-radius: var(--radius-lg);
-      margin-bottom: 16px;
-      box-shadow: 0 0 30px rgba(16, 185, 129, 0.3);
-    }
-
-    header h1 {
-      font-size: clamp(1.5rem, 5vw, 2.25rem);
-      font-weight: 800;
-      letter-spacing: -0.04em;
-      margin-bottom: 8px;
-    }
-
-    header p {
-      font-size: clamp(0.875rem, 2.5vw, 1rem);
-      color: var(--neutral-400);
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    /* ── MAIN CONTENT ── */
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 40px 24px 80px;
-    }
-
-    .info-box {
-      background: var(--primary-light);
-      border-left: 4px solid var(--primary);
-      padding: 16px 24px;
-      border-radius: var(--radius-md);
-      margin-bottom: 40px;
-      color: var(--primary-dark);
-      font-size: 0.9375rem;
-    }
-
-    /* ── FORM SECTION ── */
-    .form-section {
-      background: #fff;
-      border-radius: var(--radius-lg);
-      padding: 32px;
-      margin-bottom: 24px;
-      box-shadow: var(--shadow-md);
-    }
-
-    .form-section h2 {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: var(--neutral-900);
-      margin-bottom: 24px;
-      padding-bottom: 16px;
-      border-bottom: 2px solid var(--neutral-100);
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    .form-group label {
-      display: block;
-      font-size: 0.9375rem;
-      font-weight: 600;
-      color: var(--neutral-700);
-      margin-bottom: 8px;
-    }
-
-    .form-group input,
-    .form-group textarea,
-    .form-group select {
-      width: 100%;
-      padding: 12px 16px;
-      border: 1px solid var(--neutral-200);
-      border-radius: var(--radius-md);
-      font-size: 0.9375rem;
-      font-family: 'Inter', sans-serif;
-      transition: var(--transition);
-      color: var(--neutral-800);
-    }
-
-    .form-group input:focus,
-    .form-group textarea:focus,
-    .form-group select:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
-    }
-
-    .form-group textarea {
-      resize: vertical;
-      min-height: 100px;
-    }
-
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-
-    .form-row.full { grid-template-columns: 1fr; }
-
-    .hint {
-      font-size: 0.8125rem;
-      color: var(--neutral-500);
-      margin-top: 4px;
-      font-style: italic;
-    }
-
-    /* ── ADD/REMOVE BUTTONS ── */
-    .add-button {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 16px;
-      background: var(--primary-light);
-      color: var(--primary-dark);
-      border: 1px solid var(--primary);
-      border-radius: var(--radius-md);
-      font-size: 0.875rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: var(--transition);
-      margin-top: 16px;
-    }
-
-    .add-button:hover {
-      background: var(--primary);
-      color: #fff;
-    }
-
-    .remove-button {
-      padding: 8px 12px;
-      background: #fee2e2;
-      color: #991b1b;
-      border: 1px solid #fecaca;
-      border-radius: var(--radius-md);
-      font-size: 0.75rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: var(--transition);
-    }
-
-    .remove-button:hover {
-      background: #fca5a5;
-      color: #7f1d1d;
-    }
-
-    .entry-box {
-      background: var(--neutral-50);
-      border: 1px solid var(--neutral-200);
-      border-radius: var(--radius-md);
-      padding: 16px;
-      margin-bottom: 16px;
-      position: relative;
-    }
-
-    .entry-box .remove-button {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-    }
-
-    /* ── BUTTONS ── */
-    .button-group {
-      display: flex;
-      gap: 12px;
-      margin-top: 40px;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      padding: 14px 32px;
-      border-radius: var(--radius-md);
-      border: none;
-      font-size: 0.9375rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: var(--transition);
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .btn-primary {
-      background: var(--primary);
-      color: #fff;
-      box-shadow: var(--shadow-md);
-    }
-
-    .btn-primary:hover {
-      background: var(--primary-dark);
-      box-shadow: var(--shadow-lg);
-      transform: translateY(-2px);
-    }
-
-    .btn-secondary {
-      background: var(--neutral-100);
-      color: var(--neutral-700);
-      border: 1px solid var(--neutral-200);
-    }
-
-    .btn-secondary:hover {
-      background: var(--neutral-200);
-    }
-
-    /* ── PREVIEW ── */
-    .preview-section {
-      background: #fff;
-      border-radius: var(--radius-lg);
-      padding: 32px;
-      margin-bottom: 24px;
-      box-shadow: var(--shadow-md);
-      display: none;
-    }
-
-    .preview-section.active {
-      display: block;
-    }
-
-    .preview-section h2 {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: var(--neutral-900);
-      margin-bottom: 24px;
-    }
-
-    #pdf-preview {
-      width: 100%;
-      height: 600px;
-      border: 1px solid var(--neutral-200);
-      border-radius: var(--radius-md);
-      background: var(--neutral-50);
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      background: #fff;
-      border-top: 1px solid var(--neutral-200);
-      padding: 64px 24px;
-      text-align: center;
-    }
-
-    .copyright {
-      font-size: 0.875rem;
-      color: var(--neutral-400);
-    }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 768px) {
-      header { padding: 40px 20px 56px; }
-      .container { padding: 32px 20px 60px; }
-      .form-section { padding: 24px; }
-      .form-row { grid-template-columns: 1fr; }
-      .button-group { flex-direction: column; }
-      .btn { width: 100%; justify-content: center; }
-    }
+    body { font-family: 'Inter', sans-serif; background: var(--neutral-50); color: var(--neutral-800); line-height: 1.5; }
+    header { background: var(--neutral-900); color: #fff; padding: 48px 24px; text-align: center; }
+    .container { max-width: 900px; margin: 0 auto; padding: 40px 24px; }
+    .form-section { background: #fff; border-radius: var(--radius-lg); padding: 32px; margin-bottom: 24px; box-shadow: var(--shadow-md); }
+    .form-section h2 { font-size: 1.25rem; margin-bottom: 24px; border-bottom: 2px solid var(--neutral-100); padding-bottom: 12px; }
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; font-size: 0.9375rem; font-weight: 600; margin-bottom: 8px; }
+    .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 12px; border: 1px solid var(--neutral-200); border-radius: var(--radius-md); font-size: 0.9375rem; }
+    .form-group input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .hint { font-size: 0.8125rem; color: var(--neutral-500); margin-top: 4px; }
+    .btn { padding: 14px 32px; border-radius: var(--radius-md); border: none; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .entry-box { background: var(--neutral-50); border: 1px solid var(--neutral-200); border-radius: var(--radius-md); padding: 16px; margin-bottom: 16px; position: relative; }
+    .add-button { background: var(--primary-light); color: var(--primary-dark); border: 1px solid var(--primary); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; margin-top: 12px; }
+    .remove-button { position: absolute; top: 12px; right: 12px; color: #ef4444; border: none; background: none; cursor: pointer; font-size: 0.75rem; font-weight: 600; }
+    @media (max-width: 768px) { .form-row { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
 
 <header>
-  <div class="header-logo">
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
-    </svg>
-  </div>
   <h1>Gerador de Rirekisho</h1>
-  <p>Crie seu currículo japonês profissional em PDF, pronto para enviar para empresas.</p>
+  <p>Preencha os campos abaixo para gerar seu currículo japonês em PDF.</p>
 </header>
 
 <div class="container">
-
-  <div class="info-box">
-    <strong>Dica:</strong> O Rirekisho é o currículo padrão no Japão. Preencha todos os campos com cuidado e use o formato de data japonesa (ex: 2024年1月15日 para 15 de janeiro de 2024).
-  </div>
-
   <form id="rirekisho-form">
-
-    <!-- ── DADOS PESSOAIS ── -->
     <div class="form-section">
       <h2>📋 Dados Pessoais</h2>
-      
       <div class="form-row">
         <div class="form-group">
           <label for="name">Nome Completo (Português)</label>
           <input type="text" id="name" name="name" placeholder="Ex: João Silva" required>
-          <div class="hint">Como seu nome aparece no passaporte</div>
         </div>
         <div class="form-group">
           <label for="name-jp">Nome em Katakana (Japonês)</label>
           <input type="text" id="name-jp" name="name-jp" placeholder="Ex: ジョアン・シルバ">
-          <div class="hint">Seu nome transliterado em katakana</div>
+          <div class="hint">Escreva apenas em Katakana. Ex: ジョアン</div>
         </div>
       </div>
 
       <div class="form-row">
         <div class="form-group">
-          <label for="birth-date">Data de Nascimento (formato: YYYY/MM/DD)</label>
+          <label for="birth-date">Data de Nascimento (YYYY/MM/DD)</label>
           <input type="text" id="birth-date" name="birth-date" placeholder="Ex: 1990/05/15" required>
         </div>
         <div class="form-group">
@@ -383,341 +88,155 @@
         </div>
       </div>
 
+      <div class="form-group">
+        <label for="address">Endereço no Japão (Japonês)</label>
+        <input type="text" id="address" name="address" placeholder="Ex: 東京都渋谷区道玄坂1-2-3" required>
+      </div>
+
       <div class="form-row">
         <div class="form-group">
-          <label for="phone">Telefone (com código de país)</label>
-          <input type="tel" id="phone" name="phone" placeholder="Ex: +81-90-1234-5678" required>
+          <label for="phone">Telefone</label>
+          <input type="tel" id="phone" name="phone" placeholder="Ex: 090-1234-5678" required>
         </div>
         <div class="form-group">
           <label for="email">E-mail</label>
           <input type="email" id="email" name="email" placeholder="Ex: seu@email.com" required>
         </div>
       </div>
-
-      <div class="form-group form-row full">
-        <label for="address">Endereço no Japão (Japonês)</label>
-        <input type="text" id="address" name="address" placeholder="Ex: 東京都渋谷区道玄坂1-2-3" required>
-        <div class="hint">Endereço em caracteres japoneses (kanji/hiragana)</div>
-      </div>
-
-      <div class="form-group form-row full">
-        <label for="application-date">Data da Candidatura (formato: YYYY年MM月DD日)</label>
+      
+      <div class="form-group">
+        <label for="application-date">Data da Candidatura (YYYY年MM月DD日)</label>
         <input type="text" id="application-date" name="application-date" placeholder="Ex: 2024年1月15日" required>
-        <div class="hint">Data em que você está enviando o currículo</div>
       </div>
     </div>
 
-    <!-- ── EDUCAÇÃO ── -->
     <div class="form-section">
       <h2>🎓 Educação</h2>
-      
       <div id="education-entries"></div>
-      
-      <button type="button" class="add-button" onclick="addEducation()">
-        <span>+</span> Adicionar Educação
-      </button>
+      <button type="button" class="add-button" onclick="addEducation()">+ Adicionar Educação</button>
     </div>
 
-    <!-- ── EXPERIÊNCIA PROFISSIONAL ── -->
     <div class="form-section">
       <h2>💼 Experiência Profissional</h2>
-      
       <div id="experience-entries"></div>
-      
-      <button type="button" class="add-button" onclick="addExperience()">
-        <span>+</span> Adicionar Experiência
-      </button>
+      <button type="button" class="add-button" onclick="addExperience()">+ Adicionar Experiência</button>
     </div>
 
-    <!-- ── QUALIFICAÇÕES E HABILIDADES ── -->
     <div class="form-section">
-      <h2>🏆 Qualificações e Habilidades</h2>
-      
-      <div class="form-group form-row full">
-        <label for="qualifications">Qualificações, Certificados e Habilidades</label>
-        <textarea id="qualifications" name="qualifications" placeholder="Ex: Certificado JLPT N2, Inglês fluente, Excel avançado, etc. (um por linha)"></textarea>
-        <div class="hint">Liste cada qualificação em uma linha separada</div>
+      <h2>🏆 Qualificações e Observações</h2>
+      <div class="form-group">
+        <label for="qualifications">Qualificações (JLPT, Carteira de Motorista, etc.)</label>
+        <textarea id="qualifications" name="qualifications" rows="4" placeholder="Uma por linha..."></textarea>
       </div>
-
-      <div class="form-group form-row full">
-        <label for="notes">Observações Adicionais</label>
-        <textarea id="notes" name="notes" placeholder="Informações adicionais que deseja incluir no currículo"></textarea>
+      <div class="form-group">
+        <label for="notes">Motivação / Observações</label>
+        <textarea id="notes" name="notes" rows="4" placeholder="Por que você quer esta vaga?"></textarea>
       </div>
     </div>
 
-    <!-- ── BOTÕES ── -->
-    <div class="button-group">
-      <button type="button" class="btn btn-primary" onclick="generatePDF()">
-        <span>📥</span> Gerar PDF
-      </button>
-      <button type="reset" class="btn btn-secondary">
-        <span>🔄</span> Limpar Formulário
-      </button>
+    <div style="text-align: center; margin-top: 40px;">
+      <button type="button" class="btn btn-primary" onclick="generatePDF()">📥 Gerar PDF do Currículo</button>
     </div>
-
   </form>
-
-  <!-- ── PREVIEW ── -->
-  <div class="preview-section" id="preview-section">
-    <h2>Pré-visualização do PDF</h2>
-    <div id="pdf-preview"></div>
-    <div class="button-group">
-      <button type="button" class="btn btn-primary" onclick="downloadPDF()">
-        <span>⬇️</span> Baixar PDF
-      </button>
-      <button type="button" class="btn btn-secondary" onclick="closePreview()">
-        <span>✕</span> Fechar
-      </button>
-    </div>
-  </div>
-
 </div>
 
-<footer>
-  <p class="copyright">© 2025 UtiliWeb · Gerador de Rirekisho</p>
-</footer>
-
 <script>
-  let educationCount = 0;
-  let experienceCount = 0;
-
+  let eduCount = 0, expCount = 0;
   function addEducation() {
-    const container = document.getElementById('education-entries');
-    const id = educationCount++;
-    const entry = document.createElement('div');
-    entry.className = 'entry-box';
-    entry.id = `education-${id}`;
-    entry.innerHTML = `
-      <button type="button" class="remove-button" onclick="removeEducation(${id})">✕ Remover</button>
+    const id = eduCount++;
+    const html = `<div class="entry-box" id="edu-${id}">
+      <button type="button" class="remove-button" onclick="document.getElementById('edu-${id}').remove()">✕ Remover</button>
       <div class="form-row">
-        <div class="form-group">
-          <label>Data de Entrada (YYYY/MM/DD)</label>
-          <input type="text" class="education-start" placeholder="Ex: 2015/04/01">
-        </div>
-        <div class="form-group">
-          <label>Data de Saída (YYYY/MM/DD)</label>
-          <input type="text" class="education-end" placeholder="Ex: 2019/03/31">
-        </div>
+        <div class="form-group"><label>Início (YYYY/MM)</label><input type="text" class="edu-start" placeholder="2015/04"></div>
+        <div class="form-group"><label>Fim (YYYY/MM)</label><input type="text" class="edu-end" placeholder="2019/03"></div>
       </div>
-      <div class="form-group">
-        <label>Instituição (Japonês)</label>
-        <input type="text" class="education-school" placeholder="Ex: 東京大学">
-      </div>
-      <div class="form-group">
-        <label>Curso/Graduação</label>
-        <input type="text" class="education-course" placeholder="Ex: Engenharia de Software">
-      </div>
-    `;
-    container.appendChild(entry);
-  }
-
-  function removeEducation(id) {
-    document.getElementById(`education-${id}`)?.remove();
+      <div class="form-group"><label>Escola / Curso</label><input type="text" class="edu-school" placeholder="Ex: Universidade de São Paulo - Engenharia"></div>
+    </div>`;
+    document.getElementById('education-entries').insertAdjacentHTML('beforeend', html);
   }
 
   function addExperience() {
-    const container = document.getElementById('experience-entries');
-    const id = experienceCount++;
-    const entry = document.createElement('div');
-    entry.className = 'entry-box';
-    entry.id = `experience-${id}`;
-    entry.innerHTML = `
-      <button type="button" class="remove-button" onclick="removeExperience(${id})">✕ Remover</button>
+    const id = expCount++;
+    const html = `<div class="entry-box" id="exp-${id}">
+      <button type="button" class="remove-button" onclick="document.getElementById('exp-${id}').remove()">✕ Remover</button>
       <div class="form-row">
-        <div class="form-group">
-          <label>Data de Entrada (YYYY/MM/DD)</label>
-          <input type="text" class="experience-start" placeholder="Ex: 2019/04/01">
-        </div>
-        <div class="form-group">
-          <label>Data de Saída (YYYY/MM/DD)</label>
-          <input type="text" class="experience-end" placeholder="Ex: 2023/03/31">
-        </div>
+        <div class="form-group"><label>Início (YYYY/MM)</label><input type="text" class="exp-start" placeholder="2019/04"></div>
+        <div class="form-group"><label>Fim (YYYY/MM)</label><input type="text" class="exp-end" placeholder="Atualmente"></div>
       </div>
-      <div class="form-group">
-        <label>Empresa (Japonês)</label>
-        <input type="text" class="experience-company" placeholder="Ex: 株式会社ソニー">
-      </div>
-      <div class="form-group">
-        <label>Cargo/Posição</label>
-        <input type="text" class="experience-position" placeholder="Ex: Engenheiro de Software">
-      </div>
-      <div class="form-group">
-        <label>Descrição das Responsabilidades</label>
-        <textarea class="experience-description" placeholder="Descreva suas responsabilidades e realizações"></textarea>
-      </div>
-    `;
-    container.appendChild(entry);
-  }
-
-  function removeExperience(id) {
-    document.getElementById(`experience-${id}`)?.remove();
+      <div class="form-group"><label>Empresa / Cargo</label><input type="text" class="exp-company" placeholder="Ex: Toyota - Operador de Produção"></div>
+    </div>`;
+    document.getElementById('experience-entries').insertAdjacentHTML('beforeend', html);
   }
 
   function generatePDF() {
-    const form = document.getElementById('rirekisho-form');
-    if (!form.checkValidity()) {
-      alert('Por favor, preencha todos os campos obrigatórios.');
-      return;
-    }
-
     const data = {
       name: document.getElementById('name').value,
       nameJp: document.getElementById('name-jp').value,
-      birthDate: document.getElementById('birth-date').value,
+      birth: document.getElementById('birth-date').value,
       gender: document.getElementById('gender').value,
+      address: document.getElementById('address').value,
       phone: document.getElementById('phone').value,
       email: document.getElementById('email').value,
-      address: document.getElementById('address').value,
-      applicationDate: document.getElementById('application-date').value,
-      education: Array.from(document.querySelectorAll('#education-entries .entry-box')).map(box => ({
-        start: box.querySelector('.education-start').value,
-        end: box.querySelector('.education-end').value,
-        school: box.querySelector('.education-school').value,
-        course: box.querySelector('.education-course').value
+      date: document.getElementById('application-date').value,
+      edu: Array.from(document.querySelectorAll('#education-entries .entry-box')).map(el => ({
+        period: `${el.querySelector('.edu-start').value} ~ ${el.querySelector('.edu-end').value}`,
+        info: el.querySelector('.edu-school').value
       })),
-      experience: Array.from(document.querySelectorAll('#experience-entries .entry-box')).map(box => ({
-        start: box.querySelector('.experience-start').value,
-        end: box.querySelector('.experience-end').value,
-        company: box.querySelector('.experience-company').value,
-        position: box.querySelector('.experience-position').value,
-        description: box.querySelector('.experience-description').value
+      exp: Array.from(document.querySelectorAll('#experience-entries .entry-box')).map(el => ({
+        period: `${el.querySelector('.exp-start').value} ~ ${el.querySelector('.exp-end').value}`,
+        info: el.querySelector('.exp-company').value
       })),
-      qualifications: document.getElementById('qualifications').value,
+      qual: document.getElementById('qualifications').value,
       notes: document.getElementById('notes').value
     };
 
-    createPDF(data);
-  }
-
-  function createPDF(data) {
     const element = document.createElement('div');
-    element.style.padding = '40px';
-    element.style.fontFamily = 'Arial, sans-serif';
+    element.style.padding = '30px';
     element.style.fontSize = '12px';
-    element.style.lineHeight = '1.6';
     element.style.color = '#000';
     element.style.backgroundColor = '#fff';
-
-    let html = `
-      <div style="text-align: center; margin-bottom: 30px; border-bottom: 2px solid #000; padding-bottom: 20px;">
-        <h1 style="font-size: 24px; margin: 0; font-weight: bold;">履歴書</h1>
-        <p style="margin: 5px 0; font-size: 11px;">RIREKISHO (Japanese Resume)</p>
+    element.innerHTML = `
+      <div style="border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: flex-end;">
+        <h1 style="font-size: 24px; margin: 0;">履 歴 書</h1>
+        <span style="font-size: 11px;">${data.date} 現在</span>
       </div>
-
-      <table style="width: 100%; margin-bottom: 20px; border-collapse: collapse;">
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
         <tr>
-          <td style="width: 70%; vertical-align: top;">
-            <table style="width: 100%; border-collapse: collapse;">
-              <tr style="border-bottom: 1px solid #000;">
-                <td style="padding: 8px; font-weight: bold; width: 30%;">氏名 (Name)</td>
-                <td style="padding: 8px;">${data.name}</td>
-              </tr>
-              <tr style="border-bottom: 1px solid #000;">
-                <td style="padding: 8px; font-weight: bold;">カタカナ (Katakana)</td>
-                <td style="padding: 8px;">${data.nameJp}</td>
-              </tr>
-              <tr style="border-bottom: 1px solid #000;">
-                <td style="padding: 8px; font-weight: bold;">生年月日 (Birth Date)</td>
-                <td style="padding: 8px;">${data.birthDate}</td>
-              </tr>
-              <tr style="border-bottom: 1px solid #000;">
-                <td style="padding: 8px; font-weight: bold;">性別 (Gender)</td>
-                <td style="padding: 8px;">${data.gender}</td>
-              </tr>
-            </table>
+          <td style="width: 80%;">
+            <div style="border: 1px solid #000; padding: 5px; font-size: 10px;">ふりがna: ${data.nameJp}</div>
+            <div style="border: 1px solid #000; border-top: none; padding: 10px; font-size: 18px; font-weight: bold;">氏 名: ${data.name}</div>
+            <div style="border: 1px solid #000; border-top: none; padding: 8px;">生年月日: ${data.birth} 生 ( ${data.gender} )</div>
           </td>
-          <td style="width: 30%; text-align: center; border-left: 1px solid #000; padding-left: 15px;">
-            <div style="width: 100px; height: 120px; border: 1px solid #000; margin: 0 auto; background: #f0f0f0; display: flex; align-items: center; justify-content: center; color: #999;">
-              [写真]<br>[Photo]
-            </div>
-            <p style="font-size: 10px; margin-top: 5px;">4cm × 3cm</p>
-          </td>
+          <td style="width: 20%; border: 1px solid #000; border-left: none; text-align: center; vertical-align: middle; color: #ccc;">写真貼付</td>
         </tr>
       </table>
-
-      <table style="width: 100%; margin-bottom: 20px; border-collapse: collapse;">
-        <tr style="border-bottom: 1px solid #000;">
-          <td style="padding: 8px; font-weight: bold;">住所 (Address)</td>
-          <td style="padding: 8px;">${data.address}</td>
-        </tr>
-        <tr style="border-bottom: 1px solid #000;">
-          <td style="padding: 8px; font-weight: bold;">電話 (Phone)</td>
-          <td style="padding: 8px;">${data.phone}</td>
-        </tr>
-        <tr style="border-bottom: 1px solid #000;">
-          <td style="padding: 8px; font-weight: bold;">メール (Email)</td>
-          <td style="padding: 8px;">${data.email}</td>
-        </tr>
-      </table>
-
-      <h3 style="margin: 20px 0 10px; font-size: 14px; font-weight: bold; border-bottom: 1px solid #000; padding-bottom: 5px;">学歴 (Education)</h3>
-      <table style="width: 100%; margin-bottom: 20px; border-collapse: collapse;">
-        ${data.education.map(edu => `
-          <tr style="border-bottom: 1px solid #ddd;">
-            <td style="padding: 8px; width: 20%;">${edu.start} ~ ${edu.end}</td>
-            <td style="padding: 8px;">${edu.school} ${edu.course}</td>
-          </tr>
-        `).join('')}
-      </table>
-
-      <h3 style="margin: 20px 0 10px; font-size: 14px; font-weight: bold; border-bottom: 1px solid #000; padding-bottom: 5px;">職務経歴 (Work Experience)</h3>
-      <table style="width: 100%; margin-bottom: 20px; border-collapse: collapse;">
-        ${data.experience.map(exp => `
-          <tr style="border-bottom: 1px solid #ddd;">
-            <td style="padding: 8px; width: 20%;">${exp.start} ~ ${exp.end}</td>
-            <td style="padding: 8px;">
-              <strong>${exp.company}</strong><br>
-              職務: ${exp.position}<br>
-              ${exp.description}
-            </td>
-          </tr>
-        `).join('')}
-      </table>
-
-      <h3 style="margin: 20px 0 10px; font-size: 14px; font-weight: bold; border-bottom: 1px solid #000; padding-bottom: 5px;">資格・技能 (Qualifications & Skills)</h3>
-      <div style="margin-bottom: 20px; padding: 10px; border: 1px solid #ddd;">
-        ${data.qualifications.split('\n').map(q => q.trim()).filter(q => q).map(q => `<p style="margin: 5px 0;">• ${q}</p>`).join('')}
+      <div style="border: 1px solid #000; padding: 8px; margin-bottom: 20px;">
+        <div>現住所: ${data.address}</div>
+        <div style="margin-top: 5px;">電話: ${data.phone} / Email: ${data.email}</div>
       </div>
-
-      ${data.notes ? `
-        <h3 style="margin: 20px 0 10px; font-size: 14px; font-weight: bold; border-bottom: 1px solid #000; padding-bottom: 5px;">備考 (Additional Notes)</h3>
-        <div style="padding: 10px; border: 1px solid #ddd;">
-          ${data.notes.split('\n').map(n => `<p style="margin: 5px 0;">${n}</p>`).join('')}
-        </div>
-      ` : ''}
-
-      <div style="margin-top: 30px; text-align: right; padding-top: 20px; border-top: 1px solid #000;">
-        <p style="margin: 5px 0;">記入日 (Date): ${data.applicationDate}</p>
-        <p style="margin: 30px 0 5px; font-size: 11px;">署名 (Signature)</p>
-        <div style="width: 150px; height: 50px; border: 1px solid #000; margin-left: auto;"></div>
+      <table style="width: 100%; border-collapse: collapse; border: 1px solid #000;">
+        <tr style="background: #f5f5f5;"><th style="border: 1px solid #000; padding: 5px; width: 25%;">年 月</th><th style="border: 1px solid #000; padding: 5px;">学歴 ・ 職歴</th></tr>
+        <tr><td colspan="2" style="border: 1px solid #000; text-align: center; padding: 3px; font-weight: bold;">学 歴</td></tr>
+        ${data.edu.map(e => `<tr><td style="border: 1px solid #000; padding: 5px; text-align: center;">${e.period}</td><td style="border: 1px solid #000; padding: 5px;">${e.info}</td></tr>`).join('')}
+        <tr><td colspan="2" style="border: 1px solid #000; text-align: center; padding: 3px; font-weight: bold;">職 歴</td></tr>
+        ${data.exp.map(e => `<tr><td style="border: 1px solid #000; padding: 5px; text-align: center;">${e.period}</td><td style="border: 1px solid #000; padding: 5px;">${e.info}</td></tr>`).join('')}
+      </table>
+      <div style="border: 1px solid #000; border-top: none; padding: 8px; margin-bottom: 20px;">
+        <div style="font-weight: bold; margin-bottom: 5px;">免許 ・ 資格</div>
+        <div style="white-space: pre-wrap;">${data.qual}</div>
+      </div>
+      <div style="border: 1px solid #000; padding: 8px;">
+        <div style="font-weight: bold; margin-bottom: 5px;">志望の動機、特技、好きな学科、アピールポイントなど</div>
+        <div style="white-space: pre-wrap;">${data.notes}</div>
       </div>
     `;
 
-    element.innerHTML = html;
-
-    const opt = {
-      margin: 10,
-      filename: `Rirekisho_${data.name.replace(/\s/g, '_')}.pdf`,
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    };
-
+    const opt = { margin: 10, filename: 'rirekisho.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
     html2pdf().set(opt).from(element).save();
   }
-
-  function downloadPDF() {
-    generatePDF();
-  }
-
-  function closePreview() {
-    document.getElementById('preview-section').classList.remove('active');
-  }
-
-  // Inicializar com um campo de educação e experiência
+  
   addEducation();
   addExperience();
 </script>
-
 </body>
 </html>
