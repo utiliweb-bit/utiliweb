@@ -54,21 +54,24 @@
 
 <header>
   <h1>Gerador de Rirekisho</h1>
-  <p>Preencha os campos abaixo para gerar seu currículo japonês em PDF.</p>
+  <p>Crie seu currículo japonês profissional em PDF.</p>
 </header>
 
 <div class="container">
-  <form id="rirekisho-form">
+  <!-- Adicionado autocomplete="off" para evitar preenchimento automático indesejado -->
+  <form id="rirekisho-form" autocomplete="off">
     <div class="form-section">
       <h2>📋 Dados Pessoais</h2>
       <div class="form-row">
         <div class="form-group">
-          <label for="name">Nome Completo (Português)</label>
-          <input type="text" id="name" name="name" placeholder="Ex: João Silva" required>
+          <label for="full_name_pt">Nome Completo (Português)</label>
+          <!-- Mudado o ID e NAME para serem únicos e evitar confusão do navegador -->
+          <input type="text" id="full_name_pt" name="full_name_pt" placeholder="Ex: João Silva" required autocomplete="new-password">
         </div>
         <div class="form-group">
-          <label for="name-jp">Nome em Katakana (Japonês)</label>
-          <input type="text" id="name-jp" name="name-jp" placeholder="Ex: ジョアン・シルバ">
+          <label for="katakana_name_jp">Nome em Katakana (Japonês)</label>
+          <!-- Mudado o ID e NAME para serem únicos e evitar confusão do navegador -->
+          <input type="text" id="katakana_name_jp" name="katakana_name_jp" placeholder="Ex: ジョアン・シルバ" autocomplete="new-password">
           <div class="hint">Escreva apenas em Katakana. Ex: ジョアン</div>
         </div>
       </div>
@@ -170,8 +173,8 @@
 
   function generatePDF() {
     const data = {
-      name: document.getElementById('name').value,
-      nameJp: document.getElementById('name-jp').value,
+      name: document.getElementById('full_name_pt').value,
+      nameJp: document.getElementById('katakana_name_jp').value,
       birth: document.getElementById('birth-date').value,
       gender: document.getElementById('gender').value,
       address: document.getElementById('address').value,
@@ -203,7 +206,7 @@
       <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
         <tr>
           <td style="width: 80%;">
-            <div style="border: 1px solid #000; padding: 5px; font-size: 10px;">ふりがna: ${data.nameJp}</div>
+            <div style="border: 1px solid #000; padding: 5px; font-size: 10px;">ふりがな: ${data.nameJp}</div>
             <div style="border: 1px solid #000; border-top: none; padding: 10px; font-size: 18px; font-weight: bold;">氏 名: ${data.name}</div>
             <div style="border: 1px solid #000; border-top: none; padding: 8px;">生年月日: ${data.birth} 生 ( ${data.gender} )</div>
           </td>
