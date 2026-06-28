@@ -19,8 +19,6 @@
 body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;display:flex;flex-direction:column;align-items:center}
 #shell{width:100%;max-width:960px;display:grid;grid-template-columns:1fr;gap:0;min-height:100vh}
 @media(min-width:700px){#shell{grid-template-columns:300px 1fr;min-height:100vh}}
-
-/* sidebar */
 #sidebar{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
 #logo{padding:20px 20px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
 #logo svg{flex-shrink:0}
@@ -43,11 +41,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 .fmt-item-name{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .fmt-item-dim{font-size:11px;color:var(--text2);margin-top:1px}
 .fmt-item-flag{font-size:15px;flex-shrink:0}
-
-/* main */
 #main{display:flex;flex-direction:column;overflow:hidden}
-
-/* viewfinder */
 #vf-wrap{position:relative;background:#070a10;flex:1;min-height:320px;display:flex;align-items:center;justify-content:center;overflow:hidden}
 #video{position:absolute;width:100%;height:100%;object-fit:cover;display:none}
 #seg-canvas{position:absolute;width:100%;height:100%;display:none}
@@ -71,8 +65,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 #fmt-chip{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.55);color:rgba(255,255,255,.75);font-size:11px;padding:4px 12px;border-radius:20px;white-space:nowrap;pointer-events:none}
 #scan-line{position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);display:none;animation:scanAnim .7s ease-in-out}
 @keyframes scanAnim{from{top:10%}to{top:88%}}
-
-/* controls */
 #controls{background:var(--surface);border-top:1px solid var(--border);padding:14px 16px;display:flex;flex-direction:column;gap:10px}
 #bg-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 #bg-row label{font-size:12px;color:var(--text2);white-space:nowrap}
@@ -92,8 +84,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 .cbtn.accent:hover{background:#2d6bef}
 .cbtn:disabled{opacity:.3;cursor:not-allowed}
 #status{font-size:12px;color:var(--text2);text-align:center;min-height:16px}
-
-/* gallery */
 #gallery{padding:14px 16px;border-top:1px solid var(--border)}
 #gal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
 #gal-title{font-size:13px;font-weight:500;color:var(--text2)}
@@ -108,8 +98,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 .pcard-del{position:absolute;top:4px;right:4px;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,.7);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;opacity:0;transition:opacity .15s}
 .pcard:hover .pcard-del{opacity:1}
 .pcard-label{padding:4px 6px;font-size:10px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-
-/* lightbox */
 #lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:100;align-items:center;justify-content:center;flex-direction:column;gap:16px;padding:24px}
 #lb.open{display:flex}
 #lb-img{max-width:min(500px,90vw);max-height:70vh;border-radius:10px;object-fit:contain;border:1px solid var(--border2)}
@@ -119,8 +107,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 #lb-dl:hover{background:#2d6bef}
 #lb-close-btn{position:fixed;top:16px;right:16px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:#fff;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center}
 #lb-close-btn:hover{background:rgba(255,255,255,.2)}
-
-/* mobile */
 #mobile-fmt{display:none;overflow-x:auto;padding:10px 14px;gap:8px;border-bottom:1px solid var(--border);background:var(--surface);-webkit-overflow-scrolling:touch}
 #mobile-fmt::-webkit-scrollbar{display:none}
 @media(max-width:699px){
@@ -135,7 +121,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 </head>
 <body>
 <div id="shell">
-
   <aside id="sidebar">
     <div id="logo">
       <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
@@ -287,7 +272,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 </div>
 
 <canvas id="offscreen" style="display:none"></canvas>
-<canvas id="mask-canvas" style="display:none"></canvas>
 
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation@0.1/selfie_segmentation.js" crossorigin="anonymous"></script>
 <script>
@@ -305,7 +289,7 @@ const FORMATS = {
 
 let cur='3x4', stream=null, facing='user', bgColor='#ffffff', bgLabel='Branco';
 let photos=[], lbId=-1;
-let aiEnabled=false, segmentor=null, animId=null, lastMask=null;
+let aiEnabled=false, segmentor=null, animId=null;
 
 const video    = document.getElementById('video');
 const segCanvas= document.getElementById('seg-canvas');
@@ -317,8 +301,6 @@ const bgChipTxt= document.getElementById('bg-chip-text');
 const aiDot    = document.getElementById('ai-dot');
 const fmtChip  = document.getElementById('fmt-chip');
 const offsc    = document.getElementById('offscreen');
-const maskCv   = document.getElementById('mask-canvas');
-const maskCtx  = maskCv.getContext('2d');
 const grid     = document.getElementById('photo-grid');
 const cntEl    = document.getElementById('cnt');
 const statusEl = document.getElementById('status');
@@ -396,21 +378,29 @@ function initSegmentor() {
 }
 
 function onSegResults(res) {
-  lastMask = res.segmentationMask;
   const w=segCanvas.width, h=segCanvas.height;
   segCtx.clearRect(0,0,w,h);
-  // fill background color
+
+  // Draw mask: white=person, black=background
   segCtx.drawImage(res.segmentationMask,0,0,w,h);
   const imgData = segCtx.getImageData(0,0,w,h);
-  const d=imgData.data;
-  // parse bgColor
+  const d = imgData.data;
   const [br,bg2,bb] = hexToRgb(bgColor);
+
+  // Replace background pixels with chosen color; make person pixels transparent
   for(let i=0;i<d.length;i+=4){
-    const alpha=d[i]; // mask: 255=person, 0=background
-    d[i]=br; d[i+1]=bg2; d[i+2]=bb; d[i+3]=255-alpha; // invert: bg pixels
+    const m = d[i]; // 255=person, 0=background
+    if(m < 128){
+      // Background pixel → solid fill color
+      d[i]=br; d[i+1]=bg2; d[i+2]=bb; d[i+3]=255;
+    } else {
+      // Person pixel → transparent so video shows through
+      d[i+3]=0;
+    }
   }
   segCtx.putImageData(imgData,0,0);
-  // draw person on top
+
+  // Composite: draw video frame BEHIND the colored-bg layer
   segCtx.globalCompositeOperation='destination-over';
   segCtx.drawImage(res.image,0,0,w,h);
   segCtx.globalCompositeOperation='source-over';
@@ -424,12 +414,13 @@ function hexToRgb(hex){
 }
 
 function startSegLoop(){
-  segCanvas.width=video.videoWidth||640;
-  segCanvas.height=video.videoHeight||480;
+  // seg-canvas matches the native video resolution exactly
+  segCanvas.width  = video.videoWidth  || 640;
+  segCanvas.height = video.videoHeight || 480;
   segCanvas.style.display='block';
   video.style.display='none';
   async function loop(){
-    if(!aiEnabled||!stream){return;}
+    if(!aiEnabled||!stream) return;
     await segmentor.send({image:video});
     animId=requestAnimationFrame(loop);
   }
@@ -446,7 +437,9 @@ async function toggleCam(){
   if(stream){stopCam();return;}
   try{
     statusEl.textContent='Aguardando permissão…';
-    stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:facing,width:{ideal:1920},height:{ideal:1440}}});
+    stream=await navigator.mediaDevices.getUserMedia({
+      video:{facingMode:facing,width:{ideal:1920},height:{ideal:1440}}
+    });
     video.srcObject=stream;
     await new Promise(r=>video.onloadedmetadata=r);
     video.style.display='block';
@@ -482,44 +475,69 @@ function snap(){
   if(!stream||scanLine.style.display==='block') return;
   scanLine.style.display='block'; btnSnap.disabled=true;
   statusEl.textContent='Capturando…';
+
   setTimeout(()=>{
-    const f=FORMATS[cur];
-    const vw=video.videoWidth||640, vh=video.videoHeight||480;
-    const dispW=vfWrap.offsetWidth, dispH=vfWrap.offsetHeight;
-    const scaleX=vw/dispW, scaleY=vh/dispH;
-    const scale=Math.min(scaleX,scaleY);
-    const offX=(vw-dispW*scale)/2, offY=(vh-dispH*scale)/2;
-    const gl=parseFloat(guide.style.left), gt=parseFloat(guide.style.top);
-    const gw=parseFloat(guide.style.width), gh=parseFloat(guide.style.height);
-    const sx=gl*scale+offX, sy=gt*scale+offY;
-    const sw=gw*scale, sh=gh*scale;
-    const BASE=1200, r=f.ratio;
-    const ow=r>=1?BASE:Math.round(BASE*r);
-    const oh=r>=1?Math.round(BASE/r):BASE;
-    offsc.width=ow; offsc.height=oh;
-    const ctx=offsc.getContext('2d');
+    const f   = FORMATS[cur];
+    const vw  = video.videoWidth  || 640;
+    const vh  = video.videoHeight || 480;
+    const dispW = vfWrap.offsetWidth;
+    const dispH = vfWrap.offsetHeight;
+
+    // object-fit:cover maps video pixels → display pixels via a single scale factor
+    // (the axis with the larger ratio is the one that "covers")
+    const scaleX = vw / dispW;
+    const scaleY = vh / dispH;
+    const scale  = Math.min(scaleX, scaleY);           // cover → use the smaller scale
+    const offX   = (vw - dispW * scale) / 2;           // letterbox/pillarbox offset
+    const offY   = (vh - dispH * scale) / 2;
+
+    // Guide rectangle in display-pixel coordinates
+    const gl = parseFloat(guide.style.left);
+    const gt = parseFloat(guide.style.top);
+    const gw = parseFloat(guide.style.width);
+    const gh = parseFloat(guide.style.height);
+
+    // Guide rectangle in native-video-pixel coordinates
+    const sx = gl * scale + offX;
+    const sy = gt * scale + offY;
+    const sw = gw * scale;
+    const sh = gh * scale;
+
+    // Output canvas size at ~1200px on the long side
+    const BASE = 1200, r = f.ratio;
+    const ow = r >= 1 ? BASE : Math.round(BASE * r);
+    const oh = r >= 1 ? Math.round(BASE / r) : BASE;
+    offsc.width = ow; offsc.height = oh;
+    const ctx = offsc.getContext('2d');
 
     if(aiEnabled && segmentor){
-      // Render AI-replaced background at full resolution
-      // 1. Fill background color
-      ctx.fillStyle=bgColor; ctx.fillRect(0,0,ow,oh);
-      // 2. Draw person using the live seg-canvas (already composited)
-      //    Map the guide region from seg-canvas coordinates
-      const cvW=segCanvas.width, cvH=segCanvas.height;
-      const csx=gl*(cvW/dispW), csy=gt*(cvH/dispH);
-      const csw=gw*(cvW/dispW), csh=gh*(cvH/dispH);
-      ctx.drawImage(segCanvas,csx,csy,csw,csh,0,0,ow,oh);
+      // seg-canvas has the same native resolution as the video (set in startSegLoop).
+      // So video-pixel coords map 1:1 to seg-canvas coords (scale = 1).
+      // If for any reason they differ (e.g. browser resampled), compensate:
+      const cvScaleX = segCanvas.width  / vw;
+      const cvScaleY = segCanvas.height / vh;
+      const csx = sx * cvScaleX;
+      const csy = sy * cvScaleY;
+      const csw = sw * cvScaleX;
+      const csh = sh * cvScaleY;
+
+      // The seg-canvas already has the background color composited in.
+      // Just fill solid bg first (in case mask has gaps), then draw the composited canvas.
+      ctx.fillStyle = bgColor;
+      ctx.fillRect(0, 0, ow, oh);
+      ctx.drawImage(segCanvas, csx, csy, csw, csh, 0, 0, ow, oh);
     } else {
-      ctx.fillStyle=bgColor; ctx.fillRect(0,0,ow,oh);
-      ctx.drawImage(video,sx,sy,sw,sh,0,0,ow,oh);
+      ctx.fillStyle = bgColor;
+      ctx.fillRect(0, 0, ow, oh);
+      ctx.drawImage(video, sx, sy, sw, sh, 0, 0, ow, oh);
     }
 
-    const url=offsc.toDataURL('image/jpeg',0.94);
-    addPhoto(url,f.name,f.dim,ow+'×'+oh+'px');
+    const url = offsc.toDataURL('image/jpeg', 0.94);
+    addPhoto(url, f.name, f.dim, ow+'×'+oh+'px');
     scanLine.style.display='none'; btnSnap.disabled=false;
     statusEl.textContent='Foto capturada!';
-    setTimeout(()=>statusEl.textContent='Encaixe o rosto dentro das guias',2000);
-  },720);
+    setTimeout(()=>statusEl.textContent='Encaixe o rosto dentro das guias', 2000);
+  }, 720);
 }
 
 /* ── Gallery ── */
