@@ -161,6 +161,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
     <div id="cnt"></div>
   </div>
 </div>
+<div id="status">Pronto para começar</div>
 
 <div id="lightbox">
   <button class="close-lb" onclick="closeLightbox()">✕</button>
@@ -440,22 +441,28 @@ function stopSegLoop(){
 async function toggleCam(){
   if(stream){stopCam();return;}
   try{
-    stream = await navigator.mediaDevices.getUserMedia({
+    const constraints = {
       video:{
         facingMode:facing,
         width:{ideal:2560},
         height:{ideal:1920}
       }
-    });
+    };
+    stream = await navigator.mediaDevices.getUserMedia(constraints);
     video.srcObject = stream;
-    video.play();
-    ph.style.display='none';
-    btnCam.textContent='🎥 Parar';
-    btnFlip.style.display='block';
-    btnSnap.style.display='block';
-    posGuide();
+    video.onloadedmetadata = () => {
+      video.play();
+      ph.style.display='none';
+      video.style.display='block';
+      btnCam.textContent='🎥 Parar';
+      btnFlip.style.display='block';
+      if(btnSnap) btnSnap.style.display='block';
+      posGuide();
+      if(aiEnabled) startSegLoop();
+    };
   }catch(e){
-    alert('Câmera não disponível');
+    console.error('Erro ao abrir câmera:', e);
+    alert('Câmera não disponível: ' + e.message);
   }
 }
 
