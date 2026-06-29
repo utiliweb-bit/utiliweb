@@ -334,14 +334,17 @@
 
         function capturePhoto(){
             if(!stream){statusEl.textContent='Ative a câmera primeiro';return;}
-            const W=vfWrap.offsetWidth, H=vfWrap.offsetHeight;
-            const gx=parseFloat(guide.style.left), gy=parseFloat(guide.style.top);
-            const gw=guide.offsetWidth, gh=guide.offsetHeight;
-            const scaleX=video.videoWidth/W, scaleY=video.videoHeight/H;
-            const sx=gx*scaleX, sy=gy*scaleY, sw=gw*scaleX, sh=gh*scaleY;
+            const vfRect=vfWrap.getBoundingClientRect();
+            const guideRect=guide.getBoundingClientRect();
+            const scaleX=video.videoWidth/vfRect.width;
+            const scaleY=video.videoHeight/vfRect.height;
+            const sx=(guideRect.left-vfRect.left)*scaleX;
+            const sy=(guideRect.top-vfRect.top)*scaleY;
+            const sw=guideRect.width*scaleX;
+            const sh=guideRect.height*scaleY;
             const canvas=document.createElement('canvas');
-            canvas.width=sw;
-            canvas.height=sh;
+            canvas.width=Math.round(sw);
+            canvas.height=Math.round(sh);
             const ctx=canvas.getContext('2d');
             ctx.drawImage(video,sx,sy,sw,sh,0,0,sw,sh);
             const dataUrl=canvas.toDataURL('image/jpeg',0.95);
