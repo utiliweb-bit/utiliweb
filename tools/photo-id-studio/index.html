@@ -44,7 +44,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 #main{display:flex;flex-direction:column;overflow:hidden}
 #vf-wrap{position:relative;background:#070a10;flex:1;min-height:320px;display:flex;align-items:center;justify-content:center;overflow:hidden}
 #video{position:absolute;width:100%;height:100%;object-fit:cover;display:none}
-#seg-canvas{position:absolute;width:100%;height:100%;display:none}
+#seg-canvas{position:absolute;width:100%;height:100%;object-fit:cover;display:none}
 #ph-screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:var(--text3)}
 #ph-screen svg{opacity:.4}
 #ph-screen p{font-size:13px}
@@ -393,16 +393,13 @@ function onSegResults(res) {
   const d = imgData.data;
   const [br,bg2,bb] = hexToRgb(bgColor);
 
-  // Replace background pixels with chosen color; make person pixels transparent
+  // Apply anti-aliasing: use mask value as alpha for smooth blending
+  // This reduces artifacts and harsh edges
   for(let i=0;i<d.length;i+=4){
-    const m = d[i]; // 255=person, 0=background
-    if(m < 128){
-      // Background pixel → solid fill color
-      d[i]=br; d[i+1]=bg2; d[i+2]=bb; d[i+3]=255;
-    } else {
-      // Person pixel → transparent so video shows through
-      d[i+3]=0;
-    }
+    const m = d[i]; // 0-255 mask value
+    // Use mask value as alpha for smooth blending (removes harsh edges)
+    const alpha = m / 255;
+    d[i+3] = Math.round(alpha * 255);
   }
   segCtx.putImageData(imgData,0,0);
 
