@@ -503,8 +503,8 @@ function snap(){
     const sw = gw * scale;
     const sh = gh * scale;
 
-    // Output canvas size at ~1200px on the long side
-    const BASE = 1200, r = f.ratio;
+    // Output canvas size at ~2400px on the long side (increased for better resolution)
+    const BASE = 2400, r = f.ratio;
     const ow = r >= 1 ? BASE : Math.round(BASE * r);
     const oh = r >= 1 ? Math.round(BASE / r) : BASE;
     offsc.width = ow; offsc.height = oh;
