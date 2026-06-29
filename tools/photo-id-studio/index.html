@@ -273,13 +273,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 
 <canvas id="offscreen" style="display:none"></canvas>
 
-<script type="module">
-import { ImageSegmenter, FilesetResolver } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest";
-
-// Expose to window for the legacy event handlers in HTML
-window.ImageSegmenter = ImageSegmenter;
-window.FilesetResolver = FilesetResolver;
-</script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js" crossorigin="anonymous"></script>
 <script>
 const FORMATS = {
   '3x4':        {name:'Foto 3×4',      dim:'3 × 4 cm',   ratio:3/4,   bg:'#ffffff'},
@@ -357,13 +351,13 @@ function posGuide() {
 }
 
 /* ── AI segmentation ── */
-async function toggleAI() {
+function toggleAI() {
   aiEnabled = !aiEnabled;
   aiTrack.classList.toggle('on', aiEnabled);
   if(aiEnabled) {
     bgChipTxt.textContent = 'Fundo IA — '+bgLabel.toLowerCase();
     aiDot.classList.add('on');
-    if(!segmentor) await initSegmentor();
+    if(!segmentor) initSegmentor();
     else if(stream) startSegLoop();
   } else {
     bgChipTxt.textContent = 'Fundo '+bgLabel.toLowerCase();
@@ -373,27 +367,21 @@ async function toggleAI() {
   }
 }
 
-async function initSegmentor() {
-  statusEl.textContent = 'Carregando modelo de segmentacao...';
-  try {
-    const vision = await window.FilesetResolver.forVisionTasks(
-      'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm'
-    );
-    segmentor = await window.ImageSegmenter.createFromOptions(vision, {
-      baseOptions: {
-        modelAssetPath: 'https://storage.googleapis.com/mediapipe-assets/selfie_segmenter.tflite'
-      },
-      outputCategoryMask: true,
-      outputConfidenceMasks: false,
-      runningMode: 'VIDEO'
-    });
+function initSegmentor() {
+  statusEl.textContent = 'Carregando modelo de segmentação…';
+  segmentor = new SelfieSegmentation({locateFile: f =>
+    `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${f}`
+  });
+  segmentor.setOptions({modelSelection:1, selfieMode: facing==='user'});
+  segmentor.onResults(onSegResults);
+  segmentor.initialize().then(()=>{
     statusEl.textContent = 'Modelo pronto — encaixe o rosto nas guias';
     if(stream) startSegLoop();
-  } catch(e) {
-    console.error('Erro ao carregar modelo:', e);
-    statusEl.textContent = 'Modelo indisponivel — usando captura normal';
+  }).catch(e=>{
+    console.error(e);
+    statusEl.textContent = 'Modelo indisponível — usando captura normal';
     aiEnabled=false; aiTrack.classList.remove('on'); aiDot.classList.remove('on');
-  }
+  });
 }
 
 let maskCanvas = null, maskCtx = null;
@@ -405,24 +393,14 @@ function onSegResults(res) {
     maskCtx = maskCanvas.getContext('2d');
   }
   
-  // Get mask from new API format
-  let maskPixels;
-  if(res.categoryMask) {
-    maskCtx.filter = 'blur(2px)';
-    maskCtx.putImageData(res.categoryMask, 0, 0);
-    maskCtx.filter = 'none';
-    maskPixels = maskCtx.getImageData(0, 0, w, h).data;
-  } else if(res.segmentationMask) {
-    maskCtx.filter = 'blur(2px)';
-    maskCtx.drawImage(res.segmentationMask, 0, 0, w, h);
-    maskCtx.filter = 'none';
-    maskPixels = maskCtx.getImageData(0, 0, w, h).data;
-  } else {
-    return;
-  }
+  // Process mask with blur (stable API uses res.segmentationMask)
+  maskCtx.filter = 'blur(2px)';
+  maskCtx.drawImage(res.segmentationMask, 0, 0, w, h);
+  maskCtx.filter = 'none';
+  const maskPixels = maskCtx.getImageData(0, 0, w, h).data;
   
   // Process video frame
-  segCtx.drawImage(video, 0, 0, w, h);
+  segCtx.drawImage(res.image, 0, 0, w, h);
   const videoData = segCtx.getImageData(0, 0, w, h);
   const d = videoData.data;
   const [br, bg2, bb] = hexToRgb(bgColor);
@@ -479,9 +457,7 @@ function startSegLoop(){
   video.style.display='none';
   async function loop(){
     if(!aiEnabled||!stream) return;
-    const timestamp = performance.now();
-    const result = await segmentor.segmentForVideo(video, timestamp);
-    onSegResults(result);
+    await segmentor.send({image:video});
     animId=requestAnimationFrame(loop);
   }
   cancelAnimationFrame(animId);
