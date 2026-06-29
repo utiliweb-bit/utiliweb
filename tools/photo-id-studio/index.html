@@ -273,7 +273,13 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 
 <canvas id="offscreen" style="display:none"></canvas>
 
-<script src="https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision/vision_bundle.mjs" crossorigin="anonymous" type="module"></script>
+<script type="module">
+import { ImageSegmenter, FilesetResolver } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest";
+
+// Expose to window for the legacy event handlers in HTML
+window.ImageSegmenter = ImageSegmenter;
+window.FilesetResolver = FilesetResolver;
+</script>
 <script>
 const FORMATS = {
   '3x4':        {name:'Foto 3×4',      dim:'3 × 4 cm',   ratio:3/4,   bg:'#ffffff'},
@@ -351,13 +357,13 @@ function posGuide() {
 }
 
 /* ── AI segmentation ── */
-function toggleAI() {
+async function toggleAI() {
   aiEnabled = !aiEnabled;
   aiTrack.classList.toggle('on', aiEnabled);
   if(aiEnabled) {
     bgChipTxt.textContent = 'Fundo IA — '+bgLabel.toLowerCase();
     aiDot.classList.add('on');
-    if(!segmentor) initSegmentor();
+    if(!segmentor) await initSegmentor();
     else if(stream) startSegLoop();
   } else {
     bgChipTxt.textContent = 'Fundo '+bgLabel.toLowerCase();
@@ -370,10 +376,10 @@ function toggleAI() {
 async function initSegmentor() {
   statusEl.textContent = 'Carregando modelo de segmentacao...';
   try {
-    const vision = await window.MediaPipeVision.FilesetResolver.forVisionTasks(
+    const vision = await window.FilesetResolver.forVisionTasks(
       'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm'
     );
-    segmentor = await window.MediaPipeVision.ImageSegmenter.createFromOptions(vision, {
+    segmentor = await window.ImageSegmenter.createFromOptions(vision, {
       baseOptions: {
         modelAssetPath: 'https://storage.googleapis.com/mediapipe-assets/selfie_segmenter.tflite'
       },
