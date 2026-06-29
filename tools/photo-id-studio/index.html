@@ -1,28 +1,544 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-    <meta name="description" content="Crie fotos para documentos profissionais com remoção de fundo por IA. Suporte a passaporte, CNH, RG e mais." />
-    <title>Photo ID Studio — Fotos para Documentos com IA</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo ID Studio Pro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
 
-        /* Modal */
+        :root {
+            --bg: #0f1117;
+            --surface: #1a1d27;
+            --surface2: #222639;
+            --border: #2e3349;
+            --border2: #3d4260;
+            --text: #e8eaf0;
+            --text2: #8b90a8;
+            --text3: #555c7a;
+            --accent: #3d7fff;
+            --accent-dim: #1e3d6e;
+            --accent-text: #7eb4ff;
+            --green: #22c55e;
+            --green-dim: #14422a;
+            --green-text: #4ade80;
+            --radius: 10px;
+            --font: 'Inter', system-ui, sans-serif;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #shell {
+            width: 100%;
+            max-width: 1400px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0;
+            min-height: 100vh;
+        }
+
+        @media (min-width: 700px) {
+            #shell {
+                grid-template-columns: 300px 1fr;
+                min-height: 100vh;
+            }
+        }
+
+        #sidebar {
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        #logo {
+            padding: 20px 20px 16px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #logo svg {
+            flex-shrink: 0;
+        }
+
+        #logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        #logo-text strong {
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+        }
+
+        #logo-text span {
+            font-size: 11px;
+            color: var(--text2);
+            margin-top: 1px;
+        }
+
+        .badge-free {
+            background: var(--green-dim);
+            color: var(--green-text);
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 7px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-left: auto;
+            flex-shrink: 0;
+        }
+
+        #fmt-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px 8px;
+        }
+
+        #fmt-list::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        #fmt-list::-webkit-scrollbar-thumb {
+            background: var(--border2);
+            border-radius: 4px;
+        }
+
+        .fmt-group-label {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--text3);
+            padding: 10px 10px 6px;
+        }
+
+        .fmt-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.12s;
+            user-select: none;
+        }
+
+        .fmt-item:hover {
+            background: var(--surface2);
+        }
+
+        .fmt-item.active {
+            background: var(--accent-dim);
+        }
+
+        .fmt-item.active .fmt-item-name {
+            color: var(--accent-text);
+        }
+
+        .fmt-item.active .fmt-item-dim {
+            color: var(--accent-text);
+            opacity: 0.7;
+        }
+
+        .fmt-thumb {
+            width: 32px;
+            height: 40px;
+            border-radius: 4px;
+            border: 1.5px solid var(--border2);
+            background: var(--surface2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+            color: var(--text3);
+            flex-shrink: 0;
+        }
+
+        .fmt-item.active .fmt-thumb {
+            border-color: var(--accent);
+            background: var(--accent-dim);
+        }
+
+        .fmt-item-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .fmt-item-name {
+            font-size: 13px;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .fmt-item-dim {
+            font-size: 11px;
+            color: var(--text2);
+            margin-top: 1px;
+        }
+
+        #main {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        #vf-wrap {
+            position: relative;
+            background: #070a10;
+            flex: 1;
+            min-height: 320px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        #video {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        #ph-screen {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            color: var(--text3);
+        }
+
+        #ph-screen svg {
+            opacity: 0.4;
+        }
+
+        #ph-screen p {
+            font-size: 13px;
+        }
+
+        #guide {
+            position: absolute;
+            border: 2px solid rgba(61, 127, 255, 0.3);
+            border-radius: 8px;
+            pointer-events: none;
+        }
+
+        #scan-line {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #3d7fff, transparent);
+            animation: scan 2s infinite;
+        }
+
+        @keyframes scan {
+            0% { top: 0; }
+            100% { top: 100%; }
+        }
+
+        #toolbar {
+            display: flex;
+            gap: 8px;
+            padding: 12px;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            flex-wrap: wrap;
+        }
+
+        .toolbar-group {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .toolbar-group:not(:last-child) {
+            border-right: 1px solid var(--border2);
+            padding-right: 8px;
+        }
+
+        #bg-chip, #fmt-chip, #ai-track {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.12s;
+            user-select: none;
+        }
+
+        #bg-chip:hover, #fmt-chip:hover, #ai-track:hover {
+            background: var(--border2);
+        }
+
+        #bg-chip.active, #fmt-chip.active, #ai-track.active {
+            background: var(--accent-dim);
+            border-color: var(--accent);
+            color: var(--accent-text);
+        }
+
+        #ai-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--text3);
+            transition: background 0.12s;
+        }
+
+        #ai-track.on #ai-dot {
+            background: var(--green);
+        }
+
+        .bg-swatch {
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border 0.12s;
+        }
+
+        .bg-swatch.active {
+            border-color: var(--accent);
+        }
+
+        #bg-menu {
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 8px;
+            display: none;
+            gap: 8px;
+            flex-wrap: wrap;
+            z-index: 100;
+            margin-bottom: 8px;
+            min-width: 200px;
+        }
+
+        #bg-chip.active ~ #bg-menu {
+            display: flex;
+        }
+
+        #photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 8px;
+            padding: 12px;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .photo-item {
+            position: relative;
+            aspect-ratio: 3/4;
+            border-radius: 6px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border 0.12s;
+        }
+
+        .photo-item:hover {
+            border-color: var(--accent);
+        }
+
+        .photo-item.active {
+            border-color: var(--green);
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-item .delete-btn {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 20px;
+            height: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            border: none;
+            color: #fff;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+            display: none;
+        }
+
+        .photo-item:hover .delete-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #lightbox {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 16px;
+            padding: 20px;
+        }
+
+        #lightbox.active {
+            display: flex;
+        }
+
+        #lb {
+            position: relative;
+            max-width: 90vw;
+            max-height: 80vh;
+            background: var(--surface);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #lb-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            max-height: 60vh;
+        }
+
+        #lb-meta {
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        #lb-meta button {
+            padding: 8px 16px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        #lb-meta button:hover {
+            opacity: 0.9;
+        }
+
+        .close-lb {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 32px;
+            height: 32px;
+            background: rgba(0, 0, 0, 0.5);
+            border: none;
+            color: #fff;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            z-index: 10;
+        }
+
+        #cnt {
+            font-size: 12px;
+            color: var(--text2);
+            padding: 12px;
+            text-align: center;
+        }
+
+        #status {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-size: 12px;
+            max-width: 300px;
+            z-index: 50;
+        }
+
+        #btn-cam, #btn-flip, #btn-snap {
+            padding: 8px 16px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            transition: opacity 0.12s;
+        }
+
+        #btn-cam:hover, #btn-flip:hover, #btn-snap:hover {
+            opacity: 0.9;
+        }
+
+        #btn-snap {
+            background: var(--green);
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .vf-controls {
+            display: flex;
+            gap: 8px;
+            padding: 12px;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+        }
+
+        /* Modal de câmera */
         .modal {
             display: none;
             position: fixed;
             inset: 0;
-            z-index: 50;
-            background-color: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(4px);
+            z-index: 300;
+            background-color: rgba(0, 0, 0, 0.95);
             align-items: center;
             justify-content: center;
         }
@@ -34,12 +550,12 @@
         .modal-content {
             position: relative;
             width: 100%;
-            max-width: 448px;
+            max-width: 500px;
             margin: 1rem;
-            border-radius: 16px;
-            background-color: var(--card);
+            border-radius: 12px;
+            background-color: var(--surface);
             overflow: hidden;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border);
         }
 
         .modal-header {
@@ -56,7 +572,7 @@
             gap: 0.5rem;
             font-size: 14px;
             font-weight: 600;
-            color: var(--foreground);
+            color: var(--text);
         }
 
         .modal-close {
@@ -70,24 +586,25 @@
             border: none;
             cursor: pointer;
             transition: background-color 150ms ease-out;
+            color: var(--text);
         }
 
         .modal-close:hover {
-            background-color: var(--secondary);
+            background-color: var(--surface2);
         }
 
         .modal-body {
             padding: 1rem;
-            space: 1rem;
         }
 
         .camera-preview {
             position: relative;
             width: 100%;
             aspect-ratio: 16 / 9;
-            border-radius: 12px;
+            border-radius: 8px;
             overflow: hidden;
             background-color: #000;
+            margin-bottom: 1rem;
         }
 
         .camera-preview video,
@@ -124,37 +641,6 @@
             to { transform: rotate(360deg); }
         }
 
-        .camera-error {
-            border-radius: 8px;
-            background-color: rgb(254, 242, 242);
-            border: 1px solid rgb(254, 205, 211);
-            padding: 0.75rem;
-            display: flex;
-            align-items: flex-start;
-            gap: 0.625rem;
-        }
-
-        .camera-error-icon {
-            color: rgb(220, 38, 38);
-            flex-shrink: 0;
-            margin-top: 2px;
-        }
-
-        .camera-error-content {
-            space: 0.25rem;
-        }
-
-        .camera-error-title {
-            font-size: 12px;
-            font-weight: 600;
-            color: rgb(153, 27, 27);
-        }
-
-        .camera-error-text {
-            font-size: 12px;
-            color: rgb(153, 27, 27);
-        }
-
         .modal-footer {
             display: flex;
             gap: 0.5rem;
@@ -162,412 +648,160 @@
             border-top: 1px solid var(--border);
         }
 
-        .btn {
+        .btn-modal {
             flex: 1;
             padding: 0.625rem 1rem;
-            border-radius: 8px;
+            border-radius: 6px;
             border: 1px solid var(--border);
-            background-color: var(--card);
-            color: var(--foreground);
+            background-color: var(--surface2);
+            color: var(--text);
             font-size: 14px;
             font-weight: 500;
             cursor: pointer;
             transition: all 150ms ease-out;
         }
 
-        .btn:hover {
-            background-color: var(--secondary);
+        .btn-modal:hover {
+            background-color: var(--border2);
         }
 
-        .btn-primary {
-            background-color: var(--primary);
-            color: var(--primary-foreground);
-            border-color: var(--primary);
+        .btn-modal-primary {
+            background-color: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
         }
 
-        .btn-primary:hover {
-            background-color: oklch(0.38 0.20 255);
+        .btn-modal-primary:hover {
+            background-color: #2d5fd9;
         }
 
-        .btn:disabled {
+        .btn-modal:disabled {
             opacity: 0.5;
             cursor: not-allowed;
-        }
-
-        .tip-card {
-            border-radius: 8px;
-            background-color: rgb(219, 234, 254);
-            border: 1px solid rgb(147, 197, 253);
-            padding: 0.625rem;
-            font-size: 12px;
-            color: rgb(30, 58, 138);
-        }
-
-        :root {
-            --primary: oklch(0.45 0.18 255);
-            --primary-foreground: oklch(0.98 0.005 255);
-            --background: oklch(0.985 0.003 240);
-            --foreground: oklch(0.18 0.015 260);
-            --card: oklch(1 0 0);
-            --border: oklch(0.88 0.008 255);
-            --muted: oklch(0.95 0.005 240);
-            --muted-foreground: oklch(0.55 0.02 255);
-            --secondary: oklch(0.94 0.008 255);
-            --destructive: oklch(0.577 0.245 27.325);
-            --success: oklch(0.55 0.15 145);
-        }
-
-        body {
-            font-family: 'DM Sans', system-ui, sans-serif;
-            background-color: var(--background);
-            color: var(--foreground);
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        header {
-            position: sticky;
-            top: 0;
-            z-index: 40;
-            border-bottom: 1px solid var(--border);
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(12px);
-            height: 56px;
-            display: flex;
-            align-items: center;
-        }
-
-        .header-content {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-            padding: 0 1.5rem;
-        }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 0.625rem;
-        }
-
-        .header-logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            background-color: var(--primary);
-            color: var(--primary-foreground);
-        }
-
-        .header-title {
-            font-size: 14px;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-        }
-
-        .header-subtitle {
-            display: none;
-            font-size: 12px;
-            color: var(--muted-foreground);
-            margin-left: 0.5rem;
-        }
-
-        @media (min-width: 640px) {
-            .header-subtitle {
-                display: inline;
-            }
-        }
-
-        .status-badge {
-            display: flex;
-            align-items: center;
-            gap: 0.375rem;
-            border-radius: 9999px;
-            background-color: rgb(240, 253, 244);
-            border: 1px solid rgb(187, 247, 208);
-            padding: 0.25rem 0.625rem;
-            font-size: 12px;
-            font-weight: 500;
-            color: rgb(20, 83, 45);
-        }
-
-        .status-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background-color: rgb(34, 197, 94);
-            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        main {
-            flex: 1;
-            padding: 2rem 0;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 2rem;
-            align-items: start;
-        }
-
-        @media (min-width: 1024px) {
-            .grid {
-                grid-template-columns: 380px 1fr;
-            }
-        }
-
-        .upload-section {
-            space: 0.75rem;
-        }
-
-        .section-title {
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--muted-foreground);
-            margin-bottom: 0.75rem;
-        }
-
-        .upload-zone {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
-            border: 2px dashed var(--border);
-            border-radius: 12px;
-            padding: 2.5rem;
-            text-align: center;
-            cursor: pointer;
-            transition: all 200ms cubic-bezier(0.23, 1, 0.32, 1);
-        }
-
-        .upload-zone:hover {
-            border-color: var(--primary);
-            background-color: rgb(245, 247, 255);
-        }
-
-        .upload-zone.drag-over {
-            border-color: var(--primary);
-            background-color: rgb(245, 247, 255);
-            transform: scale(1.01);
-        }
-
-        .upload-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 64px;
-            height: 64px;
-            border-radius: 16px;
-            background-color: var(--secondary);
-            color: var(--primary);
-        }
-
-        .upload-text {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--foreground);
-        }
-
-        .upload-hint {
-            font-size: 14px;
-            color: var(--muted-foreground);
-        }
-
-        input[type="file"] {
-            display: none;
-        }
-
-        .camera-btn {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            border: 1px solid var(--border);
-            background-color: var(--secondary);
-            padding: 0.625rem 1rem;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 150ms ease-out;
-            color: var(--foreground);
-        }
-
-        .camera-btn:hover {
-            border-color: var(--primary);
-            background-color: rgb(245, 247, 255);
-        }
-
-        .info-card {
-            border: 1px solid var(--border);
-            background-color: var(--card);
-            border-radius: 12px;
-            padding: 1rem;
-            space: 0.75rem;
-        }
-
-        .info-title {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--foreground);
-            margin-bottom: 0.75rem;
-        }
-
-        .info-list {
-            space: 0.5rem;
-        }
-
-        .info-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.625rem;
-            font-size: 12px;
-            color: var(--muted-foreground);
-        }
-
-        .info-number {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            background-color: rgb(245, 247, 255);
-            color: var(--primary);
-            font-weight: 700;
-            font-size: 10px;
-            flex-shrink: 0;
-            margin-top: 2px;
-        }
-
-        .warning-card {
-            border: 1px solid rgb(253, 224, 71);
-            background-color: rgb(255, 251, 235);
-            border-radius: 12px;
-            padding: 0.75rem;
-            display: flex;
-            align-items: flex-start;
-            gap: 0.625rem;
-        }
-
-        .warning-icon {
-            color: rgb(180, 83, 9);
-            flex-shrink: 0;
-            margin-top: 2px;
-        }
-
-        .warning-content {
-            space: 0.125rem;
-        }
-
-        .warning-title {
-            font-size: 12px;
-            font-weight: 600;
-            color: rgb(120, 53, 15);
-        }
-
-        .warning-text {
-            font-size: 12px;
-            color: rgb(120, 53, 15);
-        }
-
-        .warning-code {
-            font-family: 'JetBrains Mono', monospace;
-            background-color: rgb(254, 243, 199);
-            padding: 0.125rem 0.25rem;
-            border-radius: 3px;
-        }
-
-        .preview-area {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border: 2px dashed var(--border);
-            border-radius: 16px;
-            padding: 3rem;
-            text-align: center;
-            min-height: 480px;
-        }
-
-        .preview-image {
-            width: 96px;
-            height: 96px;
-            border-radius: 16px;
-            margin-bottom: 1.5rem;
-            object-fit: cover;
-        }
-
-        .preview-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--foreground);
-            margin-bottom: 0.5rem;
-        }
-
-        .preview-text {
-            font-size: 14px;
-            color: var(--muted-foreground);
-            max-width: 280px;
-        }
-
-        .powered-by {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 12px;
-            color: var(--muted-foreground);
-            margin-top: 1.5rem;
-        }
-
-        footer {
-            border-top: 1px solid var(--border);
-            background-color: var(--card);
-            margin-top: auto;
-            height: 48px;
-            display: flex;
-            align-items: center;
-        }
-
-        .footer-content {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-            padding: 0 1.5rem;
-            font-size: 12px;
-            color: var(--muted-foreground);
-        }
-
-        .footer-mono {
-            font-family: 'JetBrains Mono', monospace;
         }
     </style>
 </head>
 <body>
-    <!-- Camera Modal -->
+    <div id="shell">
+        <div id="sidebar">
+            <div id="logo">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <rect width="20" height="20" rx="4" fill="#3d7fff"/>
+                    <circle cx="10" cy="9" r="2.5" fill="white"/>
+                    <path d="M5 14c0-2.21 2.24-4 5-4s5 1.79 5 4" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                <div id="logo-text">
+                    <strong>Photo ID</strong>
+                    <span>Studio Pro</span>
+                </div>
+                <div class="badge-free">Free</div>
+            </div>
+            <div id="fmt-list">
+                <div class="fmt-group-label">Documentos</div>
+                <div class="fmt-item active" onclick="setFmt('3x4', this)">
+                    <div class="fmt-thumb">3×4</div>
+                    <div class="fmt-item-info">
+                        <div class="fmt-item-name">Foto 3×4</div>
+                        <div class="fmt-item-dim">3 × 4 cm</div>
+                    </div>
+                </div>
+                <div class="fmt-item" onclick="setFmt('passport_br', this)">
+                    <div class="fmt-thumb">5×7</div>
+                    <div class="fmt-item-info">
+                        <div class="fmt-item-name">Passaporte BR</div>
+                        <div class="fmt-item-dim">5 × 7 cm</div>
+                    </div>
+                </div>
+                <div class="fmt-item" onclick="setFmt('cnh', this)">
+                    <div class="fmt-thumb">3×4</div>
+                    <div class="fmt-item-info">
+                        <div class="fmt-item-name">CNH</div>
+                        <div class="fmt-item-dim">3 × 4 cm</div>
+                    </div>
+                </div>
+                <div class="fmt-group-label" style="margin-top: 16px">Internacionais</div>
+                <div class="fmt-item" onclick="setFmt('passport_jp', this)">
+                    <div class="fmt-thumb">35×45</div>
+                    <div class="fmt-item-info">
+                        <div class="fmt-item-name">Passaporte JP</div>
+                        <div class="fmt-item-dim">35 × 45 mm</div>
+                    </div>
+                </div>
+                <div class="fmt-item" onclick="setFmt('us_passport', this)">
+                    <div class="fmt-thumb">2×2</div>
+                    <div class="fmt-item-info">
+                        <div class="fmt-item-name">US Passport</div>
+                        <div class="fmt-item-dim">2 × 2 inch</div>
+                    </div>
+                </div>
+                <div class="fmt-item" onclick="setFmt('uk_passport', this)">
+                    <div class="fmt-thumb">35×45</div>
+                    <div class="fmt-item-info">
+                        <div class="fmt-item-name">UK Passport</div>
+                        <div class="fmt-item-dim">35 × 45 mm</div>
+                    </div>
+                </div>
+                <div class="fmt-item" onclick="setFmt('eu_id', this)">
+                    <div class="fmt-thumb">35×45</div>
+                    <div class="fmt-item-info">
+                        <div class="fmt-item-name">EU ID Card</div>
+                        <div class="fmt-item-dim">35 × 45 mm</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="main">
+            <div id="vf-wrap">
+                <video id="video" playsinline></video>
+                <div id="ph-screen">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <rect x="3" y="3" width="18" height="18" rx="2"/>
+                        <circle cx="8.5" cy="8.5" r="1.5"/>
+                        <path d="M21 15l-5-5L5 21"/>
+                    </svg>
+                    <p>Clique em "Câmera" para começar</p>
+                </div>
+                <div id="guide"></div>
+                <div id="scan-line"></div>
+            </div>
+
+            <div id="toolbar">
+                <div class="toolbar-group">
+                    <button id="btn-cam" onclick="toggleCam()">📷 Câmera</button>
+                    <button id="btn-flip" onclick="flipCam()" style="display: none">🔄 Virar</button>
+                </div>
+                <div class="toolbar-group">
+                    <div id="fmt-chip" onclick="this.classList.toggle('active')">
+                        <span>📐</span>
+                        <span id="fmt-chip-text">Foto 3×4</span>
+                    </div>
+                </div>
+                <div class="toolbar-group">
+                    <div id="bg-chip" onclick="this.classList.toggle('active')">
+                        <div class="bg-swatch" style="background: #ffffff" onclick="setBg('#ffffff', 'Branco', this); event.stopPropagation()"></div>
+                        <span id="bg-chip-text">Fundo branco</span>
+                    </div>
+                    <div id="bg-menu">
+                        <div class="bg-swatch" style="background: #ffffff" onclick="setBg('#ffffff', 'Branco', this)"></div>
+                        <div class="bg-swatch" style="background: #cccccc" onclick="setBg('#cccccc', 'Cinza', this)"></div>
+                        <div class="bg-swatch" style="background: #0066ff" onclick="setBg('#0066ff', 'Azul', this)"></div>
+                        <div class="bg-swatch" style="background: #ff0000" onclick="setBg('#ff0000', 'Vermelho', this)"></div>
+                        <div class="bg-swatch" style="background: #00aa00" onclick="setBg('#00aa00', 'Verde', this)"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="photo-grid">
+                <div style="grid-column: 1/-1; text-align: center; color: var(--text2); padding: 40px 20px">
+                    <p>Tire uma foto para começar</p>
+                </div>
+            </div>
+            <div id="cnt"></div>
+        </div>
+    </div>
+
+    <!-- Modal de câmera -->
     <div class="modal" id="cameraModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -582,123 +816,66 @@
                         <div class="spinner"></div>
                     </div>
                 </div>
-                <div id="cameraErrorContainer"></div>
-                <div class="tip-card">💡 <strong>Dica:</strong> Posicione seu rosto no centro com boa iluminação.</div>
             </div>
             <div class="modal-footer">
-                <button class="btn" id="cameraCancelBtn">Cancelar</button>
-                <button class="btn btn-primary" id="cameraCaptureBtn">📷 Capturar</button>
+                <button class="btn-modal" id="cameraCancelBtn">Cancelar</button>
+                <button class="btn-modal btn-modal-primary" id="cameraCaptureBtn">📷 Capturar</button>
             </div>
         </div>
     </div>
 
-    <div style="display: flex; flex-direction: column; min-height: 100vh;">
-        <!-- Header -->
-        <header>
-            <div class="header-content">
-                <div class="header-left">
-                    <div class="header-logo">📷</div>
-                    <div>
-                        <span class="header-title">Photo ID Studio</span>
-                        <span class="header-subtitle">Fotos para documentos com IA</span>
-                    </div>
-                </div>
-                <div class="status-badge">
-                    <div class="status-dot"></div>
-                    <span>BiRefNet ativo</span>
-                </div>
+    <!-- Lightbox -->
+    <div id="lightbox">
+        <button class="close-lb" onclick="closeLightbox()">✕</button>
+        <div id="lb">
+            <img id="lb-img" src="">
+            <div id="lb-meta">
+                <span id="lb-meta-text"></span>
+                <button onclick="downloadPhoto()">⬇️ Baixar</button>
             </div>
-        </header>
-
-        <!-- Main Content -->
-        <main style="flex: 1;">
-            <div class="container">
-                <div class="grid">
-                    <!-- Left Column -->
-                    <div>
-                        <div class="upload-section">
-                            <div class="section-title">01 — Upload</div>
-                            
-                            <div class="upload-zone" id="uploadZone">
-                                <div class="upload-icon">⬆️</div>
-                                <div>
-                                    <div class="upload-text">Arraste sua foto ou clique para selecionar</div>
-                                    <div class="upload-hint">JPG, PNG, WebP ou HEIC · Máximo 20MB</div>
-                                </div>
-                            </div>
-
-                            <button class="camera-btn" id="cameraBtn">
-                                <span>📱</span>
-                                <span>Tirar foto com câmera</span>
-                            </button>
-                        </div>
-
-                        <div class="info-card">
-                            <div class="info-title">ℹ️ Como funciona</div>
-                            <div class="info-list">
-                                <div class="info-item">
-                                    <div class="info-number">1</div>
-                                    <span>Envie uma foto de rosto (JPG, PNG ou WebP)</span>
-                                </div>
-                                <div class="info-item">
-                                    <div class="info-number">2</div>
-                                    <span>A IA remove o fundo automaticamente com BiRefNet</span>
-                                </div>
-                                <div class="info-item">
-                                    <div class="info-number">3</div>
-                                    <span>Escolha a cor de fundo do seu documento</span>
-                                </div>
-                                <div class="info-item">
-                                    <div class="info-number">4</div>
-                                    <span>Baixe a foto pronta para impressão</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="warning-card">
-                            <div class="warning-icon">⚠️</div>
-                            <div class="warning-content">
-                                <div class="warning-title">Backend necessário</div>
-                                <div class="warning-text">
-                                    O processamento requer o servidor Flask rodando em <span class="warning-code">localhost:5000</span>.
-                                    Configure a variável <span class="warning-code">VITE_BACKEND_URL</span> para outro endereço se necessário.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Right Column -->
-                    <div>
-                        <div class="preview-area">
-                            <div class="preview-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
-                            <div class="preview-title">Nenhuma foto enviada</div>
-                            <div class="preview-text">Envie uma foto de rosto para começar o processamento com IA</div>
-                            <div class="powered-by">
-                                <span>✨</span>
-                                <span>Powered by BiRefNet — remoção de fundo de alta precisão</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-
-        <!-- Footer -->
-        <footer>
-            <div class="footer-content">
-                <span>Photo ID Studio · Remoção de fundo por IA com BiRefNet</span>
-                <span class="footer-mono">v1.0.0</span>
-            </div>
-        </footer>
+        </div>
     </div>
 
+    <div id="status">Pronto para começar</div>
+
+    <canvas id="offscreen" style="display: none"></canvas>
+
     <script>
-        // Configuração do backend
+        // Configuração
         const BACKEND_URL = localStorage.getItem('photoIdBackendUrl') || 'http://localhost:5000';
+        const FORMATS = {
+            '3x4': { name: 'Foto 3×4', dim: '3 × 4 cm', ratio: 3/4, bg: '#ffffff' },
+            'passport_br': { name: 'Passaporte BR', dim: '5 × 7 cm', ratio: 5/7, bg: '#ffffff' },
+            'cnh': { name: 'CNH', dim: '3 × 4 cm', ratio: 3/4, bg: '#ffffff' },
+            'passport_jp': { name: 'Passaporte JP', dim: '35 × 45 mm', ratio: 35/45, bg: '#ffffff' },
+            'us_passport': { name: 'US Passport', dim: '2 × 2 inch', ratio: 1, bg: '#ffffff' },
+            'uk_passport': { name: 'UK Passport', dim: '35 × 45 mm', ratio: 35/45, bg: '#cccccc' },
+            'eu_id': { name: 'EU ID Card', dim: '35 × 45 mm', ratio: 35/45, bg: '#ffffff' }
+        };
+
+        // Estado
+        let cur = '3x4';
+        let stream = null;
+        let facing = 'user';
+        let bgColor = '#ffffff';
+        let bgLabel = 'Branco';
+        let photos = [];
+        let currentStream = null;
+        let capturedImage = null;
 
         // Elementos
-        const uploadZone = document.getElementById('uploadZone');
-        const cameraBtn = document.getElementById('cameraBtn');
+        const video = document.getElementById('video');
+        const ph = document.getElementById('ph-screen');
+        const guide = document.getElementById('guide');
+        const scanLine = document.getElementById('scan-line');
+        const bgChipTxt = document.getElementById('bg-chip-text');
+        const fmtChip = document.getElementById('fmt-chip');
+        const grid = document.getElementById('photo-grid');
+        const cntEl = document.getElementById('cnt');
+        const statusEl = document.getElementById('status');
+        const btnCam = document.getElementById('btn-cam');
+        const btnFlip = document.getElementById('btn-flip');
+        const vfWrap = document.getElementById('vf-wrap');
         const cameraModal = document.getElementById('cameraModal');
         const cameraVideo = document.getElementById('cameraVideo');
         const cameraCanvas = document.getElementById('cameraCanvas');
@@ -706,61 +883,112 @@
         const cameraCaptureBtn = document.getElementById('cameraCaptureBtn');
         const cameraCancelBtn = document.getElementById('cameraCancelBtn');
         const cameraModalClose = document.getElementById('cameraModalClose');
-        const cameraErrorContainer = document.getElementById('cameraErrorContainer');
 
-        const fileInput = document.createElement('input');
-        fileInput.type = 'file';
-        fileInput.accept = 'image/jpeg,image/png,image/webp,image/heic';
-
-        let currentStream = null;
-        let capturedImage = null;
-
-        // Upload zone
-        uploadZone.addEventListener('click', () => fileInput.click());
-        uploadZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadZone.classList.add('drag-over');
-        });
-        uploadZone.addEventListener('dragleave', () => {
-            uploadZone.classList.remove('drag-over');
-        });
-        uploadZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            uploadZone.classList.remove('drag-over');
-            const file = e.dataTransfer.files[0];
-            if (file) handleFileSelect(file);
-        });
-
-        fileInput.addEventListener('change', (e) => {
-            const file = e.target.files?.[0];
-            if (file) handleFileSelect(file);
-        });
-
-        function handleFileSelect(file) {
-            console.log('Arquivo selecionado:', file.name, file.size);
-            alert('Foto selecionada: ' + file.name + '\n\nNota: Implemente o processamento no seu site.');
+        // Funções
+        function setFmt(k, el) {
+            cur = k;
+            const f = FORMATS[k];
+            document.getElementById('fmt-chip-text').textContent = f.name;
+            bgColor = f.bg;
+            bgLabel = f.bg === '#ffffff' ? 'Branco' : f.bg === '#cccccc' ? 'Cinza' : 'Personalizado';
+            bgChipTxt.textContent = 'Fundo ' + bgLabel.toLowerCase();
+            document.querySelectorAll('.fmt-item').forEach(x => x.classList.remove('active'));
+            if (el) el.classList.add('active');
+            posGuide();
         }
 
-        // Camera Modal Functions
+        function setBg(color, label, el) {
+            bgColor = color;
+            bgLabel = label;
+            bgChipTxt.textContent = 'Fundo ' + label.toLowerCase();
+            document.querySelectorAll('.bg-swatch').forEach(x => x.classList.remove('active'));
+            if (el) el.classList.add('active');
+        }
+
+        function posGuide() {
+            const r = FORMATS[cur].ratio;
+            const W = vfWrap.offsetWidth, H = vfWrap.offsetHeight || 300;
+            const maxH = H * 0.82, maxW = W * 0.82;
+            let gw, gh;
+            if (r >= 1) {
+                gw = Math.min(maxW, maxH * r);
+                gh = gw / r;
+            } else {
+                gh = Math.min(maxH, maxW / r);
+                gw = gh * r;
+            }
+            guide.style.width = gw + 'px';
+            guide.style.height = gh + 'px';
+            guide.style.left = (W - gw) / 2 + 'px';
+            guide.style.top = (H - gh) / 2 + 'px';
+        }
+
+        function toggleCam() {
+            if (stream) {
+                stopCam();
+            } else {
+                openCameraModal();
+            }
+        }
+
+        function flipCam() {
+            if (stream) {
+                stopCam();
+                facing = facing === 'user' ? 'environment' : 'user';
+                startCam();
+            }
+        }
+
+        async function startCam() {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: facing },
+                    audio: false
+                });
+                video.srcObject = stream;
+                video.style.display = 'block';
+                ph.style.display = 'none';
+                btnCam.textContent = '⏹️ Parar';
+                btnFlip.style.display = 'inline-block';
+                posGuide();
+                statusEl.textContent = 'Câmera ativa';
+            } catch (err) {
+                statusEl.textContent = 'Erro ao acessar câmera: ' + err.message;
+            }
+        }
+
+        function stopCam() {
+            if (stream) {
+                stream.getTracks().forEach(t => t.stop());
+                stream = null;
+            }
+            video.srcObject = null;
+            video.style.display = 'none';
+            ph.style.display = 'flex';
+            btnCam.textContent = '📷 Câmera';
+            btnFlip.style.display = 'none';
+            statusEl.textContent = 'Câmera desligada';
+        }
+
+        // Camera Modal
         function openCameraModal() {
             cameraModal.classList.add('active');
-            startCamera();
+            startCameraCapture();
         }
 
         function closeCameraModal() {
             cameraModal.classList.remove('active');
-            stopCamera();
+            stopCameraCapture();
             capturedImage = null;
         }
 
-        async function startCamera() {
-            cameraErrorContainer.innerHTML = '';
+        async function startCameraCapture() {
             cameraLoading.style.display = 'flex';
-            cameraCaptureBtn.textContent = '📷 Capturar';
             cameraCaptureBtn.disabled = false;
+            cameraCaptureBtn.textContent = '📷 Capturar';
 
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({
+                const mediaStream = await navigator.mediaDevices.getUserMedia({
                     video: {
                         facingMode: 'user',
                         width: { ideal: 1920 },
@@ -769,8 +997,8 @@
                     audio: false
                 });
 
-                currentStream = stream;
-                cameraVideo.srcObject = stream;
+                currentStream = mediaStream;
+                cameraVideo.srcObject = mediaStream;
                 cameraVideo.style.display = 'block';
 
                 cameraVideo.onloadedmetadata = () => {
@@ -779,32 +1007,12 @@
                 };
             } catch (err) {
                 cameraLoading.style.display = 'none';
-                let errorMsg = 'Erro ao acessar a câmera';
-
-                if (err.name === 'NotAllowedError') {
-                    errorMsg = 'Permissão de câmera negada. Verifique as configurações do seu navegador.';
-                } else if (err.name === 'NotFoundError') {
-                    errorMsg = 'Nenhuma câmera encontrada no dispositivo.';
-                } else if (err.name === 'NotReadableError') {
-                    errorMsg = 'A câmera está sendo usada por outro aplicativo.';
-                } else if (err.name === 'SecurityError') {
-                    errorMsg = 'Acesso à câmera bloqueado por razões de segurança (HTTPS necessário).';
-                }
-
-                cameraErrorContainer.innerHTML = `
-                    <div class="camera-error">
-                        <div class="camera-error-icon">⚠️</div>
-                        <div class="camera-error-content">
-                            <div class="camera-error-title">Erro ao acessar câmera</div>
-                            <div class="camera-error-text">${errorMsg}</div>
-                        </div>
-                    </div>
-                `;
                 cameraCaptureBtn.disabled = true;
+                statusEl.textContent = 'Erro ao acessar câmera: ' + err.message;
             }
         }
 
-        function stopCamera() {
+        function stopCameraCapture() {
             if (currentStream) {
                 currentStream.getTracks().forEach(track => track.stop());
                 currentStream = null;
@@ -827,16 +1035,6 @@
             });
         }
 
-        // Camera button
-        cameraBtn.addEventListener('click', () => {
-            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                openCameraModal();
-            } else {
-                alert('Câmera não suportada neste navegador.');
-            }
-        });
-
-        // Camera modal buttons
         cameraCaptureBtn.addEventListener('click', async () => {
             cameraCaptureBtn.disabled = true;
             cameraCaptureBtn.textContent = '⏳ Capturando...';
@@ -856,12 +1054,12 @@
 
                 cameraCaptureBtn.onclick = () => {
                     const file = new File([blob], 'foto-capturada.jpg', { type: 'image/jpeg' });
-                    handleFileSelect(file);
+                    handlePhotoCapture(file);
                     closeCameraModal();
                 };
             } catch (err) {
                 console.error('Erro ao capturar foto:', err);
-                alert('Erro ao capturar foto');
+                statusEl.textContent = 'Erro ao capturar foto';
                 cameraCaptureBtn.disabled = false;
                 cameraCaptureBtn.textContent = '📷 Capturar';
             }
@@ -869,7 +1067,6 @@
 
         cameraCancelBtn.addEventListener('click', () => {
             if (cameraCancelBtn.textContent === 'Refazer') {
-                // Limpar imagem capturada
                 const img = cameraVideo.parentNode.querySelector('img');
                 if (img) img.remove();
                 cameraVideo.style.display = 'block';
@@ -887,15 +1084,68 @@
             if (e.target === cameraModal) closeCameraModal();
         });
 
-        // Verificar disponibilidade do backend
-        window.addEventListener('load', async () => {
-            try {
-                const response = await fetch(BACKEND_URL + '/', { mode: 'no-cors' });
-                console.log('Backend conectado:', BACKEND_URL);
-            } catch (err) {
-                console.warn('Backend não disponível em', BACKEND_URL);
+        function handlePhotoCapture(file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const dataUrl = e.target.result;
+                const photo = {
+                    id: Date.now(),
+                    src: dataUrl,
+                    processed: false
+                };
+                photos.unshift(photo);
+                renderPhotos();
+                statusEl.textContent = 'Foto capturada com sucesso';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function renderPhotos() {
+            if (photos.length === 0) {
+                grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text2); padding: 40px 20px"><p>Tire uma foto para começar</p></div>';
+                cntEl.textContent = '';
+                return;
             }
-        });
+
+            grid.innerHTML = photos.map(p => `
+                <div class="photo-item" onclick="openLightbox(${p.id})">
+                    <img src="${p.src}" alt="Foto">
+                    <button class="delete-btn" onclick="deletePhoto(${p.id}, event)">🗑️</button>
+                </div>
+            `).join('');
+
+            cntEl.textContent = `${photos.length} foto${photos.length > 1 ? 's' : ''} capturada${photos.length > 1 ? 's' : ''}`;
+        }
+
+        function deletePhoto(id, e) {
+            e.stopPropagation();
+            photos = photos.filter(p => p.id !== id);
+            renderPhotos();
+        }
+
+        function openLightbox(id) {
+            const photo = photos.find(p => p.id === id);
+            if (photo) {
+                document.getElementById('lb-img').src = photo.src;
+                document.getElementById('lb-meta-text').textContent = `Foto ${FORMATS[cur].name}`;
+                document.getElementById('lightbox').classList.add('active');
+            }
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+        }
+
+        function downloadPhoto() {
+            const link = document.createElement('a');
+            link.href = document.getElementById('lb-img').src;
+            link.download = `photo-id-${Date.now()}.jpg`;
+            link.click();
+        }
+
+        // Inicializar
+        posGuide();
+        window.addEventListener('resize', posGuide);
     </script>
 </body>
 </html>
