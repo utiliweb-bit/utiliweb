@@ -273,7 +273,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 
 <canvas id="offscreen" style="display:none"></canvas>
 
-<script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation@0.1/selfie_segmentation.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision/vision_bundle.mjs" crossorigin="anonymous" type="module"></script>
 <script>
 const FORMATS = {
   '3x4':        {name:'Foto 3×4',      dim:'3 × 4 cm',   ratio:3/4,   bg:'#ffffff'},
@@ -367,20 +367,27 @@ function toggleAI() {
   }
 }
 
-function initSegmentor() {
-  statusEl.textContent = 'Carregando modelo de segmentação…';
-  segmentor = new SelfieSegmentation({locateFile: f =>
-    `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation@0.1/${f}`
-  });
-  segmentor.setOptions({modelSelection:1, selfieMode: facing==='user'});
-  segmentor.onResults(onSegResults);
-  segmentor.initialize().then(()=>{
+async function initSegmentor() {
+  statusEl.textContent = 'Carregando modelo de segmentacao...';
+  try {
+    const vision = await window.MediaPipeVision.FilesetResolver.forVisionTasks(
+      'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm'
+    );
+    segmentor = await window.MediaPipeVision.ImageSegmenter.createFromOptions(vision, {
+      baseOptions: {
+        modelAssetPath: 'https://storage.googleapis.com/mediapipe-assets/selfie_segmenter.tflite'
+      },
+      outputCategoryMask: true,
+      outputConfidenceMasks: false,
+      runningMode: 'VIDEO'
+    });
     statusEl.textContent = 'Modelo pronto — encaixe o rosto nas guias';
     if(stream) startSegLoop();
-  }).catch(()=>{
-    statusEl.textContent = 'Modelo indisponível — usando captura normal';
+  } catch(e) {
+    console.error('Erro ao carregar modelo:', e);
+    statusEl.textContent = 'Modelo indisponivel — usando captura normal';
     aiEnabled=false; aiTrack.classList.remove('on'); aiDot.classList.remove('on');
-  });
+  }
 }
 
 let maskCanvas = null, maskCtx = null;
@@ -392,14 +399,24 @@ function onSegResults(res) {
     maskCtx = maskCanvas.getContext('2d');
   }
   
-  // Process mask with blur
-  maskCtx.filter = 'blur(2px)';
-  maskCtx.drawImage(res.segmentationMask, 0, 0, w, h);
-  maskCtx.filter = 'none';
-  const maskPixels = maskCtx.getImageData(0, 0, w, h).data;
+  // Get mask from new API format
+  let maskPixels;
+  if(res.categoryMask) {
+    maskCtx.filter = 'blur(2px)';
+    maskCtx.putImageData(res.categoryMask, 0, 0);
+    maskCtx.filter = 'none';
+    maskPixels = maskCtx.getImageData(0, 0, w, h).data;
+  } else if(res.segmentationMask) {
+    maskCtx.filter = 'blur(2px)';
+    maskCtx.drawImage(res.segmentationMask, 0, 0, w, h);
+    maskCtx.filter = 'none';
+    maskPixels = maskCtx.getImageData(0, 0, w, h).data;
+  } else {
+    return;
+  }
   
   // Process video frame
-  segCtx.drawImage(res.image, 0, 0, w, h);
+  segCtx.drawImage(video, 0, 0, w, h);
   const videoData = segCtx.getImageData(0, 0, w, h);
   const d = videoData.data;
   const [br, bg2, bb] = hexToRgb(bgColor);
@@ -416,21 +433,26 @@ function onSegResults(res) {
       alpha = alpha * alpha * (3 - 2 * alpha);
     }
     
-    alpha = Math.pow(alpha, 1.35);
+    alpha = Math.pow(alpha, 1.2);
     
-    if(alpha < 0.98) {
-      // Spill removal + Blending
-      const r = d[i], g = d[i+1], b = d[i+2];
-      const nr = r * 0.95 + br * 0.05;
-      const ng = g * 0.95 + bg2 * 0.05;
-      const nb = b * 0.95 + bb * 0.05;
+    const r = d[i], g = d[i+1], b = d[i+2];
+    
+    if(alpha < 0.99) {
+      // Spill removal melhorado: dessaturacao parcial na borda
+      const spillFactor = 1 - alpha;
+      const desat = 0.7 + spillFactor * 0.3;
+      
+      const nr = r * desat + br * (1 - desat);
+      const ng = g * desat + bg2 * (1 - desat);
+      const nb = b * desat + bb * (1 - desat);
+      
       d[i]   = Math.round(nr * alpha + br * (1 - alpha));
       d[i+1] = Math.round(ng * alpha + bg2 * (1 - alpha));
       d[i+2] = Math.round(nb * alpha + bb * (1 - alpha));
     } else {
-      d[i]   = Math.round(d[i] * alpha + br * (1 - alpha));
-      d[i+1] = Math.round(d[i+1] * alpha + bg2 * (1 - alpha));
-      d[i+2] = Math.round(d[i+2] * alpha + bb * (1 - alpha));
+      d[i]   = Math.round(r * alpha + br * (1 - alpha));
+      d[i+1] = Math.round(g * alpha + bg2 * (1 - alpha));
+      d[i+2] = Math.round(b * alpha + bb * (1 - alpha));
     }
   }
   segCtx.putImageData(videoData, 0, 0);
@@ -451,7 +473,9 @@ function startSegLoop(){
   video.style.display='none';
   async function loop(){
     if(!aiEnabled||!stream) return;
-    await segmentor.send({image:video});
+    const timestamp = performance.now();
+    const result = await segmentor.segmentForVideo(video, timestamp);
+    onSegResults(result);
     animId=requestAnimationFrame(loop);
   }
   cancelAnimationFrame(animId);
