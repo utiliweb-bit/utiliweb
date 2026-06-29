@@ -48,232 +48,138 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 #ph-screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:var(--text3)}
 #ph-screen svg{opacity:.4}
 #ph-screen p{font-size:13px}
-#vf-overlay{position:absolute;inset:0;pointer-events:none}
-#guide{position:absolute;transition:all .3s cubic-bezier(.4,0,.2,1)}
-.g-border{position:absolute;inset:0;border:1.5px solid rgba(255,255,255,.6);border-radius:3px}
-.g-corner{position:absolute;width:14px;height:14px}
-.g-corner.tl{top:-1px;left:-1px;border-top:3px solid #fff;border-left:3px solid #fff;border-radius:2px 0 0 0}
-.g-corner.tr{top:-1px;right:-1px;border-top:3px solid #fff;border-right:3px solid #fff;border-radius:0 2px 0 0}
-.g-corner.bl{bottom:-1px;left:-1px;border-bottom:3px solid #fff;border-left:3px solid #fff;border-radius:0 0 0 2px}
-.g-corner.br{bottom:-1px;right:-1px;border-bottom:3px solid #fff;border-right:3px solid #fff;border-radius:0 0 2px 0}
-.g-cross-h{position:absolute;left:10%;right:10%;top:50%;height:1px;background:rgba(255,255,255,.18)}
-.g-cross-v{position:absolute;top:10%;bottom:10%;left:50%;width:1px;background:rgba(255,255,255,.18)}
-#bg-chip{position:absolute;top:10px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.6);color:rgba(255,255,255,.8);font-size:11px;padding:4px 12px;border-radius:20px;white-space:nowrap;pointer-events:none;display:flex;align-items:center;gap:5px}
-#ai-dot{width:7px;height:7px;border-radius:50%;background:#22c55e;display:none}
-#ai-dot.on{display:inline-block;animation:pulse 1.5s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-#fmt-chip{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.55);color:rgba(255,255,255,.75);font-size:11px;padding:4px 12px;border-radius:20px;white-space:nowrap;pointer-events:none}
-#scan-line{position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);display:none;animation:scanAnim .7s ease-in-out}
-@keyframes scanAnim{from{top:10%}to{top:88%}}
-#controls{background:var(--surface);border-top:1px solid var(--border);padding:14px 16px;display:flex;flex-direction:column;gap:10px}
-#bg-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-#bg-row label{font-size:12px;color:var(--text2);white-space:nowrap}
-.bg-swatch{width:24px;height:24px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:border-color .15s,transform .1s;flex-shrink:0}
-.bg-swatch:hover{transform:scale(1.15)}
+#guide{position:absolute;border:2px solid rgba(61,127,255,.3);border-radius:8px;pointer-events:none}
+#scan-line{position:absolute;width:100%;height:2px;background:linear-gradient(90deg,transparent,#3d7fff,transparent);animation:scan 2s infinite}
+@keyframes scan{0%{top:0}100%{top:100%}}
+#toolbar{display:flex;gap:8px;padding:12px;background:var(--surface);border-top:1px solid var(--border);flex-wrap:wrap}
+.toolbar-group{display:flex;gap:8px;align-items:center}
+.toolbar-group:not(:last-child){border-right:1px solid var(--border2);padding-right:8px}
+#bg-chip,#fmt-chip,#ai-track{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;cursor:pointer;font-size:12px;transition:all .12s;user-select:none}
+#bg-chip:hover,#fmt-chip:hover,#ai-track:hover{background:var(--border2)}
+#bg-chip.active,#fmt-chip.active,#ai-track.active{background:var(--accent-dim);border-color:var(--accent);color:var(--accent-text)}
+#ai-dot{width:8px;height:8px;border-radius:50%;background:var(--text3);transition:background .12s}
+#ai-track.on #ai-dot{background:var(--green)}
+.bg-swatch{width:16px;height:16px;border-radius:3px;cursor:pointer;border:2px solid transparent;transition:border .12s}
 .bg-swatch.active{border-color:var(--accent)}
-#ai-toggle{display:flex;align-items:center;gap:7px;margin-left:auto;cursor:pointer;user-select:none}
-#ai-toggle span{font-size:12px;color:var(--text2)}
-.toggle-track{width:34px;height:18px;border-radius:9px;background:var(--border2);position:relative;transition:background .2s;flex-shrink:0}
-.toggle-track.on{background:var(--accent)}
-.toggle-thumb{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;transition:left .2s}
-.toggle-track.on .toggle-thumb{left:18px}
-#ctrl-btn-row{display:flex;gap:8px}
-.cbtn{flex:1;padding:11px 10px;border-radius:var(--radius);font-size:13px;font-weight:500;cursor:pointer;border:1px solid var(--border2);background:var(--surface2);color:var(--text);display:flex;align-items:center;justify-content:center;gap:6px;transition:background .12s,opacity .15s;white-space:nowrap}
-.cbtn:hover{background:var(--border)}
-.cbtn.accent{background:var(--accent);color:#fff;border-color:var(--accent)}
-.cbtn.accent:hover{background:#2d6bef}
-.cbtn:disabled{opacity:.3;cursor:not-allowed}
-#status{font-size:12px;color:var(--text2);text-align:center;min-height:16px}
-#gallery{padding:14px 16px;border-top:1px solid var(--border)}
-#gal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-#gal-title{font-size:13px;font-weight:500;color:var(--text2)}
-#gal-title span{color:var(--text);margin-left:4px}
-#btn-clear-all{font-size:12px;color:var(--text3);background:none;border:none;cursor:pointer;padding:2px 6px;border-radius:6px}
-#btn-clear-all:hover{color:#f87171;background:rgba(248,113,113,.08)}
-#photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:8px}
-#empty-state{color:var(--text3);font-size:13px;text-align:center;padding:20px 0;grid-column:1/-1}
-.pcard{position:relative;border-radius:8px;overflow:hidden;border:1px solid var(--border);cursor:pointer;background:var(--surface2);transition:border-color .15s}
-.pcard:hover{border-color:var(--accent)}
-.pcard img{width:100%;display:block;object-fit:cover}
-.pcard-del{position:absolute;top:4px;right:4px;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,.7);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;opacity:0;transition:opacity .15s}
-.pcard:hover .pcard-del{opacity:1}
-.pcard-label{padding:4px 6px;font-size:10px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:100;align-items:center;justify-content:center;flex-direction:column;gap:16px;padding:24px}
-#lb.open{display:flex}
-#lb-img{max-width:min(500px,90vw);max-height:70vh;border-radius:10px;object-fit:contain;border:1px solid var(--border2)}
-#lb-footer{display:flex;align-items:center;gap:12px}
-#lb-meta{font-size:12px;color:rgba(255,255,255,.5)}
-#lb-dl{background:var(--accent);color:#fff;font-size:13px;font-weight:500;padding:9px 20px;border-radius:var(--radius);border:none;cursor:pointer;display:flex;align-items:center;gap:6px}
-#lb-dl:hover{background:#2d6bef}
-#lb-close-btn{position:fixed;top:16px;right:16px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:#fff;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center}
-#lb-close-btn:hover{background:rgba(255,255,255,.2)}
-#mobile-fmt{display:none;overflow-x:auto;padding:10px 14px;gap:8px;border-bottom:1px solid var(--border);background:var(--surface);-webkit-overflow-scrolling:touch}
-#mobile-fmt::-webkit-scrollbar{display:none}
-@media(max-width:699px){
-  #sidebar{display:none}
-  #mobile-fmt{display:flex}
-  #vf-wrap{min-height:260px;max-height:52vw}
-}
-.m-pill{flex-shrink:0;padding:6px 13px;border-radius:20px;border:1px solid var(--border2);font-size:12px;font-weight:500;cursor:pointer;background:var(--surface2);color:var(--text2);white-space:nowrap;transition:all .12s}
-.m-pill.active{background:var(--accent-dim);color:var(--accent-text);border-color:var(--accent)}
-@media(min-width:700px){#vf-wrap{min-height:0;flex:1}#main{height:100vh}}
+#bg-menu{position:absolute;bottom:100%;left:0;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:8px;display:none;gap:8px;flex-wrap:wrap;z-index:100;margin-bottom:8px;min-width:200px}
+#bg-chip.active~#bg-menu{display:flex}
+#photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px;padding:12px;background:var(--surface);border-top:1px solid var(--border);overflow-y:auto;flex:1}
+.photo-item{position:relative;aspect-ratio:3/4;border-radius:6px;overflow:hidden;cursor:pointer;border:2px solid transparent;transition:border .12s}
+.photo-item:hover{border-color:var(--accent)}
+.photo-item.active{border-color:var(--green)}
+.photo-item img{width:100%;height:100%;object-fit:cover}
+.photo-item .delete-btn{position:absolute;top:4px;right:4px;width:20px;height:20px;background:rgba(0,0,0,.6);border:none;color:#fff;border-radius:3px;cursor:pointer;font-size:12px;display:none}
+.photo-item:hover .delete-btn{display:flex;align-items:center;justify-content:center}
+#lightbox{position:fixed;inset:0;background:rgba(0,0,0,.9);display:none;z-index:200;align-items:center;justify-content:center;flex-direction:column;gap:16px;padding:20px}
+#lightbox.active{display:flex}
+#lb{position:relative;max-width:90vw;max-height:80vh;background:var(--surface);border-radius:8px;overflow:hidden;display:flex;flex-direction:column}
+#lb-img{width:100%;height:100%;object-fit:contain;max-height:60vh}
+#lb-meta{padding:16px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+#lb-meta button{padding:8px 16px;background:var(--accent);color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-weight:500}
+#lb-meta button:hover{opacity:.9}
+.close-lb{position:absolute;top:12px;right:12px;width:32px;height:32px;background:rgba(0,0,0,.5);border:none;color:#fff;border-radius:50%;cursor:pointer;font-size:18px;z-index:10}
+#cnt{font-size:12px;color:var(--text2);padding:12px;text-align:center}
+#status{position:fixed;bottom:20px;left:20px;background:var(--surface2);border:1px solid var(--border);padding:12px 16px;border-radius:6px;font-size:12px;max-width:300px;z-index:50}
+#btn-cam,#btn-flip,#btn-snap{padding:8px 16px;background:var(--accent);color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-weight:500;transition:opacity .12s}
+#btn-cam:hover,#btn-flip:hover,#btn-snap:hover{opacity:.9}
+#btn-snap{background:var(--green);padding:12px 24px;font-size:14px;font-weight:600}
+.vf-controls{display:flex;gap:8px;padding:12px;background:var(--surface);border-top:1px solid var(--border)}
 </style>
 </head>
 <body>
 <div id="shell">
-  <aside id="sidebar">
+  <div id="sidebar">
     <div id="logo">
-      <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-        <rect width="28" height="28" rx="8" fill="#1e3d6e"/>
-        <rect x="7" y="5" width="14" height="18" rx="2" stroke="#7eb4ff" stroke-width="1.5"/>
-        <circle cx="14" cy="13" r="3.5" stroke="#7eb4ff" stroke-width="1.5"/>
-        <line x1="11" y1="20" x2="17" y2="20" stroke="#7eb4ff" stroke-width="1.5" stroke-linecap="round"/>
-      </svg>
-      <div id="logo-text"><strong>Photo ID Studio</strong><span>Fotos para documentos</span></div>
-      <span class="badge-free">Grátis</span>
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect width="20" height="20" rx="4" fill="#3d7fff"/><circle cx="10" cy="9" r="2.5" fill="white"/><path d="M5 14c0-2.21 2.24-4 5-4s5 1.79 5 4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <div id="logo-text">
+        <strong>Photo ID</strong>
+        <span>Studio Pro</span>
+      </div>
+      <div class="badge-free">Free</div>
     </div>
     <div id="fmt-list">
-      <div class="fmt-group-label">Brasil</div>
-      <div class="fmt-item active" onclick="setFmt('3x4',this)">
-        <div class="fmt-thumb"><span>3×4</span></div>
-        <div class="fmt-item-info"><div class="fmt-item-name">Foto 3×4</div><div class="fmt-item-dim">3 × 4 cm · fundo branco</div></div>
-        <span class="fmt-item-flag">🇧🇷</span>
-      </div>
-      <div class="fmt-item" onclick="setFmt('passport_br',this)">
-        <div class="fmt-thumb"><span>5×7</span></div>
-        <div class="fmt-item-info"><div class="fmt-item-name">Passaporte BR</div><div class="fmt-item-dim">5 × 7 cm · ICAO</div></div>
-        <span class="fmt-item-flag">🇧🇷</span>
-      </div>
-      <div class="fmt-item" onclick="setFmt('cnh',this)">
-        <div class="fmt-thumb"><span>3×4</span></div>
-        <div class="fmt-item-info"><div class="fmt-item-name">CNH</div><div class="fmt-item-dim">3 × 4 cm · DETRAN</div></div>
-        <span class="fmt-item-flag">🇧🇷</span>
-      </div>
-      <div class="fmt-group-label">Japão</div>
-      <div class="fmt-item" onclick="setFmt('mynumber',this)">
-        <div class="fmt-thumb" style="height:40px"><span>35×45</span></div>
-        <div class="fmt-item-info"><div class="fmt-item-name">My Number Card</div><div class="fmt-item-dim">35 × 45 mm</div></div>
-        <span class="fmt-item-flag">🇯🇵</span>
-      </div>
-      <div class="fmt-item" onclick="setFmt('zairyu',this)">
-        <div class="fmt-thumb" style="height:40px"><span>35×45</span></div>
-        <div class="fmt-item-info"><div class="fmt-item-name">Zairyū Card</div><div class="fmt-item-dim">35 × 45 mm · residência</div></div>
-        <span class="fmt-item-flag">🇯🇵</span>
-      </div>
-      <div class="fmt-item" onclick="setFmt('passport_jp',this)">
-        <div class="fmt-thumb"><span>35×45</span></div>
-        <div class="fmt-item-info"><div class="fmt-item-name">Passaporte JP</div><div class="fmt-item-dim">35 × 45 mm · ICAO</div></div>
-        <span class="fmt-item-flag">🇯🇵</span>
-      </div>
-      <div class="fmt-group-label">Internacional</div>
-      <div class="fmt-item" onclick="setFmt('us_passport',this)">
-        <div class="fmt-thumb" style="height:32px"><span>2×2</span></div>
-        <div class="fmt-item-info"><div class="fmt-item-name">US Passport / Visa</div><div class="fmt-item-dim">2 × 2 inch · 51 mm</div></div>
-        <span class="fmt-item-flag">🇺🇸</span>
-      </div>
-      <div class="fmt-item" onclick="setFmt('uk_passport',this)">
-        <div class="fmt-thumb" style="height:40px"><span>35×45</span></div>
-        <div class="fmt-item-info"><div class="fmt-item-name">UK Passport</div><div class="fmt-item-dim">35 × 45 mm · fundo cinza</div></div>
-        <span class="fmt-item-flag">🇬🇧</span>
-      </div>
-      <div class="fmt-item" onclick="setFmt('eu_id',this)">
-        <div class="fmt-thumb" style="height:40px"><span>35×45</span></div>
-        <div class="fmt-item-info"><div class="fmt-item-name">EU ID Card</div><div class="fmt-item-dim">35 × 45 mm · ICAO</div></div>
-        <span class="fmt-item-flag">🇪🇺</span>
-      </div>
+      <div class="fmt-group-label">Documentos</div>
+      <div class="fmt-item active" onclick="setFmt('3x4',this)"><div class="fmt-thumb">3×4</div><div class="fmt-item-info"><div class="fmt-item-name">Foto 3×4</div><div class="fmt-item-dim">3 × 4 cm</div></div></div>
+      <div class="fmt-item" onclick="setFmt('passport_br',this)"><div class="fmt-thumb">5×7</div><div class="fmt-item-info"><div class="fmt-item-name">Passaporte BR</div><div class="fmt-item-dim">5 × 7 cm</div></div></div>
+      <div class="fmt-item" onclick="setFmt('cnh',this)"><div class="fmt-thumb">3×4</div><div class="fmt-item-info"><div class="fmt-item-name">CNH</div><div class="fmt-item-dim">3 × 4 cm</div></div></div>
+      <div class="fmt-group-label" style="margin-top:16px">Internacionais</div>
+      <div class="fmt-item" onclick="setFmt('mynumber',this)"><div class="fmt-thumb">35×45</div><div class="fmt-item-info"><div class="fmt-item-name">My Number JP</div><div class="fmt-item-dim">35 × 45 mm</div></div></div>
+      <div class="fmt-item" onclick="setFmt('zairyu',this)"><div class="fmt-thumb">35×45</div><div class="fmt-item-info"><div class="fmt-item-name">Zairyū Card</div><div class="fmt-item-dim">35 × 45 mm</div></div></div>
+      <div class="fmt-item" onclick="setFmt('passport_jp',this)"><div class="fmt-thumb">35×45</div><div class="fmt-item-info"><div class="fmt-item-name">Passaporte JP</div><div class="fmt-item-dim">35 × 45 mm</div></div></div>
+      <div class="fmt-item" onclick="setFmt('us_passport',this)"><div class="fmt-thumb">2×2</div><div class="fmt-item-info"><div class="fmt-item-name">US Passport</div><div class="fmt-item-dim">2 × 2 inch</div></div></div>
+      <div class="fmt-item" onclick="setFmt('uk_passport',this)"><div class="fmt-thumb">35×45</div><div class="fmt-item-info"><div class="fmt-item-name">UK Passport</div><div class="fmt-item-dim">35 × 45 mm</div></div></div>
+      <div class="fmt-item" onclick="setFmt('eu_id',this)"><div class="fmt-thumb">35×45</div><div class="fmt-item-info"><div class="fmt-item-name">EU ID Card</div><div class="fmt-item-dim">35 × 45 mm</div></div></div>
     </div>
-  </aside>
-
-  <main id="main">
-    <div id="mobile-fmt">
-      <div class="m-pill active" onclick="setFmt('3x4',this)">3×4 BR</div>
-      <div class="m-pill" onclick="setFmt('passport_br',this)">Passaporte BR</div>
-      <div class="m-pill" onclick="setFmt('cnh',this)">CNH</div>
-      <div class="m-pill" onclick="setFmt('mynumber',this)">My Number JP</div>
-      <div class="m-pill" onclick="setFmt('zairyu',this)">Zairyū JP</div>
-      <div class="m-pill" onclick="setFmt('passport_jp',this)">Passaporte JP</div>
-      <div class="m-pill" onclick="setFmt('us_passport',this)">US Passport</div>
-      <div class="m-pill" onclick="setFmt('uk_passport',this)">UK Passport</div>
-      <div class="m-pill" onclick="setFmt('eu_id',this)">EU ID</div>
-    </div>
-
+  </div>
+  <div id="main">
     <div id="vf-wrap">
-      <video id="video" autoplay playsinline muted></video>
+      <video id="video" playsinline></video>
       <canvas id="seg-canvas"></canvas>
       <div id="ph-screen">
-        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-          <circle cx="24" cy="24" r="10" stroke="currentColor" stroke-width="2"/>
-          <path d="M17 10h14l3 4H44v24H4V14h10l3-4z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-        </svg>
-        <p>Toque em "Ativar câmera" para começar</p>
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <p>Nenhuma câmera disponível</p>
       </div>
-      <div id="vf-overlay">
-        <div id="guide">
-          <div class="g-border"></div>
-          <div class="g-corner tl"></div><div class="g-corner tr"></div>
-          <div class="g-corner bl"></div><div class="g-corner br"></div>
-          <div class="g-cross-h"></div><div class="g-cross-v"></div>
-        </div>
-        <div id="bg-chip"><div id="ai-dot"></div><span id="bg-chip-text">Fundo branco</span></div>
-        <div id="fmt-chip">Foto 3×4</div>
-        <div id="scan-line"></div>
-      </div>
+      <div id="guide"></div>
+      <div id="scan-line"></div>
     </div>
-
-    <div id="controls">
-      <div id="bg-row">
-        <label>Fundo:</label>
-        <div class="bg-swatch active" style="background:#ffffff;box-shadow:inset 0 0 0 1px rgba(0,0,0,.15)" title="Branco" onclick="setBg('#ffffff','Branco',this)"></div>
-        <div class="bg-swatch" style="background:#cccccc" title="Cinza" onclick="setBg('#cccccc','Cinza',this)"></div>
-        <div class="bg-swatch" style="background:#c8ddf5" title="Azul claro" onclick="setBg('#c8ddf5','Azul claro',this)"></div>
-        <div class="bg-swatch" style="background:#f0e8d8" title="Creme" onclick="setBg('#f0e8d8','Creme',this)"></div>
-        <div class="bg-swatch" style="background:#c2ddc2" title="Verde claro" onclick="setBg('#c2ddc2','Verde claro',this)"></div>
-        <div id="ai-toggle" onclick="toggleAI()" title="Substituição automática de fundo por IA">
-          <span>Fundo IA</span>
-          <div class="toggle-track" id="ai-track"><div class="toggle-thumb"></div></div>
+    <div id="toolbar">
+      <div class="toolbar-group">
+        <button id="btn-cam" onclick="toggleCam()">📷 Câmera</button>
+        <button id="btn-flip" onclick="flipCam()" style="display:none">🔄 Virar</button>
+      </div>
+      <div class="toolbar-group">
+        <div id="fmt-chip" onclick="this.classList.toggle('active')">
+          <span>📐</span>
+          <span id="fmt-chip-text">Foto 3×4</span>
         </div>
       </div>
-      <div id="ctrl-btn-row">
-        <button class="cbtn" id="btn-cam" onclick="toggleCam()">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 5h2l1.5-2h5L12 5h2a1 1 0 011 1v7a1 1 0 01-1 1H2a1 1 0 01-1-1V6a1 1 0 011-1z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><circle cx="8" cy="9" r="2.5" stroke="currentColor" stroke-width="1.4"/></svg>
-          Ativar câmera
-        </button>
-        <button class="cbtn" id="btn-flip" onclick="flipCam()" disabled title="Virar câmera">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8a5 5 0 019.9-1M13 8a5 5 0 01-9.9 1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M12 4l1 3-3 1M4 12l-1-3 3-1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-        <button class="cbtn accent" id="btn-snap" onclick="snap()" disabled>
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.4"/><circle cx="8" cy="8" r="3" fill="currentColor"/></svg>
-          Capturar
-        </button>
+      <div class="toolbar-group">
+        <div id="bg-chip" onclick="this.classList.toggle('active')">
+          <div class="bg-swatch" style="background:#ffffff" onclick="setBg('#ffffff','Branco',event.target);event.stopPropagation()"></div>
+          <span id="bg-chip-text">Fundo branco</span>
+        </div>
+        <div id="bg-menu">
+          <div class="bg-swatch" style="background:#ffffff" onclick="setBg('#ffffff','Branco',this)"></div>
+          <div class="bg-swatch" style="background:#cccccc" onclick="setBg('#cccccc','Cinza',this)"></div>
+          <div class="bg-swatch" style="background:#0066ff" onclick="setBg('#0066ff','Azul',this)"></div>
+          <div class="bg-swatch" style="background:#ff0000" onclick="setBg('#ff0000','Vermelho',this)"></div>
+          <div class="bg-swatch" style="background:#00aa00" onclick="setBg('#00aa00','Verde',this)"></div>
+        </div>
       </div>
-      <div id="status">Selecione o formato e ative a câmera</div>
-    </div>
-
-    <div id="gallery">
-      <div id="gal-header">
-        <div id="gal-title">Fotos capturadas <span id="cnt">(0)</span></div>
-        <button id="btn-clear-all" onclick="clearAll()">Apagar tudo</button>
+      <div class="toolbar-group">
+        <div id="ai-track" onclick="toggleAI()">
+          <div id="ai-dot"></div>
+          <span>IA</span>
+        </div>
       </div>
-      <div id="photo-grid"><div id="empty-state">Nenhuma foto ainda.</div></div>
     </div>
-  </main>
+    <div id="photo-grid">
+      <div style="grid-column:1/-1;text-align:center;color:var(--text2);padding:40px 20px">
+        <p>Tire uma foto para começar</p>
+      </div>
+    </div>
+    <div id="cnt"></div>
+  </div>
 </div>
 
-<div id="lb">
-  <button id="lb-close-btn" onclick="closeLb()" aria-label="Fechar">✕</button>
-  <img id="lb-img" src="" alt="Foto ampliada">
-  <div id="lb-footer">
-    <div id="lb-meta"></div>
-    <button id="lb-dl" onclick="downloadLb()">
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v8M4 6l3 3 3-3M2 11h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      Baixar
-    </button>
+<div id="lightbox">
+  <button class="close-lb" onclick="closeLightbox()">✕</button>
+  <div id="lb">
+    <img id="lb-img" src="">
+    <div id="lb-meta">
+      <span id="lb-meta-text"></span>
+      <button onclick="downloadPhoto()">⬇️ Baixar</button>
+    </div>
   </div>
 </div>
 
 <canvas id="offscreen" style="display:none"></canvas>
 
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js" crossorigin="anonymous"></script>
+<script type="module">
+import { AutoModel, AutoProcessor, RawImage } from 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@2.15.0';
+window.transformers = { AutoModel, AutoProcessor, RawImage };
+</script>
 <script>
 const FORMATS = {
   '3x4':        {name:'Foto 3×4',      dim:'3 × 4 cm',   ratio:3/4,   bg:'#ffffff'},
@@ -290,6 +196,7 @@ const FORMATS = {
 let cur='3x4', stream=null, facing='user', bgColor='#ffffff', bgLabel='Branco';
 let photos=[], lbId=-1;
 let aiEnabled=false, segmentor=null, animId=null;
+let rmbgModel=null, rmbgProcessor=null, useRMBG=false;
 
 const video    = document.getElementById('video');
 const segCanvas= document.getElementById('seg-canvas');
@@ -313,7 +220,6 @@ const lbImg    = document.getElementById('lb-img');
 const lbMeta   = document.getElementById('lb-meta');
 const aiTrack  = document.getElementById('ai-track');
 
-/* ── Format & BG ── */
 function setFmt(k, el) {
   cur = k;
   const f = FORMATS[k];
@@ -325,20 +231,18 @@ function setFmt(k, el) {
   if(el) el.classList.add('active');
   posGuide();
 }
+
 function setBg(color, label, el) {
   bgColor=color; bgLabel=label;
   bgChipTxt.textContent='Fundo '+label.toLowerCase();
   document.querySelectorAll('.bg-swatch').forEach(x=>x.classList.remove('active'));
   if(el) el.classList.add('active');
-  // Ensure AI segmentation uses the new color immediately
   if(aiEnabled && segmentor) {
-    // Force update by restarting the segmentation loop
     stopSegLoop();
     if(stream) startSegLoop();
   }
 }
 
-/* ── Guide positioning ── */
 function posGuide() {
   const r=FORMATS[cur].ratio;
   const W=vfWrap.offsetWidth, H=vfWrap.offsetHeight||300;
@@ -350,14 +254,14 @@ function posGuide() {
   guide.style.cssText=`position:absolute;left:${l}px;top:${t}px;width:${gw}px;height:${gh}px`;
 }
 
-/* ── AI segmentation ── */
+/* ── AI segmentation with RMBG-1.4 ── */
 function toggleAI() {
   aiEnabled = !aiEnabled;
   aiTrack.classList.toggle('on', aiEnabled);
   if(aiEnabled) {
     bgChipTxt.textContent = 'Fundo IA — '+bgLabel.toLowerCase();
     aiDot.classList.add('on');
-    if(!segmentor) initSegmentor();
+    if(!segmentor && !rmbgModel) initSegmentor();
     else if(stream) startSegLoop();
   } else {
     bgChipTxt.textContent = 'Fundo '+bgLabel.toLowerCase();
@@ -367,8 +271,24 @@ function toggleAI() {
   }
 }
 
-function initSegmentor() {
-  statusEl.textContent = 'Carregando modelo de segmentação…';
+async function initSegmentor() {
+  statusEl.textContent = 'Carregando modelo RMBG-1.4…';
+  try {
+    const { AutoModel, AutoProcessor } = window.transformers;
+    if(AutoModel && AutoProcessor) {
+      rmbgModel = await AutoModel.from_pretrained('briaai/RMBG-1.4', { device: 'webgpu' });
+      rmbgProcessor = await AutoProcessor.from_pretrained('briaai/RMBG-1.4');
+      useRMBG = true;
+      statusEl.textContent = 'RMBG-1.4 pronto — qualidade profissional ✓';
+      if(stream) startSegLoop();
+      return;
+    }
+  } catch(e) {
+    console.warn('RMBG-1.4 indisponível:', e);
+  }
+
+  useRMBG = false;
+  statusEl.textContent = 'Carregando MediaPipe…';
   segmentor = new SelfieSegmentation({locateFile: f =>
     `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${f}`
   });
@@ -379,67 +299,112 @@ function initSegmentor() {
     if(stream) startSegLoop();
   }).catch(e=>{
     console.error(e);
-    statusEl.textContent = 'Modelo indisponível — usando captura normal';
+    statusEl.textContent = 'Modelo indisponível';
     aiEnabled=false; aiTrack.classList.remove('on'); aiDot.classList.remove('on');
   });
 }
 
 let maskCanvas = null, maskCtx = null;
-function onSegResults(res) {
+
+async function onSegResults(res) {
   const w = segCanvas.width, h = segCanvas.height;
   if(!maskCanvas || maskCanvas.width !== w || maskCanvas.height !== h) {
     maskCanvas = document.createElement('canvas');
     maskCanvas.width = w; maskCanvas.height = h;
     maskCtx = maskCanvas.getContext('2d');
   }
-  
-  // Process mask with blur (stable API uses res.segmentationMask)
-  maskCtx.filter = 'blur(2px)';
-  maskCtx.drawImage(res.segmentationMask, 0, 0, w, h);
-  maskCtx.filter = 'none';
-  const maskPixels = maskCtx.getImageData(0, 0, w, h).data;
-  
-  // Process video frame
-  segCtx.drawImage(res.image, 0, 0, w, h);
-  const videoData = segCtx.getImageData(0, 0, w, h);
-  const d = videoData.data;
-  const [br, bg2, bb] = hexToRgb(bgColor);
-  
-  for(let i=0; i<d.length; i+=4) {
-    const m = maskPixels[i];
-    let alpha = m / 255;
-    
-    // Smoothstep threshold
-    if(alpha > 0.85) alpha = 1;
-    else if(alpha < 0.15) alpha = 0;
-    else {
-      alpha = (alpha - 0.15) / 0.70;
-      alpha = alpha * alpha * (3 - 2 * alpha);
-    }
-    
-    alpha = Math.pow(alpha, 1.2);
-    
-    const r = d[i], g = d[i+1], b = d[i+2];
-    
-    if(alpha < 0.99) {
-      // Spill removal melhorado: dessaturacao parcial na borda
-      const spillFactor = 1 - alpha;
-      const desat = 0.7 + spillFactor * 0.3;
+
+  if(useRMBG && rmbgModel) {
+    // RMBG-1.4: High-quality background removal
+    try {
+      const { RawImage } = window.transformers;
+      const image = await RawImage.fromCanvas(video);
+      const { pixel_values } = await rmbgProcessor(image);
+      const { output } = await rmbgModel({ input: pixel_values });
       
-      const nr = r * desat + br * (1 - desat);
-      const ng = g * desat + bg2 * (1 - desat);
-      const nb = b * desat + bb * (1 - desat);
-      
-      d[i]   = Math.round(nr * alpha + br * (1 - alpha));
-      d[i+1] = Math.round(ng * alpha + bg2 * (1 - alpha));
-      d[i+2] = Math.round(nb * alpha + bb * (1 - alpha));
-    } else {
-      d[i]   = Math.round(r * alpha + br * (1 - alpha));
-      d[i+1] = Math.round(g * alpha + bg2 * (1 - alpha));
-      d[i+2] = Math.round(b * alpha + bb * (1 - alpha));
+      // output is the mask (0-1 range)
+      const maskData = output.data;
+      segCtx.drawImage(video, 0, 0, w, h);
+      const videoData = segCtx.getImageData(0, 0, w, h);
+      const d = videoData.data;
+      const [br, bg2, bb] = hexToRgb(bgColor);
+
+      for(let i=0, j=0; i<d.length; i+=4, j++) {
+        let alpha = maskData[j] || 0;
+        
+        // Smoothstep for clean edges
+        if(alpha > 0.85) alpha = 1;
+        else if(alpha < 0.15) alpha = 0;
+        else {
+          alpha = (alpha - 0.15) / 0.70;
+          alpha = alpha * alpha * (3 - 2 * alpha);
+        }
+        
+        alpha = Math.pow(alpha, 1.2);
+        
+        const r = d[i], g = d[i+1], b = d[i+2];
+        if(alpha < 0.99) {
+          const spillFactor = 1 - alpha;
+          const desat = 0.7 + spillFactor * 0.3;
+          const nr = r * desat + br * (1 - desat);
+          const ng = g * desat + bg2 * (1 - desat);
+          const nb = b * desat + bb * (1 - desat);
+          d[i]   = Math.round(nr * alpha + br * (1 - alpha));
+          d[i+1] = Math.round(ng * alpha + bg2 * (1 - alpha));
+          d[i+2] = Math.round(nb * alpha + bb * (1 - alpha));
+        } else {
+          d[i]   = Math.round(r * alpha + br * (1 - alpha));
+          d[i+1] = Math.round(g * alpha + bg2 * (1 - alpha));
+          d[i+2] = Math.round(b * alpha + bb * (1 - alpha));
+        }
+      }
+      segCtx.putImageData(videoData, 0, 0);
+    } catch(e) {
+      console.error('RMBG processing error:', e);
     }
+  } else if(res && res.segmentationMask) {
+    // Fallback to MediaPipe
+    maskCtx.filter = 'blur(2px)';
+    maskCtx.drawImage(res.segmentationMask, 0, 0, w, h);
+    maskCtx.filter = 'none';
+    const maskPixels = maskCtx.getImageData(0, 0, w, h).data;
+    
+    segCtx.drawImage(res.image, 0, 0, w, h);
+    const videoData = segCtx.getImageData(0, 0, w, h);
+    const d = videoData.data;
+    const [br, bg2, bb] = hexToRgb(bgColor);
+    
+    for(let i=0; i<d.length; i+=4) {
+      const m = maskPixels[i];
+      let alpha = m / 255;
+      
+      if(alpha > 0.85) alpha = 1;
+      else if(alpha < 0.15) alpha = 0;
+      else {
+        alpha = (alpha - 0.15) / 0.70;
+        alpha = alpha * alpha * (3 - 2 * alpha);
+      }
+      
+      alpha = Math.pow(alpha, 1.2);
+      
+      const r = d[i], g = d[i+1], b = d[i+2];
+      if(alpha < 0.99) {
+        const spillFactor = 1 - alpha;
+        const desat = 0.7 + spillFactor * 0.3;
+        const nr = r * desat + br * (1 - desat);
+        const ng = g * desat + bg2 * (1 - desat);
+        const nb = b * desat + bb * (1 - desat);
+        d[i]   = Math.round(nr * alpha + br * (1 - alpha));
+        d[i+1] = Math.round(ng * alpha + bg2 * (1 - alpha));
+        d[i+2] = Math.round(nb * alpha + bb * (1 - alpha));
+      } else {
+        d[i]   = Math.round(r * alpha + br * (1 - alpha));
+        d[i+1] = Math.round(g * alpha + bg2 * (1 - alpha));
+        d[i+2] = Math.round(b * alpha + bb * (1 - alpha));
+      }
+    }
+    segCtx.putImageData(videoData, 0, 0);
   }
-  segCtx.putImageData(videoData, 0, 0);
 }
 
 function hexToRgb(hex){
@@ -450,14 +415,17 @@ function hexToRgb(hex){
 }
 
 function startSegLoop(){
-  // seg-canvas matches the native video resolution exactly
   segCanvas.width  = video.videoWidth  || 640;
   segCanvas.height = video.videoHeight || 480;
   segCanvas.style.display='block';
   video.style.display='none';
   async function loop(){
     if(!aiEnabled||!stream) return;
-    await segmentor.send({image:video});
+    if(useRMBG && rmbgModel) {
+      await onSegResults(null);
+    } else if(segmentor) {
+      await segmentor.send({image:video});
+    }
     animId=requestAnimationFrame(loop);
   }
   cancelAnimationFrame(animId);
@@ -472,157 +440,121 @@ function stopSegLoop(){
 async function toggleCam(){
   if(stream){stopCam();return;}
   try{
-    statusEl.textContent='Aguardando permissão…';
-    stream=await navigator.mediaDevices.getUserMedia({
-      video:{facingMode:facing,width:{ideal:2560},height:{ideal:1920}}
+    stream = await navigator.mediaDevices.getUserMedia({
+      video:{
+        facingMode:facing,
+        width:{ideal:2560},
+        height:{ideal:1920}
+      }
     });
-    video.srcObject=stream;
-    await new Promise(r=>video.onloadedmetadata=r);
-    video.style.display='block';
+    video.srcObject = stream;
+    video.play();
     ph.style.display='none';
-    btnCam.innerHTML=`<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 5l-3-3-7 7-1 4 4-1 7-7z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg> Desativar`;
-    btnFlip.disabled=false; btnSnap.disabled=false;
-    statusEl.textContent='Encaixe o rosto dentro das guias';
+    btnCam.textContent='🎥 Parar';
+    btnFlip.style.display='block';
+    btnSnap.style.display='block';
     posGuide();
-    if(aiEnabled){
-      if(!segmentor) initSegmentor();
-      else startSegLoop();
-    }
-  }catch(e){statusEl.textContent='Câmera não disponível — abra num navegador real no celular';}
+  }catch(e){
+    alert('Câmera não disponível');
+  }
 }
 
 function stopCam(){
+  if(stream) stream.getTracks().forEach(t=>t.stop());
+  stream=null;
+  video.srcObject=null;
+  ph.style.display='flex';
+  btnCam.textContent='📷 Câmera';
+  btnFlip.style.display='none';
+  btnSnap.style.display='none';
+  segCanvas.style.display='none';
+  video.style.display='none';
+  aiEnabled=false; aiTrack.classList.remove('on'); aiDot.classList.remove('on');
   stopSegLoop();
-  stream?.getTracks().forEach(t=>t.stop()); stream=null;
-  video.style.display='none'; segCanvas.style.display='none'; ph.style.display='flex';
-  btnCam.innerHTML=`<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 5h2l1.5-2h5L12 5h2a1 1 0 011 1v7a1 1 0 01-1 1H2a1 1 0 01-1-1V6a1 1 0 011-1z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><circle cx="8" cy="9" r="2.5" stroke="currentColor" stroke-width="1.4"/></svg> Ativar câmera`;
-  btnFlip.disabled=true; btnSnap.disabled=true;
-  statusEl.textContent='Câmera desativada';
 }
 
-async function flipCam(){
+function flipCam(){
   facing=facing==='user'?'environment':'user';
-  if(segmentor) segmentor.setOptions({selfieMode:facing==='user'});
-  if(stream){stopCam(); await toggleCam();}
+  stopCam();
+  toggleCam();
 }
 
-/* ── Snap ── */
+/* ── Capture ── */
+const BASE = 2400;
 function snap(){
-  if(!stream||scanLine.style.display==='block') return;
-  scanLine.style.display='block'; btnSnap.disabled=true;
-  statusEl.textContent='Capturando…';
-
-  setTimeout(()=>{
-    const f   = FORMATS[cur];
-    const vw  = video.videoWidth  || 640;
-    const vh  = video.videoHeight || 480;
-    const dispW = vfWrap.offsetWidth;
-    const dispH = vfWrap.offsetHeight;
-
-    // object-fit:cover maps video pixels → display pixels via a single scale factor
-    // (the axis with the larger ratio is the one that "covers")
-    const scaleX = vw / dispW;
-    const scaleY = vh / dispH;
-    const scale  = Math.min(scaleX, scaleY);           // cover → use the smaller scale
-    const offX   = (vw - dispW * scale) / 2;           // letterbox/pillarbox offset
-    const offY   = (vh - dispH * scale) / 2;
-
-    // Guide rectangle in display-pixel coordinates
-    const gl = parseFloat(guide.style.left);
-    const gt = parseFloat(guide.style.top);
-    const gw = parseFloat(guide.style.width);
-    const gh = parseFloat(guide.style.height);
-
-    // Guide rectangle in native-video-pixel coordinates
-    const sx = gl * scale + offX;
-    const sy = gt * scale + offY;
-    const sw = gw * scale;
-    const sh = gh * scale;
-
-    // Output canvas size at ~2400px on the long side (increased for better resolution)
-    const BASE = 2400, r = f.ratio;
-    const ow = r >= 1 ? BASE : Math.round(BASE * r);
-    const oh = r >= 1 ? Math.round(BASE / r) : BASE;
-    offsc.width = ow; offsc.height = oh;
-    const ctx = offsc.getContext('2d');
-
-    if(aiEnabled && segmentor){
-      // seg-canvas has the same native resolution as the video (set in startSegLoop).
-      // So video-pixel coords map 1:1 to seg-canvas coords (scale = 1).
-      // If for any reason they differ (e.g. browser resampled), compensate:
-      const cvScaleX = segCanvas.width  / vw;
-      const cvScaleY = segCanvas.height / vh;
-      const csx = sx * cvScaleX;
-      const csy = sy * cvScaleY;
-      const csw = sw * cvScaleX;
-      const csh = sh * cvScaleY;
-
-      // The seg-canvas already has the background color composited in.
-      // Just fill solid bg first (in case mask has gaps), then draw the composited canvas.
-      ctx.fillStyle = bgColor;
-      ctx.fillRect(0, 0, ow, oh);
-      ctx.drawImage(segCanvas, csx, csy, csw, csh, 0, 0, ow, oh);
-    } else {
-      ctx.fillStyle = bgColor;
-      ctx.fillRect(0, 0, ow, oh);
-      ctx.drawImage(video, sx, sy, sw, sh, 0, 0, ow, oh);
-    }
-
-    const url = offsc.toDataURL('image/jpeg', 0.94);
-    addPhoto(url, f.name, f.dim, ow+'×'+oh+'px');
-    scanLine.style.display='none'; btnSnap.disabled=false;
-    statusEl.textContent='Foto capturada!';
-    setTimeout(()=>statusEl.textContent='Encaixe o rosto dentro das guias', 2000);
-  }, 720);
+  const f=FORMATS[cur], ratio=f.ratio;
+  let w,h;
+  if(ratio>=1){w=BASE;h=Math.round(BASE/ratio);}
+  else{h=BASE;w=Math.round(BASE*ratio);}
+  
+  const c=document.createElement('canvas');
+  c.width=w;c.height=h;
+  const ctx=c.getContext('2d');
+  ctx.fillStyle=bgColor;
+  ctx.fillRect(0,0,w,h);
+  
+  if(aiEnabled && segCanvas.style.display!=='none'){
+    ctx.drawImage(segCanvas,0,0,w,h);
+  }else{
+    ctx.drawImage(video,0,0,w,h);
+  }
+  
+  const dataUrl=c.toDataURL('image/jpeg',0.95);
+  photos.push(dataUrl);
+  renderGrid();
+  statusEl.textContent='Foto capturada ✓';
 }
 
-/* ── Gallery ── */
-function addPhoto(url,name,dim,px){
-  const id=Date.now();
-  photos.push({id,url,name,dim,px});
-  document.getElementById('empty-state')?.remove();
-  cntEl.textContent='('+photos.length+')';
-  const card=document.createElement('div');
-  card.className='pcard'; card.id='pc-'+id;
-  const img=document.createElement('img');
-  img.src=url; img.alt=name;
-  img.style.aspectRatio=String(FORMATS[cur].ratio);
-  const lbl=document.createElement('div');
-  lbl.className='pcard-label'; lbl.textContent=name;
-  const del=document.createElement('button');
-  del.className='pcard-del'; del.textContent='✕'; del.setAttribute('aria-label','Remover');
-  del.onclick=e=>{e.stopPropagation();removePhoto(id);};
-  card.appendChild(img); card.appendChild(lbl); card.appendChild(del);
-  card.onclick=()=>openLb(id);
-  grid.insertBefore(card,grid.firstChild);
+function renderGrid(){
+  grid.innerHTML='';
+  photos.forEach((p,i)=>{
+    const div=document.createElement('div');
+    div.className='photo-item';
+    div.innerHTML=`<img src="${p}"><button class="delete-btn" onclick="deletePhoto(${i})">✕</button>`;
+    div.onclick=()=>openLightbox(i);
+    grid.appendChild(div);
+  });
+  cntEl.textContent=`${photos.length} foto${photos.length!==1?'s':''}`;
 }
 
-function removePhoto(id){
-  photos=photos.filter(p=>p.id!==id);
-  document.getElementById('pc-'+id)?.remove();
-  cntEl.textContent='('+photos.length+')';
-  if(!photos.length) grid.innerHTML='<div id="empty-state">Nenhuma foto ainda.</div>';
+function deletePhoto(i){
+  photos.splice(i,1);
+  renderGrid();
 }
 
-function clearAll(){
-  photos=[]; grid.innerHTML='<div id="empty-state">Nenhuma foto ainda.</div>'; cntEl.textContent='(0)';
+function openLightbox(i){
+  lbId=i;
+  lbImg.src=photos[i];
+  lbMeta.textContent=`Foto ${i+1} de ${photos.length}`;
+  document.getElementById('lightbox').classList.add('active');
 }
 
-function openLb(id){
-  const p=photos.find(x=>x.id===id); if(!p) return;
-  lbId=id; lbImg.src=p.url; lbMeta.textContent=p.name+' · '+p.dim+' · '+p.px;
-  lbEl.classList.add('open');
-}
-function closeLb(){lbEl.classList.remove('open'); lbImg.src='';}
-function downloadLb(){
-  const p=photos.find(x=>x.id===lbId); if(!p) return;
-  const a=document.createElement('a'); a.href=p.url;
-  a.download=p.name.toLowerCase().replace(/\s/g,'-')+'.jpg'; a.click();
+function closeLightbox(){
+  document.getElementById('lightbox').classList.remove('active');
 }
 
-lbEl.addEventListener('click',e=>{if(e.target===lbEl)closeLb();});
-window.addEventListener('resize',()=>{if(stream)posGuide();});
-posGuide();
+function downloadPhoto(){
+  const link=document.createElement('a');
+  link.href=photos[lbId];
+  link.download=`photo-${lbId+1}.jpg`;
+  link.click();
+}
+
+// Snap button
+document.addEventListener('DOMContentLoaded',()=>{
+  btnSnap = document.createElement('button');
+  btnSnap.id='btn-snap';
+  btnSnap.textContent='📸 Capturar';
+  btnSnap.onclick=snap;
+  btnSnap.style.display='none';
+  document.querySelector('.toolbar-group').appendChild(btnSnap);
+  setFmt('3x4');
+});
+
+// Keyboard shortcuts
+document.addEventListener('keydown',e=>{
+  if(e.code==='Space'&&stream){snap();e.preventDefault();}
+});
 </script>
 </body>
 </html>
