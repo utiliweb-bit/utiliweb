@@ -336,17 +336,27 @@
             if(!stream){statusEl.textContent='Ative a câmera primeiro';return;}
             const vfRect=vfWrap.getBoundingClientRect();
             const guideRect=guide.getBoundingClientRect();
-            const scaleX=video.videoWidth/vfRect.width;
-            const scaleY=video.videoHeight/vfRect.height;
-            const sx=(guideRect.left-vfRect.left)*scaleX;
-            const sy=(guideRect.top-vfRect.top)*scaleY;
-            const sw=guideRect.width*scaleX;
-            const sh=guideRect.height*scaleY;
+            const videoAspect=video.videoWidth/video.videoHeight;
+            const containerAspect=vfRect.width/vfRect.height;
+            let scaleX, scaleY, offsetX=0, offsetY=0;
+            if(videoAspect>containerAspect){
+                scaleX=vfRect.height*videoAspect/video.videoWidth;
+                scaleY=vfRect.height/video.videoHeight;
+                offsetX=(vfRect.width-scaleX*video.videoWidth)/2;
+            }else{
+                scaleX=vfRect.width/video.videoWidth;
+                scaleY=vfRect.width/videoAspect/video.videoHeight;
+                offsetY=(vfRect.height-scaleY*video.videoHeight)/2;
+            }
+            const sx=((guideRect.left-vfRect.left-offsetX)/scaleX);
+            const sy=((guideRect.top-vfRect.top-offsetY)/scaleY);
+            const sw=(guideRect.width/scaleX);
+            const sh=(guideRect.height/scaleY);
             const canvas=document.createElement('canvas');
             canvas.width=Math.round(sw);
             canvas.height=Math.round(sh);
             const ctx=canvas.getContext('2d');
-            ctx.drawImage(video,sx,sy,sw,sh,0,0,sw,sh);
+            ctx.drawImage(video,Math.max(0,sx),Math.max(0,sy),Math.min(sw,video.videoWidth-sx),Math.min(sh,video.videoHeight-sy),0,0,sw,sh);
             const dataUrl=canvas.toDataURL('image/jpeg',0.95);
             addPhoto(dataUrl);
         }
