@@ -334,11 +334,16 @@
 
         function capturePhoto(){
             if(!stream){statusEl.textContent='Ative a câmera primeiro';return;}
+            const W=vfWrap.offsetWidth, H=vfWrap.offsetHeight;
+            const gx=parseFloat(guide.style.left), gy=parseFloat(guide.style.top);
+            const gw=guide.offsetWidth, gh=guide.offsetHeight;
+            const scaleX=video.videoWidth/W, scaleY=video.videoHeight/H;
+            const sx=gx*scaleX, sy=gy*scaleY, sw=gw*scaleX, sh=gh*scaleY;
             const canvas=document.createElement('canvas');
-            canvas.width=video.videoWidth;
-            canvas.height=video.videoHeight;
+            canvas.width=sw;
+            canvas.height=sh;
             const ctx=canvas.getContext('2d');
-            ctx.drawImage(video,0,0);
+            ctx.drawImage(video,sx,sy,sw,sh,0,0,sw,sh);
             const dataUrl=canvas.toDataURL('image/jpeg',0.95);
             addPhoto(dataUrl);
         }
