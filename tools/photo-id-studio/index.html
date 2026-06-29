@@ -383,61 +383,57 @@ function initSegmentor() {
   });
 }
 
+let maskCanvas = null, maskCtx = null;
 function onSegResults(res) {
-  const w=segCanvas.width, h=segCanvas.height;
+  const w = segCanvas.width, h = segCanvas.height;
+  if(!maskCanvas || maskCanvas.width !== w || maskCanvas.height !== h) {
+    maskCanvas = document.createElement('canvas');
+    maskCanvas.width = w; maskCanvas.height = h;
+    maskCtx = maskCanvas.getContext('2d');
+  }
   
-  // Draw video frame first
-  segCtx.drawImage(res.image,0,0,w,h);
-  
-  // Get mask data with blur for smoother edges
-  const maskCanvas = document.createElement('canvas');
-  maskCanvas.width = w; maskCanvas.height = h;
-  const maskCtx = maskCanvas.getContext('2d');
+  // Process mask with blur
   maskCtx.filter = 'blur(2px)';
-  maskCtx.drawImage(res.segmentationMask,0,0,w,h);
+  maskCtx.drawImage(res.segmentationMask, 0, 0, w, h);
   maskCtx.filter = 'none';
-  const maskData = maskCtx.getImageData(0,0,w,h);
-  const maskPixels = maskData.data;
+  const maskPixels = maskCtx.getImageData(0, 0, w, h).data;
   
-  // Get video frame pixels
-  const videoData = segCtx.getImageData(0,0,w,h);
+  // Process video frame
+  segCtx.drawImage(res.image, 0, 0, w, h);
+  const videoData = segCtx.getImageData(0, 0, w, h);
   const d = videoData.data;
-  const [br,bg2,bb] = hexToRgb(bgColor);
+  const [br, bg2, bb] = hexToRgb(bgColor);
   
-  // Advanced mask processing with smoothstep threshold and feathering
-  for(let i=0;i<d.length;i+=4){
-    const m = maskPixels[i]; // 0=background, 255=person
+  for(let i=0; i<d.length; i+=4) {
+    const m = maskPixels[i];
     let alpha = m / 255;
     
-    // Smoothstep threshold: elimina sujeira nas bordas
-    if(alpha > 0.85){
-      alpha = 1;
-    } else if(alpha < 0.15){
-      alpha = 0;
-    } else {
-      // Smooth interpolation na zona de transicao
+    // Smoothstep threshold
+    if(alpha > 0.85) alpha = 1;
+    else if(alpha < 0.15) alpha = 0;
+    else {
       alpha = (alpha - 0.15) / 0.70;
-      alpha = alpha * alpha * (3 - 2 * alpha); // smoothstep formula
+      alpha = alpha * alpha * (3 - 2 * alpha);
     }
     
-    // Feathering: suaviza as bordas com expoente
     alpha = Math.pow(alpha, 1.35);
     
-    // Descontaminacao de bordas (spill removal)
-    // Remove o halo colorido nas bordas
-    if(alpha < 0.98){
-      d[i]   = Math.round(d[i] * 0.95 + br * 0.05);
-      d[i+1] = Math.round(d[i+1] * 0.95 + bg2 * 0.05);
-      d[i+2] = Math.round(d[i+2] * 0.95 + bb * 0.05);
+    if(alpha < 0.98) {
+      // Spill removal + Blending
+      const r = d[i], g = d[i+1], b = d[i+2];
+      const nr = r * 0.95 + br * 0.05;
+      const ng = g * 0.95 + bg2 * 0.05;
+      const nb = b * 0.95 + bb * 0.05;
+      d[i]   = Math.round(nr * alpha + br * (1 - alpha));
+      d[i+1] = Math.round(ng * alpha + bg2 * (1 - alpha));
+      d[i+2] = Math.round(nb * alpha + bb * (1 - alpha));
     } else {
-      // Blending normal para pixels internos
       d[i]   = Math.round(d[i] * alpha + br * (1 - alpha));
       d[i+1] = Math.round(d[i+1] * alpha + bg2 * (1 - alpha));
       d[i+2] = Math.round(d[i+2] * alpha + bb * (1 - alpha));
     }
-    d[i+3] = 255;
   }
-  segCtx.putImageData(videoData,0,0);
+  segCtx.putImageData(videoData, 0, 0);
 }
 
 function hexToRgb(hex){
