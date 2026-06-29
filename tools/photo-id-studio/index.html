@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Photo ID Studio Pro</title>
+    <title>Photo ID Studio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
@@ -44,7 +44,7 @@
 
         #shell {
             width: 100%;
-            max-width: 1400px;
+            max-width: 960px;
             display: grid;
             grid-template-columns: 1fr;
             gap: 0;
@@ -533,7 +533,7 @@
         }
 
         /* Modal de câmera */
-        .modal {
+        .camera-modal {
             display: none;
             position: fixed;
             inset: 0;
@@ -543,11 +543,11 @@
             justify-content: center;
         }
 
-        .modal.active {
+        .camera-modal.active {
             display: flex;
         }
 
-        .modal-content {
+        .camera-modal-content {
             position: relative;
             width: 100%;
             max-width: 500px;
@@ -556,9 +556,11 @@
             background-color: var(--surface);
             overflow: hidden;
             border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
         }
 
-        .modal-header {
+        .camera-modal-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -566,7 +568,7 @@
             padding: 1rem;
         }
 
-        .modal-title {
+        .camera-modal-title {
             display: flex;
             align-items: center;
             gap: 0.5rem;
@@ -575,7 +577,7 @@
             color: var(--text);
         }
 
-        .modal-close {
+        .camera-modal-close {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -587,14 +589,20 @@
             cursor: pointer;
             transition: background-color 150ms ease-out;
             color: var(--text);
+            font-size: 18px;
         }
 
-        .modal-close:hover {
+        .camera-modal-close:hover {
             background-color: var(--surface2);
         }
 
-        .modal-body {
+        .camera-modal-body {
             padding: 1rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
         .camera-preview {
@@ -641,14 +649,14 @@
             to { transform: rotate(360deg); }
         }
 
-        .modal-footer {
+        .camera-modal-footer {
             display: flex;
             gap: 0.5rem;
             padding: 1rem;
             border-top: 1px solid var(--border);
         }
 
-        .btn-modal {
+        .btn-camera {
             flex: 1;
             padding: 0.625rem 1rem;
             border-radius: 6px;
@@ -661,21 +669,21 @@
             transition: all 150ms ease-out;
         }
 
-        .btn-modal:hover {
+        .btn-camera:hover {
             background-color: var(--border2);
         }
 
-        .btn-modal-primary {
+        .btn-camera-primary {
             background-color: var(--accent);
             color: #fff;
             border-color: var(--accent);
         }
 
-        .btn-modal-primary:hover {
+        .btn-camera-primary:hover {
             background-color: #2d5fd9;
         }
 
-        .btn-modal:disabled {
+        .btn-camera:disabled {
             opacity: 0.5;
             cursor: not-allowed;
         }
@@ -720,6 +728,20 @@
                     </div>
                 </div>
                 <div class="fmt-group-label" style="margin-top: 16px">Internacionais</div>
+                <div class="fmt-item" onclick="setFmt('mynumber', this)">
+                    <div class="fmt-thumb">35×45</div>
+                    <div class="fmt-item-info">
+                        <div class="fmt-item-name">My Number JP</div>
+                        <div class="fmt-item-dim">35 × 45 mm</div>
+                    </div>
+                </div>
+                <div class="fmt-item" onclick="setFmt('zairyu', this)">
+                    <div class="fmt-thumb">35×45</div>
+                    <div class="fmt-item-info">
+                        <div class="fmt-item-name">Zairyū Card</div>
+                        <div class="fmt-item-dim">35 × 45 mm</div>
+                    </div>
+                </div>
                 <div class="fmt-item" onclick="setFmt('passport_jp', this)">
                     <div class="fmt-thumb">35×45</div>
                     <div class="fmt-item-info">
@@ -802,13 +824,13 @@
     </div>
 
     <!-- Modal de câmera -->
-    <div class="modal" id="cameraModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-title">📱 Câmera</div>
-                <button class="modal-close" id="cameraModalClose">✕</button>
+    <div class="camera-modal" id="cameraModal">
+        <div class="camera-modal-content">
+            <div class="camera-modal-header">
+                <div class="camera-modal-title">📱 Câmera</div>
+                <button class="camera-modal-close" id="cameraModalClose">✕</button>
             </div>
-            <div class="modal-body">
+            <div class="camera-modal-body">
                 <div class="camera-preview" id="cameraPreview">
                     <video id="cameraVideo" playsinline muted></video>
                     <canvas id="cameraCanvas"></canvas>
@@ -817,9 +839,9 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button class="btn-modal" id="cameraCancelBtn">Cancelar</button>
-                <button class="btn-modal btn-modal-primary" id="cameraCaptureBtn">📷 Capturar</button>
+            <div class="camera-modal-footer">
+                <button class="btn-camera" id="cameraCancelBtn">Cancelar</button>
+                <button class="btn-camera btn-camera-primary" id="cameraCaptureBtn">📷 Capturar</button>
             </div>
         </div>
     </div>
@@ -837,16 +859,16 @@
     </div>
 
     <div id="status">Pronto para começar</div>
-
     <canvas id="offscreen" style="display: none"></canvas>
 
     <script>
         // Configuração
-        const BACKEND_URL = localStorage.getItem('photoIdBackendUrl') || 'http://localhost:5000';
         const FORMATS = {
             '3x4': { name: 'Foto 3×4', dim: '3 × 4 cm', ratio: 3/4, bg: '#ffffff' },
             'passport_br': { name: 'Passaporte BR', dim: '5 × 7 cm', ratio: 5/7, bg: '#ffffff' },
             'cnh': { name: 'CNH', dim: '3 × 4 cm', ratio: 3/4, bg: '#ffffff' },
+            'mynumber': { name: 'My Number JP', dim: '35 × 45 mm', ratio: 35/45, bg: '#ffffff' },
+            'zairyu': { name: 'Zairyū Card', dim: '35 × 45 mm', ratio: 35/45, bg: '#ffffff' },
             'passport_jp': { name: 'Passaporte JP', dim: '35 × 45 mm', ratio: 35/45, bg: '#ffffff' },
             'us_passport': { name: 'US Passport', dim: '2 × 2 inch', ratio: 1, bg: '#ffffff' },
             'uk_passport': { name: 'UK Passport', dim: '35 × 45 mm', ratio: 35/45, bg: '#cccccc' },
@@ -939,38 +961,7 @@
             }
         }
 
-        async function startCam() {
-            try {
-                stream = await navigator.mediaDevices.getUserMedia({
-                    video: { facingMode: facing },
-                    audio: false
-                });
-                video.srcObject = stream;
-                video.style.display = 'block';
-                ph.style.display = 'none';
-                btnCam.textContent = '⏹️ Parar';
-                btnFlip.style.display = 'inline-block';
-                posGuide();
-                statusEl.textContent = 'Câmera ativa';
-            } catch (err) {
-                statusEl.textContent = 'Erro ao acessar câmera: ' + err.message;
-            }
-        }
-
-        function stopCam() {
-            if (stream) {
-                stream.getTracks().forEach(t => t.stop());
-                stream = null;
-            }
-            video.srcObject = null;
-            video.style.display = 'none';
-            ph.style.display = 'flex';
-            btnCam.textContent = '📷 Câmera';
-            btnFlip.style.display = 'none';
-            statusEl.textContent = 'Câmera desligada';
-        }
-
-        // Camera Modal
+        // Camera Modal Functions
         function openCameraModal() {
             cameraModal.classList.add('active');
             startCameraCapture();
