@@ -385,28 +385,33 @@ function initSegmentor() {
 
 function onSegResults(res) {
   const w=segCanvas.width, h=segCanvas.height;
-  segCtx.clearRect(0,0,w,h);
-
-  // Draw mask: white=person, black=background
-  segCtx.drawImage(res.segmentationMask,0,0,w,h);
-  const imgData = segCtx.getImageData(0,0,w,h);
-  const d = imgData.data;
-  const [br,bg2,bb] = hexToRgb(bgColor);
-
-  // Apply anti-aliasing: use mask value as alpha for smooth blending
-  // This reduces artifacts and harsh edges
-  for(let i=0;i<d.length;i+=4){
-    const m = d[i]; // 0-255 mask value
-    // Use mask value as alpha for smooth blending (removes harsh edges)
-    const alpha = m / 255;
-    d[i+3] = Math.round(alpha * 255);
-  }
-  segCtx.putImageData(imgData,0,0);
-
-  // Composite: draw video frame BEHIND the colored-bg layer
-  segCtx.globalCompositeOperation='destination-over';
+  
+  // Draw video frame first
   segCtx.drawImage(res.image,0,0,w,h);
-  segCtx.globalCompositeOperation='source-over';
+  
+  // Get mask data
+  const maskCanvas = document.createElement('canvas');
+  maskCanvas.width = w; maskCanvas.height = h;
+  const maskCtx = maskCanvas.getContext('2d');
+  maskCtx.drawImage(res.segmentationMask,0,0,w,h);
+  const maskData = maskCtx.getImageData(0,0,w,h);
+  const maskPixels = maskData.data;
+  
+  // Get video frame pixels
+  const videoData = segCtx.getImageData(0,0,w,h);
+  const d = videoData.data;
+  const [br,bg2,bb] = hexToRgb(bgColor);
+  
+  // Blend video with background based on mask
+  for(let i=0;i<d.length;i+=4){
+    const m = maskPixels[i]; // 0=background, 255=person
+    const alpha = m / 255;
+    d[i]   = Math.round(d[i] * alpha + br * (1 - alpha));
+    d[i+1] = Math.round(d[i+1] * alpha + bg2 * (1 - alpha));
+    d[i+2] = Math.round(d[i+2] * alpha + bb * (1 - alpha));
+    d[i+3] = 255;
+  }
+  segCtx.putImageData(videoData,0,0);
 }
 
 function hexToRgb(hex){
