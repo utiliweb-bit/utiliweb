@@ -1,1142 +1,571 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Photo ID Studio</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        :root {
-            --bg: #0f1117;
-            --surface: #1a1d27;
-            --surface2: #222639;
-            --border: #2e3349;
-            --border2: #3d4260;
-            --text: #e8eaf0;
-            --text2: #8b90a8;
-            --text3: #555c7a;
-            --accent: #3d7fff;
-            --accent-dim: #1e3d6e;
-            --accent-text: #7eb4ff;
-            --green: #22c55e;
-            --green-dim: #14422a;
-            --green-text: #4ade80;
-            --radius: 10px;
-            --font: 'Inter', system-ui, sans-serif;
-        }
-
-        body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: var(--font);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        #shell {
-            width: 100%;
-            max-width: 960px;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 0;
-            min-height: 100vh;
-        }
-
-        @media (min-width: 700px) {
-            #shell {
-                grid-template-columns: 300px 1fr;
-                min-height: 100vh;
-            }
-        }
-
-        #sidebar {
-            background: var(--surface);
-            border-right: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        #logo {
-            padding: 20px 20px 16px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        #logo svg {
-            flex-shrink: 0;
-        }
-
-        #logo-text {
-            display: flex;
-            flex-direction: column;
-        }
-
-        #logo-text strong {
-            font-size: 15px;
-            font-weight: 600;
-            letter-spacing: -0.3px;
-        }
-
-        #logo-text span {
-            font-size: 11px;
-            color: var(--text2);
-            margin-top: 1px;
-        }
-
-        .badge-free {
-            background: var(--green-dim);
-            color: var(--green-text);
-            font-size: 10px;
-            font-weight: 600;
-            padding: 2px 7px;
-            border-radius: 20px;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            margin-left: auto;
-            flex-shrink: 0;
-        }
-
-        #fmt-list {
-            flex: 1;
-            overflow-y: auto;
-            padding: 10px 8px;
-        }
-
-        #fmt-list::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        #fmt-list::-webkit-scrollbar-thumb {
-            background: var(--border2);
-            border-radius: 4px;
-        }
-
-        .fmt-group-label {
-            font-size: 10px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            color: var(--text3);
-            padding: 10px 10px 6px;
-        }
-
-        .fmt-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 9px 10px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background 0.12s;
-            user-select: none;
-        }
-
-        .fmt-item:hover {
-            background: var(--surface2);
-        }
-
-        .fmt-item.active {
-            background: var(--accent-dim);
-        }
-
-        .fmt-item.active .fmt-item-name {
-            color: var(--accent-text);
-        }
-
-        .fmt-item.active .fmt-item-dim {
-            color: var(--accent-text);
-            opacity: 0.7;
-        }
-
-        .fmt-thumb {
-            width: 32px;
-            height: 40px;
-            border-radius: 4px;
-            border: 1.5px solid var(--border2);
-            background: var(--surface2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 9px;
-            color: var(--text3);
-            flex-shrink: 0;
-        }
-
-        .fmt-item.active .fmt-thumb {
-            border-color: var(--accent);
-            background: var(--accent-dim);
-        }
-
-        .fmt-item-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .fmt-item-name {
-            font-size: 13px;
-            font-weight: 500;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .fmt-item-dim {
-            font-size: 11px;
-            color: var(--text2);
-            margin-top: 1px;
-        }
-
-        #main {
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        #vf-wrap {
-            position: relative;
-            background: #070a10;
-            flex: 1;
-            min-height: 320px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        #video {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: none;
-        }
-
-        #ph-screen {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            color: var(--text3);
-        }
-
-        #ph-screen svg {
-            opacity: 0.4;
-        }
-
-        #ph-screen p {
-            font-size: 13px;
-        }
-
-        #guide {
-            position: absolute;
-            border: 2px solid rgba(61, 127, 255, 0.3);
-            border-radius: 8px;
-            pointer-events: none;
-        }
-
-        #scan-line {
-            position: absolute;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #3d7fff, transparent);
-            animation: scan 2s infinite;
-        }
-
-        @keyframes scan {
-            0% { top: 0; }
-            100% { top: 100%; }
-        }
-
-        #toolbar {
-            display: flex;
-            gap: 8px;
-            padding: 12px;
-            background: var(--surface);
-            border-top: 1px solid var(--border);
-            flex-wrap: wrap;
-        }
-
-        .toolbar-group {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-
-        .toolbar-group:not(:last-child) {
-            border-right: 1px solid var(--border2);
-            padding-right: 8px;
-        }
-
-        #bg-chip, #fmt-chip, #ai-track {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 12px;
-            background: var(--surface2);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 12px;
-            transition: all 0.12s;
-            user-select: none;
-        }
-
-        #bg-chip:hover, #fmt-chip:hover, #ai-track:hover {
-            background: var(--border2);
-        }
-
-        #bg-chip.active, #fmt-chip.active, #ai-track.active {
-            background: var(--accent-dim);
-            border-color: var(--accent);
-            color: var(--accent-text);
-        }
-
-        #ai-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--text3);
-            transition: background 0.12s;
-        }
-
-        #ai-track.on #ai-dot {
-            background: var(--green);
-        }
-
-        .bg-swatch {
-            width: 16px;
-            height: 16px;
-            border-radius: 3px;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: border 0.12s;
-        }
-
-        .bg-swatch.active {
-            border-color: var(--accent);
-        }
-
-        #bg-menu {
-            position: absolute;
-            bottom: 100%;
-            left: 0;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 8px;
-            display: none;
-            gap: 8px;
-            flex-wrap: wrap;
-            z-index: 100;
-            margin-bottom: 8px;
-            min-width: 200px;
-        }
-
-        #bg-chip.active ~ #bg-menu {
-            display: flex;
-        }
-
-        #photo-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-            gap: 8px;
-            padding: 12px;
-            background: var(--surface);
-            border-top: 1px solid var(--border);
-            overflow-y: auto;
-            flex: 1;
-        }
-
-        .photo-item {
-            position: relative;
-            aspect-ratio: 3/4;
-            border-radius: 6px;
-            overflow: hidden;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: border 0.12s;
-        }
-
-        .photo-item:hover {
-            border-color: var(--accent);
-        }
-
-        .photo-item.active {
-            border-color: var(--green);
-        }
-
-        .photo-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .photo-item .delete-btn {
-            position: absolute;
-            top: 4px;
-            right: 4px;
-            width: 20px;
-            height: 20px;
-            background: rgba(0, 0, 0, 0.6);
-            border: none;
-            color: #fff;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 12px;
-            display: none;
-        }
-
-        .photo-item:hover .delete-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        #lightbox {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.9);
-            display: none;
-            z-index: 200;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            gap: 16px;
-            padding: 20px;
-        }
-
-        #lightbox.active {
-            display: flex;
-        }
-
-        #lb {
-            position: relative;
-            max-width: 90vw;
-            max-height: 80vh;
-            background: var(--surface);
-            border-radius: 8px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
-        #lb-img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            max-height: 60vh;
-        }
-
-        #lb-meta {
-            padding: 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        #lb-meta button {
-            padding: 8px 16px;
-            background: var(--accent);
-            color: #fff;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 500;
-        }
-
-        #lb-meta button:hover {
-            opacity: 0.9;
-        }
-
-        .close-lb {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            width: 32px;
-            height: 32px;
-            background: rgba(0, 0, 0, 0.5);
-            border: none;
-            color: #fff;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 18px;
-            z-index: 10;
-        }
-
-        #cnt {
-            font-size: 12px;
-            color: var(--text2);
-            padding: 12px;
-            text-align: center;
-        }
-
-        #status {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            background: var(--surface2);
-            border: 1px solid var(--border);
-            padding: 12px 16px;
-            border-radius: 6px;
-            font-size: 12px;
-            max-width: 300px;
-            z-index: 50;
-        }
-
-        #btn-cam, #btn-flip, #btn-snap {
-            padding: 8px 16px;
-            background: var(--accent);
-            color: #fff;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 500;
-            transition: opacity 0.12s;
-        }
-
-        #btn-cam:hover, #btn-flip:hover, #btn-snap:hover {
-            opacity: 0.9;
-        }
-
-        #btn-snap {
-            background: var(--green);
-            padding: 12px 24px;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .vf-controls {
-            display: flex;
-            gap: 8px;
-            padding: 12px;
-            background: var(--surface);
-            border-top: 1px solid var(--border);
-        }
-
-        /* Modal de câmera */
-        .camera-modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            z-index: 300;
-            background-color: rgba(0, 0, 0, 0.95);
-            align-items: center;
-            justify-content: center;
-        }
-
-        .camera-modal.active {
-            display: flex;
-        }
-
-        .camera-modal-content {
-            position: relative;
-            width: 100%;
-            max-width: 500px;
-            margin: 1rem;
-            border-radius: 12px;
-            background-color: var(--surface);
-            overflow: hidden;
-            border: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .camera-modal-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid var(--border);
-            padding: 1rem;
-        }
-
-        .camera-modal-title {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text);
-        }
-
-        .camera-modal-close {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-            transition: background-color 150ms ease-out;
-            color: var(--text);
-            font-size: 18px;
-        }
-
-        .camera-modal-close:hover {
-            background-color: var(--surface2);
-        }
-
-        .camera-modal-body {
-            padding: 1rem;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .camera-preview {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            border-radius: 8px;
-            overflow: hidden;
-            background-color: #000;
-            margin-bottom: 1rem;
-        }
-
-        .camera-preview video,
-        .camera-preview img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .camera-preview canvas {
-            display: none;
-        }
-
-        .camera-loading {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: absolute;
-            inset: 0;
-            background-color: rgba(0, 0, 0, 0.5);
-        }
-
-        .spinner {
-            width: 32px;
-            height: 32px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-top-color: white;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .camera-modal-footer {
-            display: flex;
-            gap: 0.5rem;
-            padding: 1rem;
-            border-top: 1px solid var(--border);
-        }
-
-        .btn-camera {
-            flex: 1;
-            padding: 0.625rem 1rem;
-            border-radius: 6px;
-            border: 1px solid var(--border);
-            background-color: var(--surface2);
-            color: var(--text);
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 150ms ease-out;
-        }
-
-        .btn-camera:hover {
-            background-color: var(--border2);
-        }
-
-        .btn-camera-primary {
-            background-color: var(--accent);
-            color: #fff;
-            border-color: var(--accent);
-        }
-
-        .btn-camera-primary:hover {
-            background-color: #2d5fd9;
-        }
-
-        .btn-camera:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Photo ID Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f1117;--surface:#1a1d27;--surface2:#222639;
+  --border:#2e3349;--border2:#3d4260;
+  --text:#e8eaf0;--text2:#8b90a8;--text3:#555c7a;
+  --accent:#3d7fff;--accent-dim:#1e3d6e;--accent-text:#7eb4ff;
+  --green:#22c55e;--green-dim:#14422a;--green-text:#4ade80;
+  --radius:10px;--font:'Inter',system-ui,sans-serif;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;display:flex;flex-direction:column;align-items:center}
+#shell{width:100%;max-width:960px;display:grid;grid-template-columns:1fr;gap:0;min-height:100vh}
+@media(min-width:700px){#shell{grid-template-columns:300px 1fr;min-height:100vh}}
+#sidebar{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+#logo{padding:20px 20px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+#logo svg{flex-shrink:0}
+#logo-text{display:flex;flex-direction:column}
+#logo-text strong{font-size:15px;font-weight:600;letter-spacing:-.3px}
+#logo-text span{font-size:11px;color:var(--text2);margin-top:1px}
+.badge-free{background:var(--green-dim);color:var(--green-text);font-size:10px;font-weight:600;padding:2px 7px;border-radius:20px;letter-spacing:.5px;text-transform:uppercase;margin-left:auto;flex-shrink:0}
+#fmt-list{flex:1;overflow-y:auto;padding:10px 8px}
+#fmt-list::-webkit-scrollbar{width:4px}
+#fmt-list::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
+.fmt-group-label{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text3);padding:10px 10px 6px}
+.fmt-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;cursor:pointer;transition:background .12s;user-select:none}
+.fmt-item:hover{background:var(--surface2)}
+.fmt-item.active{background:var(--accent-dim)}
+.fmt-item.active .fmt-item-name{color:var(--accent-text)}
+.fmt-item.active .fmt-item-dim{color:var(--accent-text);opacity:.7}
+.fmt-thumb{width:32px;height:40px;border-radius:4px;border:1.5px solid var(--border2);background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--text3);flex-shrink:0}
+.fmt-item.active .fmt-thumb{border-color:var(--accent);background:var(--accent-dim)}
+.fmt-item-info{flex:1;min-width:0}
+.fmt-item-name{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fmt-item-dim{font-size:11px;color:var(--text2);margin-top:1px}
+.fmt-item-flag{font-size:15px;flex-shrink:0}
+#main{display:flex;flex-direction:column;overflow:hidden}
+#vf-wrap{position:relative;background:#070a10;flex:1;min-height:320px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+#video{position:absolute;width:100%;height:100%;object-fit:cover;display:none}
+#seg-canvas{position:absolute;width:100%;height:100%;object-fit:cover;display:none}
+#ph-screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:var(--text3)}
+#ph-screen svg{opacity:.4}
+#ph-screen p{font-size:13px}
+#guide{position:absolute;border:2px solid rgba(61,127,255,.3);border-radius:8px;pointer-events:none}
+#scan-line{position:absolute;width:100%;height:2px;background:linear-gradient(90deg,transparent,#3d7fff,transparent);animation:scan 2s infinite}
+@keyframes scan{0%{top:0}100%{top:100%}}
+#toolbar{display:flex;gap:8px;padding:12px;background:var(--surface);border-top:1px solid var(--border);flex-wrap:wrap}
+.toolbar-group{display:flex;gap:8px;align-items:center}
+.toolbar-group:not(:last-child){border-right:1px solid var(--border2);padding-right:8px}
+#bg-chip,#fmt-chip,#ai-track{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;cursor:pointer;font-size:12px;transition:all .12s;user-select:none}
+#bg-chip:hover,#fmt-chip:hover,#ai-track:hover{background:var(--border2)}
+#bg-chip.active,#fmt-chip.active,#ai-track.active{background:var(--accent-dim);border-color:var(--accent);color:var(--accent-text)}
+#ai-dot{width:8px;height:8px;border-radius:50%;background:var(--text3);transition:background .12s}
+#ai-track.on #ai-dot{background:var(--green)}
+.bg-swatch{width:16px;height:16px;border-radius:3px;cursor:pointer;border:2px solid transparent;transition:border .12s}
+.bg-swatch.active{border-color:var(--accent)}
+#bg-menu{position:absolute;bottom:100%;left:0;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:8px;display:none;gap:8px;flex-wrap:wrap;z-index:100;margin-bottom:8px;min-width:200px}
+#bg-chip.active~#bg-menu{display:flex}
+#photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px;padding:12px;background:var(--surface);border-top:1px solid var(--border);overflow-y:auto;flex:1}
+.photo-item{position:relative;aspect-ratio:3/4;border-radius:6px;overflow:hidden;cursor:pointer;border:2px solid transparent;transition:border .12s}
+.photo-item:hover{border-color:var(--accent)}
+.photo-item.active{border-color:var(--green)}
+.photo-item img{width:100%;height:100%;object-fit:cover}
+.photo-item .delete-btn{position:absolute;top:4px;right:4px;width:20px;height:20px;background:rgba(0,0,0,.6);border:none;color:#fff;border-radius:3px;cursor:pointer;font-size:12px;display:none}
+.photo-item:hover .delete-btn{display:flex;align-items:center;justify-content:center}
+#lightbox{position:fixed;inset:0;background:rgba(0,0,0,.9);display:none;z-index:200;align-items:center;justify-content:center;flex-direction:column;gap:16px;padding:20px}
+#lightbox.active{display:flex}
+#lb{position:relative;max-width:90vw;max-height:80vh;background:var(--surface);border-radius:8px;overflow:hidden;display:flex;flex-direction:column}
+#lb-img{width:100%;height:100%;object-fit:contain;max-height:60vh}
+#lb-meta{padding:16px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+#lb-meta button{padding:8px 16px;background:var(--accent);color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-weight:500}
+#lb-meta button:hover{opacity:.9}
+.close-lb{position:absolute;top:12px;right:12px;width:32px;height:32px;background:rgba(0,0,0,.5);border:none;color:#fff;border-radius:50%;cursor:pointer;font-size:18px;z-index:10}
+#cnt{font-size:12px;color:var(--text2);padding:12px;text-align:center}
+#status{position:fixed;bottom:20px;left:20px;background:var(--surface2);border:1px solid var(--border);padding:12px 16px;border-radius:6px;font-size:12px;max-width:300px;z-index:50}
+#btn-cam,#btn-flip,#btn-snap{padding:8px 16px;background:var(--accent);color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-weight:500;transition:opacity .12s}
+#btn-cam:hover,#btn-flip:hover,#btn-snap:hover{opacity:.9}
+#btn-snap{background:var(--green);padding:12px 24px;font-size:14px;font-weight:600}
+.vf-controls{display:flex;gap:8px;padding:12px;background:var(--surface);border-top:1px solid var(--border)}
+</style>
 </head>
 <body>
-    <div id="shell">
-        <div id="sidebar">
-            <div id="logo">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                    <rect width="20" height="20" rx="4" fill="#3d7fff"/>
-                    <circle cx="10" cy="9" r="2.5" fill="white"/>
-                    <path d="M5 14c0-2.21 2.24-4 5-4s5 1.79 5 4" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
-                </svg>
-                <div id="logo-text">
-                    <strong>Photo ID</strong>
-                    <span>Studio Pro</span>
-                </div>
-                <div class="badge-free">Free</div>
-            </div>
-            <div id="fmt-list">
-                <div class="fmt-group-label">Documentos</div>
-                <div class="fmt-item active" onclick="setFmt('3x4', this)">
-                    <div class="fmt-thumb">3×4</div>
-                    <div class="fmt-item-info">
-                        <div class="fmt-item-name">Foto 3×4</div>
-                        <div class="fmt-item-dim">3 × 4 cm</div>
-                    </div>
-                </div>
-                <div class="fmt-item" onclick="setFmt('passport_br', this)">
-                    <div class="fmt-thumb">5×7</div>
-                    <div class="fmt-item-info">
-                        <div class="fmt-item-name">Passaporte BR</div>
-                        <div class="fmt-item-dim">5 × 7 cm</div>
-                    </div>
-                </div>
-                <div class="fmt-item" onclick="setFmt('cnh', this)">
-                    <div class="fmt-thumb">3×4</div>
-                    <div class="fmt-item-info">
-                        <div class="fmt-item-name">CNH</div>
-                        <div class="fmt-item-dim">3 × 4 cm</div>
-                    </div>
-                </div>
-                <div class="fmt-group-label" style="margin-top: 16px">Internacionais</div>
-                <div class="fmt-item" onclick="setFmt('mynumber', this)">
-                    <div class="fmt-thumb">35×45</div>
-                    <div class="fmt-item-info">
-                        <div class="fmt-item-name">My Number JP</div>
-                        <div class="fmt-item-dim">35 × 45 mm</div>
-                    </div>
-                </div>
-                <div class="fmt-item" onclick="setFmt('zairyu', this)">
-                    <div class="fmt-thumb">35×45</div>
-                    <div class="fmt-item-info">
-                        <div class="fmt-item-name">Zairyū Card</div>
-                        <div class="fmt-item-dim">35 × 45 mm</div>
-                    </div>
-                </div>
-                <div class="fmt-item" onclick="setFmt('passport_jp', this)">
-                    <div class="fmt-thumb">35×45</div>
-                    <div class="fmt-item-info">
-                        <div class="fmt-item-name">Passaporte JP</div>
-                        <div class="fmt-item-dim">35 × 45 mm</div>
-                    </div>
-                </div>
-                <div class="fmt-item" onclick="setFmt('us_passport', this)">
-                    <div class="fmt-thumb">2×2</div>
-                    <div class="fmt-item-info">
-                        <div class="fmt-item-name">US Passport</div>
-                        <div class="fmt-item-dim">2 × 2 inch</div>
-                    </div>
-                </div>
-                <div class="fmt-item" onclick="setFmt('uk_passport', this)">
-                    <div class="fmt-thumb">35×45</div>
-                    <div class="fmt-item-info">
-                        <div class="fmt-item-name">UK Passport</div>
-                        <div class="fmt-item-dim">35 × 45 mm</div>
-                    </div>
-                </div>
-                <div class="fmt-item" onclick="setFmt('eu_id', this)">
-                    <div class="fmt-thumb">35×45</div>
-                    <div class="fmt-item-info">
-                        <div class="fmt-item-name">EU ID Card</div>
-                        <div class="fmt-item-dim">35 × 45 mm</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="main">
-            <div id="vf-wrap">
-                <video id="video" playsinline></video>
-                <div id="ph-screen">
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <rect x="3" y="3" width="18" height="18" rx="2"/>
-                        <circle cx="8.5" cy="8.5" r="1.5"/>
-                        <path d="M21 15l-5-5L5 21"/>
-                    </svg>
-                    <p>Clique em "Câmera" para começar</p>
-                </div>
-                <div id="guide"></div>
-                <div id="scan-line"></div>
-            </div>
-
-            <div id="toolbar">
-                <div class="toolbar-group">
-                    <button id="btn-cam" onclick="toggleCam()">📷 Câmera</button>
-                    <button id="btn-flip" onclick="flipCam()" style="display: none">🔄 Virar</button>
-                </div>
-                <div class="toolbar-group">
-                    <div id="fmt-chip" onclick="this.classList.toggle('active')">
-                        <span>📐</span>
-                        <span id="fmt-chip-text">Foto 3×4</span>
-                    </div>
-                </div>
-                <div class="toolbar-group">
-                    <div id="bg-chip" onclick="this.classList.toggle('active')">
-                        <div class="bg-swatch" style="background: #ffffff" onclick="setBg('#ffffff', 'Branco', this); event.stopPropagation()"></div>
-                        <span id="bg-chip-text">Fundo branco</span>
-                    </div>
-                    <div id="bg-menu">
-                        <div class="bg-swatch" style="background: #ffffff" onclick="setBg('#ffffff', 'Branco', this)"></div>
-                        <div class="bg-swatch" style="background: #cccccc" onclick="setBg('#cccccc', 'Cinza', this)"></div>
-                        <div class="bg-swatch" style="background: #0066ff" onclick="setBg('#0066ff', 'Azul', this)"></div>
-                        <div class="bg-swatch" style="background: #ff0000" onclick="setBg('#ff0000', 'Vermelho', this)"></div>
-                        <div class="bg-swatch" style="background: #00aa00" onclick="setBg('#00aa00', 'Verde', this)"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="photo-grid">
-                <div style="grid-column: 1/-1; text-align: center; color: var(--text2); padding: 40px 20px">
-                    <p>Tire uma foto para começar</p>
-                </div>
-            </div>
-            <div id="cnt"></div>
-        </div>
+<div id="shell">
+  <div id="sidebar">
+    <div id="logo">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect width="20" height="20" rx="4" fill="#3d7fff"/><circle cx="10" cy="9" r="2.5" fill="white"/><path d="M5 14c0-2.21 2.24-4 5-4s5 1.79 5 4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <div id="logo-text">
+        <strong>Photo ID</strong>
+        <span>Studio Pro</span>
+      </div>
+      <div class="badge-free">Free</div>
     </div>
-
-    <!-- Modal de câmera -->
-    <div class="camera-modal" id="cameraModal">
-        <div class="camera-modal-content">
-            <div class="camera-modal-header">
-                <div class="camera-modal-title">📱 Câmera</div>
-                <button class="camera-modal-close" id="cameraModalClose">✕</button>
-            </div>
-            <div class="camera-modal-body">
-                <div class="camera-preview" id="cameraPreview">
-                    <video id="cameraVideo" playsinline muted></video>
-                    <canvas id="cameraCanvas"></canvas>
-                    <div class="camera-loading" id="cameraLoading">
-                        <div class="spinner"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="camera-modal-footer">
-                <button class="btn-camera" id="cameraCancelBtn">Cancelar</button>
-                <button class="btn-camera btn-camera-primary" id="cameraCaptureBtn">📷 Capturar</button>
-            </div>
-        </div>
+    <div id="fmt-list">
+      <div class="fmt-group-label">Documentos</div>
+      <div class="fmt-item active" onclick="setFmt('3x4',this)"><div class="fmt-thumb">3×4</div><div class="fmt-item-info"><div class="fmt-item-name">Foto 3×4</div><div class="fmt-item-dim">3 × 4 cm</div></div></div>
+      <div class="fmt-item" onclick="setFmt('passport_br',this)"><div class="fmt-thumb">5×7</div><div class="fmt-item-info"><div class="fmt-item-name">Passaporte BR</div><div class="fmt-item-dim">5 × 7 cm</div></div></div>
+      <div class="fmt-item" onclick="setFmt('cnh',this)"><div class="fmt-thumb">3×4</div><div class="fmt-item-info"><div class="fmt-item-name">CNH</div><div class="fmt-item-dim">3 × 4 cm</div></div></div>
+      <div class="fmt-group-label" style="margin-top:16px">Internacionais</div>
+      <div class="fmt-item" onclick="setFmt('mynumber',this)"><div class="fmt-thumb">35×45</div><div class="fmt-item-info"><div class="fmt-item-name">My Number JP</div><div class="fmt-item-dim">35 × 45 mm</div></div></div>
+      <div class="fmt-item" onclick="setFmt('zairyu',this)"><div class="fmt-thumb">35×45</div><div class="fmt-item-info"><div class="fmt-item-name">Zairyū Card</div><div class="fmt-item-dim">35 × 45 mm</div></div></div>
+      <div class="fmt-item" onclick="setFmt('passport_jp',this)"><div class="fmt-thumb">35×45</div><div class="fmt-item-info"><div class="fmt-item-name">Passaporte JP</div><div class="fmt-item-dim">35 × 45 mm</div></div></div>
+      <div class="fmt-item" onclick="setFmt('us_passport',this)"><div class="fmt-thumb">2×2</div><div class="fmt-item-info"><div class="fmt-item-name">US Passport</div><div class="fmt-item-dim">2 × 2 inch</div></div></div>
+      <div class="fmt-item" onclick="setFmt('uk_passport',this)"><div class="fmt-thumb">35×45</div><div class="fmt-item-info"><div class="fmt-item-name">UK Passport</div><div class="fmt-item-dim">35 × 45 mm</div></div></div>
+      <div class="fmt-item" onclick="setFmt('eu_id',this)"><div class="fmt-thumb">35×45</div><div class="fmt-item-info"><div class="fmt-item-name">EU ID Card</div><div class="fmt-item-dim">35 × 45 mm</div></div></div>
     </div>
-
-    <!-- Lightbox -->
-    <div id="lightbox">
-        <button class="close-lb" onclick="closeLightbox()">✕</button>
-        <div id="lb">
-            <img id="lb-img" src="">
-            <div id="lb-meta">
-                <span id="lb-meta-text"></span>
-                <button onclick="downloadPhoto()">⬇️ Baixar</button>
-            </div>
-        </div>
+  </div>
+  <div id="main">
+    <div id="vf-wrap">
+      <video id="video" playsinline></video>
+      <canvas id="seg-canvas"></canvas>
+      <div id="ph-screen">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <p>Nenhuma câmera disponível</p>
+      </div>
+      <div id="guide"></div>
+      <div id="scan-line"></div>
     </div>
+    <div id="toolbar">
+      <div class="toolbar-group">
+        <button id="btn-cam" onclick="toggleCam()">📷 Câmera</button>
+        <button id="btn-flip" onclick="flipCam()" style="display:none">🔄 Virar</button>
+      </div>
+      <div class="toolbar-group">
+        <div id="fmt-chip" onclick="this.classList.toggle('active')">
+          <span>📐</span>
+          <span id="fmt-chip-text">Foto 3×4</span>
+        </div>
+      </div>
+      <div class="toolbar-group">
+        <div id="bg-chip" onclick="this.classList.toggle('active')">
+          <div class="bg-swatch" style="background:#ffffff" onclick="setBg('#ffffff','Branco',event.target);event.stopPropagation()"></div>
+          <span id="bg-chip-text">Fundo branco</span>
+        </div>
+        <div id="bg-menu">
+          <div class="bg-swatch" style="background:#ffffff" onclick="setBg('#ffffff','Branco',this)"></div>
+          <div class="bg-swatch" style="background:#cccccc" onclick="setBg('#cccccc','Cinza',this)"></div>
+          <div class="bg-swatch" style="background:#0066ff" onclick="setBg('#0066ff','Azul',this)"></div>
+          <div class="bg-swatch" style="background:#ff0000" onclick="setBg('#ff0000','Vermelho',this)"></div>
+          <div class="bg-swatch" style="background:#00aa00" onclick="setBg('#00aa00','Verde',this)"></div>
+        </div>
+      </div>
+      <div class="toolbar-group">
+        <div id="ai-track" onclick="toggleAI()">
+          <div id="ai-dot"></div>
+          <span>IA</span>
+        </div>
+      </div>
+    </div>
+    <div id="photo-grid">
+      <div style="grid-column:1/-1;text-align:center;color:var(--text2);padding:40px 20px">
+        <p>Tire uma foto para começar</p>
+      </div>
+    </div>
+    <div id="cnt"></div>
+  </div>
+</div>
+<div id="status">Pronto para começar</div>
 
-    <div id="status">Pronto para começar</div>
-    <canvas id="offscreen" style="display: none"></canvas>
+<div id="lightbox">
+  <button class="close-lb" onclick="closeLightbox()">✕</button>
+  <div id="lb">
+    <img id="lb-img" src="">
+    <div id="lb-meta">
+      <span id="lb-meta-text"></span>
+      <button onclick="downloadPhoto()">⬇️ Baixar</button>
+    </div>
+  </div>
+</div>
 
-    <script>
-        // Configuração
-        const FORMATS = {
-            '3x4': { name: 'Foto 3×4', dim: '3 × 4 cm', ratio: 3/4, bg: '#ffffff' },
-            'passport_br': { name: 'Passaporte BR', dim: '5 × 7 cm', ratio: 5/7, bg: '#ffffff' },
-            'cnh': { name: 'CNH', dim: '3 × 4 cm', ratio: 3/4, bg: '#ffffff' },
-            'mynumber': { name: 'My Number JP', dim: '35 × 45 mm', ratio: 35/45, bg: '#ffffff' },
-            'zairyu': { name: 'Zairyū Card', dim: '35 × 45 mm', ratio: 35/45, bg: '#ffffff' },
-            'passport_jp': { name: 'Passaporte JP', dim: '35 × 45 mm', ratio: 35/45, bg: '#ffffff' },
-            'us_passport': { name: 'US Passport', dim: '2 × 2 inch', ratio: 1, bg: '#ffffff' },
-            'uk_passport': { name: 'UK Passport', dim: '35 × 45 mm', ratio: 35/45, bg: '#cccccc' },
-            'eu_id': { name: 'EU ID Card', dim: '35 × 45 mm', ratio: 35/45, bg: '#ffffff' }
-        };
+<canvas id="offscreen" style="display:none"></canvas>
 
-        // Estado
-        let cur = '3x4';
-        let stream = null;
-        let facing = 'user';
-        let bgColor = '#ffffff';
-        let bgLabel = 'Branco';
-        let photos = [];
-        let currentStream = null;
-        let capturedImage = null;
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js" crossorigin="anonymous"></script>
 
-        // Elementos
-        const video = document.getElementById('video');
-        const ph = document.getElementById('ph-screen');
-        const guide = document.getElementById('guide');
-        const scanLine = document.getElementById('scan-line');
-        const bgChipTxt = document.getElementById('bg-chip-text');
-        const fmtChip = document.getElementById('fmt-chip');
-        const grid = document.getElementById('photo-grid');
-        const cntEl = document.getElementById('cnt');
-        const statusEl = document.getElementById('status');
-        const btnCam = document.getElementById('btn-cam');
-        const btnFlip = document.getElementById('btn-flip');
-        const vfWrap = document.getElementById('vf-wrap');
-        const cameraModal = document.getElementById('cameraModal');
-        const cameraVideo = document.getElementById('cameraVideo');
-        const cameraCanvas = document.getElementById('cameraCanvas');
-        const cameraLoading = document.getElementById('cameraLoading');
-        const cameraCaptureBtn = document.getElementById('cameraCaptureBtn');
-        const cameraCancelBtn = document.getElementById('cameraCancelBtn');
-        const cameraModalClose = document.getElementById('cameraModalClose');
+<script type="module">
+import { AutoModel, AutoProcessor, RawImage } from 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@2.15.0';
+window.transformers = { AutoModel, AutoProcessor, RawImage };
+</script>
 
-        // Funções
-        function setFmt(k, el) {
-            cur = k;
-            const f = FORMATS[k];
-            document.getElementById('fmt-chip-text').textContent = f.name;
-            bgColor = f.bg;
-            bgLabel = f.bg === '#ffffff' ? 'Branco' : f.bg === '#cccccc' ? 'Cinza' : 'Personalizado';
-            bgChipTxt.textContent = 'Fundo ' + bgLabel.toLowerCase();
-            document.querySelectorAll('.fmt-item').forEach(x => x.classList.remove('active'));
-            if (el) el.classList.add('active');
-            posGuide();
+<script>
+const FORMATS = {
+  '3x4':        {name:'Foto 3×4',      dim:'3 × 4 cm',   ratio:3/4,   bg:'#ffffff'},
+  'passport_br':{name:'Passaporte BR', dim:'5 × 7 cm',   ratio:5/7,   bg:'#ffffff'},
+  'cnh':        {name:'CNH',           dim:'3 × 4 cm',   ratio:3/4,   bg:'#ffffff'},
+  'mynumber':   {name:'My Number JP',  dim:'35 × 45 mm', ratio:35/45, bg:'#ffffff'},
+  'zairyu':     {name:'Zairyū Card',   dim:'35 × 45 mm', ratio:35/45, bg:'#ffffff'},
+  'passport_jp':{name:'Passaporte JP', dim:'35 × 45 mm', ratio:35/45, bg:'#ffffff'},
+  'us_passport':{name:'US Passport',   dim:'2 × 2 inch', ratio:1,     bg:'#ffffff'},
+  'uk_passport':{name:'UK Passport',   dim:'35 × 45 mm', ratio:35/45, bg:'#cccccc'},
+  'eu_id':      {name:'EU ID Card',    dim:'35 × 45 mm', ratio:35/45, bg:'#ffffff'},
+};
+
+let cur='3x4', stream=null, facing='user', bgColor='#ffffff', bgLabel='Branco';
+let photos=[], lbId=-1;
+let aiEnabled=false, segmentor=null, animId=null;
+let rmbgModel=null, rmbgProcessor=null, useRMBG=false;
+
+const video    = document.getElementById('video');
+const segCanvas= document.getElementById('seg-canvas');
+const segCtx   = segCanvas.getContext('2d');
+const ph       = document.getElementById('ph-screen');
+const guide    = document.getElementById('guide');
+const scanLine = document.getElementById('scan-line');
+const bgChipTxt= document.getElementById('bg-chip-text');
+const aiDot    = document.getElementById('ai-dot');
+const fmtChip  = document.getElementById('fmt-chip');
+const offsc    = document.getElementById('offscreen');
+const grid     = document.getElementById('photo-grid');
+const cntEl    = document.getElementById('cnt');
+const statusEl = document.getElementById('status');
+const btnCam   = document.getElementById('btn-cam');
+const btnFlip  = document.getElementById('btn-flip');
+const btnSnap  = document.getElementById('btn-snap');
+const vfWrap   = document.getElementById('vf-wrap');
+const lbEl     = document.getElementById('lb');
+const lbImg    = document.getElementById('lb-img');
+const lbMeta   = document.getElementById('lb-meta');
+const aiTrack  = document.getElementById('ai-track');
+
+function setFmt(k, el) {
+  cur = k;
+  const f = FORMATS[k];
+  fmtChip.textContent = f.name;
+  bgColor = f.bg;
+  bgLabel = f.bg==='#ffffff'?'Branco':f.bg==='#cccccc'?'Cinza':'Personalizado';
+  bgChipTxt.textContent = 'Fundo '+bgLabel.toLowerCase();
+  document.querySelectorAll('.fmt-item,.m-pill').forEach(x=>x.classList.remove('active'));
+  if(el) el.classList.add('active');
+  posGuide();
+}
+
+function setBg(color, label, el) {
+  bgColor=color; bgLabel=label;
+  bgChipTxt.textContent='Fundo '+label.toLowerCase();
+  document.querySelectorAll('.bg-swatch').forEach(x=>x.classList.remove('active'));
+  if(el) el.classList.add('active');
+  if(aiEnabled && segmentor) {
+    stopSegLoop();
+    if(stream) startSegLoop();
+  }
+}
+
+function posGuide() {
+  const r=FORMATS[cur].ratio;
+  const W=vfWrap.offsetWidth, H=vfWrap.offsetHeight||300;
+  const maxH=H*.82, maxW=W*.82;
+  let gw,gh;
+  if(r>=1){gw=Math.min(maxW,maxH*r);gh=gw/r;}
+  else    {gh=Math.min(maxH,maxW/r);gw=gh*r;}
+  const l=(W-gw)/2, t=(H-gh)/2;
+  guide.style.cssText=`position:absolute;left:${l}px;top:${t}px;width:${gw}px;height:${gh}px`;
+}
+
+/* ── AI segmentation with RMBG-1.4 ── */
+function toggleAI() {
+  aiEnabled = !aiEnabled;
+  aiTrack.classList.toggle('on', aiEnabled);
+  if(aiEnabled) {
+    bgChipTxt.textContent = 'Fundo IA — '+bgLabel.toLowerCase();
+    aiDot.classList.add('on');
+    if(!segmentor && !rmbgModel) initSegmentor();
+    else if(stream) startSegLoop();
+  } else {
+    bgChipTxt.textContent = 'Fundo '+bgLabel.toLowerCase();
+    aiDot.classList.remove('on');
+    stopSegLoop();
+    if(stream){ segCanvas.style.display='none'; video.style.display='block'; }
+  }
+}
+
+async function initSegmentor() {
+  statusEl.textContent = 'Carregando modelo RMBG-1.4…';
+  try {
+    const { AutoModel, AutoProcessor } = window.transformers;
+    if(AutoModel && AutoProcessor) {
+      rmbgModel = await AutoModel.from_pretrained('briaai/RMBG-1.4', { device: 'webgpu' });
+      rmbgProcessor = await AutoProcessor.from_pretrained('briaai/RMBG-1.4');
+      useRMBG = true;
+      statusEl.textContent = 'RMBG-1.4 pronto — qualidade profissional ✓';
+      if(stream) startSegLoop();
+      return;
+    }
+  } catch(e) {
+    console.warn('RMBG-1.4 indisponível:', e);
+  }
+
+  useRMBG = false;
+  statusEl.textContent = 'Carregando MediaPipe…';
+  segmentor = new SelfieSegmentation({locateFile: f =>
+    `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${f}`
+  });
+  segmentor.setOptions({modelSelection:1, selfieMode: facing==='user'});
+  segmentor.onResults(onSegResults);
+  segmentor.initialize().then(()=>{
+    statusEl.textContent = 'Modelo pronto — encaixe o rosto nas guias';
+    if(stream) startSegLoop();
+  }).catch(e=>{
+    console.error(e);
+    statusEl.textContent = 'Modelo indisponível';
+    aiEnabled=false; aiTrack.classList.remove('on'); aiDot.classList.remove('on');
+  });
+}
+
+let maskCanvas = null, maskCtx = null;
+
+async function onSegResults(res) {
+  const w = segCanvas.width, h = segCanvas.height;
+  if(!maskCanvas || maskCanvas.width !== w || maskCanvas.height !== h) {
+    maskCanvas = document.createElement('canvas');
+    maskCanvas.width = w; maskCanvas.height = h;
+    maskCtx = maskCanvas.getContext('2d');
+  }
+
+  if(useRMBG && rmbgModel) {
+    // RMBG-1.4: High-quality background removal
+    try {
+      const { RawImage } = window.transformers;
+      const image = await RawImage.fromCanvas(video);
+      const { pixel_values } = await rmbgProcessor(image);
+      const { output } = await rmbgModel({ input: pixel_values });
+      
+      // output is the mask (0-1 range)
+      const maskData = output.data;
+      segCtx.drawImage(video, 0, 0, w, h);
+      const videoData = segCtx.getImageData(0, 0, w, h);
+      const d = videoData.data;
+      const [br, bg2, bb] = hexToRgb(bgColor);
+
+      for(let i=0, j=0; i<d.length; i+=4, j++) {
+        let alpha = maskData[j] || 0;
+        
+        // Smoothstep for clean edges
+        if(alpha > 0.85) alpha = 1;
+        else if(alpha < 0.15) alpha = 0;
+        else {
+          alpha = (alpha - 0.15) / 0.70;
+          alpha = alpha * alpha * (3 - 2 * alpha);
         }
-
-        function setBg(color, label, el) {
-            bgColor = color;
-            bgLabel = label;
-            bgChipTxt.textContent = 'Fundo ' + label.toLowerCase();
-            document.querySelectorAll('.bg-swatch').forEach(x => x.classList.remove('active'));
-            if (el) el.classList.add('active');
+        
+        alpha = Math.pow(alpha, 1.2);
+        
+        const r = d[i], g = d[i+1], b = d[i+2];
+        if(alpha < 0.99) {
+          const spillFactor = 1 - alpha;
+          const desat = 0.7 + spillFactor * 0.3;
+          const nr = r * desat + br * (1 - desat);
+          const ng = g * desat + bg2 * (1 - desat);
+          const nb = b * desat + bb * (1 - desat);
+          d[i]   = Math.round(nr * alpha + br * (1 - alpha));
+          d[i+1] = Math.round(ng * alpha + bg2 * (1 - alpha));
+          d[i+2] = Math.round(nb * alpha + bb * (1 - alpha));
+        } else {
+          d[i]   = Math.round(r * alpha + br * (1 - alpha));
+          d[i+1] = Math.round(g * alpha + bg2 * (1 - alpha));
+          d[i+2] = Math.round(b * alpha + bb * (1 - alpha));
         }
+      }
+      segCtx.putImageData(videoData, 0, 0);
+    } catch(e) {
+      console.error('RMBG processing error:', e);
+    }
+  } else if(res && res.segmentationMask) {
+    // Fallback to MediaPipe
+    maskCtx.filter = 'blur(2px)';
+    maskCtx.drawImage(res.segmentationMask, 0, 0, w, h);
+    maskCtx.filter = 'none';
+    const maskPixels = maskCtx.getImageData(0, 0, w, h).data;
+    
+    segCtx.drawImage(res.image, 0, 0, w, h);
+    const videoData = segCtx.getImageData(0, 0, w, h);
+    const d = videoData.data;
+    const [br, bg2, bb] = hexToRgb(bgColor);
+    
+    for(let i=0; i<d.length; i+=4) {
+      const m = maskPixels[i];
+      let alpha = m / 255;
+      
+      if(alpha > 0.85) alpha = 1;
+      else if(alpha < 0.15) alpha = 0;
+      else {
+        alpha = (alpha - 0.15) / 0.70;
+        alpha = alpha * alpha * (3 - 2 * alpha);
+      }
+      
+      alpha = Math.pow(alpha, 1.2);
+      
+      const r = d[i], g = d[i+1], b = d[i+2];
+      if(alpha < 0.99) {
+        const spillFactor = 1 - alpha;
+        const desat = 0.7 + spillFactor * 0.3;
+        const nr = r * desat + br * (1 - desat);
+        const ng = g * desat + bg2 * (1 - desat);
+        const nb = b * desat + bb * (1 - desat);
+        d[i]   = Math.round(nr * alpha + br * (1 - alpha));
+        d[i+1] = Math.round(ng * alpha + bg2 * (1 - alpha));
+        d[i+2] = Math.round(nb * alpha + bb * (1 - alpha));
+      } else {
+        d[i]   = Math.round(r * alpha + br * (1 - alpha));
+        d[i+1] = Math.round(g * alpha + bg2 * (1 - alpha));
+        d[i+2] = Math.round(b * alpha + bb * (1 - alpha));
+      }
+    }
+    segCtx.putImageData(videoData, 0, 0);
+  }
+}
 
-        function posGuide() {
-            const r = FORMATS[cur].ratio;
-            const W = vfWrap.offsetWidth, H = vfWrap.offsetHeight || 300;
-            const maxH = H * 0.82, maxW = W * 0.82;
-            let gw, gh;
-            if (r >= 1) {
-                gw = Math.min(maxW, maxH * r);
-                gh = gw / r;
-            } else {
-                gh = Math.min(maxH, maxW / r);
-                gw = gh * r;
-            }
-            guide.style.width = gw + 'px';
-            guide.style.height = gh + 'px';
-            guide.style.left = (W - gw) / 2 + 'px';
-            guide.style.top = (H - gh) / 2 + 'px';
-        }
+function hexToRgb(hex){
+  hex=hex.replace('#','');
+  if(hex.length===3) hex=hex.split('').map(c=>c+c).join('');
+  const n=parseInt(hex,16);
+  return [(n>>16)&255,(n>>8)&255,n&255];
+}
 
-        function toggleCam() {
-            if (stream) {
-                stopCam();
-            } else {
-                openCameraModal();
-            }
-        }
+function startSegLoop(){
+  segCanvas.width  = video.videoWidth  || 640;
+  segCanvas.height = video.videoHeight || 480;
+  segCanvas.style.display='block';
+  video.style.display='none';
+  async function loop(){
+    if(!aiEnabled||!stream) return;
+    if(useRMBG && rmbgModel) {
+      await onSegResults(null);
+    } else if(segmentor) {
+      await segmentor.send({image:video});
+    }
+    animId=requestAnimationFrame(loop);
+  }
+  cancelAnimationFrame(animId);
+  animId=requestAnimationFrame(loop);
+}
 
-        function flipCam() {
-            if (stream) {
-                stopCam();
-                facing = facing === 'user' ? 'environment' : 'user';
-                startCam();
-            }
-        }
+function stopSegLoop(){
+  cancelAnimationFrame(animId); animId=null;
+}
 
-        // Camera Modal Functions
-        function openCameraModal() {
-            cameraModal.classList.add('active');
-            startCameraCapture();
-        }
+/* ── Camera ── */
+async function toggleCam(){
+  if(stream){stopCam();return;}
+  try{
+    const constraints = {
+      video:{
+        facingMode:facing,
+        width:{ideal:2560},
+        height:{ideal:1920}
+      }
+    };
+    stream = await navigator.mediaDevices.getUserMedia(constraints);
+    video.srcObject = stream;
+    video.onloadedmetadata = () => {
+      video.play();
+      ph.style.display='none';
+      video.style.display='block';
+      btnCam.textContent='🎥 Parar';
+      btnFlip.style.display='block';
+      if(btnSnap) btnSnap.style.display='block';
+      posGuide();
+      if(aiEnabled) startSegLoop();
+    };
+  }catch(e){
+    console.error('Erro ao abrir câmera:', e);
+    alert('Câmera não disponível: ' + e.message);
+  }
+}
 
-        function closeCameraModal() {
-            cameraModal.classList.remove('active');
-            stopCameraCapture();
-            capturedImage = null;
-        }
+function stopCam(){
+  if(stream) stream.getTracks().forEach(t=>t.stop());
+  stream=null;
+  video.srcObject=null;
+  ph.style.display='flex';
+  btnCam.textContent='📷 Câmera';
+  btnFlip.style.display='none';
+  btnSnap.style.display='none';
+  segCanvas.style.display='none';
+  video.style.display='none';
+  aiEnabled=false; aiTrack.classList.remove('on'); aiDot.classList.remove('on');
+  stopSegLoop();
+}
 
-        async function startCameraCapture() {
-            cameraLoading.style.display = 'flex';
-            cameraCaptureBtn.disabled = false;
-            cameraCaptureBtn.textContent = '📷 Capturar';
+function flipCam(){
+  facing=facing==='user'?'environment':'user';
+  stopCam();
+  toggleCam();
+}
 
-            try {
-                const mediaStream = await navigator.mediaDevices.getUserMedia({
-                    video: {
-                        facingMode: 'user',
-                        width: { ideal: 1920 },
-                        height: { ideal: 1440 }
-                    },
-                    audio: false
-                });
+/* ── Capture ── */
+const BASE = 2400;
+function snap(){
+  const f=FORMATS[cur], ratio=f.ratio;
+  let w,h;
+  if(ratio>=1){w=BASE;h=Math.round(BASE/ratio);}
+  else{h=BASE;w=Math.round(BASE*ratio);}
+  
+  const c=document.createElement('canvas');
+  c.width=w;c.height=h;
+  const ctx=c.getContext('2d');
+  ctx.fillStyle=bgColor;
+  ctx.fillRect(0,0,w,h);
+  
+  if(aiEnabled && segCanvas.style.display!=='none'){
+    ctx.drawImage(segCanvas,0,0,w,h);
+  }else{
+    ctx.drawImage(video,0,0,w,h);
+  }
+  
+  const dataUrl=c.toDataURL('image/jpeg',0.95);
+  photos.push(dataUrl);
+  renderGrid();
+  statusEl.textContent='Foto capturada ✓';
+}
 
-                currentStream = mediaStream;
-                cameraVideo.srcObject = mediaStream;
-                cameraVideo.style.display = 'block';
+function renderGrid(){
+  grid.innerHTML='';
+  photos.forEach((p,i)=>{
+    const div=document.createElement('div');
+    div.className='photo-item';
+    div.innerHTML=`<img src="${p}"><button class="delete-btn" onclick="deletePhoto(${i})">✕</button>`;
+    div.onclick=()=>openLightbox(i);
+    grid.appendChild(div);
+  });
+  cntEl.textContent=`${photos.length} foto${photos.length!==1?'s':''}`;
+}
 
-                cameraVideo.onloadedmetadata = () => {
-                    cameraLoading.style.display = 'none';
-                    cameraVideo.play().catch(err => console.error('Erro ao reproduzir vídeo:', err));
-                };
-            } catch (err) {
-                cameraLoading.style.display = 'none';
-                cameraCaptureBtn.disabled = true;
-                statusEl.textContent = 'Erro ao acessar câmera: ' + err.message;
-            }
-        }
+function deletePhoto(i){
+  photos.splice(i,1);
+  renderGrid();
+}
 
-        function stopCameraCapture() {
-            if (currentStream) {
-                currentStream.getTracks().forEach(track => track.stop());
-                currentStream = null;
-            }
-            cameraVideo.srcObject = null;
-        }
+function openLightbox(i){
+  lbId=i;
+  lbImg.src=photos[i];
+  lbMeta.textContent=`Foto ${i+1} de ${photos.length}`;
+  document.getElementById('lightbox').classList.add('active');
+}
 
-        async function capturePhoto() {
-            const canvas = cameraCanvas;
-            const ctx = canvas.getContext('2d');
+function closeLightbox(){
+  document.getElementById('lightbox').classList.remove('active');
+}
 
-            canvas.width = cameraVideo.videoWidth;
-            canvas.height = cameraVideo.videoHeight;
-            ctx.drawImage(cameraVideo, 0, 0);
+function downloadPhoto(){
+  const link=document.createElement('a');
+  link.href=photos[lbId];
+  link.download=`photo-${lbId+1}.jpg`;
+  link.click();
+}
 
-            return new Promise((resolve) => {
-                canvas.toBlob((blob) => {
-                    resolve(blob);
-                }, 'image/jpeg', 0.95);
-            });
-        }
+// Snap button
+document.addEventListener('DOMContentLoaded',()=>{
+  btnSnap = document.createElement('button');
+  btnSnap.id='btn-snap';
+  btnSnap.textContent='📸 Capturar';
+  btnSnap.onclick=snap;
+  btnSnap.style.display='none';
+  document.querySelector('.toolbar-group').appendChild(btnSnap);
+  setFmt('3x4');
+});
 
-        cameraCaptureBtn.addEventListener('click', async () => {
-            cameraCaptureBtn.disabled = true;
-            cameraCaptureBtn.textContent = '⏳ Capturando...';
+// Keyboard shortcuts
+document.addEventListener('keydown',e=>{
+  if(e.code==='Space'&&stream){snap();e.preventDefault();}
+});
+</script>
 
-            try {
-                const blob = await capturePhoto();
-                capturedImage = URL.createObjectURL(blob);
-
-                cameraVideo.style.display = 'none';
-                const img = document.createElement('img');
-                img.src = capturedImage;
-                img.style.display = 'block';
-                cameraVideo.parentNode.insertBefore(img, cameraVideo);
-
-                cameraCaptureBtn.textContent = '✓ Usar foto';
-                cameraCancelBtn.textContent = 'Refazer';
-
-                cameraCaptureBtn.onclick = () => {
-                    const file = new File([blob], 'foto-capturada.jpg', { type: 'image/jpeg' });
-                    handlePhotoCapture(file);
-                    closeCameraModal();
-                };
-            } catch (err) {
-                console.error('Erro ao capturar foto:', err);
-                statusEl.textContent = 'Erro ao capturar foto';
-                cameraCaptureBtn.disabled = false;
-                cameraCaptureBtn.textContent = '📷 Capturar';
-            }
-        });
-
-        cameraCancelBtn.addEventListener('click', () => {
-            if (cameraCancelBtn.textContent === 'Refazer') {
-                const img = cameraVideo.parentNode.querySelector('img');
-                if (img) img.remove();
-                cameraVideo.style.display = 'block';
-                cameraCaptureBtn.textContent = '📷 Capturar';
-                cameraCancelBtn.textContent = 'Cancelar';
-                cameraCaptureBtn.onclick = null;
-                cameraCaptureBtn.disabled = false;
-            } else {
-                closeCameraModal();
-            }
-        });
-
-        cameraModalClose.addEventListener('click', closeCameraModal);
-        cameraModal.addEventListener('click', (e) => {
-            if (e.target === cameraModal) closeCameraModal();
-        });
-
-        function handlePhotoCapture(file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const dataUrl = e.target.result;
-                const photo = {
-                    id: Date.now(),
-                    src: dataUrl,
-                    processed: false
-                };
-                photos.unshift(photo);
-                renderPhotos();
-                statusEl.textContent = 'Foto capturada com sucesso';
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function renderPhotos() {
-            if (photos.length === 0) {
-                grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text2); padding: 40px 20px"><p>Tire uma foto para começar</p></div>';
-                cntEl.textContent = '';
-                return;
-            }
-
-            grid.innerHTML = photos.map(p => `
-                <div class="photo-item" onclick="openLightbox(${p.id})">
-                    <img src="${p.src}" alt="Foto">
-                    <button class="delete-btn" onclick="deletePhoto(${p.id}, event)">🗑️</button>
-                </div>
-            `).join('');
-
-            cntEl.textContent = `${photos.length} foto${photos.length > 1 ? 's' : ''} capturada${photos.length > 1 ? 's' : ''}`;
-        }
-
-        function deletePhoto(id, e) {
-            e.stopPropagation();
-            photos = photos.filter(p => p.id !== id);
-            renderPhotos();
-        }
-
-        function openLightbox(id) {
-            const photo = photos.find(p => p.id === id);
-            if (photo) {
-                document.getElementById('lb-img').src = photo.src;
-                document.getElementById('lb-meta-text').textContent = `Foto ${FORMATS[cur].name}`;
-                document.getElementById('lightbox').classList.add('active');
-            }
-        }
-
-        function closeLightbox() {
-            document.getElementById('lightbox').classList.remove('active');
-        }
-
-        function downloadPhoto() {
-            const link = document.createElement('a');
-            link.href = document.getElementById('lb-img').src;
-            link.download = `photo-id-${Date.now()}.jpg`;
-            link.click();
-        }
-
-        // Inicializar
-        posGuide();
-        window.addEventListener('resize', posGuide);
-    </script>
 </body>
 </html>
