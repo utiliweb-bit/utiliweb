@@ -389,11 +389,13 @@ function onSegResults(res) {
   // Draw video frame first
   segCtx.drawImage(res.image,0,0,w,h);
   
-  // Get mask data
+  // Get mask data with blur for smoother edges
   const maskCanvas = document.createElement('canvas');
   maskCanvas.width = w; maskCanvas.height = h;
   const maskCtx = maskCanvas.getContext('2d');
+  maskCtx.filter = 'blur(2px)';
   maskCtx.drawImage(res.segmentationMask,0,0,w,h);
+  maskCtx.filter = 'none';
   const maskData = maskCtx.getImageData(0,0,w,h);
   const maskPixels = maskData.data;
   
@@ -402,13 +404,37 @@ function onSegResults(res) {
   const d = videoData.data;
   const [br,bg2,bb] = hexToRgb(bgColor);
   
-  // Blend video with background based on mask
+  // Advanced mask processing with smoothstep threshold and feathering
   for(let i=0;i<d.length;i+=4){
     const m = maskPixels[i]; // 0=background, 255=person
-    const alpha = m / 255;
-    d[i]   = Math.round(d[i] * alpha + br * (1 - alpha));
-    d[i+1] = Math.round(d[i+1] * alpha + bg2 * (1 - alpha));
-    d[i+2] = Math.round(d[i+2] * alpha + bb * (1 - alpha));
+    let alpha = m / 255;
+    
+    // Smoothstep threshold: elimina sujeira nas bordas
+    if(alpha > 0.85){
+      alpha = 1;
+    } else if(alpha < 0.15){
+      alpha = 0;
+    } else {
+      // Smooth interpolation na zona de transicao
+      alpha = (alpha - 0.15) / 0.70;
+      alpha = alpha * alpha * (3 - 2 * alpha); // smoothstep formula
+    }
+    
+    // Feathering: suaviza as bordas com expoente
+    alpha = Math.pow(alpha, 1.35);
+    
+    // Descontaminacao de bordas (spill removal)
+    // Remove o halo colorido nas bordas
+    if(alpha < 0.98){
+      d[i]   = Math.round(d[i] * 0.95 + br * 0.05);
+      d[i+1] = Math.round(d[i+1] * 0.95 + bg2 * 0.05);
+      d[i+2] = Math.round(d[i+2] * 0.95 + bb * 0.05);
+    } else {
+      // Blending normal para pixels internos
+      d[i]   = Math.round(d[i] * alpha + br * (1 - alpha));
+      d[i+1] = Math.round(d[i+1] * alpha + bg2 * (1 - alpha));
+      d[i+2] = Math.round(d[i+2] * alpha + bb * (1 - alpha));
+    }
     d[i+3] = 255;
   }
   segCtx.putImageData(videoData,0,0);
@@ -446,7 +472,7 @@ async function toggleCam(){
   try{
     statusEl.textContent='Aguardando permissão…';
     stream=await navigator.mediaDevices.getUserMedia({
-      video:{facingMode:facing,width:{ideal:1920},height:{ideal:1440}}
+      video:{facingMode:facing,width:{ideal:2560},height:{ideal:1920}}
     });
     video.srcObject=stream;
     await new Promise(r=>video.onloadedmetadata=r);
