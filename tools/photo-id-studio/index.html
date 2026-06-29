@@ -330,6 +330,12 @@ function setBg(color, label, el) {
   bgChipTxt.textContent='Fundo '+label.toLowerCase();
   document.querySelectorAll('.bg-swatch').forEach(x=>x.classList.remove('active'));
   if(el) el.classList.add('active');
+  // Ensure AI segmentation uses the new color immediately
+  if(aiEnabled && segmentor) {
+    // Force update by restarting the segmentation loop
+    stopSegLoop();
+    if(stream) startSegLoop();
+  }
 }
 
 /* ── Guide positioning ── */
