@@ -3,8 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>UtiliWeb — Hub de Ferramentas Gratuitas</title>
-  <meta name="description" content="UtiliWeb é uma plataforma premium de ferramentas online gratuitas para produtividade, finanças, texto, saúde, jogos e utilitários no Japão.">
+  <title>UtiliWeb 🇯🇵 | Ferramentas gratuitas para brasileiros no Japão</title>
+  <meta name="description" content="UtiliWeb reúne ferramentas gratuitas para brasileiros no Japão: calculadoras, tradução, finanças, saúde, documentos, jogos e utilidades do dia a dia.">
+
+  <meta property="og:title" content="UtiliWeb 🇯🇵 Ferramentas para brasileiros no Japão">
+  <meta property="og:description" content="Ferramentas gratuitas para facilitar sua vida no Japão.">
+  <meta property="og:image" content="https://utiliweb.vercel.app/imagem-compartilhar.png">
+  <meta property="og:url" content="https://utiliweb.vercel.app/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="UtiliWeb">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="UtiliWeb 🇯🇵 Ferramentas para brasileiros no Japão">
+  <meta name="twitter:description" content="Ferramentas gratuitas para facilitar sua vida no Japão.">
+  <meta name="twitter:image" content="https://utiliweb.vercel.app/imagem-compartilhar.png">
+  <link rel="canonical" href="https://utiliweb.vercel.app/">
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -70,7 +82,7 @@
       background: var(--neutral-900);
       background-image: radial-gradient(circle at top right, rgba(16, 185, 129, 0.15), transparent 400px);
       color: #fff;
-      padding: 64px 24px 80px;
+      padding: 38px 24px 46px;
       text-align: center;
       position: relative;
       overflow: hidden;
@@ -417,7 +429,7 @@
     }
 
     @media (max-width: 768px) {
-      header { padding: 48px 20px 64px; }
+      header { padding: 30px 20px 38px; }
       .container { padding: 32px 20px 60px; }
       .grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
       .ess-card { min-width: 90px; padding: 12px 8px; }
@@ -430,7 +442,7 @@
       .grid { grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 12px; }
       .card { padding: 16px; }
       .essentials-grid { gap: 8px; }
-      .ess-card { min-width: 80px; max-width: 140px; }
+      .ess-card { min-width: 95px; max-width: 160px; }
       .header-logo { width: 56px; height: 56px; margin-bottom: 16px; }
       .search-inner input { padding: 16px 20px 16px 48px; font-size: 0.9375rem; }
       .search-inner .search-icon { left: 16px; }
@@ -446,7 +458,7 @@
     </svg>
   </div>
   <h1>UtiliWeb</h1>
-  <p>Ferramentas rápidas, gratuitas e online.</p>
+  <p>Sua caixa de ferramentas digital para brasileiros no Japão 🇧🇷🇯🇵</p>
 </header>
 
 <div class="search-wrap">
@@ -456,36 +468,36 @@
         <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
       </svg>
     </div>
-    <input type="search" id="search" placeholder="Buscar ferramentas..." autocomplete="off" aria-label="Buscar ferramentas">
+    <input type="search" id="search" placeholder="O que você precisa hoje?" autocomplete="off" aria-label="Buscar ferramentas">
   </div>
 </div>
 
 <!-- ── FERRAMENTAS ESSENCIAIS ── -->
 <div class="essentials-wrap">
   <div class="essentials-inner">
-    <div class="essentials-label">⚡ Ferramentas Essenciais</div>
+    <div class="essentials-label">⚡ Mais usadas hoje</div>
     <div class="essentials-grid">
-      <a class="ess-card" href="tools/emergencia-japao/index.html">
+      <a class="ess-card" href="tools/emergencia-japao/">
         <span class="ess-icon">🚨</span>
         <span class="ess-title">Emergências no Japão</span>
       </a>
-      <a class="ess-card" href="tools/guia-medico/index.html">
+      <a class="ess-card" href="tools/guia-medico/">
         <span class="ess-icon">🏥</span>
         <span class="ess-title">Guia Médico JP-PT</span>
       </a>
-      <a class="ess-card" href="tools/weather/index.html">
+      <a class="ess-card" href="tools/weather/">
         <span class="ess-icon">🌦️</span>
         <span class="ess-title">Previsão do Tempo</span>
       </a>
-      <a class="ess-card" href="tools/conversor-ano-japones/index.html">
+      <a class="ess-card" href="tools/conversor-ano-japones/">
         <span class="ess-icon">🎌</span>
         <span class="ess-title">Conversor de Ano Japonês</span>
       </a>
-      <a class="ess-card" href="tools/leitor-codigos/index.html">
+      <a class="ess-card" href="tools/leitor-codigos/">
         <span class="ess-icon">📱</span>
         <span class="ess-title">Leitor de QR Code</span>
       </a>
-      <a class="ess-card" href="jogos/quiz500/index.html">
+      <a class="ess-card" href="jogos/quiz500/">
         <span class="ess-icon">🧠</span>
         <span class="ess-title">Quiz 500</span>
       </a>
@@ -497,7 +509,7 @@
 
   <div class="about">
     <strong>O que é o UtiliWeb?</strong>
-    Plataforma gratuita com ferramentas para produtividade, finanças, cálculos, conversões e recursos para quem vive no Japão. Tudo funciona direto no navegador, sem cadastro.
+    O UtiliWeb reúne ferramentas gratuitas para facilitar o dia a dia no Japão. Consulte informações, faça cálculos, converta valores e encontre recursos úteis em poucos segundos. Sem cadastro.
   </div>
 
   <div class="filter-bar" id="filter-bar">
@@ -524,72 +536,72 @@
       <div class="line"></div>
     </div>
     <div class="grid">
-      <a class="card" href="tools/emergencia-japao" data-key="emergencia japao policia ambulancia bombeiros 110 119 118 ajuda" data-cat="japao">
+      <a class="card" href="tools/emergencia-japao/" data-key="emergencia japao policia ambulancia bombeiros 110 119 118 ajuda" data-cat="japao">
         <span class="card-icon">🚨</span>
         <span class="card-title">Emergência no Japão</span>
         <span class="badge">Utilidade</span>
       </a>
-      <a class="card" href="tools/gerador-rirekisho" data-key="gerador rirekisho curriculo japao pdf jis resume emprego" data-cat="japao">
+      <a class="card" href="tools/gerador-rirekisho/" data-key="gerador rirekisho curriculo japao pdf jis resume emprego" data-cat="japao">
         <span class="card-icon">📄</span>
         <span class="card-title">Gerador de Currículo (Rirekisho)</span>
         <span class="badge">Trabalho</span>
       </a>
-      <a class="card" href="tools/guia-medico" data-key="guia medico japao portugues sintomas especialidades hospital saude" data-cat="japao saude">
+      <a class="card" href="tools/guia-medico/" data-key="guia medico japao portugues sintomas especialidades hospital saude" data-cat="japao saude">
         <span class="card-icon">🏥</span>
         <span class="card-title">Guia Médico JP-PT</span>
         <span class="badge">Saúde</span>
       </a>
-      <a class="card" href="tools/lista-de-compras-japao" data-key="lista de compras japão supermercado japonês produtos japoneses kanji romaji" data-cat="japao">
+      <a class="card" href="tools/lista-de-compras-japao/" data-key="lista de compras japão supermercado japonês produtos japoneses kanji romaji" data-cat="japao">
         <span class="card-icon">🛒</span>
         <span class="card-title">Lista de Compras (Japão)</span>
         <span class="badge">Utilidade</span>
       </a>
-      <a class="card" href="tools/frases-jp-pt" data-key="frases japones portugues conversação viagem turismo pronuncia audio" data-cat="japao">
+      <a class="card" href="tools/frases-jp-pt/" data-key="frases japones portugues conversação viagem turismo pronuncia audio" data-cat="japao">
         <span class="card-icon">🗣️</span>
         <span class="card-title">Frases Úteis JP-PT</span>
         <span class="badge">Idioma</span>
       </a>
-      <a class="card" href="tools/feriados-japao" data-key="feriados japao calendario golden week shogatsu" data-cat="japao">
+      <a class="card" href="tools/feriados-japao/" data-key="feriados japao calendario golden week shogatsu" data-cat="japao">
         <span class="card-icon">📅</span>
         <span class="card-title">Feriados do Japão</span>
         <span class="badge">Calendário</span>
       </a>
-      <a class="card" href="tools/carro-japao" data-key="carro japao imposto veiculo shaken kei car automovel" data-cat="japao">
+      <a class="card" href="tools/carro-japao/" data-key="carro japao imposto veiculo shaken kei car automovel" data-cat="japao">
         <span class="card-icon">🚗</span>
         <span class="card-title">Carro no Japão</span>
         <span class="badge">Carros</span>
       </a>
-      <a class="card" href="tools/conversor-ano-japones" data-key="conversor ano japones reiwa heisei showa taisho meiji" data-cat="japao">
+      <a class="card" href="tools/conversor-ano-japones/" data-key="conversor ano japones reiwa heisei showa taisho meiji" data-cat="japao">
         <span class="card-icon">🎌</span>
         <span class="card-title">Conversor de Ano Japonês</span>
         <span class="badge">Japão</span>
       </a>
-      <a class="card" href="tools/conversor-kana" data-key="conversor kana hiragana katakana meia largura half-width japonês" data-cat="japao">
+      <a class="card" href="tools/conversor-kana/" data-key="conversor kana hiragana katakana meia largura half-width japonês" data-cat="japao">
         <span class="card-icon">🔤</span>
         <span class="card-title">Conversor Kana</span>
         <span class="badge">Japonês</span>
       </a>
-      <a class="card" href="tools/calculadora-ir-japao" data-key="imposto renda japão ir shotokuzei juminzei empregado autônomo nenkin" data-cat="japao financas">
+      <a class="card" href="tools/calculadora-ir-japao/" data-key="imposto renda japão ir shotokuzei juminzei empregado autônomo nenkin" data-cat="japao financas">
         <span class="card-icon">💴</span>
         <span class="card-title">Calculadora de IR Japão</span>
         <span class="badge">Japonês</span>
       </a>
-      <a class="card" href="tools/calculadora-nenkin" data-key="nenkin pensao aposentadoria japao kokumin kosei calculadora" data-cat="japao financas">
+      <a class="card" href="tools/calculadora-nenkin/" data-key="nenkin pensao aposentadoria japao kokumin kosei calculadora" data-cat="japao financas">
         <span class="card-icon">💴</span>
         <span class="card-title">Calculadora de Nenkin</span>
         <span class="badge">Japonês</span>
       </a>
-      <a class="card" href="tools/calculadora-zangyo" data-key="zangyo horas extras calculadora salario trabalho hora extra" data-cat="japao financas">
+      <a class="card" href="tools/calculadora-zangyo/" data-key="zangyo horas extras calculadora salario trabalho hora extra" data-cat="japao financas">
         <span class="card-icon">⏱️</span>
         <span class="card-title">Calculadora de Zangyo</span>
         <span class="badge">Trabalho</span>
       </a>
-      <a class="card" href="tools/remessa-brasil" data-key="remessa envio dinheiro brasil cambio taxas iof transferencia japao iene real" data-cat="japao financas">
+      <a class="card" href="tools/remessa-brasil/" data-key="remessa envio dinheiro brasil cambio taxas iof transferencia japao iene real" data-cat="japao financas">
         <span class="card-icon">💸</span>
         <span class="card-title">Envio de Dinheiro ao Brasil</span>
         <span class="badge">Finanças</span>
       </a>
-      <a class="card" href="tools/custo-vida-jp-br" data-key="custo vida japao brasil comparativo moradia alimentacao" data-cat="japao financas">
+      <a class="card" href="tools/custo-vida-jp-br/" data-key="custo vida japao brasil comparativo moradia alimentacao" data-cat="japao financas">
         <span class="card-icon">🌍</span>
         <span class="card-title">Custo de Vida Japão vs Brasil</span>
         <span class="badge">Finanças</span>
@@ -604,32 +616,32 @@
       <div class="line"></div>
     </div>
     <div class="grid">
-      <a class="card" href="tools/calculadora-financeira" data-key="calculadora financeira juros parcelamento moeda porcentagem desconto conversor" data-cat="financas">
+      <a class="card" href="tools/calculadora-financeira/" data-key="calculadora financeira juros parcelamento moeda porcentagem desconto conversor" data-cat="financas">
         <span class="card-icon">💰</span>
         <span class="card-title">Calculadora Financeira</span>
         <span class="badge">Financeiro</span>
       </a>
-      <a class="card" href="tools/calculadora-ganho-anual" data-key="renda anual ganho mensal declaração imposto meses rendimentos total salário" data-cat="financas">
+      <a class="card" href="tools/calculadora-ganho-anual/" data-key="renda anual ganho mensal declaração imposto meses rendimentos total salário" data-cat="financas">
         <span class="card-icon">📊</span>
         <span class="card-title">Calculadora de Renda Anual</span>
         <span class="badge">Finanças</span>
       </a>
-      <a class="card" href="tools/calculadora-porcentagem" data-key="porcentagem calculadora matematica" data-cat="financas">
+      <a class="card" href="tools/calculadora-porcentagem/" data-key="porcentagem calculadora matematica" data-cat="financas">
         <span class="card-icon">🧮</span>
         <span class="card-title">Calculadora de Porcentagem PRO</span>
         <span class="badge">Matemática</span>
       </a>
-      <a class="card" href="tools/conversor-moedas" data-key="conversor moedas dólar euro real iene câmbio" data-cat="financas">
+      <a class="card" href="tools/conversor-moedas/" data-key="conversor moedas dólar euro real iene câmbio" data-cat="financas">
         <span class="card-icon">💵</span>
         <span class="card-title">Conversor de Moedas</span>
         <span class="badge">Finanças</span>
       </a>
-      <a class="card" href="tools/juros-compostos" data-key="juros compostos investimento rendimento calculadora" data-cat="financas">
+      <a class="card" href="tools/juros-compostos/" data-key="juros compostos investimento rendimento calculadora" data-cat="financas">
         <span class="card-icon">📈</span>
         <span class="card-title">Juros Compostos</span>
         <span class="badge">Finanças</span>
       </a>
-      <a class="card" href="tools/orcamento-mensal" data-key="planejador orcamento mensal financas gastos renda saldo despesas categorias" data-cat="financas">
+      <a class="card" href="tools/orcamento-mensal/" data-key="planejador orcamento mensal financas gastos renda saldo despesas categorias" data-cat="financas">
         <span class="card-icon">📊</span>
         <span class="card-title">Planejador de Orçamento Mensal</span>
         <span class="badge">Finanças</span>
@@ -644,47 +656,47 @@
       <div class="line"></div>
     </div>
     <div class="grid">
-      <a class="card" href="tools/contador-caracteres" data-key="texto caracteres palavras contador" data-cat="texto">
+      <a class="card" href="tools/contador-caracteres/" data-key="texto caracteres palavras contador" data-cat="texto">
         <span class="card-icon">📝</span>
         <span class="card-title">Contador de Texto PRO</span>
         <span class="badge">Texto</span>
       </a>
-      <a class="card" href="tools/contador-palavras" data-key="contador palavras contar palavras texto caracteres" data-cat="texto">
+      <a class="card" href="tools/contador-palavras/" data-key="contador palavras contar palavras texto caracteres" data-cat="texto">
         <span class="card-icon">📄</span>
         <span class="card-title">Contador de Palavras</span>
         <span class="badge">Texto</span>
       </a>
-      <a class="card" href="tools/inverter-texto" data-key="inverter texto ao contrário letras espelhar palavras" data-cat="texto">
+      <a class="card" href="tools/inverter-texto/" data-key="inverter texto ao contrário letras espelhar palavras" data-cat="texto">
         <span class="card-icon">🔄</span>
         <span class="card-title">Inverter Texto</span>
         <span class="badge">Texto</span>
       </a>
-      <a class="card" href="tools/texto-maiusculas-minusculas" data-key="texto maiúsculas minúsculas letras capitalizar converter" data-cat="texto">
+      <a class="card" href="tools/texto-maiusculas-minusculas/" data-key="texto maiúsculas minúsculas letras capitalizar converter" data-cat="texto">
         <span class="card-icon">✍️</span>
         <span class="card-title">Maiúsculas / Minúsculas</span>
         <span class="badge">Texto</span>
       </a>
-      <a class="card" href="tools/remover-espacos-extras" data-key="remover espaços extras limpar texto organizar palavras" data-cat="texto">
+      <a class="card" href="tools/remover-espacos-extras/" data-key="remover espaços extras limpar texto organizar palavras" data-cat="texto">
         <span class="card-icon">✂️</span>
         <span class="card-title">Remover Espaços Extras</span>
         <span class="badge">Texto</span>
       </a>
-      <a class="card" href="tools/remover-linhas-duplicadas" data-key="remover linhas duplicadas repetidas lista texto" data-cat="texto">
+      <a class="card" href="tools/remover-linhas-duplicadas/" data-key="remover linhas duplicadas repetidas lista texto" data-cat="texto">
         <span class="card-icon">🗑️</span>
         <span class="card-title">Remover Linhas Duplicadas</span>
         <span class="badge">Texto</span>
       </a>
-      <a class="card" href="tools/remover-quebras-linha" data-key="remover quebras linha unir linhas texto" data-cat="texto">
+      <a class="card" href="tools/remover-quebras-linha/" data-key="remover quebras linha unir linhas texto" data-cat="texto">
         <span class="card-icon">📑</span>
         <span class="card-title">Removedor de Quebras de Linha</span>
         <span class="badge">Texto</span>
       </a>
-      <a class="card" href="tools/separador-texto-virgulas" data-key="texto vírgulas separar lista csv palavras" data-cat="texto">
+      <a class="card" href="tools/separador-texto-virgulas/" data-key="texto vírgulas separar lista csv palavras" data-cat="texto">
         <span class="card-icon">📋</span>
         <span class="card-title">Separador por Vírgulas</span>
         <span class="badge">Texto</span>
       </a>
-      <a class="card" href="tools/gerador-lorem-ipsum" data-key="lorem ipsum texto fictício gerador layout design" data-cat="texto">
+      <a class="card" href="tools/gerador-lorem-ipsum/" data-key="lorem ipsum texto fictício gerador layout design" data-cat="texto">
         <span class="card-icon">📝</span>
         <span class="card-title">Gerador de Lorem Ipsum</span>
         <span class="badge">Texto</span>
@@ -699,12 +711,12 @@
       <div class="line"></div>
     </div>
     <div class="grid">
-      <a class="card" href="tools/calculadora-imc-calorias" data-key="imc calorias tmb taxa metabolica basal peso ideal fitness saude" data-cat="saude">
+      <a class="card" href="tools/calculadora-imc-calorias/" data-key="imc calorias tmb taxa metabolica basal peso ideal fitness saude" data-cat="saude">
         <span class="card-icon">🏃</span>
         <span class="card-title">Calculadora de IMC e Calorias</span>
         <span class="badge">Saúde</span>
       </a>
-      <a class="card" href="tools/contador-de-calorias" data-key="contador calorias nutricao dieta alimentos diario alimentar taco" data-cat="saude">
+      <a class="card" href="tools/contador-de-calorias/" data-key="contador calorias nutricao dieta alimentos diario alimentar taco" data-cat="saude">
         <span class="card-icon">🥗</span>
         <span class="card-title">Contador de Calorias</span>
         <span class="badge">Saúde</span>
@@ -719,37 +731,37 @@
       <div class="line"></div>
     </div>
     <div class="grid">
-      <a class="card" href="jogos/palavra-secreta" data-key="palavra secreta jogo wordle português letras adivinhar" data-cat="jogos">
+      <a class="card" href="jogos/palavra-secreta/" data-key="palavra secreta jogo wordle português letras adivinhar" data-cat="jogos">
         <span class="card-icon">🔤</span>
         <span class="card-title">Palavra Secreta</span>
         <span class="badge">Jogo</span>
       </a>
-      <a class="card" href="jogos/sequencia" data-key="sequência memória cores simon jogo reflexo" data-cat="jogos">
+      <a class="card" href="jogos/sequencia/" data-key="sequência memória cores simon jogo reflexo" data-cat="jogos">
         <span class="card-icon">🎨</span>
         <span class="card-title">Sequência</span>
         <span class="badge">Memória</span>
       </a>
-      <a class="card" href="jogos/quiz500" data-key="quiz 500 perguntas conhecimentos gerais história ciências trivia" data-cat="jogos">
+      <a class="card" href="jogos/quiz500/" data-key="quiz 500 perguntas conhecimentos gerais história ciências trivia" data-cat="jogos">
         <span class="card-icon">🧠</span>
         <span class="card-title">Quiz 500</span>
         <span class="badge">Conhecimentos</span>
       </a>
-      <a class="card" href="jogos/jogo-da-memoria" data-key="jogo da memória cartas pares matching game concentração emoji" data-cat="jogos">
+      <a class="card" href="jogos/jogo-da-memoria/" data-key="jogo da memória cartas pares matching game concentração emoji" data-cat="jogos">
         <span class="card-icon">🃏</span>
         <span class="card-title">Jogo da Memória</span>
         <span class="badge">Treino Mental</span>
       </a>
-      <a class="card" href="jogos/jogo-de-qi" data-key="jogo de qi teste inteligência raciocínio lógico sequência QI cognitivo" data-cat="jogos">
+      <a class="card" href="jogos/jogo-de-qi/" data-key="jogo de qi teste inteligência raciocínio lógico sequência QI cognitivo" data-cat="jogos">
         <span class="card-icon">💡</span>
         <span class="card-title">Jogo de QI</span>
         <span class="badge">Raciocínio</span>
       </a>
-      <a class="card" href="jogos/sorteador-numeros" data-key="sorteador números aleatório random número" data-cat="utilidade">
+      <a class="card" href="jogos/sorteador-numeros/" data-key="sorteador números aleatório random número" data-cat="utilidade">
         <span class="card-icon">🎲</span>
         <span class="card-title">Sorteador de Números</span>
         <span class="badge">Utilitário</span>
       </a>
-      <a class="card" href="jogos/bingo" data-key="bingo jogo bingo online cartela números sorteio loteria" data-cat="jogos">
+      <a class="card" href="jogos/bingo/" data-key="bingo jogo bingo online cartela números sorteio loteria" data-cat="jogos">
         <span class="card-icon">🎲</span>
         <span class="card-title">Bingo</span>
         <span class="badge">Sorte</span>
@@ -764,17 +776,17 @@
       <div class="line"></div>
     </div>
     <div class="grid">
-      <a class="card" href="tools/gerador-bio-viral" data-key="bio instagram tiktok youtube social" data-cat="social">
+      <a class="card" href="tools/gerador-bio-viral/" data-key="bio instagram tiktok youtube social" data-cat="social">
         <span class="card-icon">🔥</span>
         <span class="card-title">Gerador de Bio Viral</span>
         <span class="badge">Social Media</span>
       </a>
-      <a class="card" href="tools/gerador-link-whatsapp" data-key="whatsapp link wa.me mensagem automática" data-cat="social">
+      <a class="card" href="tools/gerador-link-whatsapp/" data-key="whatsapp link wa.me mensagem automática" data-cat="social">
         <span class="card-icon">💬</span>
         <span class="card-title">Gerador de Link WhatsApp</span>
         <span class="badge">Social</span>
       </a>
-      <a class="card" href="tools/link-na-bio-pro" data-key="link bio linktree pagina" data-cat="social">
+      <a class="card" href="tools/link-na-bio-pro/" data-key="link bio linktree pagina" data-cat="social">
         <span class="card-icon">🌐</span>
         <span class="card-title">Link na Bio PRO</span>
         <span class="badge">Social</span>
@@ -789,92 +801,92 @@
       <div class="line"></div>
     </div>
     <div class="grid">
-      <a class="card" href="tools/weather" data-key="clima tempo weather previsão temperatura hoje chuva vento umidade forecast" data-cat="utilidade">
+      <a class="card" href="tools/weather/" data-key="clima tempo weather previsão temperatura hoje chuva vento umidade forecast" data-cat="utilidade">
         <span class="card-icon">🌦️</span>
         <span class="card-title">Previsão do Tempo</span>
         <span class="badge">Utilidade</span>
       </a>
-      <a class="card" href="tools/leitor-codigos" data-key="qr code leitor qr scanner código de barras decodificar" data-cat="utilidade">
+      <a class="card" href="tools/leitor-codigos/" data-key="qr code leitor qr scanner código de barras decodificar" data-cat="utilidade">
         <span class="card-icon">📱</span>
         <span class="card-title">Leitor de QR Code</span>
         <span class="badge">Utilitário</span>
       </a>
-      <a class="card" href="tools/photo-id-studio" data-key="foto documento 3x4 passaporte my number cnh visto identidade" data-cat="utilidade">
+      <a class="card" href="tools/photo-id-studio/" data-key="foto documento 3x4 passaporte my number cnh visto identidade" data-cat="utilidade">
        <span class="card-icon">📸</span>
        <span class="card-title">Photo ID Studio</span>
        <span class="badge">Utilidade</span>
       </a>
-      <a class="card" href="tools/lista-de-compras" data-key="lista de compras supermercado mercado compras checklist" data-cat="utilidade">
+      <a class="card" href="tools/lista-de-compras/" data-key="lista de compras supermercado mercado compras checklist" data-cat="utilidade">
         <span class="card-icon">🛒</span>
         <span class="card-title">Lista de Compras</span>
         <span class="badge">Utilidade</span>
       </a>
-      <a class="card" href="tools/feriados-brasil" data-key="feriados brasil calendário carnaval páscoa natal datas nacionais" data-cat="utilidade">
+      <a class="card" href="tools/feriados-brasil/" data-key="feriados brasil calendário carnaval páscoa natal datas nacionais" data-cat="utilidade">
         <span class="card-icon">📅</span>
         <span class="card-title">Feriados do Brasil</span>
         <span class="badge">Calendário</span>
       </a>
-      <a class="card" href="tools/calculadora-idade" data-key="idade calcular idade anos meses dias aniversário" data-cat="utilidade">
+      <a class="card" href="tools/calculadora-idade/" data-key="idade calcular idade anos meses dias aniversário" data-cat="utilidade">
         <span class="card-icon">🎂</span>
         <span class="card-title">Calculadora de Idade</span>
         <span class="badge">Utilitário</span>
       </a>
-      <a class="card" href="tools/contador-prazos" data-key="prazo contador dias data deadline tempo faltando" data-cat="utilidade">
+      <a class="card" href="tools/contador-prazos/" data-key="prazo contador dias data deadline tempo faltando" data-cat="utilidade">
         <span class="card-icon">⏱️</span>
         <span class="card-title">Contador de Prazos</span>
         <span class="badge">Utilitário</span>
       </a>
-      <a class="card" href="tools/conversor-de-fusos" data-key="conversor fuso horario timezone hora cidade mundo internacional" data-cat="utilidade">
+      <a class="card" href="tools/conversor-de-fusos/" data-key="conversor fuso horario timezone hora cidade mundo internacional" data-cat="utilidade">
         <span class="card-icon">🌍</span>
         <span class="card-title">Conversor de Fusos Horários</span>
         <span class="badge">Tempo</span>
       </a>
-      <a class="card" href="tools/conversor-de-tamanhos" data-key="conversor tamanho roupa calcado sutia anel infantil brasil eua europa japao" data-cat="utilidade">
+      <a class="card" href="tools/conversor-de-tamanhos/" data-key="conversor tamanho roupa calcado sutia anel infantil brasil eua europa japao" data-cat="utilidade">
         <span class="card-icon">📏</span>
         <span class="card-title">Conversor de Tamanhos</span>
         <span class="badge">Moda</span>
       </a>
-      <a class="card" href="tools/conversor-temperatura" data-key="temperatura celsius fahrenheit conversor" data-cat="utilidade">
+      <a class="card" href="tools/conversor-temperatura/" data-key="temperatura celsius fahrenheit conversor" data-cat="utilidade">
         <span class="card-icon">🌡️</span>
         <span class="card-title">Conversor de Temperatura</span>
         <span class="badge">Utilitário</span>
       </a>
-      <a class="card" href="tools/descobrir-ip" data-key="ip internet meu ip localização" data-cat="utilidade">
+      <a class="card" href="tools/descobrir-ip/" data-key="ip internet meu ip localização" data-cat="utilidade">
         <span class="card-icon">🌍</span>
         <span class="card-title">Descobrir meu IP</span>
         <span class="badge">Utilitário</span>
       </a>
-      <a class="card" href="tools/ip-mapa" data-key="ip mapa localização geolocalização internet" data-cat="utilidade">
+      <a class="card" href="tools/ip-mapa/" data-key="ip mapa localização geolocalização internet" data-cat="utilidade">
         <span class="card-icon">🗺️</span>
         <span class="card-title">IP no Mapa</span>
         <span class="badge">IP Tools</span>
       </a>
-      <a class="card" href="tools/ip-speedtest" data-key="internet velocidade speed test rede ping" data-cat="utilidade">
+      <a class="card" href="tools/ip-speedtest/" data-key="internet velocidade speed test rede ping" data-cat="utilidade">
         <span class="card-icon">⚡</span>
         <span class="card-title">Teste de Internet</span>
         <span class="badge">IP Tools</span>
       </a>
-      <a class="card" href="tools/gerador-qr-code" data-key="qr code qrcode gerar link pix whatsapp" data-cat="utilidade">
+      <a class="card" href="tools/gerador-qr-code/" data-key="qr code qrcode gerar link pix whatsapp" data-cat="utilidade">
         <span class="card-icon">📱</span>
         <span class="card-title">Gerador de QR Code</span>
         <span class="badge">Utilitário</span>
       </a>
-      <a class="card" href="tools/gerador-senha-forte" data-key="senha password gerador senha forte segurança" data-cat="utilidade">
+      <a class="card" href="tools/gerador-senha-forte/" data-key="senha password gerador senha forte segurança" data-cat="utilidade">
         <span class="card-icon">🔐</span>
         <span class="card-title">Gerador de Senha Forte</span>
         <span class="badge">Segurança</span>
       </a>
-      <a class="card" href="tools/signo-chines" data-key="signo chines zodiaco chines calendario lunar ano novo animal" data-cat="utilidade">
+      <a class="card" href="tools/signo-chines/" data-key="signo chines zodiaco chines calendario lunar ano novo animal" data-cat="utilidade">
         <span class="card-icon">🐉</span>
         <span class="card-title">Signo Chinês</span>
         <span class="badge">Astrologia</span>
       </a>
-      <a class="card" href="tools/signo-ocidental" data-key="signo ocidental zodiaco horoscopo signo solar ascendente" data-cat="utilidade">
+      <a class="card" href="tools/signo-ocidental/" data-key="signo ocidental zodiaco horoscopo signo solar ascendente" data-cat="utilidade">
         <span class="card-icon">♈</span>
         <span class="card-title">Signo Ocidental</span>
         <span class="badge">Astrologia</span>
       </a>
-      <a class="card" href="tools/gerador-nomes" data-key="gerador nomes bebê menino menina neutro clássico moderno raro português japonês" data-cat="utilidade">
+      <a class="card" href="tools/gerador-nomes/" data-key="gerador nomes bebê menino menina neutro clássico moderno raro português japonês" data-cat="utilidade">
         <span class="card-icon">🍼</span>
         <span class="card-title">Gerador de Nomes</span>
         <span class="badge">Bebê</span>
@@ -890,10 +902,11 @@
     <a href="/privacy.html">Privacidade</a>
     <a href="/contact.html">Contato</a>
   </div>
-  <p class="copyright">© 2025 UtiliWeb · Inteligência e Praticidade</p>
+  <p class="copyright">© <span id="year"></span> UtiliWeb 🇯🇵 · Ferramentas gratuitas para o dia a dia</p>
 </footer>
 
 <script>
+  document.getElementById("year").textContent = new Date().getFullYear();
   const searchInput = document.getElementById('search');
   const filterBar = document.getElementById('filter-bar');
   const pills = filterBar.querySelectorAll('.pill');
