@@ -1,0 +1,77 @@
+name: Generate Sitemap
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sitemap:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate sitemap
+        run: |
+          python3 << 'EOF'
+          from pathlib import Path
+          from datetime import date
+
+          BASE_URL = "https://utiliweb.vercel.app"
+          ROOT = Path(".")
+
+          urls = []
+
+          urls.append(("/", "daily", "1.0"))
+
+          for page in ["about.html", "contact.html", "privacy.html"]:
+              if (ROOT / page).exists():
+                  urls.append((f"/{page}", "monthly", "0.7"))
+
+          for folder, priority in [("tools", "0.9"), ("jogos", "0.8")]:
+              d = ROOT / folder
+              if d.exists():
+                  for item in sorted(d.iterdir()):
+                      if item.is_dir():
+                          urls.append((f"/{folder}/{item.name}/", "weekly", priority))
+
+          today = date.today().isoformat()
+
+          xml = [
+              '<?xml version="1.0" encoding="UTF-8"?>',
+              '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+          ]
+
+          for path, freq, priority in urls:
+              xml.extend([
+                  "  <url>",
+                  f"    <loc>{BASE_URL}{path}</loc>",
+                  f"    <lastmod>{today}</lastmod>",
+                  f"    <changefreq>{freq}</changefreq>",
+                  f"    <priority>{priority}</priority>",
+                  "  </url>"
+              ])
+
+          xml.append("</urlset>")
+
+          Path("sitemap.xml").write_text("\n".join(xml), encoding="utf-8")
+          EOF
+
+      - name: Commit sitemap
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add sitemap.xml
+
+          if git diff --cached --quiet; then
+            echo "No changes"
+          else
+            git commit -m "Update sitemap"
+            git push
+          fi
