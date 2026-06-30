@@ -1,88 +1,8 @@
-
 {
-  "version": 2,
-  "routes": [
-    {
-      "src": "^/sitemap\\.xml$",
-      "dest": "/sitemap.xml",
-      "headers": {
-        "Cache-Control": "public, max-age=86400, s-maxage=86400",
-        "Content-Type": "application/xml"
-      }
-    },
-    {
-      "src": "^/robots\\.txt$",
-      "dest": "/robots.txt",
-      "headers": {
-        "Cache-Control": "public, max-age=86400, s-maxage=86400",
-        "Content-Type": "text/plain"
-      }
-    },
-    {
-      "src": "^/$",
-      "dest": "/index.html",
-      "headers": {
-        "Cache-Control": "public, max-age=3600, s-maxage=3600"
-      }
-    },
-    {
-      "src": "^/tools/(.+?)/?$",
-      "dest": "/tools/$1/index.html",
-      "headers": {
-        "Cache-Control": "public, max-age=7200, s-maxage=7200"
-      }
-    },
-    {
-      "src": "^/jogos/(.+?)/?$",
-      "dest": "/jogos/$1/index.html",
-      "headers": {
-        "Cache-Control": "public, max-age=7200, s-maxage=7200"
-      }
-    },
-    {
-      "src": "^/(.+)\\.html$",
-      "dest": "/$1.html",
-      "headers": {
-        "Cache-Control": "public, max-age=7200, s-maxage=7200"
-      }
-    },
-    {
-      "src": "^/(?!.*\\.)(.*)$",
-      "dest": "/$1.html",
-      "status": 200
-    },
-    {
-      "src": ".*",
-      "dest": "/index.html",
-      "status": 404
-    }
-  ],
+  "cleanUrls": true,
+  "trailingSlash": true,
+
   "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "X-Content-Type-Options",
-          "value": "nosniff"
-        },
-        {
-          "key": "X-Frame-Options",
-          "value": "SAMEORIGIN"
-        },
-        {
-          "key": "X-XSS-Protection",
-          "value": "1; mode=block"
-        },
-        {
-          "key": "Referrer-Policy",
-          "value": "strict-origin-when-cross-origin"
-        },
-        {
-          "key": "Permissions-Policy",
-          "value": "camera=(), microphone=(), geolocation=()"
-        }
-      ]
-    },
     {
       "source": "/sitemap.xml",
       "headers": [
@@ -92,7 +12,7 @@
         },
         {
           "key": "Cache-Control",
-          "value": "public, max-age=86400, s-maxage=86400"
+          "value": "public, max-age=86400"
         }
       ]
     },
@@ -105,9 +25,41 @@
         },
         {
           "key": "Cache-Control",
-          "value": "public, max-age=86400, s-maxage=86400"
+          "value": "public, max-age=86400"
         }
       ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=()"
+        }
+      ]
+    }
+  ],
+
+  "rewrites": [
+    {
+      "source": "/tools/:tool/",
+      "destination": "/tools/:tool/index.html"
+    },
+    {
+      "source": "/jogos/:game/",
+      "destination": "/jogos/:game/index.html"
     }
   ]
 }
