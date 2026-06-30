@@ -1,38 +1,38 @@
+
 # UtiliWeb - Robots.txt Configuration
 # Última atualização: 2026-06-30
-
+ 
 # Permitir todos os user-agents
 User-agent: *
 Allow: /
 Disallow: /admin/
 Disallow: /private/
 Disallow: /temp/
-Disallow: /*.json$
-Disallow: /*.xml$
-
+ 
 # Configurações específicas para o Googlebot
 User-agent: Googlebot
 Allow: /
 Crawl-delay: 0
-
+ 
 # Configurações específicas para o Bingbot
 User-agent: Bingbot
 Allow: /
 Crawl-delay: 1
-
+ 
 # Bloquear bots maliciosos conhecidos
 User-agent: AhrefsBot
 Disallow: /
-
+ 
 User-agent: SemrushBot
 Disallow: /
-
+ 
 User-agent: DotBot
 Disallow: /
-
+ 
 # Referência ao sitemap
 Sitemap: https://utiliweb.vercel.app/sitemap.xml
-
+ 
 # Tempo de espera padrão entre requisições (em segundos)
 # Aplicável a bots que respeitam essa diretiva
 Request-rate: 1/1s
+ 
