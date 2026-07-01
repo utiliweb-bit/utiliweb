@@ -336,6 +336,17 @@ a { color: inherit; text-decoration: none; }
 /* ── DISCLAIMER ── */
 .disclaimer { padding: 12px 16px; font-size: 10px; color: var(--text-3); line-height: 1.5; border-top: 1px solid var(--border); font-style: italic; }
 
+/* ── AVISO DE SIMULAÇÃO ── */
+.sim-banner {
+  max-width: 1060px; margin: 0 auto 16px; padding: 12px 16px;
+  background: #fdf1e3; border: 1.5px solid #eec27a; border-radius: var(--radius);
+  color: #7a4a12; font-size: 12.5px; line-height: 1.5; font-weight: 600;
+  display: flex; align-items: flex-start; gap: 8px;
+}
+.sim-banner .sim-icon { font-size: 16px; flex-shrink: 0; line-height: 1.3; }
+.sim-banner strong { display: block; font-size: 13px; margin-bottom: 2px; }
+@media (max-width: 480px) { .sim-banner { margin: 0 10px 14px; } }
+
 /* ── TOAST ── */
 .toast {
   position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px);
@@ -376,7 +387,15 @@ a { color: inherit; text-decoration: none; }
 <div class="page-header">
   <a class="back-link" href="../../index.html">← UtiliWeb</a>
   <h1>💸 Envio de Dinheiro ao Brasil</h1>
-  <p>Compare câmbio, taxas e IOF — veja quanto realmente chega</p>
+  <p>Simulador de câmbio, taxas e IOF — veja quanto chegaria em reais</p>
+</div>
+
+<div class="sim-banner">
+  <span class="sim-icon">⚠️</span>
+  <span>
+    <strong>Isso é apenas uma simulação.</strong>
+    Esta ferramenta só calcula e compara valores para você ter uma ideia de quanto chegaria em reais — não é possível enviar dinheiro por aqui. Para fazer a remessa de verdade, acesse diretamente o site ou app do serviço escolhido.
+  </span>
 </div>
 
 <div class="layout">
@@ -412,7 +431,7 @@ a { color: inherit; text-decoration: none; }
     <!-- PRESETS -->
     <div class="panel-section">
       <div class="sec-label" id="lbl-presets">Serviços — clique para preencher</div>
-      <p class="preset-hint" id="preset-hint">Valores estimados manualmente. Confirme sempre no site do serviço antes de enviar.</p>
+      <p class="preset-hint" id="preset-hint">Toque para preencher valores de exemplo (simulação). Confirme sempre no site do serviço antes de enviar.</p>
       <div class="presets-grid" id="presets-grid" role="group" aria-labelledby="lbl-presets"></div>
     </div>
 
@@ -512,7 +531,7 @@ a { color: inherit; text-decoration: none; }
     </div>
 
     <div class="disclaimer">
-      Câmbio e taxas dos serviços são valores de referência inseridos manualmente — não são cotações em tempo real. Confirme sempre no site do serviço antes de enviar. Não é aconselhamento financeiro.
+      Ferramenta apenas de simulação — não envia dinheiro nem se conecta a nenhum serviço de remessa. Câmbio e taxas são valores de referência inseridos manualmente, não são cotações em tempo real. Confirme sempre no site oficial do serviço escolhido antes de enviar. Não é aconselhamento financeiro.
     </div>
 
   </div><!-- /panel direito -->
