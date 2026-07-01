@@ -90,6 +90,25 @@ async function fallback() {
   loadWeather(35.6762, 139.6503, "Tóquio");
 }
 
+// A API retorna os horários no fuso LOCAL da cidade pesquisada (timezone=auto),
+// mas em duas formas diferentes: "AAAA-MM-DDTHH:MM" (com hora) e "AAAA-MM-DD" (só data).
+// O construtor nativo `new Date()` trata essas duas formas de jeito INCONSISTENTE:
+// - com hora: interpreta como hora local do dispositivo (ok, mantém os números)
+// - só data: interpreta como meia-noite UTC, e só depois converte pro fuso do dispositivo
+// Isso faz o dia da semana/"Hoje"/"Amanhã" saírem errados para quem acessa de fusos
+// negativos em relação ao UTC, como Brasil (UTC-3) e EUA (UTC-5 a -8).
+// Esta função faz o parsing manual, sempre tratando os números como estão (fuso da cidade
+// pesquisada), sem nenhuma conversão automática de fuso horário.
+function parseLocalDateTime(str) {
+  const [datePart, timePart] = str.split("T");
+  const [year, month, day] = datePart.split("-").map(Number);
+  let hour = 0, minute = 0;
+  if (timePart) {
+    [hour, minute] = timePart.split(":").map(Number);
+  }
+  return new Date(year, month - 1, day, hour, minute);
+}
+
 function isNight(hour) {
   return hour >= 20 || hour < 6;
 }
@@ -120,7 +139,9 @@ async function loadWeather(lat, lon, label) {
 
     const c = data.current;
     const code = c.weather_code;
-    const now = new Date();
+    // Usa o horário local DA CIDADE PESQUISADA (vem da própria API), não o relógio do dispositivo.
+    // Isso garante que dia/noite e a previsão por hora reflitam o fuso horário do lugar buscado.
+    const now = parseLocalDateTime(c.time);
     const timeStr = now.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
     const currentHour = now.getHours();
 
@@ -134,10 +155,10 @@ async function loadWeather(lat, lon, label) {
     document.getElementById("humidity").innerText = (c.relative_humidity_2m ?? "—") + "%";
     document.getElementById("icon").innerText = getWeatherIcon(code, currentHour);
     document.getElementById("desc").innerText = descriptions[code] || "Atualizado";
-    document.getElementById("updatedBadge").innerText = "Atualizado " + timeStr;
+    document.getElementById("updatedBadge").innerText = "Hora local: " + timeStr;
 
     setBackground(code, currentHour);
-    renderHourly(data.hourly);
+    renderHourly(data.hourly, currentHour);
     renderForecast(data.daily);
 
   } catch (err) {
@@ -172,19 +193,15 @@ function setBackground(code, hour) {
   bg.style.background = gradient;
 }
 
-function renderHourly(hourly) {
+function renderHourly(hourly, currentHour) {
   const box = document.getElementById("hourly");
   box.innerHTML = "";
   if (!hourly) return;
-  
-  const now = new Date();
-  const currentHour = now.getHours();
-  const currentMinute = now.getMinutes();
-  
-  // Encontrar o índice da hora atual
+
+  // Encontrar o índice da hora atual (na hora local da cidade pesquisada)
   let startIndex = 0;
   for (let i = 0; i < hourly.time.length; i++) {
-    const d = new Date(hourly.time[i]);
+    const d = parseLocalDateTime(hourly.time[i]);
     if (d.getHours() === currentHour) {
       startIndex = i;
       break;
@@ -196,7 +213,7 @@ function renderHourly(hourly) {
     const idx = startIndex + i;
     if (idx >= hourly.time.length) break;
     
-    const d = new Date(hourly.time[idx]);
+    const d = parseLocalDateTime(hourly.time[idx]);
     const h = d.getHours();
     const isNow = i === 0;
     
@@ -215,7 +232,7 @@ function renderForecast(daily) {
   if (!daily) return;
   const days = ["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];
   for (let i = 0; i < daily.time.length; i++) {
-    const d = new Date(daily.time[i]);
+    const d = parseLocalDateTime(daily.time[i]);
     const label = i === 0 ? "Hoje" : i === 1 ? "Amanhã" : days[d.getDay()];
     box.innerHTML += `
       <div class="day">
