@@ -228,27 +228,10 @@ function renderForecast(daily) {
 }
 
 async function searchCity() {
-  const input = document.getElementById("cityInput").value.trim();
-  if (!input) return;
-
-  // Formato "código,país" para CEP internacional (ex: 10001,us / 75001,fr / 300-2721,jp)
-  if (input.includes(",")) {
-    const [codePart, countryPart] = input.split(",").map(s => s.trim());
-    if (codePart && countryPart && /^[a-zA-Z]{2}$/.test(countryPart)) {
-      await searchByPostalCode(codePart, countryPart.toLowerCase());
-      return;
-    }
-  }
-
-  // Detecta CEP japonês (yubin bango) sem precisar informar país: 7 dígitos, com ou sem hífen
-  const zipMatch = input.replace(/[^0-9]/g, "");
-  if (/^\d{7}$/.test(zipMatch)) {
-    await searchByZip(zipMatch);
-    return;
-  }
-
+  const city = document.getElementById("cityInput").value.trim();
+  if (!city) return;
   try {
-    const res = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(input)}&count=1`);
+    const res = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1`);
     const data = await res.json();
     if (!data.results?.length) { alert("Cidade não encontrada"); return; }
     const r = data.results[0];
@@ -262,49 +245,4 @@ async function searchCity() {
 function clearSavedLocation() {
   try { localStorage.removeItem("savedLocation"); } catch {}
   startApp();
-}
-
-async function searchByPostalCode(code, countryCode) {
-  try {
-    const res = await fetch(`https://api.zippopotam.us/${countryCode}/${encodeURIComponent(code)}`);
-    if (!res.ok) { alert("CEP não encontrado para esse país"); return; }
-    const data = await res.json();
-    if (!data.places?.length) { alert("CEP não encontrado"); return; }
-    const p = data.places[0];
-    const lat = parseFloat(p.latitude);
-    const lon = parseFloat(p.longitude);
-    const label = [p["place name"], p.state, data.country].filter(Boolean).join(", ");
-    loadWeather(lat, lon, label);
-    saveLocation(lat, lon, label);
-    document.getElementById("cityInput").value = "";
-  } catch {
-    alert("Erro ao buscar CEP internacional");
-  }
-}
-
-async function searchByZip(zip) {
-  try {
-    const res = await fetch(`https://zipcloud.ibsnet.co.jp/api/search?zipcode=${zip}`);
-    const data = await res.json();
-    if (data.status !== 200 || !data.results?.length) {
-      alert("CEP (郵便番号) não encontrado");
-      return;
-    }
-    const r = data.results[0];
-    // address1 = província (ex: 茨城県), address2 = cidade (ex: 常総市), address3 = bairro
-    const addressQuery = `${r.address2} ${r.address1}`;
-    const geoRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(r.address2)}&count=1&language=ja`);
-    const geoData = await geoRes.json();
-    if (!geoData.results?.length) {
-      alert("Não foi possível localizar coordenadas para esse CEP");
-      return;
-    }
-    const g = geoData.results[0];
-    const label = `${r.address2}, ${r.address1}`;
-    loadWeather(g.latitude, g.longitude, label);
-    saveLocation(g.latitude, g.longitude, label);
-    document.getElementById("cityInput").value = "";
-  } catch {
-    alert("Erro ao buscar CEP");
-  }
 }
