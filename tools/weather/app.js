@@ -42,6 +42,13 @@ const bgGradients = {
 window.addEventListener("load", () => startApp());
 
 function startApp() {
+  // Se o usuário já salvou uma cidade manualmente, usa ela direto
+  const saved = getSavedLocation();
+  if (saved) {
+    loadWeather(saved.lat, saved.lon, saved.label);
+    return;
+  }
+
   const timeout = setTimeout(fallback, 6000);
   if (!navigator.geolocation) { clearTimeout(timeout); fallback(); return; }
   navigator.geolocation.getCurrentPosition(
@@ -51,7 +58,35 @@ function startApp() {
   );
 }
 
-function fallback() {
+function getSavedLocation() {
+  try {
+    const raw = localStorage.getItem("savedLocation");
+    return raw ? JSON.parse(raw) : null;
+  } catch { return null; }
+}
+
+function saveLocation(lat, lon, label) {
+  try {
+    localStorage.setItem("savedLocation", JSON.stringify({ lat, lon, label }));
+  } catch { /* localStorage indisponível, ignora */ }
+}
+
+async function fallback() {
+  // Tenta localizar pelo IP (funciona sem permissão do usuário)
+  try {
+    const res = await fetch("https://ipapi.co/json/");
+    if (res.ok) {
+      const data = await res.json();
+      if (data.latitude && data.longitude) {
+        const label = [data.city, data.region].filter(Boolean).join(", ") || "Sua região";
+        loadWeather(data.latitude, data.longitude, label);
+        return;
+      }
+    }
+  } catch (e) {
+    // segue para o fallback fixo abaixo
+  }
+  // Último recurso, se tudo mais falhar
   loadWeather(35.6762, 139.6503, "Tóquio");
 }
 
@@ -202,6 +237,12 @@ async function searchCity() {
     const r = data.results[0];
     const label = [r.name, r.admin1, r.country].filter(Boolean).join(", ");
     loadWeather(r.latitude, r.longitude, label);
+    saveLocation(r.latitude, r.longitude, label);
     document.getElementById("cityInput").value = "";
   } catch { alert("Erro na busca"); }
+}
+
+function clearSavedLocation() {
+  try { localStorage.removeItem("savedLocation"); } catch {}
+  startApp();
 }
