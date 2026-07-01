@@ -78,6 +78,18 @@
         #ctrl-btn-row{display:flex;gap:8px}
         #ctrl-btn-row-3{display:flex;gap:8px}
         #ctrl-btn-row-2{display:flex;gap:8px}
+        #crop-modal{display:none;position:fixed;inset:0;background:rgba(4,5,9,.97);z-index:200;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:16px}
+        #crop-modal.open{display:flex}
+        #crop-title{color:var(--text2);font-size:13px;text-align:center}
+        #crop-stage{position:relative;width:100%;max-width:420px;flex:1;max-height:60vh;background:#070a10;overflow:hidden;border-radius:10px;touch-action:none;border:1px solid var(--border2)}
+        #crop-img{position:absolute;left:0;top:0;user-select:none;-webkit-user-drag:none;pointer-events:none}
+        #crop-guide-wrap{position:absolute;inset:0;pointer-events:none}
+        #crop-guide{position:absolute;border:1.5px solid rgba(255,255,255,.85);border-radius:3px;box-shadow:0 0 0 9999px rgba(0,0,0,.6)}
+        #crop-guide .g-corner{width:14px;height:14px}
+        #crop-zoom-row{display:flex;align-items:center;gap:10px;width:100%;max-width:420px}
+        #crop-zoom-row span{font-size:16px;color:var(--text2);flex-shrink:0}
+        #crop-zoom{flex:1;accent-color:var(--accent)}
+        #crop-btn-row{display:flex;gap:10px;width:100%;max-width:420px}
         .cbtn{flex:1;padding:11px 10px;border-radius:var(--radius);font-size:13px;font-weight:500;cursor:pointer;border:1px solid var(--border2);background:var(--surface2);color:var(--text);display:flex;align-items:center;justify-content:center;gap:6px;transition:background .12s,opacity .15s;white-space:nowrap}
         .cbtn:hover{background:var(--border)}
         .cbtn.accent{background:var(--accent);color:#fff;border-color:var(--accent)}
@@ -249,6 +261,27 @@
         <div id="lb-footer">
             <div id="lb-meta"></div>
             <button id="lb-dl" onclick="downloadFromLightbox()">⬇️ Baixar</button>
+        </div>
+    </div>
+
+    <div id="crop-modal">
+        <div id="crop-title">Arraste a foto para posicionar o rosto dentro da marcação</div>
+        <div id="crop-stage">
+            <img id="crop-img" src="" alt="">
+            <div id="crop-guide-wrap">
+                <div id="crop-guide">
+                    <div class="g-corner tl"></div><div class="g-corner tr"></div>
+                    <div class="g-corner bl"></div><div class="g-corner br"></div>
+                </div>
+            </div>
+        </div>
+        <div id="crop-zoom-row">
+            <span>🔍</span>
+            <input type="range" id="crop-zoom" min="100" max="300" value="100">
+        </div>
+        <div id="crop-btn-row">
+            <button class="cbtn" onclick="cancelCrop()">Cancelar</button>
+            <button class="cbtn accent" onclick="confirmCrop()">✓ Usar esta foto</button>
         </div>
     </div>
 
@@ -501,16 +534,17 @@
             const file=e.target.files?.[0];
             if(file){
                 const reader=new FileReader();
-                reader.onload=e=>addPhoto(e.target.result);
+                reader.onload=e=>openCropEditor(e.target.result);
                 reader.readAsDataURL(file);
             }
+            fileInput.value='';
         });
 
         nativeCamInput.addEventListener('change',e=>{
             const file=e.target.files?.[0];
             if(file){
                 const reader=new FileReader();
-                reader.onload=e=>addPhoto(e.target.result);
+                reader.onload=e=>openCropEditor(e.target.result);
                 reader.readAsDataURL(file);
             }
             nativeCamInput.value=''; // permite tirar outra foto em seguida sem precisar trocar de arquivo
@@ -523,6 +557,138 @@
             btnDownload.disabled=false;
             statusEl.classList.remove('err');
             statusEl.textContent='Foto capturada com sucesso';
+        }
+
+        // ---- Editor de enquadramento (crop) ----
+        const cropModal=document.getElementById('crop-modal');
+        const cropStage=document.getElementById('crop-stage');
+        const cropImgEl=document.getElementById('crop-img');
+        const cropGuide=document.getElementById('crop-guide');
+        const cropZoom=document.getElementById('crop-zoom');
+        let cropImg=new Image();
+        let cropBaseScale=1, cropScale=1, cropX=0, cropY=0;
+        let cropFrame={left:0,top:0,w:0,h:0};
+        let cropDragging=false, cropStartX=0, cropStartY=0, cropOrigX=0, cropOrigY=0;
+
+        function openCropEditor(dataUrl){
+            cropImg=new Image();
+            cropImg.onload=()=>{
+                cropImgEl.src=dataUrl;
+                cropModal.classList.add('open');
+                // espera o layout do modal se aplicar antes de calcular medidas
+                requestAnimationFrame(()=>{
+                    positionCropGuide();
+                    resetCropTransform();
+                });
+            };
+            cropImg.src=dataUrl;
+        }
+
+        function positionCropGuide(){
+            const r=FORMATS[cur].ratio;
+            const W=cropStage.clientWidth, H=cropStage.clientHeight;
+            const maxW=W*.88, maxH=H*.88;
+            let gw,gh;
+            if(r>=1){gw=Math.min(maxW,maxH*r);gh=gw/r;}
+            else{gh=Math.min(maxH,maxW/r);gw=gh*r;}
+            cropFrame={left:(W-gw)/2, top:(H-gh)/2, w:gw, h:gh};
+            cropGuide.style.left=cropFrame.left+'px';
+            cropGuide.style.top=cropFrame.top+'px';
+            cropGuide.style.width=cropFrame.w+'px';
+            cropGuide.style.height=cropFrame.h+'px';
+        }
+
+        function resetCropTransform(){
+            const natW=cropImg.naturalWidth, natH=cropImg.naturalHeight;
+            cropBaseScale=Math.max(cropFrame.w/natW, cropFrame.h/natH);
+            cropScale=cropBaseScale;
+            cropX=cropFrame.left+cropFrame.w/2 - (natW*cropScale)/2;
+            cropY=cropFrame.top+cropFrame.h/2 - (natH*cropScale)/2;
+            cropZoom.value=100;
+            clampCropPan();
+            applyCropTransform();
+        }
+
+        function applyCropTransform(){
+            cropImgEl.style.width=(cropImg.naturalWidth*cropScale)+'px';
+            cropImgEl.style.height=(cropImg.naturalHeight*cropScale)+'px';
+            cropImgEl.style.left=cropX+'px';
+            cropImgEl.style.top=cropY+'px';
+        }
+
+        function clampCropPan(){
+            const dispW=cropImg.naturalWidth*cropScale, dispH=cropImg.naturalHeight*cropScale;
+            const minX=cropFrame.left+cropFrame.w-dispW, maxX=cropFrame.left;
+            const minY=cropFrame.top+cropFrame.h-dispH, maxY=cropFrame.top;
+            cropX=Math.min(maxX,Math.max(minX,cropX));
+            cropY=Math.min(maxY,Math.max(minY,cropY));
+        }
+
+        cropStage.addEventListener('pointerdown',e=>{
+            cropDragging=true;
+            cropStartX=e.clientX; cropStartY=e.clientY;
+            cropOrigX=cropX; cropOrigY=cropY;
+            cropStage.setPointerCapture(e.pointerId);
+        });
+        cropStage.addEventListener('pointermove',e=>{
+            if(!cropDragging)return;
+            cropX=cropOrigX+(e.clientX-cropStartX);
+            cropY=cropOrigY+(e.clientY-cropStartY);
+            clampCropPan();
+            applyCropTransform();
+        });
+        function endCropDrag(){cropDragging=false;}
+        cropStage.addEventListener('pointerup',endCropDrag);
+        cropStage.addEventListener('pointercancel',endCropDrag);
+        cropStage.addEventListener('pointerleave',endCropDrag);
+
+        cropZoom.addEventListener('input',()=>{
+            const newScale=cropBaseScale*(cropZoom.value/100);
+            // mantém o centro da marcação fixo no mesmo ponto da imagem ao aplicar zoom
+            const focalStageX=cropFrame.left+cropFrame.w/2;
+            const focalStageY=cropFrame.top+cropFrame.h/2;
+            const natX=(focalStageX-cropX)/cropScale;
+            const natY=(focalStageY-cropY)/cropScale;
+            cropScale=newScale;
+            cropX=focalStageX-natX*cropScale;
+            cropY=focalStageY-natY*cropScale;
+            clampCropPan();
+            applyCropTransform();
+        });
+
+        window.addEventListener('resize',()=>{
+            if(cropModal.classList.contains('open')){
+                positionCropGuide();
+                clampCropPan();
+                applyCropTransform();
+            }
+        });
+
+        function cancelCrop(){
+            cropModal.classList.remove('open');
+            cropImgEl.src='';
+        }
+
+        function confirmCrop(){
+            const r=FORMATS[cur].ratio;
+            const outLong=1000;
+            const outW = r>=1 ? outLong : Math.round(outLong*r);
+            const outH = r>=1 ? Math.round(outLong/r) : outLong;
+            let sx=(cropFrame.left-cropX)/cropScale;
+            let sy=(cropFrame.top-cropY)/cropScale;
+            let sw=cropFrame.w/cropScale;
+            let sh=cropFrame.h/cropScale;
+            // proteção contra pequenos erros de arredondamento nas bordas
+            sx=Math.max(0,Math.min(sx, cropImg.naturalWidth-sw));
+            sy=Math.max(0,Math.min(sy, cropImg.naturalHeight-sh));
+            const canvas=document.createElement('canvas');
+            canvas.width=outW; canvas.height=outH;
+            const ctx=canvas.getContext('2d');
+            ctx.drawImage(cropImg, sx, sy, sw, sh, 0, 0, outW, outH);
+            const dataUrl=canvas.toDataURL('image/jpeg',0.95);
+            cropModal.classList.remove('open');
+            cropImgEl.src='';
+            addPhoto(dataUrl);
         }
 
         function renderPhotos(){
