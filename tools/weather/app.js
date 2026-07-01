@@ -228,21 +228,126 @@ function renderForecast(daily) {
 }
 
 async function searchCity() {
-  const city = document.getElementById("cityInput").value.trim();
-  if (!city) return;
+  const input = document.getElementById("cityInput").value.trim();
+  if (!input) return;
+
+  // Formato "código,país" para CEP internacional (ex: 10001,us / 75001,fr / 300-2721,jp)
+  if (input.includes(",")) {
+    const [codePart, countryPart] = input.split(",").map(s => s.trim());
+    if (codePart && countryPart && /^[a-zA-Z]{2}$/.test(countryPart)) {
+      if (countryPart.toLowerCase() === "jp") {
+        await searchJapanZip(codePart.replace(/[^0-9]/g, ""));
+      } else {
+        await searchByPostalCode(codePart, countryPart.toLowerCase());
+      }
+      return;
+    }
+  }
+
+  // Detecta CEP japonês (yubin bango) sem precisar informar país: 7 dígitos, com ou sem hífen
+  const zipMatch = input.replace(/[^0-9]/g, "");
+  if (/^\d{7}$/.test(zipMatch)) {
+    await searchJapanZip(zipMatch);
+    return;
+  }
+
+  // Busca por nome de cidade: tenta Open-Meteo primeiro, depois Nominatim (melhor para nomes locais/fundidos)
+  let lastError = null;
   try {
-    const res = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1`);
+    const res = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(input)}&count=1`);
     const data = await res.json();
-    if (!data.results?.length) { alert("Cidade não encontrada"); return; }
-    const r = data.results[0];
-    const label = [r.name, r.admin1, r.country].filter(Boolean).join(", ");
-    loadWeather(r.latitude, r.longitude, label);
-    saveLocation(r.latitude, r.longitude, label);
-    document.getElementById("cityInput").value = "";
-  } catch { alert("Erro na busca"); }
+    if (data.results?.length) {
+      const r = data.results[0];
+      const label = [r.name, r.admin1, r.country].filter(Boolean).join(", ");
+      loadWeather(r.latitude, r.longitude, label);
+      saveLocation(r.latitude, r.longitude, label);
+      document.getElementById("cityInput").value = "";
+      return;
+    }
+  } catch (e) { lastError = e; }
+
+  try {
+    const found = await geocodeNominatim(input);
+    if (found) {
+      loadWeather(found.lat, found.lon, found.label);
+      saveLocation(found.lat, found.lon, found.label);
+      document.getElementById("cityInput").value = "";
+      return;
+    }
+  } catch (e) { lastError = e; }
+
+  alert("Cidade não encontrada." + (lastError ? " Erro técnico: " + lastError.message : ""));
 }
 
 function clearSavedLocation() {
   try { localStorage.removeItem("savedLocation"); } catch {}
   startApp();
+}
+
+// Geocodificação via Nominatim (OpenStreetMap) - boa cobertura para nomes locais/fundidos, ex: Joso-shi
+async function geocodeNominatim(query) {
+  const res = await fetch(
+    `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=1`,
+    { headers: { "Accept-Language": "pt-BR" } }
+  );
+  const data = await res.json();
+  if (!data?.length) return null;
+  const r = data[0];
+  return { lat: parseFloat(r.lat), lon: parseFloat(r.lon), label: r.display_name.split(",").slice(0, 3).join(",") };
+}
+
+// CEP japonês: usa a API oficial dos Correios do Japão (sempre atualizada, inclusive após fusões de cidades)
+// e depois geocodifica o endereço resultante via Nominatim, que reconhece bem nomes em kanji.
+async function searchJapanZip(zip) {
+  if (!/^\d{7}$/.test(zip)) { alert("CEP japonês inválido"); return; }
+  try {
+    const res = await fetch(`https://zipcloud.ibsnet.co.jp/api/search?zipcode=${zip}`);
+    const data = await res.json();
+    if (data.status !== 200 || !data.results?.length) {
+      alert("CEP (郵便番号) não encontrado na base dos Correios");
+      return;
+    }
+    const r = data.results[0];
+    const query = `${r.address1}${r.address2}`; // ex: 茨城県常総市
+    const found = await geocodeNominatim(query);
+    if (!found) {
+      alert(`CEP encontrado (${r.address1}${r.address2}), mas não foi possível converter em coordenadas.`);
+      return;
+    }
+    const label = `${r.address2}, ${r.address1}`;
+    loadWeather(found.lat, found.lon, label);
+    saveLocation(found.lat, found.lon, label);
+    document.getElementById("cityInput").value = "";
+  } catch (e) {
+    alert("Erro ao buscar CEP. Detalhe técnico: " + e.message);
+  }
+}
+
+async function searchByPostalCode(code, countryCode) {
+  try {
+    const res = await fetch(`https://api.zippopotam.us/${countryCode}/${encodeURIComponent(code)}`);
+    if (res.ok) {
+      const data = await res.json();
+      if (data.places?.length) {
+        const p = data.places[0];
+        const lat = parseFloat(p.latitude);
+        const lon = parseFloat(p.longitude);
+        const label = [p["place name"], p.state, data.country].filter(Boolean).join(", ");
+        loadWeather(lat, lon, label);
+        saveLocation(lat, lon, label);
+        document.getElementById("cityInput").value = "";
+        return;
+      }
+    }
+  } catch { /* tenta o fallback abaixo */ }
+
+  // Fallback via Nominatim caso o Zippopotam não tenha esse CEP
+  const found = await geocodeNominatim(`${code}, ${countryCode}`);
+  if (found) {
+    loadWeather(found.lat, found.lon, found.label);
+    saveLocation(found.lat, found.lon, found.label);
+    document.getElementById("cityInput").value = "";
+  } else {
+    alert("CEP não encontrado para esse país");
+  }
 }
