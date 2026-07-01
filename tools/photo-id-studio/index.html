@@ -76,6 +76,7 @@
         .bg-swatch:hover{transform:scale(1.15)}
         .bg-swatch.active{border-color:var(--accent)}
         #ctrl-btn-row{display:flex;gap:8px}
+        #ctrl-btn-row-3{display:flex;gap:8px}
         #ctrl-btn-row-2{display:flex;gap:8px}
         .cbtn{flex:1;padding:11px 10px;border-radius:var(--radius);font-size:13px;font-weight:500;cursor:pointer;border:1px solid var(--border2);background:var(--surface2);color:var(--text);display:flex;align-items:center;justify-content:center;gap:6px;transition:background .12s,opacity .15s;white-space:nowrap}
         .cbtn:hover{background:var(--border)}
@@ -219,8 +220,11 @@
                 <div id="ctrl-btn-row">
                     <button class="cbtn" onclick="toggleCam()"><span id="cam-icon">📷</span> <span id="cam-text">Ativar câmera</span></button>
                     <button class="cbtn cbtn-icon" onclick="flipCamera()" id="btn-flip" disabled title="Inverter câmera">🔄</button>
-                    <button class="cbtn" onclick="capturePhoto()" id="btn-capture" disabled>📸 Capturar foto</button>
-                    <button class="cbtn" onclick="document.getElementById('fileInput').click()">📁 Upload</button>
+                </div>
+                <div id="ctrl-btn-row-3">
+                    <button class="cbtn" onclick="capturePhoto()" id="btn-capture" disabled>📸 Capturar</button>
+                    <button class="cbtn" onclick="document.getElementById('nativeCamInput').click()">📷 Câmera</button>
+                    <button class="cbtn" onclick="document.getElementById('fileInput').click()">📁 Galeria</button>
                 </div>
                 <div id="ctrl-btn-row-2">
                     <button class="cbtn accent" onclick="downloadPhoto()" id="btn-download" disabled>⬇️ Baixar</button>
@@ -249,6 +253,7 @@
     </div>
 
     <input type="file" id="fileInput" accept="image/*">
+    <input type="file" id="nativeCamInput" accept="image/*" capture="user">
 
     <script>
         const FORMATS = {
@@ -287,6 +292,7 @@
         const lbImg=document.getElementById('lb-img');
         const lbMeta=document.getElementById('lb-meta');
         const fileInput=document.getElementById('fileInput');
+        const nativeCamInput=document.getElementById('nativeCamInput');
         const photoCount=document.getElementById('photo-count');
 
         // detecta se o dispositivo provavelmente tem mais de uma câmera
@@ -294,6 +300,22 @@
             navigator.mediaDevices.enumerateDevices().then(devs=>{
                 hasMultipleCams = devs.filter(d=>d.kind==='videoinput').length > 1;
             }).catch(()=>{});
+        }
+
+        // diagnóstico: mostra o estado real da permissão de câmera guardado pelo navegador
+        if(navigator.permissions && navigator.permissions.query){
+            navigator.permissions.query({name:'camera'}).then(status=>{
+                if(status.state==='denied'){
+                    statusEl.classList.add('err');
+                    statusEl.textContent='O navegador tem esta permissão marcada como bloqueada para este site.';
+                }
+                status.onchange=()=>{
+                    if(status.state==='granted' && !stream){
+                        statusEl.classList.remove('err');
+                        statusEl.textContent='Permissão liberada. Toque em "Ativar câmera".';
+                    }
+                };
+            }).catch(()=>{/* API de permissão de câmera não suportada neste navegador */});
         }
 
         function setFmt(k,el){
@@ -334,13 +356,29 @@
             else{startCam();}
         }
 
+        function getPermissionInstructions(){
+            const ua=navigator.userAgent||'';
+            const isIOS=/iPhone|iPad|iPod/.test(ua) && !window.MSStream;
+            const isAndroid=/Android/.test(ua);
+            const isChrome=/Chrome/.test(ua) && !/Edg|OPR/.test(ua);
+            const isSafari=/Safari/.test(ua) && !isChrome;
+            if(isIOS){
+                const browserName=isChrome?'Chrome':'Safari';
+                return `Vá em <b>Ajustes do iPhone → ${browserName} → Câmera</b> e escolha "Permitir".`;
+            }
+            if(isAndroid){
+                return 'Vá em <b>Configurações → Apps → seu navegador → Permissões → Câmera</b> e ative. Ou toque nos 3 pontinhos do navegador → Configurações do site → Câmera.';
+            }
+            return 'Clique no ícone de cadeado 🔒 (ou câmera) na barra de endereço e permita o acesso à câmera.';
+        }
+
         function showPermissionState(kind){
             // kind: 'denied' | 'notfound' | 'error'
             ph.style.display='flex';
             ph.classList.add('denied');
             phIcon.style.opacity='.6';
             if(kind==='denied'){
-                phText.innerHTML='Acesso à câmera negado.<br>Permita o acesso nas configurações do navegador (ícone de cadeado na barra de endereço) e tente novamente.';
+                phText.innerHTML='Acesso à câmera negado.<br>'+getPermissionInstructions()+'<br>Depois volte aqui e tente de novo.';
             }else if(kind==='notfound'){
                 phText.textContent='Nenhuma câmera foi encontrada neste dispositivo.';
             }else{
@@ -397,7 +435,7 @@
                     statusEl.textContent='Essa câmera não está disponível, voltando para a câmera frontal.';
                     return startCam(true);
                 }else{
-                    statusEl.textContent='Erro ao acessar câmera: '+e.message;
+                    statusEl.textContent='Erro ao acessar câmera ('+e.name+'): '+e.message;
                     showPermissionState('error');
                 }
             }
@@ -466,6 +504,16 @@
                 reader.onload=e=>addPhoto(e.target.result);
                 reader.readAsDataURL(file);
             }
+        });
+
+        nativeCamInput.addEventListener('change',e=>{
+            const file=e.target.files?.[0];
+            if(file){
+                const reader=new FileReader();
+                reader.onload=e=>addPhoto(e.target.result);
+                reader.readAsDataURL(file);
+            }
+            nativeCamInput.value=''; // permite tirar outra foto em seguida sem precisar trocar de arquivo
         });
 
         function addPhoto(dataUrl){
