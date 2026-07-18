@@ -160,8 +160,11 @@
     .search-inner .search-icon {
       position: absolute;
       left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
       color: var(--neutral-400);
       display: flex;
+      pointer-events: none;
     }
 
     /* ── ESSENTIALS (RESTORED LAYOUT) ── */
@@ -906,9 +909,16 @@
 </footer>
 
 <script>
-  document.getElementById("year").textContent = new Date().getFullYear();
+document.addEventListener('DOMContentLoaded', () => {
+  // Ano do rodapé — protegido: se o elemento não existir, não quebra o resto do script
+  const yearEl = document.getElementById("year");
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+  // ── Busca e filtros ──
   const searchInput = document.getElementById('search');
   const filterBar = document.getElementById('filter-bar');
+  if (!searchInput || !filterBar) return; // proteção extra
+
   const pills = filterBar.querySelectorAll('.pill');
   const sections = document.querySelectorAll('.section-wrap');
   const emptyState = document.getElementById('empty-state');
@@ -953,8 +963,8 @@
       section.style.display = sectionVisible > 0 ? 'block' : 'none';
     });
 
-    emptyState.style.display = totalVisible === 0 ? 'block' : 'none';
-    emptyTerm.textContent = searchInput.value;
+    if (emptyState) emptyState.style.display = totalVisible === 0 ? 'block' : 'none';
+    if (emptyTerm) emptyTerm.textContent = searchInput.value;
   }
 
   pills.forEach(pill => {
@@ -970,6 +980,7 @@
     clearTimeout(searchTimer);
     searchTimer = setTimeout(updateDisplay, 150);
   });
+});
 </script>
 
 </body>
