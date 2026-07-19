@@ -167,6 +167,70 @@
       pointer-events: none;
     }
 
+    /* ── LIVE SEARCH DROPDOWN ── */
+    .search-results {
+      display: none;
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      right: 0;
+      background: #fff;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-xl);
+      border: 1px solid var(--neutral-200);
+      max-height: 360px;
+      overflow-y: auto;
+      z-index: 60;
+      padding: 8px;
+    }
+
+    .search-results.open { display: block; }
+
+    .search-results a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      color: var(--neutral-800);
+      transition: var(--transition);
+    }
+
+    .search-results a:hover,
+    .search-results a:focus {
+      background: var(--primary-light);
+    }
+
+    .search-results .sr-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .search-results .sr-title {
+      font-weight: 600;
+      font-size: 0.9375rem;
+    }
+
+    .search-results .sr-badge {
+      margin-left: auto;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--primary-dark);
+      background: var(--primary-light);
+      padding: 3px 8px;
+      border-radius: var(--radius-sm);
+      flex-shrink: 0;
+    }
+
+    .search-results .sr-empty,
+    .search-results .sr-more {
+      padding: 12px 14px;
+      color: var(--neutral-500);
+      font-size: 0.875rem;
+      text-align: center;
+    }
+
     /* ── ESSENTIALS (RESTORED LAYOUT) ── */
     .essentials-wrap {
       background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
@@ -472,6 +536,7 @@
       </svg>
     </div>
     <input type="search" id="search" placeholder="O que você precisa hoje?" autocomplete="off" aria-label="Buscar ferramentas">
+    <div class="search-results" id="search-results"></div>
   </div>
 </div>
 
@@ -923,6 +988,52 @@ document.addEventListener('DOMContentLoaded', () => {
   const sections = document.querySelectorAll('.section-wrap');
   const emptyState = document.getElementById('empty-state');
   const emptyTerm = document.getElementById('empty-term');
+  const searchResults = document.getElementById('search-results');
+
+  // Índice de todos os cards, montado uma vez, para o dropdown de busca rápida
+  const allCards = Array.from(document.querySelectorAll('.card')).map(card => ({
+    href: card.getAttribute('href'),
+    icon: card.querySelector('.card-icon')?.textContent || '',
+    title: card.querySelector('.card-title')?.textContent || '',
+    badge: card.querySelector('.badge')?.textContent || '',
+    key: normalizeStatic(card.dataset.key || '') + ' ' + normalizeStatic(card.querySelector('.card-title')?.textContent || '')
+  }));
+
+  function normalizeStatic(str) {
+    return str.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+  }
+
+  const MAX_DROPDOWN_RESULTS = 8;
+
+  function updateDropdown(term) {
+    if (!searchResults) return;
+
+    if (!term) {
+      searchResults.classList.remove('open');
+      searchResults.innerHTML = '';
+      return;
+    }
+
+    const matches = allCards.filter(c => c.key.includes(term));
+
+    if (matches.length === 0) {
+      searchResults.innerHTML = '<div class="sr-empty">Nenhuma ferramenta encontrada</div>';
+      searchResults.classList.add('open');
+      return;
+    }
+
+    const shown = matches.slice(0, MAX_DROPDOWN_RESULTS);
+    searchResults.innerHTML = shown.map(c => `
+      <a href="${c.href}">
+        <span class="sr-icon">${c.icon}</span>
+        <span class="sr-title">${c.title}</span>
+        <span class="sr-badge">${c.badge}</span>
+      </a>
+    `).join('') + (matches.length > MAX_DROPDOWN_RESULTS
+      ? `<div class="sr-more">+${matches.length - MAX_DROPDOWN_RESULTS} outro(s) resultado(s) na lista abaixo</div>`
+      : '');
+    searchResults.classList.add('open');
+  }
 
   let activeCategory = 'todas';
   let searchTimer = null;
@@ -978,7 +1089,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
   searchInput.addEventListener('input', () => {
     clearTimeout(searchTimer);
-    searchTimer = setTimeout(updateDisplay, 150);
+    searchTimer = setTimeout(() => {
+      updateDisplay();
+      updateDropdown(normalize(searchInput.value));
+    }, 150);
+  });
+
+  searchInput.addEventListener('focus', () => {
+    if (searchInput.value.trim()) updateDropdown(normalize(searchInput.value));
+  });
+
+  document.addEventListener('click', (e) => {
+    if (searchResults && !searchResults.contains(e.target) && e.target !== searchInput) {
+      searchResults.classList.remove('open');
+    }
   });
 });
 </script>
