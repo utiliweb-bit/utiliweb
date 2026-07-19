@@ -926,6 +926,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let activeCategory = 'todas';
   let searchTimer = null;
+  let hadTerm = false;
 
   function normalize(str) {
     return str.toLowerCase()
@@ -965,6 +966,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (emptyState) emptyState.style.display = totalVisible === 0 ? 'block' : 'none';
     if (emptyTerm) emptyTerm.textContent = searchInput.value;
+
+    // Rola até os resultados assim que o usuário começa a digitar,
+    // para deixar claro que a busca respondeu (a barra de busca fica
+    // fora da área que é filtrada, então sem isso parece que "nada aconteceu").
+    const hasTerm = term.length > 0;
+    if (hasTerm && !hadTerm && filterBar) {
+      filterBar.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    hadTerm = hasTerm;
   }
 
   pills.forEach(pill => {
